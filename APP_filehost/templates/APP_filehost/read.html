@@ -1,0 +1,77 @@
+{% extends 'Core/index.html' %}
+{% load static %}
+{% load APP_filehost_tags %}
+{% load Core_tags %}
+
+{% block title %}xlartas | host{% endblock %}
+
+{% block meta_keywords %}fast file host hosting быстрый файловый хостинг хост для картинок загрузить
+    картинки{% endblock %}
+{% block meta_og_description %}Быстрый файловый хостинг{% endblock %}
+{% block meta_description %}File host{% endblock %}
+{% block meta_twitter_description %}File host{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'APP_filehost/js/read.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none flex-col-center
+     no_scrollbar mb-0 flex-grow-1"
+         style="max-width: 600px!important;">
+        <h1 class="text-center text-white disable-tap-and-selection fs-1 mb-2">
+            File Host
+        </h1>
+        <div class="flex-row-center gap-3">
+            {% if user.is_authenticated %}
+                <div class="flex-col-center">
+                    <a href="{% url 'host:list' %}" class="btn-3 fs-5 text-decoration-none">Мои загрузки</a>
+                </div>
+            {% endif %}
+            <div class="flex-col-center">
+                <a href="{% url 'host:create' %}" class="btn-3 fs-5 text-decoration-none">Загрузить</a>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-white-90 text-center mb-0 mt-1 fs-3">{{ upload.name }}</p>
+            <p class="text-white-80 text-center mb-0 mt-1 fs-4">{% diffFloat upload.size 1048576 %} MB</p>
+
+            <div id="img-zone" class="row p-0 my-1">
+                {% for file in files %}
+                    {% if '.png' in file.name or '.jpg' in file.name or '.jpeg' in file.name or '.webp' in file.name or '.svg' in file.name %}
+                        <div class="col-4 px-1 mb-2 flex-col-center position-relative">
+                            <img class="image" src="{{ file.file.url }}" alt="">
+                            <a class="btn_download position-absolute text-white" href="{{ file.file.url }}"
+                               download="{{ file.name }}"
+                               style="left: 1rem; top: 0.6rem;">
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <table class="table table-striped-columns">
+                <tbody id="file-zone">
+                {% for file in files %}
+                    {% if '.png' not in file.name and '.jpg' not in file.name and '.jpeg' not in file.name and '.webp' not in file.name and '.svg' not in file.name %}
+                        <tr>
+                            <td class="text-white-80">{{ file.name|truncatechars:20 }}</td>
+                            <td class="text-white-80">{% diffFloat file.size 1048576 %} МБ</td>
+                            <td class="text-white-80">
+                                <a class="btn_download text-white-80 text-decoration-none"
+                                   href="{{ file.file.url }}">
+                                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="flex-row-center">
+                <button id="download-all-button" class="btn-1 fw-7 fs-5">Скачать всё</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

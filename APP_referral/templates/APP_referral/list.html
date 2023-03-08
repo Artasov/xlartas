@@ -1,0 +1,45 @@
+{% extends 'Core/index.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load socialaccount %}
+{% block title %}xlartas | REFERRALS{% endblock %}
+
+{% block meta_keywords %}referrals referral реферальная рефералка программа система{% endblock %}
+{% block meta_description %}My Referrals{% endblock %}
+{% block meta_og_description %}Мои рефералы{% endblock %}
+{% block meta_twitter_description %}My Referrals{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none  flex-col-center flex-grow-1"
+         data-bs-theme="dark" style="max-width: 400px;">
+        <div class="row p-3 bg-black bg-opacity-10 rounded-4 disable-tap-and-selection">
+            <h1 class="text-dark-emphasis fs-1 text-center">REFERRALS</h1>
+            <table class="table text-center">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Count Starts</th>
+                    <th scope="col">Bonus</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ref_info in referrals_info %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ ref_info.username }}</td>
+                        <td>{{ ref_info.count_starts }}</td>
+                        <td>
+                            {% if ref_info.bonus %}
+                                <i class="fa-solid fa-check"></i>
+                            {% else %}
+                                <i class="fa-solid fa-xmark"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

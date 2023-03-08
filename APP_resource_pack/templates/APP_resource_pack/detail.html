@@ -1,0 +1,97 @@
+{% extends 'Core/index.html' %}
+{% load APP_shop_tags %}
+{% load static %}
+{% load Core_tags %}
+
+{% block title %}xlartas | {{ rp.name }}{% endblock %}
+
+{% block meta_keywords %}текстуры для майнкрафт майнкрафта minecraft vimeworld ваймворлд вайм ворлд rp resource pack texture resourcepack ресурспак ресурспаки текстуры ресурс пак{% endblock %}
+{% block meta_og_description %}Ресурспаки{% endblock %}
+{% block meta_description %}Resource Packs{% endblock %}
+{% block meta_twitter_description %}Resource Packs{% endblock %}
+
+{% block link_content_css %}
+    <link rel="stylesheet" href="{% static 'APP_resource_pack/css/rp.css' %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'APP_resource_pack/js/detail.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <input id="username" value="{{ user.get_username }}" type="hidden"/>
+    {% else %}
+        <input id="username" value="" type="hidden"/>
+    {% endif %}
+    <div id="content" class="container d-flex d-none flex-column justify-content-center
+     no_scrollbar mb-0 flex-grow-1 overflow-y-hidden"
+         style="max-width: 700px!important;">
+        <div class="flex-row-between fs-3 px-3">
+            <a href="{% url 'rp:catalog' %}" class="flex-row-center gap-2 text-white-50 text-decoration-none">
+                <div class="flex-col-center">
+                    <i style="transform: scale(-1, 1);" class="fa-solid fa-right-to-bracket"></i></div>
+                <div class="flex-col-center">
+                    <span>All Resource Packs</span></div>
+            </a>
+            <a href="{% url 'rp:add_new' %}" class="flex-row-center gap-2 text-white-50 text-decoration-none">
+                <div class="flex-col-center">
+                    <span>Add New</span></div>
+                <div class="flex-col-center">
+                    <i style="transform: translateY(1px)" class="fa-solid fa-right-to-bracket"></i></div>
+            </a>
+        </div>
+        <div class="pb-3 overflow-y-scroll no_scrollbar flex-row-center">
+            <div id="rp-{{ rp.id }}" class="rp mt-3 px-4 px-sm-2 w-100">
+                <div class="w-100 rounded-4">
+                    <div class="rp-title-block overflow-hidden position-relative" style="max-height: 400px;">
+                        <img src="/media/{{ rp.image_preview.image }}" id="rpImg" curImgId="0"
+                             alt="" class="rounded-top-4" style="object-fit: cover; height: 100%; width: 100%">
+                        <div class="rp-date px-3 pb-2 flex-col-center">
+                                <span class="text-white opacity-25">
+                                    {{ rp.date_created.date|date:"Y-m-d" }}</span></div>
+                        <div style="top: 0; right: 2em;"
+                             class="text-white-50 position-absolute h-100 flex-col-center">
+                            <i id="rightArrow" class="fs-1 fa-chevron-right fa-solid"></i>
+                        </div>
+                    </div>
+                    <div class="rp-info px-3 py-2 flex-col-center rounded-bottom-4
+                        bg-black bg-opacity-25 gap-2">
+                        <h1 class="text-center text-white">{{ rp.name }}</h1>
+                        <div class="flex-row-center gap-5">
+                            <div class="flex-col-center text-white-50 fs-4">
+                                <span>Style: {{ rp.style }}</span>
+                                <span>Color: {{ rp.color }}</span>
+                                <span>Resolution: {{ rp.resolution }}</span>
+                            </div>
+                            <div class="flex-col-center gap-2">
+                                <div class="d-flex justify-content-around text-white-50 gap-3 fs-3">
+                                    <div class="flex-row-center gap-2">
+                                        <i class="like-button fa-solid fa-thumbs-up" resourcePackId="{{ rp.id }}"
+                                           {% if user in rp.likes_by.all %}style="color: #f03756;"{% endif %}></i>
+                                        <span class="like-value">{{ rp.likes }}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-around tent-center text-white-50 gap-3 fs-3">
+                                    <a href="{% url 'rp:download' rp.id %}"
+                                       class="text-decoration-none flex-row-center gap-2"
+                                       style="color: inherit;">
+                                        <i class="download-button fa-solid fa-cloud-arrow-down"
+                                           {% if user in rp.downloads_by.all %}style="color: #f03756;"{% endif %}></i>
+                                        <span>{{ rp.downloads }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let images = [];
+        images.push("/media/{{ rp.image_preview.image }}")
+        {% for img in rp.images.values %}
+            images.push("/media/{{ img.image }}");
+        {% endfor %}
+    </script>
+{% endblock %}

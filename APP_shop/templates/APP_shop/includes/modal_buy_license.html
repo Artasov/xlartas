@@ -1,0 +1,74 @@
+{% load Core_tags %}
+<div class="u-modal flex-column justify-content-center"
+     id="modal{{ product.name }}{{ product.id }}">
+    <div class="modal-content mx-auto p-3 rounded-3">
+        <form class="bg-transparent" method="post" action="{% url 'shop:buy' %}">{% csrf_token %}
+            <div class="modal-header">
+                <h1 class="fs-2 m-0 mx-auto">{{ product.long_name }}</h1>
+                <button type="button" class="btn-close"
+                        onclick="closeModal('modal{{ product.name }}{{ product.id }}')"></button>
+            </div>
+            <div class="modal-body d-flex flex-column py-3">
+                <input type="hidden" name="product" value="{{ product.name }}">
+                <input type="hidden" name="license_type" id="input{{ product.name }}{{ product.id }}" value="week">
+                <div class="flex-col-center
+                text-dark-emphasis gap-2">
+                    <div class="btn-radio btn-radio-1-active btn-radio-1 px-3 py-2 rounded-3"
+                         onclick="
+                                 set_input_value_by_id('input{{ product.name }}{{ product.id }}', 'week');
+                                 set_choosed_radio(this, 'btn-radio-1-active');">
+                        <p class="m-0">Неделя</p>
+                        <p class="m-0 btn-radio-1-price">{{ product.price_week }} ₽</p>
+                    </div>
+                    <div class="btn-radio btn-radio-1 px-3 py-2 rounded-3"
+                         onclick="
+                                 set_input_value_by_id('input{{ product.name }}{{ product.id }}', 'month');
+                                 set_choosed_radio(this, 'btn-radio-1-active');">
+                        <p class="m-0">Месяц</p>
+                        <p class="m-0 btn-radio-1-price">{{ product.price_month }} ₽</p>
+                    </div>
+                    <div class="btn-radio btn-radio-1 px-3 py-2 rounded-3"
+                         onclick="
+                                 set_input_value_by_id('input{{ product.name }}{{ product.id }}', 'half_year');
+                                 set_choosed_radio(this, 'btn-radio-1-active');">
+                        <p class="m-0">Пол года</p>
+                        <p class="m-0 btn-radio-1-price">{{ product.price_half_year }} ₽</p>
+                    </div>
+                    <div class="btn-radio btn-radio-1 px-3 py-2 rounded-3"
+                         onclick="
+                                 set_input_value_by_id('input{{ product.name }}{{ product.id }}', 'year');
+                                 set_choosed_radio(this, 'btn-radio-1-active');">
+                        <p class="m-0">Год</p>
+                        <p class="m-0 btn-radio-1-price">{{ product.price_year }} ₽</p>
+                    </div>
+                    <div class="btn-radio btn-radio-1 px-3 py-2 rounded-3"
+                         onclick="
+                                 set_input_value_by_id('input{{ product.name }}{{ product.id }}', 'forever');
+                                 set_choosed_radio(this, 'btn-radio-1-active');">
+                        <p class="m-0">Навсегда</p>
+                        <p class="m-0 btn-radio-1-price">{{ product.price_forever }} ₽</p>
+                    </div>
+                    <input name="promo" class="input-1 px-3 py-2 rounded-3 text-center text-dark-emphasis" placeholder="PROMO" value="">
+                </div>
+            </div>
+            <div class="modal-footer flex-row-center gap-3 mt-2"
+                 id="btn-submit-{{ product.name }}{{ product.id }}">
+                <button type="submit" class="btn-1 fw-bold">Купить</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', function (e) {
+        var for_insert = document.getElementById('btn-submit-{{ product.name }}{{ product.id }}');
+        var el = document.createElement('script');
+        el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
+        var el2 = document.createElement('div');
+        el2.setAttribute("data-size", "compact");
+        el2.classList.add('g-recaptcha-small');
+        el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
+        el2.classList.add('g-recaptcha');
+        for_insert.before(el);
+        for_insert.before(el2);
+    });
+</script>
