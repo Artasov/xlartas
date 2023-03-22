@@ -90,7 +90,7 @@ def activate_test_period(request):
         return HttpResponseBadRequest()
     license_.is_test_period_activated = True
     license_.save()
-    add_license_time(user_=user_, product_name=product_.name, days=3)
+    add_license_time(user_=user_, product_name=product_.name, days=product_.test_period_days)
     return redirect('profile')
 
 

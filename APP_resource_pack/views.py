@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from transliterate import translit
 
 from Core.ErrMsg import FILE_TOO_BIG, IMAGE_TOO_BIG, OBJ_WITH_THIS_NAME_EXISTS, \
-    SOMETHING_WRONG, NOT_ALL_FIELDS_FILLED_OR_INCORRECT, RECAPTCHA_INVALID, NOT_FOUND_404
+    SOMETHING_WRONG, NOT_ALL_FIELDS_FILLED_OR_INCORRECT, NOT_FOUND_404
 from Core.funcs import renderInvalid
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User, File
@@ -114,9 +114,8 @@ def search(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def catalog(request, ):
+def catalog(request):
     authors_ = User.objects.filter(rp__available=True).annotate(rp_count=Count('rp')).order_by('-rp_count')
-
 
     return render(request, 'APP_resource_pack/catalog.html', {
         'rp': ResourcePack.objects.first(),

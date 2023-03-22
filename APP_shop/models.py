@@ -49,6 +49,8 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    test_period_days = models.IntegerField(default=3)
+
     price_week = models.IntegerField(null=True, blank=True)
     price_month = models.IntegerField(null=True, blank=True)
     price_half_year = models.IntegerField(null=True, blank=True)
