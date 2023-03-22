@@ -137,3 +137,5 @@ data/
 
 # SASS CACHE
 .sass-cache/
+
+log.txt
