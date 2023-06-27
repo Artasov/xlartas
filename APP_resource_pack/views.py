@@ -14,11 +14,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from transliterate import translit
 
-from Core.ErrMsg import FILE_TOO_BIG, IMAGE_TOO_BIG, OBJ_WITH_THIS_NAME_EXISTS, \
+from Core.error_messages import FILE_TOO_BIG, IMAGE_TOO_BIG, OBJ_WITH_THIS_NAME_EXISTS, \
     SOMETHING_WRONG, NOT_ALL_FIELDS_FILLED_OR_INCORRECT, NOT_FOUND_404
-from Core.funcs import renderInvalid
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User, File
+from Core.services.services import render_invalid
 from .models import ResourcePack, ResourcePackImage
 from .serializers import ResourcePackSerializer
 
@@ -125,11 +125,11 @@ def catalog(request):
 
 def detail(request, slug=None):
     if not slug:
-        return renderInvalid(request, NOT_FOUND_404, 'rp:catalog')
+        return render_invalid(request, NOT_FOUND_404, 'rp:catalog')
     try:
         rp = ResourcePack.objects.get(slug=slug)
     except ResourcePack.DoesNotExist:
-        return renderInvalid(request, NOT_FOUND_404, 'rp:catalog')
+        return render_invalid(request, NOT_FOUND_404, 'rp:catalog')
     return render(request, 'APP_resource_pack/detail.html', {'rp': rp})
 
 

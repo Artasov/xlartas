@@ -10,7 +10,11 @@ button, input[type="submit"], input[type="reset"]
 	cursor: pointer
 	outline: inherit
 
-
+ul
+	margin: 0
+	padding: 0
+	list-style: none
+	
 html
 	font-size: 16px
 	min-height: 100%
@@ -142,6 +146,7 @@ textarea, textarea:active, textarea:focus
 			border-color: rgba(#000, .0) !important
 
 .no_scrollbar
+	img
 	&::-webkit-scrollbar
 		width: 0
 		height: 0
@@ -216,7 +221,7 @@ textarea, textarea:active, textarea:focus
 .g-recaptcha
 	margin: 0 auto
 	max-width: 304px
-	filter: sepia(1%) invert(0.86) hue-rotate(-29deg)
+	filter: sepia(1%) invert(0.86) hue-rotate(210deg) saturate(4)
 
 .g-recaptcha-small
 	max-width: 156px !important

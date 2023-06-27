@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import decorator_from_middleware
 from transliterate import translit
 
-from Core.ErrMsg import NOT_FOUND_404, NOT_ALL_FIELDS_FILLED, RECAPTCHA_INVALID
-from Core.funcs import renderInvalid
+from Core.error_messages import NOT_FOUND_404, NOT_ALL_FIELDS_FILLED, RECAPTCHA_INVALID
 from Core.middleware import reCaptchaMiddleware
+from Core.services.services import render_invalid
 from .ErrMsg import UPLOAD_TOO_BIG
 from .models import Upload, UploadedFile
 
@@ -20,12 +20,12 @@ def list_user_upload(request):
 @login_required(redirect_field_name=None, login_url='signin')
 def delete(request, key=None):
     if key is None:
-        return renderInvalid(request, NOT_FOUND_404, 'host:create')
+        return render_invalid(request, NOT_FOUND_404, 'host:create')
 
     try:
         upload_ = Upload.objects.get(key=key)
     except Upload.DoesNotExist:
-        return renderInvalid(request, NOT_FOUND_404, 'host:create')
+        return render_invalid(request, NOT_FOUND_404, 'host:create')
 
     if upload_.user.username == request.user.username or request.user.is_staff:
         upload_.delete()
@@ -35,12 +35,12 @@ def delete(request, key=None):
 
 def read(request, key=None):
     if key is None:
-        return renderInvalid(request, NOT_FOUND_404, 'host:create')
+        return render_invalid(request, NOT_FOUND_404, 'host:create')
 
     try:
         upload_ = Upload.objects.get(key=key)
     except Upload.DoesNotExist:
-        return renderInvalid(request, NOT_FOUND_404, 'host:create')
+        return render_invalid(request, NOT_FOUND_404, 'host:create')
 
     author = False
     if request.user.is_authenticated:
@@ -52,7 +52,7 @@ def read(request, key=None):
     # HOURS FOR DELETE
     delete_in = int((upload_.date_delete - upload_.date_created).total_seconds() // 3600)
     if delete_in < 1:
-        return renderInvalid(request, NOT_FOUND_404, 'host:create')
+        return render_invalid(request, NOT_FOUND_404, 'host:create')
 
     return render(request, 'APP_filehost/read.html', {
         'upload': upload_,
@@ -84,7 +84,7 @@ def create(request):
     # CHECK SIZE
     total_size = sum(file.size for file in files)
     if total_size > MAX_UPLOAD_SIZE:
-        return renderInvalid(request, UPLOAD_TOO_BIG, 'host:create')
+        return render_invalid(request, UPLOAD_TOO_BIG, 'host:create')
 
     # UPLOADING
     upload_ = Upload.objects.create(name=name, user=request.user if request.user.is_authenticated else None,

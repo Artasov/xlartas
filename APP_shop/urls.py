@@ -10,4 +10,3 @@ urlpatterns = [
     path('activate_test_period/', views.activate_test_period, name='activate_test_period'),
     path('download_program/<int:product_id>/', views.download_program, name='download_program'),
 ]
-

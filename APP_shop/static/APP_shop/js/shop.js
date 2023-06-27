@@ -11,3 +11,9 @@ function set_choosed_radio(obj, className) {
     }
     obj.classList.add(className)
 }
+
+
+
+
+
+

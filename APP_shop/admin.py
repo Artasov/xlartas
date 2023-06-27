@@ -1,6 +1,7 @@
 from django.contrib import admin
 from datetime import datetime, timedelta
 
+from django.utils import timezone
 from .models import *
 
 
@@ -28,7 +29,7 @@ class LicenseAdmin(admin.ModelAdmin):
 
     def count_days_for_expiration(self, obj):
         if obj.date_expiration is not None:
-            count_days = (obj.date_expiration.date() - datetime.now().date()).days
+            count_days = (obj.date_expiration.date() - timezone.now().date()).days
             if count_days == 0:
                 count_days = 'Today'
             elif count_days < 0:

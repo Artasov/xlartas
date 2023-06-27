@@ -6,9 +6,9 @@ from django.shortcuts import render, redirect
 from APP_referral.funcs import sync_ref_program_license_bonus
 from APP_referral.models import RefLinking
 from APP_shop.models import License
-from Core.ErrMsg import REF_CODE_NOT_SPECIFIED, INVITER_ALREADY_SETTED, REF_CODE_SELF_USAGE, REF_CODE_DOES_NOT_EXIST
-from Core.funcs import renderInvalid
+from Core.error_messages import REF_CODE_NOT_SPECIFIED, INVITER_ALREADY_SETTED, REF_CODE_SELF_USAGE, REF_CODE_DOES_NOT_EXIST
 from Core.models import User
+from Core.services.services import render_invalid
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -37,14 +37,14 @@ def referrals_list(request):
 @login_required(login_url='signup')
 def set_my_inviter(request, referral_code: str = None):
     if referral_code is None:
-        return renderInvalid(request, REF_CODE_NOT_SPECIFIED, 'profile')
+        return render_invalid(request, REF_CODE_NOT_SPECIFIED, 'profile')
     if not User.objects.filter(referral_code=referral_code).exists():
-        return renderInvalid(request, REF_CODE_DOES_NOT_EXIST, 'profile')
+        return render_invalid(request, REF_CODE_DOES_NOT_EXIST, 'profile')
     if RefLinking.objects.filter(referral__username=request.user.username).exists():
-        return renderInvalid(request, INVITER_ALREADY_SETTED, 'profile')
+        return render_invalid(request, INVITER_ALREADY_SETTED, 'profile')
     user_ = User.objects.get(username=request.user.username)
     if referral_code == user_.referral_code:
-        return renderInvalid(request, REF_CODE_SELF_USAGE, 'profile')
+        return render_invalid(request, REF_CODE_SELF_USAGE, 'profile')
     RefLinking.objects.create(inviter=User.objects.get(referral_code=referral_code),
                               referral=user_)
     return redirect('profile')

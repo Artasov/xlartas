@@ -43,53 +43,55 @@
 	max-width: 400px
 	margin-left: auto
 	margin-right: auto
- 
- 
-.form__field
-	transition: all 200ms ease
-	font-family: inherit
-	width: 100%
-	border: 0
-	border-bottom: 1px solid $colorB
-	outline: none
-	font-size: 1rem
-	color: $colorF
-	padding: 7px 0
-	background: transparent
-	min-height: 50px
-	letter-spacing: 0.12rem
-	&::placeholder
-		color: transparent
-	&:placeholder-shown ~ .form__label
-		font-size: 1.1rem
-		cursor: text
-		top: 20px
-.form__label
-	transition: all 200ms ease
-	position: absolute
-	top: 0
-	display: block
-	font-size: 1rem
-	color: $colorB
-	text-align: center
-	pointer-events: none
-.form__field:focus
-	~ .form__label
+	input
+		transition: all 200ms ease
+		font-family: inherit
+		width: 100%
+		border: 0
+		text-align: center
+		border-bottom: 1px solid $colorB
+		outline: none
+		font-size: 1rem
+		color: $colorF
+		padding: 7px 0
+		background: transparent
+		min-height: 50px
+		letter-spacing: 0.12rem
+		&:required, &:invalid
+			box-shadow: none
+		&::placeholder
+			color: transparent
+		&:placeholder-shown ~ label
+			font-size: 1.1rem
+			cursor: text
+			top: 20px
+		&:focus
+			~ label
+				position: absolute
+				top: 0
+				display: block
+				transition: 0.2s
+				font-size: 1rem
+				color: $primary
+				font-weight: 700
+			padding-bottom: 6px
+			font-weight: 400
+			border-width: 1px
+			border-image: linear-gradient(to right, $primary, $secondary)
+			border-image-slice: 1
+	label
+		width: 100%
+		transition: all 200ms ease
 		position: absolute
 		top: 0
 		display: block
-		transition: 0.2s
 		font-size: 1rem
-		color: $primary
-		font-weight: 700
-	padding-bottom: 6px
-	font-weight: 400
-	border-width: 1px
-	border-image: linear-gradient(to right, $primary, $secondary)
-	border-image-slice: 1
+		color: $colorB
+		text-align: center
+		pointer-events: none
 
 .form__field-filled
-	~ .form__label
+	~ label
 		position: absolute
 		top: 0
 		display: block
@@ -98,10 +100,7 @@
 		color: $primary
 		font-weight: 700
 	
-/* reset input */
-.form__field
-	&:required, &:invalid
-		box-shadow: none
+
 
 .input-1
 	transition: all 300ms ease

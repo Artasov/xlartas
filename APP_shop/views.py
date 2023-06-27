@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
+from django.utils import timezone
 import environ
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -74,7 +76,7 @@ def buy(request):
     Bill.objects.create(user=user_, product=product_,
                         license_type=license_type, qiwi_bill_id=qiwi_bill_id,
                         pay_link=response['payUrl'], promo=promo_,
-                        date_expiration=datetime.now() + timedelta(minutes=expired_minutes))
+                        date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
     return redirect('shop:bills')
 
 
@@ -114,6 +116,7 @@ def product_program(request, program_name: str):
 
     return render(request, 'APP_shop/product_program.html', {
         'product': product_,
+        'theme': 3 if product_.name == 'xLMACROS' else "default",
         'is_test_period_activated': is_test_period_activated,
         'count_starts': License.objects.filter(product=product_).aggregate(Sum('count_starts'))['count_starts__sum']
     })

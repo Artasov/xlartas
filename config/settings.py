@@ -14,31 +14,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+DEBUG = bool(int(env('DEBUG')))
+DEV = bool(int(env('DEV')))
+ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
 
 # Application definition
 
 AUTH_USER_MODEL = 'Core.User'
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_extensions',
-    'django.contrib.sites',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.telegram',
-    'allauth.socialaccount.providers.github',
-    'rest_framework',
-
+LOCAL_APPS = [
     'Core',
     'APP_referral',
     'APP_shop',
@@ -46,8 +29,29 @@ INSTALLED_APPS = [
     'APP_private_msg',
     'APP_filehost',
     'APP_resource_pack',
-
+    'APP_tests',
 ]
+THIRD_APPS = [
+    'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.telegram',
+    'allauth.socialaccount.providers.github',
+]
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_extensions',
+    'django.contrib.sites'
+]
+
+INSTALLED_APPS = LOCAL_APPS + THIRD_APPS + DJANGO_APPS
 
 MIDDLEWARE = [
     'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
@@ -61,6 +65,7 @@ MIDDLEWARE = [
 ]
 if DEBUG:
     import mimetypes
+
     mimetypes.add_type("application/javascript", ".js", True)
     INTERNAL_IPS = ('127.0.0.1',)
     MIDDLEWARE += (
@@ -100,7 +105,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     },
     'telegram': {
-        'TOKEN': '6265700142:AAHFdoy6QnLaK9ge2wdfzWkN1ENr9wB2xSk'
+        'TOKEN': env('TG_TOKEN')
     }
 }
 AUTHENTICATION_BACKENDS = [
@@ -156,7 +161,7 @@ REST_FRAMEWORK = {
 
 REFERRER_POLICY = 'origin'
 WSGI_APPLICATION = 'config.wsgi.application'
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'Core.urls'
 
 TEMPLATES = [
     {
@@ -176,15 +181,23 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db',
-        'USER': env('DATABASES_USER'),
-        'PASSWORD': env('DATABASES_PASS'),
-        'HOST': env('DATABASES_HOST')
+if DEV:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DATABASES_USER'),
+            'USER': env('DATABASES_USER'),
+            'PASSWORD': env('DATABASES_PASS'),
+            'HOST': env('DATABASES_HOST')
+        }
+    }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -194,14 +207,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'E:/nonExistence/Code/Web/xlartas/static'
+STATIC_ROOT = BASE_DIR.parent / 'static'
 STATICFILES_DIRS = [
     BASE_DIR / 'Core' / 'static',
 ]
@@ -215,7 +228,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.timeweb.ru'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 2525
+EMAIL_PORT = 25
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
@@ -225,3 +238,7 @@ PAGINATION_RP_COUNT = 12
 
 MAX_UPLOAD_SIZE_ANON_MB = 30
 MAX_UPLOAD_SIZE_AUTHED_MB = 100
+
+CONFIRMATION_CODE_LIFE_TIME = 1  # minutes
+
+DEVELOPER_EMAIL = 'ivanhvalevskey@gmail.com'

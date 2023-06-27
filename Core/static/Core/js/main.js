@@ -15,15 +15,10 @@ function set_input_value_by_id(input_id, value) {
 const themeChangeBtns = document.getElementsByClassName('theme-change-btn');
 for (let i = 0; i < themeChangeBtns.length; i++) {
     themeChangeBtns[i].addEventListener('click', function () {
-        const curId = parseInt(bgImage.getAttribute('themeId'));
-        const maxId = 2;
-        let forSetId = curId + 1;
-        if (forSetId > maxId) {
-            forSetId = 1;
-        }
-        setThemeById(forSetId);
+        next_theme();
     })
 }
+
 window.onload = function (e) {
     document.getElementById('loading_spinner_block').remove();
     document.getElementById('content').classList.remove('d-none');

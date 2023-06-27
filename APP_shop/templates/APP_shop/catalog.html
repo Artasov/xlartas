@@ -1,7 +1,7 @@
 {% extends 'Core/index.html' %}
 {% load APP_shop_tags %}
 {% load static %}
-{% load Core_tags %}
+{% load recaptcha_tags %}
 
 {% block title %}xlartas{% endblock %}
 
@@ -25,6 +25,9 @@
         {% if invalid %}
             <div class="text-center"><span class="text-danger">{{ invalid }}</span></div>
         {% endif %}
+        <script>
+            getCookie()
+        </script>
         <div class="mx-4 mx-md-auto p-0">
             <div class="row flex-row-center my-2">
                 {% for product in products %}

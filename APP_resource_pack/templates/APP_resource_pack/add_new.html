@@ -157,26 +157,11 @@
             </div>
             <div id="preview-image-preview" class="row p-0 m-0 mb-2"></div>
             <div id="images-preview" class="row p-0 m-0"></div>
-            <div class="d-none recaptcha_mark"></div>
+            <div id="btn-recaptcha-marked" class="d-none"></div>
+            {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
         </form>
         <div class="text-center my-3">
             <button id="btn_submit" class="btn-1 fs-5 fw-bold px-4 py-1">Create</button>
         </div>
     </div>
-    <script>
-        window.addEventListener('load', function (e) {
-            let for_insert = document.getElementsByClassName('recaptcha_mark')[0];
-            let el = document.createElement('script');
-            el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-            let el2 = document.createElement('div');
-            if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
-                el2.setAttribute("data-size", "compact");
-                el2.classList.add('g-recaptcha-small');
-            }
-            el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
-            el2.classList.add('g-recaptcha');
-            for_insert.before(el);
-            for_insert.before(el2);
-        });
-    </script>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% load socialaccount %}
 {% load static %}
+{% load Core_tags %}
 
 <header class="disable-tap-and-selection mx-auto w-100">
     <nav class="backdrop-blur-10-header navbar navbar-expand-md m-auto rounded-bottom-5 rounded-top-0"
@@ -190,18 +191,9 @@
                             {% else %}
                                 <li id="auth_form" style="min-width: 300px;">
                                     <form class="px-3 py-1" method="post" action="{% url 'signin' %}">{% csrf_token %}
-                                        <div class="mb-3 form__group fs-5">
-                                            <input type="text" class="form__field text-center"
-                                                   placeholder="Email / Name" name="username" id='username' required/>
-                                            <label for="username" class="form__label" style="width: 100%">Email /
-                                                Name</label>
-                                        </div>
-                                        <div class="mb-3 form__group">
-                                            <input type="password" class="form__field text-center"
-                                                   placeholder="Password" name="password" id='password' required/>
-                                            <label for="password" class="form__label"
-                                                   style="width: 100%">Password</label>
-                                        </div>
+                                        {% get_login_form as header_login_form %}
+                                        {% include 'Core/includes/form.html' with form=header_login_form%}
+
                                         <div class="text-center pt-3 pb-1">
                                             <button type="submit" id="button" data-text="SIGN IN" data-text-done=""
                                                     class="btn-13 bg-transparent text-dark-emphasis"></button>

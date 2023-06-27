@@ -66,39 +66,7 @@ def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool =
         return rand_str
 
 
-def send_EMail(port: int, to: str, subject: str, html: str):
-    env = environ.Env()
-    server = 'smtp.timeweb.ru'
-    user = env('EMAIL_HOST_USER')
-    password = env('EMAIL_HOST_PASSWORD')
 
-    import smtplib
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-    from platform import python_version
-
-    sender = user
-    subject = subject
-    text = 'Something go wrong'
-
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = to
-    msg['Reply-To'] = sender
-    msg['Return-Path'] = sender
-    msg['X-Mailer'] = 'Python/' + (python_version())
-
-    part_text = MIMEText(text, 'plain')
-    part_html = MIMEText(html, 'html')
-
-    msg.attach(part_text)
-    msg.attach(part_html)
-
-    mail = smtplib.SMTP_SSL(server)
-    mail.login(user, password)
-    mail.sendmail(sender, to, msg.as_string())
-    mail.quit()
 
 
 def del_dict_values_by_value(d: dict, value=None, count_to_delete='ALL') -> dict:

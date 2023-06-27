@@ -118,7 +118,7 @@ mt-3 mt-sm-0">
         })
         let btn_copy_secret = document.getElementById('btn-copy-secret');
         btn_copy_secret.addEventListener('click', function (e) {
-            navigator.clipboard.writeText('{{ user_.custom_key }}');
+            navigator.clipboard.writeText('{{ user_.secret_key }}');
             btn_copy_secret.style.transition = 'all 100ms ease';
             btn_copy_secret.style.transform = 'scale(1.2)';
             setTimeout(ResetCopyBtnStyle, 200);

@@ -10,9 +10,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from APP_private_msg.models import PrivateMsg
-from Core.ErrMsg import NOT_ANY_FIELDS_FILLED, REF_CODE_NOT_SPECIFIED, NOT_FOUND_404, RECAPTCHA_INVALID
-from Core.funcs import renderInvalid
+from Core.error_messages import NOT_ANY_FIELDS_FILLED, REF_CODE_NOT_SPECIFIED, NOT_FOUND_404, RECAPTCHA_INVALID
 from Core.middleware import reCaptchaMiddleware
+from Core.services.services import render_invalid
 from xLLIB_v1 import random_str
 
 
@@ -37,23 +37,23 @@ def create(request):
 
 def preread(request, key=None,):
     if key is None:
-        return renderInvalid(request, NOT_FOUND_404, 'private-msg:create')
+        return render_invalid(request, NOT_FOUND_404, 'private-msg:create')
 
     try:
         msg_ = PrivateMsg.objects.get(key=key)
     except PrivateMsg.DoesNotExist:
-        return renderInvalid(request, NOT_FOUND_404, 'private-msg:create')
+        return render_invalid(request, NOT_FOUND_404, 'private-msg:create')
 
     return render(request, 'APP_private_msg/read.html', {'key': key})
 
 
 def read(request, key=None):
     if key is None:
-        return renderInvalid(request, NOT_FOUND_404, 'private-msg:create')
+        return render_invalid(request, NOT_FOUND_404, 'private-msg:create')
     try:
         msg_ = PrivateMsg.objects.get(key=key)
     except PrivateMsg.DoesNotExist:
-        return renderInvalid(request, NOT_FOUND_404, 'private-msg:create')
+        return render_invalid(request, NOT_FOUND_404, 'private-msg:create')
 
     msg_.delete()
 

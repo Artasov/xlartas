@@ -73,31 +73,17 @@
             </table>
 
 
-            <div class="recaptcha_mark text-center my-3">
+            <div id="btn-recaptcha-marked" class="text-center my-3">
                 <button id="btn_submit"
                         class="mx-auto btn-1 fs-5 fw-bold px-4 py-1 w-minc disable-tap-and-selection">
                     Upload
                 </button>
             </div>
+            {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
         </form>
     </div>
     <input type="hidden" id="MAX_UPLOAD_SIZE" value="
         {% if user.is_authenticated %}{% max_upload_size_authed %}
         {% else %}{% max_upload_size_anon %}{% endif %}
     ">
-    <script>
-        window.addEventListener('load', function (e) {
-            var for_insert = document.getElementsByClassName('recaptcha_mark')[0];
-            var el = document.createElement('script');
-            el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-            var el2 = document.createElement('div');
-            if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
-                el2.setAttribute("data-size", "normal");
-            }
-            el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
-            el2.classList.add('g-recaptcha');
-            for_insert.before(el);
-            for_insert.before(el2);
-        });
-    </script>
 {% endblock %}

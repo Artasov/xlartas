@@ -3,9 +3,25 @@ import secrets
 from django.db import transaction
 from django.shortcuts import render, redirect
 
-from Core.funcs import int_decrease_by_percentage
+from django.utils import timezone
+from Core.services.services import int_decrease_by_percentage
 from . import qiwi
 from .models import *
+from .qiwi import reject_bill
+
+
+def reject_waiting_bills(user: User):
+    from APP_shop.models import Bill
+    user_waiting_bills_ = Bill.objects.filter(
+        user=user, status=Bill.BillStatus.WAITING)
+    for bill in user_waiting_bills_:
+        response = reject_bill(bill.qiwi_bill_id)
+        if 'errorCode' in response:
+            return False
+        elif response['status']['value'] == Bill.BillStatus.REJECTED:
+            bill.status = Bill.BillStatus.REJECTED
+            bill.save()
+    return True
 
 
 def generate_bill_id():
@@ -87,10 +103,10 @@ def get_product_price_by_license_type(product: Product, license_type: str):
 def add_license_time(user_: User, product_name: str, days: int):
     license_, created = License.objects.get_or_create(user=user_,
                                                       product=Product.objects.get(name=product_name))
-    if license_.date_expiration > datetime.now():
+    if license_.date_expiration > timezone.now():
         license_.date_expiration = license_.date_expiration + timedelta(days=int(days))
     else:
-        license_.date_expiration = datetime.now() + timedelta(days=int(days))
+        license_.date_expiration = timezone.now() + timedelta(days=int(days))
     license_.save()
 
 

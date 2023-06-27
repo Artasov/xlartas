@@ -137,5 +137,6 @@ data/
 
 # SASS CACHE
 .sass-cache/
+*.map
 
 log.txt

@@ -2,10 +2,11 @@
 {% load APP_shop_tags %}
 {% load static %}
 {% load Core_tags %}
-
+{% load tz %}
 {% block title %}xlartas | {{ product.name }}{% endblock %}
 
-{% block meta_keywords %}{{ product.name }} {{ product.long_name }} minecraft vimeworld вайм ворлд ваймворлд майнкрафт майнкрафта софты кликер макрос macros clicker soft pvp для пвп рич{% endblock %}
+{% block meta_keywords %}{{ product.name }} {{ product.long_name }} minecraft vimeworld вайм ворлд ваймворлд майнкрафт
+    майнкрафта софты кликер макрос macros clicker soft pvp для пвп рич{% endblock %}
 {% block meta_description %}Product - {{ product.long_name }}{% endblock %}
 {% block meta_og_description %}Продукт - {{ product.long_name }}{% endblock %}
 {% block meta_twitter_description %}Product - {{ product.long_name }}{% endblock %}
@@ -40,7 +41,8 @@
                     </div>
                     <div class="modal-body d-flex flex-column mt-3 px-2">
                         <p class="text-dark-emphasis">
-                            &nbsp;&nbsp;&nbsp;&nbsp;После активации вам будет выдано {{ product.test_period_days }} дня/дней полной лицензии
+                            &nbsp;&nbsp;&nbsp;&nbsp;После активации вам будет выдано {{ product.test_period_days }}
+                            дня/дней полной лицензии
                             на {{ product.name }}.
                             Тестовый период можно использовать только 1 раз. Нажмите на кнопку ниже для активации.
                         </p>
@@ -105,15 +107,15 @@
                      style="backdrop-filter: blur(20px); border: 4px solid; border-top: 0;">
                     <div class="col flex-col position-relative p-0 pt-3 pb-0 pb-sm-3">
                         <div class="flex-col-center px-2 pb-3">
-                            <span class="fs-6 fw-8 text-white-75">Version:
+                            <span class="fs-6 fw-8 text-white-75">Версия:
                             <span class="text-white-50">{{ product.version }}</span></span>
-                            <span class="fs-6 fw-8 text-white-75">Update:
+                            <span class="fs-6 fw-8 text-white-75">Обновлено:
                             <span class="text-white-50 fs-6 fw-6">
-                                {{ product.date_updated.date|date:"Y-m-d" }} {{ product.date_updated|time:'H:i' }}</span></span>
+                                {{ product.date_updated | time_since }}
                         </div>
                         <div class="bg-black-25" style="height: 4px; width: calc(100% - 4px); margin-right: 2px;"></div>
                         <div class="flex-col-center px-2 py-2 text-center">
-                            <span class="fs-6 fw-8 text-white-75">Starts:
+                            <span class="fs-6 fw-8 text-white-75">Запусков:
                             <span class="fs-6 text-white-50">{{ count_starts }}</span></span>
                         </div>
                         <div class="bg-black-25" style="height: 4px; width: calc(100% - 4px); margin-right: 2px;"></div>
@@ -131,7 +133,8 @@
                         <div class="d-none d-sm-block bg-black-25 h-100 position-absolute"
                              style="top: 0; right: 0; width: 4px;"></div>
                     </div>
-                    <div class="bg-black-25 d-block d-sm-none" style="height: 4px; width: calc(100% - 4px); margin-right: 2px;"></div>
+                    <div class="bg-black-25 d-block d-sm-none"
+                         style="height: 4px; width: calc(100% - 4px); margin-right: 2px;"></div>
                     <div class="col flex-col-center position-relative py-3 ps-3 pe-1">
                         <div class="flex-col-center">
                             {% if product.name == 'xLUMRA' %}
@@ -169,7 +172,8 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="text-white-80">&nbsp;&nbsp;&nbsp;&nbsp;Для входа в программы используется ваше имя и secret key из
+                        <p class="text-white-80">&nbsp;&nbsp;&nbsp;&nbsp;Для входа в программы используется ваше имя и
+                            secret key из
                             <a href="{% url 'profile' %}">профиля</a>. Для работы программы необходим
                             OpenSSL (Win32OpenSSL_Light-1_1_1).
                             При открытии {{ product.long_name }}, если OpenSSL нет, вам откроется его установщик.

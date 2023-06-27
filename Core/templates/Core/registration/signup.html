@@ -13,27 +13,12 @@
     <div id="content" class="container d-none  flex-col-center flex-grow-1"
          data-bs-theme="dark" style="max-width: 400px;">
         <div class="row disable-tap-and-selection">
-            <form class="px-3 py-2 text-center" method="post" action="{% url 'signup' %}">{% csrf_token %}
-                <span class="text-dark-emphasis fs-1">SIGN UP</span>
-                {% if invalid %}
-                    <div><span class="text-danger">{{ invalid }}</span></div>
-                {% endif %}
-                <div class="mb-3 form__group fs-5">
-                    <input type="text" class="form__field text-center fs-5"
-                           placeholder="Name" minlength="6" name="username" id='username' value="{{ username }}"/>
-                    <label for="username" class="form__label" style="width: 100%">Name</label>
-                </div>
-                <div class="mb-3 form__group fs-5">
-                    <input type="email" class="form__field text-center fs-5"
-                           placeholder="Email" name="email" id='email' required value="{{ email }}"/>
-                    <label for="email" class="form__label" style="width: 100%">Email*</label>
-                </div>
-                <div class="mb-3 form__group">
-                    <input type="password" class="form__field text-center fs-5"
-                           placeholder="Password" minlength="6" name="password" id='password' required/>
-                    <label for="password" class="form__label"
-                           style="width: 100%">Password*</label>
-                </div>
+            <h1 class="text-dark-emphasis fs-1 text-center">SIGN UP</h1>
+            <form class="px-3 py-2 text-center" method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                {% include 'Core/includes/form.html' with form=form %}
+
                 <small class="form-text text-muted" style="opacity: 70%;">
                     By registering on the site you confirm that you have read
                     <a href="{% url 'privacy_policy' %}"
@@ -43,8 +28,9 @@
                 </small>
 
                 <div class="text-center pt-3 pb-1">
-                    <button type="submit" id="button" data-text="SIGN UP" data-text-done=""
-                            class="btn-13 bg-transparent text-dark-emphasis recaptcha_mark mt-3"></button>
+                    <button id='btn-recaptcha-marked' type="submit" id="button" data-text="SIGN UP" data-text-done=""
+                            class="btn-13 bg-transparent text-dark-emphasis mt-3"></button>
+                    {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
                 </div>
 
                 <div id="vk_auth" class="mx-auto mt-2 rounded-4"></div>
@@ -78,20 +64,5 @@
         let clone_tg = document.getElementsByClassName('telegram-auth')[0].cloneNode(true)
         tg_btn.appendChild(clone_tg)
     </script>
-    <script>
-        window.addEventListener('load', function (e) {
-            var for_insert = document.getElementsByClassName('recaptcha_mark')[0];
-            var el = document.createElement('script');
-            el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-            var el2 = document.createElement('div');
-            if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
-                el2.setAttribute("data-size", "compact");
-                el2.classList.add('g-recaptcha-small');
-            }
-            el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
-            el2.classList.add('g-recaptcha');
-            for_insert.before(el);
-            for_insert.before(el2);
-        });
-    </script>
+
 {% endblock %}

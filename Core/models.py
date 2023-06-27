@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
-from APP_shop.qiwi import reject_bill
 from xLLIB_v1 import random_str
 
 
@@ -16,37 +14,35 @@ def GenerateReferralCode():
 
 
 class User(AbstractUser):
-    custom_key = models.CharField(max_length=20, default=GenerateCustomKey)
+    secret_key = models.CharField(max_length=20, default=GenerateCustomKey)
     referral_code = models.CharField(max_length=10, default=GenerateReferralCode)
-    HWID = models.CharField(max_length=300, blank=True, null=True, default=None)
-
-    def reject_waiting_bills(self):
-        from APP_shop.models import Bill
-        user_waiting_bills_ = Bill.objects.filter(
-            user=self, status=Bill.BillStatus.WAITING)
-        for bill in user_waiting_bills_:
-            response = reject_bill(bill.qiwi_bill_id)
-            if 'errorCode' in response:
-                return False
-            elif response['status']['value'] == Bill.BillStatus.REJECTED:
-                bill.status = Bill.BillStatus.REJECTED
-                bill.save()
-        return True
+    hw_id = models.CharField(max_length=600, blank=True, null=True, default=None)
+    is_confirmed = models.BooleanField(default=False)
 
 
+class ConfirmationCode(models.Model):
+    class CodeType(models.TextChoices):
+        signUp = 'signUp'
+        resetPassword = 'resetPassword'
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=40)
+    type = models.CharField(max_length=30, choices=CodeType.choices, default=CodeType.resetPassword)
+    expired_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-class UnconfirmedUser(models.Model):
-    username = models.CharField(max_length=50, blank=True)
-    password = models.CharField(max_length=250, blank=True)
-    email = models.EmailField(max_length=320, blank=True)
-    confirmation_code = models.CharField(max_length=50, blank=True, null=True, default=None)
-    date_created = models.DateTimeField(blank=True, null=True, default=datetime.now)
+    def is_expired(self):
+        return self.expired_at < timezone.now()
 
 
-class UnconfirmedPasswordReset(models.Model):
-    email = models.EmailField(max_length=320, blank=True)
-    confirmation_code = models.CharField(max_length=50, blank=True, null=True, default=None)
-    date_created = models.DateTimeField(blank=True, null=True, default=datetime.now)
+class CompanyData(models.Model):
+    param = models.CharField(max_length=50)
+    value = models.CharField(max_length=200)
+
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.ForeignKey(ConfirmationCode, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class File(models.Model):
