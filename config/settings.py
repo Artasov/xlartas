@@ -195,7 +195,13 @@ else:
             'NAME': env('DATABASES_USER'),
             'USER': env('DATABASES_USER'),
             'PASSWORD': env('DATABASES_PASS'),
-            'HOST': env('DATABASES_HOST')
+            'PORT': env('DATABASES_PORT'),
+            'HOST': env('DATABASES_HOST'),
+
+            "OPTIONS": {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
+                # 'init_command': "SET GLOBAL max_connections = 100000",
+            },
         }
     }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
