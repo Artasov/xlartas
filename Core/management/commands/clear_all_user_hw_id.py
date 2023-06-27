@@ -5,12 +5,11 @@ from Core.models import User
 
 
 class Command(BaseCommand):
-    help = 'Set /' / ' in hw_id model field for each User'
+    help = 'Set '' in hw_id model field for each User'
 
     @transaction.atomic
     def handle(self, *args, **options):
         users = User.objects.all()
-        for user in users:
-            user.hw_id = ''
-            user.save()
+        users.update(hw_id='')
         print(f'{len(users)} users was updated.')
+
