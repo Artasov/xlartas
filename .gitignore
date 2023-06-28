@@ -142,3 +142,4 @@ data/
 *css.map
 *.css.map
 log.txt
+!/.gitignore
