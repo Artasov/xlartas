@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.datetime_safe import datetime
 
 from Core.forms import UserLoginForm
+from Core.models import CompanyData
 from Core.services.services import get_plural_form_number
 
 register = template.Library()
@@ -13,6 +14,14 @@ register = template.Library()
 @register.simple_tag()
 def get_login_form():
     return UserLoginForm()
+
+
+@register.simple_tag()
+def get_company_data(company_data_param: str):
+    try:
+        return CompanyData.objects.get(name=company_data_param).value
+    except CompanyData.DoesNotExist:
+        return f'"{company_data_param}" not found in CompanyData.'
 
 
 @register.filter
