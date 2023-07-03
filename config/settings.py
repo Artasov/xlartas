@@ -1,7 +1,3 @@
-# params for django templates
-# without_header
-# header_logo_only
-
 import os
 from pathlib import Path
 
@@ -17,8 +13,6 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = bool(int(env('DEBUG')))
 DEV = bool(int(env('DEV')))
 ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
-
-# Application definition
 
 AUTH_USER_MODEL = 'Core.User'
 LOCAL_APPS = [

@@ -45,7 +45,7 @@ def signup_confirmation(request, code):
         return render_invalid(request, NOT_FOUND_404, 'signup')
 
     form = UserLoginForm()
-    form.cleaned_data = []  # иначе не добавим ошибки
+    form.cleaned_data = []  # Else we won't be able to add errors.
     context = {}
 
     if code_.is_expired():
