@@ -21,9 +21,10 @@
             {#            about#}
             <div class="frc my-4">
                 <img src="{% static 'Core/img/art-square.jpg' %}" alt=""
-                     style="width: 150px; border-radius: 50%;">
-                <div class="fcc" style="width: 200px;">
-                    <h1 class="m-0 fs-1 text-white fw-bold text-center" style="letter-spacing: 0.3rem;">
+                     style="width: 130px; border-radius: 50%; box-shadow: 0 0 20px white;">
+                <div class="fcc" style="width: 180px;">
+                    <h1 class="m-0 text-white fw-bold text-center"
+                        style="letter-spacing: 0.3rem; font-size: calc(1.675rem + 1.5vw)!important;">
                         xlartas<br>
                     </h1>
                     <h2 class="m-0 fs-5 text-white-70 text-center">
@@ -32,13 +33,13 @@
                 </div>
             </div>
             {#            products#}
-            <div class="frc my-3 gap-4 mx-auto" style="max-width: 500px;">
+            <div class="frc my-3 gap-3 gap-sm-4 mx-auto" style="max-width: 500px;">
                 {% for product in products %}
                     <a href="{% url 'shop:product_program' product.name %}"
                        class="
                        product-card-small px-3 rounded-4
-                       text-decoration-none text-center bg-black-20 py-3"
-                       style="max-width: 150px;">
+                       text-decoration-none text-center bg-black-10 py-3"
+                       style="max-width: 150px; box-shadow: 0 0 10px rgba(0,0,0,.5)">
                         <div class="position-relative">
                             <img src="{{ product.img.url }}" alt="" class="w-100 hover-scale-10">
                             <img src="{{ product.img.url }}" alt=""
