@@ -87,7 +87,8 @@ if DEV:
         'INTERCEPT_REDIRECTS': False,
     }
 
-SITE_ID = 2
+SITE_ID = int(env('SITE_ID'))
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
