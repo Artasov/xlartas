@@ -20,9 +20,34 @@
         {% if invalid %}
             <div><span class="text-danger">{{ invalid }}</span></div>
         {% endif %}
+        {% if form.non_field_errors %}
+            <ul class="errorlist text-center">
+                {% for error in form.non_field_errors %}
+                    <li><span class="fw-bold text-danger">{{ error }}</span></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% for field in form %}
+            {% if field.errors %}
+                <ul class="errorlist text-center">
+                    {% for error in field.errors %}
+                        <li><span class="fw-bold text-danger">{{ error }}</span></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
         <div class="profile bg-black bg-opacity-10 py-3 pb-4 px-3 rounded-4">
-            <div class="row text-center mb-2">
-                <span class="text-white fs-1">{{ user_.username }}</span>
+            <div class="username-edit frc text-center mb-2 px-4 gap-3">
+                <form class="frc w-100 gap-3 ps-5" method="post">
+                    {% csrf_token %}
+                    {{ form.username }}
+                    <button type="submit" id="btnSubmitEditUsername" class="text-white-90 fs-1 d-none fcc">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </button>
+                </form>
+                <button class="text-white-90 fs-1 fcc" id="btnEditUsername">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
             </div>
             {% if user_.email != "" %}
                 <div class="row text-dark-emphasis text-center">
@@ -102,6 +127,23 @@ mt-3 mt-sm-0">
         </div>
     </div>
     <script>
+        const usernameInput = document.getElementById('id_username');
+        const btnEditUsername = document.getElementById('btnEditUsername');
+        const btnSubmitEditUsername = document.getElementById('btnSubmitEditUsername');
+        btnEditUsername.addEventListener('click', () => {
+            usernameInput.focus();
+        })
+        usernameInput.addEventListener('focus', () => {
+            btnEditUsername.classList.add('d-none');
+            btnSubmitEditUsername.classList.remove('d-none');
+        })
+        usernameInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                btnEditUsername.classList.remove('d-none');
+                btnSubmitEditUsername.classList.add('d-none');
+            }, 10)
+        })
+
         function ResetCopyBtnStyle() {
             btn_copy_ref.style.transform = 'none';
             btn_copy_secret.style.transform = 'none';

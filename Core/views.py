@@ -6,6 +6,8 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.forms import modelform_factory
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.crypto import get_random_string
 from django.utils.decorators import decorator_from_middleware
@@ -22,6 +24,7 @@ from .services.code_confirmation import is_code_sending_too_often, get_latest_co
 from .services.services import forbidden_with_login, base_view, render_invalid, telegram_verify_hash
 
 
+@base_view
 def main(request):
     return render(request, 'Core/main.html', {
         'products': Product.objects.filter(available=True)
@@ -219,6 +222,7 @@ def profile(request):
     user_ = User.objects.get(username=request.user.username)
     user_licenses = License.objects.filter(user=user_)
     least_days = {}
+    context = {}
     for license_ in user_licenses:
         remained = int((license_.date_expiration - timezone.now()).total_seconds() / 3600)
         if remained > 9600:
@@ -227,15 +231,16 @@ def profile(request):
             remained = 'None'
         least_days[Product.objects.get(id=license_.product_id).name] = remained
     if RefLinking.objects.filter(referral__username=user_.username).exists():
-        return render(request, 'Core/profile.html', {
-            'least_days': least_days,
-            'user_': user_,
-            'inviter_': RefLinking.objects.get(referral__username=user_.username).inviter,
-            'domain': request.build_absolute_uri('/')[0:-1]})
-    return render(request, 'Core/profile.html', {
-        'least_days': least_days,
-        'user_': user_,
-        'domain': request.build_absolute_uri('/')[0:-1]})
+        context['inviter_'] = RefLinking.objects.get(referral__username=user_.username).inviter
+
+    context['least_days'] = least_days
+    context['domain'] = request.build_absolute_uri('/')[0:-1]
+    context['user_'] = user_
+    form = modelform_factory(User, fields=('username',))(request.POST or None, instance=user_)
+    if form.is_valid():
+        form.save()
+    context['form'] = form
+    return render(request, 'Core/profile.html', context)
 
 
 @base_view
