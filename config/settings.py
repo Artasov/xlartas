@@ -218,8 +218,11 @@ STATIC_ROOT = BASE_DIR.parent / 'static'
 STATICFILES_DIRS = [
     BASE_DIR / 'Core' / 'static',
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'Core/media'
+if DEBUG:
+    MEDIA_URL = '/media/'
+else:
+    MEDIA_URL = '/static/media/'
+MEDIA_ROOT = BASE_DIR.parent / 'static' / 'media'
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env('GOOGLE_RECAPTCHA_SECRET_KEY')
 GOOGLE_RECAPTCHA_SITE_KEY = env('GOOGLE_RECAPTCHA_SITE_KEY')
