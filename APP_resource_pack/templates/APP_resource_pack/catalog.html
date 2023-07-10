@@ -28,7 +28,7 @@
     <div id="content" class="container d-flex d-none flex-column justify-content-center
      no_scrollbar mb-0 flex-grow-1 overflow-y-hidden"
          style="max-width: 900px!important;">
-        <div class="flex-row-center mt-4 mb-2 gap-3">
+        <div class="frc mt-4 mb-2 gap-3">
             <h1 class="fs-1 text-center text-white disable-tap-and-selection m-0">Resource Packs</h1>
             <div class="d-none d-sm-flex flex-column justify-content-end">
                 <a href="{% url 'rp:add_new' %}" class="btn-3 fw-8 fs-4 text-decoration-none" target="_blank">
@@ -51,10 +51,10 @@
         <button id="btn_show_filters" class="btn-3 only_touch w-minc fs-5 mx-auto mb-2">Фильтры</button>
         <div id="filter_block" class="row mb-3">
             <div class="d-flex flex-column justify-content-center gap-3">
-                <div class="flex-col-center flex-sm-row gap-2">
-                    <div class="flex-row-center gap-2">
+                <div class="fcc flex-sm-row gap-2">
+                    <div class="frc gap-2">
                         {# RES #}
-                        <div class="select flex-col-center">
+                        <div class="select fcc">
                         <span class="fs-4 text-white text-opacity-75 text-center
                         disable-tap-and-selection">Res</span>
                             <input type="hidden" name="resolution" id="select_input-resolution" value="All">
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         {# STYLE #}
-                        <div class="select flex-col-center">
+                        <div class="select fcc">
                     <span class="fs-4 text-white text-opacity-75 text-center disable-tap-and-selection">
                         Style</span>
                             <input type="hidden" name="style" id="select_input-style" value="All">
@@ -112,9 +112,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex-row-center gap-2">
+                    <div class="frc gap-2">
                         {# COLOR #}
-                        <div class="select flex-col-center">
+                        <div class="select fcc">
                     <span class="fs-4 text-white text-opacity-75 text-center disable-tap-and-selection">
                         Color</span>
                             <input type="hidden" name="color" id="select_input-color" value="All">
@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         {# Author #}
-                        <div class="select flex-col-center">
+                        <div class="select fcc">
                             <span class="fs-4 text-white text-opacity-75 text-center disable-tap-and-selection">User</span>
                             <input type="hidden" name="author" id="select_input-author" value="All">
                             <div style="min-width: 200px;" class="select_block select_block-active">
@@ -159,7 +159,7 @@
                                             bg-black bg-opacity-10 flex-column text-center">
                                     {% for author in authors %}
                                         <div value="{{ author.username }}"
-                                             class="select_menu-item select_menu-author-item py-1 px-3 flex-row-between">
+                                             class="select_menu-item select_menu-author-item py-1 px-3 frb">
                                             <span class="m-0 disable-tap-and-selection">
                                                 {{ author.username }}</span>
                                             <span>{{ author.rp_count }}</span>
@@ -176,10 +176,10 @@
                         </div>
                     </div>
 
-                    <div class="flex-row-center gap-3">
+                    <div class="frc gap-3">
                     {# SORT #}
-                    <div class="flex-row-center">
-                        <div class="select sort_block flex-row-center gap-2">
+                    <div class="frc">
+                        <div class="select sort_block frc gap-2">
                             <div class="flex-col-center justify-content-md-end">
                             <span class="fs-4 text-white text-opacity-75 text-center
                                 disable-tap-and-selection mb-0 mb-md-1">Sort: </span></div>

@@ -16,7 +16,7 @@ const images = document.getElementsByClassName('image');
 for (let i = 0; i < images.length; i++) {
     images[i].addEventListener('click', function () {
         const imgWrap = document.createElement('div');
-        imgWrap.classList.add('flex-col-center', 'position-absolute', 'left-0', 'top-0', 'bg-black-45');
+        imgWrap.classList.add('fcc', 'position-absolute', 'left-0', 'top-0', 'bg-black-45');
         imgWrap.style.width = '100vw';
         imgWrap.style.height = '100vh';
         const imgBlock = document.createElement('div');

@@ -98,8 +98,6 @@ function UpdateViewZone() {
         }
     }
     uploadField.files = list.files;
-    console.log(MAX_UPLOAD_SIZE)
-    console.log(total_files_size)
     if (total_files_size > MAX_UPLOAD_SIZE) {
         document.getElementById('invalid-size').classList.remove('d-none');
     } else {

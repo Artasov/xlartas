@@ -24,7 +24,7 @@ urlpatterns = [
     path('rp/', include(('APP_resource_pack.urls', 'APP_resource_pack'), namespace='rp')),
     path('tests/', include(('APP_tests.urls', 'APP_tests'), namespace='tests')),
 
-    path('', TemplateView.as_view(template_name='Core/main.html'), name='main'),
+    path('', views.main, name='main'),
     path('signup/', views.signup, name='signup'),
     path('signup_confirmation/<str:code>/', views.signup_confirmation, name='signup_confirmation'),
     path('signin/', views.signin, name='signin'),

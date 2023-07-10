@@ -22,6 +22,12 @@ from .services.code_confirmation import is_code_sending_too_often, get_latest_co
 from .services.services import forbidden_with_login, base_view, render_invalid, telegram_verify_hash
 
 
+def main(request):
+    return render(request, 'Core/main.html', {
+        'products': Product.objects.filter(available=True)
+    })
+
+
 @base_view
 @forbidden_with_login
 @decorator_from_middleware(reCaptchaMiddleware)

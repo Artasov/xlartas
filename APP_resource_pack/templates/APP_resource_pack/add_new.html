@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="content" class="container d-none  flex-col-center
+    <div id="content" class="container d-none  fcc
      no_scrollbar mb-0 flex-grow-1"
          style="max-width: 600px!important;">
         <h1 class="position-relative text-center text-white disable-tap-and-selection mt-4">
@@ -48,7 +48,7 @@
             {% if invalid %}
                 <div class="text-center mt-2"><span class="text-danger">{{ invalid }}</span></div>
             {% endif %}
-            <div class="d-none progress-bar-block position-relative flex-row-center mt-2">
+            <div class="d-none progress-bar-block position-relative frc mt-2">
                 <progress id="progress-bar" class="mx-auto" value="55" max="100"></progress>
                 <div class="position-absolute text-white fw-8 top-0 left w-100 flex-col-center text-center">
                     <span><span id="progress-bar-value">0</span> %</span>
@@ -59,7 +59,7 @@
                        placeholder="Resource Pack Name" name="name" id='name' required/>
                 <label for="name" class="form__label" style="width: 100%">Name</label>
             </div>
-            <div class="form-group flex-row-center gap-3 mb-3">
+            <div class="form-group frc gap-3 mb-3">
                 <div class="select flex-col-center">
                     <span class="fs-4 text-white text-opacity-75 text-center disable-tap-and-selection">
                         Res</span>
@@ -134,7 +134,7 @@
                 </div>
             </div>
             <p class="text-white-65 fs-6 fw-5 mb-2 text-center">Перетащи файлы либо кликни чтобы выбрать</p>
-            <div class="flex-row-center gap-3 mb-3 disable-tap-and-selection">
+            <div class="frc gap-3 mb-3 disable-tap-and-selection">
                 <div id="drag_drop_rp_file"
                         class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
                     <span id="drag_drop_rp_file-name" class="text-white-75 fs-5 fw-7">RP File</span>

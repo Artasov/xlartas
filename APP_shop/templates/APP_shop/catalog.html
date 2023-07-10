@@ -29,7 +29,7 @@
             getCookie()
         </script>
         <div class="mx-4 mx-md-auto p-0">
-            <div class="row flex-row-center my-2">
+            <div class="row frc my-2">
                 {% for product in products %}
                     {% if product.type == product.ProductType.program %}
                         {% include 'APP_shop/includes/modal_buy_license.html' with product=product %}
@@ -44,13 +44,13 @@
                                         <img src="{{ product.img.url }}" class="product-img" alt="">
                                         <img src="{{ product.img.url }}" class="product-img product-img-bg" alt="">
                                         {% if product.sale > 0 %}
-                                            <div class="sale-block flex-col-center text-center">
+                                            <div class="sale-block fcc text-center">
                                                 <span class="text-dark-emphasis fs-6">-{{ product.sale }}%</span>
                                             </div>
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="product-text-block px-lg-3 mt-md-3 mt-0 flex-col-center">
+                                <div class="product-text-block px-lg-3 mt-md-3 mt-0 fcc">
                                     <p class="fw-bold fs-3 mb-md-2 mb-1 product-name text-white">{{ product.long_name }}</p>
                                     <p class="text-break text-white text-opacity-75 m-0">{{ product.desc_short }}</p>
                                 </div>
@@ -59,7 +59,7 @@
                                  class="only_touch mt-3 mx-auto bg-white bg-opacity-25"></div>
                             <div class="d-flex flex-column justify-content-end mt-3 mt-sm-2">
                                 <div class="price-block d-flex flex-row flex-sm-column justify-content-center gap-5 gap-sm-3">
-                                    <div class="flex-row-center">
+                                    <div class="frc">
                                         <span class="m-0 fw-light fs-3 price">
                                             {% if product.sale > 0 %}
                                                 <span class="price-without_sale fw-lighter fs-6 text-white-50 text-center text-decoration-line-through">

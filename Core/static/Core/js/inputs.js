@@ -1,5 +1,4 @@
 let form_inputs = document.querySelectorAll('.form__group > input');
-console.log(form_inputs)
 for (let i = 0; i < form_inputs.length; i++) {
     if (form_inputs[i].value.length !== 0) {
         form_inputs[i].classList.add('form__field-filled');

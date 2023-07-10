@@ -10,7 +10,7 @@
 {% block meta_twitter_description %}Sign In{% endblock %}
 
 {% block content %}
-<div id="content" class="container d-none  flex-col-center flex-grow-1"
+<div id="content" class="container d-none  fcc flex-grow-1"
      data-bs-theme="dark"
      style="max-width: 400px;">
     <div class="row disable-tap-and-selection ">
@@ -31,7 +31,7 @@
                 document.getElementById('vk_auth').style.display = 'none';
             </script>
             <div class="text-center pt-3 pb-2">
-                <div class="flex-row-center">
+                <div class="frc">
                     <a href="{% provider_login_url "google" %}" class="px-1"><img
                             src="{% static 'Core/img/google.png' %}" alt=""
                             style="max-width: 40px;"></a>

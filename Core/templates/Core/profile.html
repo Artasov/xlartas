@@ -26,27 +26,27 @@
             </div>
             {% if user_.email != "" %}
                 <div class="row text-dark-emphasis text-center">
-                    <div class="col-4 flex-col-center">
+                    <div class="col-4 fcc">
                         <span>Email</span></div>
-                    <div class="col-8 flex-col-center overflow-x-scroll no_scrollbar">
+                    <div class="col-8 fcc overflow-x-scroll no_scrollbar">
                         <span class="no_scrollbar">{{ user_.email }}</span></div>
                 </div>
             {% endif %}
             <div class="w-100 bg-opacity-25 bg-white mx-auto" style="height: 1px;"></div>
             <div class="row text-dark-emphasis text-center">
-                <div class="col-4 flex-col-center"><span>Secret</span></div>
+                <div class="col-4 fcc"><span>Secret</span></div>
                 <div class="col-8 d-flex gap-2 justify-content-center">
-                    <p class="no_scrollbar fs-3 flex-col-center">
+                    <p class="no_scrollbar fs-3 fcc">
                         <span style="max-height: 10px;">*************</span></p>
-                    <div id="btn-copy-secret" class=" flex-col-center">
+                    <div id="btn-copy-secret" class=" fcc">
                         <i class="fa-solid fa-copy disable-tap-and-selection"></i></div>
                 </div>
             </div>
             {% for product_name in least_days.items %}
                 <div class="w-100 bg-opacity-25 bg-white mx-auto" style="height: 1px;"></div>
                 <div class="row text-dark-emphasis text-center">
-                    <div class="col-4 flex-col-center"><span>{{ product_name.0 }}</span></div>
-                    <div class="col-8 flex-col-center overflow-x-scroll no_scrollbar">
+                    <div class="col-4 fcc"><span>{{ product_name.0 }}</span></div>
+                    <div class="col-8 fcc overflow-x-scroll no_scrollbar">
                 <span>
                     {% if product_name.1 > 0 %}
                         {{ product_name.1 }} hour
@@ -60,13 +60,13 @@
             {% endfor %}
             <div class="w-100 bg-opacity-25 bg-white mx-auto" style="height: 1px;"></div>
             <div class="row text-dark-emphasis text-center">
-                <div class="col-4 flex-col-center">
+                <div class="col-4 fcc">
                     <span>Ref. link</span></div>
-                <div class="col-8 flex-col-center">
-                    <div class="overflow-x-scroll flex-row-center gap-2 no_scrollbar">
+                <div class="col-8 fcc">
+                    <div class="overflow-x-scroll frc gap-2 no_scrollbar">
                         <span class="disable-tap-and-selection no_scrollbar fs-6">
                              xlartas.ru/i'm invited...</span>
-                        <div id="btn-copy-ref" class="flex-col-center">
+                        <div id="btn-copy-ref" class="fcc">
                             <i class="fa-solid fa-copy disable-tap-and-selection"></i></div>
                     </div>
                 </div>
@@ -74,21 +74,21 @@
             {% if inviter_ %}
                 <div class="w-100 bg-opacity-25 bg-white mx-auto" style="height: 1px;"></div>
                 <div class="row text-dark-emphasis text-center">
-                    <div class="col-4 flex-col-center"><span>Inviter</span></div>
-                    <div class="col-8 flex-col-center overflow-x-scroll no_scrollbar">
+                    <div class="col-4 fcc"><span>Inviter</span></div>
+                    <div class="col-8 fcc overflow-x-scroll no_scrollbar">
                         <span>{{ inviter_.username }}</span></div>
                 </div>
             {% endif %}
 
             <div class="w-100 bg-opacity-25 bg-white mx-auto" style="height: 1px;"></div>
-            <div class="row w-100 flex-col-center text-center m-0">
+            <div class="row w-100 fcc text-center m-0">
                 <a href="{% url 'referral:info' %}"
                    class="text-secondary text-decoration-none mx-auto fw-bold
 mt-3 mt-sm-0">
                     Как работает реферальная система?</a>
             </div>
 
-            <div class="text-center flex-col-center">
+            <div class="text-center fcc">
                 <div class="col-12 d-flex flex-column flex-sm-row mx-auto
                 justify-content-center gap-3 mt-3 mt-sm-0">
                     <a class="btn-3 fw-bold text-decoration-none mx-auto"

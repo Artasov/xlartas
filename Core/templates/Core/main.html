@@ -11,59 +11,62 @@
 
 {% block link_content_css %}
     <link rel="stylesheet" href="{% static 'Core/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/borders.css' %}">
 {% endblock %}
 
 {% block content %}
     <div id="content" class="d-none container no_scrollbar overflow-y-scroll disable-tap-and-selection"
-          data-bs-theme="dark">
-
-{# about #}
+         data-bs-theme="dark">
         <div class="mx-auto container-sm p-0 pe-md-4" id="about-block">
-            <div class="row flex-row-center">
-                <div class="col-lg-3 col-md-4 d-flex
-                justify-content-center justify-content-md-end">
-                    <img src="{% static 'Core/img/art-square.jpg' %}"
-                         id="main-art" alt="">
-                </div>
-                <div class="col-lg-5 col-md-8 m-0 mt-sm-4" id="about-block-text">
-                    <p class="text-center text-md-start text-white pt-1 mb-1" style="line-height: 1.4rem;">
-                    <span class="fs-1 fw-bold" style="letter-spacing: 0.3rem;">
+            {#            about#}
+            <div class="frc my-4">
+                <img src="{% static 'Core/img/art-square.jpg' %}" alt=""
+                     style="width: 150px; border-radius: 50%;">
+                <div class="fcc" style="width: 200px;">
+                    <h1 class="m-0 fs-1 text-white fw-bold text-center" style="letter-spacing: 0.3rem;">
                         xlartas<br>
-                    </span>
-                        <span class="fs-5 text-white text-opacity-75 text-center text-md-start">
+                    </h1>
+                    <h2 class="m-0 fs-5 text-white-70 text-center">
                         Разработка web-приложений на заказ.
-                    </span>
-                    </p>
-                    <p class="fs-5 text-dark-emphasis text-center text-md-start"
-                       style="filter: invert(1); line-height: 2.5rem;">
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Python&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Django&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;DRF&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Celery&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Django&nbsp;Channels&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Docker&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Redis&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Minio&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Html&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;Sass&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;JS&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;MySQL&nbsp;</span>
-                        <span class="me-1 py-1 text-bg-dark bg-opacity-75 about-block-text-style-1">
-                        &nbsp;PostgreSQL&nbsp;</span>
-                    </p>
+                    </h2>
                 </div>
+            </div>
+            {#            products#}
+            <div class="frc my-3 gap-4 mx-auto" style="max-width: 500px;">
+                {% for product in products %}
+                    <a href="{% url 'shop:product_program' product.name %}"
+                       class="
+                       product-card-small px-3 rounded-4
+                       text-decoration-none text-center bg-black-20 py-3"
+                       style="max-width: 150px;">
+                        <div class="position-relative">
+                            <img src="{{ product.img.url }}" alt="" class="w-100 hover-scale-10">
+                            <img src="{{ product.img.url }}" alt=""
+                                 class="rotate360anim w-100 position-absolute top-0 left-0 z-n1"
+                                 style="filter: blur(20px) contrast(2) saturate(200%)">
+                        </div>
+                        <h3 class="fs-5 text-white-90 mt-3 fw-bold m-0">
+                            {{ product.name }}
+                        </h3>
+                    </a>
+                {% endfor %}
+            </div>
+            {#            rainbow#}
+            <div class="redblue-border-blured px-4 pt-3 pb-3 ps-5 fcc gap-3"
+                 style="background: rgba(17, 17, 35, .8); max-width: 250px;">
+
+                <a class="frc gap-2 text-decoration-none" href="{% url 'about' %}">
+                    <i class="fa-solid fa-circle-info me-3 fs-2 text-white-80 hover-scale-10"></i>
+                    <h3 class="m-0 text-white-80 text-left hover-scale-10" style="width: 120px">About</h3>
+                </a>
+                <a class="frc gap-2 text-decoration-none" href="{% url 'donate' %}">
+                    <i class="fa-solid fa-circle-dollar-to-slot me-3 fs-2 text-white-80 hover-scale-10"></i>
+                    <h3 class="m-0 text-white-80 text-left hover-scale-10" style="width: 120px">Donate</h3>
+                </a>
+                <a class="frc gap-2 text-decoration-none" href="{% url 'host:create' %}">
+                    <i class="fa-solid fa-file-export me-1 fs-2 text-white-80 hover-scale-10"></i>
+                    <h3 class="m-0 ps-1 text-white-80 text-left hover-scale-10" style="width: 120px">File Host</h3>
+                </a>
             </div>
         </div>
     </div>

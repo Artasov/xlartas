@@ -25,7 +25,6 @@ function search(searchText) {
     fetch(`/rp/search?text=${searchText}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             for (let i = 0; i < data.length; i++) {
                 searchResult.appendChild(createSearchEl(data[i]))
             }
@@ -34,7 +33,7 @@ function search(searchText) {
 }
 function createSearchEl(el) {
     const searchEl = document.createElement('div');
-    searchEl.classList.add('flex-row-center');
+    searchEl.classList.add('frc');
     const name = document.createElement('a');
     name.innerText = el.name.slice(0, 20) + "...";
     name.setAttribute('href', `/rp/${el.slug}`)
@@ -317,7 +316,7 @@ function createRpObj(rp) {
     wrapImg.classList.add('wrap-rp-img', 'w-100', 'position-relative', 'overflow-x-hidden', 'rounded-top-4')
 
     const loadingBlock = document.createElement('div');
-    loadingBlock.classList.add('h-100', 'w-100', 'flex-col-center', 'pb-3', 'position-absolute', 'top-0', 'left-0');
+    loadingBlock.classList.add('h-100', 'w-100', 'fcc', 'pb-3', 'position-absolute', 'top-0', 'left-0');
     loadingBlock.style.zIndex = '-1';
     const loading = document.createElement('div');
     loading.classList.add('spinner-border', 'mx-auto', 'text-white-70');

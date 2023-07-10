@@ -395,33 +395,53 @@ progress::-moz-progress-bar
 	display: flex
 	flex-direction: column
 
-.flex-col-center
+.fcc
 	display: flex
 	flex-direction: column
 	justify-content: center
 
-.flex-col-between
+.fcb
 	display: flex
 	flex-direction: column
 	justify-content: space-between
 
-.flex-col-around
+.fca
 	display: flex
 	flex-direction: column
 	justify-content: space-around
 
-.flex-row-center
+.frc
 	display: flex
 	flex-direction: row
 	justify-content: center
 
-.flex-row-between
+.frb
 	display: flex !important
 	flex-direction: row !important
 	justify-content: space-between
 
-.flex-row-around
+.fra
 	display: flex !important
 	flex-direction: row !important
 	justify-content: space-around
+
 	
+.hover-scale-20
+	transition: transform 300ms ease
+	&:hover
+		transform: scale(1.2)
+	
+.hover-scale-10
+	transition: transform 300ms ease
+	&:hover
+		transform: scale(1.1)
+	
+	
+.rotate360anim
+	animation: rotate360 10s linear infinite
+	
+@keyframes rotate360
+	0%
+		transform: rotate(0deg)
+	100%
+		transform: rotate(360deg)

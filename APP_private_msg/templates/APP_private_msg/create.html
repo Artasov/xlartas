@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="content" class="container d-none flex-col-center
+    <div id="content" class="container d-none fcc
      no_scrollbar mb-0 flex-grow-1"
          style="max-width: 600px!important;">
         <h1 class="text-center text-white disable-tap-and-selection mt-4">
@@ -40,9 +40,9 @@
 
         <form action="{% url 'private-msg:create' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="d-none progress-bar-block position-relative flex-row-center mt-2">
+            <div class="d-none progress-bar-block position-relative frc mt-2">
                 <progress id="progress-bar" class="mx-auto" value="55" max="100"></progress>
-                <div class="position-absolute text-white fw-8 top-0 left w-100 flex-col-center text-center">
+                <div class="position-absolute text-white fw-8 top-0 left w-100 fcc text-center">
                     <span><span id="progress-bar-value">0</span> %</span>
                 </div>
             </div>
@@ -52,9 +52,9 @@
                           placeholder="msg text" name="text" id='text' required></textarea>
             </div>
             <p class="text-white-65 fs-6 fw-5 mb-2 text-center">Перетащи файлы либо кликни чтобы выбрать</p>
-            <div class="flex-row-center gap-3 mb-3 disable-tap-and-selection">
+            <div class="frc gap-3 mb-3 disable-tap-and-selection">
                 <div id="drag_drop_rp_file" style="min-width: 12rem;"
-                        class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
+                        class="drag_drop px-2 bg-black-35 dashboard fcc text-center pb-1">
                     <span id="drag_drop_rp_file-name" class="text-white-75 fs-5 fw-7">File</span>
                     <span class="text-white-55 fs-6 fw-5">100 MB</span>
                     <input type="file" class="form-control-file d-none"
@@ -62,8 +62,8 @@
                 </div>
             </div>
 
-            <div class="flex-col-center mb-3">
-                <div class="flex-row-center gap-2">
+            <div class="fcc mb-3">
+                <div class="frc gap-2">
                     <div id="record-btn" class="btn-rec"></div>
                     <div id="play-audio-btn" class="btn-play d-none"></div>
                 </div>
