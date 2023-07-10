@@ -1,8 +1,6 @@
 import hashlib
-import hmac
 import json
 import os
-import time
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import authenticate, login
