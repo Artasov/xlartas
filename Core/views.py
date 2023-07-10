@@ -7,7 +7,9 @@ import time
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
+from django.utils.crypto import get_random_string
 from django.utils.decorators import decorator_from_middleware
 
 from APP_referral.models import RefLinking
@@ -19,7 +21,7 @@ from .middleware import reCaptchaMiddleware
 from .models import *
 from .services.code_confirmation import is_code_sending_too_often, get_latest_confirmation_code, \
     create_confirmation_code_for_user, send_password_reset_email, send_signup_confirmation_email
-from .services.services import forbidden_with_login, base_view, render_invalid
+from .services.services import forbidden_with_login, base_view, render_invalid, telegram_verify_hash
 
 
 @base_view
@@ -96,25 +98,6 @@ def signin(request):
 
 
 @base_view
-def telegram_verify_hash(auth_data):
-    check_hash = auth_data['hash']
-
-    del auth_data['hash']
-    data_check_arr = []
-    for key, value in auth_data.items():
-        data_check_arr.append(f'{key}={value}')
-    data_check_arr.sort()
-    data_check_string = '\n'.join(data_check_arr)
-    secret_key = hashlib.sha256(os.getenv('TELEGRAM_TOKEN').encode()).digest()
-    hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-    if hash != check_hash:
-        return False
-    if time.time() - int(auth_data['auth_date']) > 86400:
-        return False
-    return True
-
-
-@base_view
 def telegram_auth(request):
     if request.method == 'GET':
         data = request.GET.dict()
@@ -128,8 +111,11 @@ def telegram_auth(request):
         username = data['username']
         first_name = data['first_name']
 
-        if User.objects.filter(username=username).exists():
-            username = 'x' + username
+        try:
+            User.objects.get(username=username)
+            username = username + get_random_string(10)
+        except User.DoesNotExist:
+            pass
 
         if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
             user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
@@ -154,10 +140,17 @@ def vk_auth(request):
     if not uid or hash != hash_valid:
         return render(request, 'Core/registration/signup.html', context={
             'invalid': 'Vk auth invalid, pls contact us'})
-    user_, created = User.objects.get_or_create(id=uid,
-                                                first_name=first_name,
-                                                last_name=last_name,
-                                                username=first_name)
+    try:
+        user_, created = User.objects.get_or_create(id=uid,
+                                                    first_name=first_name,
+                                                    last_name=last_name,
+                                                    username=first_name)
+    except IntegrityError:
+        user_ = User.objects.create(id=uid,
+                                    first_name=first_name,
+                                    last_name=last_name,
+                                    username=first_name + get_random_string(10))
+
     login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
     return redirect('main')
 

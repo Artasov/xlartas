@@ -67,6 +67,24 @@ def get_user_by_email_or_name(email_or_name: str) -> Tuple[Optional[User], str]:
     return user_, error
 
 
+def telegram_verify_hash(auth_data):
+    check_hash = auth_data['hash']
+
+    del auth_data['hash']
+    data_check_arr = []
+    for key, value in auth_data.items():
+        data_check_arr.append(f'{key}={value}')
+    data_check_arr.sort()
+    data_check_string = '\n'.join(data_check_arr)
+    secret_key = hashlib.sha256(os.getenv('TELEGRAM_TOKEN').encode()).digest()
+    hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+    if hash != check_hash:
+        return False
+    if time.time() - int(auth_data['auth_date']) > 86400:
+        return False
+    return True
+
+
 def base_view(fn):
     """transaction.atomic() и хук исключений самого высокого уровня"""
 

@@ -12,7 +12,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = bool(int(env('DEBUG')))
 DEV = bool(int(env('DEV')))
-ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
 
 AUTH_USER_MODEL = 'Core.User'
 LOCAL_APPS = [
