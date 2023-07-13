@@ -18,6 +18,7 @@ urlpatterns = [
     path('accounts/vk/login/callback/', views.vk_auth),
 
     path('referral/', include(('APP_referral.urls', 'APP_referral'), namespace='referral')),
+    path('freekassa/', include('freekassa.urls')),
     path('shop/', include(('APP_shop.urls', 'APP_shop'), namespace='shop')),
     path('private-msg/', include(('APP_private_msg.urls', 'APP_private_msg'), namespace='private-msg')),
     path('host/', include(('APP_filehost.urls', 'APP_filehost'), namespace='host')),

@@ -79,7 +79,7 @@ class Bill(models.Model):
     desc = models.CharField(max_length=250, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     license_type = models.CharField(max_length=20, choices=LicenseType.choices, blank=True, null=True)
-    qiwi_bill_id = models.CharField(max_length=30, unique=True)
+    payment_id = models.CharField(max_length=30, unique=True)
     pay_link = models.CharField(max_length=150)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

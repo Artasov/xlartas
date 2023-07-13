@@ -15,7 +15,7 @@ def reject_waiting_bills(user: User):
     user_waiting_bills_ = Bill.objects.filter(
         user=user, status=Bill.BillStatus.WAITING)
     for bill in user_waiting_bills_:
-        response = reject_bill(bill.qiwi_bill_id)
+        response = reject_bill(bill.payment_id)
         if 'errorCode' in response:
             return False
         elif response['status']['value'] == Bill.BillStatus.REJECTED:
@@ -75,7 +75,7 @@ def sync_user_bills(user: User):
     bills = Bill.objects.filter(user=user)
     for bill in bills:
         if bill.status.upper() == Bill.BillStatus.WAITING.upper():
-            bill_status = qiwi.check_bill(bill.qiwi_bill_id)['status']['value']
+            bill_status = qiwi.check_bill(bill.payment_id)['status']['value']
             if bill_status.upper() == Bill.BillStatus.PAID.upper():
                 give_product_by_bill(bill)
                 bill.status = Bill.BillStatus.PAID

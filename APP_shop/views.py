@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from django.conf import settings
@@ -6,12 +7,13 @@ import environ
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Sum
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import decorator_from_middleware
 
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User
+from freekassa.utils import create_order, get_balance
 from . import qiwi
 from .funcs import get_product_price_by_license_type, generate_bill_id, try_apply_promo, add_license_time
 from .funcs import sync_user_bills
@@ -57,27 +59,86 @@ def buy(request):
         return promo_result['redirect']
     else:
         promo_ = None
-
-    qiwi_bill_id = generate_bill_id()
+    print(f'ip {request.META.get("REMOTE_ADDR")}')
+    payment_id = int(timezone.now().timestamp())
     expired_minutes = 10
-    response = qiwi.create_bill(value=price,
-                                billid=qiwi_bill_id,
-                                expired_minutes=expired_minutes,
-                                comment=f'Product: {product_}  |  License time: {license_type} | {user_.username}',
-                                # customer={'username': user_.username},
-                                custom_fields={
-                                    'product': product_.name,
-                                    'license_type': license_type,
-                                    'themeCode': 'Nykyta-TCBm1blw_2J', })
-    if 'errorCode' in response:
-        return render(request, 'APP_shop/catalog.html', context={
-            'invalid': "Invalid is on our side, sorry. Please contact us. (creating bill)",
-            'products': Product.objects.order_by('name').reverse(), })
-    Bill.objects.create(user=user_, product=product_,
-                        license_type=license_type, qiwi_bill_id=qiwi_bill_id,
-                        pay_link=response['payUrl'], promo=promo_,
-                        date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
-    return redirect('shop:bills')
+    a = get_balance()
+    return HttpResponseServerError(f'{a.get("type")} {a.get("message")}')
+    data = create_order(payment_id=payment_id,
+                        payment_system_id=15,
+                        currency='RUB',
+                        amount=price,
+                        ip=request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR'),
+                        email=user_.email or 'ivanhvalevskey@gmail.com')
+    print(data)
+    status_type = data.get('type')
+    orderId = data.get('orderId')
+    orderHash = data.get('orderHash')
+    location = data.get('location')
+    if all((status_type, orderId, orderHash, location)):
+        if status_type == 'success':
+            Bill.objects.create(user=user_, product=product_,
+                                license_type=license_type, payment_id=payment_id,
+                                pay_link=location, promo=promo_,
+                                date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
+            return redirect('shop:bills')
+        return HttpResponseServerError(f'FK create order status - {status_type}')
+    return HttpResponseServerError(f'FK some of status_type, orderId, orderHash, location are exists.')
+
+# @decorator_from_middleware(reCaptchaMiddleware)
+# @login_required(redirect_field_name=None, login_url='signin')
+# @transaction.atomic
+# def buy(request):
+#
+#     if request.method != "POST":
+#         return HttpResponseBadRequest()
+#
+#     if not request.recaptcha_is_valid:
+#         return render(request, 'APP_shop/catalog.html', context={
+#             'invalid': 'Invalid reCAPTCHA. Please try again.',
+#             'products': Product.objects.order_by('name').reverse(), })
+#
+#     user_ = User.objects.get(username=request.user.username)
+#     product_ = Product.objects.get(name=request.POST['product'])
+#     license_type = request.POST['license_type']
+#
+#     price = get_product_price_by_license_type(product_, license_type)
+#     if not price:
+#         return render(request, 'Core/NotFound.html')
+#
+#     promo_result = try_apply_promo(request, user_, product_, price, str(request.POST['promo']).upper())
+#     if promo_result is None:
+#         promo_ = None
+#     elif 'price' in promo_result:
+#         price = promo_result['price']
+#         promo_ = promo_result['promo_']
+#     elif 'render' in promo_result:
+#         return promo_result['render']
+#     elif 'redirect' in promo_result:
+#         return promo_result['redirect']
+#     else:
+#         promo_ = None
+#
+#     payment_id = generate_bill_id()
+#     expired_minutes = 10
+#     response = qiwi.create_bill(value=price,
+#                                 billid=payment_id,
+#                                 expired_minutes=expired_minutes,
+#                                 comment=f'Product: {product_}  |  License time: {license_type} | {user_.username}',
+#                                 # customer={'username': user_.username},
+#                                 custom_fields={
+#                                     'product': product_.name,
+#                                     'license_type': license_type,
+#                                     'themeCode': 'Nykyta-TCBm1blw_2J', })
+#     if 'errorCode' in response:
+#         return render(request, 'APP_shop/catalog.html', context={
+#             'invalid': "Invalid is on our side, sorry. Please contact us. (creating bill)",
+#             'products': Product.objects.order_by('name').reverse(), })
+#     Bill.objects.create(user=user_, product=product_,
+#                         license_type=license_type, payment_id=payment_id,
+#                         pay_link=response['payUrl'], promo=promo_,
+#                         date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
+#     return redirect('shop:bills')
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -116,7 +177,6 @@ def product_program(request, program_name: str):
 
     return render(request, 'APP_shop/product_program.html', {
         'product': product_,
-        'theme': 3 if product_.name == 'xLMACROS' else "default",
         'is_test_period_activated': is_test_period_activated,
         'count_starts': License.objects.filter(product=product_).aggregate(Sum('count_starts'))['count_starts__sum']
     })

@@ -16,6 +16,7 @@ ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
 
 AUTH_USER_MODEL = 'Core.User'
 LOCAL_APPS = [
+    'freekassa',
     'Core',
     'APP_referral',
     'APP_shop',
@@ -246,3 +247,10 @@ MAX_UPLOAD_SIZE_AUTHED_MB = 100
 CONFIRMATION_CODE_LIFE_TIME = 1  # minutes
 
 DEVELOPER_EMAIL = 'ivanhvalevskey@gmail.com'
+
+FK_MERCHANT_ID = env('FK_MERCHANT_ID')
+FK_SECRET_WORD1 = env('FK_SECRET_WORD1')
+FK_SECRET_WORD2 = env('FK_SECRET_WORD2')
+FK_API_URL = 'https://api.freekassa.ru/v1/'
+FK_API_KEY = env('FK_API_KEY')
+FK_SHOP_ID = '666'

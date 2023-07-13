@@ -10,52 +10,13 @@
 {% block meta_twitter_description %}Donate{% endblock %}
 
 {% block content %}
-    <div class="u">
-        <div class="u__container">
-            <div class="u__content">
-                <form class="u__form" method="post" action="{% url 'donate' %}">{% csrf_token %}
-                    <p class="u-text6 u-text-align-center" style="color: #F5F5F5; font-weight: 500">DONATE</p>
-                    <div class="u-help">
-                        {% if invalid %}
-                            <span class="invalid">{{ invalid }}</span>
-                        {% endif %}
-                        <div class="u__fields" style="padding-bottom: 20px;">
-                            <input name="value" type="number" placeholder="Value RUB" class="u__field u-text3">
-                            <input name="comment" type="text" placeholder="Comment" class="u__field u-text3">
-                        </div>
-                        <input class="u-submit u-text3" type="submit" value="Donate" style="margin-top: 20px;">
-                    </div>
-
-
-                </form>
+        <div id="content" class="fcc mx-auto d-none h-100 flex-grow-1">
+            <h1 class="text-white fw-bold fs-1 text-center">Donate</h1>
+            <p class="text-white-80 fs-5 text-center">Спасибо за поддержку проекта</p>
+            <div class="frc">
+                <iframe src="https://widgets.freekassa.ru?type=payment-window&lang=ru&theme=dark&default_amount=500&api_key=34f3b93545e8d3c51107d9667deb2b10&shopID=36606"
+                        width="300" height="490" frameborder="0"></iframe>
             </div>
         </div>
-    </div>
-    <script>
-        let inputs = document.getElementsByClassName('u__field')
-        for (let i = 0; i < inputs.length; i++){
-            inputs[i].addEventListener('blur', function (e) {
-                if(inputs[i].value !== ''){
-                    inputs[i].style.borderColor = '#ff5f6c';
-                }
-                else{
-                    inputs[i].style.borderColor = 'rgba(244, 247, 245, 0.7)';
-                }
-            })
-        }
-        window.addEventListener('load', function(e) {
-            var for_insert = document.getElementsByClassName('u-submit')[0];
-            var el = document.createElement('script');
-            el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-            var el2 = document.createElement('div');
-            if(document.getElementsByTagName('body')[0].classList.contains('_touch')){
-                el2.setAttribute("data-size", "compact")
-            }
-            el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
-            el2.classList.add('g-recaptcha');
-            for_insert.before(el);
-            for_insert.before(el2);
-        });
-    </script>
 
 {% endblock %}
