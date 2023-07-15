@@ -34,7 +34,7 @@ def buy(request):
     if request.method != "POST":
         return HttpResponseBadRequest()
 
-    if not request.recaptcha_is_valid:
+    if not request.recaptcha_is_valid and not request.user.is_staff:
         return render(request, 'APP_shop/catalog.html', context={
             'invalid': 'Invalid reCAPTCHA. Please try again.',
             'products': Product.objects.order_by('name').reverse(), })
@@ -62,10 +62,8 @@ def buy(request):
     print(f'ip {request.META.get("REMOTE_ADDR")}')
     payment_id = int(timezone.now().timestamp())
     expired_minutes = 10
-    a = get_balance()
-    return HttpResponseServerError(f'{a.get("type")} {a.get("message")}')
     data = create_order(payment_id=payment_id,
-                        payment_system_id=15,
+                        payment_system_id=1,
                         currency='RUB',
                         amount=price,
                         ip=request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR'),

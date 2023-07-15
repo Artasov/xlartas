@@ -1,3 +1,4 @@
+import hmac
 import time
 
 import requests
@@ -10,9 +11,8 @@ from django.conf import settings
 def generate_signature(data, api_key=settings.FK_API_KEY):
     sorted_data = sorted(data.items(), key=lambda x: x[0])
     data_string = '|'.join([str(value) for _, value in sorted_data])
-    signature = hashlib.sha256((data_string + api_key).encode()).hexdigest()
+    signature = hmac.new(api_key.encode('utf-8'), data_string.encode('utf-8'), hashlib.sha256).hexdigest()
     return signature
-
 
 def send_request(endpoint, data, api_key=settings.FK_API_KEY):
     data['signature'] = generate_signature(data, api_key)
