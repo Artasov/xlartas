@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-
+import logging
 from django.conf import settings
 from django.utils import timezone
 import environ
@@ -20,6 +20,8 @@ from .funcs import sync_user_bills
 from .models import Product, Bill, License
 
 env = environ.Env()
+
+logger = logging.getLogger(__name__)
 
 
 def catalog(request):
@@ -59,7 +61,6 @@ def buy(request):
         return promo_result['redirect']
     else:
         promo_ = None
-    print(f'ip {request.META.get("REMOTE_ADDR")}')
     payment_id = int(timezone.now().timestamp())
     expired_minutes = 10
     data = create_order(payment_id=payment_id,
@@ -82,6 +83,7 @@ def buy(request):
             return redirect('shop:bills')
         return HttpResponseServerError(f'FK create order status - {status_type}')
     return HttpResponseServerError(f'FK some of status_type, orderId, orderHash, location are exists.')
+
 
 # @decorator_from_middleware(reCaptchaMiddleware)
 # @login_required(redirect_field_name=None, login_url='signin')
@@ -157,10 +159,27 @@ def activate_test_period(request):
 
 @login_required(redirect_field_name=None, login_url='signin')
 def bills(request):
-    user_ = User.objects.get(username=request.user.username)
-    sync_user_bills(user=user_)
+    user_ = request.user
     return render(request, 'APP_shop/bills.html', {
         'bills': Bill.objects.filter(user=user_).order_by('date_created'), })
+
+
+def pay_notify(request):
+    logger.warning('pay_notify')
+    logger.warning(request.POST)
+    logger.warning(request.GET)
+
+
+def pay_success(request):
+    logger.warning('pay_success')
+    logger.warning(request.POST)
+    logger.warning(request.GET)
+
+
+def pay_failed(request):
+    logger.warning('pay_failed')
+    logger.warning(request.POST)
+    logger.warning(request.GET)
 
 
 def product_program(request, program_name: str):
