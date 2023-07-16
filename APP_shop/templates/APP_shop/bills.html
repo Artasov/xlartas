@@ -13,9 +13,9 @@
     <div id="content" class="container d-none  d-flex flex-column
     justify-content-center" data-bs-theme="dark" style="max-width: 500px;">
         <p class="text-dark-emphasis m-0 mt-3 mb-1 fs-1 text-center">{{ user.get_username }} Bills</p>
-        <div class="d-flex flex-column justify-content-between gap-2 pb-3 no_scrollbar">
+        <div class="d-flex bg-transparent flex-column justify-content-between gap-2 pb-3 no_scrollbar">
             {% if bills.count < 1 %}
-                <div class="d-flex flex-column flex-md-row bg-opacity-10 rounded-4
+                <div class="d-flex flex-column bg-transparent flex-md-row bg-opacity-10 rounded-4
                     fs-5 px-3 ps-3 py-4 py-sm-2 bg-black gap-1 gap-sm-3">
                     <div class="col-6 mx-auto fcc">
                         <span class="text-dark-emphasis text-center">У вас пока нет чеков. Для покупки перейдите в
@@ -26,21 +26,21 @@
             <table class="table text-center">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">License</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Pay link</th>
+                    <th scope="col" class="bg-transparent">#</th>
+                    <th scope="col" class="bg-transparent">Product</th>
+                    <th scope="col" class="bg-transparent">License</th>
+                    <th scope="col" class="bg-transparent">Status</th>
+                    <th scope="col" class="bg-transparent">Pay link</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for bill in bills.reverse %}
                     <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ bill.product }}</td>
-                        <td>{{ bill.license_type }}</td>
-                        <td>{{ bill.status }}</td>
-                        <td><a href="{{ bill.pay_link }}">pay</a></td>
+                        <th class="bg-transparent" scope="row">{{ forloop.counter }}</th>
+                        <td class="bg-transparent">{{ bill.product }}</td>
+                        <td class="bg-transparent">{{ bill.license_type }}</td>
+                        <td class="bg-transparent">{{ bill.status }}</td>
+                        <td class="bg-transparent"><a href="{{ bill.pay_link }}">pay</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

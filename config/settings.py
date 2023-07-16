@@ -58,6 +58,43 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'base_formatter': {
+            'format': '{levelname} {asctime} {module}: {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',  # Имя файла, куда будут записываться логи.
+            'formatter': 'base_formatter'
+        },
+    },
+    'loggers': {
+        'Core': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+        'APP_shop': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+        'APP_api': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
 if DEV:
     import mimetypes
 
