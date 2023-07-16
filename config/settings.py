@@ -72,7 +72,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
             'class': 'logging.FileHandler',
-            'filename': 'django.log',  # Имя файла, куда будут записываться логи.
+            'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
             'formatter': 'base_formatter'
         },
     },

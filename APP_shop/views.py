@@ -13,7 +13,7 @@ from django.utils.decorators import decorator_from_middleware
 
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User
-from freekassa.utils import create_order, get_balance
+from freekassa.utils import create_order, get_balance, Currency
 from . import qiwi
 from .funcs import get_product_price_by_license_type, generate_bill_id, try_apply_promo, add_license_time
 from .funcs import sync_user_bills
@@ -64,7 +64,7 @@ def buy(request):
     payment_id = int(timezone.now().timestamp())
     expired_minutes = 10
     data = create_order(payment_id=payment_id,
-                        payment_system_id=1,
+                        payment_system_id=Currency.QIWI,
                         currency='RUB',
                         amount=price,
                         ip=request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR'),

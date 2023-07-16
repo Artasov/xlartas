@@ -8,6 +8,50 @@ import json
 from django.conf import settings
 
 
+from django.db import models
+
+class Currency(models.TextChoices):
+    # Format: Member_Name = "database_value", "Human-Readable Name"
+    FK = "1", "FK"
+    WALLET = "2", "WALLET"
+    RUB = "3", "RUB"
+    USD = "4", "USD"
+    EUR = "5", "EUR"
+    VISA_RUB = "6", "VISA RUB"
+    UAH = "7", "UAH"
+    MASTER_CARD_RUB = "8", "MasterCard RUB"
+    MASTER_CARD_UAH = "9", "MasterCard UAH"
+    QIWI = "10", "Qiwi"
+    VISA_EUR = "11", "VISA EUR"
+    MIR = "12", "МИР"
+    ONLINE_BANK = "13", "Онлайн банк"
+    USDT_ERC20 = "14", "USDT(ERC20)"
+    USDT_TRC20 = "15", "USDT(TRC20)"
+    BITCOIN_CASH = "16", "Bitcoin Cash"
+    BNB = "17", "BNB"
+    DASH = "18", "DASH"
+    DOGECOIN = "19", "Dogecoin"
+    ZCASH = "20", "ZCash"
+    MONERO = "21", "Monero"
+    WAVES = "22", "Waves"
+    RIPPLE = "23", "Ripple"
+    BITCOIN = "24", "Bitcoin"
+    LITECOIN = "25", "Litecoin"
+    ETHEREUM = "26", "Ethereum"
+    STEAMPAY = "27", "SteamPay"
+    MEGAFON = "28", "Мегафон"
+    VISA_USD = "32", "VISA USD"
+    PERFECT_MONEY_USD = "33", "Perfect Money USD"
+    SHIBA_INU = "34", "Shiba Inu"
+    QIWI_API = "35", "QIWI API"
+    CARD_RUB_API = "36", "Card RUB API"
+    GOOGLE_PAY = "37", "Google Pay"
+    APPLE_PAY = "38", "Apple Pay"
+    TRON = "39", "Tron"
+    WEBMONEY_WMZ = "40", "Webmoney WMZ"
+    VISA_MASTER_CARD_KZT = "41", "VISA / MasterCard KZT"
+    SBP = "42", "СБП"
+
 def generate_signature(data, api_key=settings.FK_API_KEY):
     sorted_data = sorted(data.items(), key=lambda x: x[0])
     data_string = '|'.join([str(value) for _, value in sorted_data])
