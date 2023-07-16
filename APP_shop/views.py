@@ -64,7 +64,7 @@ def buy(request):
     payment_id = int(timezone.now().timestamp())
     expired_minutes = 10
     data = create_order(payment_id=payment_id,
-                        payment_system_id=Currency.QIWI,
+                        payment_system_id=1,
                         currency='RUB',
                         amount=price,
                         ip=request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR'),

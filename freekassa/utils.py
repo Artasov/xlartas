@@ -9,6 +9,8 @@ from django.conf import settings
 
 
 from django.db import models
+from django.utils import timezone
+
 
 class Currency(models.TextChoices):
     # Format: Member_Name = "database_value", "Human-Readable Name"
@@ -78,7 +80,7 @@ def create_order(payment_id, payment_system_id, email, amount, currency, ip, api
                  shop_id=settings.FK_MERCHANT_ID):
     data = {
         'shopId': shop_id,
-        'nonce': int(time.time()),
+        'nonce': timezone.now().timestamp(),
         'paymentId': payment_id,
         'i': payment_system_id,
         'email': email,
