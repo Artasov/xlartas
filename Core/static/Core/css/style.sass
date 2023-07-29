@@ -14,7 +14,7 @@ ul
 	margin: 0
 	padding: 0
 	list-style: none
-	
+
 html
 	font-size: 16px
 	min-height: 100%
@@ -44,7 +44,7 @@ body
 .wrapper
 	min-height: 100vh
 	max-height: 100vh
- 
+
 .bg-main-color
 	background: rgb(26, 27, 30)
 	background: linear-gradient(180deg, rgba(26, 27, 30, 1) 0%, rgba(33, 33, 33, 0) 100%)
@@ -97,10 +97,11 @@ textarea, textarea:active, textarea:focus
 	border-radius: 0.7em
 	width: 100%
 	border: 1px solid $primary
+	
 	&::placeholder
 		font-size: 2rem
-	
-		
+
+
 .telegram-auth
 	max-width: 40px !important
 	max-height: 40px !important
@@ -116,7 +117,7 @@ textarea, textarea:active, textarea:focus
 
 .w-minc
 	width: min-content
-	
+
 .popover
 	background: rgba(0, 0, 0, 0.2) !important
 	backdrop-filter: blur(20px)
@@ -147,6 +148,7 @@ textarea, textarea:active, textarea:focus
 
 .no_scrollbar
 	img
+	
 	&::-webkit-scrollbar
 		width: 0
 		height: 0
@@ -156,25 +158,28 @@ textarea, textarea:active, textarea:focus
 ._pc
 	.backdrop-blur-10-header
 		backdrop-filter: none
+
 .backdrop-blur-10-header
 	backdrop-filter: blur(10px)
-	
+
 .btn-close
 	box-shadow: 0 0 0 !important
+
 ._pc
 	.only_pc
-		display: block!important
+		display: block !important
 
 ._touch
 	.only_pc
-		display: none!important
+		display: none !important
+
 ._pc
 	.only_touch
-		display: none!important
+		display: none !important
 
 ._touch
 	.only_touch
-		display: block!important
+		display: block !important
 	
 	nav
 		box-shadow: 0 10px 20px rgba(#000, 0.2)
@@ -228,7 +233,7 @@ textarea, textarea:active, textarea:focus
 
 .invert
 	filter: invert(1)
-	
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -264,8 +269,6 @@ progress::-webkit-progress-value
 	border-radius: 7px
 	background-color: $primary
 
-progress::-moz-progress-bar
-/* style rules */
 
 .text-nowrap
 	white-space: nowrap
@@ -278,6 +281,7 @@ progress::-moz-progress-bar
 
 .left-0
 	left: 0
+
 .right-0
 	right: 0
 
@@ -436,21 +440,29 @@ progress::-moz-progress-bar
 
 .w-max-content
 	width: max-content !important
-	
+
 .hover-scale-20
 	transition: transform 300ms ease
+	
 	&:hover
 		transform: scale(1.2)
-	
+
 .hover-scale-10
 	transition: transform 300ms ease
+	
 	&:hover
 		transform: scale(1.1)
+
+.hover-scale-5
+	transition: transform 300ms ease
 	
-	
+	&:hover
+		transform: scale(1.05)
+
+
 .rotate360anim
 	animation: rotate360 10s linear infinite
-	
+
 @keyframes rotate360
 	0%
 		transform: rotate(0deg)

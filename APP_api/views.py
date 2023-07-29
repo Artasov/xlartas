@@ -1,3 +1,4 @@
+import functools
 import json
 from datetime import datetime
 
@@ -22,7 +23,6 @@ def login_program(request):
     data = json.loads(request.body)
 
     hw_id = data.get('hw_id')
-    print(hw_id)
     product = data.get('product')
     is_first_license_checking = data.get('is_first_license_checking')
 
@@ -120,9 +120,9 @@ def get_product_version(request, product):
         product_ = Product.objects.get(name=product)
         url = request.build_absolute_uri(reverse('shop:download_program', kwargs={'product_id': product_.id}))
         return Response({
-                'version': product_.version,
-                'url': url
-             },
+            'version': product_.version,
+            'url': url
+        },
             headers={'Content-Type': 'application/json'})
     except Product.DoesNotExist:
         return Response('Product does not exist.', status=status.HTTP_404_NOT_FOUND,

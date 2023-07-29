@@ -1,5 +1,6 @@
 function showModal(id) {
-    let modal = document.getElementById(id);
+    console.log(1   )
+    const modal = document.getElementById(id);
     modal.style.display = 'flex';
 }
 function closeModal(id) {

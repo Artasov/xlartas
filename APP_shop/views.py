@@ -1,23 +1,27 @@
+import base64
+import hashlib
+import hmac
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 import logging
 from django.conf import settings
+from django.core.exceptions import BadRequest
 from django.utils import timezone
 import environ
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Sum
-from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseServerError
+from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import decorator_from_middleware
+from rest_framework.response import Response
 
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User
-from freekassa.utils import create_order, get_balance, Currency
-from . import qiwi
-from .funcs import get_product_price_by_license_type, generate_bill_id, try_apply_promo, add_license_time
-from .funcs import sync_user_bills
-from .models import Product, Bill, License
+from .funcs import get_product_price_by_license_type, try_apply_promo, add_license_time
+from .middleware import QiwiIPMiddleware
+from .models import Product, Order, License
+from .services.qiwi import create_order, create_order_and_bill, get_webhook_key, register_webhook
 
 env = environ.Env()
 
@@ -41,13 +45,17 @@ def buy(request):
             'invalid': 'Invalid reCAPTCHA. Please try again.',
             'products': Product.objects.order_by('name').reverse(), })
 
-    user_ = User.objects.get(username=request.user.username)
-    product_ = Product.objects.get(name=request.POST['product'])
-    license_type = request.POST['license_type']
+    user_ = request.user
+    license_type = request.POST.get('license_type')
+    product_name = request.POST.get('product_name')
 
+    if not all((license_type, product_name)):
+        return HttpResponseBadRequest()
+
+    product_ = Product.objects.get(name=product_name)
     price = get_product_price_by_license_type(product_, license_type)
     if not price:
-        return render(request, 'Core/NotFound.html')
+        raise BadRequest
 
     promo_result = try_apply_promo(request, user_, product_, price, str(request.POST['promo']).upper())
     if promo_result is None:
@@ -61,84 +69,6 @@ def buy(request):
         return promo_result['redirect']
     else:
         promo_ = None
-    payment_id = int(timezone.now().timestamp())
-    expired_minutes = 10
-    data = create_order(payment_id=payment_id,
-                        payment_system_id=1,
-                        currency='RUB',
-                        amount=price,
-                        ip=request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR'),
-                        email=user_.email or 'ivanhvalevskey@gmail.com')
-    print(data)
-    status_type = data.get('type')
-    orderId = data.get('orderId')
-    orderHash = data.get('orderHash')
-    location = data.get('location')
-    if all((status_type, orderId, orderHash, location)):
-        if status_type == 'success':
-            Bill.objects.create(user=user_, product=product_,
-                                license_type=license_type, payment_id=payment_id,
-                                pay_link=location, promo=promo_,
-                                date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
-            return redirect('shop:bills')
-        return HttpResponseServerError(f'FK create order status - {status_type}')
-    return HttpResponseServerError(f'FK some of status_type, orderId, orderHash, location are exists.')
-
-
-# @decorator_from_middleware(reCaptchaMiddleware)
-# @login_required(redirect_field_name=None, login_url='signin')
-# @transaction.atomic
-# def buy(request):
-#
-#     if request.method != "POST":
-#         return HttpResponseBadRequest()
-#
-#     if not request.recaptcha_is_valid:
-#         return render(request, 'APP_shop/catalog.html', context={
-#             'invalid': 'Invalid reCAPTCHA. Please try again.',
-#             'products': Product.objects.order_by('name').reverse(), })
-#
-#     user_ = User.objects.get(username=request.user.username)
-#     product_ = Product.objects.get(name=request.POST['product'])
-#     license_type = request.POST['license_type']
-#
-#     price = get_product_price_by_license_type(product_, license_type)
-#     if not price:
-#         return render(request, 'Core/NotFound.html')
-#
-#     promo_result = try_apply_promo(request, user_, product_, price, str(request.POST['promo']).upper())
-#     if promo_result is None:
-#         promo_ = None
-#     elif 'price' in promo_result:
-#         price = promo_result['price']
-#         promo_ = promo_result['promo_']
-#     elif 'render' in promo_result:
-#         return promo_result['render']
-#     elif 'redirect' in promo_result:
-#         return promo_result['redirect']
-#     else:
-#         promo_ = None
-#
-#     payment_id = generate_bill_id()
-#     expired_minutes = 10
-#     response = qiwi.create_bill(value=price,
-#                                 billid=payment_id,
-#                                 expired_minutes=expired_minutes,
-#                                 comment=f'Product: {product_}  |  License time: {license_type} | {user_.username}',
-#                                 # customer={'username': user_.username},
-#                                 custom_fields={
-#                                     'product': product_.name,
-#                                     'license_type': license_type,
-#                                     'themeCode': 'Nykyta-TCBm1blw_2J', })
-#     if 'errorCode' in response:
-#         return render(request, 'APP_shop/catalog.html', context={
-#             'invalid': "Invalid is on our side, sorry. Please contact us. (creating bill)",
-#             'products': Product.objects.order_by('name').reverse(), })
-#     Bill.objects.create(user=user_, product=product_,
-#                         license_type=license_type, payment_id=payment_id,
-#                         pay_link=response['payUrl'], promo=promo_,
-#                         date_expiration=timezone.now() + timedelta(minutes=expired_minutes))
-#     return redirect('shop:bills')
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -158,28 +88,65 @@ def activate_test_period(request):
 
 
 @login_required(redirect_field_name=None, login_url='signin')
-def bills(request):
-    user_ = request.user
-    return render(request, 'APP_shop/bills.html', {
-        'bills': Bill.objects.filter(user=user_).order_by('date_created'), })
+def orders(request):
+    return render(request, 'APP_shop/orders.html', {
+        'orders': Order.objects.filter(user=request.user).order_by('date_created'), })
 
 
-def pay_notify(request):
-    logger.warning('pay_notify')
-    logger.warning(request.POST)
-    logger.warning(request.GET)
+@login_required
+@decorator_from_middleware(reCaptchaMiddleware)
+def balance_increase(request):
+    if request.POST:
+        user_ = request.user
+        amount = request.POST.get('amount')
+
+        if not amount:
+            return HttpResponseBadRequest()
+
+        order_ = create_order_and_bill(user_id=user_.id,
+                                       amount=amount,
+                                       order_type=Order.OrderType.BALANCE,
+                                       expired_minutes=10,
+                                       comment=f'User balance: {user_.username}\n')
+
+        return redirect(order_.pay_link)
 
 
-def pay_success(request):
-    logger.warning('pay_success')
-    logger.warning(request.POST)
-    logger.warning(request.GET)
+#@decorator_from_middleware(QiwiIPMiddleware)
+def qiwi_hook(request):
+    res = register_webhook(hook_type=1, txn_type=0, param='https://xlartas.ru/shop/qiwi_hook/')
+    print(res)
+    if request.POST:
+        logging.warning(request.POST)
+        payment = request.POST.get('payment')
+        sign_hash = request.POST.get('hash')
+        hook_id = request.POST.get('hookId')
+        if not all((payment, sign_hash, hook_id)):
+            logging.error('Payment dict or hash or hook_id does not exists')
+            return HttpResponseBadRequest()
 
+        payment_sum = payment.get('sum')
+        currency = payment_sum.get('currency')
+        amount = payment_sum.get('amount')
+        payment_type = payment.get('type')
+        account = payment.get('account')
+        txnId = payment.get('txnId')
 
-def pay_failed(request):
-    logger.warning('pay_failed')
-    logger.warning(request.POST)
-    logger.warning(request.GET)
+        data = f'{currency}|{amount}|{payment_type}|{account}|{txnId}'
+
+        webhook_key_base64 = get_webhook_key(hook_id)
+        if not webhook_key_base64:
+            logging.error('Web hook key is None')
+            return HttpResponseBadRequest()
+
+        webhook_key = base64.b64decode(bytes(webhook_key_base64, 'utf-8'))
+        if hmac.new(webhook_key, data.encode('utf-8'), hashlib.sha256).hexdigest() == sign_hash:
+            return HttpResponse('success')
+        else:
+            logging.error('Hashes is not equal')
+            return HttpResponseBadRequest()
+    logging.error('qiwi_hook only POST allowed')
+    return HttpResponseBadRequest()
 
 
 def product_program(request, program_name: str):

@@ -65,25 +65,34 @@ class Product(models.Model):
         return f'{self.name}'
 
 
-class Bill(models.Model):
-    class BillStatus(models.TextChoices):
+class Order(models.Model):
+    class OrderType(models.TextChoices):
+        PRODUCT = 'product', _('product')
+        BALANCE = 'balance', _('balance')
+
+    class OrderStatus(models.TextChoices):
         WAITING = 'waiting', _('waiting')
         PAID = 'paid', _('paid')
         REJECTED = 'rejected', _('rejected')
         EXPIRED = 'expired', _('expired')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=BillStatus.choices, default=BillStatus.WAITING)
-    is_product_given = models.BooleanField(default=False)
+    amountRub = models.DecimalField(decimal_places=2, max_digits=6)
+    status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.WAITING)
+    is_complete = models.BooleanField(default=False)
     promo = models.ForeignKey('Promo', on_delete=models.SET_NULL, null=True, blank=True)
     desc = models.CharField(max_length=250, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     license_type = models.CharField(max_length=20, choices=LicenseType.choices, blank=True, null=True)
-    payment_id = models.CharField(max_length=30, unique=True)
+    order_system_name = models.CharField(max_length=30)
+    order_id = models.CharField(max_length=30, unique=True)
+    type = models.CharField(max_length=10, choices=OrderType.choices, default=OrderType.PRODUCT)
     pay_link = models.CharField(max_length=150)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    date_expiration = models.DateTimeField()
+
+    class Meta:
+        ordering = ["date_created"]
 
 
 class License(models.Model):

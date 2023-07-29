@@ -65,7 +65,8 @@ LOGGING = {
     'formatters': {
         'base_formatter': {
             'format': '{levelname} {asctime} {module}: {message}',
-            'style': '{'
+            'style': '{',
+            'encoding': 'utf-8',
         }
     },
     'handlers': {
@@ -73,7 +74,8 @@ LOGGING = {
             'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
             'class': 'logging.FileHandler',
             'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
-            'formatter': 'base_formatter'
+            'formatter': 'base_formatter',
+            'encoding': 'utf-8',
         },
     },
     'loggers': {
@@ -180,7 +182,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        # 'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',

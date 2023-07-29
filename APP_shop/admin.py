@@ -5,9 +5,9 @@ from django.utils import timezone
 from .models import *
 
 
-@admin.register(Bill)
-class BillAdmin(admin.ModelAdmin):
-    list_display = ['user', 'status', 'product', 'is_product_given', 'date_created']
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['user', 'status', 'product', 'is_complete', 'date_created']
     save_on_top = True
 
 

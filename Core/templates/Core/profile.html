@@ -37,15 +37,15 @@
             {% endif %}
         {% endfor %}
         <div class="profile bg-black bg-opacity-10 py-3 pb-4 px-3 rounded-4">
-            <div class="username-edit frc text-center mb-2 px-4 gap-3">
+            <div class="username-edit fs-2 frc text-center mb-2 px-4 gap-3">
                 <form class="frc w-100 gap-3 ps-5" method="post">
                     {% csrf_token %}
                     {{ form.username }}
-                    <button type="submit" id="btnSubmitEditUsername" class="text-white-90 fs-1 d-none fcc">
+                    <button type="submit" id="btnSubmitEditUsername" class="text-white-90 fs-3 d-none fcc">
                         <i class="fa-regular fa-circle-check"></i>
                     </button>
                 </form>
-                <button class="text-white-90 fs-1 fcc" id="btnEditUsername">
+                <button class="text-white-90 fs-3 fcc" id="btnEditUsername">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>
             </div>
@@ -118,7 +118,7 @@ mt-3 mt-sm-0">
                 justify-content-center gap-3 mt-3 mt-sm-0">
                     <a class="btn-3 fw-bold text-decoration-none mx-auto"
                        style="max-width: 160px"
-                       href="{% url 'shop:bills' %}">Чеки и оплата</a>
+                       href="{% url 'shop:balance_increase' %}">Чеки и оплата</a>
                     <a class="btn-3 fw-bold text-decoration-none mx-auto"
                        style="max-width: 160px"
                        href="{% url 'referral:list' %}">Мои рефералы</a>

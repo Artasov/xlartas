@@ -2,14 +2,17 @@ const popover = new bootstrap.Popover('.popover-dismiss', {trigger: 'focus'})
 
 
 function searchInputOnchange(e) {
-    if(e.target.value.length > 3){
+    if (e.target.value.length > 3) {
         search(e.target.value);
     }
 }
+
 const debounce = (func, ms) => {
     let timeout;
     return function () {
-        const funcCall = () => {(func.apply(this, arguments))}
+        const funcCall = () => {
+            (func.apply(this, arguments))
+        }
         clearTimeout(timeout);
         timeout = setTimeout(funcCall, ms);
     };
@@ -31,6 +34,7 @@ function search(searchText) {
         })
         .catch(error => console.error(error));
 }
+
 function createSearchEl(el) {
     const searchEl = document.createElement('div');
     searchEl.classList.add('frc');

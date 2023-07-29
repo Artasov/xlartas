@@ -42,7 +42,7 @@
                                         <img src="{% static 'APP_resource_pack/img/pickaxe.png' %}" alt=""
                                              style="transform: scale(1.14); margin-right: 4px;">
                                         <span class="fw-7"
-                                                style="text-decoration: none;">
+                                              style="text-decoration: none;">
                                         Resource packs
                                     </span>
                                     </div>
@@ -66,7 +66,7 @@
                                          style="display: inline-block !important;">
                                         <i class="fa-solid fa-comment-medical me-1"></i>
                                         <span class="fw-7"
-                                                style="text-decoration: none;">
+                                              style="text-decoration: none;">
                                         Private Msg
                                     </span>
                                     </div>
@@ -130,12 +130,13 @@
                            aria-expanded="false">
                             <div style="display: inline-block;">
                                 <i class="fa-solid fa-user me-1"></i>
-                                <span tabindex="99" class="fw-7" style="display:
+                                <span tabindex="99" class="fw-7 text-white-80" style="display:
                                         {% if user.is_authenticated %}inline{% else %}none{% endif %};"
                                       id="signIn-btn">
                                 {% if user.is_authenticated %}{{ user.username }}{% else %}SIGN IN{% endif %}</span>
                             </div>
                         </a>
+
                         {% if not user.is_authenticated %}
                             <a class="nav-link text-center"
                                id="signup-dropdown-link"
@@ -192,7 +193,7 @@
                                 <li id="auth_form" style="min-width: 300px;">
                                     <form class="px-3 py-1" method="post" action="{% url 'signin' %}">{% csrf_token %}
                                         {% get_login_form as header_login_form %}
-                                        {% include 'Core/includes/form.html' with form=header_login_form%}
+                                        {% include 'Core/includes/form.html' with form=header_login_form %}
 
                                         <div class="text-center pt-3 pb-1">
                                             <button type="submit" id="button" data-text="SIGN IN" data-text-done=""
@@ -258,16 +259,13 @@
                             {% endif %}
                         </ul>
                     </li>
-                    <li class="nav-item pt-1 only_touch">
-                            <span class="theme-change-btn nav-link dropdown-toggle dropdown-toggle-without_arrow text-center"
-                                  role="button">
-                                <div style="display: inline-block;">
-                                    <i class="fa-solid fa-image"></i>
-                                    <span>Theme</span>
-                                </div>
-                            </span>
-                    </li>
+
                     {% if user.is_authenticated %}
+                        <li class="fcc nav-link dropdown-toggle dropdown-toggle-without_arrow text-center">
+                            <a href="{% url 'shop:orders' %}"
+                               class="mt-1 text-white-75 fw-bold text-decoration-none">
+                                {{ user.balance }} ₽</a>
+                        </li>
                         {% if user.is_staff %}
                             <li class="nav-item pt-1 only_touch">
                                 <a class="nav-link dropdown-toggle dropdown-toggle-without_arrow text-center"

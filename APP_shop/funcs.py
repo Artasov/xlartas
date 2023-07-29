@@ -5,27 +5,12 @@ from django.shortcuts import render, redirect
 
 from django.utils import timezone
 from Core.services.services import int_decrease_by_percentage
-from . import qiwi
+# from . import qiwi
 from .models import *
-from .qiwi import reject_bill
+# from .qiwi import reject_bill
 
 
-def reject_waiting_bills(user: User):
-    from APP_shop.models import Bill
-    user_waiting_bills_ = Bill.objects.filter(
-        user=user, status=Bill.BillStatus.WAITING)
-    for bill in user_waiting_bills_:
-        response = reject_bill(bill.payment_id)
-        if 'errorCode' in response:
-            return False
-        elif response['status']['value'] == Bill.BillStatus.REJECTED:
-            bill.status = Bill.BillStatus.REJECTED
-            bill.save()
-    return True
 
-
-def generate_bill_id():
-    return secrets.token_hex(15)
 
 
 def try_apply_promo(request, user_, product_, price, promo):
@@ -55,12 +40,12 @@ def try_apply_promo(request, user_, product_, price, promo):
 
 
 @transaction.atomic
-def give_product_by_bill(bill: Bill):
+def give_product_by_bill(bill: Order):
     product_ = bill.product
     if product_.type == Product.ProductType.program:
         add_license_time(user_=bill.user, product_name=product_.name,
                          days=get_count_license_days(bill.license_type))
-        bill.is_product_given = True
+        bill.is_complete = True
         bill.save()
         promo_ = bill.promo
         if promo_:
@@ -72,16 +57,16 @@ def give_product_by_bill(bill: Bill):
 
 @transaction.atomic
 def sync_user_bills(user: User):
-    bills = Bill.objects.filter(user=user)
+    bills = Order.objects.filter(user=user)
     for bill in bills:
-        if bill.status.upper() == Bill.BillStatus.WAITING.upper():
+        if bill.status.upper() == Order.OrderStatus.WAITING.upper():
             bill_status = qiwi.check_bill(bill.payment_id)['status']['value']
-            if bill_status.upper() == Bill.BillStatus.PAID.upper():
+            if bill_status.upper() == Order.OrderStatus.PAID.upper():
                 give_product_by_bill(bill)
-                bill.status = Bill.BillStatus.PAID
+                bill.status = Order.OrderStatus.PAID
                 bill.save()
-            elif bill_status.upper() == Bill.BillStatus.EXPIRED.upper():
-                bill.status = Bill.BillStatus.EXPIRED
+            elif bill_status.upper() == Order.OrderStatus.EXPIRED.upper():
+                bill.status = Order.OrderStatus.EXPIRED
                 bill.save()
 
 
