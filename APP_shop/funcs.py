@@ -1,3 +1,4 @@
+import logging
 import secrets
 
 from django.db import transaction
@@ -7,10 +8,10 @@ from django.utils import timezone
 from Core.services.services import int_decrease_by_percentage
 # from . import qiwi
 from .models import *
+from .services import qiwi
+
+
 # from .qiwi import reject_bill
-
-
-
 
 
 def try_apply_promo(request, user_, product_, price, promo):
@@ -40,34 +41,43 @@ def try_apply_promo(request, user_, product_, price, promo):
 
 
 @transaction.atomic
-def give_product_by_bill(bill: Order):
-    product_ = bill.product
-    if product_.type == Product.ProductType.program:
-        add_license_time(user_=bill.user, product_name=product_.name,
-                         days=get_count_license_days(bill.license_type))
-        bill.is_complete = True
-        bill.save()
-        promo_ = bill.promo
-        if promo_:
-            promo_.used_by.add(bill.user.id)
-            promo_.save()
-    elif product_.type == Product.ProductType.account:
-        pass  # in dev
+def execute_order(order: Order):
+    user_ = order.user
+    if order.type == Order.OrderType.PRODUCT:
+        product_ = order.product
+        if product_.type == Product.ProductType.program:
+            user_.balance -= order.amountRub
+            user_.save()
+            order.status = Order.OrderStatus.DONE
+            add_license_time(user_=order.user, product_name=product_.name,
+                             days=get_count_license_days(order.license_type))
+        elif product_.type == Product.ProductType.account:
+            pass  # in dev
+    elif order.type == Order.OrderType.BALANCE:
+        user_.balance += order.amountRub
+        user_.save()
+
+    order.is_complete = True
+    order.save()
+    promo_ = order.promo
+    if promo_:
+        promo_.used_by.add(order.user.id)
+        promo_.save()
 
 
 @transaction.atomic
-def sync_user_bills(user: User):
-    bills = Order.objects.filter(user=user)
-    for bill in bills:
-        if bill.status.upper() == Order.OrderStatus.WAITING.upper():
-            bill_status = qiwi.check_bill(bill.payment_id)['status']['value']
-            if bill_status.upper() == Order.OrderStatus.PAID.upper():
-                give_product_by_bill(bill)
-                bill.status = Order.OrderStatus.PAID
-                bill.save()
-            elif bill_status.upper() == Order.OrderStatus.EXPIRED.upper():
-                bill.status = Order.OrderStatus.EXPIRED
-                bill.save()
+def check_user_payments(user: User):
+    orders = Order.objects.filter(user=user)
+    for order in orders:
+        if order.status.upper() == Order.OrderStatus.WAITING.upper():
+            order_status = qiwi.check_order(order.order_id)['status']['value']
+            if order_status.upper() == Order.OrderStatus.PAID.upper():
+                order.status = Order.OrderStatus.PAID
+                order.save()
+                execute_order(order)
+            elif order_status.upper() == Order.OrderStatus.EXPIRED.upper():
+                order.status = Order.OrderStatus.EXPIRED
+                order.save()
 
 
 def get_product_price_by_license_type(product: Product, license_type: str):

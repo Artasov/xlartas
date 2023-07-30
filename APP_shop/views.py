@@ -11,17 +11,18 @@ import environ
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Sum
-from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseServerError, Http404
+from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseServerError, Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import decorator_from_middleware
 from rest_framework.response import Response
 
 from Core.middleware import reCaptchaMiddleware
 from Core.models import User
-from .funcs import get_product_price_by_license_type, try_apply_promo, add_license_time
+from .funcs import get_product_price_by_license_type, try_apply_promo, add_license_time, check_user_payments, \
+    execute_order
 from .middleware import QiwiIPMiddleware
 from .models import Product, Order, License
-from .services.qiwi import create_order, create_order_and_bill, get_webhook_key, register_webhook
+from .services.qiwi import create_order, create_payment_and_order, get_webhook_key, register_webhook
 
 env = environ.Env()
 
@@ -36,16 +37,11 @@ def catalog(request):
 @decorator_from_middleware(reCaptchaMiddleware)
 @login_required(redirect_field_name=None, login_url='signin')
 @transaction.atomic
-def buy(request):
+def buy_product_program(request):
     if request.method != "POST":
         return HttpResponseBadRequest()
 
-    if not request.recaptcha_is_valid and not request.user.is_staff:
-        return render(request, 'APP_shop/catalog.html', context={
-            'invalid': 'Invalid reCAPTCHA. Please try again.',
-            'products': Product.objects.order_by('name').reverse(), })
-
-    user_ = request.user
+    user_: User = request.user
     license_type = request.POST.get('license_type')
     product_name = request.POST.get('product_name')
 
@@ -53,11 +49,34 @@ def buy(request):
         return HttpResponseBadRequest()
 
     product_ = Product.objects.get(name=product_name)
+
+    if not request.recaptcha_is_valid:
+        is_test_period_activated = False
+        if License.objects.filter(user=user_, product=product_).exists():
+            is_test_period_activated = License.objects.get(
+                user=user_, product=product_).is_test_period_activated
+        return render(request, 'APP_shop/product_program.html', {
+            'invalid': 'Invalid reCAPTCHA. Please try again.',
+            'product': product_,
+            'is_test_period_activated': is_test_period_activated,
+            'count_starts': License.objects.filter(product=product_)
+                      .aggregate(Sum('count_starts'))['count_starts__sum']
+        })
+
+
     price = get_product_price_by_license_type(product_, license_type)
     if not price:
         raise BadRequest
 
-    promo_result = try_apply_promo(request, user_, product_, price, str(request.POST['promo']).upper())
+    if price > user_.balance:
+        return render(request, 'APP_shop/orders.html', {
+            'invalid': f'Недостаточно средств на балансе. '
+                       f'Пополните баланс на {price - user_.balance} ₽',
+            'orders': Order.objects.filter(user=request.user).order_by('date_created'),
+        })
+
+    promo_result = try_apply_promo(request, user_, product_,
+                                   price, request.POST.get('promo', '').upper())
     if promo_result is None:
         promo_ = None
     elif 'price' in promo_result:
@@ -69,6 +88,15 @@ def buy(request):
         return promo_result['redirect']
     else:
         promo_ = None
+
+    order_ = Order.objects.create(user=user_,
+                                  amountRub=price,
+                                  promo=promo_,
+                                  product=product_,
+                                  license_type=license_type,
+                                  type=Order.OrderType.PRODUCT)
+    execute_order(order_)
+    return redirect('profile')
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -89,36 +117,47 @@ def activate_test_period(request):
 
 @login_required(redirect_field_name=None, login_url='signin')
 def orders(request):
-    if request.user.is_staff:
-        res = register_webhook(hook_type=1, txn_type="0", param='https://xlartas.ru/shop/qiwi_hook/')
-        print(res)
     return render(request, 'APP_shop/orders.html', {
-        'orders': Order.objects.filter(user=request.user).order_by('date_created'), })
+        'orders': Order.objects.filter(user=request.user).order_by('date_created'),
+    })
 
 
 @login_required
 @decorator_from_middleware(reCaptchaMiddleware)
 def balance_increase(request):
     if request.POST:
+        if not request.recaptcha_is_valid and not request.user.is_staff:
+            return render(request, 'APP_shop/orders.html', {
+                'invalid': 'Invalid reCAPTCHA. Please try again.',
+                'orders': Order.objects.filter(user=request.user).order_by('date_created'),
+            })
+
         user_ = request.user
         amount = request.POST.get('amount')
 
         if not amount:
-            return HttpResponseBadRequest()
+            return render(request, 'APP_shop/orders.html', {
+                'invalid': 'Fill the amount field.',
+                'orders': Order.objects.filter(user=request.user).order_by('date_created'),
+            })
 
-        order_ = create_order_and_bill(user_id=user_.id,
-                                       amount=amount,
-                                       order_type=Order.OrderType.BALANCE,
-                                       expired_minutes=10,
-                                       comment=f'User balance: {user_.username}\n')
+        order_ = create_payment_and_order(user_id=user_.id,
+                                          amount=amount,
+                                          order_type=Order.OrderType.BALANCE,
+                                          expired_minutes=10,
+                                          comment=f'User balance: {user_.username}\n')
 
         return redirect(order_.pay_link)
 
 
-#@decorator_from_middleware(QiwiIPMiddleware)
-def qiwi_hook(request):
+@login_required
+def check_payment(request):
+    check_user_payments(request.user)
+    return redirect('shop:orders')
 
-    return HttpResponse()
+
+@decorator_from_middleware(QiwiIPMiddleware)
+def qiwi_hook(request):
     if request.POST:
         logging.warning(request.POST)
         payment = request.POST.get('payment')

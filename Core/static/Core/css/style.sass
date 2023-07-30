@@ -223,13 +223,24 @@ textarea, textarea:active, textarea:focus
 	-moz-user-select: none
 	-ms-user-select: none
 
-.g-recaptcha
+.g-recaptcha-pc
 	margin: 0 auto
-	max-width: 304px
-	filter: sepia(1%) invert(0.86) hue-rotate(210deg) saturate(4)
+	max-width: 302px
+	max-height: 76px
+	filter: sepia(1%) invert(0.86) hue-rotate(210deg) saturate(4) contrast(1.3)
+	opacity: 60%
+	border-radius: 4px
+	overflow: hidden
 
-.g-recaptcha-small
-	max-width: 156px !important
+.g-recaptcha-touch
+	margin: 0 auto
+	width: 331px
+	height: 82.5px
+	filter: sepia(1%) invert(0.86) hue-rotate(210deg) saturate(4) contrast(1.3)
+	opacity: 60%
+	border-radius: 4px
+	overflow: hidden
+	transform: scale(0.9)
 
 .invert
 	filter: invert(1)
@@ -457,7 +468,7 @@ progress::-webkit-progress-value
 	transition: transform 300ms ease
 	
 	&:hover
-		transform: scale(1.05)
+		transform: scale(1.05) !important
 
 
 .rotate360anim

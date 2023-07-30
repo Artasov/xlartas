@@ -12,7 +12,7 @@
 <div class="u-modal flex-column justify-content-center"
      id="modalChoosePaymentSystem">
     <div class="modal-content mx-auto py-3 rounded-3" style="width: 400px; max-width: 95%;">
-        <form class="bg-transparent" method="post" action="{% url 'shop:buy' %}">{% csrf_token %}
+        <form class="bg-transparent" method="post" action="{% url 'shop:buy_product_program' %}">{% csrf_token %}
             <div class="modal-header px-3 mb-2">
                 <h1 class="fs-5 m-0 mx-auto text-white-80">Платёжная система</h1>
                 <button type="button" class="btn-close me-3"

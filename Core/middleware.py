@@ -7,9 +7,6 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class reCaptchaMiddleware(MiddlewareMixin):
-    def __init__(self, get_response):
-        self.get_response = get_response
-
     def __call__(self, request):
         self.process_request(request)
         ####################################
@@ -17,7 +14,8 @@ class reCaptchaMiddleware(MiddlewareMixin):
         ####################################
         return response
 
-    def process_request(self, request):
+    @staticmethod
+    def process_request(request):
         if 'invalid' in request.session:
             del request.session['invalid']
         if request.method != 'GET':

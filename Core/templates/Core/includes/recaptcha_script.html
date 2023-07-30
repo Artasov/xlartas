@@ -1,16 +1,29 @@
 {% load recaptcha_tags %}
 <script>
     window.addEventListener('load', function (e) {
-        var for_insert = document.getElementById('{{ mark_el_id }}');
-        var el = document.createElement('script');
+        let for_insert = document.getElementById('{{ mark_el_id }}');
+        let el = document.createElement('script');
         el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-        var el2 = document.createElement('div');
-        if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
-            el2.setAttribute("data-size", "compact");
-            el2.classList.add('g-recaptcha-small');
-        }
+        let el2 = document.createElement('div');
+
         el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
+
         el2.classList.add('g-recaptcha');
+        if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
+            {#el2.setAttribute("data-size", "compact");#}
+            el2.classList.add('g-recaptcha-touch');
+        } else {
+            el2.classList.add('g-recaptcha-pc');
+        }
+        const intervalId = setInterval(() => {
+            const reCAPTCHA = document.querySelector('iframe[title="reCAPTCHA"]');
+            if (reCAPTCHA) {
+                clearInterval(intervalId);
+                reCAPTCHA.setAttribute('width', '331');
+                reCAPTCHA.setAttribute('height', '82.5');
+            }
+        }, 100);
+
         for_insert.before(el);
         for_insert.before(el2);
     });

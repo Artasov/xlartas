@@ -18,7 +18,7 @@ class User(AbstractUser):
     referral_code = models.CharField(max_length=10, default=GenerateReferralCode)
     hw_id = models.CharField(max_length=600, blank=True, null=True, default=None)
     is_confirmed = models.BooleanField(default=False)
-    balance = models.DecimalField(decimal_places=2, max_digits=6, default=0)
+    balance = models.DecimalField(decimal_places=2, max_digits=8, default=0)
 
 
 class ConfirmationCode(models.Model):

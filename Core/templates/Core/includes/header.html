@@ -109,18 +109,6 @@
                     style="width: 70%; height: 1px; display: none;"></ul>
 
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0 gap-2">
-                    {% if not user.is_authenticated %}
-                        <li class="nav-item pt-1 dropdown only_pc" id="signin-dropdown">
-                            <div class="theme-change-btn nav-link dropdown-toggle dropdown-toggle-without_arrow text-center"
-                                 role="button"
-                                 data-bs-toggle="dropdown"
-                                 aria-expanded="false">
-                                <div style="display: inline-block;">
-                                    <i class="fa-solid fa-image me-1"></i>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
                     <li class="nav-item pt-1 dropdown" id="signin-dropdown">
                         <a class="nav-link dropdown-toggle dropdown-toggle-without_arrow text-center"
                            id="signin-dropdown-link"
@@ -170,15 +158,6 @@
                                             <span class="text-dark-emphasis fw-7 fs-6">Profile</span>
                                         </div>
                                     </a>
-                                </li>
-                                <div class="dropdown-divider" style="margin: 5px 0!important;"></div>
-                                <li>
-                                    <div class="theme-change-btn dropdown-item">
-                                        <div class="text-dark-emphasis text-decoration-none d-inline-block">
-                                            <i class="fa-solid fa-image me-1"></i>
-                                            <span class="text-dark-emphasis fw-7 fs-6">Theme</span>
-                                        </div>
-                                    </div>
                                 </li>
                                 <div class="dropdown-divider" style="margin: 5px 0!important;"></div>
                                 <li>
@@ -261,7 +240,8 @@
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="fcc nav-link dropdown-toggle dropdown-toggle-without_arrow text-center">
+                        <li class="fcc nav-link dropdown-toggle
+                        dropdown-toggle-without_arrow text-center hover-scale-5">
                             <a href="{% url 'shop:orders' %}"
                                class="mt-1 text-white-75 fw-bold text-decoration-none">
                                 {{ user.balance }} ₽</a>

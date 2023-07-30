@@ -2,13 +2,13 @@
 <div class="u-modal flex-column justify-content-center"
      id="modal{{ product.name }}{{ product.id }}">
     <div class="modal-content mx-auto p-3 rounded-3">
-        <form class="bg-transparent" method="post" action="{% url 'shop:buy' %}">{% csrf_token %}
+        <form class="bg-transparent" method="post" action="{% url 'shop:buy_product_program' %}">{% csrf_token %}
             <div class="modal-header">
-                <h1 class="fs-2 m-0 mx-auto">{{ product.long_name }}</h1>
+                <h2 class="fs-2 m-0 mx-auto text-white-90">{{ product.long_name }}</h2>
                 <button type="button" class="btn-close"
                         onclick="closeModal('modal{{ product.name }}{{ product.id }}')"></button>
             </div>
-            <div class="modal-body d-flex flex-column py-3">
+            <div class="modal-body d-flex flex-column py-3 no_scrollbar">
                 <input type="hidden" name="product_name" value="{{ product.name }}">
                 <input type="hidden" name="license_type" id="input{{ product.name }}{{ product.id }}" value="week">
                 <div class="fcc

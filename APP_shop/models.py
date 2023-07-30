@@ -72,6 +72,7 @@ class Order(models.Model):
 
     class OrderStatus(models.TextChoices):
         WAITING = 'waiting', _('waiting')
+        DONE = 'done', _('done')
         PAID = 'paid', _('paid')
         REJECTED = 'rejected', _('rejected')
         EXPIRED = 'expired', _('expired')
@@ -84,10 +85,10 @@ class Order(models.Model):
     desc = models.CharField(max_length=250, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     license_type = models.CharField(max_length=20, choices=LicenseType.choices, blank=True, null=True)
-    order_system_name = models.CharField(max_length=30)
-    order_id = models.CharField(max_length=30, unique=True)
+    order_system_name = models.CharField(max_length=30, blank=True)
+    order_id = models.CharField(max_length=30, blank=True)
     type = models.CharField(max_length=10, choices=OrderType.choices, default=OrderType.PRODUCT)
-    pay_link = models.CharField(max_length=150)
+    pay_link = models.CharField(max_length=150, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
