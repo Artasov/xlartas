@@ -1,5 +1,4 @@
 function showModal(id) {
-    console.log(1   )
     const modal = document.getElementById(id);
     modal.style.display = 'flex';
 }
