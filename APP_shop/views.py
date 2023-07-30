@@ -89,6 +89,9 @@ def activate_test_period(request):
 
 @login_required(redirect_field_name=None, login_url='signin')
 def orders(request):
+    if request.user.is_staff:
+        res = register_webhook(hook_type=1, txn_type="0", param='https://xlartas.ru/shop/qiwi_hook/')
+        print(res)
     return render(request, 'APP_shop/orders.html', {
         'orders': Order.objects.filter(user=request.user).order_by('date_created'), })
 
@@ -114,8 +117,8 @@ def balance_increase(request):
 
 #@decorator_from_middleware(QiwiIPMiddleware)
 def qiwi_hook(request):
-    res = register_webhook(hook_type=1, txn_type=0, param='https://xlartas.ru/shop/qiwi_hook/')
-    print(res)
+
+    return HttpResponse()
     if request.POST:
         logging.warning(request.POST)
         payment = request.POST.get('payment')
