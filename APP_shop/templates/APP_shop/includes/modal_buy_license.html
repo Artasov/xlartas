@@ -58,17 +58,3 @@
         </form>
     </div>
 </div>
-<script>
-    window.addEventListener('load', function (e) {
-        var for_insert = document.getElementById('btn-submit-{{ product.name }}{{ product.id }}');
-        var el = document.createElement('script');
-        el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-        var el2 = document.createElement('div');
-        el2.setAttribute("data-size", "compact");
-        el2.classList.add('g-recaptcha-small');
-        el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
-        el2.classList.add('g-recaptcha');
-        for_insert.before(el);
-        for_insert.before(el2);
-    });
-</script>
