@@ -9,18 +9,39 @@
         el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
 
         el2.classList.add('g-recaptcha');
-        if (document.getElementsByTagName('body')[0].classList.contains('_touch')) {
-            {#el2.setAttribute("data-size", "compact");#}
-            el2.classList.add('g-recaptcha-touch');
-        } else {
-            el2.classList.add('g-recaptcha-pc');
-        }
+        const isTouch = document.getElementsByTagName('body')[0].classList.contains('_touch')
+
+        {% if compact == 'True' %}
+            el2.setAttribute("data-size", "compact");
+            if (isTouch) {
+                el2.classList.add('g-recaptcha-touch-compact');
+            } else {
+                el2.classList.add('g-recaptcha-pc-compact');
+            }
+        {% else %}
+            if (isTouch) {
+                el2.classList.add('g-recaptcha-touch');
+            } else {
+                el2.classList.add('g-recaptcha-pc');
+            }
+        {% endif %}
         const intervalId = setInterval(() => {
             const reCAPTCHA = document.querySelector('iframe[title="reCAPTCHA"]');
             if (reCAPTCHA) {
                 clearInterval(intervalId);
-                reCAPTCHA.setAttribute('width', '331');
-                reCAPTCHA.setAttribute('height', '82.5');
+                {% if compact == 'True' %}
+                    if (isTouch) {
+                        reCAPTCHA.setAttribute('width', '174');
+                        reCAPTCHA.setAttribute('height', '152');
+                    } else {
+                        reCAPTCHA.setAttribute('width', '158');
+                        reCAPTCHA.setAttribute('height', '138');
+                    }
+
+                {% else %}
+                    reCAPTCHA.setAttribute('width', '331');
+                    reCAPTCHA.setAttribute('height', '82.5');
+                {% endif %}
             }
         }, 100);
 

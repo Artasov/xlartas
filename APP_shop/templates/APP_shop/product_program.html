@@ -35,7 +35,7 @@
                 <form class="bg-transparent" method="post"
                       action="{% url 'shop:activate_test_period' %}">{% csrf_token %}
                     <div class="modal-header d-flex gap-2">
-                        <h1 class="fs-2 m-0 mx-auto">{{ product.long_name }} Test</h1>
+                        <h1 class="fs-2 m-0 mx-auto text-white-90">{{ product.long_name }} Test</h1>
                         <button type="button" class="btn-close"
                                 onclick="closeModal('modalTestPeriod{{ product.name }}{{ product.id }}')"></button>
                     </div>

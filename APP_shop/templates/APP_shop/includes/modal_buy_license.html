@@ -48,13 +48,19 @@
                         <p class="m-0">Навсегда</p>
                         <p class="m-0 btn-radio-1-price">{{ product.price_forever }} ₽</p>
                     </div>
-                    <input name="promo" class="input-1 px-3 py-2 rounded-3 text-center text-dark-emphasis" placeholder="PROMO" value="">
+                    <input name="promo" class="input-1 px-3 py-2 rounded-3 text-center text-dark-emphasis"
+                           placeholder="PROMO" value="">
                 </div>
             </div>
-            <div class="modal-footer frc gap-3 mt-2"
-                 id="btn-submit-{{ product.name }}{{ product.id }}">
+            <div class="modal-footer frc gap-3 mt-3"
+                 id="btn-recaptcha-marked-{{ product.id }}">
                 <button type="submit" class="btn-1 fw-bold">Купить</button>
             </div>
+            {% with product_id=product.id|stringformat:"s" %}
+                {% with mark_el_id='btn-recaptcha-marked-'|add:product_id %}
+                    {% include 'Core/includes/recaptcha_script.html' with compact='True' mark_el_id=mark_el_id %}
+                {% endwith %}
+            {% endwith %}
         </form>
     </div>
 </div>
