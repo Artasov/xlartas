@@ -8,6 +8,7 @@ from .models import *
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['user', 'status', 'product', 'is_complete', 'date_created']
+    search_fields = ['user__username']
     save_on_top = True
 
 
@@ -25,6 +26,7 @@ class LicenseAdmin(admin.ModelAdmin):
                     'count_starts',
                     'count_days_for_expiration', 'date_expiration']
     list_editable = ['date_expiration']
+    search_fields = ['user__username']
     save_on_top = True
 
     def count_days_for_expiration(self, obj):
