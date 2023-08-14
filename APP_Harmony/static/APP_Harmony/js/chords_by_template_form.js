@@ -72,12 +72,14 @@ const inputs_CBT = form_CBT.querySelectorAll('input')
 const error_field_CBT = form_CBT.querySelector('.error_field')
 const result_container_CBT = form_CBT.querySelector('.result_container')
 const btn_close_result_container_close_CBT = result_container_SCC.querySelector('button').cloneNode()
+let access_upload_CBT = true;
+
 btn_CBT_submit.addEventListener('click', (e) => {
     e.preventDefault();
 
     const chords_els = progressionTemplate.children;
     if (chords_els.length < 2) return;
-    error_field_CBT.innerHTML = '';
+    access_upload_CBT.innerHTML = '';
 
     let chords = [];
     for (let i = 0; i < chords_els.length; i++) {
@@ -98,12 +100,17 @@ btn_CBT_submit.addEventListener('click', (e) => {
     const inputOutTypeValue = encodeURIComponent(inputs_CBT[3].value)
     const apiUrl =
         `/harmony/get_chords_combinations_by_template/${template}/${inputModeValue}/${inputQualityValue}/${inputDimValue}/${inputOutTypeValue}/`
+    access_upload_SCC = false;
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                error_field_CBT.innerHTML = response.statusText;
+                throw new Error(`${response.status} ${response.statusText}`);
 
-    sendGetRequest(apiUrl, function (error, response) {
-        if (error) {
-            error_field_CBT.innerHTML = error;
-        } else {
-            const chordProgressions = JSON.parse(response);
+            }
+            return response.json();
+        })
+        .then(chordProgressions => {
             result_container_CBT.innerHTML = '';
             result_container_CBT.appendChild(btn_close_result_container_close_CBT);
             for (const key in chordProgressions) {
@@ -111,9 +118,11 @@ btn_CBT_submit.addEventListener('click', (e) => {
                 result_container_CBT.appendChild(scaleProgressionsList)
             }
             result_container_CBT.classList.remove('d-none')
-
-        }
-    });
+            access_upload_SCC = true;
+        })
+        .catch(error => {
+            console.error('An error occurred while fetching the data: ', error);
+        });
 })
 btn_close_result_container_close_CBT.addEventListener('click', (e) => {
     e.preventDefault();
