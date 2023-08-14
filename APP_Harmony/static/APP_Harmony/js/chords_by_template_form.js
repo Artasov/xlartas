@@ -76,10 +76,9 @@ let access_upload_CBT = true;
 
 btn_CBT_submit.addEventListener('click', (e) => {
     e.preventDefault();
-
+    if (!access_upload_CBT) return;
     const chords_els = progressionTemplate.children;
     if (chords_els.length < 2) return;
-    access_upload_CBT.innerHTML = '';
 
     let chords = [];
     for (let i = 0; i < chords_els.length; i++) {
@@ -91,7 +90,7 @@ btn_CBT_submit.addEventListener('click', (e) => {
             return;
         }
     }
-
+    error_field_CBT.innerHTML = '';
 
     const template = encodeURIComponent(chords.join('_'))
     const inputModeValue = inputs_CBT[0].value
@@ -100,7 +99,7 @@ btn_CBT_submit.addEventListener('click', (e) => {
     const inputOutTypeValue = encodeURIComponent(inputs_CBT[3].value)
     const apiUrl =
         `/harmony/get_chords_combinations_by_template/${template}/${inputModeValue}/${inputQualityValue}/${inputDimValue}/${inputOutTypeValue}/`
-    access_upload_SCC = false;
+    let access_upload_SCC = false;
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) {
@@ -118,7 +117,7 @@ btn_CBT_submit.addEventListener('click', (e) => {
                 result_container_CBT.appendChild(scaleProgressionsList)
             }
             result_container_CBT.classList.remove('d-none')
-            access_upload_SCC = true;
+            access_upload_CBT = true;
         })
         .catch(error => {
             console.error('An error occurred while fetching the data: ', error);

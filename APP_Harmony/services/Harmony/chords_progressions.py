@@ -49,8 +49,8 @@ NOTE_NAME_DICT = {
 }
 
 NOTE_TYPE = {
-    '#': '#',
-    'b': 'b',
+    'sharp': 'sharp',
+    'flat': 'flat',
     'both': 'both',
 }
 
@@ -232,7 +232,7 @@ class ChordsProgressionsGenerator:
         return result
 
     def get_chords_combinations_by_template(self, template: tuple, mode='maj', quality='base', dim=False,
-                                            out_sharp_or_flat='#') -> dict:
+                                            out_sharp_or_flat='sharp') -> dict:
         """
         Generate all chords combination by template with available scales.
         :param template: Chords progression template like: tuple('', 'Am', 'Dm', '')
@@ -279,7 +279,7 @@ class ChordsProgressionsGenerator:
 
     def get_scale_chords_combinations(self, tonic: str, mode: str,
                                       progressions_len, max_repeats: int = 2,
-                                      quality: str = 'maj', out_sharp_or_flat: str = '#',
+                                      quality: str = 'maj', out_sharp_or_flat: str = 'sharp',
                                       dim: bool = True) -> Tuple[Tuple[str, ...]]:
         if quality == 'base':
             quality = 'maj'
