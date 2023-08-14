@@ -5,7 +5,7 @@
 {% if form.non_field_errors %}
     <ul class="errorlist">
         {% for error in form.non_field_errors %}
-            <li><span class="fw-bold text-danger">{{ error }}</span></li>
+            <li class="text-center"><span class="fw-bold text-danger">{{ error }}</span></li>
         {% endfor %}
     </ul>
 {% endif %}
@@ -18,9 +18,11 @@
         </ul>
     {% endif %}
 {% endfor %}
-{% for field in form %}
-    <div class="mb-3 form__group fs-5">
-        {{ field }}
-        {{ field.label_tag|remove_colons|safe }}
-    </div>
-{% endfor %}
+{% if not errors_only %}
+    {% for field in form %}
+        <div class="mb-3 form__group fs-5">
+            {{ field }}
+            {{ field.label_tag|remove_colons|safe }}
+        </div>
+    {% endfor %}
+{% endif %}

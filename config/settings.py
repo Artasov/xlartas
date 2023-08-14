@@ -6,6 +6,7 @@ import environ
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DATA_DIR = BASE_DIR / 'data'
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
@@ -25,6 +26,7 @@ LOCAL_APPS = [
     'APP_filehost',
     'APP_resource_pack',
     'APP_tests',
+    'APP_Harmony'
 ]
 THIRD_APPS = [
     'rest_framework',
@@ -293,3 +295,7 @@ FK_SECRET_WORD2 = env('FK_SECRET_WORD2')
 FK_API_URL = 'https://api.freekassa.ru/v1/'
 FK_API_KEY = env('FK_API_KEY')
 FK_SHOP_ID = '666'
+
+MAX_DEPOSIT_AMOUNT = 10_000
+MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
+DEFAULT_DEPOSIT_AMOUNT = 100

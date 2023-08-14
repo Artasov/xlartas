@@ -34,7 +34,7 @@ def try_apply_promo(request, user_, product_, price, promo):
             if product_.type == product_.ProductType.account:
                 pass  # in dev
             elif product_.type == product_.ProductType.program:
-                add_license_time(user_=user_, product_name=product_.name, days=promo_.promo_value)
+                add_license_time(user_id=user_.id, product_id=product_.id, days=promo_.promo_value)
                 promo_.used_by.add(user_.id)
                 return {'redirect': redirect('profile')}
     return None
@@ -49,7 +49,7 @@ def execute_order(order: Order):
             user_.balance -= order.amountRub
             user_.save()
             order.status = Order.OrderStatus.DONE
-            add_license_time(user_=order.user, product_name=product_.name,
+            add_license_time(user_id=order.user.id, product_id=product_.id,
                              days=get_count_license_days(order.license_type))
         elif product_.type == Product.ProductType.account:
             pass  # in dev
@@ -95,9 +95,9 @@ def get_product_price_by_license_type(product: Product, license_type: str):
         return None
 
 
-def add_license_time(user_: User, product_name: str, days: int):
-    license_, created = License.objects.get_or_create(user=user_,
-                                                      product=Product.objects.get(name=product_name))
+def add_license_time(user_id: int, product_id: int, days: int):
+    license_ = Subscription.objects.get_or_create(
+        user_id=user_id, product_id=product_id)[0]
     if license_.date_expiration > timezone.now():
         license_.date_expiration = license_.date_expiration + timedelta(days=int(days))
     else:

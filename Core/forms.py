@@ -1,11 +1,26 @@
 from django import forms
 
-from Core.error_messages import PASSWORDS_NOT_EQUAL, CONFIRMATION_CODE_WRONG, CONFIRMATION_CODE_EXPIRE
-from Core.models import User, ConfirmationCode
-from Core.services.services import get_user_by_email_or_name
+from Core.error_messages import PASSWORDS_NOT_EQUAL, RECAPTCHA_INVALID
+from Core.models import User
+from Core.services.services import get_user_by_email_or_name, check_recaptcha_is_valid
 
 
-class UserCreationForm(forms.ModelForm):
+class FormWithRecaptchaValidator(forms.Form):
+    def clean(self):
+        cleaned_data = super().clean()
+        if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
+            raise forms.ValidationError(RECAPTCHA_INVALID)
+        return cleaned_data
+
+class ModelFormWithRecaptchaValidator(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
+            raise forms.ValidationError(RECAPTCHA_INVALID)
+        return cleaned_data
+
+
+class UserCreationForm(ModelFormWithRecaptchaValidator):
     username = forms.CharField(
         label='Username',
         max_length=User._meta.get_field('username').max_length,

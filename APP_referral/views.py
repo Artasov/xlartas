@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from APP_referral.funcs import sync_ref_program_license_bonus
 from APP_referral.models import RefLinking
-from APP_shop.models import License
+from APP_shop.models import Subscription
 from Core.error_messages import REF_CODE_NOT_SPECIFIED, INVITER_ALREADY_SETTED, REF_CODE_SELF_USAGE, REF_CODE_DOES_NOT_EXIST
 from Core.models import User
 from Core.services.services import render_invalid
@@ -21,8 +21,8 @@ def referrals_list(request):
         referral_ = ref_link_.referral
         referral_info: dict = {'username': referral_.username}
         count_starts = 0
-        if License.objects.filter(user=referral_).exists():
-            ref_licenses_ = License.objects.filter(user=referral_)
+        if Subscription.objects.filter(user=referral_).exists():
+            ref_licenses_ = Subscription.objects.filter(user=referral_)
             for ref_license_ in ref_licenses_:
                 count_starts += ref_license_.count_starts
         referral_info['count_starts'] = count_starts

@@ -65,6 +65,7 @@ class Product(models.Model):
         return f'{self.name}'
 
 
+
 class Order(models.Model):
     class OrderType(models.TextChoices):
         PRODUCT = 'product', _('product')
@@ -78,7 +79,7 @@ class Order(models.Model):
         EXPIRED = 'expired', _('expired')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amountRub = models.DecimalField(decimal_places=2, max_digits=6)
+    amountRub = models.DecimalField(decimal_places=2, max_digits=8)
     status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.WAITING)
     is_complete = models.BooleanField(default=False)
     promo = models.ForeignKey('Promo', on_delete=models.SET_NULL, null=True, blank=True)
@@ -96,7 +97,7 @@ class Order(models.Model):
         ordering = ["date_created"]
 
 
-class License(models.Model):
+class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     is_test_period_activated = models.BooleanField(default=False, verbose_name='Is tested')

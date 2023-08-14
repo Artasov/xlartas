@@ -14,18 +14,9 @@
     justify-content-center" data-bs-theme="dark" style="max-width: 800px;">
         <h1 class="text-white-90 fs-1 text-center my-3">Платежи</h1>
         <div class="fcc flex-md-row gap-0 gap-md-4">
-            <form action="{% url 'shop:balance_increase' %}" method="post"
-                  class="mb-3 bg-black-15 h-min-content px-3 py-2 rounded-4">
-                {% csrf_token %}
-                {% if invalid %}
-                    <p class="fw-bold text-danger text-center mx-auto" style="max-width: 400px;">
-                        {{ invalid }}</p>
-                {% endif %}
-                <div class="form__group mb-3">
-                    <input type="number" name="amount"
-                           placeholder="Сумма для пополнения" id="amount" required min="1">
-                    <label for="amount">Сумма для пополнения</label>
-                </div>
+            <form class="mb-3 bg-black-15 h-min-content px-3 py-2 rounded-4"
+                  method="post"> {% csrf_token %}
+                {% include 'Core/includes/form.html' with form=form %}
                 <div class="frc my-3 gap-3" id="btn-recaptcha-marked">
                     <button type="submit" class="btn-3">Оплатить</button>
                     <a href="{% url 'shop:check_payment' %}"

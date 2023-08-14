@@ -10,7 +10,7 @@ from Core.models import ConfirmationCode
 
 
 def get_latest_confirmation_code(user_id: int,
-                                 code_type: ConfirmationCode.CodeType) -> Optional[ConfirmationCode]:
+                                 code_type: str) -> Optional[ConfirmationCode]:
     try:
         return ConfirmationCode.objects.filter(
             user_id=user_id, type=code_type
@@ -26,7 +26,7 @@ def is_code_sending_too_often(code: ConfirmationCode) -> bool:
 
 
 def create_confirmation_code_for_user(user_id: int,
-                                      code_type: ConfirmationCode.CodeType) -> Optional[ConfirmationCode]:
+                                      code_type: str) -> Optional[ConfirmationCode]:
     code_len = ConfirmationCode._meta.get_field('code').max_length
     code = get_random_string(code_len)
     return ConfirmationCode.objects.create(

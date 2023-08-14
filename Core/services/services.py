@@ -16,6 +16,8 @@ from django.shortcuts import render, redirect
 from APP_mailing.services.services import send_text_email
 from Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
 from Core.models import User
+import urllib.parse, urllib.request
+from django.http import HttpResponseNotAllowed
 
 
 def reCAPTCHA_validation(request):
@@ -87,6 +89,37 @@ def telegram_verify_hash(auth_data):
     if time.time() - int(auth_data['auth_date']) > 86400:
         return False
     return True
+
+
+def check_recaptcha_is_valid(recaptcha_response: str) -> bool:
+    if not recaptcha_response:
+        return False
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    values = {
+        'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        'response': recaptcha_response
+    }
+    data = urllib.parse.urlencode(values).encode()
+    req = urllib.request.Request(url, data=data)
+    response = urllib.request.urlopen(req)
+    result = json.loads(response.read().decode())
+    recaptcha_is_valid = result.get('success', False)
+    if not recaptcha_is_valid:
+        return False
+    return True
+
+
+def allowed_only(allowed_methods):
+    def decorator(view_func):
+        def wrapped_view(request, *args, **kwargs):
+            if request.method in allowed_methods:
+                return view_func(request, *args, **kwargs)
+            else:
+                return HttpResponseNotAllowed(allowed_methods)
+
+        return wrapped_view
+
+    return decorator
 
 
 def base_view(fn):

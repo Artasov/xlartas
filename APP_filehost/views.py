@@ -5,8 +5,7 @@ from django.utils.decorators import decorator_from_middleware
 from transliterate import translit
 
 from Core.error_messages import NOT_FOUND_404, NOT_ALL_FIELDS_FILLED, RECAPTCHA_INVALID
-from Core.middleware import reCaptchaMiddleware
-from Core.services.services import render_invalid
+from Core.services.services import render_invalid, check_recaptcha_is_valid
 from .ErrMsg import UPLOAD_TOO_BIG
 from .models import Upload, UploadedFile
 
@@ -62,7 +61,6 @@ def read(request, key=None):
     })
 
 
-@decorator_from_middleware(reCaptchaMiddleware)
 def create(request):
     if request.method != 'POST':
         return render(request, 'APP_filehost/create.html')
@@ -72,7 +70,7 @@ def create(request):
     else:
         MAX_UPLOAD_SIZE = settings.MAX_UPLOAD_SIZE_ANON_MB * 1024 * 1024
 
-    if not request.recaptcha_is_valid:
+    if not check_recaptcha_is_valid(request.POST.get('g-recaptcha-response')):
         return render(request, 'APP_filehost/create.html', {'invalid': RECAPTCHA_INVALID})
 
     files = request.FILES.getlist('files[]')

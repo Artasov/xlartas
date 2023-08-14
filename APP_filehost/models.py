@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 from transliterate import translit
 
-from params_and_funcs import log
 from xLLIB_v1 import random_str
 
 

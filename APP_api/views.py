@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from APP_shop.models import Product, License
+from APP_shop.models import Product, Subscription
 from Core.error_messages import LOGIN_OR_SECRET_KEY_WRONG, MULTI_ACCOUNT_PROHIBITED, PRODUCT_NOT_EXISTS, \
     LICENSE_TIMEOUT, SOMETHING_WRONG, HWID_NOT_EQUAL
 from Core.models import User
@@ -61,7 +61,7 @@ def login_program(request):
                         status=status.HTTP_200_OK,
                         headers={'Content-Type': 'application/json'})
 
-    license_, created = License.objects.get_or_create(user=user_, product=product_)
+    license_, created = Subscription.objects.get_or_create(user=user_, product=product_)
     # if license expired
     if license_.date_expiration <= timezone.now():
         if product == 'xLUMRA':
@@ -109,7 +109,7 @@ def set_hw_id(request):
 
     user_.hw_id = hw_id
     user_.save()
-    user_licenses = License.objects.filter(user=user_)
+    user_licenses = Subscription.objects.filter(user=user_)
     user_licenses.update(date_expiration=datetime.utcnow())
     return Response({'accept': True}, headers={'Content-Type': 'application/json'})
 

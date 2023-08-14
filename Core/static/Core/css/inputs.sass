@@ -1,6 +1,8 @@
 @import "vars"
+
 .select
 	.select_block
+		height: min-content
 		position: relative
 		.select_btn
 			transition: all 300ms ease
@@ -117,3 +119,46 @@
 		box-shadow: 0 0 10px rgba(#fff, .3)
 		background: rgba(#fff, 0)
 		transform: scale(1.05)
+
+@import "vars"
+
+.input-2
+	transition: all 300ms ease
+	display: flex
+	justify-content: center
+	z-index: 200
+	
+	.input-2-block
+		background: $serviceElBg
+		display: flex
+		justify-content: center
+		gap: 3
+		position: relative
+		box-shadow: 0 0 5px rgba(#000, .6)
+		
+		.input-2-icon-block
+			height: 100%
+			width: 40px
+			display: flex
+			flex-direction: column
+			justify-content: center
+			
+			i
+				color: #ddd
+				margin: 0 auto
+		
+		input
+			color: #ddd
+			margin: 0 auto
+			background: transparent
+			border: 0
+			outline: 0
+			padding: 0 0.2rem
+			
+	&:focus-within
+		filter: invert(100%) hue-rotate(-50deg)
+		transform: scale(1.01) !important
+		
+	label
+		filter: invert(1)
+	

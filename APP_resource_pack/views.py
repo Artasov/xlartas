@@ -16,7 +16,6 @@ from transliterate import translit
 
 from Core.error_messages import FILE_TOO_BIG, IMAGE_TOO_BIG, OBJ_WITH_THIS_NAME_EXISTS, \
     SOMETHING_WRONG, NOT_ALL_FIELDS_FILLED_OR_INCORRECT, NOT_FOUND_404
-from Core.middleware import reCaptchaMiddleware
 from Core.models import User, File
 from Core.services.services import render_invalid
 from .models import ResourcePack, ResourcePackImage
@@ -134,7 +133,6 @@ def detail(request, slug=None):
 
 
 @login_required(redirect_field_name=None, login_url='signin')
-@decorator_from_middleware(reCaptchaMiddleware)
 @transaction.atomic
 @api_view(['GET', 'POST'])
 def add_new(request):
@@ -142,9 +140,6 @@ def add_new(request):
         return render(request, 'APP_resource_pack/add_new.html', {
             'resolutions': ResourcePack.Resolution.values, 'styles': ResourcePack.Style.values,
             'colors': ResourcePack.Color.values, 'mapRpOverviewFile': File.objects.get(name='mapRpOverviewFile')})
-
-    # if not request.recaptcha_is_valid:
-    #     return Response({'data': RECAPTCHA_INVALID}, status=status.HTTP_403_FORBIDDEN)
 
     name = str(request.POST.get('name')).strip('\n\t').strip()
     style = str(request.POST.get('style')).strip('\n\t').strip()

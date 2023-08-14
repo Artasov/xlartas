@@ -20,14 +20,13 @@
     <script src="{% static 'Core/js/modal.js' %}"></script>
 {% endblock %}
 
+
 {% block content %}
     <div id="content" class="d-none container shop fcc flex-grow-1
     no_scrollbar disable-tap-and-selection mb-0"
          data-bs-theme="dark">
 
-        {% if invalid %}
-            <div class="text-center"><span class="text-danger fw-bold">{{ invalid }}</span></div>
-        {% endif %}
+        {% include 'Core/includes/form.html' with form=form errors_only=True %}
         {% include 'APP_shop/includes/modal_buy_license.html' with product=product %}
         <div class="u-modal flex-column justify-content-center"
              id="modalTestPeriod{{ product.name }}{{ product.id }}">

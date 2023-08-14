@@ -8,16 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.forms import modelform_factory
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.decorators import decorator_from_middleware
 
 from APP_referral.models import RefLinking
-from APP_shop.models import Product, License
+from APP_shop.models import Product, Subscription
 from .error_messages import NOT_FOUND_404, PASSWORD_WRONG, CONFIRMATION_CODE_EXPIRE, CONFIRMATION_CODE_SENT_TOO_OFTEN, \
     EMAIL_SENT, SUCCESSFULLY_REGISTERED, PASSWORD_RESET_SUCCESS
 from .forms import UserCreationForm, UserLoginForm, PasswordResetFormLoginField, PasswordResetConfirmForm
-from .middleware import reCaptchaMiddleware
 from .models import *
 from .services.code_confirmation import is_code_sending_too_often, get_latest_confirmation_code, \
     create_confirmation_code_for_user, send_password_reset_email, send_signup_confirmation_email
@@ -33,7 +32,6 @@ def main(request):
 
 @base_view
 @forbidden_with_login
-@decorator_from_middleware(reCaptchaMiddleware)
 def signup(request):
     form = UserCreationForm(request.POST or None)
     if form.is_valid():
@@ -48,10 +46,7 @@ def signup(request):
 @base_view
 @forbidden_with_login
 def signup_confirmation(request, code):
-    try:
-        code_ = ConfirmationCode.objects.get(code=code, type=ConfirmationCode.CodeType.signUp)
-    except ConfirmationCode.DoesNotExist:
-        return render_invalid(request, NOT_FOUND_404, 'signup')
+    code_ = get_object_or_404(ConfirmationCode, code=code, type=ConfirmationCode.CodeType.signUp)
 
     form = UserLoginForm()
     form.cleaned_data = []  # Else we won't be able to add errors.
@@ -63,7 +58,7 @@ def signup_confirmation(request, code):
         if is_code_sending_too_often(code_latest_):
             form.add_error(None, CONFIRMATION_CODE_SENT_TOO_OFTEN)
         else:
-            new_code_ = create_confirmation_code_for_user(code_.user_id, code_.type)
+            new_code_ = create_confirmation_code_for_user(code_.user.id, code_.type)
             send_signup_confirmation_email(request, new_code_.user.email, new_code_.code)
             context['success'] = EMAIL_SENT.format(f'{new_code_.user.email[:4]}******')
     else:
@@ -170,8 +165,9 @@ def password_reset(request):
 
     if form.is_valid():
         user_: User = form.cleaned_data['user']
-        code_: ConfirmationCode = get_latest_confirmation_code(user_id=user_.id,
-                                                               code_type=ConfirmationCode.CodeType.resetPassword)
+        code_: ConfirmationCode = get_latest_confirmation_code(
+            user_id=user_.id,
+            code_type=ConfirmationCode.CodeType.resetPassword)
 
         if code_ is not None:
             if is_code_sending_too_often(code_):
@@ -191,10 +187,7 @@ def password_reset(request):
 @base_view
 @forbidden_with_login
 def password_reset_confirmation(request, code):
-    try:
-        code_ = ConfirmationCode.objects.get(code=code, type=ConfirmationCode.CodeType.resetPassword)
-    except ConfirmationCode.DoesNotExist:
-        return render_invalid(request, NOT_FOUND_404, 'password_reset')
+    code_ = get_object_or_404(ConfirmationCode, code=code, type=ConfirmationCode.CodeType.resetPassword)
 
     if code_.is_expired():
         return render_invalid(request, CONFIRMATION_CODE_EXPIRE, 'password_reset')
@@ -220,16 +213,16 @@ def password_reset_confirmation(request, code):
 @login_required(redirect_field_name=None, login_url='signin')
 def profile(request):
     user_ = User.objects.get(username=request.user.username)
-    user_licenses = License.objects.filter(user=user_)
+    user_subs = Subscription.objects.filter(user=user_)
     least_days = {}
     context = {}
-    for license_ in user_licenses:
-        remained = int((license_.date_expiration - timezone.now()).total_seconds() / 3600)
+    for sub_ in user_subs:
+        remained = int((sub_.date_expiration - timezone.now()).total_seconds() / 3600)
         if remained > 9600:
             remained = 'FOREVER'
         elif remained < 1:
             remained = 'None'
-        least_days[Product.objects.get(id=license_.product_id).name] = remained
+        least_days[Product.objects.get(id=sub_.product_id).name] = remained
     if RefLinking.objects.filter(referral__username=user_.username).exists():
         context['inviter_'] = RefLinking.objects.get(referral__username=user_.username).inviter
 

@@ -11,19 +11,17 @@ from rest_framework.response import Response
 
 from APP_private_msg.models import PrivateMsg
 from Core.error_messages import NOT_ANY_FIELDS_FILLED, REF_CODE_NOT_SPECIFIED, NOT_FOUND_404, RECAPTCHA_INVALID
-from Core.middleware import reCaptchaMiddleware
-from Core.services.services import render_invalid
+from Core.services.services import render_invalid, check_recaptcha_is_valid
 from xLLIB_v1 import random_str
 
 
-@decorator_from_middleware(reCaptchaMiddleware)
 @transaction.atomic
 @api_view(['GET', 'POST'])
 def create(request):
     if request.method != 'POST':
         return render(request, 'APP_private_msg/create.html')
 
-    if not request.recaptcha_is_valid:
+    if not check_recaptcha_is_valid(request.POST.get('g-recaptcha-response')):
         return Response({'data': RECAPTCHA_INVALID}, status=status.HTTP_403_FORBIDDEN)
 
     text = str(request.POST.get('text')).strip('\n\t').strip()

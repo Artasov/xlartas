@@ -24,6 +24,7 @@ urlpatterns = [
     path('host/', include(('APP_filehost.urls', 'APP_filehost'), namespace='host')),
     path('rp/', include(('APP_resource_pack.urls', 'APP_resource_pack'), namespace='rp')),
     path('tests/', include(('APP_tests.urls', 'APP_tests'), namespace='tests')),
+    path('harmony/', include('APP_Harmony.urls')),
 
     path('', views.main, name='main'),
     path('signup/', views.signup, name='signup'),

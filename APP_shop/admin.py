@@ -19,7 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
     save_on_top = True
 
 
-@admin.register(License)
+@admin.register(Subscription)
 class LicenseAdmin(admin.ModelAdmin):
     list_display = ['user', 'product',
                     'is_test_period_activated',
