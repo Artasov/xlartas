@@ -41,7 +41,7 @@
         <div class="frc gap-2">
             <h2 class="text-white-80 text-center fs-6 my-auto" style="line-height: 0.9rem">Out<br>Type</h2>
             {% get_out_sharp_or_flat_types as out_sharp_or_flat_types %}
-            {% include 'Core/includes/select_tag.html' with id='out_sharp_or_flat_types_1' style='max-width: 70px;' classes='frc' select_input_name='out_sharp_or_flat' elements_dict=out_sharp_or_flat_types default_value='sharp' %}
+            {% include 'Core/includes/select_tag.html' with id='out_sharp_or_flat_types_1' style='max-width: 100px;' classes='frc' select_input_name='out_sharp_or_flat' elements_dict=out_sharp_or_flat_types default_value='sharp' %}
         </div>
     </div>
     <button type="button" class="submit mx-auto btn-3 fw-bold rounded-3 py-1 px-4 w-min-content">
