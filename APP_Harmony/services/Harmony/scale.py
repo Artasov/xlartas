@@ -23,7 +23,7 @@ class Scale:
         self.tonic = tonic
         self.mode = mode
 
-    def get_chords(self, quality: str = '', type_out=str) -> Tuple[Chord | Tuple[str], ...]:
+    def get_chords(self, quality: str = '', type_out=str):
         """
         :param type_out:
         :param quality: one of ("", "-", "maj", "m", "min", "7", "M7", "maj7", "m7")

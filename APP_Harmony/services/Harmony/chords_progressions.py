@@ -87,7 +87,7 @@ accords_dict = {
 }
 
 
-def get_unique_progression(progressions) -> Tuple[Tuple[str], ...]:
+def get_unique_progression(progressions):
     unique = []
     for progression in progressions:
         p_ = ChordProgression(list(progression))
@@ -309,7 +309,7 @@ class ChordsProgressionsGenerator:
         return all_combinations
 
     @staticmethod
-    def get_chords_combinations(chords: tuple[Chord | Tuple[str], ...],
+    def get_chords_combinations(chords,
                                 length: int, max_repeats: int = 2) -> Tuple[Tuple[str]]:
         unique_chords = set(chord.chord for chord in chords)
         all_scale_chords = tuple(product(unique_chords, repeat=length))
