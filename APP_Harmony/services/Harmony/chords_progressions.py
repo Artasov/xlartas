@@ -1,18 +1,14 @@
-import copy
 import json
 import os
 from itertools import product
-import random
-from typing import List, Tuple, Any
-import numpy
+from typing import Tuple
 from django.conf import settings
 from pychord import ChordProgression
-from pychord.constants import VAL_NOTE_DICT, NOTE_VAL_DICT
+from pychord.constants import VAL_NOTE_DICT
 from pychord.constants.scales import RELATIVE_KEY_DICT
 
 from APP_Harmony.services.Harmony.chord import Chord
-from APP_Harmony.services.Harmony.scale import Scale, QUALITIES_TRIADS_SEVENTHS
-from xLLIB_v1 import ReadFile
+from APP_Harmony.services.Harmony.scale import Scale
 
 scales = (
     'C', 'Am', 'G', 'Em', 'D', 'Bm',
