@@ -110,9 +110,12 @@ btn_CBT_submit.addEventListener('click', (e) => {
             return response.json();
         })
         .then(chordProgressions => {
+            console.log(chordProgressions)
             result_container_CBT.innerHTML = '';
             result_container_CBT.appendChild(btn_close_result_container_close_CBT);
             for (const key in chordProgressions) {
+
+                console.log(key)
                 const scaleProgressionsList = createScaleProgressionsList(key, chordProgressions[key])
                 result_container_CBT.appendChild(scaleProgressionsList)
             }
