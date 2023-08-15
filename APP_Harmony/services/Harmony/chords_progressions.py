@@ -248,6 +248,8 @@ class ChordsProgressionsGenerator:
             raise ValueError('Wrong quality.')
 
         progressions_len = len(template)
+        template = tuple(chord.split('/')[0] for chord in template)
+
         all_files = get_all_files_in_directory(self.scales_chords_combinations_detailed_dirs_dict_primary)
         filtered_files = [
             item for item in all_files
@@ -261,9 +263,9 @@ class ChordsProgressionsGenerator:
                 path_parts = str(file_path).replace('\\', '/').split('/')
                 tonic = next((part.replace('tonic_', '') for part in path_parts if part.startswith('tonic')),
                              'Undefined tonic')
-                if '#' in tonic and out_sharp_or_flat == 'b':
+                if '#' in tonic and out_sharp_or_flat == 'flat':
                     continue
-                elif 'b' in tonic and out_sharp_or_flat == '#':
+                elif 'b' in tonic and out_sharp_or_flat == 'sharp':
                     continue
 
                 list_progressions_uniques_tuple = {tuple(sublist) for sublist in json.load(json_file)}
