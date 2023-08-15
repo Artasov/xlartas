@@ -133,7 +133,9 @@ GitHub.sublime-settings
 !**/migrations/__init__.py
 
 # MINIO POSTGRES DATA
-data/
+data1/
+**data1/
+data1
 
 # SASS CACHE
 .sass-cache/
