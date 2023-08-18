@@ -47,7 +47,7 @@ def signup(request):
 @forbidden_with_login
 def signup_confirmation(request, code):
     code_ = get_object_or_404(ConfirmationCode, code=code, type=ConfirmationCode.CodeType.signUp)
-
+    ConfirmationCode.objects.filter(skip)
     form = UserLoginForm()
     form.cleaned_data = []  # Else we won't be able to add errors.
     context = {}
