@@ -38,6 +38,6 @@ def activate_test_period(user_id: int, product_name: str):
         product_ = Product.objects.get(name=product_name)
     except Product.DoesNotExist:
         raise BadRequest
-    add_license_time(user_id, product_.id, product_.test_period_days)
     license_.is_test_period_activated = True
-    license_.save()
+    add_license_time(user_id, product_.id, product_.test_period_days)
+
