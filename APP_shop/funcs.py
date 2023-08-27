@@ -100,10 +100,8 @@ def add_license_time(user_id: int, product_id: int, days: int):
         user_id=user_id, product_id=product_id)
     if license_.date_expiration > timezone.now():
         license_.date_expiration = license_.date_expiration + timedelta(days=int(days))
-        print('$')
     else:
         license_.date_expiration = timezone.now() + timedelta(days=int(days))
-        print(timezone.now() + timedelta(days=int(days)))
     license_.save()
 
 
