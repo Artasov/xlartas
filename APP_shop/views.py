@@ -36,7 +36,6 @@ def buy_product_program(request):
 
     product_ = get_object_or_404(Product, name=product_name)
 
-
     form = BuyProductProgramForm(data={
         'user_': user_,
         'license_type': license_type,

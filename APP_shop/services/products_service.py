@@ -28,7 +28,7 @@ def is_test_period_activated(**kwargs) -> bool:
         return False
 
 def activate_test_period(user_id: int, product_name: str):
-    license_ = Subscription.objects.get_or_create(user_id=user_id, product_name=product_name)[0]
+    license_ = Subscription.objects.get_or_create(user_id=user_id, product__name=product_name)[0]
     if license_.is_test_period_activated:
         raise BadRequest
     try:
