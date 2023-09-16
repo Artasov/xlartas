@@ -5,7 +5,8 @@
 
 {% block title %}xlartas | ADD RP{% endblock %}
 
-{% block meta_keywords %}текстуры для майнкрафт майнкрафта minecraft vimeworld ваймворлд вайм ворлд rp resource pack texture resourcepack ресурспак ресурспаки текстуры ресурс пак{% endblock %}
+{% block meta_keywords %}текстуры для майнкрафт майнкрафта minecraft vimeworld ваймворлд вайм ворлд rp resource pack
+    texture resourcepack ресурспак ресурспаки текстуры ресурс пак{% endblock %}
 {% block meta_og_description %}Добавить Ресурспак{% endblock %}
 {% block meta_description %}Add New Resource Pack{% endblock %}
 {% block meta_twitter_description %}Add New Resource Pack{% endblock %}
@@ -136,29 +137,31 @@
             <p class="text-white-65 fs-6 fw-5 mb-2 text-center">Перетащи файлы либо кликни чтобы выбрать</p>
             <div class="frc gap-3 mb-3 disable-tap-and-selection">
                 <div id="drag_drop_rp_file"
-                        class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
+                     class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
                     <span id="drag_drop_rp_file-name" class="text-white-75 fs-5 fw-7">RP File</span>
                     <span class="text-white-55 fs-6 fw-5">100 MB</span>
                     <input type="file" class="form-control-file d-none"
                            id="file_input" name="file" accept=".rar, .7zip, .zip" required>
                 </div>
-                <div id="drag_drop_preview" class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
+                <div id="drag_drop_preview"
+                     class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
                     <span class="text-white-75 fs-5 fw-7">Preview Image</span>
                     <span class="text-white-55 fs-6 fw-5">5 MB</span>
                     <input type="file" class="d-none" id="preview_input" name="image_preview"
-                       accept=".jpeg, .jpg, .png" required>
+                           accept=".jpeg, .jpg, .png" required>
                 </div>
-                <div id="drag_drop_images" class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
+                <div id="drag_drop_images"
+                     class="drag_drop px-2 bg-black-35 dashboard flex-col-center text-center pb-1">
                     <span class="text-white-75 fs-5 fw-7">Other Images</span>
                     <span class="text-white-55 fs-6 fw-5">5 MB (5 шт.)</span>
                     <input type="file" class="d-none" id="images" name="images[]" multiple
-                       accept=".jpeg, .jpg, .png" required>
+                           accept=".jpeg, .jpg, .png" required>
                 </div>
             </div>
             <div id="preview-image-preview" class="row p-0 m-0 mb-2"></div>
             <div id="images-preview" class="row p-0 m-0"></div>
             <div id="btn-recaptcha-marked" class="d-none"></div>
-            {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
+            {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked' %}
         </form>
         <div class="text-center my-3">
             <button id="btn_submit" class="btn-1 fs-5 fw-bold px-4 py-1">Create</button>

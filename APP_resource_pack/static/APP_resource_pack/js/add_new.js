@@ -229,6 +229,8 @@ btn_submit.addEventListener('click', (event) => {
         progressBar.value = Math.round(event.loaded / event.total * 100).toString();
         progressBarValue.innerText = progressBar.value;
     };
+
+
     xhr.onload = () => {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);

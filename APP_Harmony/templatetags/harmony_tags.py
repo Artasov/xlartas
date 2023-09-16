@@ -7,6 +7,15 @@ register = template.Library()
 
 
 @register.simple_tag
+def get_trainer_sounds():
+    return {
+        'BalladPiano-s': 'BalladPiano-s',
+        'BalladPiano-m': 'BalladPiano-m',
+        'BalladPiano-l': 'BalladPiano-l',
+    }
+
+
+@register.simple_tag
 def get_all_qualities():
     return AVAILABLE_QUALITY
 

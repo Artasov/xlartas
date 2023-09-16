@@ -11,7 +11,8 @@ from . import views
 app_name = 'harmony'
 
 urlpatterns = [
-    path('chords', views.chords, name='chords'),
+    path('trainer/', views.trainer, name='trainer'),
+    path('chords/', views.chords, name='chords'),
     path('get_scale_chords_combinations'
          '/<str:tonic>'
          '/<str:mode>'

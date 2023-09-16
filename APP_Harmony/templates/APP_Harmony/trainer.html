@@ -1,0 +1,126 @@
+{% extends 'Core/index.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load harmony_tags %}
+{% load socialaccount %}
+{% block title %}xlartas | Harmony Trainer{% endblock %}
+
+{% block meta_keywords %}trainer ear functional ears music chord chords тренажер тренажёр слуха слух музыкальный музыка
+    аккорды аккорд{% endblock %}
+{% block meta_description %}Harmony Trainer{% endblock %}
+{% block meta_og_description %}Слуховой тренажёр{% endblock %}
+{% block meta_twitter_description %}Harmony Trainer{% endblock %}
+
+{% block link_content_css %}
+    <link rel="stylesheet" href="{% static 'APP_Harmony/css/trainer.css' %}">
+    <link rel="stylesheet" href="{% static 'APP_Harmony/css/harmony.css' %}">
+    <link rel="stylesheet" href="{% static 'APP_Harmony/css/piano.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/accordions.css' %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'APP_Harmony/js/trainer_global.js' %}"></script>
+    <script src="{% static 'APP_Harmony/js/harmony_constants.js' %}"></script>
+    <script src="{% static 'APP_Harmony/js/trainerSounds.js' %}"></script>
+    <script src="{% static 'APP_Harmony/js/piano.js' %}"></script>
+    <script src="{% static 'APP_Harmony/js/harmony.js' %}"></script>
+    <script src="{% static 'APP_Harmony/js/trainer.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="content" class="container d-none fcc flex-grow-1 disable-tap-and-selection"
+         data-bs-theme="dark" style="max-width: 900px;">
+        <h1 class="text-dark-emphasis fs-1 text-center my-4" style="line-height: 20px;">
+            <span class="m-0">TRAINER</span> <br>
+            <span class="fs-5 text-white text-opacity-25"
+                  style="letter-spacing: 0.28em; padding-left: 6px">YOUR EARS</span>
+        </h1>
+        <div class="harmony-circle w-100">
+            <div>
+                <img class="w-100" src="{% static 'APP_Harmony/img/music_circle.png' %}" alt="">
+            </div>
+        </div>
+        <img class="btn-show-harmony-circle" width="50" height="50" alt=""
+             src="{% static 'APP_Harmony/img/music_circle.png' %}">
+        <img class="btn-show-trainer-settings" width="40" height="40" alt=""
+             src="{% static 'APP_Harmony/img/trainer-setting.png' %}"
+             data-bs-toggle="modal" data-bs-target="#settingTrainerModal">
+
+
+        <div class="audioContainer"></div>
+        {% get_trainer_sounds as trainer_sounds %}
+        {% include 'Core/includes/select_tag.html' with id='trainer_sounds' style='max-width: 180px; min-width: 170px;' classes='frc mx-auto' select_input_name='trainer_sound' elements_dict=trainer_sounds default_value='BalladPiano-m' %}
+
+        <div style="width: 90%; height: 1px; background: #ffffff66; max-width: 600px;"
+             class="mx-auto rounded-5 my-3"></div>
+
+
+        <div id="trainer-menu" class="frc">
+            <div class="train-starter frc gap-3 bg-black-15 rounded-3 py-2 px-3 w-min-content mx-auto">
+                <span class="disable-tap-and-selection fs-2 text-white-80 my-auto white-space-no-wrap"
+                      style="padding-top: 3px !important;" data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Тренировка первых 4-ёх ступеней C Major гаммы.">
+                    C Major 1-2-3-4
+                </span>
+                <button
+                        class="btn-start-1 my-auto"
+                        onclick="startTrainer('Major', 'C Major 1-2-3-4')"
+                        style="width: 45px; height: 45px">
+
+                </button>
+            </div>
+        </div>
+
+        <div id="trainer-field">
+
+        </div>
+
+
+
+
+        <div class="modal fade" id="settingTrainerModal" tabindex="-1" aria-labelledby="infoModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mx-auto" style="width: 90%; max-width: 500px;">
+                <div class="modal-content bg-black-25 backdrop-blur-20">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-white-90 white-space-no-wrap"
+                            id="infoModalLabel">Settings</h1>
+                    </div>
+                    <div class="modal-body fcc gap-2">
+                        <div class="fcc">
+                            <label for="cadenceDuration" class="text-white-80 fs-5">
+                                Duration Cadence
+                                (<span class="text-white-60" id="cadenceDurationValue"></span>)
+                            </label>
+                            <input class="slider" type="range" id="cadenceDuration" min="200" max="700" step="1" value="350">
+                        </div>
+                        <div class="fcc">
+                            <label for="notesDuration" class="text-white-80 fs-5">
+                                Duration Between Notes
+                                (<span class="text-white-60" id="notesDurationValue"></span>)
+                            </label>
+                            <input class="slider" type="range" id="notesDuration" min="200" max="700" step="1" value="350">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="trainerExitModal" tabindex="-1" aria-labelledby="infoModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered w-min-content mx-auto">
+                <div class="modal-content bg-black-25 backdrop-blur-20">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-white-90 white-space-no-wrap"
+                            id="infoModalLabel">Do u want to exit?</h1>
+                    </div>
+                    <div class="modal-body frc gap-2">
+                        <button class="btn-3" aria-label="Close" data-bs-dismiss="modal" id="btn-trainer-exit">Yes</button>
+                        <button class="btn-3" aria-label="Close" data-bs-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

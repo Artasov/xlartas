@@ -7,6 +7,11 @@ from Core.services.services import base_view
 
 
 @base_view
+def trainer(request):
+    return render(request, 'APP_Harmony/trainer.html')
+
+
+@base_view
 def chords(request):
     return render(request, 'APP_Harmony/chords.html')
 
