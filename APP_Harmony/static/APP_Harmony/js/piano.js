@@ -62,7 +62,7 @@ class Piano {
             index = this.current_keys.indexOf(key);
         }
         if (this.current_keys.includes(key) && !this.disabled_keys.includes(key)) {
-            this.keysSounds[key+octave].play();
+
             if (this.keysEls) {
                 const keyEl = this.keysEls[index];
                 if (keyEl) {
@@ -76,6 +76,7 @@ class Piano {
                     }
                 }, duration);
             }
+            this.keysSounds[key+octave].play();
         }
     }
 
