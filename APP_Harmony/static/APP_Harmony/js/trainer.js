@@ -27,7 +27,6 @@ function getScaleKeys(scale) {
     return scaleKeys;
 }
 
-
 class Trainer {
     constructor(presetName,
                 pianoStartKey,
@@ -227,7 +226,8 @@ class Trainer {
         btn.addEventListener('click', () => {
             this.trainPiano.stopPlayingAll();
             this.trainPiano.playKey(
-                `${this.currentHiddenKey}${this.hiddenKeyOctave}`,
+                this.currentHiddenKey,
+                this.hiddenKeyOctave,
                 this.notesDuration,
                 null,
                 true
@@ -245,7 +245,8 @@ class Trainer {
         setTimeout(() => {
             this.trainPiano.stopPlayingAll();
             this.trainPiano.playKey(
-                `${this.currentHiddenKey}${this.hiddenKeyOctave}`,
+                this.currentHiddenKey,
+                this.hiddenKeyOctave,
                 this.notesDuration,
                 null,
                 true
@@ -278,8 +279,8 @@ class Trainer {
 
 function startTrainer(presetType, presetName = null) {
     if (!isSoundsPreloaded) {
-        preloadSounds();
-        preloadSounds();
+        // preloadSounds();
+        // preloadSounds();
     }
     if (presetName) {
         const preset = trainerPresets[presetType][presetName];
@@ -299,4 +300,5 @@ function startTrainer(presetType, presetName = null) {
         }, 300)
     }
 }
+
 

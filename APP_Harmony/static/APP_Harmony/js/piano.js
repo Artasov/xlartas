@@ -56,15 +56,12 @@ class Piano {
     }
 
 
-    playKey(fullKey, duration = 0, index = null, hidden = false) {
-        const key_without_octave = fullKey.replace(/\d/g, '');
+    playKey(key, octave, duration = 0, index = null, hidden = false) {
         if (index === null) {
-            index = this.current_keys.indexOf(key_without_octave);
+            index = this.current_keys.indexOf(key);
         }
-        if (this.current_keys.includes(key_without_octave) && !this.disabled_keys.includes(key_without_octave)) {
-            console.log(this.keysSounds)
-            console.log(fullKey)
-            this.keysSounds[fullKey].play();
+        if (this.current_keys.includes(key) && !this.disabled_keys.includes(key)) {
+            this.keysSounds[key+octave].play();
             if (this.keysEls) {
                 const keyEl = this.keysEls[index];
                 if (keyEl) {
@@ -78,8 +75,6 @@ class Piano {
                     }
                 }, duration);
             }
-        } else {
-            console.log(`Key: ${fullKey} is not available or disabled`);
         }
     }
 
@@ -106,8 +101,7 @@ class Piano {
             let timeOffset = 0;
             for (let i = fromIndex; i >= targetIndex; i--) {
                 if (!this.disabled_keys.includes(this.current_keys[i])) {
-                    let fullKey = addOctaveToKey(this.current_keys[i], octave);
-                    setTimeout(() => this.playKey(fullKey, duration, i), duration * timeOffset);
+                    setTimeout(() => this.playKey(this.current_keys[i], octave, duration, i), duration * timeOffset);
                     timeOffset++;
                 }
                 if (i > targetIndex && this.current_keys[i] === 'C') {
@@ -121,8 +115,7 @@ class Piano {
                     octave++;
                 }
                 if (!this.disabled_keys.includes(this.current_keys[i])) {
-                    let fullKey = addOctaveToKey(this.current_keys[i], octave);
-                    setTimeout(() => this.playKey(fullKey, duration, i), duration * timeOffset);
+                    setTimeout(() => this.playKey(this.current_keys[i], octave, duration, i), duration * timeOffset);
                     timeOffset++;
                 }
             }
@@ -143,7 +136,7 @@ class Piano {
     playChord(chord, octave, duration) {
         this.stopPlayingAll();
         for (const note of chord) {
-            this.playKey(note + octave, duration, null);
+            this.playKey(note, octave, duration, null);
         }
     }
 
