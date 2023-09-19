@@ -1,2 +1,2 @@
-.btn-show-trainer-settings{transition:all 300ms ease-in-out;position:fixed;bottom:23px;left:23px;filter:invert(.7)}.btn-show-trainer-settings:hover{transform:scale(1.1) rotate(-180deg);filter:invert(.9)}
+.btn-show-trainer-settings{transition:all 300ms ease-in-out;position:fixed;top:90px;left:23px;filter:invert(.7)}.btn-show-trainer-settings:hover{transform:scale(1.1) rotate(-90deg);filter:invert(.9)}
 /*# sourceMappingURL=trainer.css.map */
