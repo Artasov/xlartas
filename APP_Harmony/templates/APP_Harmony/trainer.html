@@ -42,13 +42,6 @@
              src="{% static 'APP_Harmony/img/trainer-setting.png' %}"
              data-bs-toggle="modal" data-bs-target="#settingTrainerModal">
 
-
-        <div class="frc">
-            {% get_trainer_sounds as trainer_sounds %}
-            {% include 'Core/includes/select_tag.html' with id='trainer_sounds' style='max-width: 180px; min-width: 170px;' classes='frc mx-auto' select_input_name='trainer_sound' elements_dict=trainer_sounds default_value='BalladPiano-m' %}
-            <button class="btn-3 rounded-3" data-bs-toggle="modal" data-bs-target="#addPresetModal">+ preset</button>
-        </div>
-
         <div style="width: 90%; height: 1px; background: #ffffff66; max-width: 600px;"
              class="mx-auto rounded-5 mt-3"></div>
 
@@ -108,6 +101,13 @@
                             </label>
                             <input class="slider" type="range" id="notesDuration" min="200" max="700" step="1"
                                    value="350">
+                        </div>
+                        <div class="frc">
+                            {% get_trainer_sounds as trainer_sounds %}
+                            {% include 'Core/includes/select_tag.html' with id='trainer_sounds' style='max-width: 180px; min-width: 170px;' classes='frc mx-auto' select_input_name='trainer_sound' elements_dict=trainer_sounds default_value='BalladPiano-m' %}
+                            <button class="btn-3 rounded-3" data-bs-toggle="modal" data-bs-target="#addPresetModal">+
+                                preset
+                            </button>
                         </div>
                     </div>
                 </div>

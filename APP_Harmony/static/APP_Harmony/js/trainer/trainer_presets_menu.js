@@ -13,13 +13,14 @@ export async function fetchTrainerPresets() {
     const trainerPresets = {};
 
     for (const preset of data) {
-        const category = preset.category.name;
+        const category = preset.category;
         if (!trainerPresets[category]) {
             trainerPresets[category] = {};
         }
         let scalePreset = undefined;
 
         trainerPresets[category][preset.name] = {
+            id: preset.id,
             presetName: preset.name,
             presetCategory: preset.category,
             presetDesc: preset.desc,
@@ -32,7 +33,8 @@ export async function fetchTrainerPresets() {
             cadenceName: preset.cadence_name,
             playCadenceEveryNQuestion: preset.play_cadence_every_n_question,
             cadenceOctave: preset.cadence_octave,
-            availableReplay: preset.available_replay
+            availableReplay: preset.available_replay,
+            user_statistics: preset.user_statistics
         };
     }
 
@@ -77,29 +79,98 @@ export function populatePresetAccordion(trainerPresets) {
             const preset = trainerPresets[category][presetName];
 
             const presetBlock = document.createElement('div');
-            presetBlock.className = 'train-preset-block frb gap-3 bg-black-15 rounded-3 py-2 px-3 mx-auto mb-2';
+            presetBlock.className = 'train-preset-block overflow-hidden frb gap-3 bg-black-15 rounded-3 py-2 px-3 mx-auto mb-2 position-relative';
             presetBlock.style.width = '100%';
             presetBlock.style.maxWidth = '300px';
 
+            const presetTitle = document.createElement('div');
+            presetTitle.className = 'fcc'
+
+
             const presetSpan = document.createElement('span');
-            presetSpan.className = 'disable-tap-and-selection fs-6 text-white-80 my-auto white-space-no-wrap';
+            presetSpan.className = 'disable-tap-and-selection fs-6 text-white-80 my-auto';
             presetSpan.style.paddingTop = '3px';
             presetSpan.dataset.bsToggle = 'tooltip';
             presetSpan.dataset.bsPlacement = 'top';
             presetSpan.dataset.bsTitle = preset.presetDesc;
             presetSpan.textContent = preset.presetName;
 
+            const presetSettings = document.createElement('div');
+            const degrees = document.createElement('div');
+            degrees.classList.add('degrees-wrap');
+            for (let i = 1; i <= 8; i++) {
+                console.log(i)
+                console.log(preset.degrees)
+                const degree = document.createElement('div');
+                if (preset.degrees.indexOf(i) !== -1) {
+                    console.log('Yes')
+                    degree.classList.add('degree-active');
+                }
+                degree.classList.add('degree')
+                degrees.appendChild(degree);
+            }
+
+
+            presetSettings.appendChild(degrees)
+
+            presetTitle.appendChild(presetSpan)
+            presetTitle.appendChild(presetSettings)
+
             const presetButton = document.createElement('button');
             presetButton.className = 'btn-start-1 my-auto';
-            presetButton.style.width = '45px';
+            presetButton.style.minWidth = '45px';
             presetButton.style.height = '45px';
 
-            // START TRAINER BUTTON
-            presetButton.onclick =
-                () => createAndStartTrainer(presetName, category);
 
-            presetBlock.appendChild(presetSpan);
+            console.log('STATISTICS')
+            const presetStatsLineWrap = document.createElement('div');
+            presetStatsLineWrap.className = 'position-absolute bottom-0 left-0 w-100'
+            presetStatsLineWrap.style.height = '5px';
+
+            const presetStatsLine = document.createElement('div');
+            presetStatsLine.className = 'h-100 presets-stats-line'
+
+            let total_percent_amount = 0;
+            let averagePercentage = 0;
+
+            if (preset.user_statistics.length > 0) {
+                preset.user_statistics.forEach(ustats => {
+                    total_percent_amount += ustats.right_answer_percentage;
+                });
+                averagePercentage = Math.floor(total_percent_amount / preset.user_statistics.length);
+            }
+
+            function lerp(start, end, factor) {
+                return start + (end - start) * factor;
+            }
+
+// Начальный и конечный цвета в формате RGB
+            const startColor = {r: 41, g: 36, b: 102}; // #292466
+            const endColor = {r: 147, g: 13, b: 83};   // #930d53
+
+// Вычислите фактор интерполяции
+            let factor = averagePercentage / 100;
+
+// Получите интерполированный цвет
+            let interpolatedColor = {
+                r: Math.round(lerp(startColor.r, endColor.r, factor)),
+                g: Math.round(lerp(startColor.g, endColor.g, factor)),
+                b: Math.round(lerp(startColor.b, endColor.b, factor))
+            };
+
+// Установите этот цвет как второй цвет в вашем градиенте
+            presetStatsLine.style.background = `linear-gradient(90deg, #292466 0%, rgb(${interpolatedColor.r}, ${interpolatedColor.g}, ${interpolatedColor.b}) 100%)`;
+
+            presetStatsLine.style.width = `${averagePercentage}%`;
+            presetStatsLineWrap.appendChild(presetStatsLine);
+            presetStatsLineWrap.appendChild(presetStatsLine)
+
+            presetButton.onclick =
+                () => createAndStartTrainer(presetName, preset.presetCategory);
+
+            presetBlock.appendChild(presetTitle);
             presetBlock.appendChild(presetButton);
+            presetBlock.appendChild(presetStatsLineWrap);
 
             presetsContainer.appendChild(presetBlock);
         }

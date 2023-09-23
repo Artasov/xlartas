@@ -23,6 +23,8 @@ const trainerSoundsMenu = document.getElementById('select-trainer_sounds');
 let currentTrainer = null;
 let isSoundsPreloaded = false;
 
+
+
 window.addEventListener('load', function () {
     loadTrainerSettings();
     initCircleHarmony();

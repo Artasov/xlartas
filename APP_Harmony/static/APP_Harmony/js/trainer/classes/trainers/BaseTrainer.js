@@ -47,6 +47,7 @@ class BaseTrainer {
         this.workField.classList.add('d-none');
         const event = new CustomEvent('trainerExit');
         window.dispatchEvent(event);
+        delete this;
     }
 
     _increaseRightAnswer() {

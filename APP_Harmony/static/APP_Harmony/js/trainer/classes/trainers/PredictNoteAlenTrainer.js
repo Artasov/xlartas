@@ -13,6 +13,7 @@ import PianoEl from "../pianos/PianoEl.js";
 import Scale from "../../../shared/classes/Scale.js";
 import ProgressCircleBar from "../../../../../../../static/Core/js/progress_circle_bar.js";
 import {fetchTrainerPresets, populatePresetAccordion} from "../../trainer_presets_menu.js";
+import {randomIntInRange} from "../../../../../../../static/Core/js/shared_funcs.js";
 
 class PredictNoteAlenTrainer extends BaseAlenTrainer {
     constructor(
@@ -44,6 +45,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         } else {
             this.presetScale = new Scale(preset.scaleName, preset.scaleOctave)
         }
+        this.preset = preset;
         this.degrees = preset.degrees;
         this.isChromatic = preset.chromatic;
         this.currentScale = undefined;
@@ -51,6 +53,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         this.piano = undefined;
         this.availableReplay = preset.availableReplay;
         this.currentHiddenNote = null;
+        this.currentCadenceSkips = 1;
         this.hiddenNoteOctave = preset.hiddenNoteOctave;
 
         this.btnPlayCurrentHiddenNote = undefined;
@@ -99,8 +102,6 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                 this.currentScale.decreaseOctave(1);
             }
         }
-        console.log('Scale created')
-        console.log(this.currentScale)
         this.pianoField.innerHTML = '';
         this.currentEnabledNotes = [];
         for (let i = 0; i < this.degrees.length; i++) {
@@ -141,8 +142,9 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         this._increaseCurrentQuestionCount();
         this.currentHiddenNote = this._getRandomNoteFromAvailable();
         if (this.hiddenNoteOctave === -1) {
-            this.currentHiddenNote.octave = Math.floor(Math.random() * 7) + 2;
+            this.currentHiddenNote.octave = randomIntInRange(3, 6);
         }
+
         this._playQuestion();
 
         console.log('AFTER NEXT QUESTION')
@@ -201,7 +203,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                     closestNote,
                     notesForSkipping,
                     this.notesDuration,
-                        this.notesDuration,
+                    this.notesDuration,
                 );
 
                 this._increaseRightAnswer();
@@ -228,18 +230,22 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         this.piano.cancelAllHighlights();
         this.piano.isHighlightAvailable = true;
         this.piano.highlight.setWarning();
-        const cadence = cadences[this.cadenceName];
-        const totalCadenceDuration = (this.cadenceDuration + 100) *
-            (cadence.length - 1) + this.cadenceDuration;
-        console.log('_playQuestion')
-        console.log(this.currentScale)
-        this.piano.player.playCadence(
-            this.currentScale.scaleName,
-            this.cadenceName,
-            this.piano.allCurrentPianoNotes[0].octave,
-            this.cadenceDuration + 500,
-            this.cadenceDuration,
-        );
+        let totalCadenceDuration = 0;
+        if (this.currentCadenceSkips === 1) {
+            const cadence = cadences[this.cadenceName];
+            totalCadenceDuration = (this.cadenceDuration + 100) *
+                (cadence.length - 1) + this.cadenceDuration;
+            this.piano.player.playCadence(
+                this.currentScale.scaleName,
+                this.cadenceName,
+                this.piano.allCurrentPianoNotes[0].octave,
+                this.cadenceDuration + 500,
+                this.cadenceDuration,
+            );
+            this.currentCadenceSkips += this.playCadenceEveryNQuestion
+        }
+        this.currentCadenceSkips -= 1;
+
 
         let timeoutId = setTimeout(() => {
             this.piano.isHighlightAvailable = false;
@@ -275,7 +281,9 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         btn.classList.add('btn-3')
         btn.innerHTML = 'Replay';
         btn.addEventListener('click', () => {
-            this._playQuestion();
+            if (this.availableReplay) {
+                this._playQuestion();
+            }
         })
         return btn;
     }
@@ -309,12 +317,32 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         const rightAnswerPercentage = Math.round(
             ((this.countQuestions / totalAttempts) * 100).toFixed(2)
         );
+        this.rightAnswerPercentage = rightAnswerPercentage;
 
         progressBar.setValue(rightAnswerPercentage, 1000);
     }
 
     finish() {
         this._showResult();
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/harmony/trainer/save_preset_result/', true);
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        xhr.onload = function () {
+            if (xhr.status === 201) {
+                console.log("Result saved successfully:", xhr.responseText);
+            } else {
+                console.error("Failed to save result:", xhr.responseText);
+            }
+        };
+
+        const data = JSON.stringify({
+            "right_answer_percentage": this.rightAnswerPercentage,
+            "preset": this.preset.id  // Замените на ID текущего пресета
+        });
+        xhr.send(data);
     }
 }
 

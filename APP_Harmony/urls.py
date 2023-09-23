@@ -13,7 +13,8 @@ app_name = 'harmony'
 urlpatterns = [
     path('trainer/', views.trainer, name='trainer'),
     path('trainer/base_presets/', views.get_base_trainer_presets, name="base_presets"),
-    path('add-trainer-preset/', views.add_trainer_preset, name='add_trainer_preset'),
+    path('trainer/add-trainer-preset/', views.add_trainer_preset, name='add_trainer_preset'),
+    path('trainer/save_preset_result/', views.save_preset_result, name='save_preset_result'),
     path('chords/', views.chords, name='chords'),
 
     path('get_scale_chords_combinations'

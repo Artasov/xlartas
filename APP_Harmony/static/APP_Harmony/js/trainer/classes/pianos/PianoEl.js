@@ -75,13 +75,20 @@ class PianoEl {
             return totalOctave / notesArray.length;
         };
 
-        let averageOctaveOfNotes = calculateAverageOctave(notes);  // let вместо const
+        let averageOctaveOfNotes = calculateAverageOctave(notes);
         const averageOctaveOfPiano = calculateAverageOctave(this.allCurrentPianoNotes);
 
-        // Подгоняем последовательность к доступному диапазону пианино
-        while (true) {
-            // Если все ноты уже в диапазоне, то завершаем
-            if (notes.every(note => this.allCurrentPianoNotes.some(pianoNote => pianoNote.equals(note)))) {
+        // Ограничиваем количество попыток коррекции, чтобы избежать бесконечного цикла
+        const maxAttempts = 20;
+        let currentAttempt = 0;
+
+        while (currentAttempt < maxAttempts) {
+            // Проверяем, находятся ли все ноты внутри доступного диапазона
+            const allNotesAreInsideRange = notes.every(note => {
+                return this.allCurrentPianoNotes.some(pianoNote => pianoNote.equals(note));
+            });
+
+            if (allNotesAreInsideRange) {
                 break;
             }
 
@@ -95,11 +102,15 @@ class PianoEl {
                 }
             }
 
-            averageOctaveOfNotes = calculateAverageOctave(notes);  // Обновляем среднюю октаву после изменения октавы
+            averageOctaveOfNotes = calculateAverageOctave(notes);
+            currentAttempt++;
         }
 
-        console.log('AGEST');
-        console.log(notes);
+        // Если после всех попыток ноты все равно не подходят, выводим предупреждение
+        if (currentAttempt === maxAttempts) {
+            console.warn('Unable to fit all notes inside the available range after multiple adjustments.');
+        }
+
         return notes;
     }
 
@@ -132,7 +143,6 @@ class PianoEl {
             console.warn('Note does not exist in current piano.');
             return;
         }
-        console.log('Highlight')
         this.keysEls[index].classList.add(this.highlight.class);
         setTimeout(() => {
             this.keysEls[index].classList.remove(this.highlight.class);

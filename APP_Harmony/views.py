@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
-from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from APP_Harmony.forms.forms import TrainerPresetForm
 from APP_Harmony.models import TrainerPreset
-from APP_Harmony.serializers import TrainerPresetSerializer
+from APP_Harmony.serializers import TrainerPresetSerializer, TrainerPresetResultSerializer
 from APP_Harmony.services.Harmony.chords_progressions import ChordsProgressionsGenerator
 from Core.services.services import base_view
 
@@ -12,9 +14,22 @@ from Core.services.services import base_view
 @base_view
 @api_view(['GET'])
 def get_base_trainer_presets(request):
-    presets = TrainerPreset.objects.filter(author__is_staff=True)
-    serializer = TrainerPresetSerializer(presets, many=True)
+    base_presets = TrainerPreset.objects.filter(
+        author__is_staff=True).order_by('priority')
+    serializer = TrainerPresetSerializer(base_presets, many=True, context={'request': request})
+
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_preset_result(request):
+    serializer = TrainerPresetResultSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @base_view
