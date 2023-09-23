@@ -1,0 +1,465 @@
+[
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 1,
+    "fields": {
+      "author": 1,
+      "priority": 1,
+      "name": "C Major I II III IV",
+      "category": 1,
+      "desc": "",
+      "scale_name": "C",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 4,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 2,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 3,
+    "fields": {
+      "author": 1,
+      "priority": 2,
+      "name": "C Major V VI VII VIII",
+      "category": 1,
+      "desc": "",
+      "scale_name": "C",
+      "scale_octave": 4,
+      "degrees": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 4,
+    "fields": {
+      "author": 1,
+      "priority": 3,
+      "name": "C Major Full",
+      "category": 1,
+      "desc": "",
+      "scale_name": "C",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 5,
+    "fields": {
+      "author": 1,
+      "priority": 4,
+      "name": "C Major Full Octave Random",
+      "category": 1,
+      "desc": "",
+      "scale_name": "C",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": -1,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 6,
+    "fields": {
+      "author": 1,
+      "priority": 5,
+      "name": "Random Major Full",
+      "category": 1,
+      "desc": "",
+      "scale_name": "randomMajor",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 7,
+    "fields": {
+      "author": 1,
+      "priority": 6,
+      "name": "Random Major & Octave",
+      "category": 1,
+      "desc": "",
+      "scale_name": "randomMajor",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": -1,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 8,
+    "fields": {
+      "author": 1,
+      "priority": 1,
+      "name": "C Minor I II III IV",
+      "category": 2,
+      "desc": "",
+      "scale_name": "Cm",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:45:40.305Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 21,
+    "fields": {
+      "author": 1,
+      "priority": 2,
+      "name": "C Minor V VI VII VIII Chromatic",
+      "category": 4,
+      "desc": "",
+      "scale_name": "Cm",
+      "scale_octave": 4,
+      "degrees": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": true,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:51:37.159Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 22,
+    "fields": {
+      "author": 1,
+      "priority": 3,
+      "name": "C Minor Full Chromatic",
+      "category": 4,
+      "desc": "",
+      "scale_name": "Cm",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": true,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:51:38.586Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 23,
+    "fields": {
+      "author": 1,
+      "priority": 4,
+      "name": "C Minor Full Chromatic Octave Random",
+      "category": 4,
+      "desc": "",
+      "scale_name": "Cm",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": true,
+      "hidden_note_octave": -1,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:51:40.245Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 24,
+    "fields": {
+      "author": 1,
+      "priority": 5,
+      "name": "Random Minor Full Chromatic",
+      "category": 4,
+      "desc": "",
+      "scale_name": "randomMinor",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": true,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:51:41.816Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 25,
+    "fields": {
+      "author": 1,
+      "priority": 6,
+      "name": "Random Minor & Octave Chromatic",
+      "category": 4,
+      "desc": "",
+      "scale_name": "randomMinor",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": true,
+      "hidden_note_octave": -1,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:51:43.112Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 26,
+    "fields": {
+      "author": 1,
+      "priority": 1,
+      "name": "Random Minor or Major & Octave",
+      "category": 5,
+      "desc": "",
+      "scale_name": "random",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": -1,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": true,
+      "created_at": "2023-09-23T09:56:25.269Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpreset",
+    "pk": 27,
+    "fields": {
+      "author": 1,
+      "priority": 2,
+      "name": "Random Major No Replay",
+      "category": 5,
+      "desc": "",
+      "scale_name": "randomMajor",
+      "scale_octave": 4,
+      "degrees": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "chromatic": false,
+      "hidden_note_octave": 4,
+      "count_questions": 10,
+      "cadence_name": "AuthenticCadence",
+      "play_cadence_every_n_question": 1,
+      "cadence_octave": 4,
+      "available_replay": false,
+      "created_at": "2023-09-23T09:58:06.499Z"
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpresetcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Major",
+      "desc": "",
+      "priority": 1
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpresetcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Minor",
+      "desc": "",
+      "priority": 2
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpresetcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Chromaticism in a Major",
+      "desc": "",
+      "priority": 3
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpresetcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Chromaticism in a Minor",
+      "desc": "",
+      "priority": 4
+    }
+  },
+  {
+    "model": "APP_Harmony.trainerpresetcategory",
+    "pk": 5,
+    "fields": {
+      "name": "Additional",
+      "desc": "",
+      "priority": 5
+    }
+  }
+]
