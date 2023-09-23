@@ -1,9 +1,9 @@
 import BasePianoPlayer from "./BasePianoPlayer.js";
-import {NOTE_MAP} from "../../../shared/constants/notes.js";
+import {NOTE_MAP, NOTES} from "../../../shared/constants/notes.js";
 import {scales} from "../../../shared/constants/scales.js";
 import {cadences} from "../../../shared/constants/cadences.js";
 import Chord from "../../../shared/classes/Chord.js";
-import {getNotesBetween} from "../../../shared/shared_funcs.js";
+import {getDirection, getNotesBetween} from "../../../shared/shared_funcs.js";
 
 class OscillatorPianoPlayer extends BasePianoPlayer {
     constructor() {
@@ -15,8 +15,6 @@ class OscillatorPianoPlayer extends BasePianoPlayer {
     }
 
     playNote(note, duration_ms, gain_value = this.gain_value) {
-        console.log(note)
-        console.log(gain_value)
         const frequency = this.getFrequency(note);
         if (frequency) {
             window.dispatchEvent(new CustomEvent('notePlaying', {
@@ -30,28 +28,49 @@ class OscillatorPianoPlayer extends BasePianoPlayer {
     }
 
     playFromTo(fromNote, toNote, skipNotes, interval_ms, duration_ms) {
-        const notesArray = getNotesBetween(fromNote, toNote, skipNotes);
+        let skipNotesCutoff = [];
+        skipNotes.forEach(note => {
+            if (note.note !== fromNote.note && note.note !== toNote.note) {
+                skipNotesCutoff.push(note)
+            }
+        })
+        const notesArray = getNotesBetween(fromNote, toNote, skipNotesCutoff);
+
+        window.dispatchEvent(new CustomEvent('noteProgressionPlaying', {
+            detail: {notesArray}
+        }));
         return this.playNotesProgression(notesArray, interval_ms, duration_ms);
     }
 
 
-    playCadence(scaleKey, cadenceName, duration_ms, interval_ms) {
-        if (!scales[scaleKey]) {
-            console.error(`Scale '${scaleKey}' not found.`);
+    playCadence(scaleName, cadenceName, octave, duration_ms, interval_ms) {
+        if (!scales[scaleName]) {
+            console.error(`Scale '${scaleName}' not found.`);
             return;
         }
         if (!cadences[cadenceName]) {
             console.error(`Cadence '${cadenceName}' not found.`);
             return;
         }
+        const scaleNoteName = scaleName.replace('m', '');
+        const scaleNoteIndex = NOTES.indexOf(scaleNoteName);
 
-        const cadence = cadences[cadenceName].map(step => {
-            const chordNotes = scales[scaleKey][step];
+        const cadence = cadences[cadenceName].map((step, stepIndex) => {
+            const chordNotes = scales[scaleName][step];
             if (!chordNotes) {
                 console.error('Some steps in the cadence were not found in the scale.');
                 return;
             }
-            return new Chord(null, 4, chordNotes);
+
+            // Проверяем, нужно ли увеличить октаву
+            const firstNoteIndex = NOTES.indexOf(chordNotes[0]);
+            if (firstNoteIndex < scaleNoteIndex) {
+                return new Chord(null, octave + 1, chordNotes);
+            } else {
+                return new Chord(null, octave, chordNotes);
+            }
+
+
         });
 
         if (cadence.includes(undefined)) {
@@ -78,7 +97,7 @@ class OscillatorPianoPlayer extends BasePianoPlayer {
     }
 
     playNotesSimultaneously(noteList, duration_ms) {
-        const reducedGainValue = this.gain_value - this.gain_value * 0.36;
+        const reducedGainValue = this.gain_value - this.gain_value * 0.56;
         noteList.forEach(note => {
             this.playNote(note, duration_ms, reducedGainValue);
         });

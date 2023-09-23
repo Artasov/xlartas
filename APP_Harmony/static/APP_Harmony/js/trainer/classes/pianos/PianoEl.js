@@ -2,7 +2,7 @@ import {NOTES} from "../../../shared/constants/notes.js";
 import Note from "../../../shared/classes/Note.js";
 import {generateNotesFromNoteToCount} from "../../../shared/shared_funcs.js";
 
-class PianoElHighlightClasses{
+class PianoElHighlightClasses {
     constructor() {
         this.warningClass = 'piano-key-warning';
         this.successClass = 'piano-key-success';
@@ -11,28 +11,32 @@ class PianoElHighlightClasses{
         this.setWarning()
 
     }
-    setWarning(){
+
+    setWarning() {
         this.class = this.warningClass;
     }
-    setSuccess(){
+
+    setSuccess() {
         this.class = this.successClass;
     }
-    setDanger(){
+
+    setDanger() {
         this.class = this.dangerClass;
     }
 }
 
+
 class PianoEl {
     constructor(
-        pianoStartNote,
+        startNote,
         enabledNotes,
         player
     ) {
+        this.startNote = startNote;
         this.enabledNotes = enabledNotes;
         this.disabledNotes = [];
-
         this.allCurrentPianoNotes = generateNotesFromNoteToCount(
-            pianoStartNote, 14
+            this.startNote, 14
         )
 
         this._enableOnlyNotes(enabledNotes);
@@ -41,13 +45,66 @@ class PianoEl {
         this.player = player;
         this.isPressAvailable = false;
         this.isHighlightAvailable = true;
+        this.future_history = [];
         this.highlight = new PianoElHighlightClasses();
         this.pianoEl = this.createPianoEl();
         window.addEventListener('notePlaying', this._onNotePlaying.bind(this));
+        window.addEventListener('noteProgressionPlaying', this._onProgressionPlaying.bind(this));
+    }
+
+    _onProgressionPlaying(event) {
+        if (this.isHighlightAvailable) {
+            this.future_history = [];
+            event.detail.notesArray.forEach(note => {
+                this.future_history.push(new Note(note.note, note.octave));
+            })
+            console.log('start adjust')
+            this.adjustNotesToAvailableRange(this.future_history)
+            console.log('end adjust')
+            // this.future_history = this.adjustNotesToAvailableRange(event.detail.notesArray);
+        }
+    }
+
+    adjustNotesToAvailableRange(notes) {
+        // Вычисление средней октавы для массива нот
+        const calculateAverageOctave = (notesArray) => {
+            let totalOctave = 0;
+            for (let note of notesArray) {
+                totalOctave += note.octave;
+            }
+            return totalOctave / notesArray.length;
+        };
+
+        const averageOctaveOfNotes = calculateAverageOctave(notes);
+        const averageOctaveOfPiano = calculateAverageOctave(this.allCurrentPianoNotes);
+
+        // Подгоняем последовательность к доступному диапазону пианино
+        while (true) {
+
+            console.log('AGEST while')
+            // Если все ноты уже в диапазоне, то завершаем
+            if (notes.every(note => this.allCurrentPianoNotes.some(pianoNote => pianoNote.equals(note)))) {
+                break;
+            }
+
+            if (averageOctaveOfNotes > averageOctaveOfPiano) {
+                for (let note of notes) {
+                    note.octave--;
+                }
+            } else {
+                for (let note of notes) {
+                    note.octave++;
+                }
+            }
+        }
+        console.log('AGEST')
+        console.log(notes)
+        return notes;
     }
 
     _onNotePlaying(event) {
         if (this.isHighlightAvailable) {
+            console.log("Note playing:", event.detail.note);
             this.highlightKey(
                 event.detail.note,
                 event.detail.duration_ms
@@ -57,23 +114,30 @@ class PianoEl {
 
     highlightKey(note_or_index, duration_ms) {
         let index = null;
-        if(Number.isInteger(note_or_index)){
+
+        if (Number.isInteger(note_or_index)) {
             index = note_or_index;
         } else {
-            index = this.allCurrentPianoNotes.findIndex(n => n.equals(note_or_index));
+            if (this.future_history && this.future_history.length > 0) {
+                let adjustedNote = this.future_history.shift();
+                index = this.allCurrentPianoNotes.findIndex(n => n.equals(adjustedNote));
+            } else {
+                index = this.allCurrentPianoNotes.findIndex(n => n.equals(note_or_index));
+            }
         }
+
         if (index === -1) {
             console.warn('Note does not exist in current piano.');
             return;
         }
-
+        console.log('Highlight')
         this.keysEls[index].classList.add(this.highlight.class);
         setTimeout(() => {
             this.keysEls[index].classList.remove(this.highlight.class);
-        }, 200);
+        }, duration_ms - 200);
     }
 
-    cancelAllHighlights(){
+    cancelAllHighlights() {
         this.keysEls.forEach(keyEl => {
             keyEl.classList.remove(this.highlight.dangerClass);
             keyEl.classList.remove(this.highlight.warningClass);
@@ -102,13 +166,18 @@ class PianoEl {
     createKeyEl(key, isDisabled) {
         const keyEl = document.createElement('div');
         keyEl.classList.add('piano-key');
+        const isKeyBlack = key.includes('#');
 
-        if (key.includes('#')) {
+        if (isKeyBlack) {
             keyEl.classList.add('piano-key-b');
         }
 
         if (isDisabled) {
-            keyEl.classList.add('piano-key-disabled');
+            if (isKeyBlack) {
+                keyEl.classList.add('piano-key-b-disabled');
+            } else {
+                keyEl.classList.add('piano-key-disabled');
+            }
         } else {
             this.enabledKeysEls.push(keyEl);
         }

@@ -90,7 +90,51 @@ input[type=range]
 	margin-left: auto
 	margin-right: auto
 	
-	input
+	input[type=checkbox]
+		appearance: none
+		-webkit-appearance: none
+		-moz-appearance: none
+		width: 21px
+		height: 21px
+		color: $colorF
+		background: $serviceElBg
+		box-shadow: 0 0 5px rgba(#fff, .6)
+		border-radius: 10px
+		transition: all 300ms ease
+		position: relative
+		
+		&::after
+			position: absolute
+			width: 1px
+			height: 1px
+			border-radius: 10px
+			top: 10px
+			left: 10px
+			content: " "
+			transition: all 300ms ease
+			box-shadow: 0 0 6px #00000000
+		
+		&:checked::after
+			box-shadow: 0 0 10px 7px $primary
+	textarea
+		height: 100px
+	input[type=number]
+		background: $serviceElBg
+		padding: 0.1rem 0.4rem
+		border: 0
+		color: #dddddd
+		box-shadow: 0 0 5px rgba(#000, .6)
+		outline: 0
+	select
+		max-width: 140px
+		background: $serviceElBg
+		padding: 0.1rem 0.4rem
+		border: 0
+		color: #dddddd
+		box-shadow: 0 0 5px rgba(#000, .6)
+		outline: 0
+	
+	input[type=text]
 		transition: all 200ms ease
 		font-family: inherit
 		width: 100%
@@ -115,7 +159,14 @@ input[type=range]
 			font-size: 1.1rem
 			cursor: text
 			top: 20px
-		
+
+.all_in-my-auto
+	*
+		margin: auto 0
+
+
+.absolute_text_label
+	input[type=text]
 		&:focus
 			~ label
 				position: absolute
@@ -143,6 +194,7 @@ input[type=range]
 		pointer-events: none
 
 .form__field-filled
+	
 	~ label
 		position: absolute
 		top: 0
@@ -152,6 +204,14 @@ input[type=range]
 		color: $primary
 		font-weight: 700
 
+.label-position-inherit
+	input[type=number]
+		max-width: 100px
+	
+	label
+		margin-top: 3px
+		color: $colorF
+		position: inherit !important
 
 .input-1
 	transition: all 300ms ease

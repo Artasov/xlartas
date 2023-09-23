@@ -1,7 +1,46 @@
-import {trainerPresets} from "./constants/trainer_presets.js";
 import {createAndStartTrainer} from "./trainer_main.js";
+import Scale from "../shared/classes/Scale.js";
 
-export function populatePresetAccordion() {
+
+export async function fetchTrainerPresets() {
+    const response = await fetch('/harmony/trainer/base_presets/');
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    const trainerPresets = {};
+
+    for (const preset of data) {
+        const category = preset.category.name;
+        if (!trainerPresets[category]) {
+            trainerPresets[category] = {};
+        }
+        let scalePreset = undefined;
+
+        trainerPresets[category][preset.name] = {
+            presetName: preset.name,
+            presetCategory: preset.category,
+            presetDesc: preset.desc,
+            scaleName: preset.scale_name,
+            scaleOctave: preset.scale_octave,
+            degrees: preset.degrees,
+            chromatic: preset.chromatic,
+            hiddenNoteOctave: preset.hidden_note_octave,
+            countQuestions: preset.count_questions,
+            cadenceName: preset.cadence_name,
+            playCadenceEveryNQuestion: preset.play_cadence_every_n_question,
+            cadenceOctave: preset.cadence_octave,
+            availableReplay: preset.available_replay
+        };
+    }
+
+    return trainerPresets;
+}
+
+export function populatePresetAccordion(trainerPresets) {
+
     const container = document.getElementById('trainer-presets-container');
 
     let groupIndex = 1;
@@ -30,7 +69,8 @@ export function populatePresetAccordion() {
 
         const presetsContainer = document.createElement('div');
         presetsContainer.id = `panelsStayOpen-collapse${groupIndex}`;
-        presetsContainer.className = 'accordion-collapse collapse';
+        presetsContainer.className = 'collapse';
+        presetsContainer.setAttribute('data-bs-parent', '#trainer-presets-container')
         presetsContainer.className += groupIndex === 1 ? ' show' : '';
 
         for (const presetName in trainerPresets[category]) {

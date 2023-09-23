@@ -7,26 +7,24 @@ class BasePianoTrainer extends BaseTrainer {
         presetCategory,
         countQuestions,
         workFieldId,
-        pianoStartNote,
-        enabledNotes,
-        availableReplay,
         notesDuration,
         pianoPlayer
     ) {
         super(presetName, presetCategory, countQuestions, workFieldId);
-        this.pianoStartNote = pianoStartNote;
-        this.enabledNotes = enabledNotes;
-        this.availableReplay = availableReplay;
         this.notesDuration = notesDuration;
-
+        this.pianoField = document.createElement('div');
+        this.workField.appendChild(this.pianoField);
+        this._pianoPlayer = pianoPlayer;
         this.timeouts = [];
-        this.piano = new PianoEl(this.pianoStartNote, this.enabledNotes, pianoPlayer); // Использовал обновленное имя переменной
+        this.piano = undefined;
     }
 
     stopAllSounds() {
         this.timeouts.forEach(timeoutId => clearTimeout(timeoutId));
         this.timeouts = [];
-        this.piano.player.stopAllSounds();
+        if (this.piano) {
+            this.piano.player.stopAllSounds();
+        }
     }
 }
 

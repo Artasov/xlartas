@@ -1,27 +1,32 @@
 import BaseAlenTrainer from "./BaseAlenTrainer.js";
-import {trainerPresets} from "../../constants/trainer_presets.js";
 import Note from "../../../shared/classes/Note.js";
 import {cadences} from "../../../shared/constants/cadences.js";
-import {getClosestNote} from "../../../shared/shared_funcs.js";
+import {
+    fillChromaticFromToNoteList,
+    findNoteHalf,
+    getClosestNote, getNotesBetween,
+    getRandomMajorScaleName,
+    getRandomMinorScaleName,
+    getRandomScaleName, notesToIndices
+} from "../../../shared/shared_funcs.js";
+import PianoEl from "../pianos/PianoEl.js";
+import Scale from "../../../shared/classes/Scale.js";
+import ProgressCircleBar from "../../../../../../../static/Core/js/progress_circle_bar.js";
+import {fetchTrainerPresets, populatePresetAccordion} from "../../trainer_presets_menu.js";
 
 class PredictNoteAlenTrainer extends BaseAlenTrainer {
     constructor(
-        presetName,
-        presetCategory,
+        preset,
         workFieldId,
         pianoPlayer,
         notesDuration,
         cadenceDuration
     ) {
-        const preset = PredictNoteAlenTrainer._getPreset(presetName, presetCategory);
         super(
             preset.presetName,
-            presetCategory,
+            preset.presetCategory,
             preset.countQuestions,
             workFieldId,
-            preset.pianoStartNote,
-            preset.enabledNotes,
-            preset.availableReplay,
             notesDuration,
             pianoPlayer,
             preset.cadenceName,
@@ -29,18 +34,27 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             preset.cadenceOctave,
             cadenceDuration,
         );
-        this.hiddenKeyOctave = preset.hiddenKeyOctave;
-        this.currentHiddenKey = null;
-    }
-
-    static _getPreset(presetName, presetCategory) {
-        let preset;
-        if (trainerPresets[presetCategory][presetName]) {
-            preset = trainerPresets[presetCategory][presetName];
-            return preset;
+        console.log()
+        if (preset.scaleName === 'randomMajor') {
+            this.presetScale = preset.scaleName
+        } else if (preset.scaleName === 'randomMinor') {
+            this.presetScale = preset.scaleName
+        } else if (preset.scaleName === 'random') {
+            this.presetScale = preset.scaleName
         } else {
-            throw new Error(`Preset "${presetName}" not found`);
+            this.presetScale = new Scale(preset.scaleName, preset.scaleOctave)
         }
+        this.degrees = preset.degrees;
+        this.isChromatic = preset.chromatic;
+        this.currentScale = undefined;
+        this.currentEnabledNotes = undefined;
+        this.piano = undefined;
+        this.availableReplay = preset.availableReplay;
+        this.currentHiddenNote = null;
+        this.hiddenNoteOctave = preset.hiddenNoteOctave;
+
+        this.btnPlayCurrentHiddenNote = undefined;
+        this.btnPlayQuestion = undefined;
     }
 
     start() {
@@ -52,21 +66,71 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         this._nextQuestion();
     }
 
-    finish() {
-        this.exit();
-    }
 
     _nextQuestion() {
+        console.log(`Next Question: ${this.currentQuestionNumber}`)
+        this.currentScale = typeof this.presetScale === 'string' ?
+            this.presetScale.toString() : this.presetScale.copy()
+        let currentScale = undefined;
         if (this.currentQuestionNumber === this.countQuestions) {
             this.finish();
             return;
         }
-        this._increaseCurrentQuestionCount();
-        this.currentHiddenKey = this._getRandomNoteFromAvailable();
-        this._playQuestion();
-    }
-
-    _fillWorkField() {
+        if (this.presetScale === 'randomMajor') {
+            const randomScale = new Scale(getRandomMajorScaleName());
+            if (findNoteHalf(randomScale.rootNote) === 2) {
+                randomScale.decreaseOctave(1);
+            }
+            this.currentScale = randomScale;
+        } else if (this.presetScale === 'randomMinor') {
+            const randomScale = new Scale(getRandomMinorScaleName());
+            if (findNoteHalf(randomScale.rootNote) === 2) {
+                randomScale.decreaseOctave(1);
+            }
+            this.currentScale = randomScale;
+        } else if (this.presetScale === 'random') {
+            const randomScale = new Scale(getRandomScaleName());
+            if (findNoteHalf(randomScale.rootNote) === 2) {
+                randomScale.decreaseOctave(1);
+            }
+            this.currentScale = randomScale;
+        } else {
+            if (findNoteHalf(this.presetScale.rootNote) === 2) {
+                this.currentScale.decreaseOctave(1);
+            }
+        }
+        console.log('Scale created')
+        console.log(this.currentScale)
+        this.pianoField.innerHTML = '';
+        this.currentEnabledNotes = [];
+        for (let i = 0; i < this.degrees.length; i++) {
+            if (this.degrees[i] === 8) {
+                this.currentEnabledNotes.push(
+                    new Note(
+                        this.currentScale.notes[0].note,
+                        this.currentScale.notes[0].octave + 1
+                    )
+                )
+                continue;
+            }
+            this.currentEnabledNotes.push(this.currentScale.notes[this.degrees[i] - 1]);
+        }
+        if (this.isChromatic) {
+            if (this.degrees.length === 8) {
+                this.currentEnabledNotes.push(
+                    new Note(
+                        this.currentEnabledNotes[1].note,
+                        this.currentEnabledNotes[1].octave + 1,
+                    )
+                )
+            }
+            this.currentEnabledNotes = fillChromaticFromToNoteList(
+                this.currentEnabledNotes[0],
+                this.currentEnabledNotes[this.currentEnabledNotes.length - 1],
+            );
+        }
+        this.piano = new PianoEl(this.currentScale.notes[0], this.currentEnabledNotes, this._pianoPlayer)
+        this.pianoField.appendChild(this.piano.pianoEl)
         for (let i = 0; i < this.piano.keysEls.length; i++) {
             if (this.piano.enabledKeysEls.includes(this.piano.keysEls[i])) {
                 this.piano.keysEls[i].addEventListener('click', () => {
@@ -74,11 +138,25 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                 });
             }
         }
-        this.workField.appendChild(this.piano.pianoEl);
+        this._increaseCurrentQuestionCount();
+        this.currentHiddenNote = this._getRandomNoteFromAvailable();
+        if (this.hiddenNoteOctave === -1) {
+            this.currentHiddenNote.octave = Math.floor(Math.random() * 7) + 2;
+        }
+        this._playQuestion();
+
+        console.log('AFTER NEXT QUESTION')
+        console.log(this.presetScale)
+        console.log(this.currentHiddenNote)
+    }
+
+    _fillWorkField() {
         const trainerControls = document.createElement('div');
         trainerControls.classList.add('frc', 'gap-3');
-        trainerControls.appendChild(this._createBtnPlayQuestion())
-        trainerControls.appendChild(this._createBtnPlayCurrentHiddenKey())
+        this.btnPlayQuestion = this._createBtnPlayQuestion()
+        this.btnPlayCurrentHiddenNote = this._createBtnPlayCurrentHiddenNote()
+        trainerControls.appendChild(this.btnPlayQuestion)
+        trainerControls.appendChild(this.btnPlayCurrentHiddenNote)
         this.workField.appendChild(trainerControls)
         this.workField.classList.remove('d-none');
     }
@@ -88,37 +166,62 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             this.stopAllSounds();
             this.piano.cancelAllHighlights();
             this.piano.isHighlightAvailable = true;
-            if (this.piano.keysEls[indexKeyEl].textContent === this.currentHiddenKey.note) {
+            const currentHiddenNote = new Note(
+                this.currentHiddenNote.note,
+                this.currentHiddenNote.octave,)
+            if (this.piano.keysEls[indexKeyEl].textContent === currentHiddenNote.note) {
                 this.piano.isPressAvailable = false;
                 this.piano.highlight.setSuccess();
-                await this.piano.player.playFromTo(
-                    this.currentHiddenKey,
-                    getClosestNote(
-                        this.currentHiddenKey,
-                        this.pianoStartNote.note
-                    ),
-                    this.piano.disabledNotes,
-                    this.notesDuration,
-                    this.notesDuration,
+                let notesForSkipping = [];
+                if (this.isChromatic) {
+                    const notes = getNotesBetween(
+                        currentHiddenNote,
+                        getClosestNote(
+                            currentHiddenNote,
+                            this.currentScale.notes[0].note,
+                        )
+                    );
+                    notes.forEach(note => {
+                        if (note.note.includes('#')) {
+                            if (note.note !== currentHiddenNote.note) {
+                                notesForSkipping.push(note);
+                            }
+                        }
+                    })
+                }
+                notesForSkipping = notesForSkipping.concat(this.piano.disabledNotes);
+                this.piano.tonicOctaveIcreased = true
+                const closestNote = getClosestNote(
+                    currentHiddenNote,
+                    this.currentScale.notes[0].note,
                 )
-                ;
+
+                await this.piano.player.playFromTo(
+                    currentHiddenNote,
+                    closestNote,
+                    notesForSkipping,
+                    this.notesDuration,
+                        this.notesDuration,
+                );
+
                 this._increaseRightAnswer();
                 setTimeout(() => {
                     this._nextQuestion();
                 }, 500);
             } else {
+                console.log('wrong')
                 this.piano.highlight.setDanger();
-                this.piano.highlightKey(indexKeyEl);
+                this.piano.highlightKey(indexKeyEl, this.notesDuration);
                 this._decreaseWrongAnswer();
             }
         }
     }
 
     _getRandomNoteFromAvailable() {
-        const randomIndex = Math.floor(Math.random() * this.enabledNotes.length);
-        return this.enabledNotes[randomIndex];
+        const randomIndex =
+            Math.floor(Math.random() * this.currentEnabledNotes.length);
+        return this.currentEnabledNotes[randomIndex];
     }
-
 
     _playQuestion() {
         this.stopAllSounds();
@@ -128,23 +231,25 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         const cadence = cadences[this.cadenceName];
         const totalCadenceDuration = (this.cadenceDuration + 100) *
             (cadence.length - 1) + this.cadenceDuration;
-
+        console.log('_playQuestion')
+        console.log(this.currentScale)
         this.piano.player.playCadence(
-            this.pianoStartNote.note,
+            this.currentScale.scaleName,
             this.cadenceName,
+            this.piano.allCurrentPianoNotes[0].octave,
             this.cadenceDuration + 500,
             this.cadenceDuration,
         );
 
         let timeoutId = setTimeout(() => {
             this.piano.isHighlightAvailable = false;
-            this.piano.player.playNote(this.currentHiddenKey, this.notesDuration)
+            this.piano.player.playNote(this.currentHiddenNote, this.notesDuration)
             this.piano.isPressAvailable = true;
         }, totalCadenceDuration);
         this.timeouts.push(timeoutId);
     }
 
-    _createBtnPlayCurrentHiddenKey() {
+    _createBtnPlayCurrentHiddenNote() {
         const btn = document.createElement('button');
         btn.classList.add('btn-3', 'frc')
         const imgNote = document.createElement('img');
@@ -158,7 +263,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             this.stopAllSounds();
             this.piano.isHighlightAvailable = false;
             this.piano.player.playNote(
-                this.currentHiddenKey,
+                this.currentHiddenNote,
                 this.notesDuration,
             )
         })
@@ -168,11 +273,48 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
     _createBtnPlayQuestion() {
         const btn = document.createElement('button');
         btn.classList.add('btn-3')
-        btn.innerHTML = 'Cadence';
+        btn.innerHTML = 'Replay';
         btn.addEventListener('click', () => {
             this._playQuestion();
         })
         return btn;
+    }
+
+    _createBtnExitAfterFinish() {
+        const btnDiv = document.createElement('div');
+        btnDiv.classList.add('frc');
+        const btn = document.createElement('button');
+        btn.classList.add('btn-3', 'fs-4')
+        btn.innerHTML = 'Exit';
+        btn.addEventListener('click', () => {
+            this.exit();
+        })
+        btnDiv.appendChild(btn)
+        return btnDiv;
+    }
+
+    _showResult() {
+        const progressBarScale = 1.4;
+        const progressBar =
+            new ProgressCircleBar(progressBarScale, '#930d53', '#292466');
+        this.pianoField.innerHTML = '';
+        const mt = 1.3 * 20 * progressBarScale;
+        const mb = 1.3 * 30 * progressBarScale;
+        progressBar.element.style.margin = `${mt}px auto ${mb}px auto`;
+        this.pianoField.appendChild(progressBar.element);
+        this.pianoField.appendChild(this._createBtnExitAfterFinish());
+        this.btnPlayCurrentHiddenNote.remove();
+        this.btnPlayQuestion.remove();
+        const totalAttempts = this.countQuestions + this.wrongAnswers;
+        const rightAnswerPercentage = Math.round(
+            ((this.countQuestions / totalAttempts) * 100).toFixed(2)
+        );
+
+        progressBar.setValue(rightAnswerPercentage, 1000);
+    }
+
+    finish() {
+        this._showResult();
     }
 }
 

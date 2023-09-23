@@ -11,7 +11,10 @@ class Note {
         this.octave = octave;
     }
 
-    equals(otherNote) {
+    equals(otherNote, withoutOctave=false) {
+        if (withoutOctave){
+            return this.note === otherNote.note;
+        }
         return this.note === otherNote.note && this.octave === otherNote.octave;
     }
 }

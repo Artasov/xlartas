@@ -1,14 +1,39 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from APP_Harmony.forms.forms import TrainerPresetForm
+from APP_Harmony.models import TrainerPreset
+from APP_Harmony.serializers import TrainerPresetSerializer
 from APP_Harmony.services.Harmony.chords_progressions import ChordsProgressionsGenerator
 from Core.services.services import base_view
 
 
 @base_view
+@api_view(['GET'])
+def get_base_trainer_presets(request):
+    presets = TrainerPreset.objects.filter(author__is_staff=True)
+    serializer = TrainerPresetSerializer(presets, many=True)
+    return Response(serializer.data)
+
+
+@base_view
+def add_trainer_preset(request):
+    if request.method == "POST":
+        form = TrainerPresetForm(request.POST)
+        if form.is_valid():
+            trainer_preset = form.save(commit=False)
+            trainer_preset.author = request.user  # Установите текущего пользователя в качестве автора
+            trainer_preset.save()
+            # После успешного сохранения, например, перенаправьте на главную страницу
+            return redirect('harmony:trainer')
+        return render(request, 'APP_Harmony/trainer.html', {'form': form})
+    return render(request, 'APP_Harmony/trainer.html', {'form': TrainerPresetForm()})
+
+
+@base_view
 def trainer(request):
-    return render(request, 'APP_Harmony/trainer.html')
+    return render(request, 'APP_Harmony/trainer.html', {'form': TrainerPresetForm()})
 
 
 @base_view

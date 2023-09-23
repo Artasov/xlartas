@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'APP_Harmony/css/harmony.css' %}">
     <link rel="stylesheet" href="{% static 'APP_Harmony/css/piano.css' %}">
     <link rel="stylesheet" href="{% static 'Core/css/accordions.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/progress_bars.css' %}">
 {% endblock %}
 {% block scripts %}
     <script type="module" src="{% static 'APP_Harmony/js/trainer/trainer_main.js' %}"></script>
@@ -42,9 +43,11 @@
              data-bs-toggle="modal" data-bs-target="#settingTrainerModal">
 
 
-        <div class="audioContainer"></div>
-        {% get_trainer_sounds as trainer_sounds %}
-        {% include 'Core/includes/select_tag.html' with id='trainer_sounds' style='max-width: 180px; min-width: 170px;' classes='frc mx-auto' select_input_name='trainer_sound' elements_dict=trainer_sounds default_value='BalladPiano-m' %}
+        <div class="frc">
+            {% get_trainer_sounds as trainer_sounds %}
+            {% include 'Core/includes/select_tag.html' with id='trainer_sounds' style='max-width: 180px; min-width: 170px;' classes='frc mx-auto' select_input_name='trainer_sound' elements_dict=trainer_sounds default_value='BalladPiano-m' %}
+            <button class="btn-3 rounded-3" data-bs-toggle="modal" data-bs-target="#addPresetModal">+ preset</button>
+        </div>
 
         <div style="width: 90%; height: 1px; background: #ffffff66; max-width: 600px;"
              class="mx-auto rounded-5 mt-3"></div>
@@ -60,6 +63,26 @@
             </div>
         </div>
 
+        <div class="modal fade" id="addPresetModal" tabindex="-1" aria-labelledby="addPresetModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mx-auto" style="width: 90%; max-width: 500px;">
+                <div class="modal-content bg-transparent backdrop-blur-20">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-white-90 white-space-no-wrap"
+                            id="addPresetModalLabel">Add Preset</h1>
+                    </div>
+                    <div class="modal-body fcc gap-2">
+                        <form action="{% url 'harmony:add_trainer_preset' %}" method="post">
+                            {% csrf_token %}
+                            {% include 'Core/includes/form.html' with form=form %}
+                            <div class="frc">
+                                <button class="btn-3 fs-4 fw-bold">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="settingTrainerModal" tabindex="-1" aria-labelledby="infoModalLabel"
              aria-hidden="true">

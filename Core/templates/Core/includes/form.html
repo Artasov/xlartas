@@ -1,3 +1,4 @@
+
 {% load Core_tags %}
 {% if success %}
     <span class="text-success fw-bold text-center">{{ success }}</span>
@@ -20,9 +21,41 @@
 {% endfor %}
 {% if not errors_only %}
     {% for field in form %}
-        <div class="mb-3 form__group fs-5">
-            {{ field }}
-            {{ field.label_tag|remove_colons|safe }}
-        </div>
+        {#        if checkbox#}
+        {% if field.field.widget.input_type == 'checkbox' %}
+            <div class="mb-3 gap-3 form__group all_in-my-auto label-position-inherit fs-5 frc ">
+                {{ field.label_tag|remove_colons|safe }}
+                {{ field }}
+            </div>
+            {#        if text#}
+        {% elif field.field.widget.input_type == 'text' %}
+            <div class="mb-3 form__group absolute_text_label fs-5 ">
+                {{ field }}
+                {{ field.label_tag|remove_colons|safe }}
+            </div>
+            {#        if number#}
+        {% elif field.field.widget.input_type == 'number' %}
+            <div class="mb-3 gap-3 form__group all_in-my-auto label-position-inherit fs-5 frc ">
+                {{ field.label_tag|remove_colons|safe }}
+                {{ field }}
+            </div>
+            {#        if select#}
+        {% elif field.field.widget.input_type == 'select' %}
+            <div class="mb-3 gap-3 form__group all_in-my-auto label-position-inherit fs-5 frc ">
+                {{ field.label_tag|remove_colons|safe }}
+                {{ field }}
+            </div>
+            {#        if textarea#}
+        {% elif field|widget_name == 'Textarea' %}
+            <div class="mb-3 gap-1 form__group all_in-my-auto text-center label-position-inherit fs-5 fcc ">
+                {{ field.label_tag|remove_colons|safe }}
+                {{ field }}
+            </div>
+        {% else %}
+            <div class="mb-3 form__group fs-5 ">
+                {{ field }}
+                {{ field.label_tag|remove_colons|safe }}
+            </div>
+        {% endif %}
     {% endfor %}
 {% endif %}

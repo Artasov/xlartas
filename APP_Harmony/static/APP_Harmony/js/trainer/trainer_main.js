@@ -3,10 +3,10 @@ import Chord from "../shared/classes/Chord.js";
 import OscillatorPianoPlayer from "./classes/pianos/OscillatorPianoPlayer.js";
 import {loadTrainerSettings} from "./trainer_settings.js";
 import {initCircleHarmony} from "../shared/circle_harmony.js";
-import {populatePresetAccordion} from "./trainer_presets_menu.js";
-import {trainerPresets} from "./constants/trainer_presets.js";
+import {fetchTrainerPresets, populatePresetAccordion} from "./trainer_presets_menu.js";
 import PredictNoteAlenTrainer from "./classes/trainers/PredictNoteAlenTrainer.js";
-import {getNotesBetween} from "../shared/shared_funcs.js";
+import {getNotesBetween, getRandomScaleName} from "../shared/shared_funcs.js";
+import Scale from "../shared/classes/Scale.js";
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {trigger: 'focus'}))
@@ -23,13 +23,10 @@ const trainerSoundsMenu = document.getElementById('select-trainer_sounds');
 let currentTrainer = null;
 let isSoundsPreloaded = false;
 
-
 window.addEventListener('load', function () {
     loadTrainerSettings();
     initCircleHarmony();
 });
-document.addEventListener('DOMContentLoaded', populatePresetAccordion);
-
 window.addEventListener('trainerStart', () => {
     trainerPresetsContainer.classList.add('d-none');
     trainerSoundsMenu.classList.add('d-none');
@@ -39,6 +36,11 @@ window.addEventListener('trainerExit', () => {
     trainerPresetsContainer.classList.remove('d-none');
     trainerSoundsMenu.classList.remove('d-none');
 });
+let trainerPresetsAll = undefined;
+(async () => {
+    trainerPresetsAll = await fetchTrainerPresets();
+    populatePresetAccordion(trainerPresetsAll);
+})();
 
 export function createAndStartTrainer(presetName, presetCategory) {
     trainerPlayField.innerHTML = ''
@@ -47,9 +49,10 @@ export function createAndStartTrainer(presetName, presetCategory) {
         isSoundsPreloaded = true;
     }
     const pianoPlayer = new OscillatorPianoPlayer()
+    const currentPreset = trainerPresetsAll[presetCategory][presetName];
+
     currentTrainer = new PredictNoteAlenTrainer(
-        presetName,
-        presetCategory,
+        currentPreset,
         workFieldId,
         pianoPlayer,
         500,
@@ -61,20 +64,4 @@ export function createAndStartTrainer(presetName, presetCategory) {
 }
 
 
-// document.querySelector('h1').addEventListener('click', () => {
-//     const player = new OscillatorPianoPlayer();
-//     const noteC4 = new Note('D', 4);
-//     const noteE4 = new Note('F', 4);
-//     const noteG4 = new Note('A', 4);
-//
-//     const chordEm = new Chord('Em');
-//     //player.playChord(chordEm.notes, 3000);
-//     // player.playNote(noteC4, 500);
-//     // player.playFromTo(noteC4, noteG4, 300, 3500);
-//     // player.playChord([noteC4, noteE4, noteG4], 3000);
-//     player.playNotesProgression(
-//         [noteC4, noteE4, noteG4, noteC4, noteE4, noteG4, noteG4, noteE4, noteC4,],
-//         500,
-//         2000
-//     )
-// })
+

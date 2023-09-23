@@ -6,6 +6,9 @@ from APP_Harmony.services.Harmony.chords_progressions import accords_dict, NOTE_
 register = template.Library()
 
 
+
+
+
 @register.simple_tag
 def get_trainer_sounds():
     return {

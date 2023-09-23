@@ -7,9 +7,6 @@ class BaseAlenTrainer extends BasePianoTrainer {
         presetCategory,
         countQuestions,
         workFieldId,
-        pianoStartNote,
-        enabledNotes,
-        availableReplay,
         notesDuration,
         pianoPlayer,
         cadenceName,
@@ -17,7 +14,14 @@ class BaseAlenTrainer extends BasePianoTrainer {
         cadenceOctave,
         cadenceDuration,
     ) {
-        super(presetName, presetCategory, countQuestions, workFieldId, pianoStartNote, enabledNotes, availableReplay, notesDuration, pianoPlayer);
+        super(
+            presetName,
+            presetCategory,
+            countQuestions,
+            workFieldId,
+            notesDuration,
+            pianoPlayer
+        );
         this.playCadenceEveryNQuestion = playCadenceEveryNQuestion;
         this.cadenceOctave = cadenceOctave;
         this.cadenceDuration = cadenceDuration;

@@ -11,6 +11,11 @@ from Core.services.services import get_plural_form_number
 register = template.Library()
 
 
+@register.filter
+def widget_name(field):
+    return field.field.widget.__class__.__name__
+
+
 @register.simple_tag()
 def get_login_form():
     return UserLoginForm()
