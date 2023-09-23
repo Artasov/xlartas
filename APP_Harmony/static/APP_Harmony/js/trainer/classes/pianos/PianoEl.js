@@ -75,13 +75,11 @@ class PianoEl {
             return totalOctave / notesArray.length;
         };
 
-        const averageOctaveOfNotes = calculateAverageOctave(notes);
+        let averageOctaveOfNotes = calculateAverageOctave(notes);  // let вместо const
         const averageOctaveOfPiano = calculateAverageOctave(this.allCurrentPianoNotes);
 
         // Подгоняем последовательность к доступному диапазону пианино
         while (true) {
-
-            console.log('AGEST while')
             // Если все ноты уже в диапазоне, то завершаем
             if (notes.every(note => this.allCurrentPianoNotes.some(pianoNote => pianoNote.equals(note)))) {
                 break;
@@ -96,11 +94,15 @@ class PianoEl {
                     note.octave++;
                 }
             }
+
+            averageOctaveOfNotes = calculateAverageOctave(notes);  // Обновляем среднюю октаву после изменения октавы
         }
-        console.log('AGEST')
-        console.log(notes)
+
+        console.log('AGEST');
+        console.log(notes);
         return notes;
     }
+
 
     _onNotePlaying(event) {
         if (this.isHighlightAvailable) {
