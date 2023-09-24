@@ -12,11 +12,14 @@
 {% block content %}
         <div id="content" class="fcc mx-auto d-none h-100 flex-grow-1">
             <h1 class="text-white fw-bold fs-1 text-center">Donate</h1>
-            <p class="text-white-80 fs-5 text-center">Спасибо за поддержку проекта</p>
+            <p class="text-white-80 fs-5 text-center m-0">Спасибо за поддержку проекта</p>
             <div class="frc">
-                <iframe src="https://widgets.freekassa.ru?type=payment-window&lang=ru&theme=dark&default_amount=500&api_key=065bd9272dc77f4b370632b7d53c0d7c&shopID=36606"
-                        width="300" height="490" frameborder="0"></iframe>
-
+                <form class="fcc" method="post" action="{% url 'donate' %}">
+                    {% csrf_token %}
+                    {% include 'Core/includes/form.html' with form=form %}
+                    <button id="btn-recaptcha-marked" class="btn-3 mt-3 mx-auto rounded-3 fs-3">Pay</button>
+                    {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
+                </form>
             </div>
         </div>
 

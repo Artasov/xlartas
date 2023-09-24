@@ -70,6 +70,7 @@ class Order(models.Model):
     class OrderType(models.TextChoices):
         PRODUCT = 'product', _('product')
         BALANCE = 'balance', _('balance')
+        DONATE = 'donate', _('donate')
 
     class OrderStatus(models.TextChoices):
         WAITING = 'waiting', _('waiting')

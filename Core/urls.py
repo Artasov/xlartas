@@ -7,6 +7,9 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from . import views
+from .views.auth.auth_views import password_reset_confirmation, password_reset, signin, signup, signup_confirmation
+from .views.auth.soc_auth_views import vk_auth, telegram_auth
+from .views.common_views import profile, main, donate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -14,8 +17,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('APP_api.urls')),
 
-    path('accounts/telegram/login/callback/', views.telegram_auth, name='telegram_signup'),
-    path('accounts/vk/login/callback/', views.vk_auth),
+    path('accounts/telegram/login/callback/', telegram_auth, name='telegram_signup'),
+    path('accounts/vk/login/callback/', vk_auth),
 
     path('referral/', include(('APP_referral.urls', 'APP_referral'), namespace='referral')),
     path('freekassa/', include('freekassa.urls')),
@@ -26,17 +29,17 @@ urlpatterns = [
     path('tests/', include(('APP_tests.urls', 'APP_tests'), namespace='tests')),
     path('harmony/', include('APP_Harmony.urls')),
 
-    path('', views.main, name='main'),
-    path('signup/', views.signup, name='signup'),
-    path('signup_confirmation/<str:code>/', views.signup_confirmation, name='signup_confirmation'),
-    path('signin/', views.signin, name='signin'),
+    path('', main, name='main'),
+    path('signup/', signup, name='signup'),
+    path('signup_confirmation/<str:code>/', signup_confirmation, name='signup_confirmation'),
+    path('signin/', signin, name='signin'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('password_reset/', views.password_reset, name='password_reset'),
-    path('password_reset_confirmation/<str:code>/', views.password_reset_confirmation,
+    path('password_reset/', password_reset, name='password_reset'),
+    path('password_reset_confirmation/<str:code>/', password_reset_confirmation,
          name='password_reset_confirmation'),
-    path('profile/', views.profile, name='profile'),
+    path('profile/', profile, name='profile'),
 
-    path('donate/', TemplateView.as_view(template_name='Core/donate.html'), name='donate'),
+    path('donate/', donate, name='donate'),
     path('about/', TemplateView.as_view(template_name='Core/about.html'), name='about'),
     path('terms_and_conditions/', TemplateView.as_view(template_name='Core/terms_and_conditions.html'),
          name='terms_and_conditions'),

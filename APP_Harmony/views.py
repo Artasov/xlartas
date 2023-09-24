@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils import translation
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -48,7 +49,11 @@ def add_trainer_preset(request):
 
 @base_view
 def trainer(request):
-    return render(request, 'APP_Harmony/trainer.html', {'form': TrainerPresetForm()})
+    lang = request.GET.get('lang') or 'ru'
+    return render(request, 'APP_Harmony/trainer.html', {
+        'form': TrainerPresetForm(),
+        'language': lang
+    })
 
 
 @base_view

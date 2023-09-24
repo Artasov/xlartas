@@ -1,33 +1,12 @@
-import hashlib
-import json
-import os
-
-from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
-from django.forms import modelform_factory
-from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.crypto import get_random_string
-from django.utils.decorators import decorator_from_middleware
-
-from APP_referral.models import RefLinking
-from APP_shop.models import Product, Subscription
-from .error_messages import NOT_FOUND_404, PASSWORD_WRONG, CONFIRMATION_CODE_EXPIRE, CONFIRMATION_CODE_SENT_TOO_OFTEN, \
+from Core.error_messages import PASSWORD_WRONG, CONFIRMATION_CODE_EXPIRE, CONFIRMATION_CODE_SENT_TOO_OFTEN, \
     EMAIL_SENT, SUCCESSFULLY_REGISTERED, PASSWORD_RESET_SUCCESS
-from .forms import UserCreationForm, UserLoginForm, PasswordResetFormLoginField, PasswordResetConfirmForm
-from .models import *
-from .services.code_confirmation import is_code_sending_too_often, get_latest_confirmation_code, \
+from Core.forms import UserCreationForm, UserLoginForm, PasswordResetFormLoginField, PasswordResetConfirmForm
+from Core.models import *
+from Core.services.code_confirmation import is_code_sending_too_often, get_latest_confirmation_code, \
     create_confirmation_code_for_user, send_password_reset_email, send_signup_confirmation_email
-from .services.services import forbidden_with_login, base_view, render_invalid, telegram_verify_hash
-
-
-@base_view
-def main(request):
-    return render(request, 'Core/main.html', {
-        'products': Product.objects.filter(available=True)
-    })
+from Core.services.services import forbidden_with_login, base_view, render_invalid, telegram_verify_hash
 
 
 @base_view
@@ -47,7 +26,6 @@ def signup(request):
 @forbidden_with_login
 def signup_confirmation(request, code):
     code_ = get_object_or_404(ConfirmationCode, code=code, type=ConfirmationCode.CodeType.signUp)
-    ConfirmationCode.objects.filter(skip)
     form = UserLoginForm()
     form.cleaned_data = []  # Else we won't be able to add errors.
     context = {}
@@ -100,64 +78,6 @@ def signin(request):
 
 
 @base_view
-def telegram_auth(request):
-    if request.method == 'GET':
-        data = request.GET.dict()
-
-        if not telegram_verify_hash(data):
-            return render_invalid(request, 'Invalid hash', 'signup')
-
-        del data['auth_date']
-
-        telegram_id = data['id']
-        username = data['username']
-        first_name = data['first_name']
-
-        try:
-            User.objects.get(username=username)
-            username = username + get_random_string(10)
-        except User.DoesNotExist:
-            pass
-
-        if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
-            user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
-            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-        else:
-            user_ = User.objects.create(username=username, first_name=first_name)
-            SocialAccount.objects.create(user=user_, uid=telegram_id,
-                                         provider='telegram',
-                                         extra_data=json.dumps(data))
-            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('main')
-
-
-@base_view
-def vk_auth(request):
-    uid = request.GET.get('uid')
-    first_name = request.GET.get('first_name')
-    last_name = request.GET.get('last_name')
-    hash = request.GET.get('hash')
-    hash_valid = hashlib.md5(str(os.getenv('VK_CLIENT_ID') + uid + os.getenv('VK_SECRET')).encode()).hexdigest()
-
-    if not uid or hash != hash_valid:
-        return render(request, 'Core/registration/signup.html', context={
-            'invalid': 'Vk auth invalid, pls contact us'})
-    try:
-        user_, created = User.objects.get_or_create(id=uid,
-                                                    first_name=first_name,
-                                                    last_name=last_name,
-                                                    username=first_name)
-    except IntegrityError:
-        user_ = User.objects.create(id=uid,
-                                    first_name=first_name,
-                                    last_name=last_name,
-                                    username=first_name + get_random_string(10))
-
-    login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-    return redirect('main')
-
-
-@base_view
 @forbidden_with_login
 def password_reset(request):
     form = PasswordResetFormLoginField(request.POST or None)
@@ -207,35 +127,3 @@ def password_reset_confirmation(request, code):
         'form': PasswordResetConfirmForm(),
         'code': code
     })
-
-
-@base_view
-@login_required(redirect_field_name=None, login_url='signin')
-def profile(request):
-    user_ = User.objects.get(username=request.user.username)
-    user_subs = Subscription.objects.filter(user=user_)
-    least_days = {}
-    context = {}
-    for sub_ in user_subs:
-        remained = int((sub_.date_expiration - timezone.now()).total_seconds() / 3600)
-        if remained > 9600:
-            remained = 'FOREVER'
-        elif remained < 1:
-            remained = 'None'
-        least_days[Product.objects.get(id=sub_.product_id).name] = remained
-    if RefLinking.objects.filter(referral__username=user_.username).exists():
-        context['inviter_'] = RefLinking.objects.get(referral__username=user_.username).inviter
-
-    context['least_days'] = least_days
-    context['domain'] = request.build_absolute_uri('/')[0:-1]
-    context['user_'] = user_
-    form = modelform_factory(User, fields=('username',))(request.POST or None, instance=user_)
-    if form.is_valid():
-        form.save()
-    context['form'] = form
-    return render(request, 'Core/profile.html', context)
-
-
-@base_view
-def donate(request):
-    return render(request, 'Core/donate.html', {})

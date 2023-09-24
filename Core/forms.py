@@ -12,6 +12,7 @@ class FormWithRecaptchaValidator(forms.Form):
             raise forms.ValidationError(RECAPTCHA_INVALID)
         return cleaned_data
 
+
 class ModelFormWithRecaptchaValidator(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
@@ -125,3 +126,7 @@ class PasswordResetFormLoginField(forms.Form):
         cleaned_data['user'] = user_
 
         return cleaned_data
+
+
+class DonateFrom(FormWithRecaptchaValidator):
+    amount = forms.IntegerField(required=True, min_value=50)

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import environ
+from transliterate.utils import _
 
 env = environ.Env()
 
@@ -55,12 +56,20 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+    # Добавьте другие языки по необходимости
+]
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

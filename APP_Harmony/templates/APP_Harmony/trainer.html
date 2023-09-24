@@ -26,29 +26,28 @@
 {% block content %}
     <div id="content" class="container d-none fcc justify-content-start flex-grow-1 disable-tap-and-selection"
          data-bs-theme="dark" style="max-width: 900px; height: calc(100vh - 80px);">
-        <h1 class="text-dark-emphasis fs-1 text-center my-4" style="line-height: 20px;">
-            <span class="m-0">TRAINER</span> <br>
-            <span class="text-white text-opacity-25"
-                  style="letter-spacing: 0.20em; padding-left: 0.2em; font-size: 0.58em">
+        <div class="frc gap-4">
+            <h1 class="text-dark-emphasis fs-1 text-center my-4" style="line-height: 20px;">
+                <span class="m-0">TRAINER</span> <br>
+                <span class="text-white text-opacity-25"
+                      style="letter-spacing: 0.20em; padding-left: 0.2em; font-size: 0.58em">
                 YOUR EARS</span>
-        </h1>
-        <div class="harmony-circle w-100">
-            <div>
-                <img class="w-100" src="{% static 'APP_Harmony/img/music_circle.png' %}" alt="">
+            </h1>
+            <div class="frc gap-2">
+                <img class="btn-show-harmony-circle my-auto" width="50" height="50" alt=""
+                     src="{% static 'APP_Harmony/img/music_circle.png' %}">
+                <img class="btn-show-trainer-settings my-auto" width="40" height="40" alt=""
+                     src="{% static 'APP_Harmony/img/trainer-setting.png' %}"
+                     data-bs-toggle="modal" data-bs-target="#settingTrainerModal">
+                {% include 'APP_Harmony/includes/infoModalWithBtn.html' %}
             </div>
         </div>
-        <img class="btn-show-harmony-circle " width="50" height="50" alt=""
-             src="{% static 'APP_Harmony/img/music_circle.png' %}">
-        <img class="btn-show-trainer-settings" width="40" height="40" alt=""
-             src="{% static 'APP_Harmony/img/trainer-setting.png' %}"
-             data-bs-toggle="modal" data-bs-target="#settingTrainerModal">
-
+        <a href="?lang=en">English</a> | <a href="?lang=ru">Русский</a>
         <div style="width: 90%; height: 1px; background: #ffffff66; max-width: 600px;"
-             class="mx-auto rounded-5 mt-3"></div>
+             class="mx-auto rounded-5 mt-0"></div>
 
-        {% include 'APP_Harmony/includes/infoModalWithBtn.html' %}
 
-        <div class="trainer_main overflow-y-auto pt-3 pb-5 flex-grow-1 no_scrollbar" style="">
+        <div class="trainer_main overflow-y-auto pt-0 pb-5 flex-grow-1 no_scrollbar" style="">
             <div id="trainer-presets-container" class="accordion" id="accordionPanelsStayOpenExample">
 
             </div>
@@ -58,7 +57,6 @@
 
             </div>
         </div>
-
 
 
         <div class="modal fade" id="addPresetModal" tabindex="-1" aria-labelledby="addPresetModalLabel"
@@ -119,6 +117,11 @@
             </div>
         </div>
 
+        <div class="harmony-circle w-100">
+            <div>
+                <img class="w-100" src="{% static 'APP_Harmony/img/music_circle.png' %}" alt="">
+            </div>
+        </div>
 
     </div>
 {% endblock %}

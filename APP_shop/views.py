@@ -10,7 +10,6 @@ from Core.services.services import allowed_only
 from .forms import DepositForm, BuyProductProgramForm
 from .funcs import check_user_payments, execute_order
 from .models import Product, Order
-from .services.Product.product import ProductService
 from .services.orders_service import get_user_orders
 from .services.products_service import get_product_program_count_starts, is_test_period_activated
 from .services.qiwi import create_payment_and_order
