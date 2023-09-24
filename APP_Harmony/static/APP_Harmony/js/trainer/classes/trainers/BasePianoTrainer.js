@@ -8,10 +8,12 @@ class BasePianoTrainer extends BaseTrainer {
         countQuestions,
         workFieldId,
         notesDuration,
+        notesInterval,
         pianoPlayer
     ) {
         super(presetName, presetCategory, countQuestions, workFieldId);
         this.notesDuration = notesDuration;
+        this.notesInterval = notesInterval;
         this.pianoField = document.createElement('div');
         this.workField.appendChild(this.pianoField);
         this._pianoPlayer = pianoPlayer;

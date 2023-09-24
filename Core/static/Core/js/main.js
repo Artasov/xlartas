@@ -2,6 +2,10 @@ async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function isString(value) {
+    return Object.prototype.toString.call(value) === '[object String]';
+}
+
 function getCookie(name) {
     const value = "; " + document.cookie;
     const parts = value.split("; " + name + "=");

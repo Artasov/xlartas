@@ -8,11 +8,13 @@ class BaseAlenTrainer extends BasePianoTrainer {
         countQuestions,
         workFieldId,
         notesDuration,
+        notesInterval,
         pianoPlayer,
         cadenceName,
         playCadenceEveryNQuestion,
         cadenceOctave,
         cadenceDuration,
+        cadenceInterval,
     ) {
         super(
             presetName,
@@ -20,11 +22,13 @@ class BaseAlenTrainer extends BasePianoTrainer {
             countQuestions,
             workFieldId,
             notesDuration,
+            notesInterval,
             pianoPlayer
         );
         this.playCadenceEveryNQuestion = playCadenceEveryNQuestion;
         this.cadenceOctave = cadenceOctave;
         this.cadenceDuration = cadenceDuration;
+        this.cadenceInterval = cadenceInterval;
         this.cadenceName = cadenceName;
     }
 }

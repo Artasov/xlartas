@@ -1,6 +1,121 @@
 import {createAndStartTrainer} from "./trainer_main.js";
 import Scale from "../shared/classes/Scale.js";
 
+function insertStatisticsGraphic(statistics, forInsertEl) {
+    const canvas = document.createElement("canvas");
+    forInsertEl.appendChild(canvas);
+    let context = canvas.getContext("2d");
+    const createLineChart = (xData, yData) => {
+        let data = {
+            labels: xData,
+            datasets: [{
+                label: 0,
+                data: yData,
+                pointStyle: false,
+                fill: true,
+                borderWidth: 1,
+                tension: 0.4
+            }]
+        }
+        let xScaleConfig = {
+            min: 0,
+            max: 50,
+            ticks: {
+                autoSkip: true,
+                maxRotation: 0,
+            }
+        }
+        let config = {
+            type: "line",
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    subtitle: false,
+                    legend: false,
+                    tooltip: false,
+                    title: false,
+                },
+                scales: {
+                    x: {
+                        // display: false,
+                        ticks: {
+                            autoSkip: true,
+                            maxRotation: 0,
+                        }
+                    },
+                    y: {
+                        // display: false,
+                        ticks: {
+                            autoSkip: true,
+                            maxRotation: 0,
+                        }
+                    }
+                }
+            },
+        }
+        let chart = new Chart(context, config)
+    }
+
+    let xData = [];
+    let yData = [];
+    for (let i = 0; i < statistics.length; i++) {
+        xData.push(statistics[i].created_at)
+        yData.push(statistics[i].right_answer_percentage)
+    }
+    createLineChart(xData, yData)
+}
+
+function showPresetUserStats(preset) {
+    const userStats = preset.user_statistics.map(obj => {
+        let newObj = {...obj};
+        let date = new Date(newObj.created_at);
+        let day = date.getDate();
+        let month = date.getMonth() + 1; // getMonth() возвращает месяцы от 0 до 11, поэтому прибавляем 1
+        newObj.created_at = `${day}.${month}`;
+        return newObj;
+    });
+
+    const modalWrap = document.createElement('div');
+    modalWrap.addEventListener('click', () => {
+        modalWrap.remove();
+    })
+
+    modalWrap.className = 'fcc position-absolute top-0 left-0 w-100vw h-100vh';
+    const modal = document.createElement('div');
+    modal.style.maxWidth = '500px';
+    modal.style.pointerEvents = 'all';
+    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.25)';
+    modal.className = 'w-90 fcc bg-black-25 mx-auto p-4 backdrop-blur-20 rounded-4';
+
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'frc gap-2'
+    const modalTitle = document.createElement('h3');
+    modalTitle.className = 'text-white-90 mx-0 my-auto';
+    modalTitle.innerHTML = preset.presetName;
+    const btnClose = document.createElement('button');
+    btnClose.className = 'btn-close my-auto';
+    btnClose.style.filter = 'invert(0.9)';
+    btnClose.addEventListener('click', () => {
+        modalWrap.remove();
+    })
+
+    const modalBody = document.createElement('div');
+    const modalGraphic = document.createElement('div');
+    insertStatisticsGraphic(userStats, modalGraphic);
+
+
+    modalWrap.appendChild(modal);
+    modal.appendChild(modalHeader);
+    modalHeader.appendChild(modalTitle);
+    modalHeader.appendChild(btnClose);
+
+    modal.appendChild(modalBody);
+    modalBody.appendChild(modalGraphic);
+
+
+    document.body.appendChild(modalWrap);
+}
 
 export async function fetchTrainerPresets() {
     const response = await fetch('/harmony/trainer/base_presets/');
@@ -41,9 +156,9 @@ export async function fetchTrainerPresets() {
     return trainerPresets;
 }
 
-export function populatePresetAccordion(trainerPresets) {
+export function populatePresetAccordion(trainerPresets, toContainerId) {
 
-    const container = document.getElementById('trainer-presets-container');
+    const container = document.getElementById(toContainerId);
 
     let groupIndex = 1;
     for (const category in trainerPresets) {
@@ -74,8 +189,8 @@ export function populatePresetAccordion(trainerPresets) {
         presetsContainer.className = 'collapse';
         presetsContainer.setAttribute('data-bs-parent', '#trainer-presets-container')
         presetsContainer.className += groupIndex === 1 ? ' show' : '';
-
         for (const presetName in trainerPresets[category]) {
+
             const preset = trainerPresets[category][presetName];
 
             const presetBlock = document.createElement('div');
@@ -96,22 +211,33 @@ export function populatePresetAccordion(trainerPresets) {
             presetSpan.textContent = preset.presetName;
 
             const presetSettings = document.createElement('div');
+            presetSettings.className = 'mb-1 d-flex gap-2'
             const degrees = document.createElement('div');
-            degrees.classList.add('degrees-wrap');
+            degrees.classList.add('degrees-wrap', 'my-auto');
             for (let i = 1; i <= 8; i++) {
-                console.log(i)
-                console.log(preset.degrees)
                 const degree = document.createElement('div');
                 if (preset.degrees.indexOf(i) !== -1) {
-                    console.log('Yes')
                     degree.classList.add('degree-active');
                 }
                 degree.classList.add('degree')
                 degrees.appendChild(degree);
             }
-
-
             presetSettings.appendChild(degrees)
+
+            const questionCount = document.createElement('span');
+            questionCount.classList.add('text-white-50', 'fs-7');
+            questionCount.innerHTML = `Q<span class="text-white-80">${preset.countQuestions}</span>`
+            const percentageNumber = document.createElement('span');
+            percentageNumber.classList.add('text-white-50', 'fs-7');
+
+            percentageNumber.addEventListener('click', () => {
+                console.log('123')
+                showPresetUserStats(preset);
+            })
+
+
+            presetSettings.appendChild(percentageNumber)
+            presetSettings.appendChild(questionCount)
 
             presetTitle.appendChild(presetSpan)
             presetTitle.appendChild(presetSettings)
@@ -122,7 +248,6 @@ export function populatePresetAccordion(trainerPresets) {
             presetButton.style.height = '45px';
 
 
-            console.log('STATISTICS')
             const presetStatsLineWrap = document.createElement('div');
             presetStatsLineWrap.className = 'position-absolute bottom-0 left-0 w-100'
             presetStatsLineWrap.style.height = '5px';
@@ -139,6 +264,7 @@ export function populatePresetAccordion(trainerPresets) {
                 });
                 averagePercentage = Math.floor(total_percent_amount / preset.user_statistics.length);
             }
+            percentageNumber.innerHTML = `<span class="text-white-80">${averagePercentage}%</span>`
 
             function lerp(start, end, factor) {
                 return start + (end - start) * factor;

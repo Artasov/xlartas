@@ -21,7 +21,9 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         workFieldId,
         pianoPlayer,
         notesDuration,
-        cadenceDuration
+        notesInterval,
+        cadenceDuration,
+        cadenceInterval,
     ) {
         super(
             preset.presetName,
@@ -29,11 +31,13 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             preset.countQuestions,
             workFieldId,
             notesDuration,
+            notesInterval,
             pianoPlayer,
             preset.cadenceName,
             preset.playCadenceEveryNQuestion,
             preset.cadenceOctave,
             cadenceDuration,
+            cadenceInterval
         );
         console.log()
         if (preset.scaleName === 'randomMajor') {
@@ -71,7 +75,6 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
 
 
     _nextQuestion() {
-        console.log(`Next Question: ${this.currentQuestionNumber}`)
         this.currentScale = typeof this.presetScale === 'string' ?
             this.presetScale.toString() : this.presetScale.copy()
         let currentScale = undefined;
@@ -146,10 +149,6 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         }
 
         this._playQuestion();
-
-        console.log('AFTER NEXT QUESTION')
-        console.log(this.presetScale)
-        console.log(this.currentHiddenNote)
     }
 
     _fillWorkField() {
@@ -202,16 +201,15 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                     currentHiddenNote,
                     closestNote,
                     notesForSkipping,
-                    this.notesDuration,
+                    this.notesInterval,
                     this.notesDuration,
                 );
 
                 this._increaseRightAnswer();
                 setTimeout(() => {
                     this._nextQuestion();
-                }, 500);
+                }, 800);
             } else {
-                console.log('wrong')
                 this.piano.highlight.setDanger();
                 this.piano.highlightKey(indexKeyEl, this.notesDuration);
                 this._decreaseWrongAnswer();
@@ -233,14 +231,14 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         let totalCadenceDuration = 0;
         if (this.currentCadenceSkips === 1) {
             const cadence = cadences[this.cadenceName];
-            totalCadenceDuration = (this.cadenceDuration + 100) *
-                (cadence.length - 1) + this.cadenceDuration;
+            totalCadenceDuration = (this.cadenceInterval) *
+                (cadence.length) + this.cadenceInterval;
             this.piano.player.playCadence(
                 this.currentScale.scaleName,
                 this.cadenceName,
                 this.piano.allCurrentPianoNotes[0].octave,
-                this.cadenceDuration + 500,
                 this.cadenceDuration,
+                this.cadenceInterval,
             );
             this.currentCadenceSkips += this.playCadenceEveryNQuestion
         }
@@ -319,7 +317,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         );
         this.rightAnswerPercentage = rightAnswerPercentage;
 
-        progressBar.setValue(rightAnswerPercentage, 1000);
+        progressBar.setValue(rightAnswerPercentage, 24);
     }
 
     finish() {

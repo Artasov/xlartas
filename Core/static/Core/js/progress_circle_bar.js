@@ -41,14 +41,13 @@ class ProgressCircleBar {
         return progressBar;
     }
 
-    setValue(value, duration_ms) {
+    setValue(value, interval_ms = 40) {
         if (value < 0 || value > 100) {
             console.error('Value must be between 0 and 100');
             return;
         }
 
-        const frameRate = 60;
-        const totalFrames = duration_ms / (1000 / frameRate);
+        const totalFrames = 100; // Один кадр на процент
 
         let currentFrame = 0;
         let currentValue = 0;
@@ -56,8 +55,8 @@ class ProgressCircleBar {
         const animate = () => {
             if (currentFrame >= totalFrames) {
                 if (value === 100) {
-                    this.outer.classList.add('outer-100');
                     this.inner.classList.add('inner-100');
+                    this.outer.classList.add('outer-100');
                 }
                 clearInterval(this.interval);
 
@@ -67,14 +66,13 @@ class ProgressCircleBar {
 
             currentValue = (value / totalFrames) * currentFrame;
             const currentOffset = this.maxOffset - ((this.maxOffset - this.minOffset) * (currentValue / 100));
-
             this.circle.style.strokeDashoffset = currentOffset.toString();
             this.circle.style.stroke = this.interpolateColor(this.colorStart, this.colorEnd, currentValue / 100);
             this.inner.textContent = `${Math.round(currentValue)}%`;
 
             currentFrame += 1;
         };
-        this.interval = setInterval(animate, 1000 / frameRate);
+        this.interval = setInterval(animate, interval_ms);
     }
 
     interpolateColor(color1, color2, factor) {

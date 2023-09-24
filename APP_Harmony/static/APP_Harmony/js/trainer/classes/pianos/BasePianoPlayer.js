@@ -34,9 +34,6 @@ class BasePianoPlayer {
         throw new Error("Method 'playSound' must be implemented.");
     }
 
-    getFrequency({note, octave}) {
-        throw new Error("Method 'getFrequency' must be implemented.");
-    }
 }
 
 export default BasePianoPlayer;

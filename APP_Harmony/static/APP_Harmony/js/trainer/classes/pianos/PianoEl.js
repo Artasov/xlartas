@@ -117,7 +117,6 @@ class PianoEl {
 
     _onNotePlaying(event) {
         if (this.isHighlightAvailable) {
-            console.log("Note playing:", event.detail.note);
             this.highlightKey(
                 event.detail.note,
                 event.detail.duration_ms
@@ -146,7 +145,7 @@ class PianoEl {
         this.keysEls[index].classList.add(this.highlight.class);
         setTimeout(() => {
             this.keysEls[index].classList.remove(this.highlight.class);
-        }, duration_ms - 200);
+        }, duration_ms-duration_ms*0.7);
     }
 
     cancelAllHighlights() {

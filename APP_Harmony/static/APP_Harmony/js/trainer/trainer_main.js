@@ -7,6 +7,8 @@ import {fetchTrainerPresets, populatePresetAccordion} from "./trainer_presets_me
 import PredictNoteAlenTrainer from "./classes/trainers/PredictNoteAlenTrainer.js";
 import {getNotesBetween, getRandomScaleName} from "../shared/shared_funcs.js";
 import Scale from "../shared/classes/Scale.js";
+import AudioPianoPlayer from "./classes/pianos/AudioPianoPlayer.js";
+import {preloadSounds, setSoundSettings} from "./trainerSounds.js";
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {trigger: 'focus'}))
@@ -21,49 +23,55 @@ const trainerPlayField = document.getElementById(workFieldId);
 const trainerSoundsMenu = document.getElementById('select-trainer_sounds');
 
 let currentTrainer = null;
-let isSoundsPreloaded = false;
+let trainerPresetsAll = undefined;
 
-
-
+setSoundSettings();
 window.addEventListener('load', function () {
     loadTrainerSettings();
     initCircleHarmony();
+    (async () => {
+        trainerPresetsAll = await fetchTrainerPresets();
+        populatePresetAccordion(trainerPresetsAll, 'trainer-presets-container');
+    })();
 });
 window.addEventListener('trainerStart', () => {
     trainerPresetsContainer.classList.add('d-none');
-    trainerSoundsMenu.classList.add('d-none');
+    trainerPresetsContainer.innerHTML = '';
 });
 
 window.addEventListener('trainerExit', () => {
     trainerPresetsContainer.classList.remove('d-none');
-    trainerSoundsMenu.classList.remove('d-none');
+    (async () => {
+        trainerPresetsAll = await fetchTrainerPresets();
+        populatePresetAccordion(trainerPresetsAll, 'trainer-presets-container');
+    })();
+    trainerPlayField.innerHTML = ''
 });
-let trainerPresetsAll = undefined;
-(async () => {
-    trainerPresetsAll = await fetchTrainerPresets();
-    populatePresetAccordion(trainerPresetsAll);
-})();
+
 
 export function createAndStartTrainer(presetName, presetCategory) {
-    trainerPlayField.innerHTML = ''
-    if (!isSoundsPreloaded) {
-        // preloadSounds();
-        isSoundsPreloaded = true;
+    let pianoPlayer;
+    if (window.keySounds === 'Oscillator') {
+        pianoPlayer = new OscillatorPianoPlayer();
+    } else {
+        preloadSounds();
+        pianoPlayer = new AudioPianoPlayer(window.keySounds);
     }
-    const pianoPlayer = new OscillatorPianoPlayer()
+
     const currentPreset = trainerPresetsAll[presetCategory][presetName];
 
     currentTrainer = new PredictNoteAlenTrainer(
         currentPreset,
         workFieldId,
         pianoPlayer,
-        500,
+        800,
+        450,
+        900,
         500
     );
     setTimeout(() => {
         currentTrainer.start();
     }, 200);
 }
-
 
 
