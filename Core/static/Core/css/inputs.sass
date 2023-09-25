@@ -116,8 +116,10 @@ input[type=range]
 		
 		&:checked::after
 			box-shadow: 0 0 10px 7px $primary
+	
 	textarea
 		height: 100px
+	
 	input[type=number]
 		background: $serviceElBg
 		padding: 0.1rem 0.4rem
@@ -125,6 +127,7 @@ input[type=range]
 		color: #dddddd
 		box-shadow: 0 0 5px rgba(#000, .6)
 		outline: 0
+	
 	select
 		max-width: 140px
 		background: $serviceElBg
@@ -134,7 +137,7 @@ input[type=range]
 		box-shadow: 0 0 5px rgba(#000, .6)
 		outline: 0
 	
-	input[type=text]
+	input[type=text], input[type=password]
 		transition: all 200ms ease
 		font-family: inherit
 		width: 100%
@@ -166,7 +169,7 @@ input[type=range]
 
 
 .absolute_text_label
-	input[type=text]
+	input[type=text], input[type=password]
 		&:focus
 			~ label
 				position: absolute

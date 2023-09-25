@@ -42,6 +42,25 @@
                 {% include 'APP_Harmony/includes/infoModalWithBtn.html' %}
             </div>
         </div>
+        <div id="signin_promote"
+             class="fcc backdrop-blur-20 bg-black-25 px-4 py-3 rounded-3 d-none"
+             onclick="this.classList.add('d-none')"
+             style="max-width: 200px; position: absolute; pointer-events: all;
+             top: 0; left: 0; z-index: 3; box-shadow: 0 0 30px #00000099;
+             margin: calc((100% - 200px)/2);">
+            <p class="text-white-80 position-relative">
+                Если вы хотите следить за своим прогрессом войдите в аккаунт.
+                <button style="right: -10px"
+                        class="position-absolute top-0 btn-close"></button>
+            </p>
+            <a href="{% url 'signin' %}"
+               style="max-width: 100px;"
+               class="btn-3 rounded-3 text-decoration-none text-center">
+                Войти
+            </a>
+        </div>
+
+
         <div style="width: 90%; height: 1px; background: #ffffff66; max-width: 600px;"
              class="mx-auto rounded-5 mt-0"></div>
 
@@ -52,7 +71,7 @@
             </div>
 
 
-            <div id="trainer-play-field" class="d-none">
+            <div id="trainer-play-field" class="d-none mt-4">
 
             </div>
         </div>

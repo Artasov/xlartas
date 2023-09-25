@@ -49,10 +49,8 @@ def add_trainer_preset(request):
 
 @base_view
 def trainer(request):
-    lang = request.GET.get('lang') or 'ru'
     return render(request, 'APP_Harmony/trainer.html', {
         'form': TrainerPresetForm(),
-        'language': lang
     })
 
 

@@ -332,6 +332,8 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             if (xhr.status === 201) {
                 console.log("Result saved successfully:", xhr.responseText);
             } else {
+                const event = new CustomEvent('resultNotSaved');
+                window.dispatchEvent(event);
                 console.error("Failed to save result:", xhr.responseText);
             }
         };
@@ -341,6 +343,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             "preset": this.preset.id  // Замените на ID текущего пресета
         });
         xhr.send(data);
+        this.exit()
     }
 }
 

@@ -19,5 +19,7 @@ class TrainerPresetSerializer(serializers.ModelSerializer):
 
     def get_user_statistics(self, obj):
         user = self.context['request'].user
+        if user.is_anonymous:
+            return []
         stats = TrainerPresetResult.objects.filter(preset=obj, user=user)
         return TrainerPresetResultSerializer(stats, many=True).data

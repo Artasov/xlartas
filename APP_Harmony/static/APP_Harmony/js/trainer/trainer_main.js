@@ -16,6 +16,8 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+const signInPromoteEl = document.getElementById('signin_promote');
+
 const trainerPresetsContainer = document.getElementById('trainer-presets-container');
 const workFieldId = 'trainer-play-field';
 const trainerPlayField = document.getElementById(workFieldId);
@@ -33,6 +35,9 @@ window.addEventListener('load', function () {
         trainerPresetsAll = await fetchTrainerPresets();
         populatePresetAccordion(trainerPresetsAll, 'trainer-presets-container');
     })();
+});
+window.addEventListener('resultNotSaved', () => {
+    signInPromoteEl.classList.remove('d-none');
 });
 window.addEventListener('trainerStart', () => {
     trainerPresetsContainer.classList.add('d-none');
