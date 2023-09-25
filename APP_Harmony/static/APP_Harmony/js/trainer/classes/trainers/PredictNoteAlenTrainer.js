@@ -343,7 +343,6 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             "preset": this.preset.id  // Замените на ID текущего пресета
         });
         xhr.send(data);
-        this.exit()
     }
 }
 
