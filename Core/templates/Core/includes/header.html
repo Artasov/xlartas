@@ -193,12 +193,12 @@
                                                     class="btn-13 bg-transparent text-dark-emphasis"></button>
                                         </div>
                                         {# OAuth #}
-                                        <div id="vk_auth_header" class="mx-auto mt-2 rounded-4"></div>
-                                        <script type="text/javascript">
-                                            VK.init({apiId: 51423204});
-                                            VK.Widgets.Auth("vk_auth_header", {"authUrl": "/accounts/vk/login/callback"});
-                                            document.getElementById('vk_auth_header').style.display = 'none';
-                                        </script>
+{#                                        <div id="vk_auth_header" class="mx-auto mt-2 rounded-4"></div>#}
+{#                                        <script type="text/javascript">#}
+{#                                            VK.init({apiId: 51423204});#}
+{#                                            VK.Widgets.Auth("vk_auth_header", {"authUrl": "/accounts/vk/login/callback"});#}
+{#                                            document.getElementById('vk_auth_header').style.display = 'none';#}
+{#                                        </script>#}
                                         <div class="text-center pt-3 pb-2">
                                             <div class="frc">
                                                 <a href="{% provider_login_url "google" %}" class="px-1"><img
@@ -222,13 +222,13 @@
                                                         tg_btn_header.classList.add('telegram-auth')
                                                     </script>
                                                 </div>
-                                                <div class="px-1"
-                                                     onclick="document.getElementById('vk_auth_header').style.display = 'block';">
-                                                    <img src="{% static 'Core/img/vkontakte.png' %}" alt=""
-                                                         style="max-width: 40px;"></div>
-                                                <a href="{% provider_login_url "github" %}" class="px-1"><img
-                                                        src="{% static 'Core/img/github-mark-white.png' %}" alt=""
-                                                        style="max-width: 40px;"></a>
+{#                                                <div class="px-1"#}
+{#                                                     onclick="document.getElementById('vk_auth_header').style.display = 'block';">#}
+{#                                                    <img src="{% static 'Core/img/vkontakte.png' %}" alt=""#}
+{#                                                         style="max-width: 40px;"></div>#}
+{#                                                <a href="{% provider_login_url "github" %}" class="px-1"><img#}
+{#                                                        src="{% static 'Core/img/github-mark-white.png' %}" alt=""#}
+{#                                                        style="max-width: 40px;"></a>#}
 
                                             </div>
                                         </div>
