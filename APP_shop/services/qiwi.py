@@ -40,27 +40,31 @@ def create_order(value: int, order_id: str, comment: str = '',
 
 def create_payment_and_order(user_id: int,
                              order_type: Order.OrderType,
-                             amount: int, comment: str = '',
+                             amount: int, amount_with_promo: int,
+                             promo_id: int,
+                             comment: str = '',
                              product_id: int = '',
                              license_type: str = '',
                              expired_minutes: int = 10, customer: dict = None,
                              currency: str = 'RUB', custom_fields: dict = None,
                              SECRET_KEY: str = os.getenv('QIWI_SECRET_KEY'), ) -> Order:
     order_id = secrets.token_hex(15)
-    order = create_order(amount, order_id, comment,
-                         expired_minutes, customer,
-                         currency, custom_fields,
-                         SECRET_KEY)
-    if 'payUrl' not in order:
+
+    qiwi_order = create_order(amount_with_promo, order_id, comment,
+                              expired_minutes, customer,
+                              currency, custom_fields,
+                              SECRET_KEY)
+    if 'payUrl' not in qiwi_order:
         raise BadRequest
     order_ = Order.objects.create(user_id=user_id,
                                   amountRub=amount,
+                                  promo_id=promo_id,
                                   product_id=product_id,
                                   license_type=license_type,
                                   order_system_name='QIWI',
                                   order_id=order_id,
                                   type=order_type,
-                                  pay_link=order['payUrl'], )
+                                  pay_link=qiwi_order['payUrl'], )
     return order_
 
 

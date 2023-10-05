@@ -1,8 +1,19 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from datetime import datetime, timedelta
 
+from django.db import transaction
 from django.utils import timezone
+
+from .funcs import execute_order
 from .models import *
+
+
+@admin.action(description='Execute selected orders')
+def execute_selected_orders(modeladmin, request, queryset):
+    with transaction.atomic():
+        for order in queryset:
+            execute_order(order)
+    messages.success(request, f'Executed {queryset.count()} orders successfully.')
 
 
 @admin.register(Order)
@@ -10,12 +21,14 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['user', 'status', 'product', 'is_complete', 'date_created']
     search_fields = ['user__username']
     save_on_top = True
+    actions = [execute_selected_orders]
+    ordering = ('-date_created',)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'version', 'desc', 'log_changes', 'sale']
-    list_editable = ['version', 'desc', 'log_changes', 'sale']
+    list_display = ['name', 'version', 'desc', 'log_changes', 'discount']
+    list_editable = ['version', 'desc', 'log_changes', 'discount']
     save_on_top = True
 
 
@@ -45,21 +58,32 @@ class LicenseAdmin(admin.ModelAdmin):
     count_days_for_expiration.short_description = 'Days left'
 
 
+@admin.register(PromoGroup)
+class PromoGroupAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name'
+    ]
+    list_editable = [
+        'name'
+    ]
+
+
 @admin.register(Promo)
 class PromoAdmin(admin.ModelAdmin):
     list_display = [
-        'promo',
-        'promo_type',
-        'promo_value',
+        'code',
+        'type',
+        'value',
         'applys_now',
         'applys_max',
         'date_expiration'
     ]
     list_editable = [
-        'promo_type',
-        'promo_value',
+        'type',
+        'value',
         'applys_now',
         'applys_max',
         'date_expiration']
-    filter_horizontal = ['used_by', 'products']
+    filter_horizontal = ['used_by']
     save_on_top = True

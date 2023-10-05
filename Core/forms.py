@@ -8,8 +8,8 @@ from Core.services.services import get_user_by_email_or_name, check_recaptcha_is
 class FormWithRecaptchaValidator(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
-        if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
-            raise forms.ValidationError(RECAPTCHA_INVALID)
+        # if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
+        #     raise forms.ValidationError(RECAPTCHA_INVALID)
         return cleaned_data
 
 

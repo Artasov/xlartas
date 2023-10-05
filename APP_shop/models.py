@@ -38,7 +38,7 @@ class Product(models.Model):
     long_name = models.CharField(max_length=100, blank=True)
     version = models.CharField(max_length=5, blank=True)
     img = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
-    sale = models.IntegerField(default=0)
+    discount = models.IntegerField(default=0)
     desc = models.TextField(blank=True)
     desc_short = models.CharField(max_length=100, null=True, blank=True)
     review_ulr = models.CharField(max_length=200, null=True, blank=True)
@@ -63,7 +63,6 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
 
 
 class Order(models.Model):
@@ -113,19 +112,28 @@ def NowPlus30Days():
     return datetime.utcnow() + timedelta(days=30)
 
 
+class PromoGroup(models.Model):
+    name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return f'{self.name}'
+
+
 class Promo(models.Model):
     class PromoType(models.TextChoices):
-        sale = 'sale', _('sale')
-        free = 'free', _('free')
+        discount = 'discount', _('discount')
+        balance = 'balance', _('balance')
 
-    promo = models.CharField(max_length=50)
-    used_by = models.ManyToManyField(User, blank=True, related_name='used_by')
-    products = models.ManyToManyField(Product)
-    promo_type = models.CharField(max_length=50, choices=PromoType.choices)
-    promo_value = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
+    group = models.ForeignKey(
+        PromoGroup, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    used_by = models.ManyToManyField(User, blank=True, related_name='used_promo')
+    type = models.CharField(max_length=50, choices=PromoType.choices)
+    value = models.IntegerField()
     applys_now = models.IntegerField(default=0)
     applys_max = models.IntegerField(default=60)
     date_expiration = models.DateTimeField(default=NowPlus30Days)
 
     def __str__(self):
-        return f'{self.promo}'
+        return f'{self.code}'

@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from Core.models import User
 from Core.services.services import allowed_only
 from .forms import DepositForm, BuyProductProgramForm
-from .funcs import check_user_payments, execute_order
+from .funcs import check_user_payments, execute_order, try_apply_promo
 from .models import Product, Order
 from .services.orders_service import get_user_orders
 from .services.products_service import get_product_program_count_starts, is_test_period_activated
@@ -75,11 +75,23 @@ def activate_test_period(request):
 @login_required(redirect_field_name=None, login_url='signin')
 def orders(request):
     user_ = request.user
-    form = DepositForm(request.POST or None)
+    form = DepositForm(request.POST or None, user=user_)
     if form.is_valid():
+        amount = form.cleaned_data.get('amount')
+        promo = form.cleaned_data.get('promo')
+        amount_with_promo = amount
+        if promo:
+            res = try_apply_promo(promo, request.user, amount)
+            if res == 'redirect_orders':
+                return redirect('shop:orders')
+            elif res.get('new_price'):
+                amount_with_promo = res['new_price']
+
         order_ = create_payment_and_order(
             user_id=user_.id,
-            amount=form.cleaned_data.get('amount'),
+            amount=amount,
+            amount_with_promo=amount_with_promo,
+            promo_id=promo.id,
             order_type=Order.OrderType.BALANCE,
             expired_minutes=10,
             comment=f'User deposit: {user_.username}\n')
