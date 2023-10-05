@@ -24,12 +24,12 @@
                         class="btn-13 bg-transparent text-dark-emphasis"></button>
             </div>
             {# OAuth #}
-            <div id="vk_auth" class="mx-auto mt-2 rounded-4"></div>
-            <script type="text/javascript">
-                VK.init({apiId: 51423204});
-                VK.Widgets.Auth("vk_auth", {"authUrl": "/accounts/vk/login/callback"});
-                document.getElementById('vk_auth').style.display = 'none';
-            </script>
+{#            <div id="vk_auth" class="mx-auto mt-2 rounded-4"></div>#}
+{#            <script type="text/javascript">#}
+{#                VK.init({apiId: 51423204});#}
+{#                VK.Widgets.Auth("vk_auth", {"authUrl": "/accounts/vk/login/callback"});#}
+{#                document.getElementById('vk_auth').style.display = 'none';#}
+{#            </script>#}
             <div class="text-center pt-3 pb-2">
                 <div class="frc">
                     <a href="{% provider_login_url "google" %}" class="px-1"><img

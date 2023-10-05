@@ -24,7 +24,9 @@ class LicenseAdmin(admin.ModelAdmin):
     list_display = ['user', 'product',
                     'is_test_period_activated',
                     'count_starts',
-                    'count_days_for_expiration', 'date_expiration']
+                    'count_days_for_expiration',
+                    'date_expiration'
+                    ]
     list_editable = ['date_expiration']
     search_fields = ['user__username']
     save_on_top = True
@@ -42,9 +44,22 @@ class LicenseAdmin(admin.ModelAdmin):
 
     count_days_for_expiration.short_description = 'Days left'
 
+
 @admin.register(Promo)
-class PromoCodeAdmin(admin.ModelAdmin):
-    list_display = ['promo', 'promo_type', 'promo_value', 'applys_now', 'applys_max', 'date_expiration']
-    list_editable = ['applys_now', 'applys_max', 'date_expiration']
+class PromoAdmin(admin.ModelAdmin):
+    list_display = [
+        'promo',
+        'promo_type',
+        'promo_value',
+        'applys_now',
+        'applys_max',
+        'date_expiration'
+    ]
+    list_editable = [
+        'promo_type',
+        'promo_value',
+        'applys_now',
+        'applys_max',
+        'date_expiration']
     filter_horizontal = ['used_by', 'products']
     save_on_top = True
