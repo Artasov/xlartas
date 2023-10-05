@@ -70,9 +70,9 @@
                                             {% endif %}
                                             ₽
                                             {% if product.type == 'account' %}
-                                                {% get_price_with_sale product.price_forever product.discount %}
+                                                {% get_price_with_discount product.price_forever product.discount %}
                                             {% else %}
-                                                {% get_price_with_sale product.price_week product.discount %}
+                                                {% get_price_with_discount product.price_week product.discount %}
                                             {% endif %}
                                         </span>
                                     </div>
