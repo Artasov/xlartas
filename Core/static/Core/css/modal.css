@@ -1,0 +1,2 @@
+.u-modal{transition:all 200ms ease;position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0,0,0,0.8);z-index:100;display:none}.u-modal .modal-header{position:relative}.u-modal .modal-header .btn-close{position:absolute;top:0;right:.6rem;height:100%}.u-modal .modal-content{background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(15px);box-shadow:0 0 10px rgba(0,0,0,0.5);max-width:300px;max-height:80vh}.u-modal .modal-body{overflow-y:scroll}
+/*# sourceMappingURL=modal.css.map */

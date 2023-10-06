@@ -1,0 +1,78 @@
+{% extends 'Core/index.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load socialaccount %}
+{% block title %}xlartas | REFERRAL PROGRAM{% endblock %}
+
+{% block meta_keywords %}referral реферальная рефералка программа система{% endblock %}
+{% block meta_description %}Referral program{% endblock %}
+{% block meta_og_description %}Реферальная программа{% endblock %}
+{% block meta_twitter_description %}Referral program{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none  fcc flex-grow-1"
+         data-bs-theme="dark" style="max-width: 500px;">
+        <div class="row p-3 pt-4 mx-2 my-3 bg-black bg-opacity-10 rounded-4 disable-tap-and-selection">
+            <h1 class="text-white fs-1 fw-bold text-center mb-3">REFERRAL PROGRAM</h1>
+
+            <h2 class="mt-2 fs-3 fw-bold text-dark-emphasis">Бонусы</h2>
+            <ul class="text-white text-opacity-75 ps-5 ps-sm-5">
+                <li>Вы и ваш реферал получаете по 7 дней к
+                лицензии на <span class="fw-bold">все</span> возможные
+                для этого товары (программы).</li>
+                <li>
+                    Присутствует коэффициент увеличения бонуса.
+                    Формула: {7 дней} * {кол-во рефералов получивших бонус / 1.5}
+                </li>
+                <li>Рефералов может быть неограниченное количество.</li>
+                <li>К примеру: 10 рефералов, выполнивших условия
+                    подарят вам 257 дней для каждой программы из каталога.
+                </li>
+            </ul>
+
+            <h2 class="mt-2 fs-3 fw-bold text-dark-emphasis">Условия получения бонуса</h2>
+            <ul class="text-white text-opacity-75 ps-5 ps-sm-5">
+                <li>
+                    Вы и реферал должны быть зарегистрированы на сайте.
+                </li>
+                <li>
+                    Реферал должен запустить
+                    программы (любые из <a href="{% url 'shop:catalog' %}">каталога</a>)
+                    более 20 раз в сумме.
+                </li>
+                <li>
+                    Для получения бонуса просто перейдите на
+                    <a href="{% url 'referral:list' %}">страницу обзора ваших рефералов</a>.
+                </li>
+            </ul>
+
+            <h2 class="mt-2 fs-3 fw-bold text-dark-emphasis">Как приглашать рефералов?</h2>
+            <p class="text-white text-opacity-75 ps-5 ps-sm-5">
+                Используйте для приглашения вашу личную ссылку
+                (Ref. link) из <a href="{% url 'profile' %}">профиля</a>.
+                Если пользователь не зарегистрирован его автоматически
+                перенаправит на страницу регистрации.
+            </p>
+            <ul class="text-white text-opacity-75 ps-5 ps-sm-5">
+                <li>
+                    Ваш будущий реферал должен предварительно
+                    зарегистрироваться на сайте.
+                </li>
+                <li>
+                    Для привязки к вашему аккаунту рефералу необходимо
+                    после регистрации перейти по вашей личной
+                    ссылке из <a href="{% url 'profile' %}">профиля</a>,
+                    после чего в его профиле будет отображаться ваш username,
+                    а у вас на <a href="{% url 'referral:list' %}">странице
+                    обзора рефералов</a> появиться он как новый реферал.
+                </li>
+            </ul>
+
+            <h2 class="mt-2 fs-3 fw-bold text-dark-emphasis">Доп. информация</h2>
+            <p class="text-white text-opacity-75 ps-5 ps-sm-5">
+                Попытка обмануть систему через multi-account ведёт
+                к моментальной блокировке доступа к программам.
+            </p>
+        </div>
+    </div>
+{% endblock %}

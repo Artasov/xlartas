@@ -1,0 +1,16 @@
+@import "vars"
+.profile
+	.username-edit
+		input
+			display: block!important
+			background: transparent
+			text-align: center
+			border: 0
+			outline: none
+			max-width: 100%
+			&:focus
+				border-bottom: 1px solid
+				border-image: linear-gradient(to right, $primary, $secondary)
+				border-image-slice: 1
+	.row
+		height: 50px
