@@ -28,6 +28,16 @@ class BasePianoTrainer extends BaseTrainer {
             this.piano.player.stopAllSounds();
         }
     }
+    exit() {
+        this.workField.classList.add('d-none');
+        const event = new CustomEvent('trainerExit');
+        window.dispatchEvent(event);
+        this.stopAllSounds();
+        delete this._pianoPlayer;
+        delete this.piano;
+        delete this;
+
+    }
 }
 
 export default BasePianoTrainer;

@@ -58,10 +58,7 @@ class PianoEl {
             event.detail.notesArray.forEach(note => {
                 this.future_history.push(new Note(note.note, note.octave));
             })
-            console.log('start adjust')
             this.adjustNotesToAvailableRange(this.future_history)
-            console.log('end adjust')
-            // this.future_history = this.adjustNotesToAvailableRange(event.detail.notesArray);
         }
     }
 

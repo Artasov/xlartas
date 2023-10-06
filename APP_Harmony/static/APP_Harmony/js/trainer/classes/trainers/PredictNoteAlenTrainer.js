@@ -39,7 +39,6 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             cadenceDuration,
             cadenceInterval
         );
-        console.log()
         if (preset.scaleName === 'randomMajor') {
             this.presetScale = preset.scaleName
         } else if (preset.scaleName === 'randomMinor') {
@@ -74,7 +73,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
     }
 
 
-    _nextQuestion() {
+    async _nextQuestion() {
         this.currentScale = typeof this.presetScale === 'string' ?
             this.presetScale.toString() : this.presetScale.copy()
         let currentScale = undefined;
@@ -148,7 +147,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             this.currentHiddenNote.octave = randomIntInRange(3, 6);
         }
 
-        this._playQuestion();
+        await this._playQuestion();
     }
 
     _fillWorkField() {
@@ -205,10 +204,10 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                     this.notesDuration,
                 );
 
-                this._increaseRightAnswer();
-                setTimeout(() => {
+                new Promise(resolve => setTimeout(resolve, 800)).then(() => {
+                    this.stopAllSounds();
                     this._nextQuestion();
-                }, 800);
+                });
             } else {
                 this.piano.highlight.setDanger();
                 this.piano.highlightKey(indexKeyEl, this.notesDuration);
@@ -223,7 +222,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         return this.currentEnabledNotes[randomIndex];
     }
 
-    _playQuestion() {
+    async _playQuestion() {
         this.stopAllSounds();
         this.piano.cancelAllHighlights();
         this.piano.isHighlightAvailable = true;
@@ -245,12 +244,15 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
         this.currentCadenceSkips -= 1;
 
 
-        let timeoutId = setTimeout(() => {
-            this.piano.isHighlightAvailable = false;
-            this.piano.player.playNote(this.currentHiddenNote, this.notesDuration)
-            this.piano.isPressAvailable = true;
-        }, totalCadenceDuration);
-        this.timeouts.push(timeoutId);
+        await new Promise(resolve => {
+            const timeoutId = setTimeout(() => {
+                this.piano.isHighlightAvailable = false;
+                this.piano.player.playNote(this.currentHiddenNote, this.notesDuration);
+                this.piano.isPressAvailable = true;
+                resolve();  // Resolve promise after timeout
+            }, totalCadenceDuration);
+            this.timeouts.push(timeoutId);
+        });
     }
 
     _createBtnPlayCurrentHiddenNote() {

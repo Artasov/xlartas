@@ -13,6 +13,10 @@ class TrainerPreset(models.Model):
         PhrygianHalfCadence = 'PhrygianHalfCadence'
         BackdoorCadence = 'BackdoorCadence'
 
+    class TrainerType(models.TextChoices):
+        PredictNoteAlen = 'PredictNoteAlen'
+        PredictNoteAlenForListen = 'PredictNoteAlenForListen'
+
     class Scale(models.TextChoices):
         C = 'C'
         Cm = 'Cm'
@@ -45,6 +49,11 @@ class TrainerPreset(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='trainer_presets', verbose_name='Author')
     priority = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=100, unique=True, verbose_name="Name")
+    type = models.CharField(
+        max_length=30,
+        default=TrainerType.PredictNoteAlen,
+        choices=TrainerType.choices,
+        verbose_name="Trainer Type")
     category = models.ForeignKey('TrainerPresetCategory', on_delete=models.CASCADE, verbose_name="Category")
     desc = models.TextField(max_length=400, blank=True, verbose_name="Description")
     scale_name = models.CharField(

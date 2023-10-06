@@ -9,6 +9,7 @@ import {getNotesBetween, getRandomScaleName} from "../shared/shared_funcs.js";
 import Scale from "../shared/classes/Scale.js";
 import AudioPianoPlayer from "./classes/pianos/AudioPianoPlayer.js";
 import {preloadSounds, setSoundSettings} from "./trainerSounds.js";
+import PredictNoteAlenTrainerForListen from "./classes/trainers/PredictNoteAlenTrainerForListen.js";
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {trigger: 'focus'}))
@@ -33,6 +34,7 @@ window.addEventListener('load', function () {
     initCircleHarmony();
     (async () => {
         trainerPresetsAll = await fetchTrainerPresets();
+        console.log(trainerPresetsAll)
         populatePresetAccordion(trainerPresetsAll, 'trainer-presets-container');
     })();
 });
@@ -64,19 +66,31 @@ export function createAndStartTrainer(presetName, presetCategory) {
     }
 
     const currentPreset = trainerPresetsAll[presetCategory][presetName];
+    const currentPresetType = currentPreset.type;
+    if (currentPresetType === 'PredictNoteAlen') {
+        currentTrainer = new PredictNoteAlenTrainer(
+            currentPreset,
+            workFieldId,
+            pianoPlayer,
+            800, 450, 900, 500
+        );
+        setTimeout(() => {
+            currentTrainer.start();
+        }, 200);
+    }
+    else if (currentPresetType === 'PredictNoteAlenForListen'){
+        currentTrainer = new PredictNoteAlenTrainerForListen(
+            currentPreset,
+            workFieldId,
+            pianoPlayer,
+            800, 450, 900, 500
+        );
+        setTimeout(() => {
+            currentTrainer.start();
+        }, 200);
+    }
 
-    currentTrainer = new PredictNoteAlenTrainer(
-        currentPreset,
-        workFieldId,
-        pianoPlayer,
-        800,
-        450,
-        900,
-        500
-    );
-    setTimeout(() => {
-        currentTrainer.start();
-    }, 200);
+
 }
 
 

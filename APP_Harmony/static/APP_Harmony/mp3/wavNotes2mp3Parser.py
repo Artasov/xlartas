@@ -24,9 +24,9 @@ def parseWavToNotesMp3Files(source_path, out_path, note_duration_ms, octave_from
 
 
 parseWavToNotesMp3Files(
-    source_path='BalladPiano-m/fulls/medium.wav',
-    out_path='BalladPiano-m',
+    source_path='BalladPiano/fulls/short.wav',
+    out_path='BalladPiano',
     note_duration_ms=8000,
     octave_from=2,
-    octave_to=9,
+    octave_to=8,
 )

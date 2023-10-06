@@ -145,6 +145,5 @@ data
 *.css.map
 log.txt
 !/.gitignore
-/APP_Harmony/static/APP_Harmony/mp3/BalladPiano-s/fulls/short.wav
-/APP_Harmony/static/APP_Harmony/mp3/BalladPiano-m/fulls/medium.wav
-/APP_Harmony/static/APP_Harmony/mp3/BalladPiano-l/fulls/long.wav
+/APP_Harmony/static/APP_Harmony/mp3/BalladPiano/fulls/
+/APP_Harmony/static/APP_Harmony/mp3/BalladPiano/fulls

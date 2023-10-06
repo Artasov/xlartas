@@ -137,6 +137,7 @@ export async function fetchTrainerPresets() {
         trainerPresets[category][preset.name] = {
             id: preset.id,
             presetName: preset.name,
+            type: preset.type,
             presetCategory: preset.category,
             presetDesc: preset.desc,
             scaleName: preset.scale_name,
