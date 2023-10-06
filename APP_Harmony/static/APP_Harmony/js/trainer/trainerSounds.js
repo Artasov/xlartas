@@ -29,7 +29,7 @@ export function setSoundSettings() {
     const selectSoundItems = document.querySelectorAll('.select_menu-trainer_sound-item')
 
     const audioContainer = document.querySelector('.audioContainer');
-    const octaves = [3, 4, 5, 6];
+    const octaves = [2, 3, 4, 5, 6, 7];
 
     const savedSoundSelection = localStorage.getItem('savedSoundSelection');
     if (savedSoundSelection) {
