@@ -11,6 +11,7 @@ def get_trainer_sounds():
     return {
         'Oscillator': 'Oscillator',
         'BalladPiano': 'BalladPiano',
+        'BalladGuitar': 'BalladGuitar',
     }
 
 
