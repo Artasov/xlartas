@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from datetime import datetime, timedelta
 
+from django.utils import timezone
 from transliterate import translit
 
 from xLLIB_v1 import random_str
@@ -15,7 +16,7 @@ def format_filehost_upload(instance, filename):
 
 
 def NowPlus30Days():
-    return datetime.utcnow() + timedelta(days=30)
+    return timezone.now() + timedelta(days=30)
 
 
 def GenerateUploadKey():

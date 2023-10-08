@@ -110,7 +110,7 @@ def set_hw_id(request):
     user_.hw_id = hw_id
     user_.save()
     user_licenses = Subscription.objects.filter(user=user_)
-    user_licenses.update(date_expiration=datetime.utcnow())
+    user_licenses.update(date_expiration=timezone.now())
     return Response({'accept': True}, headers={'Content-Type': 'application/json'})
 
 

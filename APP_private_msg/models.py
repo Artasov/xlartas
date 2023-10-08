@@ -1,6 +1,8 @@
 import os
 from datetime import datetime, timedelta
 from django.db import models
+from django.utils import timezone
+
 from xLLIB_v1 import random_str
 
 
@@ -9,7 +11,7 @@ def format_private_file_upload(instance, filename):
 
 
 def NowPlusSevenDays():
-    return datetime.utcnow() + timedelta(days=7)
+    return timezone.now() + timedelta(days=7)
 
 
 def GeneratePrivateKey():

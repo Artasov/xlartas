@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from Core.models import File, User
@@ -102,14 +103,14 @@ class Subscription(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     is_test_period_activated = models.BooleanField(default=False, verbose_name='Is tested')
     count_starts = models.IntegerField(default=0, verbose_name='Starts')
-    date_expiration = models.DateTimeField(blank=True, default=datetime.utcnow)
+    date_expiration = models.DateTimeField(blank=True, default=timezone.now)
 
     def __str__(self):
         return f'{self.user} - {self.product}'
 
 
 def NowPlus30Days():
-    return datetime.utcnow() + timedelta(days=30)
+    return timezone.now() + timedelta(days=30)
 
 
 class PromoGroup(models.Model):

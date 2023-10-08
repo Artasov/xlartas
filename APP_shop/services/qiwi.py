@@ -20,7 +20,7 @@ def create_order(value: int, order_id: str, comment: str = '',
     Specify SECRET_KEY in the environment variable named QIWI_SECRET_KEY.
     Returns the json-encoded content of a response, if any.
     """
-    now = datetime.utcnow()
+    now = timezone.now()
     ex_date = now + timedelta(minutes=expired_minutes)
 
     headers = {'Authorization': f'Bearer {SECRET_KEY}',
