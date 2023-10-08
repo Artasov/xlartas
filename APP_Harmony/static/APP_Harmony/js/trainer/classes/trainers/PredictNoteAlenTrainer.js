@@ -203,7 +203,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
                     this.notesInterval,
                     this.notesDuration,
                 );
-
+                this._increaseRightAnswer();
                 new Promise(resolve => setTimeout(resolve, 800)).then(() => {
                     this.stopAllSounds();
                     this._nextQuestion();
@@ -211,7 +211,7 @@ class PredictNoteAlenTrainer extends BaseAlenTrainer {
             } else {
                 this.piano.highlight.setDanger();
                 this.piano.highlightKey(indexKeyEl, this.notesDuration);
-                this._decreaseWrongAnswer();
+                this._increaseWrongAnswer();
             }
         }
     }

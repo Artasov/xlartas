@@ -60,7 +60,7 @@ class BaseTrainer {
         this.fieldQuestionNumber.innerText = this.currentQuestionNumber;
     }
 
-    _decreaseWrongAnswer() {
+    _increaseWrongAnswer() {
         this.wrongAnswers += 1;
         this.fieldCountWrongAnswers.innerText = this.wrongAnswers;
     }
