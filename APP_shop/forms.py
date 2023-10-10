@@ -63,9 +63,8 @@ class BuyProductProgramForm(FormWithRecaptchaValidator):
             product_, cleaned_data.get('license_type'))
         if not price:
             raise forms.ValidationError(CANNOT_CALC_PRICE)
-
-        if price > user_.balance:
-            forms.ValidationError(BALANCE_TO_SMALL.format(price - user_.balance))
+        if price > int(user_.balance):
+            raise forms.ValidationError(BALANCE_TO_SMALL.format(price - user_.balance))
 
         cleaned_data['price'] = price
         return cleaned_data
