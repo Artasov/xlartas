@@ -18,8 +18,8 @@ class CompanyDataAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'days_from_join', 'email', 'hw_id', 'referral_code']
-    list_editable = ['hw_id', 'referral_code']
+    list_display = ['username', 'days_from_join', 'balance', 'email', 'hw_id', 'referral_code']
+    list_editable = ['balance', 'hw_id', 'referral_code']
     save_on_top = True
     search_fields = ['username']
 
