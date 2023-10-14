@@ -21,7 +21,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'days_from_join', 'balance', 'email', 'hw_id', 'referral_code']
     list_editable = ['balance', 'hw_id', 'referral_code']
     save_on_top = True
-    search_fields = ['username']
+    search_fields = ['username', 'hw_id']
 
     def days_from_join(self, obj: User):
         if obj.date_joined is not None:
