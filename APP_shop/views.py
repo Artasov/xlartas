@@ -131,5 +131,5 @@ def download_program(request, product_id):
 
     file_content = open(product.file.file.path, 'rb').read()
     response = HttpResponse(file_content, content_type='application/force-download')
-    response['Content-Disposition'] = f'attachment; filename={product.file.file.name}'
+    response['Content-Disposition'] = f'attachment; filename={product.name} {product.version}'
     return response

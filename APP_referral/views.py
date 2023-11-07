@@ -39,7 +39,10 @@ def set_my_inviter(request, referral_code: str = None):
     if referral_code is None:
         return render_invalid(request, REF_CODE_NOT_SPECIFIED, 'profile')
     if not User.objects.filter(referral_code=referral_code).exists():
-        return render_invalid(request, REF_CODE_DOES_NOT_EXIST, 'profile')
+        return render_invalid(
+            request,
+            REF_CODE_DOES_NOT_EXIST,
+            'profile')
     if RefLinking.objects.filter(referral__username=request.user.username).exists():
         return render_invalid(request, INVITER_ALREADY_SETTED, 'profile')
     user_ = User.objects.get(username=request.user.username)

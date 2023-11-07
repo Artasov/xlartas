@@ -32,6 +32,7 @@ class DepositForm(FormWithUser, FormWithRecaptchaValidator):
     )
     promo_code = forms.CharField(
         label='Promo',
+        required=False,
         max_length=Promo._meta.get_field('code').max_length,
         widget=forms.TextInput(attrs={'placeholder': 'Promo'})
     )
