@@ -91,7 +91,7 @@ def orders(request):
             user_id=user_.id,
             amount=amount,
             amount_with_promo=amount_with_promo,
-            promo_id=promo.id,
+            promo_id=promo.id if promo else None,
             order_type=Order.OrderType.BALANCE,
             expired_minutes=10,
             comment=f'User deposit: {user_.username}\n')

@@ -71,10 +71,12 @@ class UserCreationForm(ModelFormWithRecaptchaValidator):
 class UserLoginForm(forms.Form):
     login_str = forms.CharField(
         label='Username / Email',
+        required=True,
         max_length=User._meta.get_field('username').max_length,
         widget=forms.TextInput(attrs={'placeholder': 'Username / Email'}))
     password = forms.CharField(
         label='Password',
+        required=True,
         max_length=User._meta.get_field('password').max_length,
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
