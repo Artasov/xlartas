@@ -34,12 +34,16 @@
                 <form class="bg-transparent" method="post"
                       action="{% url 'shop:activate_test_period' %}">{% csrf_token %}
                     <div class="modal-header d-flex gap-2">
-                        <h1 class="fs-2 m-0 mx-auto text-white-90">{{ product.long_name }} Test</h1>
+                        {% with product.long_name|length as name_length %}
+                            <h1 class="m-0 mx-auto text-white-90 {% if name_length > 4 %}fs-4{% else %}fs-2{% endif %}">{{ product.long_name }}
+                                Test</h1>
+                        {% endwith %}
+
                         <button type="button" class="btn-close"
                                 onclick="closeModal('modalTestPeriod{{ product.name }}{{ product.id }}')"></button>
                     </div>
-                    <div class="modal-body d-flex flex-column mt-3 px-2">
-                        <p class="text-dark-emphasis">
+                    <div class="modal-body d-flex flex-column mt-3 px-2 no_scrollbar">
+                        <p class="text-dark-emphasis ">
                             &nbsp;&nbsp;&nbsp;&nbsp;После активации вам будет выдано {{ product.test_period_days }}
                             дня/дней полной лицензии
                             на {{ product.name }}.
@@ -66,24 +70,35 @@
                     <div class="col fcc pe-3 py-2 pe-2">
                         <div class="fcc mx-auto" style="width: 195px;">
                             <div class="fcc">
-                                <h1 class="fs-1 fw-8 d-inline text-white text-center"
-                                >{{ product.long_name }}</h1>
+                                {% with product.long_name|length as name_length %}
+                                    <h1 class="fw-8 d-inline text-white text-center {% if name_length > 5 %}fs-2{% else %}fs-1{% endif %}">{{ product.long_name }}</h1>
+                                {% endwith %}
+
                             </div>
                             <div class="fcc gap-2" style="width: 195px;">
-                                <div class="frc">
-                                    <div class="btn-radio btn-radio-1 bg-black-15 px-3 py-2 rounded-3 btn-radio-1-active-2 m-0"
-                                         style="width: 150px;"
-                                         onclick="showModal('modal{{ product.name }}{{ product.id }}')">
-                                        <p class="text-white-90 m-0">Купить</p>
-                                        <p class="text-white-90 m-0 btn-radio-1-price">{{ product.price_week }} ₽</p>
+                                {% if product.name != 'xLMACROS' %}
+                                    <div class="frc">
+                                        <div class="btn-radio btn-radio-1 bg-black-15 px-3 py-2 rounded-3 btn-radio-1-active-2 m-0"
+                                             style="width: 150px;"
+                                             onclick="showModal('modal{{ product.name }}{{ product.id }}')">
+                                            <p class="text-white-90 m-0">Купить</p>
+                                            <p class="text-white-90 m-0 btn-radio-1-price {% if product.price_week > 9999 %} fs-7 mt-1 {% endif %} ">{{ product.price_week }}
+                                                ₽</p>
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
                                 {% if not is_test_period_activated %}
                                     <div class="frc">
                                         <div class="btn-radio btn-radio-1 bg-black-15 px-3 py-2 rounded-3 btn-radio-1-active-2 m-0"
                                              style="width: 170px; filter: hue-rotate(240deg)"
                                              onclick="showModal('modalTestPeriod{{ product.name }}{{ product.id }}')">
-                                            <p class="text-white-90 m-0 w-100 text-center">Тестовый период</p>
+                                            <p class="text-white-90 m-0 w-100 text-center">
+                                                {% if product.name == 'xLMACROS' %}
+                                                    Бета тест на год
+                                                {% else %}
+                                                    Тестовый период
+                                                {% endif %}
+                                            </p>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -141,6 +156,9 @@
                             {% endif %}
                             {% if product.name == 'xLGUILD' %}
                                 {% include 'APP_shop/includes/xlguild_custom_product_block.html' %}
+                            {% endif %}
+                            {% if product.name == 'xLMACROS' %}
+                                {% include 'APP_shop/includes/xlmacros_custom_product_block.html' %}
                             {% endif %}
 
                         </div>
