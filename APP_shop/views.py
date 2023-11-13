@@ -1,4 +1,6 @@
 import logging
+import os
+
 import environ
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -126,10 +128,17 @@ def product_program(request, program_name: str):
 
 def download_program(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+
     if product.type != Product.ProductType.program or not product.file:
         return HttpResponse(status=404)
 
-    file_content = open(product.file.file.path, 'rb').read()
+    file_path = product.file.file.path
+    file_content = open(file_path, 'rb').read()
+
+    _, file_extension = os.path.splitext(file_path)
+    if not file_extension:
+        file_extension = '.exe'
+
     response = HttpResponse(file_content, content_type='application/force-download')
-    response['Content-Disposition'] = f'attachment; filename={product.name} {product.version}.exe'
+    response['Content-Disposition'] = f'attachment; filename={product.name} {product.version}{file_extension}'
     return response
