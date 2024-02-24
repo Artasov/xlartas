@@ -14,13 +14,13 @@ BASE_DATA_DIR = BASE_DIR / 'data'
 
 # Environment helper
 env = os.environ.get
-DEV = True#bool(int(env('DEV', 0)))
+DEV = bool(int(env('DEV', 0)))
 
 dotenv_path = os.path.join(BASE_DIR, '.env.prod')
 load_dotenv(dotenv_path=dotenv_path)
 
 # Basic settings
-DEBUG = True#bool(int(env('DEBUG', 0)))
+DEBUG = bool(int(env('DEBUG', 0)))
 SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = ['localhost', env('MAIN_DOMAIN', '127.0.0.1')] + env('ALLOWED_HOSTS', '').split(',')
 ROOT_URLCONF = 'apps.Core.urls'
