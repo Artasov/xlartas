@@ -1,44 +1,49 @@
+import logging
 import os
+import os
+from datetime import timedelta
+from pathlib import Path
 from pathlib import Path
 
-import environ
+from dotenv import load_dotenv
 from transliterate.utils import _
 
-env = environ.Env()
+env = os.environ.get
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DATA_DIR = BASE_DIR / 'data'
-
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+dotenv_path = os.path.join(BASE_DIR, '.env.prod')
+load_dotenv(dotenv_path=dotenv_path)
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = bool(int(env('DEBUG')))
 DEV = bool(int(env('DEV')))
 ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
 
+# Security and domain settings
+HTTPS = bool(int(env('HTTPS', 0)))
+MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
+DOMAIN_URL = f'https://{MAIN_DOMAIN}'
+
+# Database and cache
+REDIS_BASE_URL = 'redis://127.0.0.1:6379/'
+REDIS_URL = env('REDIS_URL', REDIS_BASE_URL + '0')
+REDIS_CACHE_URL = env('REDIS_CACHE_URL', REDIS_BASE_URL + '1')
+DJANGO_REDIS_LOGGER = 'RedisLogger'
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+# SESSION_ENGINE = 'redis_sessions.session'
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_AGE = 86400  # seconds 2 days
+# SESSION_SAVE_EVERY_REQUEST = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
+
 AUTH_USER_MODEL = 'Core.User'
-LOCAL_APPS = [
-    'freekassa',
-    'Core',
-    'APP_referral',
-    'APP_shop',
-    'APP_api',
-    'APP_private_msg',
-    'APP_filehost',
-    'APP_resource_pack',
-    'APP_tests',
-    'APP_Harmony'
-]
-THIRD_APPS = [
-    'rest_framework',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.telegram',
-    'allauth.socialaccount.providers.github',
-]
-DJANGO_APPS = [
+INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,10 +51,30 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'django.contrib.sites'
-]
+    'django.contrib.sites',
 
-INSTALLED_APPS = LOCAL_APPS + THIRD_APPS + DJANGO_APPS
+    'rest_framework',
+    'adrf',
+    'channels',
+    'django_celery_beat',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.telegram',
+    'allauth.socialaccount.providers.github',
+
+    'apps.freekassa',
+    'apps.Core',
+    'apps.referral',
+    'apps.shop',
+    'apps.programs_api',
+    'apps.private_msg',
+    'apps.filehost',
+    'apps.resource_pack',
+    'apps.harmony'
+]
 
 MIDDLEWARE = [
     'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
@@ -61,82 +86,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
-LANGUAGES = [
-    ('en', _('English')),
-    ('ru', _('Russian')),
-    # Добавьте другие языки по необходимости
-]
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'base_formatter': {
-            'format': '{levelname} {asctime} {module}: {message}',
-            'style': '{',
-            'encoding': 'utf-8',
-        }
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
-            'formatter': 'base_formatter',
-            'encoding': 'utf-8',
-        },
-    },
-    'loggers': {
-        'Core': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
-        },
-        'APP_shop': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
-        },
-        'APP_api': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
-        },
-    },
-}
-
-if DEV:
-    import mimetypes
-
-    mimetypes.add_type("application/javascript", ".js", True)
-    INTERNAL_IPS = ('127.0.0.1',)
-    MIDDLEWARE += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-    INSTALLED_APPS += (
-        'debug_toolbar',
-    )
-    DEBUG_TOOLBAR_PANELS = [
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.logging.LoggingPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
-    ]
-
-    DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': False,
-    }
 
 SITE_ID = int(env('SITE_ID'))
 
@@ -150,9 +101,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         }
     },
-    'telegram': {
-        'TOKEN': env('TG_TOKEN')
-    }
+    'telegram': {'TOKEN': env('TG_TOKEN')}
 }
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -162,8 +111,9 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400  # 1 day in seconds
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/m'
+}
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = 'main'  # default to /accounts/profile
 ACCOUNT_USERNAME_REQUIRED = True
@@ -206,75 +156,129 @@ REST_FRAMEWORK = {
 }
 
 REFERRER_POLICY = 'origin'
-WSGI_APPLICATION = 'config.wsgi.application'
-ROOT_URLCONF = 'Core.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'Core' / 'templates'
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+WSGI_APPLICATION = None  # 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+ROOT_URLCONF = 'apps.Core.urls'
 
 if DEV:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': env('DATABASES_USER'),
-            'USER': env('DATABASES_USER'),
-            'PASSWORD': env('DATABASES_PASS'),
-            'PORT': env('DATABASES_PORT'),
-            'HOST': env('DATABASES_HOST'),
-
-            "OPTIONS": {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
-                # 'init_command': "SET GLOBAL max_connections = 100000",
-            },
+            'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': env('SQL_DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
+            'USER': env('SQL_USER', 'admin'),
+            'PASSWORD': env('SQL_PASSWORD', 'admin'),
+            'HOST': env('SQL_HOST', 'localhost'),
+            'PORT': env('SQL_PORT', '5432'),
         }
     }
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
-]
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        'LOCATION': REDIS_CACHE_URL,
+        'OPTIONS': {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
-LANGUAGE_CODE = 'ru-RU'
-TIME_ZONE = 'Europe/Moscow'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
+# Base directories
+BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DATA_DIR = BASE_DIR / 'data'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR.parent / 'static'
-STATICFILES_DIRS = [
-    BASE_DIR / 'Core' / 'static',
-]
-if DEBUG:
+# Environment helper
+env = os.environ.get
+DEV = bool(int(env('DEV', 0)))
+
+dotenv_path = os.path.join(BASE_DIR, '.env.prod')
+load_dotenv(dotenv_path=dotenv_path)
+
+# Basic settings
+DEBUG = bool(int(env('DEBUG', 0)))
+SECRET_KEY = env('SECRET_KEY')
+ALLOWED_HOSTS = ['localhost', env('MAIN_DOMAIN', '127.0.0.1')] + env('ALLOWED_HOSTS', '').split(',')
+ROOT_URLCONF = 'apps.Core.urls'
+
+# Security and domain settings
+HTTPS = bool(int(env('HTTPS', 0)))
+MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
+DOMAIN_URL = f'https://{MAIN_DOMAIN}'
+
+# Database and cache
+REDIS_BASE_URL = 'redis://127.0.0.1:6379/'
+REDIS_URL = env('REDIS_URL', REDIS_BASE_URL + '0')
+REDIS_CACHE_URL = env('REDIS_CACHE_URL', REDIS_BASE_URL + '1')
+DJANGO_REDIS_LOGGER = 'RedisLogger'
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+# SESSION_ENGINE = 'redis_sessions.session'
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_AGE = 86400  # seconds 2 days
+# SESSION_SAVE_EVERY_REQUEST = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
+
+# Static and media files
+MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = True
+MINIO_USE_HTTPS = False
+if DEV:
+    STATIC_ROOT = BASE_DIR.parent / 'static'
+    MEDIA_ROOT = BASE_DIR.parent / 'media'
+    STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 else:
-    MEDIA_URL = '/static/media/'
-MEDIA_ROOT = BASE_DIR.parent / 'static' / 'media'
+    STATIC_ROOT = None
+    MEDIA_ROOT = None
+    STATIC_URL = f'{DOMAIN_URL}/static/'
+    MEDIA_URL = f'{DOMAIN_URL}/media/'
+
+    MINIO_ENDPOINT = 'minio:9000'
+    MINIO_EXTERNAL_ENDPOINT = f'{MAIN_DOMAIN}'  # For external access use Docker hostname and MinIO port
+    MINIO_ACCESS_KEY = env('MINIO_ACCESS_KEY')
+    MINIO_SECRET_KEY = env('MINIO_SECRET_KEY')
+    MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = bool(int(env('MINIO_EXTERNAL_ENDPOINT_USE_HTTPS') or 0))
+    MINIO_USE_HTTPS = bool(int(env('MINIO_USE_HTTPS') or 0))
+    MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
+    MINIO_CONSISTENCY_CHECK_ON_START = True
+    MINIO_PRIVATE_BUCKETS = [
+        'django-backend-dev-private',
+    ]
+    MINIO_PUBLIC_BUCKETS = [
+        'django-backend-dev-public',
+    ]
+    MINIO_POLICY_HOOKS: list[tuple[str, dict]] = []
+    MINIO_STATIC_FILES_BUCKET = 'static'  # Just bucket name may be 'my-static-files'?
+    MINIO_MEDIA_FILES_BUCKET = 'media'  # Just bucket name may be 'media-files'?
+    MINIO_BUCKET_CHECK_ON_SAVE = True  # Default: True // Creates a cart if it doesn't exist, then saves it
+    MINIO_PUBLIC_BUCKETS.append(MINIO_STATIC_FILES_BUCKET)
+    MINIO_PUBLIC_BUCKETS.append(MINIO_MEDIA_FILES_BUCKET)
+    MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+    MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
+    DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
+    STATICFILES_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
+    FILE_UPLOAD_MAX_MEMORY_SIZE = 65536
+
+# Celery
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Internationalization
+LANGUAGE_CODE = 'ru-RU'
+TIME_ZONE = env('TZ', 'Europe/Moscow')
+USE_I18N = True
+USE_TZ = True
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env('GOOGLE_RECAPTCHA_SECRET_KEY')
 GOOGLE_RECAPTCHA_SITE_KEY = env('GOOGLE_RECAPTCHA_SITE_KEY')
@@ -294,7 +298,7 @@ PAGINATION_RP_COUNT = 12
 MAX_UPLOAD_SIZE_ANON_MB = 30
 MAX_UPLOAD_SIZE_AUTHED_MB = 100
 
-CONFIRMATION_CODE_LIFE_TIME = 1  # minutes
+CONFIRMATION_CODE_LIFE_TIME = 5  # minutes
 
 DEVELOPER_EMAIL = 'ivanhvalevskey@gmail.com'
 
@@ -308,3 +312,127 @@ FK_SHOP_ID = '666'
 MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
 DEFAULT_DEPOSIT_AMOUNT = 100
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+    # Добавьте другие языки по необходимости
+]
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'base_formatter': {
+            'format': '{levelname} {asctime} {module}: {message}',
+            'style': '{',
+            'encoding': 'utf-8',
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
+            'formatter': 'base_formatter',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'Core': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+        'shop': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+        'programs_api': {
+            'handlers': ['file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / 'apps' / 'Core' / 'templates'
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+if DEV:
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
+    INTERNAL_IPS = ('127.0.0.1',)
+    MIDDLEWARE += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+    }
+
+log = logging.getLogger('base')
+
+log.info('#####################################')
+log.info('########## Server Settings ##########')
+log.info('#####################################')
+log.info(f'{BASE_DIR=}')
+log.info(f'{MAIN_DOMAIN=}')
+log.info(f'{HTTPS=}')
+# log.info(f'{MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=}')
+# log.info(f'{MINIO_USE_HTTPS=}')
+log.info(f'{ALLOWED_HOSTS=}')
+log.info(f'{DEBUG=}')
+log.info(f'{DEV=}')
+log.info(f'{ASGI_APPLICATION=}')
+log.info(f'{WSGI_APPLICATION=}')
+log.info(f'{STATIC_URL=}')
+log.info(f'{MEDIA_URL=}')
+log.info(f'{STATIC_ROOT=}')
+log.info(f'{MEDIA_ROOT=}')
+log.info('#####################################')
+log.info('#####################################')
+log.info('#####################################')

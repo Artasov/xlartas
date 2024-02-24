@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import Counter
 
-import environ
-
 ALPHABETS = {
     'en': 'abcdefghijklmnopqrstuvwxyz',
     'ru': 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
@@ -64,9 +62,6 @@ def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool =
         return rand_str.upper()
     else:
         return rand_str
-
-
-
 
 
 def del_dict_values_by_value(d: dict, value=None, count_to_delete='ALL') -> dict:
