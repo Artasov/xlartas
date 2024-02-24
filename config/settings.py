@@ -228,8 +228,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
 
 # Static and media files
-MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = True
-MINIO_USE_HTTPS = False
 if DEV:
     STATIC_ROOT = BASE_DIR.parent / 'static'
     MEDIA_ROOT = BASE_DIR.parent / 'media'

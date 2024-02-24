@@ -1,12 +1,21 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
+from django.db import connections
 from django.forms import modelform_factory
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from apps.referral.models import RefLinking
-from apps.shop.models import Product, Subscription, Order
-from apps.shop.services.qiwi import create_payment_and_order
+from django_minio_backend import MinioBackend
+from django_redis import get_redis_connection
+
 from apps.Core.forms import DonateFrom
 from apps.Core.models import *
 from apps.Core.services.services import base_view
+from apps.referral.models import RefLinking
+from apps.shop.models import Product, Subscription, Order
+from apps.shop.services.qiwi import create_payment_and_order
+
+log = logging.getLogger('base')
 
 
 @base_view
@@ -57,3 +66,27 @@ def donate(request):
         return redirect(order_.pay_link)
     print(1)
     return render(request, 'Core/donate.html', {'form': form})
+
+
+def health_test(request) -> HttpResponse:
+    # Проверка Redis
+    if not get_redis_connection().flushall():
+        log.error('Redis have not yet come to life')
+        return HttpResponse("Redis error", status=500)
+    try:
+        connections['default'].cursor()
+    except Exception as e:
+        log.error(f'DB have not yet come to life: {str(e)}')
+        return HttpResponse(f"DB error: {str(e)}", status=500)
+
+    minio_available = MinioBackend().is_minio_available()  # An empty string is fine this time
+    if not minio_available:
+        log.error(f'MINIO ERROR')
+        log.error(minio_available.details)
+        log.error(f'MINIO_STATIC_FILES_BUCKET = {MinioBackend().MINIO_STATIC_FILES_BUCKET}')
+        log.error(f'MINIO_MEDIA_FILES_BUCKET = {MinioBackend().MINIO_MEDIA_FILES_BUCKET}')
+        log.error(f'base_url = {MinioBackend().base_url}')
+        log.error(f'base_url_external = {MinioBackend().base_url_external}')
+        log.error(f'HTTP_CLIENT = {MinioBackend().HTTP_CLIENT}')
+        return HttpResponse(f"MINIO ERROR", status=500)
+    return HttpResponse("OK")

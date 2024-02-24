@@ -6,13 +6,17 @@ from django.urls import include
 from django.urls import path
 from django.views.generic import TemplateView
 
-from . import views
-from .views.auth.auth_views import password_reset_confirmation, password_reset, signin, signup, signup_confirmation
+from .views.auth.auth_views import (
+    password_reset_confirmation,
+    password_reset,
+    signin, signup,
+    signup_confirmation)
 from .views.auth.soc_auth_views import vk_auth, telegram_auth
-from .views.common_views import profile, main, donate
+from .views.common_views import profile, main, donate, health_test
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health_test/', health_test),
     path('accounts/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('apps.programs_api.urls')),
