@@ -178,8 +178,8 @@ else:
 
     MINIO_ENDPOINT = 'minio:9000'
     MINIO_EXTERNAL_ENDPOINT = f'{MAIN_DOMAIN}'  # For external access use Docker hostname and MinIO port
-    MINIO_ACCESS_KEY = env('MINIO_ACCESS_KEY')
-    MINIO_SECRET_KEY = env('MINIO_SECRET_KEY')
+    MINIO_ACCESS_KEY = env('MINIO_ROOT_USER')
+    MINIO_SECRET_KEY = env('MINIO_ROOT_USER')
     MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = bool(int(env('MINIO_EXTERNAL_ENDPOINT_USE_HTTPS') or 0))
     MINIO_USE_HTTPS = bool(int(env('MINIO_USE_HTTPS') or 0))
     MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
