@@ -8,17 +8,22 @@ from pathlib import Path
 from dotenv import load_dotenv
 from transliterate.utils import _
 
-env = os.environ.get
-
+# Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DATA_DIR = BASE_DIR / 'data'
+
+# Environment helper
+env = os.environ.get
+DEV = True#bool(int(env('DEV', 0)))
+
 dotenv_path = os.path.join(BASE_DIR, '.env.prod')
 load_dotenv(dotenv_path=dotenv_path)
 
+# Basic settings
+DEBUG = True#bool(int(env('DEBUG', 0)))
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = bool(int(env('DEBUG')))
-DEV = bool(int(env('DEV')))
-ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
+ALLOWED_HOSTS = ['localhost', env('MAIN_DOMAIN', '127.0.0.1')] + env('ALLOWED_HOSTS', '').split(',')
+ROOT_URLCONF = 'apps.Core.urls'
 
 # Security and domain settings
 HTTPS = bool(int(env('HTTPS', 0)))
@@ -40,6 +45,10 @@ SESSION_COOKIE_AGE = 86400  # seconds 2 days
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
+
+REFERRER_POLICY = 'origin'
+WSGI_APPLICATION = None  # 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
 
 AUTH_USER_MODEL = 'Core.User'
 INSTALLED_APPS = [
@@ -155,78 +164,6 @@ REST_FRAMEWORK = {
     }
 }
 
-REFERRER_POLICY = 'origin'
-WSGI_APPLICATION = None  # 'config.wsgi.application'
-ASGI_APPLICATION = 'config.asgi.application'
-ROOT_URLCONF = 'apps.Core.urls'
-
-if DEV:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': env('SQL_DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
-            'USER': env('SQL_USER', 'admin'),
-            'PASSWORD': env('SQL_PASSWORD', 'admin'),
-            'HOST': env('SQL_HOST', 'localhost'),
-            'PORT': env('SQL_PORT', '5432'),
-        }
-    }
-
-CACHES = {
-    'default': {
-        "BACKEND": "django_redis.cache.RedisCache",
-        'LOCATION': REDIS_CACHE_URL,
-        'OPTIONS': {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
-# Base directories
-BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DATA_DIR = BASE_DIR / 'data'
-
-# Environment helper
-env = os.environ.get
-DEV = bool(int(env('DEV', 0)))
-
-dotenv_path = os.path.join(BASE_DIR, '.env.prod')
-load_dotenv(dotenv_path=dotenv_path)
-
-# Basic settings
-DEBUG = bool(int(env('DEBUG', 0)))
-SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ['localhost', env('MAIN_DOMAIN', '127.0.0.1')] + env('ALLOWED_HOSTS', '').split(',')
-ROOT_URLCONF = 'apps.Core.urls'
-
-# Security and domain settings
-HTTPS = bool(int(env('HTTPS', 0)))
-MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
-DOMAIN_URL = f'https://{MAIN_DOMAIN}'
-
-# Database and cache
-REDIS_BASE_URL = 'redis://127.0.0.1:6379/'
-REDIS_URL = env('REDIS_URL', REDIS_BASE_URL + '0')
-REDIS_CACHE_URL = env('REDIS_CACHE_URL', REDIS_BASE_URL + '1')
-DJANGO_REDIS_LOGGER = 'RedisLogger'
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-# SESSION_ENGINE = 'redis_sessions.session'
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_CACHE_ALIAS = "default"
-SESSION_COOKIE_AGE = 86400  # seconds 2 days
-# SESSION_SAVE_EVERY_REQUEST = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
-
 # Static and media files
 if DEV:
     STATIC_ROOT = BASE_DIR.parent / 'static'
@@ -273,7 +210,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 # Internationalization
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = 'en-us'
 TIME_ZONE = env('TZ', 'Europe/Moscow')
 USE_I18N = True
 USE_TZ = True
@@ -286,7 +223,7 @@ EMAIL_HOST = 'smtp.timeweb.ru'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 25
-EMAIL_USE_SSL = False
+EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
 SERVER_EMAIL = env('EMAIL_HOST_USER')
@@ -311,52 +248,102 @@ MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
 DEFAULT_DEPOSIT_AMOUNT = 100
 
-LANGUAGES = [
-    ('en', _('English')),
-    ('ru', _('Russian')),
-    # Добавьте другие языки по необходимости
-]
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'base_formatter': {
-            'format': '{levelname} {asctime} {module}: {message}',
-            'style': '{',
-            'encoding': 'utf-8',
+if DEV:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
-            'formatter': 'base_formatter',
-            'encoding': 'utf-8',
-        },
-    },
-    'loggers': {
-        'Core': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
-        },
-        'shop': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
-        },
-        'programs_api': {
-            'handlers': ['file'],
-            'level': 'DEBUG' if DEBUG else 'WARNING',
-            'propagate': True,
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': env('SQL_DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
+            'USER': env('SQL_USER', 'admin'),
+            'PASSWORD': env('SQL_PASSWORD', 'admin'),
+            'HOST': env('SQL_HOST', 'localhost'),
+            'PORT': env('SQL_PORT', '5432'),
+        }
+    }
+
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        'LOCATION': REDIS_CACHE_URL,
+        'OPTIONS': {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            # "hosts": [('redis', 6379)],
+            "hosts": [('127.0.0.1', 6379)],
         },
     },
 }
+# Logging
+LOG_PREFIX = env('LOG_PREFIX', 'server')
+logs_prod_dir = os.path.join(BASE_DIR, 'logs/django_prod', LOG_PREFIX)
+logs_dev_dir = os.path.join(BASE_DIR, 'logs/django_dev', LOG_PREFIX)
+logs_sql_prod_dir = os.path.join(logs_prod_dir, 'sql')
+logs_sql_dev_dir = os.path.join(logs_dev_dir, 'sql')
 
+for path in [logs_prod_dir, logs_dev_dir, logs_sql_prod_dir, logs_sql_dev_dir]:
+    os.makedirs(path, exist_ok=True)
+
+if not DEV:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'base_formatter': {
+                'format': '{levelname} {asctime} {module}: {message}',
+                'style': '{',
+            }
+        },
+        'handlers': {
+            'file_sql': {
+                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
+                'class': 'logging.handlers.TimedRotatingFileHandler',
+                'filename': os.path.join(logs_sql_dev_dir if DEBUG and DEV else logs_sql_prod_dir, 'sql.log'),
+                'when': 'midnight',
+                'backupCount': 30,  # How many days to keep logs
+                'formatter': 'base_formatter',
+                'encoding': 'utf-8',
+            },
+            'file': {
+                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
+                'class': 'logging.handlers.TimedRotatingFileHandler',
+                'filename': os.path.join(logs_dev_dir if DEBUG and DEV else logs_prod_dir, 'django.log'),
+                'when': 'midnight',
+                'backupCount': 30,  # How many days to keep logs
+                'formatter': 'base_formatter',
+                'encoding': 'utf-8',
+            },
+            'console': {
+                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
+                'class': 'logging.StreamHandler',
+                'formatter': 'base_formatter',
+            },
+        },
+        'loggers': {
+            'base': {
+                'handlers': ['console', 'file'],
+                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
+                'propagate': True,
+            },
+            # 'django.db.backends': {  # All SQL
+            #     'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
+            #     'handlers': ['file_sql'],
+            #     'propagate': False,
+            # },
+        },
+    }
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
@@ -411,6 +398,15 @@ if DEV:
     DEBUG_TOOLBAR_CONFIG = {
         'INTERCEPT_REDIRECTS': False,
     }
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+    # Добавьте другие языки по необходимости
+]
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 log = logging.getLogger('base')
 

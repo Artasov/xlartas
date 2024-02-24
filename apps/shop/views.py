@@ -15,8 +15,6 @@ from .services.orders_service import get_user_orders
 from .services.products_service import get_product_program_count_starts, is_test_period_activated
 from .services.qiwi import create_payment_and_order
 
-logger = logging.getLogger(__name__)
-
 
 def catalog(request):
     return render(request, 'APP_shop/catalog.html', context={
