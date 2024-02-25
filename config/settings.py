@@ -103,7 +103,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'apps.Core.middleware.ForceHttpsMiddleware',
 ]
 
 SITE_ID = int(env('SITE_ID'))
@@ -149,11 +148,6 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
@@ -173,6 +167,12 @@ REST_FRAMEWORK = {
 }
 
 # Static and media files
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
+MINIO_USE_HTTPS = None
 if DEV:
     STATIC_ROOT = BASE_DIR.parent / 'static'
     MEDIA_ROOT = BASE_DIR.parent / 'media'
@@ -415,9 +415,6 @@ LANGUAGES = [
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
-
-MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
-MINIO_USE_HTTPS = None
 
 log = logging.getLogger('base')
 
