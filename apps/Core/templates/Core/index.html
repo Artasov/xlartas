@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta name="lava-verify" content="d12422d0edc803ad" />
 
     <title>{% block title %} {% endblock %}</title>
     {% block link_content_css %}{% endblock %}
@@ -52,6 +51,8 @@
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'Core/img/logo.png' %}">
     <script src="{% static 'Core/js/kit.fontawesome.js' %}"></script>
     <meta id="theme" content="{{ theme }}">
+
+    <meta name="lava-verify" content="d12422d0edc803ad"/>
 </head>
 <body class="bg-dark">
 <img class="bg-image" id="bg-image" src="{% static 'Core/img/theme_bg.jpg' %}" alt="#">
