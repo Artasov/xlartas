@@ -44,10 +44,10 @@ services:
     hostname: redis
     image: redis:alpine
     restart: always
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server /redis.conf
     volumes:
       - ./data/redis/:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis.conf:/redis.conf
     ports:
       - "6379:6379"
     healthcheck:
