@@ -50,7 +50,7 @@ CSRF_TRUSTED_ORIGINS = [f'http{"s" if not DEV else ""}://{MAIN_DOMAIN}']
 #     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 #     SECURE_SSL_REDIRECT = True
 
-REFERRER_POLICY = 'origin'
+# REFERRER_POLICY = 'origin'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # REFERRER_POLICY = 'origin'
 WSGI_APPLICATION = None  # 'config.wsgi.application'
@@ -80,7 +80,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.telegram',
     'allauth.socialaccount.providers.github',
 
-    'apps.flex_static',
     'apps.freekassa',
     'apps.Core',
     'apps.referral',
@@ -94,7 +93,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
 
-    'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
+    # 'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
