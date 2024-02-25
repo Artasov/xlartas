@@ -46,6 +46,10 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [f'http{"s" if not DEV else ""}://{MAIN_DOMAIN}']
 
+if HTTPS:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+
 REFERRER_POLICY = 'origin'
 
 # REFERRER_POLICY = 'origin'
@@ -436,21 +440,3 @@ log.info(f'{MEDIA_ROOT=}')
 log.info('#####################################')
 log.info('#####################################')
 log.info('#####################################')
-print('#####################################')
-print('########## Server Settings ##########')
-print('#####################################')
-print(f'{BASE_DIR=}')
-print(f'{MAIN_DOMAIN=}')
-print(f'{HTTPS=}')
-print(f'{ALLOWED_HOSTS=}')
-print(f'{DEBUG=}')
-print(f'{DEV=}')
-print(f'{ASGI_APPLICATION=}')
-print(f'{WSGI_APPLICATION=}')
-print(f'{STATIC_URL=}')
-print(f'{MEDIA_URL=}')
-print(f'{STATIC_ROOT=}')
-print(f'{MEDIA_ROOT=}')
-print('#####################################')
-print('#####################################')
-print('#####################################')
