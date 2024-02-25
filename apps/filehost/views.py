@@ -12,7 +12,7 @@ from .models import Upload, UploadedFile
 @login_required(redirect_field_name=None, login_url='signin')
 def list_user_upload(request):
     uploads_ = Upload.objects.filter(user=request.user)
-    return render(request, 'APP_filehost/list.html', {'uploads_': uploads_})
+    return render(request, 'filehost/list.html', {'uploads_': uploads_})
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -52,7 +52,7 @@ def read(request, key=None):
     if delete_in < 1:
         return render_invalid(request, NOT_FOUND_404, 'host:create')
 
-    return render(request, 'APP_filehost/read.html', {
+    return render(request, 'filehost/read.html', {
         'upload': upload_,
         'files': uploadedfile_,
         'delete_in': delete_in,
@@ -62,7 +62,7 @@ def read(request, key=None):
 
 def create(request):
     if request.method != 'POST':
-        return render(request, 'APP_filehost/create.html')
+        return render(request, 'filehost/create.html')
 
     if request.user.is_authenticated:
         MAX_UPLOAD_SIZE = settings.MAX_UPLOAD_SIZE_AUTHED_MB * 1024 * 1024
@@ -70,13 +70,13 @@ def create(request):
         MAX_UPLOAD_SIZE = settings.MAX_UPLOAD_SIZE_ANON_MB * 1024 * 1024
 
     if not check_recaptcha_is_valid(request.POST.get('g-recaptcha-response')):
-        return render(request, 'APP_filehost/create.html', {'invalid': RECAPTCHA_INVALID})
+        return render(request, 'filehost/create.html', {'invalid': RECAPTCHA_INVALID})
 
     files = request.FILES.getlist('files[]')
     name = request.POST.get('name', None)
 
     if not files or not name:
-        return render(request, 'APP_filehost/create.html', {'invalid': NOT_ALL_FIELDS_FILLED})
+        return render(request, 'filehost/create.html', {'invalid': NOT_ALL_FIELDS_FILLED})
 
     # CHECK SIZE
     total_size = sum(file.size for file in files)

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from apps.harmony.forms.forms import TrainerPresetForm
 from apps.harmony.models import TrainerPreset
 from apps.harmony.serializers import TrainerPresetSerializer, TrainerPresetResultSerializer
-from apps.harmony.services.Harmony.chords_progressions import ChordsProgressionsGenerator
+from apps.harmony.services.harmony.chords_progressions import ChordsProgressionsGenerator
 from apps.Core.services.services import base_view
 
 
@@ -42,20 +42,20 @@ def add_trainer_preset(request):
             trainer_preset.save()
             # После успешного сохранения, например, перенаправьте на главную страницу
             return redirect('harmony:trainer')
-        return render(request, 'APP_Harmony/trainer.html', {'form': form})
-    return render(request, 'APP_Harmony/trainer.html', {'form': TrainerPresetForm()})
+        return render(request, 'harmony/trainer.html', {'form': form})
+    return render(request, 'harmony/trainer.html', {'form': TrainerPresetForm()})
 
 
 @base_view
 def trainer(request):
-    return render(request, 'APP_Harmony/trainer.html', {
+    return render(request, 'harmony/trainer.html', {
         'form': TrainerPresetForm(),
     })
 
 
 @base_view
 def chords(request):
-    return render(request, 'APP_Harmony/chords.html')
+    return render(request, 'harmony/chords.html')
 
 
 @api_view()

@@ -1,6 +1,6 @@
 from django import template
 
-from apps.harmony.services.Harmony.chords_progressions import accords_dict, NOTE_NAME_DICT, MODE_NAME_DICT, NOTE_TYPE, \
+from apps.harmony.services.harmony.chords_progressions import accords_dict, NOTE_NAME_DICT, MODE_NAME_DICT, NOTE_TYPE, \
     AVAILABLE_QUALITY
 
 register = template.Library()

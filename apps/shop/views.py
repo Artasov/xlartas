@@ -17,7 +17,7 @@ from .services.qiwi import create_payment_and_order
 
 
 def catalog(request):
-    return render(request, 'APP_shop/catalog.html', context={
+    return render(request, 'shop/catalog.html', context={
         'products': Product.objects.order_by('name').reverse(), })
 
 
@@ -48,7 +48,7 @@ def buy_product_program(request):
         execute_order(order_)
         return redirect('profile')
 
-    return render(request, 'APP_shop/product_program.html', {
+    return render(request, 'shop/product_program.html', {
         'form': form,
         'product': product_,
         'is_test_period_activated': is_test_period_activated(
@@ -95,7 +95,7 @@ def orders(request):
 
         return redirect(order_.pay_link)
 
-    return render(request, 'APP_shop/orders.html', {
+    return render(request, 'shop/orders.html', {
         'form': form,
         'orders': get_user_orders(user_id=user_.id),
     })
@@ -112,7 +112,7 @@ def product_program(request, program_name: str):
     if not product_.available:
         return redirect('shop:catalog')
 
-    return render(request, 'APP_shop/product_program.html', {
+    return render(request, 'shop/product_program.html', {
         'product': product_,
         'is_test_period_activated': is_test_period_activated(
             user_id=request.user.id, product_id=product_.id),

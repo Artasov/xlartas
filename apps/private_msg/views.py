@@ -14,7 +14,7 @@ from apps.Core.services.services import render_invalid, check_recaptcha_is_valid
 @api_view(['GET', 'POST'])
 def create(request):
     if request.method != 'POST':
-        return render(request, 'APP_private_msg/create.html')
+        return render(request, 'private_msg/create.html')
 
     if not check_recaptcha_is_valid(request.POST.get('g-recaptcha-response')):
         return Response({'data': RECAPTCHA_INVALID}, status=status.HTTP_403_FORBIDDEN)
@@ -37,7 +37,7 @@ def preread(request, key=None,):
     except PrivateMsg.DoesNotExist:
         return render_invalid(request, NOT_FOUND_404, 'private-msg:create')
 
-    return render(request, 'APP_private_msg/read.html', {'key': key})
+    return render(request, 'private_msg/read.html', {'key': key})
 
 
 def read(request, key=None):
@@ -50,7 +50,7 @@ def read(request, key=None):
 
     msg_.delete()
 
-    return render(request, 'APP_private_msg/read.html', {
+    return render(request, 'private_msg/read.html', {
         'read': True,
         'msg': msg_
     })

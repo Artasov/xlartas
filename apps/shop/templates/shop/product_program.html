@@ -1,5 +1,5 @@
 {% extends 'Core/index.html' %}
-{% load APP_shop_tags %}
+{% load shop_tags %}
 {% load static %}
 {% load Core_tags %}
 {% load Core_tags %}
@@ -28,7 +28,7 @@
          data-bs-theme="dark">
 
         {% include 'Core/includes/form.html' with form=form errors_only=True %}
-        {% include 'APP_shop/includes/modal_buy_license.html' with product=product %}
+        {% include 'shop/includes/modal_buy_license.html' with product=product %}
         <div class="u-modal flex-column justify-content-center"
              id="modalTestPeriod{{ product.name }}{{ product.id }}">
             <div class="modal-content mx-auto p-3 rounded-3">
@@ -153,13 +153,13 @@
                     <div class="col fcc position-relative py-3 ps-3 pe-1">
                         <div class="fcc">
                             {% if product.name == 'xLUMRA' %}
-                                {% include 'APP_shop/includes/xlumra_custom_product_block.html' %}
+                                {% include 'shop/includes/xlumra_custom_product_block.html' %}
                             {% endif %}
                             {% if product.name == 'xLGUILD' %}
-                                {% include 'APP_shop/includes/xlguild_custom_product_block.html' %}
+                                {% include 'shop/includes/xlguild_custom_product_block.html' %}
                             {% endif %}
                             {% if product.name == 'xLMACROS' %}
-                                {% include 'APP_shop/includes/xlmacros_custom_product_block.html' %}
+                                {% include 'shop/includes/xlmacros_custom_product_block.html' %}
                             {% endif %}
 
                         </div>

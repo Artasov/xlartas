@@ -27,7 +27,7 @@ def referrals_list(request):
         referral_info['bonus'] = ref_link_.given
         referrals_info.append(referral_info)
 
-    return render(request, 'APP_referral/list.html', {
+    return render(request, 'referral/list.html', {
         'referrals_info': referrals_info
     })
 
@@ -52,4 +52,4 @@ def set_my_inviter(request, referral_code: str = None):
 
 
 def referral_program_info(request):
-    return render(request, 'APP_referral/info.html')
+    return render(request, 'referral/info.html')

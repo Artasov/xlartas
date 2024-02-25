@@ -115,7 +115,7 @@ def search(request):
 def catalog(request):
     authors_ = User.objects.filter(rp__available=True).annotate(rp_count=Count('rp')).order_by('-rp_count')
 
-    return render(request, 'APP_resource_pack/catalog.html', {
+    return render(request, 'resource_pack/catalog.html', {
         'rp': ResourcePack.objects.first(),
         'authors': authors_
     })
@@ -128,7 +128,7 @@ def detail(request, slug=None):
         rp = ResourcePack.objects.get(slug=slug)
     except ResourcePack.DoesNotExist:
         return render_invalid(request, NOT_FOUND_404, 'rp:catalog')
-    return render(request, 'APP_resource_pack/detail.html', {'rp': rp})
+    return render(request, 'resource_pack/detail.html', {'rp': rp})
 
 
 @login_required(redirect_field_name=None, login_url='signin')
@@ -136,7 +136,7 @@ def detail(request, slug=None):
 @api_view(['GET', 'POST'])
 def add_new(request):
     if request.method != 'POST':
-        return render(request, 'APP_resource_pack/add_new.html', {
+        return render(request, 'resource_pack/add_new.html', {
             'resolutions': ResourcePack.Resolution.values, 'styles': ResourcePack.Style.values,
             'colors': ResourcePack.Color.values, 'mapRpOverviewFile': File.objects.get(name='mapRpOverviewFile')})
 

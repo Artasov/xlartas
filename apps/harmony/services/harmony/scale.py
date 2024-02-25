@@ -1,7 +1,7 @@
 from pychord.constants import NOTE_VAL_DICT
 from pychord.constants.scales import RELATIVE_KEY_DICT
 
-from apps.harmony.services.Harmony.chord import Chord
+from apps.harmony.services.harmony.chord import Chord
 
 QUALITIES_TRIADS_SEVENTHS = (
     ("", "-", "maj", "m", "min"), ("7", "M7", "maj7", "m7")

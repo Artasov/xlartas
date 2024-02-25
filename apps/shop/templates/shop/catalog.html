@@ -1,5 +1,5 @@
 {% extends 'Core/index.html' %}
-{% load APP_shop_tags %}
+{% load shop_tags %}
 {% load static %}
 {% load Core_tags %}
 {% load recaptcha_tags %}
@@ -33,7 +33,7 @@
             <div class="row frc my-2 gap-2">
                 {% for product in products %}
                     {% if product.type == product.ProductType.program %}
-                        {% include 'APP_shop/includes/modal_buy_license.html' with product=product %}
+                        {% include 'shop/includes/modal_buy_license.html' with product=product %}
                     {% endif %}
                     <div class="col-5 col-md-3 text-dark-emphasis product mx-0 mx-sm-2 my-2 text-decoration-none"
                          id="product-{{ product.id }}" style="background-color: rgba(50,50,50, 0.2)">

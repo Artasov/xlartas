@@ -7,7 +7,7 @@ from pychord import ChordProgression
 from pychord.constants import VAL_NOTE_DICT
 from pychord.constants.scales import RELATIVE_KEY_DICT
 
-from apps.harmony.services.Harmony.scale import Scale
+from apps.harmony.services.harmony.scale import Scale
 
 scales = (
     'C', 'Am', 'G', 'Em', 'D', 'Bm',
