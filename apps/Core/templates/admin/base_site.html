@@ -1,5 +1,6 @@
 {% extends "admin/base.html" %}
-{% load static %}
+{% load flex_static %}
+{% load Core_tags %}
 
 {% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 

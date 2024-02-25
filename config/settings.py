@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.telegram',
     'allauth.socialaccount.providers.github',
 
+    'apps.flex_static',
     'apps.freekassa',
     'apps.Core',
     'apps.referral',
