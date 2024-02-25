@@ -44,7 +44,7 @@ SESSION_COOKIE_AGE = 86400  # seconds 2 days
 # SESSION_SAVE_EVERY_REQUEST = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
+CSRF_TRUSTED_ORIGINS = [f'http{"s" if not DEV else ""}://{MAIN_DOMAIN}']
 
 REFERRER_POLICY = 'origin'
 
@@ -410,6 +410,10 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
+
+MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
+MINIO_USE_HTTPS = None
+
 log = logging.getLogger('base')
 
 log.info('#####################################')
@@ -418,8 +422,8 @@ log.info('#####################################')
 log.info(f'{BASE_DIR=}')
 log.info(f'{MAIN_DOMAIN=}')
 log.info(f'{HTTPS=}')
-# log.info(f'{MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=}')
-# log.info(f'{MINIO_USE_HTTPS=}')
+log.info(f'{MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=}') if MINIO_EXTERNAL_ENDPOINT_USE_HTTPS else None
+log.info(f'{MINIO_USE_HTTPS=}') if MINIO_USE_HTTPS else None
 log.info(f'{ALLOWED_HOSTS=}')
 log.info(f'{DEBUG=}')
 log.info(f'{DEV=}')
@@ -432,3 +436,21 @@ log.info(f'{MEDIA_ROOT=}')
 log.info('#####################################')
 log.info('#####################################')
 log.info('#####################################')
+print('#####################################')
+print('########## Server Settings ##########')
+print('#####################################')
+print(f'{BASE_DIR=}')
+print(f'{MAIN_DOMAIN=}')
+print(f'{HTTPS=}')
+print(f'{ALLOWED_HOSTS=}')
+print(f'{DEBUG=}')
+print(f'{DEV=}')
+print(f'{ASGI_APPLICATION=}')
+print(f'{WSGI_APPLICATION=}')
+print(f'{STATIC_URL=}')
+print(f'{MEDIA_URL=}')
+print(f'{STATIC_ROOT=}')
+print(f'{MEDIA_ROOT=}')
+print('#####################################')
+print('#####################################')
+print('#####################################')
