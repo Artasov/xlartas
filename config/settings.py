@@ -92,7 +92,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'apps.Core.middleware.ForceHttpsMiddleware'
+    'apps.Core.middleware.ForceHttpsMiddleware',
 
     'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
