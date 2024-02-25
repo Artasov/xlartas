@@ -92,7 +92,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'apps.Core.middleware.ForceHttpsMiddleware',
 
     'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -104,6 +103,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'apps.Core.middleware.ForceHttpsMiddleware',
 ]
 
 SITE_ID = int(env('SITE_ID'))
@@ -241,7 +241,7 @@ PAGINATION_RP_COUNT = 12
 MAX_UPLOAD_SIZE_ANON_MB = 30
 MAX_UPLOAD_SIZE_AUTHED_MB = 100
 
-CONFIRMATION_CODE_LIFE_TIME = 5  # minutes
+CONFIRMATION_CODE_LIFE_TIME = 10  # minutes
 
 DEVELOPER_EMAIL = 'ivanhvalevskey@gmail.com'
 

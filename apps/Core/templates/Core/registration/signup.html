@@ -17,7 +17,7 @@
             <form class="px-3 py-2 text-center" method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
 
-                {% include 'Core/includes/../includes/form.html' with form=form %}
+                {% include 'Core/includes/form.html' with form=form %}
 
                 <small class="form-text text-muted" style="opacity: 70%;">
                     By registering on the site you confirm that you have read
@@ -30,7 +30,7 @@
                 <div class="text-center pt-3 pb-1">
                     <button id='btn-recaptcha-marked' type="submit" id="button" data-text="SIGN UP" data-text-done=""
                             class="btn-13 bg-transparent text-dark-emphasis mt-3"></button>
-                    {% include 'Core/includes/../includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
+                    {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
                 </div>
 
                 <div id="vk_auth" class="mx-auto mt-2 rounded-4"></div>

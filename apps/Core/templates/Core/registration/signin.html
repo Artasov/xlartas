@@ -19,7 +19,7 @@
         <h1 class="text-dark-emphasis fs-1 text-center">SIGN IN</h1>
         <form class="px-3 py-1 text-center" method="post" action="{% url 'signin' %}">{% csrf_token %}
 
-            {% include 'Core/includes/../includes/form.html' with form=form %}
+            {% include 'Core/includes/form.html' with form=form %}
 
             <div class="text-center pt-3 pb-1">
                 <button type="submit" id="button" data-text="SIGN IN" data-text-done=""
