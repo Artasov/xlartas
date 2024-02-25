@@ -92,6 +92,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'apps.Core.middleware.ForceHttpsMiddleware'
+
     'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -413,7 +415,6 @@ LANGUAGES = [
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
-
 
 MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
 MINIO_USE_HTTPS = None
