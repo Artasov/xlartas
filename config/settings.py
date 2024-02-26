@@ -200,13 +200,13 @@ else:
     ]
     MINIO_POLICY_HOOKS: list[tuple[str, dict]] = []
     MINIO_STATIC_FILES_BUCKET = 'static'  # Just bucket name may be 'my-static-files'?
-    MINIO_MEDIA_FILES_BUCKET = 'media'  # Just bucket name may be 'media-files'?
+    MINIO_MEDIA_FILES_BUCKET = 'static'  # Just bucket name may be 'media-files'?
     MINIO_BUCKET_CHECK_ON_SAVE = True  # Default: True // Creates a cart if it doesn't exist, then saves it
     MINIO_PUBLIC_BUCKETS.append(MINIO_STATIC_FILES_BUCKET)
     MINIO_PUBLIC_BUCKETS.append(MINIO_MEDIA_FILES_BUCKET)
     MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
     MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
-    DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
+    DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
     STATICFILES_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
     FILE_UPLOAD_MAX_MEMORY_SIZE = 65536
 
