@@ -193,12 +193,8 @@ else:
     MINIO_USE_HTTPS = bool(int(env('MINIO_USE_HTTPS') or 0))
     MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
     MINIO_CONSISTENCY_CHECK_ON_START = True
-    MINIO_PRIVATE_BUCKETS = [
-        'django-backend-dev-private',
-    ]
-    MINIO_PUBLIC_BUCKETS = [
-        'django-backend-dev-public',
-    ]
+    MINIO_PRIVATE_BUCKETS = []
+    MINIO_PUBLIC_BUCKETS = []
     MINIO_POLICY_HOOKS: list[tuple[str, dict]] = []
     MINIO_STATIC_FILES_BUCKET = 'static'  # Just bucket name may be 'my-static-files'?
     MINIO_MEDIA_FILES_BUCKET = 'media'  # Just bucket name may be 'media-files'?

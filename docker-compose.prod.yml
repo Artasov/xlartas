@@ -104,10 +104,8 @@ services:
 
       - LOG_PREFIX=server
     volumes:
-      - ./data:/data
+      - ./data:/srv/data
       - ./logs:/srv/logs
-      - ../static:/static
-      - ../media:/media
     ports:
       - "8000:8000"
     restart: always
@@ -136,6 +134,7 @@ services:
       context: .
       dockerfile: DockerfileCelery
     volumes:
+      - ./data:/srv/data
       - ./logs:/srv/logs
       - ./entrypoint_celery.sh:/srv/entrypoint_celery.sh
     links:
