@@ -50,7 +50,7 @@ export function setSoundSettings() {
         const audioFiles = {};
         octaves.forEach(octave => {
             NOTES.forEach(note => {
-                const audio = new Audio(`/static/APP_Harmony/mp3/${soundInput.value}/${encodeURIComponent(note)}${octave}.mp3`);
+                const audio = new Audio(`/static/harmony/mp3/${soundInput.value}/${encodeURIComponent(note)}${octave}.mp3`);
                 audio.preload = 'auto';
                 audioFiles[note + octave] = audio;
             });

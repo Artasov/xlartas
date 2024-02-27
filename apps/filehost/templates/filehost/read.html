@@ -1,7 +1,7 @@
 {% extends 'Core/index.html' %}
 {% load static %}
 {% load Core_tags %}
-{% load APP_filehost_tags %}
+{% load filehost_tags %}
 {% load Core_tags %}
 
 {% block title %}xlartas | host{% endblock %}
@@ -13,7 +13,7 @@
 {% block meta_twitter_description %}File host{% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'APP_filehost/js/read.js' %}"></script>
+    <script src="{% static 'filehost/js/read.js' %}"></script>
 {% endblock %}
 
 {% block content %}
