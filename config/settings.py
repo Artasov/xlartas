@@ -4,9 +4,10 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from pathlib import Path
-from  django_minio_backend.models import MinioBackend
+
 from dotenv import load_dotenv
 from transliterate.utils import _
+
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DATA_DIR = BASE_DIR / 'data'
@@ -174,6 +175,7 @@ STATICFILES_FINDERS = [
 ]
 MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
 MINIO_USE_HTTPS = None
+
 if DEV:
     STATIC_ROOT = BASE_DIR.parent / 'static'
     MEDIA_ROOT = BASE_DIR.parent / 'media'
@@ -193,8 +195,12 @@ else:
     MINIO_USE_HTTPS = bool(int(env('MINIO_USE_HTTPS') or 0))
     MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
     MINIO_CONSISTENCY_CHECK_ON_START = True
-    MINIO_PRIVATE_BUCKETS = []
-    MINIO_PUBLIC_BUCKETS = []
+    MINIO_PRIVATE_BUCKETS = [
+        'django-backend-dev-private',
+    ]
+    MINIO_PUBLIC_BUCKETS = [
+        'django-backend-dev-public',
+    ]
     MINIO_POLICY_HOOKS: list[tuple[str, dict]] = []
     MINIO_STATIC_FILES_BUCKET = 'static'  # Just bucket name may be 'my-static-files'?
     MINIO_MEDIA_FILES_BUCKET = 'media'  # Just bucket name may be 'media-files'?
