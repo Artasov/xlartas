@@ -148,8 +148,6 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
@@ -199,7 +197,8 @@ else:
         'django-backend-dev-private',
     ]
     MINIO_PUBLIC_BUCKETS = [
-        'django-backend-dev-public',
+        'static',
+        'media',
     ]
     MINIO_POLICY_HOOKS: list[tuple[str, dict]] = []
     MINIO_STATIC_FILES_BUCKET = 'static'  # Just bucket name may be 'my-static-files'?
