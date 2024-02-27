@@ -4,10 +4,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from pathlib import Path
-
+from  django_minio_backend.models import MinioBackend
 from dotenv import load_dotenv
 from transliterate.utils import _
-
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DATA_DIR = BASE_DIR / 'data'
@@ -148,6 +147,8 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
@@ -206,7 +207,7 @@ else:
     MINIO_PUBLIC_BUCKETS.append(MINIO_MEDIA_FILES_BUCKET)
     MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
     MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
-    DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
+    DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
     STATICFILES_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
     FILE_UPLOAD_MAX_MEMORY_SIZE = 65536
 
