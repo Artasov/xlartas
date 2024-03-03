@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: `${window.location.protocol}//${window.location.hostname}:8000/`,
+    baseURL: `${window.location.protocol}//${window.location.hostname}${window.location.protocol === 'http:' ? ':8000' : ''}/`,
 });
+
 
 axiosInstance.interceptors.request.use(config => {
     const token = localStorage.getItem('access');
