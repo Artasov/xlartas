@@ -199,18 +199,20 @@ services:
 
   minio:
     hostname: minio
-    image: minio/minio
-    restart: always
+    build:
+      context: .
+      dockerfile: DockerfileMinio
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-    command: sh -c "/data/init-minio.sh && minio server /data --console-address :9001"
+    command: sh -c "/data/entrypoint-minio.sh && minio server /data --console-address :9001"
     volumes:
       - ./backend/data/minio/data:/data
       - ./backend/data/minio/config:/root/.minio
+      - ./entrypoint-minio.sh:/opt/entrypoint-minio.sh
     networks:
       - net
     healthcheck:
