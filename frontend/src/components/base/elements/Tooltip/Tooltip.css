@@ -1,0 +1,2 @@
+#tooltip-root-wrapper{pointer-events:none;position:absolute;left:0;top:0;width:100%;height:100%}#tooltip-root-wrapper #tooltip-root{pointer-events:none;width:100%;height:100%}.tooltip-container{display:inline-block}.tooltip-content{transition:all .3s ease-in-out;font-size:.86rem;position:fixed;backdrop-filter:blur(0px);background:rgba(0,0,0,0.2);color:#fff;padding:.3rem .6rem;border-radius:4px;z-index:5;white-space:nowrap;opacity:0;pointer-events:none;box-shadow:0 0 .3rem #00000055}
+/*# sourceMappingURL=Tooltip.css.map */

@@ -1,0 +1,13 @@
+.modal-wrapper
+  transition: all 0.4s ease
+  z-index: 4
+  backdrop-filter: blur(0px)
+  .x-modal
+    transition: opacity 0.3s ease, visibility 0.3s
+    opacity: 0
+    visibility: hidden
+
+.show
+  .x-modal
+    opacity: 1
+    visibility: visible

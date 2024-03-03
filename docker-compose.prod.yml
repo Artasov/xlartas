@@ -57,12 +57,23 @@ services:
     networks:
       - net
 
+  react:
+    build:
+      context: .
+      dockerfile: DockerfileReact
+    volumes:
+      - ./frontend/build:/srv/build
+
   web:
     hostname: web
     build:
       context: .
       dockerfile: Dockerfile
       target: prod
+    volumes:
+      - ./frontend/build:/srv/build
+      - ./data:/data
+      - ./logs:/srv/logs
     environment:
       - DEBUG=${DEBUG}
       - DEV=${DEV}
@@ -103,9 +114,6 @@ services:
       - FK_API_KEY=${FK_API_KEY}
 
       - LOG_PREFIX=server
-    volumes:
-      - ./data:/srv/data
-      - ./logs:/srv/logs
     ports:
       - "8000:8000"
     restart: always
