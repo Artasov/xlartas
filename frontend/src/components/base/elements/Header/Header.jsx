@@ -24,7 +24,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/themes/')
+        axios.get('/api/themes/')
             .then(response => {
                 const imageUrls = response.data.map(theme => theme.bg_image);
                 setBackgroundImages(imageUrls);
