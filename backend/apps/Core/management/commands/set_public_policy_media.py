@@ -7,7 +7,7 @@ from minio.error import S3Error
 
 
 class Command(BaseCommand):
-    help = 'Makes the media bucket public'
+    help = 'Make the media bucket public'
 
     def add_arguments(self, parser):
         parser.add_argument('media_path', type=str, help='Path to the media folder')
