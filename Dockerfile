@@ -25,7 +25,7 @@ RUN echo "server pool.ntp.org iburst" >> /etc/chrony/chrony.conf
 
 # Установка Supervisor
 RUN apk update && apk add supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ###########
 # DEV #
