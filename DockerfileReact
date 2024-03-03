@@ -3,6 +3,6 @@ FROM node:21-alpine
 WORKDIR /srv
 COPY ./frontend .
 
-RUN npm install
-RUN npm run build
-COPY build /srv/build
+CMD["npm", "install"]
+CMD["npm", "run", "build"]
+
