@@ -13,10 +13,10 @@ RUN apk add netcat-openbsd
 # RUN python -m venv /venv
 # ENV PATH="/srv/venv/bin:$PATH"
 RUN python -m pip install --upgrade pip
-RUN python -m pip install -r /srv/requirements.txt
-RUN dos2unix /srv/entrypoint.prod.sh
+RUN python -m pip install -r /srv/backend/requirements.txt
+RUN dos2unix /srv/backend/entrypoint.prod.sh
 RUN apk del dos2unix
-RUN chmod +x /srv/entrypoint.prod.sh
+RUN chmod +x /srv/backend/entrypoint.prod.sh
 
 # Установка Chrony для синхронизации времени
 RUN apk add --no-cache chrony
@@ -31,10 +31,10 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # DEV #
 ###########
 FROM base as dev
-ENTRYPOINT ["sh", "/srv/entrypoint.dev.sh"]
+ENTRYPOINT ["sh", "/srv/backend/entrypoint.dev.sh"]
 
 #############
 # PROD #
 #############
 FROM base as prod
-ENTRYPOINT ["sh", "/srv/entrypoint.prod.sh"]
+ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]

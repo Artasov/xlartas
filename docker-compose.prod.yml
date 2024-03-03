@@ -71,9 +71,9 @@ services:
       dockerfile: Dockerfile
       target: prod
     volumes:
-      - ./frontend/build:/srv/build
-      - ./data:/data
-      - ./logs:/srv/logs
+      - ./frontend/build:/srv/frontend/build
+      - ./backend/data:/srv/backend/data
+      - ./backend/logs:/srv/backend/logs
     environment:
       - DEBUG=${DEBUG}
       - DEV=${DEV}
@@ -142,9 +142,9 @@ services:
       context: .
       dockerfile: DockerfileCelery
     volumes:
-      - ./data:/srv/data
-      - ./logs:/srv/logs
-      - ./entrypoint_celery.sh:/srv/entrypoint_celery.sh
+      - ./backend/data:/srv/backend/data
+      - ./backend/logs:/srv/backend/logs
+      - ./entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
     links:
       - redis
     environment:
@@ -207,8 +207,8 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     command: server /data --console-address :9001
     volumes:
-      - ./data/minio/data:/data
-      - ./data/minio/config:/root/.minio
+      - ./backend/data/minio/data:/data
+      - ./backend/data/minio/config:/root/.minio
     networks:
       - net
     healthcheck:
