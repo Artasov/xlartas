@@ -91,7 +91,7 @@ INSTALLED_APPS = [
     'apps.filehost',
     'apps.harmony',
 
-    # 'frontend',
+    'frontend',
 ]
 
 REST_FRAMEWORK = {
