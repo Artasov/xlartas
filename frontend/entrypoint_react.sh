@@ -7,4 +7,4 @@ npm install
 echo "NPM INSTALL END"
 echo "NPM RUN BUILD"
 npm run build
-echo "NPM RUN BUILD END"
+echo "SUCCESS NPM RUN BUILD END"
