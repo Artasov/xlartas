@@ -9,25 +9,14 @@ from minio.error import S3Error
 class Command(BaseCommand):
     help = 'Make the media bucket public'
 
-    def add_arguments(self, parser):
-        parser.add_argument('media_path', type=str, help='Path to the media folder')
-
     def handle(self, *args, **kwargs):
-        media_path = kwargs['media_path']
-        if not os.path.isdir(media_path):
-            self.stdout.write(self.style.ERROR(f'{media_path} is not a valid directory'))
-            return
-
-        # Убедитесь, что эти значения соответствуют вашей конфигурации
         minio_client = Minio(
             settings.MINIO_ENDPOINT,
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
-            secure=settings.MINIO_USE_HTTPS  # Используйте False, если ваш MinIO работает без SSL
+            secure=settings.MINIO_USE_HTTPS
         )
-
         bucket_name = "media"
-
         try:
             policy = '''{
                 "Version": "2012-10-17",
