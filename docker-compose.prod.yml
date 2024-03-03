@@ -104,7 +104,7 @@ services:
 
       - LOG_PREFIX=server
     volumes:
-      - ./data:/srv/data
+      - ./data:/data
       - ./logs:/srv/logs
     ports:
       - "8000:8000"

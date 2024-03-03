@@ -1,0 +1,105 @@
+{% extends 'Core/base.html' %}
+{% load shop_tags %}
+{% load static %}
+{% load Core_tags %}
+{% load recaptcha_tags %}
+
+{% block title %}xlartas{% endblock %}
+
+{% block meta_keywords %}магазин shop каталог catalog{% endblock %}
+{% block meta_description %}Shop{% endblock %}
+{% block meta_og_description %}Каталог{% endblock %}
+{% block meta_twitter_description %}Shop{% endblock %}
+
+{% block link_content_css %}
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/modal.css' %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'shop/js/shop.js' %}"></script>
+    <script src="{% static 'Core/js/modal.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div id="content" class="d-none container shop
+    no_scrollbar overflow-y-scroll disable-tap-and-selection mb-0"
+         data-bs-theme="dark">
+        {% if invalid %}
+            <div class="text-center"><span class="text-danger">{{ invalid }}</span></div>
+        {% endif %}
+        <script>
+            getCookie()
+        </script>
+        <div class="mx-md-auto p-0">
+            <div class="row frc my-2 gap-2">
+                {% for product in products %}
+                    {% if product.type == product.ProductType.PROGRAM %}
+                        {% include 'shop/includes/modal_buy_license.html' with product=product %}
+                    {% endif %}
+                    <div class="col-5 col-md-3 text-dark-emphasis product mx-0 mx-sm-2 my-2 text-decoration-none"
+                         id="product-{{ product.id }}" style="background-color: rgba(50,50,50, 0.2)">
+                        <div class="py-3 d-flex flex-column justify-content-sm-between h-100 text-center">
+                            <a href="{% url 'shop:product_program' product.name %}"
+                               class="d-flex flex-column gap-3 gap-md-0 text-decoration-none px-2">
+                                <div class="d-flex flex-column justify-content-md-center mx-auto">
+                                    <div class="product-img-block">
+                                        <img src="{{ product.img.url }}" class="product-img" alt="">
+                                        <img src="{{ product.img.url }}" class="product-img product-img-bg" alt="">
+                                        {% if product.discount > 0 %}
+                                            <div class="sale-block fcc text-center">
+                                                <span class="text-dark-emphasis fs-6">-{{ product.discount }}%</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="product-text-block px-lg-3 mt-md-3 mt-0 fcc">
+                                    <p class="fw-bold fs-3 mb-md-2 mb-1 product-name text-white">{{ product.long_name }}</p>
+                                    <p class="text-break text-white text-opacity-75 m-0 only_pc">{{ product.desc_short }}</p>
+                                </div>
+                            </a>
+                            <div class="d-flex flex-column justify-content-end mt-3 mt-sm-2">
+                                <div class="price-block fcc gap-2 gap-sm-3">
+                                    <div class="frc">
+                                        <span class="m-0 fw-light fs-3 price">
+                                            {% if product.discount > 0 %}
+                                                <span class="price-without_sale fw-lighter fs-6 text-white-50 text-center text-decoration-line-through">
+                                                    {% if product.type == product.ProductType.ACCOUNT %}
+                                                        {{ product.price_forever }}
+                                                    {% else %}
+                                                        {{ product.price_week }}
+                                                    {% endif %}
+                                                </span>
+                                            {% endif %}
+                                            ₽
+                                            {% if product.type == 'ACCOUNT' %}
+                                                {% get_price_with_discount product.price_forever product.discount %}
+                                            {% else %}
+                                                {% get_price_with_discount product.price_week product.discount %}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="btn-buy">
+                                        {% if product.type == product.ProductType.ACCOUNT %}
+                                            <div>
+                                                <a class="btn-1 w-100 text-decoration-none fs-5 fw-7"
+                                                   href="{% url 'shop:product_program' product_name=product.name %}">
+                                                    Купить
+                                                </a>
+                                            </div>
+                                        {% elif product.type == product.ProductType.PROGRAM %}
+                                            <div>
+                                                <button class="btn-1 w-100 text-decoration-none fs-5 fw-7"
+                                                        onclick="showModal('modal{{ product.name }}{{ product.id }}')">
+                                                    Купить
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

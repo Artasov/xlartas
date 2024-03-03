@@ -1,0 +1,69 @@
+{% extends 'Core/base.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load Core_tags %}
+{% load socialaccount %}
+{% block title %}xlartas | SIGN UP{% endblock %}
+
+{% block meta_keywords %}signup registration{% endblock %}
+{% block meta_description %}Sign Up{% endblock %}
+{% block meta_og_description %}Регистрация{% endblock %}
+{% block meta_twitter_description %}Sign Up{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none  fcc flex-grow-1"
+         data-bs-theme="dark" style="max-width: 400px;">
+        <div class="row disable-tap-and-selection">
+            <h1 class="text-dark-emphasis fs-1 text-center">SIGN UP</h1>
+            <form class="px-3 py-2 text-center" method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                {% include 'Core/includes/form.html' with form=form %}
+
+                <small class="form-text text-muted" style="opacity: 70%;">
+                    By registering on the site you confirm that you have read
+                    <a href="{% url 'privacy_policy' %}"
+                       class="text-primary text-decoration-none">privacy policy</a> and
+                    <a href="{% url 'terms_and_conditions' %}"
+                       class="text-primary text-decoration-none">terms and conditions</a>
+                </small>
+
+                <div class="text-center pt-3 pb-1">
+                    <button id='btn-recaptcha-marked' type="submit" id="button" data-text="SIGN UP" data-text-done=""
+                            class="btn-13 bg-transparent text-dark-emphasis mt-3"></button>
+                    {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
+                </div>
+
+                <div id="vk_auth" class="mx-auto mt-2 rounded-4"></div>
+                <script type="text/javascript">
+                    VK.init({apiId: 51423204});
+                    VK.Widgets.Auth("vk_auth", {"authUrl": "/accounts/vk/login/callback"});
+                    document.getElementById('vk_auth').style.display = 'none';
+                </script>
+                <div class="text-center pt-3 pb-2">
+                    <div class="frc">
+                        <a href="{% provider_login_url "google" %}" class="px-1"><img
+                                src="{% static 'Core/img/google.png' %}" alt=""
+                                style="max-width: 40px;"></a>
+                        <div class="px-1" id="TelegramBtn"><img
+                                src="{% static 'Core/img/telegram.png' %}" alt=""
+                                style="max-width: 40px;"></div>
+                        <div class="px-1"
+                             onclick="document.getElementById('vk_auth').style.display = 'block';">
+                            <img src="{% static 'Core/img/vkontakte.png' %}" alt=""
+                                 style="max-width: 40px;"></div>
+                        <a href="{% provider_login_url "github" %}" class="px-1"><img
+                                src="{% static 'Core/img/github-mark-white.png' %}" alt=""
+                                style="max-width: 40px;"></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let tg_btn = document.getElementById('TelegramBtn')
+        let clone_tg = document.getElementsByClassName('telegram-auth')[0].cloneNode(true)
+        tg_btn.appendChild(clone_tg)
+    </script>
+
+{% endblock %}
