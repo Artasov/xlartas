@@ -137,7 +137,8 @@ const SoftwareProductCard = ({software}) => {
                             </div>
                         </Modal>
                     </div>
-                    <a className={`${software.review_url ? '' : 'opacity-25'} fccc text-white-70`} target={'_blank'}
+                    <a className={`${software.review_url ? '' : 'opacity-25'} fccc text-white-70`}
+                       rel={'noopener noreferrer'} target={'_blank'}
                        style={{width: '1em', height: '1em'}}
                        href={software.review_url}>
                         <FontAwesomeIcon style={{fontSize: "1em"}} icon={faYoutube} className={'hover-scale-5'}/>

@@ -20,12 +20,12 @@ const About = () => {
                 Contact Us
             </Typography>
             <div className={'fc w-min-content mx-auto'}>
-                <Link className={'frsc gap-2 text-decoration-none'} target={'_blank'}
+                <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'} target={'_blank'}
                       href="mailto:ivanhvalevskey@gmail.com" color="inherit">
                     <EmailIcon fontSize="large"/>
                     <Typography className={'enable-tap-select-all'}>ivanhvalevskey@gmail.com</Typography>
                 </Link>
-                <Link className={'frsc gap-2 text-decoration-none'} href="https://t.me/artasov/" target={'_blank'}
+                <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'}  href="https://t.me/artasov/" target={'_blank'}
                       color="inherit">
                     <TelegramIcon fontSize="large"/>
                     <Typography className={'enable-tap-select-all'}>@artasov</Typography>
