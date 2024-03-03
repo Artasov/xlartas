@@ -10,6 +10,8 @@ echo "######### Server Starting... ########"
 echo "#####################################"
 
 chronyc tracking
+# shellcheck disable=SC2164
+cd /srv/backend
 # Collect static files into one folder without asking for confirmation
 python manage.py collectstatic --noinput &&
 # Apply migrations to the database
