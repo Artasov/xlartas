@@ -5,3 +5,4 @@ COPY ./frontend .
 
 RUN npm install
 RUN npm run build
+COPY build /srv/build
