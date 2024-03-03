@@ -51,6 +51,7 @@ CSRF_TRUSTED_ORIGINS = [f'http{"s" if not DEV else ""}://{MAIN_DOMAIN}']
 #     SECURE_SSL_REDIRECT = True
 
 # REFERRER_POLICY = 'origin'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # REFERRER_POLICY = 'origin'
 WSGI_APPLICATION = None  # 'config.wsgi.application'
