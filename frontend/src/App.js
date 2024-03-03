@@ -14,6 +14,9 @@ import {ThemeProvider} from "@mui/material";
 import Software from "./pages/Software/Software";
 import Deposit from "./components/base/Payment/Deposit";
 import SoftwareDetail from "./pages/Software/SoftwareDetail";
+import About from "./pages/About";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 class App extends Component {
     render() {
@@ -28,11 +31,13 @@ class App extends Component {
                             <main className={'overflow-y-auto no-scrollbar'}>
                                 <Routes>
                                     <Route path="/example_form" element={<FormExample/>}/>
-
                                     <Route path="/" element={<Home/>}/>
                                     <Route path="/deposit/" element={<Deposit/>}/>
                                     <Route path="/software/" element={<Software/>}/>
                                     <Route path="/software/:softwareName/" element={<SoftwareDetail/>}/>
+                                    <Route path="/about/" element={<About/>}/>
+                                    <Route path="/terms-and-conditions/" element={<TermsAndConditions/>}/>
+                                    <Route path="/privacy-policy/" element={<PrivacyPolicy/>}/>
                                 </Routes>
                             </main>
                             {/*<Footer/>*/}

@@ -11,6 +11,9 @@ const HeaderNavigationMenu = forwardRef(({onHideMenu}, ref) => {
                 <li>
                     <Link to="/software/" className="text-decoration-none text-white-c0" onClick={onHideMenu}>Software</Link>
                 </li>
+                <li>
+                    <Link to="/about/" className="text-decoration-none text-white-c0" onClick={onHideMenu}>About</Link>
+                </li>
                 {isAuthenticated && (
                     <li>
                         {user.is_staff && (

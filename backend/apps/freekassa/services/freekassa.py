@@ -1,4 +1,6 @@
 import hashlib
+import hmac
+from datetime import datetime
 
 from aiohttp import ClientSession
 from django.conf import settings
@@ -16,17 +18,16 @@ class FreeKassa:
         self.api_key = api_key
         self.base_url = 'https://api.freekassa.ru/v1/'
 
-    @staticmethod
-    async def generate_signature(params, secret):
+    def _get_signature(self, params):
         sorted_params = sorted(params.items(), key=lambda x: x[0])
         string_params = '|'.join([str(v) for _, v in sorted_params])
-        signature = hashlib.sha256(f'{string_params}|{secret}'.encode('utf-8')).hexdigest()
-        return signature
+        hash_object = hmac.new(self.api_key.encode(), string_params.encode(), hashlib.sha256)
+        return hash_object.hexdigest()
 
     async def create_order(self, amount, currency, order_id, **kwargs):
         params = {
             'shopId': self.merchant_id,
-            'nonce': kwargs.get('nonce', 123456789),
+            'nonce': 123456789 + int(datetime.now().timestamp()),
             'paymentId': order_id,
             'i': kwargs.get('i', 6),
             'email': kwargs.get('email', ''),
@@ -34,7 +35,8 @@ class FreeKassa:
             'amount': amount,
             'currency': currency,
         }
-        signature = await self.generate_signature(params, self.api_key)
+        # Используем _get_signature для создания подписи
+        signature = self._get_signature(params)
         params['signature'] = signature
         async with ClientSession() as session:
             async with session.post(f'{self.base_url}orders/create', json=params) as response:
@@ -43,10 +45,11 @@ class FreeKassa:
     async def check_order_status(self, order_id):
         params = {
             'shopId': self.merchant_id,
-            'nonce': 123456789,
+            'nonce': 123456789 + int(datetime.now().timestamp()),
             'orderId': order_id,
         }
-        signature = await self.generate_signature(params, self.api_key)
+        # Используем _get_signature для создания подписи
+        signature = self._get_signature(params)
         params['signature'] = signature
         async with ClientSession() as session:
             async with session.post(f'{self.base_url}orders', json=params) as response:

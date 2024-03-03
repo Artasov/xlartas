@@ -12,6 +12,10 @@ const Deposit = ({onSuccessDeposit, className}) => {
     const createDepositOrder = (setErrors) => {
         setErrors({});
         if (isAuthenticated) {
+            if (amount < 300){
+                setErrors({'error':'Minimum deposit amount 300 RUB'});
+                return;
+            }
             axiosInstance.post('/deposit/', {amount: amount})
                 .then(response => {
                     console.log(response.data);
@@ -34,7 +38,7 @@ const Deposit = ({onSuccessDeposit, className}) => {
                 <TextField
                     label="Amount"
                     variant="outlined"
-                    type="text"
+                    type="number" // изменено с text на number
                     helperText="Deposit amount (RUB currency)"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
