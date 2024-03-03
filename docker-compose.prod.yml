@@ -144,7 +144,7 @@ services:
     volumes:
       - ./backend/data:/srv/backend/data
       - ./backend/logs:/srv/backend/logs
-      - ./entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
+      - ./backend/entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
     links:
       - redis
     environment:
