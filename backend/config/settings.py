@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
 
-
     'django.contrib.staticfiles',
     'django_extensions',
     'django.contrib.sites',
@@ -288,7 +287,7 @@ MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
 DEFAULT_DEPOSIT_AMOUNT = 100
 
-if True:
+if DEV:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -396,7 +395,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'apps' / 'Core' / 'templates',
-            os.path.join(BASE_DIR, '../frontend/build')
+            os.path.join(BASE_DIR.parent, 'frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
