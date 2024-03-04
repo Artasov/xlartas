@@ -37,15 +37,11 @@ urlpatterns = [
     # path('host/', include(('apps.filehost.urls', 'apps.filehost'), namespace='host')),
     # path('rp/', include(('apps.resource_pack.urls', 'apps.resource_pack'), namespace='rp')),
     # path('harmony/', include('apps.harmony.urls')),
-    #
-    # path('password_reset/', password_reset, name='password_reset'),
-    # path('password_reset_confirmation/<str:code>/', password_reset_confirmation,
-    #      name='password_reset_confirmation'),
-    # path('donate/', donate, name='donate'),
-    path('', TemplateView.as_view(template_name='index.html')),
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEV:
     urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))
+
+urlpatterns.append(re_path(r'^.*$', TemplateView.as_view(template_name='index.html')))

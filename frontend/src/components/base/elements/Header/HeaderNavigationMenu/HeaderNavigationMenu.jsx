@@ -17,7 +17,7 @@ const HeaderNavigationMenu = forwardRef(({onHideMenu}, ref) => {
                 {isAuthenticated && (
                     <li>
                         {user.is_staff && (
-                            <Link to="/admin" className="text-decoration-none text-white-c0"
+                            <Link to="/admin" target={'_blank'} rel={'noopener noreferrer'} className="text-decoration-none text-white-c0"
                                   onClick={onHideMenu}>Admin</Link>)
                         }
                     </li>

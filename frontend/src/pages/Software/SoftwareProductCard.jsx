@@ -69,6 +69,7 @@ const SoftwareProductCard = ({software}) => {
                 const file_url = response.data['file_url'];
                 if (!file_url) {
                     console.error('Not found file_url')
+                    return;
                 }
                 const link = document.createElement('a');
                 link.href = file_url;
