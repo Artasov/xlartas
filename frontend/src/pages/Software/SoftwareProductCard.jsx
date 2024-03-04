@@ -63,32 +63,22 @@ const SoftwareProductCard = ({software}) => {
             return;
         }
 
-        axiosInstance({
-            url: `api/software/download/${id}`,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            console.log(response);
-            const contentDisposition = response.headers['content-disposition'];
-            let filename = 'unknown';
-            const match = contentDisposition.match(/filename="([^"]+)"/);
-            if (match) {
-                filename = match[1]
-            } else {
-                console.error('Unknown content disposition')
-                return;
-            }
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
+        axiosInstance.get(`api/software/download/${id}`)
+            .then((response) => {
+                console.log(response.data);
+                const file_url = response.data['file_url'];
+                if (!file_url) {
+                    console.error('Not found file_url')
+                }
+                const link = document.createElement('a');
+                link.href = file_url;
+                link.setAttribute('download', file_url.split('/')[-1]);
+                document.body.appendChild(link);
+                link.click();
 
-            // Очистка ссылки после скачивания
-            link.parentNode.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        }).catch((error) => console.error('Download error:', error));
+                // Очистка ссылки после скачивания
+                link.parentNode.removeChild(link);
+            }).catch((error) => console.error('Download error:', error));
     };
 
     return (<div className="fc gap-2 bg-white-25 p-3 rounded-2 flex-grow-1">

@@ -76,7 +76,7 @@ async def download_software_file(request, id) -> Response | FileResponse:
         return Response({'error': 'No valid license found for this software.'}, status=403)
 
     file = await sync_to_async(getattr)(software, 'file')
-    file_path = file.file.path
-    file_extension = file.file.name.split('.')[-1]
-    file_name = f"{software.name}.{file_extension}"
-    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_name)
+    if not file:
+        Response('Software file not found', status=status.HTTP_404_NOT_FOUND)
+    print(file.file.url)
+    return Response({'file_url': file.file.url}, status=status.HTTP_200_OK)
