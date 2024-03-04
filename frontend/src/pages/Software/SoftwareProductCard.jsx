@@ -3,7 +3,7 @@ import {timeAgo} from "../../services/base/timeAgo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookOpen, faClockRotateLeft, faCloudArrowDown} from "@fortawesome/free-solid-svg-icons";
 import {faYoutube} from "@fortawesome/free-brands-svg-icons";
-import {Button} from "@mui/material";
+import {Alert, Button, CircularProgress} from "@mui/material";
 import Modal from "../../components/base/elements/Modal/Modal";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../../components/base/auth/AuthContext/AuthContext";
@@ -22,6 +22,9 @@ const SoftwareProductCard = ({software}) => {
     const [isTestPeriodModalOpen, setIsTestPeriodModalOpen] = useState(false);
     const [isTestPeriodActivate, setIsTestPeriodActivate] = useState(false);
     const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isDownloadInProgress, setIsDownloadInProgress] = useState(false);
+    const [downloadProgress, setDownloadProgress] = useState(0);
+    const [isDownloadError, setIsDownloadError] = useState(false);
     const handleClickOpenPayModal = () => {
         if (isAuthenticated) {
             setIsSubscribeModalOpen(true);
@@ -59,28 +62,58 @@ const SoftwareProductCard = ({software}) => {
     const handleDownloadSoftwareFile = async (fileUrl, softwareName) => {
         if (!fileUrl) {
             console.error('Software file URL not provided.');
+            setIsDownloadError(true);
+            setTimeout(() => setIsDownloadError(false), 4000);
             return;
         }
-        const urlSegments = fileUrl.split('/');
-        let fileName = urlSegments[urlSegments.length - 1];
-        const fileNameParts = fileName.split('.');
-        const fileExt = fileNameParts.pop();
+        setIsDownloadInProgress(true);
+        setIsDownloadError(false);
 
-        if (fileExt && softwareName) {
-            fileName = `${softwareName}.${fileExt}`;
+        try {
+            const response = await fetch(fileUrl);
+            if (!response.ok) throw new Error('Network response was not ok.');
+
+            const contentLength = response.headers.get('content-length');
+            let receivedLength = 0;
+            const reader = response.body.getReader();
+            const stream = new ReadableStream({
+                async start(controller) {
+                    while (true) {
+                        const {done, value} = await reader.read();
+                        if (done) break;
+                        receivedLength += value.length;
+                        setDownloadProgress((receivedLength / contentLength) * 100);
+                        controller.enqueue(value);
+                    }
+                    controller.close();
+                    reader.releaseLock();
+                },
+            });
+
+            const data = await new Response(stream).blob();
+
+            const urlSegments = fileUrl.split('/');
+            let fileName = urlSegments[urlSegments.length - 1];
+            const fileNameParts = fileName.split('.');
+            const fileExt = fileNameParts.pop();
+            if (fileExt && softwareName) {
+                fileName = `${softwareName}.${fileExt}`;
+            }
+
+            const blobUrl = window.URL.createObjectURL(data);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(link);
+        } catch (error) {
+            setIsDownloadError(true);
+            // setTimeout(() => setIsDownloadError(false), 4000);
+        } finally {
+            setIsDownloadInProgress(false);
         }
-
-        const response = await fetch(fileUrl);
-        const data = await response.blob();
-
-        const blobUrl = window.URL.createObjectURL(data);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.setAttribute('download', fileName);
-        document.body.appendChild(link);
-        link.click();
-        window.URL.revokeObjectURL(blobUrl); // Clean up
-        document.body.removeChild(link);
     };
 
     return (<div className="fc gap-2 bg-white-25 p-3 rounded-2 flex-grow-1">
@@ -136,12 +169,33 @@ const SoftwareProductCard = ({software}) => {
                         <FontAwesomeIcon style={{fontSize: "1em"}} icon={faYoutube} className={'hover-scale-5'}/>
                     </a>
                     <div className={'fccc'} style={{width: '1em', height: '1em', fontSize: '.9em'}}>
-                        <FontAwesomeIcon onClick={() => {
-                            handleDownloadSoftwareFile(software.file, software.name)
-                        }} style={{fontSize: '1em'}} icon={faCloudArrowDown} className={'hover-scale-5'}/>
+                        <FontAwesomeIcon style={{fontSize: '1em'}}
+                                         icon={faCloudArrowDown}
+                                         className={`hover-scale-5 ${isDownloadInProgress ? 'pointer-events-none opacity-25' : ''}`}
+                                         onClick={() => {
+                                             if (!isDownloadInProgress) handleDownloadSoftwareFile(software.file, software.name);
+                                         }}/>
                     </div>
                 </div>
             </div>
+            {isDownloadInProgress &&
+                <div className={'position-absolute left-0 top-0 h-50 w-100 frcc'}>
+                    <div className={'bg-black-40 rounded-4 shadow-black-5-90 frc p-3 backdrop-blur-10'}
+                         style={{maxWidth: 340, zIndex: 2}}>
+                        <CircularProgress variant="determinate" size={80}
+                                          className={'text-white-c0'}
+                                          value={downloadProgress}/>
+                    </div>
+                </div>
+            }
+            {isDownloadError &&
+                <div className={'position-absolute left-0 w-100 frcc'} style={{top: '10%'}}>
+                    <div className={'frcc'} style={{maxWidth: 340}}>
+                        <Alert className={'bg-danger bg-opacity-10 rounded-4 backdrop-blur-10'} severity="error">Error downloading
+                            file.</Alert>
+                    </div>
+                </div>
+            }
             <div className={'fcb w-100 pt-1 gap-2'} style={{paddingBottom: 3}}>
                 <div className={'fc'}>
                     <h3 className={'m-0 text-white-d0'}>
