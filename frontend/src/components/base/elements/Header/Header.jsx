@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import theme_icon from '../../../../static/base/images/icons/palette.png';
-import logo from '../../../../static/base/images/logo.png';
+import logo from '../../../../static/base/images/art-square-logo.png';
 import './header.css';
 import axios from 'axios';
 import UserAvatar from "../../user/UserAvatar/UserAvatar";
@@ -68,7 +68,9 @@ const Header = () => {
     return (<header ref={headerRef} className="frcc gap-4 px-4">
         {(!isAuthenticated || (location.pathname !== '/' && isAuthenticated)) && (
             <div onClick={handleClickHomePage} className="logo_container frcc gap-2" style={{marginTop: 2}}>
-                <UserAvatar width={'45px'} height={'45px'} userImage={isAuthenticated ? user.avatar : logo}/>
+                <UserAvatar width={'45px'} height={'45px'}
+                            userImage={isAuthenticated ? user.avatar : logo}
+                            className={isAuthenticated ? '' : ''}/>
                 <span className="fw-bold fs-3 text-white-d0"
                       style={{marginTop: "1px"}}>{isAuthenticated ? user.username : 'xlartas'}</span>
             </div>

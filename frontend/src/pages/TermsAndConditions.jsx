@@ -1,7 +1,10 @@
 import {Container, Typography} from "@mui/material";
+import Head from "../components/base/Head";
+import React from "react";
 
 const TermsAndConditions = () => (
     <Container maxWidth="sm" style={{marginTop: '20px'}}>
+        <Head title={'xl | Terms And Conditions'}/>
         <Typography variant="h4" component="h1" gutterBottom>
             Terms And Conditions Of Use
         </Typography>

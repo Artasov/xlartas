@@ -3,12 +3,14 @@ import {useNavigate} from 'react-router-dom';
 import {Button, Container, Link, Typography} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import Head from "../components/base/Head";
 
 const About = () => {
     const navigate = useNavigate();
 
     return (
         <Container maxWidth="md" style={{marginTop: '20px', maxWidth: 500, textAlign: 'center'}}>
+            <Head title={'xl | About'}/>
             <Typography variant="h4" component="h1" gutterBottom>
                 About Us
             </Typography>
@@ -25,7 +27,8 @@ const About = () => {
                     <EmailIcon fontSize="large"/>
                     <Typography className={'enable-tap-select-all'}>ivanhvalevskey@gmail.com</Typography>
                 </Link>
-                <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'}  href="https://t.me/artasov/" target={'_blank'}
+                <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'}
+                      href="https://t.me/artasov/" target={'_blank'}
                       color="inherit">
                     <TelegramIcon fontSize="large"/>
                     <Typography className={'enable-tap-select-all'}>@artasov</Typography>
