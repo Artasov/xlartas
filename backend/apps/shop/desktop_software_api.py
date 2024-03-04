@@ -53,13 +53,13 @@ def software_auth(request) -> Response:
                         headers={'Content-Type': 'application/json'})
 
     try:
-        product_ = SoftwareProduct.objects.get(name=software_name)
+        software_ = SoftwareProduct.objects.get(name=software_name)
     except SoftwareProduct.DoesNotExist:
         return Response({'accept': False, 'error': PRODUCT_NOT_EXISTS},
                         status=status.HTTP_200_OK,
                         headers={'Content-Type': 'application/json'})
 
-    sub_, created = UserSoftwareSubscription.objects.get_or_create(user=user_, product=product_)
+    sub_, created = UserSoftwareSubscription.objects.get_or_create(user=user_, software=software_)
     # if license expired
     if sub_.expires_at <= timezone.now():
         if software_name == 'xLUMRA':

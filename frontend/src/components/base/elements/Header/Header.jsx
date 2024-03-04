@@ -70,7 +70,7 @@ const Header = () => {
             <div onClick={handleClickHomePage} className="logo_container frcc gap-2" style={{marginTop: 2}}>
                 <UserAvatar width={'45px'} height={'45px'}
                             userImage={isAuthenticated ? user.avatar : logo}
-                            className={(isAuthenticated && user.avatar) ? '' : 'invert-80'}/>
+                            className={(isAuthenticated && !user.avatar) ? 'invert-80' : ''}/>
                 <span className="fw-bold fs-3 text-white-d0"
                       style={{marginTop: "1px"}}>{isAuthenticated ? user.username : 'xlartas'}</span>
             </div>
