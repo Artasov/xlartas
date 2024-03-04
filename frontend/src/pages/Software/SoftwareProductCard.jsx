@@ -110,7 +110,7 @@ const SoftwareProductCard = ({software}) => {
             document.body.removeChild(link);
         } catch (error) {
             setIsDownloadError(true);
-            // setTimeout(() => setIsDownloadError(false), 4000);
+            setTimeout(() => setIsDownloadError(false), 5000);
         } finally {
             setIsDownloadInProgress(false);
         }
