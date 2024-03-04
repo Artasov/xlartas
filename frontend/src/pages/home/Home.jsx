@@ -120,7 +120,7 @@ const Home = () => {
                         <div className={'px-1'}>
                             <div className="logo_container fs-1 frsc gap-2 mb-2"
                                  style={{marginTop: 2}}>
-                                <UserAvatar width={'1.7em'} height={'1.7em'} userImage={user.avatar}/>
+                                <UserAvatar width={'1.7em'} height={'1.7em'} className={user.avatar ? '' : 'invert-80'} userImage={user.avatar}/>
                                 <span className="fw-4  text-white-d0"
                                       style={{marginTop: "1px"}}>{user.username}</span>
                             </div>

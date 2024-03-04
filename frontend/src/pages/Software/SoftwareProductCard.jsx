@@ -56,30 +56,31 @@ const SoftwareProductCard = ({software}) => {
             setErrorTestPeriod([err.response?.data?.detail] || ['An unexpected error occurred'])
         }
     };
-    const handleDownloadSoftwareFile = (id) => {
-
-        if (!id) {
-            console.error('Product ID is undefined.');
+    const handleDownloadSoftwareFile = async (fileUrl, softwareName) => {
+        if (!fileUrl) {
+            console.error('Software file URL not provided.');
             return;
         }
+        const urlSegments = fileUrl.split('/');
+        let fileName = urlSegments[urlSegments.length - 1];
+        const fileNameParts = fileName.split('.');
+        const fileExt = fileNameParts.pop();
 
-        axiosInstance.get(`api/software/download/${id}`)
-            .then((response) => {
-                console.log(response.data);
-                const file_url = response.data['file_url'];
-                if (!file_url) {
-                    console.error('Not found file_url')
-                    return;
-                }
-                const link = document.createElement('a');
-                link.href = file_url;
-                link.setAttribute('download', file_url.split('/')[-1]);
-                document.body.appendChild(link);
-                link.click();
+        if (fileExt && softwareName) {
+            fileName = `${softwareName}.${fileExt}`;
+        }
 
-                // Очистка ссылки после скачивания
-                link.parentNode.removeChild(link);
-            }).catch((error) => console.error('Download error:', error));
+        const response = await fetch(fileUrl);
+        const data = await response.blob();
+
+        const blobUrl = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(blobUrl); // Clean up
+        document.body.removeChild(link);
     };
 
     return (<div className="fc gap-2 bg-white-25 p-3 rounded-2 flex-grow-1">
@@ -136,7 +137,7 @@ const SoftwareProductCard = ({software}) => {
                     </a>
                     <div className={'fccc'} style={{width: '1em', height: '1em', fontSize: '.9em'}}>
                         <FontAwesomeIcon onClick={() => {
-                            handleDownloadSoftwareFile(software.id)
+                            handleDownloadSoftwareFile(software.file, software.name)
                         }} style={{fontSize: '1em'}} icon={faCloudArrowDown} className={'hover-scale-5'}/>
                     </div>
                 </div>
