@@ -45,3 +45,4 @@ if settings.DEV:
     urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))
 
 urlpatterns.append(re_path(r'^.*$', TemplateView.as_view(template_name='index.html')))
+urlpatterns.append(path('', TemplateView.as_view(template_name='index.html'), name='main'))
