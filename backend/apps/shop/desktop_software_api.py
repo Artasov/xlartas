@@ -17,7 +17,7 @@ from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 @csrf_exempt
 @api_view(('POST',))
 @permission_classes([AllowAny])
-def login_program(request) -> Response:
+def software_auth(request) -> Response:
     data = json.loads(request.body)
 
     hw_id = data.get('hw_id')
@@ -88,7 +88,7 @@ def login_program(request) -> Response:
 @csrf_exempt
 @api_view(('POST',))
 @permission_classes([AllowAny])
-def set_hw_id(request) -> Response:
+def set_user_hw_id(request) -> Response:
     data = json.loads(request.body)
     username = data['username']
     secret_key = data['secret_key']
@@ -114,9 +114,9 @@ def set_hw_id(request) -> Response:
 
 
 @api_view(('GET',))
-def get_product_version(request, product) -> Response:
+def get_software_version(request, software) -> Response:
     try:
-        software_ = SoftwareProduct.objects.get(name=product)
+        software_ = SoftwareProduct.objects.get(name=software)
         url = request.build_absolute_uri(reverse('shop:software_download', kwargs={'id': software_.id}))
         return Response({
             'version': software_.version,
