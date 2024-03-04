@@ -9,7 +9,7 @@ const SoftwareDetail = () => {
     const [software, setSoftware] = useState(null);
 
     useEffect(() => {
-        axios.get(`/api/software/${softwareName}`)
+        axios.get(`/api/software/${softwareName}/`)
             .then(response => {
                 setSoftware(response.data);
             })

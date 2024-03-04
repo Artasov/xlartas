@@ -15,16 +15,16 @@ from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(('POST',))
 @permission_classes([AllowAny])
-def login_program(request):
+def login_program(request) -> Response:
     data = json.loads(request.body)
 
     hw_id = data.get('hw_id')
-    product = data.get('software')
+    software_name = data.get('product')
     is_first_license_checking = data.get('is_first_license_checking')
 
-    if not all([hw_id, product, str(is_first_license_checking)]):
+    if not all([hw_id, software_name, str(is_first_license_checking)]):
         return Response({'accept': False, 'error': SOMETHING_WRONG},
                         status=status.HTTP_200_OK,
                         headers={'Content-Type': 'application/json'})
@@ -53,19 +53,19 @@ def login_program(request):
                         headers={'Content-Type': 'application/json'})
 
     try:
-        product_ = SoftwareProduct.objects.get(name=product)
+        product_ = SoftwareProduct.objects.get(name=software_name)
     except SoftwareProduct.DoesNotExist:
         return Response({'accept': False, 'error': PRODUCT_NOT_EXISTS},
                         status=status.HTTP_200_OK,
                         headers={'Content-Type': 'application/json'})
 
-    license_, created = UserSoftwareSubscription.objects.get_or_create(user=user_, product=product_)
+    sub_, created = UserSoftwareSubscription.objects.get_or_create(user=user_, product=product_)
     # if license expired
-    if license_.expires_at <= timezone.now():
-        if product == 'xLUMRA':
+    if sub_.expires_at <= timezone.now():
+        if software_name == 'xLUMRA':
             # Give FREE version
             if is_first_license_checking:
-                license_.save()
+                sub_.save()
             return Response(
                 {'accept': True, 'full_license': False, 'hw_id': user_.hw_id, 'is_first_start': is_first_start},
                 headers={'Content-Type': 'application/json'}, status=status.HTTP_200_OK)
@@ -78,17 +78,17 @@ def login_program(request):
                             headers={'Content-Type': 'application/json'})
 
     if is_first_license_checking:
-        license_.starts += 1
-        license_.last_activity = timezone.now()
-    license_.save()
+        sub_.starts += 1
+        sub_.last_activity = timezone.now()
+    sub_.save()
     return Response({'accept': True, 'full_license': True, 'hw_id': user_.hw_id, 'is_first_start': is_first_start},
                     headers={'Content-Type': 'application/json'}, status=status.HTTP_200_OK)
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(('POST',))
 @permission_classes([AllowAny])
-def set_hw_id(request):
+def set_hw_id(request) -> Response:
     data = json.loads(request.body)
     username = data['username']
     secret_key = data['secret_key']
@@ -113,16 +113,16 @@ def set_hw_id(request):
     return Response({'accept': True}, headers={'Content-Type': 'application/json'})
 
 
-@api_view(['GET'])
-def get_product_version(request, product):
+@api_view(('GET',))
+def get_product_version(request, product) -> Response:
     try:
-        product_ = SoftwareProduct.objects.get(name=product)
-        url = request.build_absolute_uri(reverse('shop:download_program', kwargs={'product_id': product_.id}))
+        software_ = SoftwareProduct.objects.get(name=product)
+        url = request.build_absolute_uri(reverse('shop:software_download', kwargs={'id': software_.id}))
         return Response({
-            'version': product_.version,
+            'version': software_.version,
             'url': url
         },
             headers={'Content-Type': 'application/json'})
     except SoftwareProduct.DoesNotExist:
-        return Response('SoftwareProductCard does not exist.', status=status.HTTP_404_NOT_FOUND,
+        return Response('SoftwareProduct does not exist.', status=status.HTTP_404_NOT_FOUND,
                         headers={'Content-Type': 'application/json'})

@@ -88,7 +88,6 @@ INSTALLED_APPS = [
     'apps.Core',
     'apps.referral',
     'apps.shop',
-    'apps.programs_api',
     'apps.filehost',
     'apps.harmony',
 

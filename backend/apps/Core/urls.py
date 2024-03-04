@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('accounts/', include('allauth.urls')),
     # path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/', include('apps.programs_api.urls')),
+    path('api/v1/', include('apps.shop.desktop_software_urls')),
 
     path('accounts/telegram/login/callback/', telegram_auth, name='telegram_signup'),
     path('accounts/vk/login/callback/', vk_auth),
