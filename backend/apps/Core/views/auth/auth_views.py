@@ -5,19 +5,19 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 from apps.Core.models import *
 from apps.Core.serializers import SignUpSerializer
 from apps.Core.services.code_confirmation import (
     get_latest_confirmation_code,
     create_confirmation_code_for_user,
-    send_signup_confirmation_email
 )
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-async def signup(request) -> JsonResponse:
+async def signup(request) -> Response:
     serializer = SignUpSerializer(data=request.data)
     if serializer.is_valid():
         data = await serializer.adata
@@ -27,13 +27,13 @@ async def signup(request) -> JsonResponse:
 
         username_exists = await User.objects.filter(username=username).aexists()
         if username_exists:
-            return JsonResponse({"username": ["A user with that username already exists."]},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response({"username": ["A user with that username already exists."]},
+                            status=status.HTTP_409_CONFLICT)
 
         email_exists = await User.objects.filter(email=email).aexists()
         if email_exists:
-            return JsonResponse({"email": ["A user with that email already exists."]},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response({"email": ["A user with that email already exists."]},
+                            status=status.HTTP_409_CONFLICT)
 
         user = await sync_to_async(User.objects.create_user, thread_sensitive=True)(
             username=username, email=email, password=password, is_confirmed=False
@@ -48,9 +48,9 @@ async def signup(request) -> JsonResponse:
                 is_secure=request.is_secure()
             )
 
-        return JsonResponse({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
+        return Response({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
     else:
-        return JsonResponse(serializer.errors, status=400)
+        return Response(serializer.errors, status=400)
 
 
 @api_view(['POST'])

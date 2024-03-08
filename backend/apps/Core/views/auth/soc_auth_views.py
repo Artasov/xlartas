@@ -26,7 +26,7 @@ class GoogleLogin(SocialLoginView):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def telegram_auth(request):
+def telegram_auth(request) -> Response:
     if request.method == 'GET':
         data = request.GET.dict()
 
