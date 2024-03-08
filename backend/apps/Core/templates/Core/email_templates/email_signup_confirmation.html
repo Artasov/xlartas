@@ -9,7 +9,7 @@
 </head>
 <body bgcolor="#161415" style="margin: 0; padding: 0; width: 600px; max-width: 600px; background-color: #161415; font-family: Arial, sans-serif;">
 {#<div>#}
-{#    <img src="{% if is_secure %}https{% else %}http{% endif %}://{{ get_host }}{% static 'Core/img/golden_blocks_with_logo.jpg' %}" alt="background image" width="100%"/>#}
+{#    <img src="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% static 'Core/img/golden_blocks_with_logo.jpg' %}" alt="background image" width="100%"/>#}
 {#</div>#}
 <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#161415">
     <tr><td height="20px"></td></tr>
@@ -23,7 +23,7 @@
             <h2 style="font-size: 24px; color: #cccccc; margin: 0;">Подтверждение регистрации</h2>
             <p style="color: #aaaaaa; margin-top: 10px;">Подтвердите запрос на регистрацию на
                 <a style="text-decoration: none; font-weight: 600; color: #bbbbbb;"
-                   href="{% if is_secure %}https{% else %}http{% endif %}://{{ get_host }}{% url 'main' %}">
+                   href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}">
                     xlartas.ru</a>.
                 Если вы не отправляли запрос, просто проигнорируйте это письмо. Для подтверждения нажмите на кнопку
                 ниже.
@@ -42,15 +42,15 @@
             <table>
                 <tr>
 {#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ get_host }}{% url 'main' %}"#}
+{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}"#}
 {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">xlartas.ru</a>#}
 {#                    </td>#}
 {#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ get_host }}{% url 'about' %}"#}
+{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'about' %}"#}
 {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">О нас</a>#}
 {#                    </td>#}
 {#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ get_host }}{% url 'shop:catalog' %}"#}
+{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'shop:catalog' %}"#}
 {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">Каталог</a>#}
 {#                    </td>#}
                 </tr>

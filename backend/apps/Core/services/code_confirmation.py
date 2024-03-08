@@ -52,14 +52,15 @@ def send_password_reset_email(request, to_email: str, code: str) -> None:
 
 
 @shared_task
-def send_signup_confirmation_email(request, to_email: str, code: str) -> None:
+def send_signup_confirmation_email(
+        to_email: str, code: str, host: str, is_secure: bool) -> None:
     send_email_by_template(
         subject='Подтверждение регистрации',
         to_email=to_email,
         template='Core/email_templates/email_signup_confirmation.html',
         context={
-            'get_host': request.get_host(),
-            'is_secure': request.is_secure(),
+            'host': host,
+            'is_secure': is_secure,
             'code': code
         }
     )

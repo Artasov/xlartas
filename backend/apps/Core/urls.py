@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from .views.auth.auth_views import signup, verify_email
-from .views.auth.soc_auth_views import vk_auth, telegram_auth
+from .views.auth.soc_auth_views import telegram_auth, GoogleLogin
 from .views.common_views import health_test, theme_list, current_user
 
 urlpatterns = [
@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/v1/', include('apps.shop.desktop_software_urls')),
 
     path('accounts/telegram/login/callback/', telegram_auth, name='telegram_signup'),
-    path('accounts/vk/login/callback/', vk_auth),
+    path('google/', GoogleLogin.as_view(), name='google_login'),
 
     path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),
     path('', include('apps.freekassa.urls')),

@@ -25,13 +25,12 @@ async def signup(request) -> JsonResponse:
         email = data['email']
         password = data['password']
 
-        # После успешной синхронной валидации проводим асинхронные проверки
-        username_exists = await User.objects.filter(username=serializer.validated_data['username']).aexists()
+        username_exists = await User.objects.filter(username=username).aexists()
         if username_exists:
             return JsonResponse({"username": ["A user with that username already exists."]},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-        email_exists = await User.objects.filter(email=serializer.validated_data['email']).aexists()
+        email_exists = await User.objects.filter(email=email).aexists()
         if email_exists:
             return JsonResponse({"email": ["A user with that email already exists."]},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -42,7 +41,12 @@ async def signup(request) -> JsonResponse:
 
         code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.CodeType.signUp)
         if not settings.DEV:
-            send_signup_confirmation_email.delay(request, to_email=user.email, code=code.code)
+            send_signup_confirmation_email.delay(
+                to_email=user.email,
+                code=code.code,
+                host=request.get_host(),
+                is_secure=request.is_secure()
+            )
 
         return JsonResponse({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
     else:

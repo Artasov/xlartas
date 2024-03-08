@@ -71,9 +71,11 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'adrf',
     'corsheaders',
+    'dj_rest_auth',
     'channels',
     'django_celery_beat',
 
@@ -99,7 +101,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
@@ -112,13 +116,14 @@ REST_FRAMEWORK = {
     #     'user': '60/minute'
     # }
 }
-
+REST_USE_JWT = True
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20 if DEV else 60 * 24 * 2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
@@ -127,8 +132,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:3000",
 ]
-MIDDLEWARE = [
 
+MIDDLEWARE = [
     # 'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,15 +1,16 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AuthContext} from "../../components/base/auth/AuthContext/AuthContext";
 import SignUpForm from "../../components/base/auth/SignUpForm";
 import axiosInstance from "../../services/base/axiosConfig";
 import {timeAgo} from "../../services/base/timeAgo";
-import {Button, CircularProgress} from "@mui/material";
+import {Alert, Button, CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import UserAvatar from "../../components/base/user/UserAvatar/UserAvatar";
 import SoftwareImage from "../Software/SoftwareImage";
 import Modal from "../../components/base/elements/Modal/Modal";
 import Deposit from "../../components/base/Payment/Deposit";
 import {useAuth} from "../../components/base/auth/useAuth";
+import Head from "../../components/base/Head";
 
 const Home = () => {
     const {user, isAuthenticated, showLoginModal, updateCurrentUser} = useAuth(AuthContext);
@@ -39,10 +40,7 @@ const Home = () => {
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
-            // Добавляем класс для анимации
             copySecretKeyBtnRef.current.classList.add('backdrop-saturate-4');
-
-            // Удаляем класс анимации через 500 мс
             setTimeout(() => {
                 copySecretKeyBtnRef.current.classList.remove('backdrop-saturate-4');
             }, 300);
@@ -102,6 +100,7 @@ const Home = () => {
 
     return (
         <div className={'mt-2'} style={{maxWidth: 400, margin: 'auto'}}>
+            <Head title={`${isAuthenticated ? user.username : 'xl'}`}/>
             <div className={'w-90 mx-auto'}>
                 {!isAuthenticated ? (
                     <div>
@@ -113,6 +112,12 @@ const Home = () => {
                                 sign in
                             </span>
                         </p>
+                        <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
+                            Внимание! Авторизация через Google, Telegram пока не работает в связи с переносом сайта
+                            на другой хостинг и реализацией single page application. Если у вас были подписки
+                            и вы не можете войти, напишите мне в личку в tg @artasov. По любым вопросам не стесняемся
+                            писать. Спасибо за поддержку проекта, работаю на энтузиазме по факту.
+                        </Alert>
                         <SignUpForm/>
                     </div>
                 ) : (
@@ -120,7 +125,8 @@ const Home = () => {
                         <div className={'px-1'}>
                             <div className="logo_container fs-1 frsc gap-2 mb-2"
                                  style={{marginTop: 2}}>
-                                <UserAvatar width={'1.7em'} height={'1.7em'} className={user.avatar ? '' : 'invert-80'} userImage={user.avatar}/>
+                                <UserAvatar width={'1.7em'} height={'1.7em'} className={user.avatar ? '' : 'invert-80'}
+                                            userImage={user.avatar}/>
                                 <span className="fw-4  text-white-d0"
                                       style={{marginTop: "1px"}}>{user.username}</span>
                             </div>
@@ -168,7 +174,7 @@ const Home = () => {
                         </div>
                         <div className={'bg-white-25 p-3 rounded-2'}>
 
-                            <h3 className={'fw-3 mb-2 pb-1'}>Licenses</h3>
+                            <h3 className={'fw-3 mb-2 pb-1'}>Subscriptions</h3>
                             {renderSubscriptions()}
                         </div>
 
@@ -179,7 +185,7 @@ const Home = () => {
                                     className={`
                                         transition-all transition-tf-eio transition-d-300 fw-4 backdrop-saturate-1
                                         fs-5 py-0 frcc flex-grow-1 bg-white-30 text-white-a5
-                                    `} // Используем динамический стиль
+                                    `}
                                     type="button"
                                     variant="contained"
                                     onClick={() => copyToClipboard(user.secret_key)}

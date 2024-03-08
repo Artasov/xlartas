@@ -6,20 +6,17 @@ from django.contrib.auth.decorators import login_required
 from django.db import connections
 from django.forms import modelform_factory
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django_minio_backend import MinioBackend
 from django_redis import get_redis_connection
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.forms import DonateFrom
 from apps.Core.models import *
 from apps.Core.serializers import ThemeSerializer, CurrentUserSerializer
 from apps.referral.models import RefLinking
-from apps.shop.models import SoftwareProduct, UserSoftwareSubscription, SoftwareSubscriptionOrder
-
-# from backend.apps.Core.models import Theme
+from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 
 log = logging.getLogger('base')
 
