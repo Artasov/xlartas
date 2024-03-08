@@ -13,6 +13,7 @@ from apps.Core.services.code_confirmation import (
     get_latest_confirmation_code,
     create_confirmation_code_for_user,
 )
+from apps.Core.tasks import send_signup_confirmation_email_task
 
 
 @api_view(['POST'])
@@ -41,7 +42,7 @@ async def signup(request) -> Response:
 
         code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.CodeType.signUp)
         if not settings.DEV:
-            send_signup_confirmation_email.delay(
+            send_signup_confirmation_email_task.delay(
                 to_email=user.email,
                 code=code.code,
                 host=request.get_host(),
