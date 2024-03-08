@@ -21,7 +21,7 @@ def test_periodic_task(param1):
     log.warning(f"TASK PERIODIC SUCCESS {param1}")
 
 
-@shared_task(bind=True, autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 20})
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 20})
 def send_signup_confirmation_email_task(
         to_email: str, code: str, host: str, is_secure: bool) -> None:
     send_email_by_template(
