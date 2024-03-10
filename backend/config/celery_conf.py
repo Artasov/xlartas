@@ -1,12 +1,12 @@
 import django
 from celery import Celery
 
-django.setup()
 app = Celery('config')
 
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+django.setup()
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.broker_connection_retry_on_startup = True
 
