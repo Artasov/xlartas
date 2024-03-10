@@ -4,8 +4,6 @@ import os
 
 from adrf.decorators import api_view
 from allauth.socialaccount.models import SocialAccount
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from dj_rest_auth.registration.views import SocialLoginView
 from django.contrib.auth import login
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
@@ -17,11 +15,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.Core.models import *
 from apps.Core.services.services import telegram_verify_hash
-
-
-class GoogleLogin(SocialLoginView):
-    authentication_classes = []
-    adapter_class = GoogleOAuth2Adapter
 
 
 @api_view(['GET'])

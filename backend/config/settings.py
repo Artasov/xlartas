@@ -75,7 +75,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'adrf',
     'corsheaders',
-    'dj_rest_auth',
     'channels',
     'django_celery_beat',
 
@@ -101,7 +100,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -123,7 +121,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
-ACCOUNT_EMAIL_VERIFICATION = "none"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [

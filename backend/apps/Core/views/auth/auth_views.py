@@ -42,23 +42,23 @@ async def signup(request) -> Response:
         )
 
         code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.CodeType.signUp)
-        # if not settings.DEV:
-        #     send_signup_confirmation_email_task.delay(
-        #         to_email=user.email,
-        #         code=code.code,
-        #         host=request.get_host(),
-        #         is_secure=request.is_secure()
-        #     )
-        send_email_by_template(
-            subject='Sign Up Confirmation | xlartas',
-            to_email=user.email,
-            template='Core/email_templates/email_signup_confirmation.html',
-            context={
-                'host': request.get_host(),
-                'is_secure': request.is_secure(),
-                'code': code
-            }
-        )
+        if not settings.DEV:
+            send_signup_confirmation_email_task.delay(
+                to_email=user.email,
+                code=code.code,
+                host=request.get_host(),
+                is_secure=request.is_secure()
+            )
+        # send_email_by_template(
+        #     subject='Sign Up Confirmation | xlartas',
+        #     to_email=user.email,
+        #     template='Core/email_templates/email_signup_confirmation.html',
+        #     context={
+        #         'host': request.get_host(),
+        #         'is_secure': request.is_secure(),
+        #         'code': code.code
+        #     }
+        # )
 
         return Response({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
     else:
