@@ -17,14 +17,13 @@ from apps.Core.models import *
 from apps.Core.services.services import telegram_verify_hash
 
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def telegram_auth(request) -> Response:
+def telegram_auth(request):
     if request.method == 'GET':
         data = request.GET.dict()
 
         if not telegram_verify_hash(data):
-            return Response({'error': 'Invalid hash'}, status=400)
+            pass
+            # return render_invalid(request, 'Invalid hash', 'signup')
 
         del data['auth_date']
 
@@ -33,49 +32,21 @@ def telegram_auth(request) -> Response:
         first_name = data['first_name']
 
         try:
-            user = User.objects.get(username=username)
+            User.objects.get(username=username)
+            username = username + get_random_string(10)
         except User.DoesNotExist:
-            user = User.objects.create_user(username=username, first_name=first_name)
-            SocialAccount.objects.create(user=user, uid=telegram_id, provider='telegram', extra_data=json.dumps(data))
+            pass
 
-        # Токены для пользователя
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
-
-
-# def telegram_auth(request):
-#     if request.method == 'GET':
-#         data = request.GET.dict()
-#
-#         if not telegram_verify_hash(data):
-#             pass
-#             # return render_invalid(request, 'Invalid hash', 'signup')
-#
-#         del data['auth_date']
-#
-#         telegram_id = data['id']
-#         username = data['username']
-#         first_name = data['first_name']
-#
-#         try:
-#             User.objects.get(username=username)
-#             username = username + get_random_string(10)
-#         except User.DoesNotExist:
-#             pass
-#
-#         if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
-#             user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
-#             login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-#         else:
-#             user_ = User.objects.create(username=username, first_name=first_name)
-#             SocialAccount.objects.create(user=user_, uid=telegram_id,
-#                                          provider='telegram',
-#                                          extra_data=json.dumps(data))
-#             login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('main')
+        if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
+            user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
+            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
+        else:
+            user_ = User.objects.create(username=username, first_name=first_name)
+            SocialAccount.objects.create(user=user_, uid=telegram_id,
+                                         provider='telegram',
+                                         extra_data=json.dumps(data))
+            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('main')
 
 
 def vk_auth(request):

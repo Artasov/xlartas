@@ -1,5 +1,4 @@
 from celery import Celery
-from django.conf import settings
 
 app = Celery('config')
 
@@ -25,7 +24,7 @@ app.conf.beat_schedule = {
     # },
 }
 app.conf.CELERY_IMPORTS = ('apps.Core.tasks',)
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+app.autodiscover_tasks()
 
 # # Задача выполняется каждые 30 минут
 # 'task-every-30-minutes': {
