@@ -11,4 +11,4 @@ echo "django inited for celery"
 
 sleep 1
 
-celery -A config worker --loglevel=warning --task-events -E
+celery -A config worker -l info --task-events -E

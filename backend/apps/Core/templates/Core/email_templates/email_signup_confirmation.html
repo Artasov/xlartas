@@ -7,12 +7,15 @@
     <title>Название сайта</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body bgcolor="#161415" style="margin: 0; padding: 0; width: 600px; max-width: 600px; background-color: #161415; font-family: Arial, sans-serif;">
+<body bgcolor="#161415"
+      style="margin: 0; padding: 0; width: 600px; max-width: 600px; background-color: #161415; font-family: Arial, sans-serif;">
 {#<div>#}
 {#    <img src="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% static 'Core/img/golden_blocks_with_logo.jpg' %}" alt="background image" width="100%"/>#}
 {#</div>#}
 <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#161415">
-    <tr><td height="20px"></td></tr>
+    <tr>
+        <td height="20px"></td>
+    </tr>
     <tr>
         <td align="center" style="">
             <p style="height: 1px; width: 70%!important; background-color: #777777;"></p>
@@ -20,13 +23,12 @@
     </tr>
     <tr bgcolor="#161415">
         <td align="center" style="font-size: 16px; line-height: 1.5; padding: 20px;" bgcolor="#161415">
-            <h2 style="font-size: 24px; color: #cccccc; margin: 0;">Подтверждение регистрации</h2>
-            <p style="color: #aaaaaa; margin-top: 10px;">Подтвердите запрос на регистрацию на
+            <h2 style="font-size: 24px; color: #cccccc; margin: 0;">Registration confirmation</h2>
+            <p style="color: #aaaaaa; margin-top: 10px;">Confirm your registration request on
                 <a style="text-decoration: none; font-weight: 600; color: #bbbbbb;"
                    href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}">
                     xlartas.ru</a>.
-                Если вы не отправляли запрос, просто проигнорируйте это письмо. Для подтверждения нажмите на кнопку
-                ниже.
+                If you have not submitted a request, simply ignore this email. To confirm, copy this code.
             </p>
             <span style="background-color: #f03756; border-radius: 5px; color: #ffffff; display: inline-block; font-size: 18px; font-weight: 600; letter-spacing: 0.1em; padding: 10px 18px 10px 20px; text-decoration: none;">
                 {{ code }}</span>
@@ -41,23 +43,25 @@
         <td align="center" style="font-size: 16px; line-height: 1.5;">
             <table>
                 <tr>
-{#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}"#}
-{#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">xlartas.ru</a>#}
-{#                    </td>#}
-{#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'about' %}"#}
-{#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">О нас</a>#}
-{#                    </td>#}
-{#                    <td>#}
-{#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'shop:catalog' %}"#}
-{#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">Каталог</a>#}
-{#                    </td>#}
+                    {#                    <td>#}
+                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}"#}
+                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">xlartas.ru</a>#}
+                    {#                    </td>#}
+                    {#                    <td>#}
+                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'about' %}"#}
+                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">О нас</a>#}
+                    {#                    </td>#}
+                    {#                    <td>#}
+                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'shop:catalog' %}"#}
+                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">Каталог</a>#}
+                    {#                    </td>#}
                 </tr>
             </table>
         </td>
     </tr>
-    <tr><td height="20px"></td></tr>
+    <tr>
+        <td height="20px"></td>
+    </tr>
 </table>
 </body>
 </html>
