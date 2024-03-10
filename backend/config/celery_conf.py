@@ -1,20 +1,18 @@
+import django
 from celery import Celery
 
+django.setup()
 app = Celery('config')
 
 import os
 
-# Set the default Django settings module for the 'celery' PROGRAM.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-# os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
-# Using a string here means the worker doesn't have to serialize
-# the configuration object to child processes.
-# - namespace='CELERY' means all celery-related configuration keys
-#   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.broker_connection_retry_on_startup = True
 
-# Load task modules from all registered Django apps.
+app.conf.CELERY_IMPORTS = ('apps.Core.tasks',)
+app.autodiscover_tasks()
+
 app.conf.beat_schedule = {
     # Задача выполняется каждые 15 секунд
     # 'some-task-every-15s': {
@@ -23,9 +21,6 @@ app.conf.beat_schedule = {
     #     'args': ('value1',),
     # },
 }
-app.conf.CELERY_IMPORTS = ('apps.Core.tasks',)
-app.autodiscover_tasks()
-
 # # Задача выполняется каждые 30 минут
 # 'task-every-30-minutes': {
 #     'task': 'Core.tasks.shared.common_tasks.test_periodic_task',

@@ -1,12 +1,6 @@
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from email.message import EmailMessage
-import smtplib
-from platform import python_version
-from django.conf import settings
-from django.template.loader import render_to_string
-
 
 def send_email_by_template(subject: str, to_email: str, template: str, context=None):
     if context is None:
