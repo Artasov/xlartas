@@ -1,6 +1,6 @@
 function createProgressionEl(progression) {
     const progressionItem = document.createElement('div');
-    progressionItem.className = 'px-3 py-1 progression-item text-center h-min-content w-min-content white-space-no-wrap frc';
+    progressionItem.className = 'px-3 py-1 progression-item text-center h-min w-min white-space-no-wrap frc';
 
 // Создание текстового элемента
     const chordSpan = document.createElement('span');

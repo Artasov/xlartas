@@ -48,7 +48,7 @@ const Modal = ({isOpen, onClose, className, children}) => {
                 position-fixed top-0 left-0 vw-100 vh-100 fccc px-3`
              }
              onClick={handleClose}>
-            <div className={`${className} x-modal max-h-800px`} style={{minWidth: 300}}
+            <div className={`${className} x-modal mh-800px`} style={{minWidth: 300}}
                  onClick={handleModalContentClick}>
                 <div className="modal-content h-100 position-relative fc">
                     <div className={'overflow-y-scroll no-scrollbar'}>

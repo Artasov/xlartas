@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from .views.auth.auth_views import signup, verify_email
-from .views.auth.soc_auth_views import telegram_auth
+from .views.auth.soc_auth_views import discord_oauth2, google_oauth2
 from .views.common_views import health_test, theme_list, current_user
 
 urlpatterns = [
@@ -20,14 +20,14 @@ urlpatterns = [
     path('api/themes/', theme_list, name='theme_list'),
     path('api/current_user/', current_user, name='current_user'),
 
+    path('accounts/discord/oauth2/callback/', discord_oauth2, name="discord_oauth2"),
+    path('accounts/google/oauth2/callback/', google_oauth2, name="google_oauth2"),
+
     path('api/signup/', signup, name='signup'),
     path('api/verify_email/', verify_email, name='verify_email'),
 
-    path('accounts/', include('allauth.urls')),
     # path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('apps.shop.desktop_software_urls')),
-
-    path('accounts/telegram/login/callback/', telegram_auth, name='telegram_signup'),
 
     path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),
     path('', include('apps.freekassa.urls')),

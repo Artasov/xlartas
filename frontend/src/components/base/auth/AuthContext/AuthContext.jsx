@@ -1,9 +1,9 @@
 // AuthContext/AuthProvider.js
 import React, {createContext, useEffect, useState} from 'react';
 import axiosInstance from "../../../../services/base/axiosConfig";
-import SignInModal from "../SignInModal/SignInModal";
+import SignInModal from "../SignInModal";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);

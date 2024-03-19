@@ -78,13 +78,6 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_beat',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.telegram',
-    'allauth.socialaccount.providers.github',
-
     'apps.freekassa',
     'apps.Core',
     'apps.referral',
@@ -92,7 +85,6 @@ INSTALLED_APPS = [
     'apps.filehost',
     'apps.harmony',
 
-    # 'frontend',
 ]
 
 REST_FRAMEWORK = {
@@ -141,51 +133,46 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 SITE_ID = int(env('SITE_ID'))
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    },
-    'telegram': {'TOKEN': env('TG_TOKEN')}
-}
+GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
+GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/"
+
+DISCORD_CLIENT_ID = env('DISCORD_CLIENT_ID')
+DISCORD_CLIENT_SECRET = env('DISCORD_CLIENT_SECRET')
+DISCORD_REDIRECT_URI = "http://127.0.0.1:8000/"
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_UNIQUE = True
-ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_RATE_LIMITS = {
-    'login_failed': '5/m'
-}
-ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = 'main'  # default to /accounts/profile
-ACCOUNT_USERNAME_REQUIRED = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_LOGIN_ON_GET = True
-ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_FORMS = {
-    'login': 'allauth.ACCOUNT.forms.SignInForm',
-    'signup': 'allauth.ACCOUNT.forms.SignupForm',
-    'add_email': 'allauth.ACCOUNT.forms.AddEmailForm',
-    'change_password': 'allauth.ACCOUNT.forms.ChangePasswordForm',
-    'set_password': 'allauth.ACCOUNT.forms.SetPasswordForm',
-    'reset_password': 'allauth.ACCOUNT.forms.ResetPasswordForm',
-    'reset_password_from_key': 'allauth.ACCOUNT.forms.ResetPasswordKeyForm',
-    'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
-}
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_UNIQUE = True
+# ACCOUNT_EMAIL_VERIFICATION = "none"
+# ACCOUNT_RATE_LIMITS = {
+#     'login_failed': '5/m'
+# }
+# ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+# LOGIN_REDIRECT_URL = 'main'  # default to /accounts/profile
+# ACCOUNT_USERNAME_REQUIRED = True
+# SOCIALACCOUNT_AUTO_SIGNUP = True
+# SOCIALACCOUNT_LOGIN_ON_GET = True
+# ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'username'
+# ACCOUNT_FORMS = {
+#     'login': 'allauth.ACCOUNT.forms.SignInForm',
+#     'signup': 'allauth.ACCOUNT.forms.SignupForm',
+#     'add_email': 'allauth.ACCOUNT.forms.AddEmailForm',
+#     'change_password': 'allauth.ACCOUNT.forms.ChangePasswordForm',
+#     'set_password': 'allauth.ACCOUNT.forms.SetPasswordForm',
+#     'reset_password': 'allauth.ACCOUNT.forms.ResetPasswordForm',
+#     'reset_password_from_key': 'allauth.ACCOUNT.forms.ResetPasswordKeyForm',
+#     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
+# }
 
 # Static and media files
 STATICFILES_FINDERS = [

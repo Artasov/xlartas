@@ -127,7 +127,7 @@ const SoftwareProductCard = ({software}) => {
                                          onClick={() => {
                                              setIsInfoModalOpen(true)
                                          }}/>
-                        <Modal className={'fs-6 bg-black-65 max-w-450px text-white-d0 text-shadow-black-2-80'}
+                        <Modal className={'fs-6 bg-black-65 mw-450px text-white-d0 text-shadow-black-2-80'}
                                isOpen={isInfoModalOpen}
                                onClose={() => {
                                    setIsInfoModalOpen(false)
@@ -147,7 +147,7 @@ const SoftwareProductCard = ({software}) => {
                                          onClick={() => {
                                              setIsChangeLogModalOpen(true)
                                          }}/>
-                        <Modal className={'fs-6 bg-black-65 max-w-450px text-white-d0 text-shadow-black-2-80'}
+                        <Modal className={'fs-6 bg-black-65 mw-450px text-white-d0 text-shadow-black-2-80'}
                                isOpen={isChangeLogModalOpen}
                                onClose={() => {
                                    setIsChangeLogModalOpen(false)
@@ -229,7 +229,7 @@ const SoftwareProductCard = ({software}) => {
                         onClick={handleClickOpenTestPeriodModal}>
                         <span style={{marginTop: 1}}>Free first month</span>
                     </Button>
-                    <Modal className={`fs-6 rounded-4 bg-black-45 max-w-450px text-white-d0 text-shadow-black-2-80
+                    <Modal className={`fs-6 rounded-4 bg-black-45 mw-450px text-white-d0 text-shadow-black-2-80
                                         transition-all transition-d-300
                                         ${isTestPeriodActivate ? 'rotate3dZX-90' : ''}`}
                            isOpen={isTestPeriodModalOpen}
@@ -268,7 +268,7 @@ const SoftwareProductCard = ({software}) => {
                         onClick={handleClickOpenPayModal}>
                         <span style={{marginTop: 1}}>Subscribe</span>
                     </Button>
-                    <Modal className={`fs-6 max-w-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
+                    <Modal className={`fs-6 mw-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
                                         transition-all transition-d-300
                                         ${isSubscribed ? 'rotate3dZX-90' : ''}`}
                            isOpen={isSubscribeModalOpen}

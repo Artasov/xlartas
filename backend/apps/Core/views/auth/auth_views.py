@@ -7,6 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from apps.Core.exeption.auth import UsernameAlreadyExists, UserEmailAlreadyExists
 from apps.Core.models import *
 from apps.Core.serializers import SignUpSerializer
 from apps.Core.services.code_confirmation import (
@@ -14,7 +15,6 @@ from apps.Core.services.code_confirmation import (
     create_confirmation_code_for_user,
 )
 from apps.Core.tasks import send_signup_confirmation_email_task
-from apps.mailing.services.services import send_email_by_template
 
 
 @api_view(['POST'])
@@ -28,14 +28,10 @@ async def signup(request) -> Response:
         password = data['password']
 
         username_exists = await User.objects.filter(username=username).aexists()
-        if username_exists:
-            return Response({"username": ["A user with that username already exists."]},
-                            status=status.HTTP_409_CONFLICT)
+        if username_exists: raise UsernameAlreadyExists()
 
         email_exists = await User.objects.filter(email=email).aexists()
-        if email_exists:
-            return Response({"email": ["A user with that email already exists."]},
-                            status=status.HTTP_409_CONFLICT)
+        if email_exists: raise UserEmailAlreadyExists()
 
         user = await sync_to_async(User.objects.create_user, thread_sensitive=True)(
             username=username, email=email, password=password, is_confirmed=False
@@ -49,20 +45,9 @@ async def signup(request) -> Response:
                 host=request.get_host(),
                 is_secure=request.is_secure()
             )
-        # send_email_by_template(
-        #     subject='Sign Up Confirmation | xlartas',
-        #     to_email=user.email,
-        #     template='Core/email_templates/email_signup_confirmation.html',
-        #     context={
-        #         'host': request.get_host(),
-        #         'is_secure': request.is_secure(),
-        #         'code': code.code
-        #     }
-        # )
 
         return Response({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
-    else:
-        return Response(serializer.errors, status=400)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

@@ -9,7 +9,6 @@ import './static/base/css/wide-classes.css';
 import './static/base/css/base.css';
 import {AuthProvider} from './components/base/auth/AuthContext/AuthContext';
 import {darkTheme} from './components/base/theme/Theme';
-import FormExample from './components/examples/FormExample';
 import {ThemeProvider} from "@mui/material";
 import Software from "./pages/Software/Software";
 import Deposit from "./components/base/Payment/Deposit";
@@ -17,8 +16,10 @@ import SoftwareDetail from "./pages/Software/SoftwareDetail";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import {useAuth} from "./components/base/auth/useAuth";
 
 class App extends Component {
+
     render() {
         return (
             <ThemeProvider theme={darkTheme}>
@@ -30,7 +31,6 @@ class App extends Component {
                             <Header/>
                             <main className={'overflow-y-auto no-scrollbar'}>
                                 <Routes>
-                                    <Route path="/example_form" element={<FormExample/>}/>
                                     <Route path="/" element={<Home/>}/>
                                     <Route path="/deposit/" element={<Deposit/>}/>
                                     <Route path="/software/" element={<Software/>}/>

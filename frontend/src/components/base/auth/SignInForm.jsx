@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import {useAuth} from "../useAuth";
 import TextField from '@mui/material/TextField';
-import DynamicForm from "../../elements/DynamicForm";
-import Alert from '@mui/material/Alert';
-import SocialLogin from "../SocialLogin";
+import {useAuth} from "./useAuth";
+import SocialLogin from "./SocialLogin";
+import DynamicForm from "../elements/DynamicForm";
 
-const SignInForm = ({onSubmit, className}) => {
+const SignInForm = ({className}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const {login, authError} = useAuth(); // Используйте состояние ошибки из хука
+    const {login} = useAuth();
 
     const signIn = async (setErrors) => {
         try {
@@ -54,7 +53,7 @@ const SignInForm = ({onSubmit, className}) => {
                     margin="dense"
                 />
             </DynamicForm>
-            <SocialLogin c/>
+            <SocialLogin/>
         </div>
     );
 };

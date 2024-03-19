@@ -21,7 +21,7 @@ const About = () => {
             <Typography variant="h6" gutterBottom>
                 Contact Us
             </Typography>
-            <div className={'fc w-min-content mx-auto'}>
+            <div className={'fc w-min mx-auto'}>
                 <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'} target={'_blank'}
                       href="mailto:ivanhvalevskey@gmail.com" color="inherit">
                     <EmailIcon fontSize="large"/>

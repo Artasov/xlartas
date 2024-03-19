@@ -1,46 +1,61 @@
-import React, {useEffect, useRef} from 'react';
-import {IconButton} from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+import React, {useRef, useState} from 'react';
+import {IconButton, Snackbar} from '@mui/material';
+import {useGoogleLogin} from '@react-oauth/google';
+import {useAuth} from './useAuth';
+import MuiAlert from '@mui/material/Alert';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDiscord, faGoogle} from "@fortawesome/free-brands-svg-icons";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const SocialLogin = ({className}) => {
     const socialDiv = useRef();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "https://telegram.org/js/telegram-widget.js?19";
-        script.setAttribute("data-telegram-login", "xlartas_web_bot");
-        script.setAttribute("data-size", "large");
-        script.setAttribute("data-radius", "8");
-        script.setAttribute("data-userpic", "false");
-        script.setAttribute("data-auth-url", "https://xlartas.ru/accounts/telegram/login/callback/");
-        script.setAttribute("data-request-access", "write");
-        socialDiv.current.appendChild(script);
-    }, []);
+    let auth = useAuth();
 
-    const handleGoogle = () => {
-        const loginWindow = window.open(
-            `/google/`,
-            'SocialLogin',
-            'width=600,height=700'
-        );
+    let googleLogin = useGoogleLogin({
+        onSuccess: credentialResponse => {
+            auth.google_oauth2(credentialResponse.code);
+            console.log('Login success');
+        },
+        onNonOAuthError: (e) => {
+            console.log(e);
+            console.log('onNonOAuthError');
+            setOpenSnackbar(true);
+        },
+        onError: () => {
+            console.log('Login Failed');
+            setOpenSnackbar(true);
+        },
+        flow: "auth-code"
+    });
 
-        // Опционально: ожидание закрытия окна и выполнение действий после входа
-        const timer = setInterval(() => {
-            if (loginWindow.closed) {
-                clearInterval(timer);
-                // Обновление состояния после входа, если требуется
-            }
-        }, 500);
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
     };
 
     return (
         <div ref={socialDiv} className={`${className} frcc mt-3 gap-2`}>
-            <IconButton onClick={() => handleGoogle()}>
-                <GoogleIcon fontSize={'large'}/>
+            <IconButton onClick={googleLogin}>
+                <FontAwesomeIcon style={{fontSize: '1em'}} icon={faGoogle} className={'hover-scale-5'}/>
             </IconButton>
-            {/*<IconButton>*/}
-            {/*    <TelegramIcon fontSize={'large'}/>*/}
-            {/*</IconButton>*/}
+            <a className={''}
+                href="https://discord.com/oauth2/authorize?client_id=1018434499341733888&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2F&scope=identify">
+                <IconButton className={'ratio-1-1'}>
+                    <FontAwesomeIcon style={{fontSize: '1em'}} icon={faDiscord} className={'hover-scale-5'}/>
+                </IconButton>
+            </a>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{width: '100%'}}>
+                    Login process was interrupted. Please try again.
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

@@ -88,7 +88,7 @@ class BaseTrainerControllersGenerator {
         modal.setAttribute('aria-hidden', 'true');
 
         const modalDialog = document.createElement('div');
-        modalDialog.classList.add('modal-dialog', 'modal-dialog-centered', 'w-min-content', 'mx-auto');
+        modalDialog.classList.add('modal-dialog', 'modal-dialog-centered', 'w-min', 'mx-auto');
         modal.appendChild(modalDialog);
 
         const modalContent = document.createElement('div');

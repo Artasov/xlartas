@@ -18,7 +18,6 @@ class CurrentUserSerializer(ModelSerializer):
 
 
 class SignUpSerializer(Serializer):
-    username = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
-    password = serializers.CharField(required=True)
-
+    username = serializers.CharField(required=True, )
+    email = serializers.EmailField(required=True, )
+    password = serializers.CharField(required=True, )

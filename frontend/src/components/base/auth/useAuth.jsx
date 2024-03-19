@@ -20,5 +20,21 @@ export const useAuth = () => {
         await updateCurrentUser();
     };
 
-    return {...context, updateCurrentUser, login};
+    const google_oauth2 = async (code) => {
+        const response = await axios.get(`http://127.0.0.1:8000/accounts/google/oauth2/callback/?code=${code}`);
+        console.log(response.data.access)
+        localStorage.setItem('access', response.data.access);
+        localStorage.setItem('refresh', response.data.refresh);
+        await updateCurrentUser();
+    }
+
+    const discord_oauth2 = async (code) => {
+        const response = await axios.get(`http://127.0.0.1:8000/accounts/discord/oauth2/callback/?code=${code}`);
+        localStorage.setItem('access', response.data.access);
+        localStorage.setItem('refresh', response.data.refresh);
+        await updateCurrentUser();
+        window.location.href = "/"
+    }
+
+    return {...context, updateCurrentUser, login, google_oauth2, discord_oauth2};
 };

@@ -13,13 +13,22 @@ import {useAuth} from "../../components/base/auth/useAuth";
 import Head from "../../components/base/Head";
 
 const Home = () => {
-    const {user, isAuthenticated, showLoginModal, updateCurrentUser} = useAuth(AuthContext);
+    const {user, isAuthenticated, showLoginModal, updateCurrentUser, discord_oauth2} = useAuth(AuthContext);
     const [subscriptions, setSubscriptions] = useState([]);
     const [loadingSubscriptions, setLoadingSubscriptions] = useState(false);
     const [errorSubscriptions, setErrorSubscriptions] = useState('');
     const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
     const copySecretKeyBtnRef = useRef(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (window.location.search && !window.localStorage.getItem("access")) {
+            let urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("code")) {
+                discord_oauth2(urlParams.get("code"))
+            }
+        }
+    })
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -161,7 +170,7 @@ const Home = () => {
                                 >
                                     <span style={{marginTop: 2}}>DEPOSIT</span>
                                 </Button>
-                                <Modal className={`fs-6 max-w-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
+                                <Modal className={`fs-6 mw-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
                                         transition-all transition-d-300 p-4`}
                                        isOpen={isDepositModalOpen}
                                        onClose={() => {

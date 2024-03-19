@@ -1,9 +1,9 @@
 // SignUpForm.jsx
 import React, {useState} from 'react';
-import {Alert, TextField} from '@mui/material';
+import {TextField} from '@mui/material';
 import axiosInstance from "../../../services/base/axiosConfig";
 import DynamicForm from "../elements/DynamicForm";
-import {useNavigate} from "react-router-dom";
+import {useAuth} from "./useAuth";
 
 const SignUpForm = () => {
     const [formData, setFormData] = useState({
@@ -13,8 +13,7 @@ const SignUpForm = () => {
         confirmation_code: ''
     });
     const [codeSent, setCodeSent] = useState(false);
-    const [error, setError] = useState({});
-    const navigate = useNavigate();
+    const {showLoginModal} = useAuth();
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -22,15 +21,10 @@ const SignUpForm = () => {
             ...formData,
             [name]: value,
         });
-        // Reset error on input change
-        setError({
-            ...error,
-            [name]: '',
-        });
     };
 
-    const handleSignUp = async (e) => {
-        setError({});
+    const signUp = async (setErrors) => {
+        setErrors({});
         try {
             await axiosInstance.post('/api/signup/', {
                 username: formData.username,
@@ -38,31 +32,42 @@ const SignUpForm = () => {
                 password: formData.password,
             });
             setCodeSent(true);
-        } catch (err) {
-            setError(err.response.data);
+        } catch (e) {
+            console.log(e.response.data);
+            if (e.response.data.detail) {
+                setErrors([e.response.data.detail]);
+            } else {
+                setErrors(['Something go wrong']);
+            }
         }
     };
-    const verifyCode = async (e) => {
-        setError({});
+    const verifyCode = async (setErrors) => {
+        setErrors({});
         try {
             await axiosInstance.post('/api/verify_email/', {
-                email: formData.email, // Ensure formData.email is used
+                email: formData.email,
                 confirmation_code: formData.confirmation_code,
             });
-            navigate('/');
-        } catch (err) {
-            setError(err.response.data);
+            setCodeSent(false);
+            showLoginModal();
+        } catch (e) {
+            if (e.response.data.detail) {
+                setErrors([e.response.data.detail]);
+            } else {
+                setErrors(['Something go wrong']);
+            }
         }
     };
 
     return (
         <div>
             {!codeSent ? (
-                <DynamicForm requestFunc={handleSignUp}
+                <DynamicForm requestFunc={signUp}
                              submitBtnText={'Create ACCOUNT'}
                              submitBtnClassName={'fw-6'}
                              loadingClassName={'text-white-c0'}>
                     <TextField
+                        required={true}
                         name="username"
                         label="Username"
                         variant="outlined"
@@ -71,10 +76,10 @@ const SignUpForm = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="dense"
-                        error={!!error.username}
-                        helperText={error.username || "Enter username"}
+                        helperText={"Enter username"}
                     />
                     <TextField
+                        required={true}
                         name="email"
                         label="Email"
                         variant="outlined"
@@ -83,10 +88,10 @@ const SignUpForm = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="dense"
-                        error={!!error.email}
-                        helperText={error.email || "Enter a valid email"}
+                        helperText={"Enter a valid email"}
                     />
                     <TextField
+                        required={true}
                         name="password"
                         label="Password"
                         variant="outlined"
@@ -95,8 +100,7 @@ const SignUpForm = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="dense"
-                        error={!!error.password}
-                        helperText={error.password || "Enter password"}
+                        helperText={"Enter password"}
                     />
                 </DynamicForm>
             ) : (
@@ -110,15 +114,10 @@ const SignUpForm = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="dense"
-                        error={!!error.confirmation_code}
-                        helperText={error.confirmation_code || "Enter confirmation code"}
+                        helperText={"Enter confirmation code"}
                     />
                 </DynamicForm>
             )}
-            {
-                Object.values(error).some(e => e) &&
-                <Alert className={'bg-danger bg-opacity-10'} severity="error">{Object.values(error)[0]}</Alert>
-            }
         </div>
     );
 };

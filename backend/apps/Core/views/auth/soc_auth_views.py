@@ -1,52 +1,89 @@
 import hashlib
-import json
 import os
 
-from adrf.decorators import api_view
-from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import login
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.crypto import get_random_string
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.Core.models import *
-from apps.Core.services.services import telegram_verify_hash
+from apps.Core.models import DiscordUser, User
+from apps.Core.services.soc_auth import get_discord_user_by_code, get_google_user_by_token
 
 
-def telegram_auth(request):
-    if request.method == 'GET':
-        data = request.GET.dict()
+def discord_oauth2(request):
+    """ View for discord oauth2 """
+    code = request.GET.get('code')
+    discord_data = get_discord_user_by_code(code)
 
-        if not telegram_verify_hash(data):
-            pass
-            # return render_invalid(request, 'Invalid hash', 'signup')
+    try:
+        print(discord_data)
+        discord_user = DiscordUser.objects.get(discord_id=int(discord_data.get('id')))
+        user = discord_user.user
+    except DiscordUser.DoesNotExist:
+        user = User(username=discord_data.get('username'))
+        user.save()
+        discord_user = DiscordUser(discord_id=int(discord_data.get('id')), user=user)
+        discord_user.save()
 
-        del data['auth_date']
+    refresh = RefreshToken.for_user(user)
 
-        telegram_id = data['id']
-        username = data['username']
-        first_name = data['first_name']
+    return JsonResponse({
+        'access': str(refresh.access_token),
+        'refresh': str(refresh),
+    }, safe=False)
 
-        try:
-            User.objects.get(username=username)
-            username = username + get_random_string(10)
-        except User.DoesNotExist:
-            pass
 
-        if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
-            user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
-            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-        else:
-            user_ = User.objects.create(username=username, first_name=first_name)
-            SocialAccount.objects.create(user=user_, uid=telegram_id,
-                                         provider='telegram',
-                                         extra_data=json.dumps(data))
-            login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('main')
+def google_oauth2(request):
+    """ View for google oauth2 """
+    code = request.GET.get('code')
+    google_data = get_google_user_by_token(code)
+
+    try:
+        user = User.objects.get(email=google_data.get('email'))
+    except User.DoesNotExist:
+        user = User(email=google_data.get('email'), username=google_data.get('email').split('@')[0])
+        user.save()
+
+    refresh = RefreshToken.for_user(user)
+
+    return JsonResponse({
+        'access': str(refresh.access_token),
+        'refresh': str(refresh),
+    }, safe=False)
+
+
+# def telegram_auth(request):
+#     if request.method == 'GET':
+#         data = request.GET.dict()
+#
+#         if not telegram_verify_hash(data):
+#             pass
+#             # return render_invalid(request, 'Invalid hash', 'signup')
+#
+#         del data['auth_date']
+#
+#         telegram_id = data['id']
+#         username = data['username']
+#         first_name = data['first_name']
+#
+#         try:
+#             User.objects.get(username=username)
+#             username = username + get_random_string(10)
+#         except User.DoesNotExist:
+#             pass
+#
+#         if SocialAccount.objects.filter(uid=telegram_id, provider='telegram').exists():
+#             user_ = SocialAccount.objects.get(uid=telegram_id, provider='telegram').user
+#             login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
+#         else:
+#             user_ = User.objects.create(username=username, first_name=first_name)
+#             SocialAccount.objects.create(user=user_, uid=telegram_id,
+#                                          provider='telegram',
+#                                          extra_data=json.dumps(data))
+#             login(request, user_, backend='django.contrib.auth.backends.ModelBackend')
+#         return redirect('main')
 
 
 def vk_auth(request):
