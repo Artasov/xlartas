@@ -4,7 +4,9 @@ from django.contrib import admin
 from django.urls import include, re_path
 from django.urls import path
 from django.views.generic import TemplateView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView, TokenRefreshView, TokenVerifyView
+)
 
 from .views.auth.auth_views import signup, verify_email
 from .views.auth.soc_auth_views import discord_oauth2, google_oauth2
@@ -26,7 +28,6 @@ urlpatterns = [
     path('api/signup/', signup, name='signup'),
     path('api/verify_email/', verify_email, name='verify_email'),
 
-    # path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('apps.shop.desktop_software_urls')),
 
     path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),

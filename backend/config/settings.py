@@ -116,10 +116,11 @@ SIMPLE_JWT = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://localhost:3000",
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://localhost:3000',
+    'https://accounts.google.com',
 ]
 
 MIDDLEWARE = [
@@ -139,11 +140,11 @@ SITE_ID = int(env('SITE_ID'))
 
 GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
-GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/"
+GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/google-callback/"
 
 DISCORD_CLIENT_ID = env('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = env('DISCORD_CLIENT_SECRET')
-DISCORD_REDIRECT_URI = "http://127.0.0.1:8000/"
+DISCORD_REDIRECT_URI = "http://127.0.0.1:8000/discord-callback/"
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

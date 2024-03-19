@@ -1,6 +1,5 @@
 import React, {useRef, useState} from 'react';
 import {IconButton, Snackbar} from '@mui/material';
-import {useGoogleLogin} from '@react-oauth/google';
 import {useAuth} from './useAuth';
 import MuiAlert from '@mui/material/Alert';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -14,25 +13,6 @@ const SocialLogin = ({className}) => {
     const socialDiv = useRef();
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
-    let auth = useAuth();
-
-    let googleLogin = useGoogleLogin({
-        onSuccess: credentialResponse => {
-            auth.google_oauth2(credentialResponse.code);
-            console.log('Login success');
-        },
-        onNonOAuthError: (e) => {
-            console.log(e);
-            console.log('onNonOAuthError');
-            setOpenSnackbar(true);
-        },
-        onError: () => {
-            console.log('Login Failed');
-            setOpenSnackbar(true);
-        },
-        flow: "auth-code"
-    });
-
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -42,11 +22,10 @@ const SocialLogin = ({className}) => {
 
     return (
         <div ref={socialDiv} className={`${className} frcc mt-3 gap-2`}>
-            <IconButton onClick={googleLogin}>
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fgoogle-callback%2F&prompt=consent&response_type=code&client_id=7224594722-0c7m3b3ud8thtliee2gvhphjbu3e9c0l.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20openid&access_type=offline">
                 <FontAwesomeIcon style={{fontSize: '1em'}} icon={faGoogle} className={'hover-scale-5'}/>
-            </IconButton>
-            <a className={''}
-                href="https://discord.com/oauth2/authorize?client_id=1018434499341733888&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2F&scope=identify">
+            </a>
+            <a href="https://discord.com/oauth2/authorize?client_id=1018434499341733888&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fdiscord-callback%2F&scope=identify">
                 <IconButton className={'ratio-1-1'}>
                     <FontAwesomeIcon style={{fontSize: '1em'}} icon={faDiscord} className={'hover-scale-5'}/>
                 </IconButton>

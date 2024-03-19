@@ -18,7 +18,6 @@ def discord_oauth2(request):
     discord_data = get_discord_user_by_code(code)
 
     try:
-        print(discord_data)
         discord_user = DiscordUser.objects.get(discord_id=int(discord_data.get('id')))
         user = discord_user.user
     except DiscordUser.DoesNotExist:

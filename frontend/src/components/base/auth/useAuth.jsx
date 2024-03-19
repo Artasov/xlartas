@@ -26,6 +26,7 @@ export const useAuth = () => {
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
         await updateCurrentUser();
+        window.location.href = "/"
     }
 
     const discord_oauth2 = async (code) => {

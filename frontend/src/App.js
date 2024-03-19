@@ -16,7 +16,8 @@ import SoftwareDetail from "./pages/Software/SoftwareDetail";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
-import {useAuth} from "./components/base/auth/useAuth";
+import GoogleOAuth from "./components/base/auth/OAuth/GoogleOAuth";
+import DiscordOAuth from "./components/base/auth/OAuth/DiscordOAuth";
 
 class App extends Component {
 
@@ -38,6 +39,8 @@ class App extends Component {
                                     <Route path="/about/" element={<About/>}/>
                                     <Route path="/terms-and-conditions/" element={<TermsAndConditions/>}/>
                                     <Route path="/privacy-policy/" element={<PrivacyPolicy/>}/>
+                                    <Route path="/discord-callback/" element={<DiscordOAuth/>}/>
+                                    <Route path="/google-callback/" element={<GoogleOAuth/>}/>
                                 </Routes>
                             </main>
                             {/*<Footer/>*/}
