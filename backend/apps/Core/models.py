@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     BigIntegerField, ImageField, CharField, BooleanField,
@@ -6,21 +8,19 @@ from django.db.models import (
 )
 from django.utils import timezone
 
-from xLLIB_v1 import random_str
+
+def generate_custom_key() -> str:
+    return uuid.uuid4().hex[:20]
 
 
-def GenerateCustomKey():
-    return random_str(20)
-
-
-def GenerateReferralCode():
-    return random_str(10)
+def generate_referral_code() -> str:
+    return uuid.uuid4().hex[:10]
 
 
 class User(AbstractUser):
     avatar = ImageField(upload_to='images/users/avatar/', blank=True)
-    secret_key = CharField(max_length=20, default=GenerateCustomKey)
-    referral_code = CharField(max_length=10, default=GenerateReferralCode)
+    secret_key = CharField(max_length=20, default=generate_custom_key)
+    referral_code = CharField(max_length=10, default=generate_referral_code)
     hw_id = CharField(max_length=600, blank=True, null=True, default=None)
     is_confirmed = BooleanField(default=False)
     balance = DecimalField(decimal_places=2, max_digits=8, default=0)
@@ -37,17 +37,17 @@ class Theme(Model):
 
 
 class ConfirmationCode(Model):
-    class CodeType(TextChoices):
-        signUp = 'signUp'
-        resetPassword = 'resetPassword'
+    class ConfirmationCodeTypes(TextChoices):
+        SIGN_UP = 'SIGN_UP', 'Sign Up'
+        RESET_PASSWORD = 'RESET_PASSWORD', 'Reset Password'
 
     user = ForeignKey(User, on_delete=CASCADE)
     code = CharField(max_length=40)
-    type = CharField(max_length=30, choices=CodeType.choices, default=CodeType.resetPassword)
+    type = CharField(max_length=30, choices=ConfirmationCodeTypes.choices)
     expired_at = DateTimeField()
     created_at = DateTimeField(auto_now_add=True)
 
-    async def is_expired(self):
+    async def is_expired(self) -> bool:
         return self.expired_at < timezone.now()
 
 

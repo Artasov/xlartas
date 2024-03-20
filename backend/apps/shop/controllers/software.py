@@ -8,8 +8,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.Core.services.services import aget_object_or_404, acontroller
+from apps.shop.exceptions.base import NoValidLicenseFound, SoftwareFileNotFound
 from apps.shop.models import UserSoftwareSubscription, SoftwareProduct
-from apps.shop.services.product import get_softwares
+from apps.shop.services.software import get_softwares
 from apps.shop.services.subscription import subscribe_user_software, InsufficientFundsError, activate_test_software_user
 
 
@@ -61,9 +62,9 @@ async def software_subscribe_current_user(request) -> Response:
         raise e
 
 
+@acontroller('Download software file by id')
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-@acontroller('Download software file by id')
 async def download_software_file(request, id) -> Response | FileResponse:
     user = request.user
     software = await aget_object_or_404(SoftwareProduct, id=id)
@@ -72,11 +73,10 @@ async def download_software_file(request, id) -> Response | FileResponse:
         expires_at__gte=timezone.now()
     ).afirst()
 
-    if not subscription:
-        return Response({'error': 'No valid license found for this software.'}, status=403)
+    if not subscription: raise NoValidLicenseFound
 
-    file = await sync_to_async(getattr)(software, 'file')
-    if not file:
-        Response('Software file not found', status=status.HTTP_404_NOT_FOUND)
-    print(file.file.url)
+    file = await sync_to_async(getattr)(software, 'file', None)
+
+    if not file: raise SoftwareFileNotFound
+
     return Response({'file_url': file.file.url}, status=status.HTTP_200_OK)

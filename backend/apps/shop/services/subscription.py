@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.exceptions import APIException
-from transliterate.utils import _
 
+from apps.shop.exceptions.base import InsufficientFundsError
 from apps.shop.models import UserSoftwareSubscription, SoftwareSubscription, SoftwareProduct
 
 
@@ -39,8 +39,19 @@ async def calculate_remaining_hours(expiration_date) -> int:
 
 
 async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
+    """
+    The get_user_subscriptions asynchronous function
+    retrieves a list of software subscriptions
+    associated with a given user. Each subscription is detailed
+    with software information, expiration date, last activity,
+    remaining hours, and the number of starts.
+    :param user: The user for whom to retrieve software subscriptions.
+    :return: A list of UserSoftwareSubscriptionInfo instances, each
+    representing detailed information about a user's software subscription.
+    """
     subscriptions: list[UserSoftwareSubscription] = await sync_to_async(list)(
-        UserSoftwareSubscription.objects.filter(user=user))
+        UserSoftwareSubscription.objects.filter(user=user)
+    )
     subscription_infos = []
     for sub in subscriptions:
         subscription_info = UserSoftwareSubscriptionInfo(
@@ -57,14 +68,16 @@ async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
     return subscription_infos
 
 
-class InsufficientFundsError(APIException):
-    status_code = status.HTTP_402_PAYMENT_REQUIRED
-    default_detail = _("Insufficient funds to complete the subscription.")
-    default_code = 'insufficient_funds'
-
-
 @transaction.atomic()
 def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_id: int):
+    """
+    Creates a UserSubscription (the product is already indicated in it) if
+    it does not exist, otherwise changes it by increasing the expiration
+    date and debits money from the balance.
+    :param user: User object.
+    :param subscription_id: software subscription id.
+    :return:
+    """
     sub: SoftwareSubscription = get_object_or_404(SoftwareSubscription, id=subscription_id)
 
     if user.balance < sub.priceRub:

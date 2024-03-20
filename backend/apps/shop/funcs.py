@@ -4,7 +4,9 @@ from apps.Core.services.services import decrease_by_percentage
 # from . import qiwi
 from .models import *
 
+'''
 
+'''
 # from .services import qiwi
 
 

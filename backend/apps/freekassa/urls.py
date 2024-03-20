@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.freekassa.views import fk_notify, fk_success, fk_failed, create_deposit
+from apps.freekassa.controllers import fk_notify, fk_success, fk_failed, create_deposit
 
 app_name = 'freekassa'
 

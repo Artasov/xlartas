@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.exeption.auth import UsernameAlreadyExists, UserEmailAlreadyExists
+from apps.Core.exceptions.auth import UsernameAlreadyExists, UserEmailAlreadyExists
 from apps.Core.models import *
 from apps.Core.serializers import SignUpSerializer
 from apps.Core.services.code_confirmation import (
@@ -37,7 +37,7 @@ async def signup(request) -> Response:
             username=username, email=email, password=password, is_confirmed=False
         )
 
-        code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.CodeType.signUp)
+        code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.ConfirmationCodeTypes.signUp)
         if not settings.DEV:
             send_signup_confirmation_email_task.delay(
                 to_email=user.email,
