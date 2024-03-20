@@ -11,7 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from apps.Core.models import DiscordUser, User
 from apps.Core.services.soc_auth import get_discord_user_by_code, get_google_user_by_token
 
-
 def discord_oauth2(request):
     """ View for discord oauth2 """
     code = request.GET.get('code')
