@@ -1,0 +1,24 @@
+{% extends 'Core/base.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load Core_tags %}
+
+{% block title %}xlartas | CHECK EMAIL{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none  fcc flex-grow-1" data-bs-theme="dark">
+        <div class="row disable-tap-and-selection">
+            <div class="mx-auto" style="max-width: 400px">
+                <p class="text-success text-center fs-1"
+                   style="line-height: 2.1rem;">
+                    We have sent a letter by the specified mail.<br>
+                </p>
+                <p class="fs-4 text-center" style="color: #aaaaaa; line-height: 2.1rem;">
+                    Usually emails arrive within a few seconds, but it can take up to
+                    15 minutes. If you have any problems, please contact me
+                    xl@xlartas.ru <br>This page can be closed.
+                </p>
+            </divc>
+        </div>
+    </div>
+{% endblock %}

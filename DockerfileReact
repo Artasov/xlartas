@@ -1,0 +1,8 @@
+FROM node:21-alpine
+
+COPY ./frontend /srv
+COPY ./frontend /srv
+WORKDIR /srv
+
+ENTRYPOINT ["sh", "/srv/entrypoint_react.sh"]
+

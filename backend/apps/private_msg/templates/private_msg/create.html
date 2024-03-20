@@ -1,0 +1,84 @@
+{% extends 'Core/base.html' %}
+{% load static %}
+{% load Core_tags %}
+{% load Core_tags %}
+
+{% block title %}xlartas | Private msg{% endblock %}
+
+{% block meta_keywords %}Приват приватные сообщения сообщение закрытое скрытое скрыть одноразовое одноразовый msg
+    private message{% endblock %}
+{% block meta_og_description %}Приватные сообщения{% endblock %}
+{% block meta_description %}Private msg{% endblock %}
+{% block meta_twitter_description %}Private msg{% endblock %}
+
+{% block link_content_css %}
+    <link rel="stylesheet" href="{% static 'Core/css/drag_and_drop.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/audio.css' %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'private_msg/js/create.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none fcc
+     no_scrollbar mb-0 flex-grow-1"
+         style="max-width: 600px!important;">
+        <h1 class="text-center text-white disable-tap-and-selection mt-4">
+            New Private Msg
+        </h1>
+        <div class="d-none w-100 mx-auto text-center">
+            <span id="invalid" class="fw-8 fs-5 text-danger"></span>
+        </div>
+        <span id="success" class="fw-8 fs-5 text-success text-center d-none mb-2"></span>
+        <button type="button"
+                class="fs-5 mx-auto badge rounded-pill text-white-70 bg-black-25 text-white-50 popover-dismiss"
+                data-bs-container="body" data-bs-toggle="popover"
+                data-bs-placement="bottom" data-bs-trigger="focus" style="width: min-content" data-bs-content="
+                Здесь ты можешь создать сообщение, которое удалиться сразу
+                после первого прочтения, прикрепить к нему файл и голосовое сообщение.">
+            использование
+        </button>
+
+        <form action="{% url 'private-msg:create' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="d-none progress-bar-block position-relative frc mt-2">
+                <progress id="progress-bar" class="mx-auto" value="55" max="100"></progress>
+                <div class="position-absolute text-white fw-8 top-0 left w-100 fcc text-center">
+                    <span><span id="progress-bar-value">0</span> %</span>
+                </div>
+            </div>
+            <div class="mb-3 px-3">
+                <label for='text'></label>
+                <textarea type="text" class="text-white-80 text-center fs-6 p-4"
+                          placeholder="msg text" name="text" id='text' required></textarea>
+            </div>
+            <p class="text-white-65 fs-6 fw-5 mb-2 text-center">Перетащи файлы либо кликни чтобы выбрать</p>
+            <div class="frc gap-3 mb-3 disable-tap-and-selection">
+                <div id="drag_drop_rp_file" style="min-width: 12rem;"
+                        class="drag_drop px-2 bg-black-35 dashboard fcc text-center pb-1">
+                    <span id="drag_drop_rp_file-name" class="text-white-75 fs-5 fw-7">File</span>
+                    <span class="text-white-55 fs-6 fw-5">100 MB</span>
+                    <input type="file" class="form-control-file d-none"
+                           id="file_input" name="file" accept=".rar, .7zip, .zip" required>
+                </div>
+            </div>
+
+            <div class="fcc mb-3">
+                <div class="frc gap-2">
+                    <div id="record-btn" class="btn-rec"></div>
+                    <div id="play-audio-btn" class="btn-play d-none"></div>
+                </div>
+            </div>
+            <audio id="audio-player" class="d-none" controls></audio>
+            <input type="file" class="d-none" name="audio-file" id="audio-file">
+
+            <div id="btn-recaptcha-marked" class="text-center my-3">
+                <div id="btn_submit"
+                     class="mx-auto btn-1 fs-5 fw-bold px-4 py-1 w-min disable-tap-and-selection">
+                    Create</div>
+            </div>
+            {% include 'Core/includes/recaptcha_script.html' with mark_el_id='btn-recaptcha-marked'%}
+        </form>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+# DockerfileMinio
+FROM minio/minio
+
+COPY entrypoint-minio.sh /opt/entrypoint-minio.sh
+
+RUN chmod +x /opt/entrypoint-minio.sh
+
+ENTRYPOINT ["sh", "/opt/entrypoint-minio.sh"]

@@ -1,0 +1,19 @@
+{% load recaptcha_tags %}
+<script>
+    window.addEventListener('load', function (e) {
+        let for_insert = document.getElementById('{{ mark_el_id }}');
+        let el = document.createElement('script');
+        el.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
+        let el2 = document.createElement('div');
+
+        el2.setAttribute("data-sitekey", "{% get_GOOGLE_RECAPTCHA_SITE_KEY %}");
+
+        el2.classList.add('g-recaptcha');
+        {% if compact == 'True' %}
+            el2.setAttribute("data-size", "compact");
+        {% endif %}
+
+        for_insert.before(el);
+        for_insert.before(el2);
+    });
+</script>

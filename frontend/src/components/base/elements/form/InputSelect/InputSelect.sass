@@ -1,0 +1,93 @@
+@import "../../../../../static/base/css/vars"
+.custom-select
+  transition: all .3s ease
+  position: relative
+  width: min-content
+  white-space: nowrap
+  border-radius: 0.3rem
+  height: min-content
+
+  .custom-select-arrow
+    transition: transform .3s ease
+    width: 0.7rem
+    transform: rotate(-90deg)
+
+  ul
+    border-radius: 0.3rem
+
+  .select-value
+    position: relative
+    transition: all .3s ease
+    padding: .4rem .7rem
+    cursor: pointer
+    user-select: none
+    box-shadow: 0 0 0.4rem #00000055
+    border-radius: 0.3rem
+    background: #ffffff08
+
+
+  .options-container
+    backdrop-filter: blur(15px)
+    overflow: hidden
+    transition: all .3s ease
+    position: absolute
+    top: 101%
+    left: 0
+    width: 100%
+    z-index: 11
+    max-height: 350px
+    overflow-y: auto
+    overflow-x: auto
+    height: 0
+    box-shadow: 0 0 0.4rem #00000055
+    border-radius: 0.3rem
+
+  .option-item-choosed
+    background-color: $primary
+
+  .option-item
+    transition: background-color .3s ease
+    padding: .3rem .5rem
+    cursor: pointer
+    user-select: none
+    border-bottom: 2px solid #00000033
+
+    &:last-child
+      padding-bottom: .5rem
+      border-bottom-left-radius: 0.3rem
+      border-bottom-right-radius: 0.3rem
+      border-bottom: 0
+
+    &:first-child
+      border-top-left-radius: 0.3rem
+      border-top-right-radius: 0.3rem
+
+
+  .option-item:hover
+    background-color: #ffffff11
+  .help-button
+    transition: opacity .3s ease
+    position: absolute
+    top: 0
+    right: .5rem
+    height: 100%
+    opacity: 0
+    img
+      width: 13px
+      padding-bottom: 1px
+.custom-select-opened
+  background: #ffffff05 !important
+  .help-button
+    opacity: 100%
+  .custom-select-arrow
+    width: 0.7rem
+    transform: rotate(-180deg)
+
+  .select-value
+    background-color: #ffffff11
+    box-shadow: 0 0 0.3rem #00000055
+    padding-right: 1.8rem
+
+  .options-container
+    background-color: #ffffff03 !important
+

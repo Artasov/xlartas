@@ -128,9 +128,6 @@ Control.ca-bundle
 Control.system-ca-bundle
 GitHub.sublime-settings
 
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
 
 # MINIO POSTGRES DATA
 data/
@@ -144,6 +141,8 @@ data
 *css.map
 *.css.map
 log.txt
-!/.gitignore
-/APP_Harmony/static/APP_Harmony/mp3/BalladPiano/fulls/
-/APP_Harmony/static/APP_Harmony/mp3/BalladPiano/fulls
+short.wav
+audio_data/
+
+db_fixtures
+.env*

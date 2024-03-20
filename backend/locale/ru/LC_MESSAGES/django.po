@@ -1,0 +1,588 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-25 02:37+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: .\APP_Harmony\templates\APP_Harmony\includes\infoModalWithBtn.html:17
+msgid "Ð Ð¿ÑÐ¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ð¸"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:24
+msgid "Addon"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:25
+msgid "x8"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:26
+msgid "x16"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:27
+msgid "x32"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:28
+msgid "x64"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:29
+msgid "x128"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:30
+msgid "x256"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:31
+msgid "x512"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:32 .\APP_resource_pack\models.py:38
+#: .\APP_resource_pack\models.py:48
+msgid "other"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:35
+msgid "dark"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:36
+msgid "medium"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:37
+msgid "light"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:41
+msgid "white"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:42
+msgid "black"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:43
+msgid "red"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:44
+msgid "blue"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:45
+msgid "green"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:46
+msgid "yellow"
+msgstr ""
+
+#: .\APP_resource_pack\models.py:47
+msgid "violet"
+msgstr ""
+
+#: .\APP_shop\models.py:24
+msgid "WEEK"
+msgstr ""
+
+#: .\APP_shop\models.py:25
+msgid "MONTH"
+msgstr ""
+
+#: .\APP_shop\models.py:26
+msgid "HALF_YEAR"
+msgstr ""
+
+#: .\APP_shop\models.py:27
+msgid "YEAR"
+msgstr ""
+
+#: .\APP_shop\models.py:28
+msgid "FOREVER"
+msgstr ""
+
+#: .\APP_shop\models.py:33
+msgid "PROGRAM"
+msgstr ""
+
+#: .\APP_shop\models.py:34
+msgid "ACCOUNT"
+msgstr ""
+
+#: .\APP_shop\models.py:71
+msgid "software"
+msgstr ""
+
+#: .\APP_shop\models.py:72
+msgid "BALANCE"
+msgstr ""
+
+#: .\APP_shop\models.py:73
+msgid "donate"
+msgstr ""
+
+#: .\APP_shop\models.py:76
+msgid "waiting"
+msgstr ""
+
+#: .\APP_shop\models.py:77
+msgid "done"
+msgstr ""
+
+#: .\APP_shop\models.py:78
+msgid "paid"
+msgstr ""
+
+#: .\APP_shop\models.py:79
+msgid "rejected"
+msgstr ""
+
+#: .\APP_shop\models.py:80
+msgid "expired"
+msgstr ""
+
+#: .\APP_shop\models.py:118
+msgid "sale"
+msgstr ""
+
+#: .\APP_shop\models.py:119
+msgid "free"
+msgstr ""
+
+#: .\Core\templates\account\account_inactive.html:5
+#: .\Core\templates\account\account_inactive.html:8
+msgid "Account Inactive"
+msgstr ""
+
+#: .\Core\templates\account\account_inactive.html:10
+msgid "This ACCOUNT is inactive."
+msgstr ""
+
+#: .\Core\templates\account\email.html:5 .\Core\templates\account\email.html:8
+msgid "E-mail Addresses"
+msgstr ""
+
+#: .\Core\templates\account\email.html:10
+msgid "The following e-mail addresses are associated with your ACCOUNT:"
+msgstr ""
+
+#: .\Core\templates\account\email.html:24
+msgid "Verified"
+msgstr ""
+
+#: .\Core\templates\account\email.html:26
+msgid "Unverified"
+msgstr ""
+
+#: .\Core\templates\account\email.html:28
+msgid "Primary"
+msgstr ""
+
+#: .\Core\templates\account\email.html:34
+msgid "Make Primary"
+msgstr ""
+
+#: .\Core\templates\account\email.html:35
+msgid "Re-send Verification"
+msgstr ""
+
+#: .\Core\templates\account\email.html:36
+#: .\Core\templates\socialaccount\connections.html:35
+msgid "Remove"
+msgstr ""
+
+#: .\Core\templates\account\email.html:43
+msgid "Warning:"
+msgstr ""
+
+#: .\Core\templates\account\email.html:43
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: .\Core\templates\account\email.html:48
+msgid "Add E-mail Address"
+msgstr ""
+
+#: .\Core\templates\account\email.html:53
+msgid "Add E-mail"
+msgstr ""
+
+#: .\Core\templates\account\email.html:63
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr ""
+
+#: .\Core\templates\account\email\base_message.txt:1
+#, python-format
+msgid "Hello from %(site_name)s!"
+msgstr ""
+
+#: .\Core\templates\account\email\base_message.txt:5
+#, python-format
+msgid ""
+"Thank you for using %(site_name)s!\n"
+"%(site_domain)s"
+msgstr ""
+
+#: .\Core\templates\account\email\email_confirmation_message.txt:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because user %(user_display)s has given your e-"
+"mail address to register an ACCOUNT on %(site_domain)s.\n"
+"\n"
+"To confirm this is correct, go to %(activate_url)s"
+msgstr ""
+
+#: .\Core\templates\account\email\email_confirmation_subject.txt:3
+msgid "Please Confirm Your E-mail Address"
+msgstr ""
+
+#: .\Core\templates\account\email\password_reset_key_message.txt:4
+msgid ""
+"You're receiving this e-mail because you or someone else has requested a "
+"password for your user ACCOUNT.\n"
+"It can be safely ignored if you did not request a password reset. Click the "
+"link below to reset your password."
+msgstr ""
+
+#: .\Core\templates\account\email\password_reset_key_message.txt:9
+#, python-format
+msgid "In case you forgot, your username is %(username)s."
+msgstr ""
+
+#: .\Core\templates\account\email\password_reset_key_subject.txt:3
+#: .\Core\templates\account\email\unknown_account_subject.txt:3
+msgid "Password Reset E-mail"
+msgstr ""
+
+#: .\Core\templates\account\email\unknown_account_message.txt:4
+#, python-format
+msgid ""
+"You are receiving this e-mail because you or someone else has requested a\n"
+"password for your user ACCOUNT. However, we do not have any record of a "
+"user\n"
+"with email %(email)s in our database.\n"
+"\n"
+"This mail can be safely ignored if you did not request a password reset.\n"
+"\n"
+"If it was you, you can sign up for an ACCOUNT using the link below."
+msgstr ""
+
+#: .\Core\templates\account\email_confirm.html:6
+#: .\Core\templates\account\email_confirm.html:10
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: .\Core\templates\account\email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user %(user_display)s."
+msgstr ""
+
+#: .\Core\templates\account\email_confirm.html:20
+msgid "Confirm"
+msgstr ""
+
+#: .\Core\templates\account\email_confirm.html:27
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a href=\"%"
+"(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+
+#: .\Core\templates\account\logout.html:5
+#: .\Core\templates\account\logout.html:8
+#: .\Core\templates\account\logout.html:17
+msgid "Sign Out"
+msgstr ""
+
+#: .\Core\templates\account\logout.html:10
+msgid "Are you sure you want to sign out?"
+msgstr ""
+
+#: .\Core\templates\account\messages\cannot_delete_primary_email.txt:2
+#, python-format
+msgid "You cannot remove your primary e-mail address (%(email)s)."
+msgstr ""
+
+#: .\Core\templates\account\messages\email_confirmation_sent.txt:2
+#, python-format
+msgid "Confirmation e-mail sent to %(email)s."
+msgstr ""
+
+#: .\Core\templates\account\messages\email_confirmed.txt:2
+#, python-format
+msgid "You have confirmed %(email)s."
+msgstr ""
+
+#: .\Core\templates\account\messages\email_deleted.txt:2
+#, python-format
+msgid "Removed e-mail address %(email)s."
+msgstr ""
+
+#: .\Core\templates\account\messages\logged_in.txt:4
+#, python-format
+msgid "Successfully signed in as %(name)s."
+msgstr ""
+
+#: .\Core\templates\account\messages\logged_out.txt:2
+msgid "You have signed out."
+msgstr ""
+
+#: .\Core\templates\account\messages\password_changed.txt:2
+msgid "Password successfully changed."
+msgstr ""
+
+#: .\Core\templates\account\messages\password_set.txt:2
+msgid "Password successfully set."
+msgstr ""
+
+#: .\Core\templates\account\messages\primary_email_set.txt:2
+msgid "Primary e-mail address set."
+msgstr ""
+
+#: .\Core\templates\account\messages\unverified_primary_email.txt:2
+msgid "Your primary e-mail address must be verified."
+msgstr ""
+
+#: .\Core\templates\account\password_change.html:5
+#: .\Core\templates\account\password_change.html:8
+#: .\Core\templates\account\password_change.html:13
+#: .\Core\templates\account\password_reset_from_key.html:4
+#: .\Core\templates\account\password_reset_from_key.html:7
+#: .\Core\templates\account\password_reset_from_key_done.html:4
+#: .\Core\templates\account\password_reset_from_key_done.html:7
+msgid "Change Password"
+msgstr ""
+
+#: .\Core\templates\account\password_change.html:14
+msgid "Forgot Password?"
+msgstr ""
+
+#: .\Core\templates\account\password_reset.html:6
+#: .\Core\templates\account\password_reset.html:10
+#: .\Core\templates\account\password_reset_done.html:6
+#: .\Core\templates\account\password_reset_done.html:9
+msgid "Password Reset"
+msgstr ""
+
+#: .\Core\templates\account\password_reset.html:15
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+
+#: .\Core\templates\account\password_reset.html:20
+msgid "Reset My Password"
+msgstr ""
+
+#: .\Core\templates\account\password_reset.html:23
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: .\Core\templates\account\password_reset_done.html:15
+msgid ""
+"We have sent you an e-mail. If you have not received it please check your "
+"spam folder. Otherwise contact us if you do not receive it in a few minutes."
+msgstr ""
+
+#: .\Core\templates\account\password_reset_from_key.html:7
+msgid "Bad Token"
+msgstr ""
+
+#: .\Core\templates\account\password_reset_from_key.html:11
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+
+#: .\Core\templates\account\password_reset_from_key.html:16
+msgid "change password"
+msgstr ""
+
+#: .\Core\templates\account\password_reset_from_key_done.html:8
+msgid "Your password is now changed."
+msgstr ""
+
+#: .\Core\templates\account\password_set.html:5
+#: .\Core\templates\account\password_set.html:8
+#: .\Core\templates\account\password_set.html:13
+msgid "Set Password"
+msgstr ""
+
+#: .\Core\templates\account\signup_closed.html:5
+#: .\Core\templates\account\signup_closed.html:8
+msgid "Sign Up Closed"
+msgstr ""
+
+#: .\Core\templates\account\signup_closed.html:10
+msgid "We are sorry, but the sign up is currently closed."
+msgstr ""
+
+#: .\Core\templates\account\snippets\already_logged_in.html:5
+msgid "Note"
+msgstr ""
+
+#: .\Core\templates\account\snippets\already_logged_in.html:5
+#, python-format
+msgid "you are already logged in as %(user_display)s."
+msgstr ""
+
+#: .\Core\templates\account\verification_sent.html:5
+#: .\Core\templates\account\verification_sent.html:8
+#: .\Core\templates\account\verified_email_required.html:5
+#: .\Core\templates\account\verified_email_required.html:8
+msgid "Verify Your E-mail Address"
+msgstr ""
+
+#: .\Core\templates\account\verification_sent.html:10
+msgid ""
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process. If you do not see the verification e-mail in "
+"your main inbox, check your spam folder. Please contact us if you do not "
+"receive the verification e-mail within a few minutes."
+msgstr ""
+
+#: .\Core\templates\account\verified_email_required.html:12
+msgid ""
+"This part of the site requires us to verify that\n"
+"you are who you claim to be. For this purpose, we require that you\n"
+"verify ownership of your e-mail address. "
+msgstr ""
+
+#: .\Core\templates\account\verified_email_required.html:16
+msgid ""
+"We have sent an e-mail to you for\n"
+"verification. Please click on the link inside that e-mail. If you do not see "
+"the verification e-mail in your main inbox, check your spam folder. "
+"Otherwise\n"
+"contact us if you do not receive it within a few minutes."
+msgstr ""
+
+#: .\Core\templates\account\verified_email_required.html:20
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address</a>."
+msgstr ""
+
+#: .\Core\templates\admin\base_site.html:4
+msgid "Django site admin"
+msgstr ""
+
+#: .\Core\templates\admin\base_site.html:12
+msgid "Django administration"
+msgstr ""
+
+#: .\Core\templates\socialaccount\authentication_error.html:5
+#: .\Core\templates\socialaccount\authentication_error.html:8
+msgid "Social Network Login Failure"
+msgstr ""
+
+#: .\Core\templates\socialaccount\authentication_error.html:10
+msgid ""
+"An error occurred while attempting to login via your social network ACCOUNT."
+msgstr ""
+
+#: .\Core\templates\socialaccount\connections.html:5
+#: .\Core\templates\socialaccount\connections.html:8
+msgid "Account Connections"
+msgstr ""
+
+#: .\Core\templates\socialaccount\connections.html:11
+msgid ""
+"You can sign in to your ACCOUNT using any of the following third party "
+"accounts:"
+msgstr ""
+
+#: .\Core\templates\socialaccount\connections.html:43
+msgid ""
+"You currently have no social network accounts connected to this ACCOUNT."
+msgstr ""
+
+#: .\Core\templates\socialaccount\connections.html:46
+msgid "Add a 3rd Party Account"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:4
+msgid "Sign In"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:10
+#, python-format
+msgid "Connect %(provider)s"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:12
+#, python-format
+msgid "You are about to connect a new third party ACCOUNT from %(provider)s."
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:14
+#, python-format
+msgid "Sign In Via %(provider)s"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:16
+#, python-format
+msgid "You are about to sign in using a third party ACCOUNT from %(provider)s."
+msgstr ""
+
+#: .\Core\templates\socialaccount\login.html:21
+msgid "Continue"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login_cancelled.html:5
+#: .\Core\templates\socialaccount\login_cancelled.html:9
+msgid "Login Cancelled"
+msgstr ""
+
+#: .\Core\templates\socialaccount\login_cancelled.html:13
+#, python-format
+msgid ""
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
+msgstr ""
+
+#: .\Core\templates\socialaccount\messages\account_connected.txt:2
+msgid "The social ACCOUNT has been connected."
+msgstr ""
+
+#: .\Core\templates\socialaccount\messages\account_connected_other.txt:2
+msgid "The social ACCOUNT is already connected to a different ACCOUNT."
+msgstr ""
+
+#: .\Core\templates\socialaccount\messages\account_disconnected.txt:2
+msgid "The social ACCOUNT has been disconnected."
+msgstr ""
+
+#: .\config\settings.py:66
+msgid "English"
+msgstr ""
+
+#: .\config\settings.py:67
+msgid "Russian"
+msgstr ""

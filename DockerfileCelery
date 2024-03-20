@@ -1,0 +1,13 @@
+# Используйте официальный образ Python как базовый
+FROM python:3.11-alpine
+
+COPY . /srv
+WORKDIR /srv
+
+RUN apk update
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r /srv/backend/requirements.txt
+RUN adduser -D celeryuser
+USER celeryuser
+
+ENTRYPOINT ["sh", "/srv/backend/entrypoint_celery.sh"]

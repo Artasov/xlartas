@@ -1,0 +1,2 @@
+.modal-wrapper{transition:all .4s ease;z-index:4;backdrop-filter:blur(0px)}.modal-wrapper .x-modal{transition:opacity .3s ease,visibility .3s;opacity:0;visibility:hidden}.show .x-modal{opacity:1;visibility:visible}
+/*# sourceMappingURL=modal.css.map */
