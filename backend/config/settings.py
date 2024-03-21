@@ -78,14 +78,13 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_beat',
 
-    'apps.freekassa',
     'apps.Core',
-    'apps.referral',
     'apps.shop',
-    'apps.filehost',
-    'apps.harmony',
+    'apps.tinkoff',
+    'apps.referral',
 
 ]
+TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

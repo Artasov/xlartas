@@ -30,7 +30,8 @@ urlpatterns = [
     path('api/verify_email/', verify_email, name='verify_email'),
     path('api/v1/', include('apps.shop.desktop_software_urls')),
     path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),
-    path('', include('apps.freekassa.urls')),
+
+    path('pay/', include('apps.tinkoff.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

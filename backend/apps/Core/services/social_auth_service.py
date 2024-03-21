@@ -11,6 +11,11 @@ from apps.Core.models import User, DiscordUser
 log = logging.getLogger('base')
 
 
+class JwtData(TypedDict):
+    access: str
+    refresh: str
+
+
 class DiscordUserResponse(TypedDict):
     # API Date on 21.03.24
     id: str
@@ -43,15 +48,17 @@ class GoogleUserResponse(TypedDict):
     locale: Optional[str]
 
 
-def get_jwt_by_user(user: settings.AUTH_USER_MODEL) -> dict[str, str]:
+def get_jwt_by_user(user: settings.AUTH_USER_MODEL) -> JwtData:
     refresh = RefreshToken.for_user(user)
-    return {
-        'access': str(refresh.access_token),
-        'refresh': str(refresh),
-    }
+    return JwtData(access=str(refresh.access_token), refresh=str(refresh))
 
 
 async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
+    """
+    https://developers.google.com/identity/protocols/oauth2?hl=ru#2.-obtain-an-access-token-from-the-google-authorization-server.
+    :param code: Is sent by Discord to authenticate the user.
+    :return: discord user profile as DiscordUserResponse dict by discord oauth2 code.
+    """
     async with aiohttp.ClientSession() as session:
         async with session.post(
                 url='https://discord.com/api/v10/oauth2/token',
@@ -78,6 +85,11 @@ async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
 
 
 async def get_google_user_by_code(code: str) -> GoogleUserResponse:
+    """
+    https://developers.google.com/identity/protocols/oauth2?hl=ru#2.-obtain-an-access-token-from-the-google-authorization-server.
+    :param code: Is sent by Google to authenticate the user.
+    :return: google user profile as GoogleUserResponse dict by google oauth2 code.
+    """
     async with aiohttp.ClientSession() as session:
         async with session.post(
                 url='https://oauth2.googleapis.com/token',
@@ -101,7 +113,11 @@ async def get_google_user_by_code(code: str) -> GoogleUserResponse:
     return GoogleUserResponse(**user_data)
 
 
-async def get_jwt_by_google_oauth2_code(code) -> dict[str, str]:
+async def get_jwt_by_google_oauth2_code(code: str) -> JwtData:
+    """
+    :param code: Is sent by Google to authenticate the user.
+    :return: JwtData dictionary with access and refresh keys for the user received via oauth2 code.
+    """
     user_dict: GoogleUserResponse = await get_google_user_by_code(code=code)
     try:
         user = await User.objects.aget(email=user_dict.get('email'))
@@ -113,13 +129,16 @@ async def get_jwt_by_google_oauth2_code(code) -> dict[str, str]:
     return get_jwt_by_user(user)
 
 
-async def get_jwt_by_discord_oauth2_code(code) -> dict[str, str]:
-    log.critical(f'{code=}')
+async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
+    """
+    :param code: Is sent by Discord to authenticate the user.
+    :return: JwtData dictionary with access and refresh keys for the user received via oauth2 code.
+    """
     user_dict: DiscordUserResponse = await get_discord_user_by_code(code)
     try:
         discord_user = await DiscordUser.objects.aget(id=int(user_dict.get('id')))
         user = await sync_to_async(getattr)(discord_user, 'user', None)
     except DiscordUser.DoesNotExist:
-        user = await User.objects.acreate(username=user_dict.get('username'))
+        user = await User.objects.acreate(username=user_dict.get('username'), email=user_dict.get('email'))
         await DiscordUser.objects.acreate(id=int(user_dict.get('id')), user=user)
     return get_jwt_by_user(user)

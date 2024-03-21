@@ -107,7 +107,7 @@ class SoftwareSubscriptionOrder(Model):
     is_complete = BooleanField(default=False)
     promo = ForeignKey('Promo', on_delete=SET_NULL, null=True, blank=True)
     desc = CharField(max_length=250, blank=True)
-    software = ForeignKey(SoftwareProduct, on_delete=SET_NULL, null=True, blank=True)
+    software = ForeignKey(SoftwareProduct, on_delete=SET_NULL, null=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 

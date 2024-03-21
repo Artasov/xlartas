@@ -3,9 +3,12 @@ import {useContext} from 'react';
 import {AuthContext} from "./AuthContext/AuthContext";
 import axiosInstance, {DOMAIN_URL} from "../../../services/base/axiosConfig";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
+    const navigate = useNavigate();
+
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
@@ -27,7 +30,8 @@ export const useAuth = () => {
         );
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
-        window.location.href = "/"
+        await updateCurrentUser();
+        navigate('/');
     }
 
     const discord_oauth2 = async (code) => {
@@ -36,7 +40,8 @@ export const useAuth = () => {
         );
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
-        window.location.href = "/"
+        await updateCurrentUser();
+        navigate('/');
     }
 
     return {...context, updateCurrentUser, login, google_oauth2, discord_oauth2};

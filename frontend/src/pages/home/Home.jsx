@@ -170,13 +170,13 @@ const Home = () => {
                                 >
                                     <span style={{marginTop: 2}}>DEPOSIT</span>
                                 </Button>
-                                <Modal className={`fs-6 mw-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
+                                <Modal className={`fs-6 mw-350px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
                                         transition-all transition-d-300 p-4`}
                                        isOpen={isDepositModalOpen}
                                        onClose={() => {
                                            setIsDepositModalOpen(false)
                                        }}>
-                                    <Deposit onSuccessDeposit={updateCurrentUser}/>
+                                    <Deposit/>
                                 </Modal>
 
                             </div>

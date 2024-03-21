@@ -14,7 +14,7 @@ const SocialLogin = ({className, pxIconSize = 50}) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const googleOAuth2Url = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${DOMAIN_URL_ENCODED}%2Fgoogle-callback%2F&prompt=consent&response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20openid&access_type=offline`
-    const discordOAuth2Url = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&response_type=code&redirect_uri=${DOMAIN_URL_ENCODED}%2Fdiscord-callback%2F&scope=identify`
+    const discordOAuth2Url = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&response_type=code&redirect_uri=${DOMAIN_URL_ENCODED}%2Fdiscord-callback%2F&scope=identify+email`
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') return;

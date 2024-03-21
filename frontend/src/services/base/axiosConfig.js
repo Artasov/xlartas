@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const protocol = window.location.protocol;
 export const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID;
+export const TINKOFF_TERMINAL_KEY = process.env.REACT_APP_TINKOFF_TERMINAL_KEY;
 export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 export const DOMAIN = process.env.REACT_APP_MAIN_DOMAIN;
 export const DOMAIN_URL = `${protocol}//${DOMAIN}${protocol === 'http:' ? ':8000' : ''}`
@@ -24,7 +25,7 @@ axiosInstance.interceptors.response.use(response => response, error => {
     if (error.response && error.response.status === 401) {
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
-        window.location.href = '/'; // Adjust this as necessary
+        window.location.href = '/';
     }
     return Promise.reject(error);
 });
