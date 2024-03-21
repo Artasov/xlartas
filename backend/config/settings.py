@@ -139,11 +139,11 @@ SITE_ID = int(env('SITE_ID'))
 
 GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
-GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/google-callback/"
+GOOGLE_REDIRECT_URI = f'{DOMAIN_URL}/google-callback/'
 
 DISCORD_CLIENT_ID = env('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = env('DISCORD_CLIENT_SECRET')
-DISCORD_REDIRECT_URI = "http://127.0.0.1:8000/discord-callback/"
+DISCORD_REDIRECT_URI = f'{DOMAIN_URL}/discord-callback/'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

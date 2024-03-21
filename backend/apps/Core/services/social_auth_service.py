@@ -66,7 +66,7 @@ async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
                     settings.DISCORD_CLIENT_SECRET
                 )
         ) as resp:
-            log.critical(f'{resp.json()=}')
+            log.critical(f'{await resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
@@ -93,7 +93,7 @@ async def get_google_user_by_code(code: str) -> GoogleUserResponse:
                     "redirect_uri": settings.GOOGLE_REDIRECT_URI,
                 }
         ) as resp:
-            log.critical(f'{resp.json()=}')
+            log.critical(f'{await resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
