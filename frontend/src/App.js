@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
 import Header from './components/base/elements/Header/Header';
 import Home from './pages/home/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,31 +21,35 @@ import DiscordOAuth from "./components/base/auth/OAuth/DiscordOAuth";
 import 'react-toastify/dist/ReactToastify.css';
 import './static/base/css/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
-
+function HeaderWithNavigate() {
+  const navigate = useNavigate(); // получаем navigate с помощью хука
+  return <Header navigate={navigate} />; // передаем navigate как prop в Header
+}
 class App extends Component {
 
     render() {
         return (
             <ThemeProvider theme={darkTheme}>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss={false}
-                    draggable
-                    pauseOnHover
-                    theme="dark"
-                />
-                <AuthProvider>
                     <Router>
+                <AuthProvider>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss={false}
+                            draggable
+                            pauseOnHover
+                            theme="dark"
+                            className={'disable-tap-select'}
+                        />
                         <div className={'App h-100 fc disable-tap-select'} data-bs-theme="dark">
                             <img src="" className="bg-image" alt=""/>
 
-                            <Header/>
-                            <main className={'overflow-y-auto no-scrollbar'}>
+                            <HeaderWithNavigate/>
+                            <main className={'overflow-y-auto no-scrollbar pb-5'}>
                                 <Routes>
                                     <Route path="/" element={<Home/>}/>
                                     <Route path="/deposit/" element={<Deposit/>}/>
@@ -60,8 +64,8 @@ class App extends Component {
                             </main>
                             {/*<Footer/>*/}
                         </div>
-                    </Router>
                 </AuthProvider>
+                    </Router>
             </ThemeProvider>
         );
     }

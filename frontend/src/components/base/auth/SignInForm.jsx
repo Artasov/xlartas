@@ -4,11 +4,12 @@ import {useAuth} from "./useAuth";
 import SocialLogin from "./SocialLogin";
 import DynamicForm from "../elements/DynamicForm";
 import {Message} from "../Message";
+import {useNavigate} from "react-router-dom";
 
-const SignInForm = ({className}) => {
+const SignInForm = ({className, navigate}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const {login} = useAuth();
+    const {login, hideLoginModal} = useAuth();
 
     const signIn = async () => {
         try {
@@ -22,6 +23,10 @@ const SignInForm = ({className}) => {
             Message.errorsByData(e.response.data)
         }
     };
+    const signUpRedirect = () => {
+        hideLoginModal();
+        navigate('/');
+    }
 
     return (
         <div className={'fc'}>
@@ -51,6 +56,13 @@ const SignInForm = ({className}) => {
                     margin="dense"
                 />
             </DynamicForm>
+            <small className={'fc text-center'}>
+                <span className={'text-secondary fs-6 mt-2'}>Not registered yet?</span>
+                <span onClick={signUpRedirect} style={{color: 'rgba(183,210,255,0.82)'}}
+                    className={'fs-6 cursor-pointer hover-scale-2'}>
+                    Create your account now.
+                </span>
+            </small>
             <SocialLogin/>
         </div>
     );

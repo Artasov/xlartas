@@ -2,12 +2,14 @@
 import React, {createContext, useEffect, useState} from 'react';
 import axiosInstance from "../../../../services/base/axiosConfig";
 import SignInModal from "../SignInModal";
+import {useNavigate} from "react-router-dom";
 
 export const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const access = localStorage.getItem('access');
@@ -40,7 +42,7 @@ export const AuthProvider = ({children}) => {
             logout
         }}>
             {isLoginModalOpen && !user &&
-                <SignInModal show={isLoginModalOpen} onSubmit={() => setIsLoginModalOpen(false)}/>}
+                <SignInModal navigate={navigate} show={isLoginModalOpen} onSubmit={() => setIsLoginModalOpen(false)}/>}
             {children}
         </AuthContext.Provider>
     );

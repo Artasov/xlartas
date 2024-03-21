@@ -101,7 +101,7 @@ const SoftwareProductCard = ({software}) => {
             if (fileExt && softwareName) {
                 fileName = `${softwareName}.${fileExt}`;
             }
-
+            Message.success(`File ${fileName} successfully downloaded to your computer.`)
             const blobUrl = window.URL.createObjectURL(data);
             const link = document.createElement('a');
             link.href = blobUrl;

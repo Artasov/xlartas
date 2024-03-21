@@ -9,14 +9,13 @@ import {useAuth} from "../../auth/useAuth";
 import logoutIcon from "../../../../static/base/images/icons/logout.png";
 import {useLocation, useNavigate} from "react-router-dom";
 
-const Header = () => {
+const Header = ({navigate}) => {
     const headerRef = useRef(null);
     const headerNavRef = useRef(null);
     const btnToggleMenuRef = useRef(null);
     const [backgroundImages, setBackgroundImages] = useState([]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
     const {user, isAuthenticated, logout, showLoginModal} = useAuth();
-    const navigate = useNavigate();
     const location = useLocation();
 
     const handleClickHomePage = () => {
