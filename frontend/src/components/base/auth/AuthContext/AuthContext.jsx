@@ -11,6 +11,7 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         const token = localStorage.getItem('access');
+        console.log('token: ' + token);
         if (token) {
             axiosInstance.get('/api/current_user/')
                 .then(response => setUser(response.data))

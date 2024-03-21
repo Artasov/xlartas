@@ -1,45 +1,56 @@
 from adrf.decorators import api_view
+from adrf.serializers import Serializer
 from asgiref.sync import sync_to_async
 from django.http import FileResponse
 from django.utils import timezone
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from apps.Core.exceptions.base import (
+    SomethingGoWrong
+)
 from apps.Core.services.services import aget_object_or_404, acontroller
-from apps.shop.exceptions.base import NoValidLicenseFound, SoftwareFileNotFound
+from apps.shop.exceptions.base import (
+    NoValidLicenseFound, SoftwareFileNotFound, SoftwareByNameNotFound
+)
+from apps.shop.messages.success import SUCCESS_SOFTWARE_SUBSCRIBE
 from apps.shop.models import UserSoftwareSubscription, SoftwareProduct
 from apps.shop.services.software import get_softwares
-from apps.shop.services.subscription import subscribe_user_software, InsufficientFundsError, activate_test_software_user
+from apps.shop.services.subscription import subscribe_user_software, activate_test_software_user
 
 
+@acontroller('Get list of software')
 @api_view(['GET'])
 @permission_classes([AllowAny])
 async def software_list(request) -> Response:
     return Response(await get_softwares(is_available=True))
 
 
+@acontroller('Get software data by name')
 @api_view(['GET'])
 @permission_classes([AllowAny])
-@acontroller('Get software data by name')
 async def software_by_name(request, name) -> Response:
     softwares = await get_softwares(is_available=True, name=name)
-    return Response(softwares[0]) if softwares else Response(status=status.HTTP_404_NOT_FOUND)
+    if not softwares: raise SoftwareByNameNotFound
+    return Response(softwares[0])
 
 
 @acontroller('Apply software subscription by id to current user')
 @api_view(('POST',))
 @permission_classes([IsAuthenticated])
 async def software_test_activate_current_user(request) -> Response:
-    software_id = request.data.get('software_id')
-    if not software_id:
-        return Response(
-            data={"error": "Software ID is required."},
-            status=status.HTTP_400_BAD_REQUEST)
+    class SoftwareIdSerializer(Serializer):
+        software_id = serializers.IntegerField()
 
+    serializer = SoftwareIdSerializer(data=request.data)
+    if not serializer.is_valid(): raise SomethingGoWrong
+
+    data = await serializer.adata
     await sync_to_async(activate_test_software_user)(
-        request.user, software_id=software_id)
+        request.user, software_id=data['software_id']
+    )
     return Response(status=status.HTTP_200_OK)
 
 
@@ -47,17 +58,21 @@ async def software_test_activate_current_user(request) -> Response:
 @api_view(('POST',))
 @permission_classes([IsAuthenticated])
 async def software_subscribe_current_user(request) -> Response:
-    sub_id = request.data.get('software_subscription_id')
-    if not sub_id:
-        return Response(
-            data={"error": "Subscription ID is required."},
-            status=status.HTTP_400_BAD_REQUEST)
+    class SubscriptionIdSerializer(Serializer):
+        software_subscription_id = serializers.IntegerField()
+
+    serializer = SubscriptionIdSerializer(data=request.data)
+    if not serializer.is_valid(): raise SomethingGoWrong
+    # raise DetailAPIException(DetailExceptionDict(
+    #     message=CORRECT_ERRORS_IN_FIELDS,
+    #     fields_errors=serializer_errors_to_field_errors(serializer.errors)
+    # ), status_code=status.HTTP_409_CONFLICT)
+
+    data = await serializer.adata
     try:
         await sync_to_async(subscribe_user_software)(
-            request.user, subscription_id=sub_id)
-        return Response(status=status.HTTP_200_OK)
-    except InsufficientFundsError as e:
-        return Response({"error": str(e.detail)}, status=e.status_code)
+            request.user, subscription_id=data['software_subscription_id'])
+        return Response(SUCCESS_SOFTWARE_SUBSCRIBE, status=status.HTTP_200_OK)
     except Exception as e:
         raise e
 

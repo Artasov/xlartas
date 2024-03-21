@@ -1,19 +1,17 @@
 import React, {useState} from 'react';
-import {Alert, Button, CircularProgress, FormControl, TextField} from '@mui/material';
+import {Button, CircularProgress, FormControl, TextField} from '@mui/material';
 
 const DynamicForm = ({children, className, requestFunc, submitBtnText, submitBtnClassName, loadingClassName}) => {
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         try {
-            await requestFunc(setErrors).then(() =>{
+            await requestFunc().then(() => {
                 setLoading(false);
             });
         } catch (error) {
-
         }
         setLoading(false);
     };
@@ -26,8 +24,7 @@ const DynamicForm = ({children, className, requestFunc, submitBtnText, submitBtn
         if (child.type === TextField) {
             return React.cloneElement(child, {
                 disabled: loading,
-                error: !!errors[name],
-                helperText: errors[name] || child.props.helperText,
+                helperText: child.props.helperText,
             });
         }
         return React.cloneElement(child, {
@@ -50,11 +47,6 @@ const DynamicForm = ({children, className, requestFunc, submitBtnText, submitBtn
                 >
                     {loading ? 'Loading...' : submitBtnText}
                 </Button>
-                {Object.values(errors).some(e => e) && (
-                    <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
-                        {Object.values(errors).join(', ')}
-                    </Alert>
-                )}
             </FormControl>
         </form>
     );

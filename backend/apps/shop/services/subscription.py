@@ -6,10 +6,10 @@ from django.conf import settings
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import status
-from rest_framework.exceptions import APIException
 
-from apps.shop.exceptions.base import InsufficientFundsError
+from apps.Core.services.services import aget_object_or_404
+from apps.shop.exceptions.base import InsufficientFundsError, TestPeriodAlreadyUsed, \
+    TestPeriodActivationFailed
 from apps.shop.models import UserSoftwareSubscription, SoftwareSubscription, SoftwareProduct
 
 
@@ -98,27 +98,25 @@ def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_id: int
     user_sub.save()
 
 
-class TestPeriodAlreadyUsedException(APIException):
-    status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = 'Test period has already been used.'
-    default_code = 'test_period_already_used'
-
-
-@transaction.atomic()
-def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_id: int):
-    software = get_object_or_404(SoftwareProduct, id=software_id)
-
-    user_sub: UserSoftwareSubscription
-    user_sub, created = UserSoftwareSubscription.objects.get_or_create(
-        user=user,
-        software=software,
-    )
-    if user_sub.is_test_period_activated:
-        raise TestPeriodAlreadyUsedException()
-    now = timezone.now()
-    user_sub.is_test_period_activated = True
-    user_sub.expires_at = (now if created else
-                           user_sub.expires_at
-                           if user_sub.expires_at > now else now
-                           ) + timedelta(days=software.test_period_days)
-    user_sub.save()
+async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_id: int):
+    try:
+        with transaction.atomic():
+            software = await aget_object_or_404(SoftwareProduct, id=software_id)
+            user_sub: UserSoftwareSubscription
+            user_sub, created = await UserSoftwareSubscription.objects.aget_or_create(
+                user=user,
+                software=software,
+            )
+            if user_sub.is_test_period_activated:
+                raise TestPeriodAlreadyUsed()
+            now = timezone.now()
+            user_sub.is_test_period_activated = True
+            user_sub.expires_at = (now if created else
+                                   user_sub.expires_at
+                                   if user_sub.expires_at > now else now
+                                   ) + timedelta(days=software.test_period_days)
+            await user_sub.asave()
+    except TestPeriodAlreadyUsed as e:
+        raise e
+    except Exception as e:
+        raise TestPeriodActivationFailed()

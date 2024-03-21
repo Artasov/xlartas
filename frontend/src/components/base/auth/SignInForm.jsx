@@ -3,25 +3,23 @@ import TextField from '@mui/material/TextField';
 import {useAuth} from "./useAuth";
 import SocialLogin from "./SocialLogin";
 import DynamicForm from "../elements/DynamicForm";
+import {Message} from "../Message";
 
 const SignInForm = ({className}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {login} = useAuth();
 
-    const signIn = async (setErrors) => {
+    const signIn = async () => {
         try {
             if (!username || !password) {
-                setErrors(['Username and password fields are required']);
+                Message.error('Username and password fields are required');
                 return;
             }
             await login(username, password);
+            Message.success('Welcome! You have successfully logged into your account.')
         } catch (e) {
-            if (e.response.data.detail) {
-                setErrors([e.response.data.detail]);
-            } else {
-                setErrors(['Something go wrong']);
-            }
+            Message.errorsByData(e.response.data)
         }
     };
 

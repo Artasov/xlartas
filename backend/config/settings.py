@@ -15,7 +15,7 @@ BASE_DATA_DIR = BASE_DIR / 'data'
 # Environment helper
 env = os.environ.get
 
-dotenv_path = os.path.join(BASE_DIR, '../.env.prod')
+dotenv_path = os.path.join(BASE_DIR, '../.env.production')
 load_dotenv(dotenv_path=dotenv_path)
 
 # Basic settings
@@ -120,7 +120,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://localhost:3000',
-    'https://accounts.google.com',
 ]
 
 MIDDLEWARE = [
@@ -431,7 +430,7 @@ if DEV:
 
 LANGUAGES = [
     ('en', _('English')),
-    ('ru', _('Russian')),
+    # ('ru', _('Russian')),
     # Добавьте другие языки по необходимости
 ]
 LOCALE_PATHS = [

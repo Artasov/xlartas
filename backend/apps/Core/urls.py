@@ -8,9 +8,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView, TokenVerifyView
 )
 
-from .controllers.auth.auth_views import signup, verify_email
-from .controllers.auth.soc_auth_views import discord_oauth2, google_oauth2
-from .controllers.common_views import health_test, theme_list, current_user
+from .controllers.auth.common import signup, verify_email
+from .controllers.auth.social import discord_oauth2_callback, google_oauth2_callback
+from .controllers.common import health_test, theme_list, current_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,8 +20,12 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/themes/', theme_list, name='theme_list'),
     path('api/current_user/', current_user, name='current_user'),
-    path('accounts/discord/oauth2/callback/', discord_oauth2, name="discord_oauth2"),
-    path('accounts/google/oauth2/callback/', google_oauth2, name="google_oauth2"),
+
+    path('accounts/discord/oauth2/callback/',
+         discord_oauth2_callback, name='discord_oauth2_callback'),
+    path('accounts/google/oauth2/callback/',
+         google_oauth2_callback, name='google_oauth2_callback'),
+
     path('api/signup/', signup, name='signup'),
     path('api/verify_email/', verify_email, name='verify_email'),
     path('api/v1/', include('apps.shop.desktop_software_urls')),

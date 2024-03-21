@@ -23,6 +23,7 @@ from django.http import HttpResponseNotAllowed, HttpResponseNotFound, HttpRespon
 from rest_framework import status
 from rest_framework.response import Response
 
+from apps.Core.async_django import AsyncAtomicContextManager
 from apps.Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
 from apps.Core.models import User
 from apps.mailing.services.services import send_text_email
@@ -164,14 +165,16 @@ def acontroller(name=None, log_time=False) -> callable:
                 start_time = time()
 
             if settings.DEBUG:
-                return await fn(request, *args, **kwargs)
+                async with AsyncAtomicContextManager():
+                    return await fn(request, *args, **kwargs)
             else:
                 try:
                     if log_time:
                         end_time = time()
                         elapsed_time = end_time - start_time
                         log.info(f"Execution time of {fn_name}: {elapsed_time:.2f} seconds")
-                    return await fn(request, *args, **kwargs)
+                    async with AsyncAtomicContextManager():
+                        return await fn(request, *args, **kwargs)
                 except Exception as e:
                     log.critical(f"ERROR in {fn_name}: {str(e)}", exc_info=True)
                     send_text_email(

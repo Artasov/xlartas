@@ -3,17 +3,17 @@ import {AuthContext} from "../auth/AuthContext/AuthContext";
 import axiosInstance from "../../../services/base/axiosConfig";
 import DynamicForm from "../elements/DynamicForm";
 import TextField from "@mui/material/TextField";
+import {Message} from "../Message";
 
 const Deposit = ({onSuccessDeposit, className}) => {
-    const {user, isAuthenticated, showLoginModal, logout} = useContext(AuthContext);
+    const {isAuthenticated, logout} = useContext(AuthContext);
     const [amount, setAmount] = useState([]);
 
 
-    const createDepositOrder = (setErrors) => {
-        setErrors({});
+    const createDepositOrder = () => {
         if (isAuthenticated) {
-            if (amount < 300){
-                setErrors({'error':'Minimum deposit amount 300 RUB'});
+            if (amount < 300) {
+                Message.error('Minimum deposit amount 300 RUB');
                 return;
             }
             axiosInstance.post('/deposit/', {amount: amount})
@@ -21,8 +21,8 @@ const Deposit = ({onSuccessDeposit, className}) => {
                     console.log(response.data);
                     onSuccessDeposit();
                 })
-                .catch(error => {
-                    setErrors(error.response.data);
+                .catch(e => {
+                    Message.errorsByData(e.response.data)
                 });
         } else logout();
     }

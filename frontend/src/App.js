@@ -18,12 +18,27 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import GoogleOAuth from "./components/base/auth/OAuth/GoogleOAuth";
 import DiscordOAuth from "./components/base/auth/OAuth/DiscordOAuth";
+import 'react-toastify/dist/ReactToastify.css';
+import './static/base/css/ReactToastify.css';
+import {ToastContainer} from "react-toastify";
 
 class App extends Component {
 
     render() {
         return (
             <ThemeProvider theme={darkTheme}>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss={false}
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
                 <AuthProvider>
                     <Router>
                         <div className={'App h-100 fc disable-tap-select'} data-bs-theme="dark">

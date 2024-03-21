@@ -8,15 +8,20 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from apps.Core.exceptions.auth import UsernameAlreadyExists, UserEmailAlreadyExists
+from apps.Core.exceptions.base import DetailAPIException, DetailExceptionDict, serializer_errors_to_field_errors
+from apps.Core.messages.errors import CORRECT_ERRORS_IN_FIELDS
+from apps.Core.messages.success import USER_CREATED_CONFIRM_EMAIL
 from apps.Core.models import *
 from apps.Core.serializers import SignUpSerializer
 from apps.Core.services.code_confirmation import (
     get_latest_confirmation_code,
     create_confirmation_code_for_user,
 )
+from apps.Core.services.services import acontroller
 from apps.Core.tasks import send_signup_confirmation_email_task
 
 
+@acontroller('Sign Up')
 @api_view(['POST'])
 @permission_classes([AllowAny])
 async def signup(request) -> Response:
@@ -37,7 +42,10 @@ async def signup(request) -> Response:
             username=username, email=email, password=password, is_confirmed=False
         )
 
-        code = await create_confirmation_code_for_user(user_id=user.id, code_type=ConfirmationCode.ConfirmationCodeTypes.signUp)
+        code = await create_confirmation_code_for_user(
+            user_id=user.id,
+            code_type=ConfirmationCode.ConfirmationCodeTypes.SIGN_UP
+        )
         if not settings.DEV:
             send_signup_confirmation_email_task.delay(
                 to_email=user.email,
@@ -46,10 +54,14 @@ async def signup(request) -> Response:
                 is_secure=request.is_secure()
             )
 
-        return Response({'message': 'The user has been created. Please check your email to confirm.'}, status=201)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': USER_CREATED_CONFIRM_EMAIL}, status=201)
+    raise DetailAPIException(DetailExceptionDict(
+        message=CORRECT_ERRORS_IN_FIELDS,
+        fields_errors=serializer_errors_to_field_errors(serializer.errors)
+    ), status_code=status.HTTP_400_BAD_REQUEST)
 
 
+@acontroller('Verify Email')
 @api_view(['POST'])
 @permission_classes([AllowAny])
 async def verify_email(request) -> JsonResponse:

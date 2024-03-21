@@ -12,10 +12,12 @@ from rest_framework.response import Response
 
 from apps.Core.models import *
 from apps.Core.serializers import ThemeSerializer, CurrentUserSerializer
+from apps.Core.services.services import acontroller
 
 log = logging.getLogger('base')
 
 
+@acontroller('Get theme list')
 @api_view(['GET'])
 @permission_classes([AllowAny])
 async def theme_list(request) -> Response:
@@ -24,6 +26,7 @@ async def theme_list(request) -> Response:
     return Response(await serializer.adata)
 
 
+@acontroller('Get current user json info')
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 async def current_user(request) -> Response:
@@ -31,6 +34,7 @@ async def current_user(request) -> Response:
     return Response(await serializer.adata)
 
 
+@acontroller('Check django, minio, celery available')
 @api_view(['GET'])
 def health_test(request) -> Response:
     # Check Redis

@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
-    BigIntegerField, ImageField, CharField, BooleanField,
+    ImageField, CharField, BooleanField,
     DecimalField, Model, TextChoices, CASCADE, DateTimeField,
     ForeignKey, FileField, OneToOneField, SET_NULL
 )
@@ -27,8 +27,7 @@ class User(AbstractUser):
 
 
 class DiscordUser(Model):
-    discord_id = BigIntegerField()
-    user = OneToOneField(User, on_delete=CASCADE)
+    user = OneToOneField(User, on_delete=CASCADE, unique=True)
 
 
 class Theme(Model):

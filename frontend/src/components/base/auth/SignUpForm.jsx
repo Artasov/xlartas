@@ -4,6 +4,7 @@ import {TextField} from '@mui/material';
 import axiosInstance from "../../../services/base/axiosConfig";
 import DynamicForm from "../elements/DynamicForm";
 import {useAuth} from "./useAuth";
+import {Message} from "../Message";
 
 const SignUpForm = () => {
     const [formData, setFormData] = useState({
@@ -23,8 +24,7 @@ const SignUpForm = () => {
         });
     };
 
-    const signUp = async (setErrors) => {
-        setErrors({});
+    const signUp = async () => {
         try {
             await axiosInstance.post('/api/signup/', {
                 username: formData.username,
@@ -33,16 +33,10 @@ const SignUpForm = () => {
             });
             setCodeSent(true);
         } catch (e) {
-            console.log(e.response.data);
-            if (e.response.data.detail) {
-                setErrors([e.response.data.detail]);
-            } else {
-                setErrors(['Something go wrong']);
-            }
+            Message.errorsByData(e.response.data)
         }
     };
-    const verifyCode = async (setErrors) => {
-        setErrors({});
+    const verifyCode = async () => {
         try {
             await axiosInstance.post('/api/verify_email/', {
                 email: formData.email,
@@ -51,11 +45,7 @@ const SignUpForm = () => {
             setCodeSent(false);
             showLoginModal();
         } catch (e) {
-            if (e.response.data.detail) {
-                setErrors([e.response.data.detail]);
-            } else {
-                setErrors(['Something go wrong']);
-            }
+            Message.errorsByData(e.response.data)
         }
     };
 
