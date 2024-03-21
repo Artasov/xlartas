@@ -1,5 +1,6 @@
 import logging
 
+import rest_framework
 from adrf.decorators import api_view
 from asgiref.sync import sync_to_async
 from django.db import connections
@@ -34,8 +35,7 @@ async def current_user(request) -> Response:
     return Response(await serializer.adata)
 
 
-@acontroller('Check django, minio, celery available')
-@api_view(['GET'])
+@rest_framework.decorators.api_view(['GET'])
 def health_test(request) -> Response:
     # Check Redis
     if not get_redis_connection().flushall():
