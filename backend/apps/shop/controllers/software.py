@@ -48,7 +48,7 @@ async def software_test_activate_current_user(request) -> Response:
     if not serializer.is_valid(): raise SomethingGoWrong
 
     data = await serializer.adata
-    await sync_to_async(activate_test_software_user)(
+    await activate_test_software_user(
         request.user, software_id=data['software_id']
     )
     return Response(status=status.HTTP_200_OK)

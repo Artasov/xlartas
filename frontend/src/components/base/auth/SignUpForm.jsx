@@ -5,6 +5,7 @@ import axiosInstance from "../../../services/base/axiosConfig";
 import DynamicForm from "../elements/DynamicForm";
 import {useAuth} from "./useAuth";
 import {Message} from "../Message";
+import SocialLogin from "./SocialLogin";
 
 const SignUpForm = () => {
     const [formData, setFormData] = useState({
@@ -108,6 +109,7 @@ const SignUpForm = () => {
                     />
                 </DynamicForm>
             )}
+            <SocialLogin className={'frsc'} pxIconSize={60}/>
         </div>
     );
 };

@@ -25,7 +25,6 @@ export const useAuth = () => {
         const response = await axios.get(
             `${DOMAIN_URL}/accounts/google/oauth2/callback/?code=${code}`
         );
-        console.log(response.data)
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
         window.location.href = "/"
@@ -35,7 +34,6 @@ export const useAuth = () => {
         const response = await axios.get(
             `${DOMAIN_URL}/accounts/discord/oauth2/callback/?code=${code}`
         );
-        console.log(response.data);
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
         window.location.href = "/"

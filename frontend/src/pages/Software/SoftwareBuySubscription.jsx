@@ -5,6 +5,7 @@ import DynamicForm from "../../components/base/elements/DynamicForm";
 import axiosInstance from "../../services/base/axiosConfig";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../components/base/auth/useAuth";
+import {Message} from "../../components/base/Message";
 
 const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) => {
     const {user, isAuthenticated, showLoginModal, updateCurrentUser} = useAuth();
@@ -21,9 +22,9 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
                 .then(response => {
                     setSoftware(response.data);
                 })
-                .catch(error => {
+                .catch(e => {
                     setSoftware(false);
-                    console.error('Error fetching software details:', error);
+                    Message.errorsByData(e.response.data)
                 });
         }
     }, [software_name, software_obj]);
@@ -42,9 +43,10 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
             setIsSubscribe(true);
             setTimeout(() => {
                 navigate('/');
+                Message.success('Congratulations! You have successfully subscribed.', 7000)
             }, 310);
-        } catch (error) {
-            setError(error.response.data);
+        } catch (e) {
+            Message.errorsByData(e.response.data);
         }
     };
 

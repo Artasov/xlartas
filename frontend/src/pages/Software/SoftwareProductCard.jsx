@@ -12,9 +12,10 @@ import SoftwareBuySubscription from "./SoftwareBuySubscription";
 import SoftwareImage from "./SoftwareImage";
 import SoftwareLogoTitle from "./SoftwareLogoTitle";
 import DynamicForm from "../../components/base/elements/DynamicForm";
+import {Message} from "../../components/base/Message";
 
 const SoftwareProductCard = ({software}) => {
-    const {user, isAuthenticated, showLoginModal} = useContext(AuthContext);
+    const {isAuthenticated, showLoginModal} = useContext(AuthContext);
     const navigate = useNavigate();
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
@@ -24,26 +25,24 @@ const SoftwareProductCard = ({software}) => {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [isDownloadInProgress, setIsDownloadInProgress] = useState(false);
     const [downloadProgress, setDownloadProgress] = useState(0);
-    const [isDownloadError, setIsDownloadError] = useState(false);
     const handleClickOpenPayModal = () => {
         if (isAuthenticated) {
             setIsSubscribeModalOpen(true);
         } else {
-            navigate('/');
+            Message.noAuthentication();
             showLoginModal();
         }
     }
     const handleClickOpenTestPeriodModal = () => {
         if (!isAuthenticated) {
-            navigate('/');
+            Message.noAuthentication();
             showLoginModal();
         }
         setIsTestPeriodModalOpen(true);
     }
-    const handleTestPeriodActivate = async (softwareId, setErrorTestPeriod) => {
+    const handleTestPeriodActivate = async (softwareId) => {
         if (!isAuthenticated) {
-            navigate('/');
-            showLoginModal();
+            Message.noAuthentication();
             return;
         }
         try {
@@ -51,27 +50,30 @@ const SoftwareProductCard = ({software}) => {
                 software_id: softwareId,
             }).then((response) => {
                 setIsTestPeriodActivate(true);
+                Message.success(
+                    'Congratulations! You have successfully activated the trial period. Enjoy using it.',
+                    7000)
                 setTimeout(() => {
                     navigate('/');
                 }, 310);
             });
-        } catch (err) {
-            setErrorTestPeriod([err.response?.data?.detail] || ['An unexpected error occurred'])
+        } catch (e) {
+            Message.errorsByData(e.response.data);
         }
     };
     const handleDownloadSoftwareFile = async (fileUrl, softwareName) => {
         if (!fileUrl) {
-            console.error('Software file URL not provided.');
-            setIsDownloadError(true);
-            setTimeout(() => setIsDownloadError(false), 4000);
+            Message.error('Software file URL not provided.');
             return;
         }
         setIsDownloadInProgress(true);
-        setIsDownloadError(false);
 
         try {
             const response = await fetch(fileUrl);
-            if (!response.ok) throw new Error('Network response was not ok.');
+            if (!response.ok) {
+                Message.error('Network response was not ok.');
+                return;
+            }
 
             const contentLength = response.headers.get('content-length');
             let receivedLength = 0;
@@ -108,9 +110,8 @@ const SoftwareProductCard = ({software}) => {
             link.click();
             window.URL.revokeObjectURL(blobUrl);
             document.body.removeChild(link);
-        } catch (error) {
-            setIsDownloadError(true);
-            setTimeout(() => setIsDownloadError(false), 5000);
+        } catch (e) {
+            Message.errorsByData(e.response.data);
         } finally {
             setIsDownloadInProgress(false);
         }
@@ -188,14 +189,6 @@ const SoftwareProductCard = ({software}) => {
                     </div>
                 </div>
             }
-            {isDownloadError &&
-                <div className={'position-absolute left-0 w-100 frcc'} style={{top: '10%'}}>
-                    <div className={'frcc'} style={{maxWidth: 340}}>
-                        <Alert className={'bg-danger bg-opacity-10 rounded-4 backdrop-blur-10'} severity="error">Error downloading
-                            file.</Alert>
-                    </div>
-                </div>
-            }
             <div className={'fcb w-100 pt-1 gap-2'} style={{paddingBottom: 3}}>
                 <div className={'fc'}>
                     <h3 className={'m-0 text-white-d0'}>
@@ -238,8 +231,8 @@ const SoftwareProductCard = ({software}) => {
                            }}>
                         <div className={'pb-4 px-3'}>
                             <DynamicForm className={`fccc`}
-                                         requestFunc={(setErrorTestPeriod) => {
-                                             handleTestPeriodActivate(software.id, setErrorTestPeriod)
+                                         requestFunc={() => {
+                                             handleTestPeriodActivate(software.id)
                                          }}
                                          loadingClassName={'text-black-c0'}
                                          submitBtnClassName={'fw-7 bg-white-c0'}

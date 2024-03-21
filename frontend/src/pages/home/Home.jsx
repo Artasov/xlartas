@@ -3,7 +3,7 @@ import {AuthContext} from "../../components/base/auth/AuthContext/AuthContext";
 import SignUpForm from "../../components/base/auth/SignUpForm";
 import axiosInstance from "../../services/base/axiosConfig";
 import {timeAgo} from "../../services/base/timeAgo";
-import {Alert, Button, CircularProgress} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import UserAvatar from "../../components/base/user/UserAvatar/UserAvatar";
 import SoftwareImage from "../Software/SoftwareImage";
@@ -121,12 +121,12 @@ const Home = () => {
                                 sign in
                             </span>
                         </p>
-                        <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
-                            Внимание! Авторизация через Google, Telegram пока не работает в связи с переносом сайта
-                            на другой хостинг и реализацией single page application. Если у вас были подписки
-                            и вы не можете войти, напишите мне в личку в tg @artasov. По любым вопросам не стесняемся
-                            писать. Спасибо за поддержку проекта, работаю на энтузиазме по факту.
-                        </Alert>
+                        {/*<Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">*/}
+                        {/*    Внимание! Авторизация через Google, Telegram пока не работает в связи с переносом сайта*/}
+                        {/*    на другой хостинг и реализацией single page application. Если у вас были подписки*/}
+                        {/*    и вы не можете войти, напишите мне в личку в tg @artasov. По любым вопросам не стесняемся*/}
+                        {/*    писать. Спасибо за поддержку проекта, работаю на энтузиазме по факту.*/}
+                        {/*</Alert>*/}
                         <SignUpForm/>
                     </div>
                 ) : (

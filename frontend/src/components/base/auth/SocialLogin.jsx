@@ -9,7 +9,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const SocialLogin = ({className}) => {
+const SocialLogin = ({className, pxIconSize = 50}) => {
     const socialDiv = useRef();
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -22,13 +22,15 @@ const SocialLogin = ({className}) => {
     };
 
     return (
-        <div ref={socialDiv} className={`${className} frcc mt-3 gap-2`}>
+        <div ref={socialDiv} className={`${className ? className : 'frcc'} mt-3 gap-2`}>
             <a href={googleOAuth2Url}>
-                <FontAwesomeIcon style={{fontSize: '1em'}} icon={faGoogle} className={'hover-scale-5'}/>
+                <IconButton className={'ratio-1-1'} style={{height: `${pxIconSize}px`}}>
+                    <FontAwesomeIcon icon={faGoogle} className={'hover-scale-5 h-100'}/>
+                </IconButton>
             </a>
             <a href={discordOAuth2Url}>
-                <IconButton className={'ratio-1-1'}>
-                    <FontAwesomeIcon style={{fontSize: '1em'}} icon={faDiscord} className={'hover-scale-5'}/>
+                <IconButton className={'ratio-1-1 '} style={{height: `${pxIconSize}px`}}>
+                    <FontAwesomeIcon icon={faDiscord} className={'h-100 ratio-1-1'} style={{transform: 'scale(1.2)'}}/>
                 </IconButton>
             </a>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>

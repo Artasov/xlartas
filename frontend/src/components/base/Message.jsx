@@ -6,10 +6,9 @@ function capitalizeFirstLetter(string) {
 
 export class Message {
     static somethingGoWrong = () => this.error('Sorry, something went wrong. We are already working on the problem. Please try again later.')
-
+    static noAuthentication = () => this.error('You must be signed in or create an account to perform this action.')
     static errorsByData(data) {
         try {
-            console.log(data);
             const message = data.message
             if (message) {
                 this.error(message);

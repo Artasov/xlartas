@@ -10,13 +10,14 @@ export const AuthProvider = ({children}) => {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('access');
-        console.log('token: ' + token);
-        if (token) {
+        const access = localStorage.getItem('access');
+        if (access) {
             axiosInstance.get('/api/current_user/')
                 .then(response => setUser(response.data))
                 .catch(() => {
                     setIsLoginModalOpen(true);
+                    localStorage.removeItem('access');
+                    localStorage.removeItem('refresh');
                 });
         }
     }, []);

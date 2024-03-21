@@ -30,14 +30,14 @@ async def google_oauth2_callback(request) -> Response:
 #         data = request.GET.dict()
 #
 #         if not telegram_verify_hash(data):
-#             pass
+#             p
 #             # return render_invalid(request, 'Invalid hash', 'signup')
 #
 #         del data['auth_date']
 #
 #         telegram_id = data['id']
 #         username = data['username']
-#         first_name = data['first_name']
+#         first_name = data['irst_name']
 #
 #         try:
 #             User.objects.get(username=username)

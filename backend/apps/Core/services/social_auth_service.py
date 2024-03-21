@@ -66,17 +66,14 @@ async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
                     settings.DISCORD_CLIENT_SECRET
                 )
         ) as resp:
-            log.critical(f'{await resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
-
         async with session.get('https://discord.com/api/v10/users/@me', headers={
             'Authorization': f'Bearer {access_token}',
         }) as user_resp:
             user_resp.raise_for_status()
             user_data = await user_resp.json()
-        log.critical(f'{user_data=}')
     return DiscordUserResponse(**user_data)
 
 
@@ -93,17 +90,14 @@ async def get_google_user_by_code(code: str) -> GoogleUserResponse:
                     "redirect_uri": settings.GOOGLE_REDIRECT_URI,
                 }
         ) as resp:
-            log.critical(f'{await resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
-
         async with session.get('https://www.googleapis.com/oauth2/v3/userinfo', headers={
             'Authorization': f'Bearer {access_token}',
         }) as user_resp:
             user_resp.raise_for_status()
             user_data = await user_resp.json()
-        log.critical(f'{user_data=}')
     return GoogleUserResponse(**user_data)
 
 
