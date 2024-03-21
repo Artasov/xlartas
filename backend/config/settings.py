@@ -28,7 +28,7 @@ ROOT_URLCONF = 'apps.Core.urls'
 # Security and domain settings
 HTTPS = bool(int(env('HTTPS', 0)))
 MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
-DOMAIN_URL = f'https://{MAIN_DOMAIN}'
+DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{"" if HTTPS else ":8000"}'
 
 # Database and cache
 REDIS_BASE_URL = 'redis://127.0.0.1:6379/'
@@ -439,23 +439,25 @@ LOCALE_PATHS = [
 
 log = logging.getLogger('base')
 
-log.info('#####################################')
-log.info('########## Server Settings ##########')
-log.info('#####################################')
-log.info(f'{BASE_DIR=}')
-log.info(f'{MAIN_DOMAIN=}')
-log.info(f'{HTTPS=}')
-log.info(f'{MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=}') if MINIO_EXTERNAL_ENDPOINT_USE_HTTPS else None
-log.info(f'{MINIO_USE_HTTPS=}') if MINIO_USE_HTTPS else None
-log.info(f'{ALLOWED_HOSTS=}')
-log.info(f'{DEBUG=}')
-log.info(f'{DEV=}')
-log.info(f'{ASGI_APPLICATION=}')
-log.info(f'{WSGI_APPLICATION=}')
-log.info(f'{STATIC_URL=}')
-log.info(f'{MEDIA_URL=}')
-log.info(f'{STATIC_ROOT=}')
-log.info(f'{MEDIA_ROOT=}')
-log.info('#####################################')
-log.info('#####################################')
-log.info('#####################################')
+log.warning('#####################################')
+log.warning('########## Server Settings ##########')
+log.warning('#####################################')
+log.warning(f'{BASE_DIR=}')
+log.warning(f'{MAIN_DOMAIN=}')
+log.warning(f'{HTTPS=}')
+log.warning(f'{MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=}') if MINIO_EXTERNAL_ENDPOINT_USE_HTTPS else None
+log.warning(f'{MINIO_USE_HTTPS=}') if MINIO_USE_HTTPS else None
+log.warning(f'{ALLOWED_HOSTS=}')
+log.warning(f'{DEBUG=}')
+log.warning(f'{DEV=}')
+log.warning(f'{ASGI_APPLICATION=}')
+log.warning(f'{WSGI_APPLICATION=}')
+log.warning(f'{STATIC_URL=}')
+log.warning(f'{MEDIA_URL=}')
+log.warning(f'{STATIC_ROOT=}')
+log.warning(f'{MEDIA_ROOT=}')
+log.warning(f'{GOOGLE_REDIRECT_URI=}')
+log.warning(f'{DISCORD_REDIRECT_URI=}')
+log.warning('#####################################')
+log.warning('#####################################')
+log.warning('#####################################')
