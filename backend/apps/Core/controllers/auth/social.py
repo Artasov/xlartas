@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from apps.Core.exceptions.base import SomethingGoWrong
 from apps.Core.services.services import acontroller
-from apps.Core.services.social_auth_service import get_jwt_by_google_oauth2_token, get_jwt_by_discord_oauth2_code
+from apps.Core.services.social_auth_service import get_jwt_by_google_oauth2_code, get_jwt_by_discord_oauth2_code
 
 
 @acontroller('Get jwt by Discord OAuth2 code')
@@ -17,13 +17,13 @@ async def discord_oauth2_callback(request) -> Response:
     return Response(await get_jwt_by_discord_oauth2_code(code=code))
 
 
-@acontroller('Get jwt by Google OAuth2 token')
+@acontroller('Get jwt by Google OAuth2 code')
 @api_view(['GET'])
 @permission_classes([AllowAny])
 async def google_oauth2_callback(request) -> Response:
     code = request.GET.get('code')
     if not code: raise SomethingGoWrong
-    return Response(await get_jwt_by_google_oauth2_token(token=code))
+    return Response(await get_jwt_by_google_oauth2_code(code=code))
 
 # def telegram_auth(request):
 #     if request.method == 'GET':

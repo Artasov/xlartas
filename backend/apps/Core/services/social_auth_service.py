@@ -1,3 +1,4 @@
+import logging
 from typing import TypedDict, Optional
 
 import aiohttp
@@ -6,6 +7,8 @@ from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.Core.models import User, DiscordUser
+
+log = logging.getLogger('base')
 
 
 class DiscordUserResponse(TypedDict):
@@ -63,6 +66,7 @@ async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
                     settings.DISCORD_CLIENT_SECRET
                 )
         ) as resp:
+            log.critical(f'{resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
@@ -72,10 +76,11 @@ async def get_discord_user_by_code(code: str) -> DiscordUserResponse:
         }) as user_resp:
             user_resp.raise_for_status()
             user_data = await user_resp.json()
+        log.critical(f'{user_data=}')
     return DiscordUserResponse(**user_data)
 
 
-async def get_google_user_by_token(code: str) -> GoogleUserResponse:
+async def get_google_user_by_code(code: str) -> GoogleUserResponse:
     async with aiohttp.ClientSession() as session:
         async with session.post(
                 url='https://oauth2.googleapis.com/token',
@@ -88,6 +93,7 @@ async def get_google_user_by_token(code: str) -> GoogleUserResponse:
                     "redirect_uri": settings.GOOGLE_REDIRECT_URI,
                 }
         ) as resp:
+            log.critical(f'{resp.json()=}')
             resp.raise_for_status()
             response_data = await resp.json()
             access_token = response_data['access_token']
@@ -97,11 +103,12 @@ async def get_google_user_by_token(code: str) -> GoogleUserResponse:
         }) as user_resp:
             user_resp.raise_for_status()
             user_data = await user_resp.json()
+        log.critical(f'{user_data=}')
     return GoogleUserResponse(**user_data)
 
 
-async def get_jwt_by_google_oauth2_token(token) -> dict[str, str]:
-    user_dict: GoogleUserResponse = await get_google_user_by_token(token)
+async def get_jwt_by_google_oauth2_code(code) -> dict[str, str]:
+    user_dict: GoogleUserResponse = await get_google_user_by_code(code=code)
     try:
         user = await User.objects.aget(email=user_dict.get('email'))
     except User.DoesNotExist:
@@ -113,6 +120,7 @@ async def get_jwt_by_google_oauth2_token(token) -> dict[str, str]:
 
 
 async def get_jwt_by_discord_oauth2_code(code) -> dict[str, str]:
+    log.critical(f'{code=}')
     user_dict: DiscordUserResponse = await get_discord_user_by_code(code)
     try:
         discord_user = await DiscordUser.objects.aget(id=int(user_dict.get('id')))

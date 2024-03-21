@@ -1,3 +1,5 @@
+import logging
+
 from adrf.decorators import api_view
 from asgiref.sync import sync_to_async
 from django.conf import settings
@@ -19,6 +21,8 @@ from apps.Core.services.code_confirmation import (
 )
 from apps.Core.services.services import acontroller
 from apps.Core.tasks import send_signup_confirmation_email_task
+
+log = logging.getLogger('base')
 
 
 @acontroller('Sign Up')
