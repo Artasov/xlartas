@@ -25,6 +25,21 @@ async def google_oauth2_callback(request) -> Response:
     if not code: raise SomethingGoWrong
     return Response(await get_jwt_by_google_oauth2_code(code=code))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # def telegram_auth(request):
 #     if request.method == 'GET':
 #         data = request.GET.dict()
