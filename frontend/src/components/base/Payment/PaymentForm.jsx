@@ -25,17 +25,17 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
         const form = e.target;
         const {description, amount, email, phone, receipt} = form;
 
-        if (receipt.value) {
+        if (receipt) {
             if (!email.value && !phone.value) {
                 alert("Поле E-mail или Phone не должно быть пустым");
                 return;
             }
-
-            receipt.value = JSON.stringify({
-                "EmailCompany": "mail@mail.com",
-                "Taxation": "patent",
+            console.log(form.receipt)
+            form.receipt.value = JSON.stringify({
+                "EmailCompany": user.email,
+                "Taxation": "envd",
                 "Items": [{
-                    "Name": description.value || "Оплата",
+                    "Name": description.value || "Deposit",
                     "Price": amount.value + '00',
                     "Quantity": 1.00,
                     "Amount": amount.value + '00',
@@ -44,7 +44,9 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
                     "Tax": "none"
                 }]
             });
+            console.log(receipt.value)
         }
+        console.log(form)
 
         window.pay(form); // Assuming `pay` is defined in the Tinkoff script
     };
@@ -59,7 +61,7 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
             </ul>
             <form className="payform-tinkoff" onSubmit={handleSubmit}>
                 <input type="hidden" name="terminalkey" value={terminalKey}/>
-                <input type="hidden" name="frame" value="false"/>
+                <input type="hidden" name="frame" value="true"/>
                 <input type="hidden" name="language" value="ru"/>
                 <input type="hidden" name="receipt" value=""/>
                 <input type="hidden" name="amount" value={amount} required/>
