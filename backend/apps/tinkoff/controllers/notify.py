@@ -54,6 +54,10 @@ def check_tinkoff_token(notification: TinkoffPaymentNotification) -> bool:
     token = str(notification.get('Token')[0])
     expected_token = generate_token(notification)
     provided_token = token
+
+    log.critical("=========================")
+    log.critical(expected_token)
+    log.critical(provided_token)
     return expected_token == provided_token
 
 
