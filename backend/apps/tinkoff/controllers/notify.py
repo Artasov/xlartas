@@ -51,7 +51,7 @@ def generate_token(parameters: TinkoffPaymentNotification) -> str:
 
 
 def check_tinkoff_token(notification: TinkoffPaymentNotification) -> bool:
-    token = str(notification.get('Token')[0])
+    token = str(notification.get('Token'))
     expected_token = generate_token(notification)
     provided_token = token
 
