@@ -30,9 +30,7 @@ async def execute_order_by_id(order_id: str):
     :param order_id: order id str uuid4.
     :return: If it turns out True, otherwise False.
     """
-    log.critical('||||||||||||||||||Executing order||||||||||||||||||')
     order = await TinkoffDepositOrder.objects.aget(order_id=order_id)
     if order.is_paid:
         raise SomethingGoWrong
     await execute_tinkoff_deposit_order(order)
-    log.critical('||||||||||||||||||Executing order END||||||||||||||||||')
