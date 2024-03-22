@@ -38,6 +38,8 @@ def generate_token(parameters: TinkoffPaymentNotification) -> str:
             params[key] = 'true'
         elif params[key] == 'False':
             params[key] = 'false'
+        elif isinstance(params[key], bool):
+            params[key] = 'true' if params[key] else 'false'
 
     params['Password'] = settings.TINKOFF_PASSWORD
 
@@ -51,6 +53,8 @@ def generate_token(parameters: TinkoffPaymentNotification) -> str:
 
 
 def check_tinkoff_token(notification: TinkoffPaymentNotification) -> bool:
+    print('#########')
+    print(notification)
     token = str(notification.get('Token'))
     expected_token = generate_token(notification)
     provided_token = token
