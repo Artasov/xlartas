@@ -31,6 +31,6 @@ async def execute_order_by_id(order_id: str):
     """
     log.critical('||||||||||||||||||Executing order||||||||||||||||||')
     await execute_tinkoff_deposit_order(
-        await TinkoffDepositOrder.objects.aget(id=order_id)
+        await TinkoffDepositOrder.objects.aget(order_id=order_id)
     )
     log.critical('||||||||||||||||||Executing order END||||||||||||||||||')

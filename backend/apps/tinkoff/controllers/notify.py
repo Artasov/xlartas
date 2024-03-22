@@ -1,10 +1,11 @@
 import hashlib
 import logging
+from collections import OrderedDict
 from typing import TypedDict
 
+from adrf.decorators import api_view
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -28,23 +29,34 @@ class TinkoffPaymentNotification(TypedDict):
 
 
 def generate_token(parameters: TinkoffPaymentNotification) -> str:
-    sorted_keys = sorted(parameters.keys())
-    sorted_parameters = {key: parameters[key] for key in sorted_keys if key != 'Token'}
-    sorted_parameters[settings.TINKOFF_PASSWORD_KEY] = settings.TINKOFF_PASSWORD
-    concatenated_values = "".join(str(value) for value in sorted_parameters.values())
-    return hashlib.sha256(concatenated_values.encode('utf-8')).hexdigest()
+    params = {k: v[0] for k, v in parameters.items() if
+              k not in ('Shops', 'DATA', 'Receipt', 'Token')}
+
+    for key in params.keys():
+        if params[key] == 'True':
+            params[key] = 'true'
+        elif params[key] == 'False':
+            params[key] = 'false'
+
+    params['Password'] = settings.TINKOFF_PASSWORD
+
+    sorted_parameters = OrderedDict(sorted(params.items()))
+    concatenated_values = ''.join(str(sorted_parameters[key]) for key in sorted_parameters)
+    token_hash = hashlib.sha256(concatenated_values.encode('utf-8')).hexdigest()
+
+    return token_hash
 
 
 def check_tinkoff_token(notification: TinkoffPaymentNotification) -> bool:
-    provided_token = notification['Token']
-    generated_token = generate_token(notification)
-    return provided_token == generated_token
+    token = str(notification.get('Token')[0])
+    expected_token = generate_token(notification)
+    provided_token = token
+    return expected_token == provided_token
 
 
-@csrf_exempt
 @api_view(('GET', 'POST'))
 @permission_classes((AllowAny,))
-def notify(request) -> Response:
+async def notify(request) -> Response:
     log.critical('||||||||||||||||||NOTIFY||||||||||||||||||')
     print(request.data)
     notify_ = TinkoffPaymentNotification(**request.data)
@@ -53,9 +65,9 @@ def notify(request) -> Response:
         log.critical('||||||||||||||||||next2||||||||||||||||||')
         if notify_.get('Success'):
             log.critical('||||||||||||||||||next3||||||||||||||||||')
-            order_id = notify_.get('OrderId')
+            order_id = notify_.get('OrderId')[0]
             if order_id:
-                execute_order_by_id(order_id=order_id)
+                await execute_order_by_id(order_id=order_id)
                 return Response('Order executed successfully.')
 
     log.critical('||||||||||||||||||next4||||||||||||||||||')
