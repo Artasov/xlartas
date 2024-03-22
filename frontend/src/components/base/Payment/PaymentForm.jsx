@@ -61,7 +61,7 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
             </ul>
             <form className="payform-tinkoff" onSubmit={handleSubmit}>
                 <input type="hidden" name="terminalkey" value={terminalKey}/>
-                <input type="hidden" name="frame" value="true"/>
+                <input type="hidden" name="frame" value="false"/>
                 <input type="hidden" name="language" value="ru"/>
                 <input type="hidden" name="receipt" value=""/>
                 <input type="hidden" name="amount" value={amount} required/>

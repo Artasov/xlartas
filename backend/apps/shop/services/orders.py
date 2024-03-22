@@ -3,6 +3,7 @@ import logging
 from asgiref.sync import sync_to_async
 from django.db.models import QuerySet
 
+from apps.Core.exceptions.base import SomethingGoWrong
 from apps.shop.models import SoftwareSubscriptionOrder
 from apps.tinkoff.models import TinkoffDepositOrder
 
@@ -17,6 +18,8 @@ def get_user_orders(user_id: int) -> QuerySet[SoftwareSubscriptionOrder]:
 
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
     user = await sync_to_async(getattr)(order, 'user', None)
+    if order.is_paid:
+        raise SomethingGoWrong
     user.balance += order.amount
     order.is_paid = True
     await order.asave()
