@@ -71,6 +71,7 @@ async def notify(request) -> Response:
     log.critical('||||||||||||||||||NOTIFY||||||||||||||||||')
     print(request.data)
     notify_ = TinkoffPaymentNotification(**request.data)
+
     log.critical('||||||||||||||||||next1||||||||||||||||||')
     if check_tinkoff_token(notify_):
         log.critical('||||||||||||||||||next2||||||||||||||||||')

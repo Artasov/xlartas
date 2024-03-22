@@ -18,8 +18,6 @@ def get_user_orders(user_id: int) -> QuerySet[SoftwareSubscriptionOrder]:
 
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
     user = await sync_to_async(getattr)(order, 'user', None)
-    if order.is_paid:
-        raise SomethingGoWrong
     user.balance += order.amount
     order.is_paid = True
     await order.asave()
@@ -33,7 +31,8 @@ async def execute_order_by_id(order_id: str):
     :return: If it turns out True, otherwise False.
     """
     log.critical('||||||||||||||||||Executing order||||||||||||||||||')
-    await execute_tinkoff_deposit_order(
-        await TinkoffDepositOrder.objects.aget(order_id=order_id)
-    )
+    order = await TinkoffDepositOrder.objects.aget(id=order_id)
+    if order.is_paid:
+        raise SomethingGoWrong
+    await execute_tinkoff_deposit_order(order)
     log.critical('||||||||||||||||||Executing order END||||||||||||||||||')
