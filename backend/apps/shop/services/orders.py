@@ -17,12 +17,13 @@ def get_user_orders(user_id: int) -> QuerySet[SoftwareSubscriptionOrder]:
 
 
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
-    order.user = await sync_to_async(getattr)(order, 'user', None)
+    user = await sync_to_async(getattr)(order, 'user', None)
     if order.is_paid:
         raise SomethingGoWrong
-    order.user.balance += order.amount
+    user.balance += order.amount
     order.is_paid = True
     await order.asave()
+    await user.asave()
 
 
 async def execute_order_by_id(order_id: str):
