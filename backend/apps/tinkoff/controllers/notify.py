@@ -29,8 +29,9 @@ class TinkoffPaymentNotification(TypedDict):
 
 
 def generate_token(parameters: TinkoffPaymentNotification) -> str:
-    params = {k: v for k, v in parameters.items() if
+    params = {k: v[0] for k, v in parameters.items() if
               k not in ('Shops', 'DATA', 'Receipt', 'Token')}
+    log.critical(params)
 
     for key in params.keys():
         if params[key] == 'True':
@@ -41,7 +42,9 @@ def generate_token(parameters: TinkoffPaymentNotification) -> str:
     params['Password'] = settings.TINKOFF_PASSWORD
 
     sorted_parameters = OrderedDict(sorted(params.items()))
+    log.critical(sorted_parameters)
     concatenated_values = ''.join(str(sorted_parameters[key]) for key in sorted_parameters)
+    log.critical(concatenated_values)
     token_hash = hashlib.sha256(concatenated_values.encode('utf-8')).hexdigest()
 
     return token_hash
@@ -65,7 +68,8 @@ async def notify(request) -> Response:
         log.critical('||||||||||||||||||next2||||||||||||||||||')
         if notify_.get('Success'):
             log.critical('||||||||||||||||||next3||||||||||||||||||')
-            order_id = notify_.get('OrderId')[0]
+            order_id = notify_.get('OrderId')
+            print(type(order_id))
             if order_id:
                 await execute_order_by_id(order_id=order_id)
                 return Response('Order executed successfully.')
