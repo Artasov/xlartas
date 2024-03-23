@@ -125,7 +125,8 @@ async def get_jwt_by_google_oauth2_code(code: str) -> JwtData:
     except User.DoesNotExist:
         user = await User.objects.acreate(
             email=user_dict.get('email'),
-            username=user_dict.get('email').split('@')[0]
+            username=user_dict.get('email').split('@')[0],
+            is_confirmed=True
         )
     return get_jwt_by_user(user)
 
@@ -140,6 +141,10 @@ async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
         discord_user = await DiscordUser.objects.aget(id=int(user_dict.get('id')))
         user = await sync_to_async(getattr)(discord_user, 'user', None)
     except DiscordUser.DoesNotExist:
-        user = await User.objects.acreate(username=user_dict.get('username'), email=user_dict.get('email'))
+        user = await User.objects.acreate(
+            username=user_dict.get('username'),
+            email=user_dict.get('email'),
+            is_confirmed=True
+        )
         await DiscordUser.objects.acreate(id=int(user_dict.get('id')), user=user)
     return get_jwt_by_user(user)
