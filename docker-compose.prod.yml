@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   base: &base
-    image: xlartas:latest
+    image: base:latest
     build:
       context: .
       target: base
