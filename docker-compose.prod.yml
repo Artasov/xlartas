@@ -77,7 +77,7 @@ services:
     volumes:
       - ./frontend/build:/srv/frontend/build
       - ./data/:/srv/data
-      - ./data/:/srv/logs
+      - ./logs/:/srv/logs
     environment:
       - DEBUG=${DEBUG}
       - DEV=${DEV}
@@ -156,7 +156,7 @@ services:
       dockerfile: DockerfileCelery
     volumes:
       - ./data/:/srv/data
-      - ./data/:/srv/logs
+      - ./logs/:/srv/logs
       - ./backend/entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
     links:
       - redis

@@ -7,12 +7,12 @@ RUN apk update
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/backend/requirements.txt
 
-RUN mkdir -p  \
-    /logs/django_prod/celery/sql  \
-    /logs/django_dev/celery/sql \
-    /logs/django_prod/web/sql  \
-    /logs/django_dev/web/sql && \
-    chmod -R 777 /logs
+#RUN mkdir -p  \
+#    /logs/django_prod/celery/sql  \
+#    /logs/django_dev/celery/sql \
+#    /logs/django_prod/web/sql  \
+#    /logs/django_dev/web/sql && \
+chmod -R 777 /logs
 
 RUN adduser -D celeryuser
 USER celeryuser
