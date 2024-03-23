@@ -4,15 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('shop', '0005_softwaresubscriptionorder_amount'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='softwaresubscription',
+        migrations.AddField(
+            model_name='softwaresubscriptionorder',
             name='amount',
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
+            preserve_default=False,
         ),
     ]
