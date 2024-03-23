@@ -14,7 +14,8 @@ async def generate_confirm_code_and_send(request: ASGIRequest, action: str):
     )
     if not settings.DEV:
         send_confirmation_email_task.delay(
-            request=request,
+            host=request.get_host(),
+            is_secure=request.is_secure(),
             action_mail=ActionsMails.get('action'),
             to_email=request.user.email,
             code=code.code
