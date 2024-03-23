@@ -31,3 +31,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Successfully set {bucket_name} bucket to public'))
         except S3Error as e:
             self.stdout.write(self.style.ERROR(f'Error setting bucket policy: {e}'))
+        except Exception as e:
+            print('Error setting bucket policy!}')
+            print('Error setting bucket policy!}')
+            print('Error setting bucket policy!}')
+            print(e)
