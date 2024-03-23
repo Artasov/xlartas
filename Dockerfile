@@ -6,26 +6,26 @@ WORKDIR /srv
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apk update
-RUN apk add dos2unix
-RUN apk add libpq-dev
-RUN apk add netcat-openbsd
-# RUN python -m venv /venv
-# ENV PATH="/srv/venv/bin:$PATH"
+RUN apk update && apk add --no-cache libpq-dev netcat-openbsd dos2unix supervisor chrony
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/backend/requirements.txt
+
+RUN echo "server pool.ntp.org iburst" >> /etc/chrony/chrony.conf
+RUN apk add --no-cache chrony
+RUN chmod -R 777 /srv/logs
+
+RUN dos2unix /srv/backend/entrypoint.prod.sh && \
+    apk del dos2unix
+
 RUN dos2unix /srv/backend/entrypoint.prod.sh
 RUN apk del dos2unix
 RUN chmod +x /srv/backend/entrypoint.prod.sh
 
-# Установка Chrony для синхронизации времени
-RUN apk add --no-cache chrony
-# Запуск Chrony и настройка времени при старте контейнера
-RUN echo "server pool.ntp.org iburst" >> /etc/chrony/chrony.conf
-
-# Установка Supervisor
-RUN apk update && apk add supervisor
+# Конфигурация Supervisor
 COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Пользователь для celery
+RUN adduser -D celeryuser
 
 ###########
 # DEV #
