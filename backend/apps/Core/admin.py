@@ -36,7 +36,7 @@ class ThemeAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'days_from_join', 'is_confirmed', 'balance', 'email', 'hw_id', 'referral_code')
-    list_editable = ('balance', 'hw_id', 'referral_code')
+    list_editable = ('balance', 'is_confirmed', 'hw_id', 'referral_code')
     save_on_top = True
     search_fields = ('username', 'hw_id')
 
