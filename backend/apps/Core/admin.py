@@ -13,8 +13,8 @@ admin.site.index_title = 'xlartas'
 
 @admin.register(CompanyData)
 class CompanyDataAdmin(admin.ModelAdmin):
-    list_display = ['param', 'value']
-    list_editable = ['value']
+    list_display = ('param', 'value')
+    list_editable = ('value',)
     save_on_top = True
 
 
@@ -35,10 +35,10 @@ class ThemeAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'days_from_join', 'balance', 'email', 'hw_id', 'referral_code']
-    list_editable = ['balance', 'hw_id', 'referral_code']
+    list_display = ('username', 'days_from_join', 'is_confirmed', 'balance', 'email', 'hw_id', 'referral_code')
+    list_editable = ('balance', 'hw_id', 'referral_code')
     save_on_top = True
-    search_fields = ['username', 'hw_id']
+    search_fields = ('username', 'hw_id')
 
     def days_from_join(self, obj: User):
         if obj.date_joined is not None:
@@ -56,6 +56,6 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
-    list_display = ['name', 'file']
-    list_editable = ['file']
+    list_display = ('name', 'file')
+    list_editable = ('file',)
     save_on_top = True
