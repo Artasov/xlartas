@@ -1,4 +1,3 @@
-# Используйте официальный образ Python как базовый
 FROM python:3.11-alpine
 
 COPY . /srv
@@ -7,6 +6,21 @@ WORKDIR /srv
 RUN apk update
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/backend/requirements.txt
+
+RUN mkdir logs
+RUN mkdir logs/django_prod
+RUN mkdir logs/django_dev
+RUN mkdir logs/django_prod/celery/sql
+RUN mkdir logs/django_dev/celery/sql
+RUN mkdir logs/django_prod/web/sql
+RUN mkdir logs/django_dev/web/sql
+RUN mkdir logs/django_prod/celery/sql
+RUN mkdir logs/django_dev/celery/sql
+RUN mkdir logs/django_prod/web/sql
+RUN mkdir logs/django_dev/web/sql
+
+RUN chmod -R 777 /logs
+
 RUN adduser -D celeryuser
 USER celeryuser
 
