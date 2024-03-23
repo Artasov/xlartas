@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from django.utils.timezone import now
 
 from apps.Core.models.common import CompanyData, Theme, File
+from apps.Core.models.social import DiscordUser
 from apps.Core.models.user import User
 
 # ADMIN SETTINGS
@@ -35,7 +36,8 @@ class ThemeAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'days_from_join', 'is_confirmed', 'balance', 'email', 'hw_id', 'referral_code')
+    list_display = (
+        'username', 'days_from_join', 'is_confirmed', 'balance', 'email', 'last_login', 'hw_id', 'referral_code')
     list_editable = ('balance', 'is_confirmed', 'hw_id', 'referral_code')
     save_on_top = True
     search_fields = ('username', 'hw_id', 'email', 'is_confirmed')
@@ -52,6 +54,11 @@ class UserAdmin(admin.ModelAdmin):
             return None
 
     days_from_join.short_description = 'Joined ago'
+
+
+@admin.register(DiscordUser)
+class DiscordUserAdmin(admin.ModelAdmin):
+    list_display = ('user', 'id')
 
 
 @admin.register(File)
