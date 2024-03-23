@@ -5,4 +5,4 @@ COPY backend/entrypoint-minio.sh /opt/entrypoint-minio.sh
 
 RUN chmod +x /opt/entrypoint_minio.sh
 
-ENTRYPOINT ["sh", "/opt/entrypoint-minio.sh"]
+ENTRYPOINT ["sh", "/opt/entrypoint_minio.sh"]
