@@ -92,7 +92,7 @@ services:
     container_name: celery
     user: "celeryuser"
     hostname: celery
-    command: [ "celery", "-A", "config", "worker", "--loglevel=info", "--task-events", "--concurrency", "1", "-E" ]
+    command: sh -c 'cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E'
     build:
       target: prod
     links:
