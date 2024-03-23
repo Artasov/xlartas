@@ -24,12 +24,15 @@ RUN chmod +x /srv/backend/entrypoint.prod.sh
 # Конфигурация Supervisor
 COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Пользователь для celery
-RUN adduser -D celeryuser
 
-
-FROM base as django
+#############
+# PROD #
+#############
+FROM base as prod
 ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
 
-FROM base as celery
-ENTRYPOINT ["sh", "/srv/backend/worker.sh"]
+###########
+# DEV #
+###########
+FROM base as dev
+ENTRYPOINT ["sh", "/srv/backend/entrypoint.dev.sh"]

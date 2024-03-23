@@ -10,7 +10,7 @@ minio server /data --console-address ":9001" &
 
 # Функция для проверки готовности MinIO
 check_minio_ready() {
-    mc alias set myminio http://localhost:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}"
+    mc alias set myminio http://minio:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}"
     mc ls myminio
 }
 
@@ -21,8 +21,6 @@ until check_minio_ready; do
 done
 
 echo "Minio is ready."
-mc alias set myminio http://localhost:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}"
-
 # Создаем бакет, если он не существует
 echo "Creating media bucket if not exist..."
 mc mb myminio/media --ignore-existing

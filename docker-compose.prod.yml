@@ -1,108 +1,6 @@
 version: '3.8'
 
 services:
-  base: &base
-    build:
-      context: .
-    volumes:
-      - ./data/:/srv/data
-      - ./logs/:/srv/logs
-    environment:
-      - DEBUG=${DEBUG}
-      - DEV=${DEV}
-      - HTTPS=${HTTPS}
-      - MAIN_DOMAIN=${MAIN_DOMAIN}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - REDIS_CACHE_URL=${REDIS_URL}
-      - REDIS_URL=${REDIS_URL}
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=${MINIO_EXTERNAL_ENDPOINT_USE_HTTPS}
-      - MINIO_USE_HTTPS=${MINIO_USE_HTTPS}
-      - TZ=${TZ}
-      - SECRET_KEY=${SECRET_KEY}
-      - SITE_ID=${SITE_ID}
-      - SQL_HOST=${SQL_HOST}
-      - SQL_ENGINE=${SQL_ENGINE}
-      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
-      - SQL_USER=${SQL_USER}
-      - SQL_PASSWORD=${SQL_PASSWORD}
-      - SQL_PORT=${SQL_PORT}
-
-      - QIWI_SECRET_KEY=${QIWI_SECRET_KEY}
-      - QIWI_PUBLIC_KEY=${QIWI_PUBLIC_KEY}
-
-      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
-      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
-
-      - EMAIL_HOST_USER2=${EMAIL_HOST_USER2}
-      - EMAIL_HOST_PASSWORD2=${EMAIL_HOST_PASSWORD2}
-      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-      - VK_CLIENT_ID=${VK_CLIENT_ID}
-      - VK_SECRET=${VK_SECRET}
-      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
-      - GITHUB_SECRET=${GITHUB_SECRET}
-      - FK_MERCHANT_ID=${FK_MERCHANT_ID}
-      - FK_SECRET_WORD1=${FK_SECRET_WORD1}
-      - FK_SECRET_WORD2=${FK_SECRET_WORD2}
-      - FK_API_KEY=${FK_API_KEY}
-
-      - LOG_PREFIX=server
-    networks:
-      - net
-
-  web:
-    <<: *base
-    container_name: web
-    hostname: web
-    build:
-      dockerfile: Dockerfile
-      target: django
-    ports:
-      - "8000:8000"
-    restart: always
-    healthcheck:
-      test: [ "CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8000/health_test/ || exit 1" ]
-      timeout: 30s
-      retries: 5
-      start_period: 5s
-    depends_on:
-      redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      react:
-        condition: service_completed_successfully
-    networks:
-      - net
-    cap_add:
-      - SYS_TIME
-
-  celery:
-    <<: *base
-    container_name: celery
-    user: "celeryuser"
-    hostname: celery
-#    command: sh -c 'cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E'
-    build:
-      dockerfile: Dockerfile
-      target: celery
-    links:
-      - redis
-    depends_on:
-      redis:
-        condition: service_healthy
-      web:
-        condition: service_healthy
-    networks:
-      - net
 
   nginx:
     container_name: nginx
@@ -169,6 +67,151 @@ services:
     volumes:
       - ./frontend/build:/srv/build
 
+  web:
+    container_name: web
+    hostname: web
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    volumes:
+      - ./data/:/srv/data
+      - ./logs/:/srv/logs
+    environment:
+      - DEBUG=${DEBUG}
+      - DEV=${DEV}
+      - HTTPS=${HTTPS}
+      - MAIN_DOMAIN=${MAIN_DOMAIN}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - REDIS_CACHE_URL=${REDIS_URL}
+      - REDIS_URL=${REDIS_URL}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=${MINIO_EXTERNAL_ENDPOINT_USE_HTTPS}
+      - MINIO_USE_HTTPS=${MINIO_USE_HTTPS}
+      - TZ=${TZ}
+      - SECRET_KEY=${SECRET_KEY}
+      - SITE_ID=${SITE_ID}
+      - SQL_HOST=${SQL_HOST}
+      - SQL_ENGINE=${SQL_ENGINE}
+      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_PORT=${SQL_PORT}
+
+      - QIWI_SECRET_KEY=${QIWI_SECRET_KEY}
+      - QIWI_PUBLIC_KEY=${QIWI_PUBLIC_KEY}
+
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
+      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
+
+      - EMAIL_HOST_USER2=${EMAIL_HOST_USER2}
+      - EMAIL_HOST_PASSWORD2=${EMAIL_HOST_PASSWORD2}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - VK_CLIENT_ID=${VK_CLIENT_ID}
+      - VK_SECRET=${VK_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_SECRET=${GITHUB_SECRET}
+      - FK_MERCHANT_ID=${FK_MERCHANT_ID}
+      - FK_SECRET_WORD1=${FK_SECRET_WORD1}
+      - FK_SECRET_WORD2=${FK_SECRET_WORD2}
+      - FK_API_KEY=${FK_API_KEY}
+
+      - LOG_PREFIX=server
+    ports:
+      - "8000:8000"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8000/health_test/ || exit 1" ]
+      # interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 5s
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      react:
+        condition: service_completed_successfully
+    networks:
+      - net
+    cap_add:
+      - SYS_TIME
+
+  celery:
+    container_name: celery
+    user: "1000:1000"
+    hostname: celery
+    build:
+      context: .
+      dockerfile: DockerfileCelery
+    volumes:
+      - ./data/:/srv/data
+      - ./logs/:/srv/logs
+      - ./backend/entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
+    links:
+      - redis
+    environment:
+      - DEBUG=${DEBUG}
+      - DEV=${DEV}
+      - HTTPS=${HTTPS}
+      - MAIN_DOMAIN=${MAIN_DOMAIN}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - REDIS_CACHE_URL=${REDIS_URL}
+      - REDIS_URL=${REDIS_URL}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_EXTERNAL_ENDPOINT_USE_HTTPS=${MINIO_EXTERNAL_ENDPOINT_USE_HTTPS}
+      - MINIO_USE_HTTPS=${MINIO_USE_HTTPS}
+      - TZ=${TZ}
+      - SECRET_KEY=${SECRET_KEY}
+      - SITE_ID=${SITE_ID}
+      - SQL_HOST=${SQL_HOST}
+      - SQL_ENGINE=${SQL_ENGINE}
+      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_PORT=${SQL_PORT}
+
+      - QIWI_SECRET_KEY=${QIWI_SECRET_KEY}
+      - QIWI_PUBLIC_KEY=${QIWI_PUBLIC_KEY}
+
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
+      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
+
+      - EMAIL_HOST_USER2=${EMAIL_HOST_USER2}
+      - EMAIL_HOST_PASSWORD2=${EMAIL_HOST_PASSWORD2}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - VK_CLIENT_ID=${VK_CLIENT_ID}
+      - VK_SECRET=${VK_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_SECRET=${GITHUB_SECRET}
+      - FK_MERCHANT_ID=${FK_MERCHANT_ID}
+      - FK_SECRET_WORD1=${FK_SECRET_WORD1}
+      - FK_SECRET_WORD2=${FK_SECRET_WORD2}
+      - FK_API_KEY=${FK_API_KEY}
+
+      - LOG_PREFIX=celery
+    depends_on:
+      redis:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    networks:
+      - net
 
   minio:
     container_name: minio
