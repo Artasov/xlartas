@@ -64,7 +64,6 @@ services:
     hostname: web
     build:
       dockerfile: DockerfileDjangoAndBeat
-      target: django_and_beat
     ports:
       - "8000:8000"
     restart: always
@@ -95,7 +94,6 @@ services:
 #    command: sh -c 'cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E'
     build:
       dockerfile: DockerfileCelery
-      target: worker
     links:
       - redis
     depends_on:
