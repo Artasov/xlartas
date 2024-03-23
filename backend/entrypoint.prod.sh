@@ -5,28 +5,22 @@
 ############
 /usr/sbin/chronyd
 
-echo "#####################################"
-echo "######### Server Starting... ########"
-echo "#####################################"
+#echo "#####################################"
+#echo "######### Server Starting... ########"
+#echo "#####################################"
 
 echo "chronyc exec"
 chronyc tracking
 # shellcheck disable=SC2164
 cd /srv/backend
-# Collect static files into one folder without asking for confirmation
 echo "Collecting static files"
 python manage.py collectstatic --noinput &&
-# Apply migrations to the database
-
-echo "Migrating"
+  echo "Migrating"
 python manage.py migrate
-
 echo "Set public policy for media bucket"
 python manage.py set_public_policy_media
 
-echo "Start DAPHNE & BEAT"
-supervisord -c /etc/supervisor/conf.d/supervisord.conf
-
+#echo "Start DAPHNE & BEAT"
 
 # Start beat
 #python manage.py startbeat &
