@@ -48,7 +48,7 @@ services:
     image: redis:alpine
     restart: always
     volumes:
-      - ./backend/data/redis/:/data
+      - ./data/redis/:/data
     ports:
       - "6379:6379"
     healthcheck:
@@ -76,8 +76,8 @@ services:
       target: prod
     volumes:
       - ./frontend/build:/srv/frontend/build
-      - ./backend/data:/srv/backend/data
-      - ./backend/logs:/srv/backend/logs
+      - ./data/:/srv/data
+      - ./data/:/srv/logs
     environment:
       - DEBUG=${DEBUG}
       - DEV=${DEV}
@@ -155,8 +155,8 @@ services:
       context: .
       dockerfile: DockerfileCelery
     volumes:
-      - ./backend/data:/srv/backend/data
-      - ./backend/logs:/srv/backend/logs
+      - ./data/:/srv/data
+      - ./data/:/srv/logs
       - ./backend/entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
     links:
       - redis
@@ -228,8 +228,8 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     command: sh -c "/data/entrypoint-minio.sh && minio server /data --console-address :9001"
     volumes:
-      - ./backend/data/minio/data:/data
-      - ./backend/data/minio/config:/root/.minio
+      - ./data/minio/data:/data
+      - ./data/minio/config:/root/.minio
       - ./entrypoint-minio.sh:/opt/entrypoint-minio.sh
     networks:
       - net
