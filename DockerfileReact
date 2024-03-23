@@ -3,6 +3,6 @@ FROM node:21-alpine
 COPY ./frontend /srv
 COPY ./frontend /srv
 WORKDIR /srv
-
+RUN npm run build
 ENTRYPOINT ["sh", "/srv/entrypoint_react.sh"]
 

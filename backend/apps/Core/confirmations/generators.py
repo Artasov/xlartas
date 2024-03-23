@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 
 from apps.Core.confirmations.manager import CoreConfirmation
-from apps.Core.tasks.mail.base import send_confirmation_email_task
+from apps.Core.tasks.mail_tasks import send_confirmation_email_task
 from apps.confirmation.models.base import ActionsMails
 
 

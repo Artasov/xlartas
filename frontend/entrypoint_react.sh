@@ -6,5 +6,5 @@ echo "NPM INSTALL"
 npm install
 echo "NPM INSTALL END"
 echo "NPM RUN BUILD"
-npm run build
+#npm run build
 echo "SUCCESS NPM RUN BUILD END"
