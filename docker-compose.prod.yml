@@ -2,10 +2,6 @@ version: '3.8'
 
 services:
   base: &base
-    image: base:latest
-    build:
-      context: .
-      target: base
     volumes:
       - ./data/:/srv/data
       - ./logs/:/srv/logs
@@ -63,7 +59,8 @@ services:
     container_name: web
     hostname: web
     build:
-      dockerfile: DockerfileDjangoAndBeat
+      dockerfile: Dockerfile
+      target: django
     ports:
       - "8000:8000"
     restart: always
@@ -93,7 +90,8 @@ services:
     hostname: celery
 #    command: sh -c 'cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E'
     build:
-      dockerfile: DockerfileCelery
+      dockerfile: Dockerfile
+      target: celery
     links:
       - redis
     depends_on:

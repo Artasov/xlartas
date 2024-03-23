@@ -28,5 +28,8 @@ COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN adduser -D celeryuser
 
 
-FROM base as preconf
+FROM base as django
 ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
+
+FROM base as celery
+ENTRYPOINT ["sh", "/srv/backend/worker.sh"]

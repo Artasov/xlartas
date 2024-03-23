@@ -13,6 +13,7 @@ python manage.py migrate
 echo "Set public policy for media bucket"
 python manage.py set_public_policy_media
 
+supervisord -c /etc/supervisor/conf.d/supervisord.conf
 #echo "Start DAPHNE & BEAT"
 
 # Start beat
