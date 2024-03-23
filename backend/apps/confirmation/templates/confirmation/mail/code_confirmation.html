@@ -23,12 +23,7 @@
     </tr>
     <tr bgcolor="#161415">
         <td align="center" style="font-size: 16px; line-height: 1.5; padding: 20px;" bgcolor="#161415">
-            <h2 style="font-size: 24px; margin: 0;"><a style="text-decoration: none; font-weight: 600;  color: #fd3349;"
-                                                       href="{% if is_secure %}https{% else %}http{% endif %}://
-                                                               {{ host }}{% url 'main' %}">
-                xlartas.ru</a></h2>
-
-            <h3 style="color: #bbb; margin-top: 10px;">{{ subject }}</h3>
+            <h3 style="font-size: 24px; margin: 0;text-decoration: none; font-weight: 600;  color: #fd3349;">{{ subject }}</h3>
             <p style="color: #aaaaaa; margin-top: 10px;">{{ text }}</p>
             <span style="background-color: #f03756; border-radius: 5px; color: #ffffff; display: inline-block; font-size: 18px; font-weight: 600; letter-spacing: 0.1em; padding: 10px 18px 10px 20px; text-decoration: none;">
                 {{ code }}</span>
@@ -44,21 +39,21 @@
         </td>
     </tr>
     <tr>
-        <td align="center" style="font-size: 16px; line-height: 1.5;">
+        <td align="center" style="font-size: 16px; line-height: 1.5; margin-top: 15px; user-select: all;">
             <table>
                 <tr>
-                    {#                    <td>#}
-                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'main' %}"#}
-                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">xlartas.ru</a>#}
-                    {#                    </td>#}
-                    {#                    <td>#}
-                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'about' %}"#}
-                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">О нас</a>#}
-                    {#                    </td>#}
-                    {#                    <td>#}
-                    {#                        <a href="{% if is_secure %}https{% else %}http{% endif %}://{{ host }}{% url 'shop:catalog' %}"#}
-                    {#                            style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">Каталог</a>#}
-                    {#                    </td>#}
+                    <td>
+                        <a href="https://xlartas.ru/"
+                           style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">xlartas.ru</a>
+                    </td>
+                    <td>
+                        <a href="https://xlartas.ru/about/"
+                           style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">About Us</a>
+                    </td>
+                    <td>
+                        <a href="https://xlartas.ru/software/"
+                           style="font-size: 16px; color: #777777; margin: 0 10px; text-decoration: none;">Software</a>
+                    </td>
                 </tr>
             </table>
         </td>
