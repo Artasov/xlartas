@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='softwaresubscription',
             name='amount',
-            field=models.PositiveIntegerField(),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
     ]
