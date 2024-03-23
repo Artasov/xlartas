@@ -319,8 +319,8 @@ CHANNEL_LAYERS = {
 }
 # Logging
 LOG_PREFIX = env('LOG_PREFIX', 'server')
-logs_prod_dir = os.path.join(BASE_DIR, 'logs/django_prod', LOG_PREFIX)
-logs_dev_dir = os.path.join(BASE_DIR, 'logs/django_dev', LOG_PREFIX)
+logs_prod_dir = os.path.join(BASE_DIR.parent, 'logs/django_prod', LOG_PREFIX)
+logs_dev_dir = os.path.join(BASE_DIR.parent, 'logs/django_dev', LOG_PREFIX)
 logs_sql_prod_dir = os.path.join(logs_prod_dir, 'sql')
 logs_sql_dev_dir = os.path.join(logs_dev_dir, 'sql')
 
