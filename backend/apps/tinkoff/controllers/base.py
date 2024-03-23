@@ -27,7 +27,7 @@ async def tinkoff_pay_form(request) -> HttpResponse:
     amount = request.data.get('amount')
     if amount is None: raise SomethingGoWrong()
     order: TinkoffDepositOrder = await TinkoffDepositOrder.objects.acreate(
-        user=request.user, amount=amount
+        user=request.user, amount=amount, type=BaseOrder.OrderTypes.DEPOSIT
     )
     return Response({
         'order_id': order.order_id,
