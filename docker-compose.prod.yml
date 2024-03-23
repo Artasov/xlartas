@@ -63,7 +63,7 @@ services:
     container_name: web
     hostname: web
     build:
-      target: prod
+      target: django
     ports:
       - "8000:8000"
     restart: always
@@ -94,7 +94,7 @@ services:
     hostname: celery
     command: sh -c 'cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E'
     build:
-      target: prod
+      target: worker
     links:
       - redis
     depends_on:
