@@ -21,6 +21,7 @@ until check_minio_ready; do
 done
 
 echo "Minio is ready."
+mc alias set myminio http://localhost:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}"
 
 # Создаем бакет, если он не существует
 echo "Creating media bucket if not exist..."
@@ -29,8 +30,8 @@ mc mb myminio/media --ignore-existing
 # Настраиваем публичную политику доступа к бакету
 echo "Setting public policy for media bucket..."
 mc policy set download myminio/media
-echo "Setting anonymous public policy for media bucket..."
-mc anonymous set download myminio/media
+#echo "Setting anonymous public policy for media bucket..."
+#mc anonymous set download myminio/media
 echo "Minio setup complete."
 
 # Блокируем скрипт, чтобы контейнер не завершал работу
