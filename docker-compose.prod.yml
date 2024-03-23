@@ -63,7 +63,7 @@ services:
     container_name: web
     hostname: web
     build:
-      target: django
+      target: django_and_beat
     ports:
       - "8000:8000"
     restart: always

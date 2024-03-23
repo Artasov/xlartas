@@ -31,7 +31,7 @@ RUN adduser -D celeryuser
 ###########
 # DEV #
 ###########
-FROM base as prod
+FROM base as django_and_beat
 ENTRYPOINT ["supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
 
 # Для worker-сервиса
