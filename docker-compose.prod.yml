@@ -5,6 +5,7 @@ services:
     image: xlartas:latest
     build:
       context: .
+      target: base
     volumes:
       - ./data/:/srv/data
       - ./logs/:/srv/logs
