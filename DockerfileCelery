@@ -12,7 +12,7 @@ RUN python -m pip install -r /srv/backend/requirements.txt
 #    /logs/django_dev/celery/sql \
 #    /logs/django_prod/web/sql  \
 #    /logs/django_dev/web/sql && \
-chmod -R 777 /logs
+RUN chmod -R 777 /logs
 
 RUN adduser -D celeryuser
 USER celeryuser
