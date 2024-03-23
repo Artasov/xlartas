@@ -1,0 +1,2 @@
+FROM base as django_and_beat
+ENTRYPOINT ["sh", "/srv/backend/django_and_beat.sh"]

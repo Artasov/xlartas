@@ -1,14 +1,2 @@
-FROM python:3.11-alpine
-
-COPY . /srv
-WORKDIR /srv
-
-RUN apk update
-RUN chmod -R 777 /srv/logs
-RUN python -m pip install --upgrade pip
-RUN python -m pip install -r /srv/backend/requirements.txt
-
-RUN adduser -D celeryuser
-USER celeryuser
-
-ENTRYPOINT ["sh", "/srv/backend/entrypoint_celery.sh"]
+FROM base as worker
+ENTRYPOINT ["sh", "/srv/backend/worker.sh"]

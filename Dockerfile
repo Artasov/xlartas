@@ -1,15 +1,3 @@
-FROM base as preconf
-ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
-
-
-FROM base as django_and_beat
-ENTRYPOINT ["sh", "/srv/backend/django_and_beat.sh"]
-
-
-FROM base as worker
-ENTRYPOINT ["sh", "/srv/backend/worker.sh"]
-
-
 FROM python:3.11-alpine as base
 
 COPY . /srv
@@ -40,3 +28,5 @@ COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN adduser -D celeryuser
 
 
+FROM base as preconf
+ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
