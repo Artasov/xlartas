@@ -31,8 +31,8 @@ RUN adduser -D celeryuser
 ###########
 # DEV #
 ###########
-FROM base as django
-ENTRYPOINT ["sh", "-c", "cd /srv/backend && supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+FROM base as prod
+ENTRYPOINT ["supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
 
 # Для worker-сервиса
 
@@ -41,4 +41,4 @@ ENTRYPOINT ["sh", "-c", "cd /srv/backend && supervisord -c /etc/supervisor/conf.
 # PROD #
 #############
 FROM base as worker
-ENTRYPOINT ["sh", "-c", "cd /srv/backend && celery -A config worker --loglevel=info --task-events --concurrency 1 -E"]
+ENTRYPOINT ["celery -A config worker --loglevel=info --task-events --concurrency 1 -E"]
