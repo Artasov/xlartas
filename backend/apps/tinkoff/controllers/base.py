@@ -34,7 +34,6 @@ async def tinkoff_pay_form(request) -> HttpResponse:
         'order_id': order.order_id,
         'amount': order.amount,
     })
-    # return render(request, 'tinkoff/deposit.html', )
 
 
 @acontroller('Creating a Tinkoff deposit and receiving a payment link')
