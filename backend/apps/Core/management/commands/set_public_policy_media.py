@@ -5,7 +5,7 @@ from minio.error import S3Error
 
 
 class Command(BaseCommand):
-    help = 'Make the media bucket public'
+    help = 'Make the media bucket public and ensure it exists'
 
     def handle(self, *args, **kwargs):
         try:
@@ -16,6 +16,12 @@ class Command(BaseCommand):
                 secure=settings.MINIO_USE_HTTPS
             )
             bucket_name = "media"
+
+            # Проверяем существование бакета, если нет - создаем
+            if not minio_client.bucket_exists(bucket_name):
+                minio_client.make_bucket(bucket_name)
+                self.stdout.write(self.style.SUCCESS(f'Bucket {bucket_name} created successfully'))
+
             try:
                 policy = '''{
                     "Version": "2012-10-17",
@@ -31,7 +37,5 @@ class Command(BaseCommand):
             except S3Error as e:
                 self.stdout.write(self.style.ERROR(f'Error setting bucket policy: {e}'))
         except Exception as e:
-            print('Error setting bucket policy!}')
-            print('Error setting bucket policy!}')
-            print('Error setting bucket policy!}')
-            print(e)
+            self.stdout.write(self.style.ERROR('Error setting bucket policy!'))
+            self.stdout.write(self.style.ERROR(e))
