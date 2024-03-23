@@ -1,16 +1,9 @@
 #!/bin/sh
-
-############
-#   PROD   #
-############
 /usr/sbin/chronyd
-
-#echo "#####################################"
-#echo "######### Server Starting... ########"
-#echo "#####################################"
 
 echo "chronyc exec"
 chronyc tracking
+
 # shellcheck disable=SC2164
 cd /srv/backend
 echo "Collecting static files"

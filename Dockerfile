@@ -28,17 +28,12 @@ COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN adduser -D celeryuser
 
 
-###########
-# DEV #
-###########
+FROM base as preconf
+ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
+
 FROM base as django_and_beat
-ENTRYPOINT ["supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
-
-# Для worker-сервиса
+ENTRYPOINT ["sh", "/srv/backend/django_and_beat.sh"]
 
 
-#############
-# PROD #
-#############
 FROM base as worker
-ENTRYPOINT ["celery -A config worker --loglevel=info --task-events --concurrency 1 -E"]
+ENTRYPOINT ["sh", "/srv/backend/worker.sh"]
