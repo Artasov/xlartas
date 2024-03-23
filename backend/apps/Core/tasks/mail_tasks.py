@@ -18,3 +18,17 @@ def send_confirmation_email_task(host, is_secure: bool, to_email: str, action_ma
             'code': code
         }
     )
+# @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 20})
+# def send_confirmation_email_task(host, is_secure: bool, to_email: str, subject: str, text: str, code) -> None:
+#     send_email_by_template(
+#         subject=subject,
+#         to_email=to_email,
+#         template='confirmation/mail/code_confirmation.html',
+#         context={
+#             'text': text,
+#             'subject': subject,
+#             'host': host,
+#             'is_secure': is_secure,
+#             'code': code
+#         }
+#     )
