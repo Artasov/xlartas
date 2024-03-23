@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   base: &base
+    build:
+      context: .
     volumes:
       - ./data/:/srv/data
       - ./logs/:/srv/logs
