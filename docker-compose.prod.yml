@@ -230,7 +230,7 @@ services:
     volumes:
       - ./data/minio/data:/data
       - ./data/minio/config:/root/.minio
-      - ./entrypoint-minio.sh:/opt/entrypoint-minio.sh
+      - ./backend/entrypoint-minio.sh:/opt/entrypoint-minio.sh
     networks:
       - net
     healthcheck:
