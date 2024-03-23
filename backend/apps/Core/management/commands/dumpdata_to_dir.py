@@ -21,5 +21,8 @@ class Command(BaseCommand):
                 model_label = f"{app.label}_{model._meta.model_name}"
                 output_file_path = os.path.join(directory, f"{model_label}.json")
                 self.stdout.write(f"Dumping data for {model_label} into {output_file_path}")
-                with open(output_file_path, 'w', encoding='utf-8') as output_file:
-                    call_command('dumpdata', f'{app.label}.{model._meta.model_name}', stdout=output_file)
+                try:
+                    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+                        call_command('dumpdata', f'{app.label}.{model._meta.model_name}', stdout=output_file)
+                except Exception:
+                    print(f'{model._meta.model_name} Not Loaded')
