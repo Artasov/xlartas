@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AppMailingConfig(AppConfig):
+class AppConfirmationConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.mailing'
+    name = 'apps.confirmation'

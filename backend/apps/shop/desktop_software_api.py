@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from apps.Core.error_messages import LOGIN_OR_SECRET_KEY_WRONG, MULTI_ACCOUNT_PROHIBITED, PRODUCT_NOT_EXISTS, \
     LICENSE_TIMEOUT, SOMETHING_WRONG, HWID_NOT_EQUAL
-from apps.Core.models import User
+from apps.Core.models.user import User
 from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 
 

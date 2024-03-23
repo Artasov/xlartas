@@ -3,14 +3,14 @@ from typing import TypedDict
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
-from django.db import transaction
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from apps.Core.services.services import aget_object_or_404
+from apps.Core.async_django import get_related_field
+from apps.Core.services.base import aget_object_or_404
 from apps.shop.exceptions.base import InsufficientFundsError, TestPeriodAlreadyUsed, \
     TestPeriodActivationFailed
-from apps.shop.models import UserSoftwareSubscription, SoftwareSubscription, SoftwareProduct
+from apps.shop.models import UserSoftwareSubscription, SoftwareSubscription, SoftwareProduct, SoftwareSubscriptionOrder, \
+    BaseOrder
 
 
 class SoftwareSmallInfo(TypedDict):
@@ -68,8 +68,7 @@ async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
     return subscription_infos
 
 
-@transaction.atomic()
-def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_id: int):
+async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_id: int):
     """
     Creates a UserSubscription (the product is already indicated in it) if
     it does not exist, otherwise changes it by increasing the expiration
@@ -78,24 +77,40 @@ def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_id: int
     :param subscription_id: software subscription id.
     :return:
     """
-    sub: SoftwareSubscription = get_object_or_404(SoftwareSubscription, id=subscription_id)
-
-    if user.balance < sub.priceRub:
+    sub: SoftwareSubscription = await aget_object_or_404(SoftwareSubscription, id=subscription_id)
+    print(sub.amount)
+    print(sub.amount)
+    print(sub)
+    print(sub.amount)
+    if user.balance < sub.amount:
         raise InsufficientFundsError()
 
-    user.balance -= sub.priceRub
-    user.save()
+    sub_order: SoftwareSubscriptionOrder = await SoftwareSubscriptionOrder.objects.acreate(
+        user=user,
+        software=await get_related_field(sub, 'software'),
+        amount=sub.amount,
+        type=BaseOrder.OrderTypes.SOFTWARE,
+    )
+    user.balance -= sub.amount
+    await user.asave()
 
-    user_sub, created = UserSoftwareSubscription.objects.get_or_create(
+    user_sub, created = await UserSoftwareSubscription.objects.aget_or_create(
         user=user,
         software=sub.software,
     )
+    print('#1')
     user_sub: UserSoftwareSubscription
+    time_category = await get_related_field(sub, 'time_category'),
+    time_category = time_category[0]
     if created:
-        user_sub.expires_at = timezone.now() + timedelta(hours=sub.time_category.hours)
+        user_sub.expires_at = timezone.now() + timedelta(hours=time_category.hours)
     else:
-        user_sub.expires_at = user_sub.expires_at + timedelta(hours=sub.time_category.hours)
-    user_sub.save()
+        user_sub.expires_at = user_sub.expires_at + timedelta(hours=time_category.hours)
+    print('#2')
+    await user_sub.asave()
+    sub_order.is_completed = True
+    await sub_order.asave()
+    print('#3')
 
 
 async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_id: int):

@@ -20,3 +20,7 @@ def aatomic(fun, *args, **kwargs) -> callable:
             await fun(*args, **kwargs)
 
     return wrapper
+
+
+async def get_related_field(model_object, related_field_name: str):
+    return await sync_to_async(getattr)(model_object, related_field_name, None)

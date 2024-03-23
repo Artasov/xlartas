@@ -10,25 +10,30 @@ import traceback
 import urllib
 import urllib.parse
 import urllib.request
+from datetime import timedelta, datetime
 from time import time
 from typing import Optional, Tuple
 
 import aiohttp
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
-from django.http import HttpResponseNotAllowed, HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseNotAllowed, HttpResponse
+from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
 
 from apps.Core.async_django import AsyncAtomicContextManager
 from apps.Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
-from apps.Core.models import User
-from apps.mailing.services.services import send_text_email
+from apps.Core.models.user import User
+from apps.Core.services.mail.base import send_text_email
 
 log = logging.getLogger('base')
+
+
+def get_timedelta(**kwargs) -> datetime:
+    return now() + timedelta(**kwargs)
 
 
 def reCAPTCHA_validation(request):
@@ -226,7 +231,4 @@ def controller(name=None, log_time=False) -> callable:
 
 
 async def aget_object_or_404(klass, *args, **kwargs):
-    try:
-        return await klass.objects.aget(*args, **kwargs)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound("Object does not exist")
+    return await klass.objects.aget(*args, **kwargs)

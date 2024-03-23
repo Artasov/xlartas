@@ -6,16 +6,17 @@ import DynamicForm from "../elements/DynamicForm";
 import {useAuth} from "./useAuth";
 import {Message} from "../Message";
 import SocialLogin from "./SocialLogin";
+import ConfirmationCode from "../ConfirmationCode";
+import {AuthContext} from "./AuthContext/AuthContext";
 
 const SignUpForm = () => {
     const [formData, setFormData] = useState({
         email: '',
         username: '',
         password: '',
-        confirmation_code: ''
     });
     const [codeSent, setCodeSent] = useState(false);
-    const {showLoginModal} = useAuth();
+    const {showLoginModal, user} = useAuth(AuthContext);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -26,36 +27,27 @@ const SignUpForm = () => {
     };
 
     const signUp = async () => {
-        try {
-            await axiosInstance.post('/api/signup/', {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-            });
+        await axiosInstance.post('/api/signup/', {
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+        }).then(response => {
+            Message.success(response.data.message)
             setCodeSent(true);
-        } catch (e) {
-            Message.errorsByData(e.response.data)
-        }
-    };
-    const verifyCode = async () => {
-        try {
-            await axiosInstance.post('/api/verify_email/', {
-                email: formData.email,
-                confirmation_code: formData.confirmation_code,
-            });
-            setCodeSent(false);
-            showLoginModal();
-        } catch (e) {
-            Message.errorsByData(e.response.data)
-        }
+        }).catch(e => Message.errorsByData(e.response.data));
     };
 
+    const onConfirm = () => {
+        showLoginModal();
+        setCodeSent(false);
+        Message.success('You have successfully registered, log in to your account.', 10000)
+    }
     return (
         <div>
             {!codeSent ? (
                 <DynamicForm requestFunc={signUp}
                              submitBtnText={'Create ACCOUNT'}
-                             submitBtnClassName={'fw-6'}
+                             submitBtnClassName={'fw-6 bg-white-c0'}
                              loadingClassName={'text-white-c0'}>
                     <TextField
                         required={true}
@@ -75,7 +67,7 @@ const SignUpForm = () => {
                         label="Email"
                         variant="outlined"
                         type="email"
-                        value={formData.email}
+                        value={formData.email.toLowerCase()}
                         onChange={handleInputChange}
                         fullWidth
                         margin="dense"
@@ -95,21 +87,10 @@ const SignUpForm = () => {
                     />
                 </DynamicForm>
             ) : (
-                <DynamicForm requestFunc={verifyCode} submitBtnText={'Confirm Email'}>
-                    <TextField
-                        name="confirmation_code"
-                        label="Confirmation code"
-                        variant="outlined"
-                        type="text"
-                        value={formData.confirmation_code}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="dense"
-                        helperText={"Enter confirmation code"}
-                    />
-                </DynamicForm>
+                <ConfirmationCode action={'signup'} onConfirm={onConfirm} autoSend={true}
+                                  email={user ? user.email : formData.email}/>
             )}
-            <SocialLogin className={'frsc'} pxIconSize={60}/>
+            <SocialLogin className={'frsc text-white-a0'} pxIconSize={60}/>
         </div>
     );
 };

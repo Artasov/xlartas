@@ -25,7 +25,7 @@ async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
                     name=sub.name,
                     software=sub.software.id,
                     hours=sub.time_category.hours,  # Access the attribute directly
-                    priceRub=sub.priceRub,
+                    priceRub=sub.amount,
                 ))
         softwares_info.append(
             SoftwareProductInfo(

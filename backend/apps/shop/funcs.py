@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from apps.Core.services.services import decrease_by_percentage
+from apps.Core.services.base import decrease_by_percentage
 # from . import qiwi
 from .models import *
 
@@ -38,7 +38,7 @@ def execute_software_order(order: SoftwareSubscriptionOrder):
             promo_.used_by.add(order.user.id)
             promo_.applys_now += 1
             promo_.save()
-    order.is_complete = True
+    order.is_completed = True
     order.save()
 
 

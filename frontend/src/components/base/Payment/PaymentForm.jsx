@@ -30,7 +30,6 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
                 alert("Поле E-mail или Phone не должно быть пустым");
                 return;
             }
-            console.log(form.receipt)
             form.receipt.value = JSON.stringify({
                 "EmailCompany": user.email,
                 "Taxation": "envd",
@@ -44,10 +43,7 @@ const PaymentForm = ({terminalKey = TINKOFF_TERMINAL_KEY, amount, orderId}) => {
                     "Tax": "none"
                 }]
             });
-            console.log(receipt.value)
         }
-        console.log(form)
-
         window.pay(form); // Assuming `pay` is defined in the Tinkoff script
     };
 

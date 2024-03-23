@@ -21,6 +21,7 @@ import DiscordOAuth from "./components/base/auth/OAuth/DiscordOAuth";
 import 'react-toastify/dist/ReactToastify.css';
 import './static/base/css/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
+import ResetPassword from "./pages/ResetPassword";
 function HeaderWithNavigate() {
   const navigate = useNavigate(); // получаем navigate с помощью хука
   return <Header navigate={navigate} />; // передаем navigate как prop в Header
@@ -60,6 +61,7 @@ class App extends Component {
                                     <Route path="/privacy-policy/" element={<PrivacyPolicy/>}/>
                                     <Route path="/discord-callback/" element={<DiscordOAuth/>}/>
                                     <Route path="/google-callback/" element={<GoogleOAuth/>}/>
+                                    <Route path="/reset-password/" element={<ResetPassword/>}/>
                                 </Routes>
                             </main>
                             {/*<Footer/>*/}

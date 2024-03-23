@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from apps.Core.exceptions.base import (
     SomethingGoWrong
 )
-from apps.Core.services.services import aget_object_or_404, acontroller
+from apps.Core.services.base import aget_object_or_404, acontroller
 from apps.shop.exceptions.base import (
     NoValidLicenseFound, SoftwareFileNotFound, SoftwareByNameNotFound
 )
@@ -33,7 +33,7 @@ async def software_list(request) -> Response:
 @permission_classes([AllowAny])
 async def software_by_name(request, name) -> Response:
     softwares = await get_softwares(is_available=True, name=name)
-    if not softwares: raise SoftwareByNameNotFound
+    if not softwares: raise SoftwareByNameNotFound()
     return Response(softwares[0])
 
 
@@ -45,7 +45,7 @@ async def software_test_activate_current_user(request) -> Response:
         software_id = serializers.IntegerField()
 
     serializer = SoftwareIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise SomethingGoWrong
+    if not serializer.is_valid(): raise SomethingGoWrong()
 
     data = await serializer.adata
     await activate_test_software_user(
@@ -62,16 +62,13 @@ async def software_subscribe_current_user(request) -> Response:
         software_subscription_id = serializers.IntegerField()
 
     serializer = SubscriptionIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise SomethingGoWrong
-    # raise DetailAPIException(DetailExceptionDict(
-    #     message=CORRECT_ERRORS_IN_FIELDS,
-    #     fields_errors=serializer_errors_to_field_errors(serializer.errors)
-    # ), status_code=status.HTTP_409_CONFLICT)
-
+    if not serializer.is_valid(): raise SomethingGoWrong()
     data = await serializer.adata
     try:
-        await sync_to_async(subscribe_user_software)(
-            request.user, subscription_id=data['software_subscription_id'])
+        await subscribe_user_software(
+            request.user,
+            subscription_id=data['software_subscription_id']
+        )
         return Response(SUCCESS_SOFTWARE_SUBSCRIBE, status=status.HTTP_200_OK)
     except Exception as e:
         raise e
@@ -88,10 +85,10 @@ async def download_software_file(request, id) -> Response | FileResponse:
         expires_at__gte=timezone.now()
     ).afirst()
 
-    if not subscription: raise NoValidLicenseFound
+    if not subscription: raise NoValidLicenseFound()
 
     file = await sync_to_async(getattr)(software, 'file', None)
 
-    if not file: raise SoftwareFileNotFound
+    if not file: raise SoftwareFileNotFound()
 
     return Response({'file_url': file.file.url}, status=status.HTTP_200_OK)

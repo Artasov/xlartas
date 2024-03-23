@@ -11,15 +11,20 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.models import *
-from apps.Core.serializers import ThemeSerializer, CurrentUserSerializer
-from apps.Core.services.services import acontroller
+from apps.Core.exceptions.base import SerializerErrors
+from apps.Core.exceptions.user import UserExceptions
+from apps.Core.messages.errors import CORRECT_ERRORS_IN_FIELDS
+from apps.Core.messages.success import Responses
+from apps.Core.models.common import Theme
+from apps.Core.serializers import ThemeSerializer, CurrentUserSerializer, UserUsernameSerializer
+from apps.Core.services.base import acontroller
+from apps.Core.services.user.base import is_user_exist
 
 log = logging.getLogger('base')
 
 
 @acontroller('Get theme list')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([AllowAny])
 async def theme_list(request) -> Response:
     themes = await sync_to_async(list)(Theme.objects.all())
@@ -28,11 +33,31 @@ async def theme_list(request) -> Response:
 
 
 @acontroller('Get current user json info')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([IsAuthenticated])
 async def current_user(request) -> Response:
     serializer = CurrentUserSerializer(request.user)
     return Response(await serializer.adata)
+
+
+@acontroller('Rename current user')
+@api_view(('POST',))
+@permission_classes([IsAuthenticated])
+async def rename_current_user(request) -> Response:
+    serializer = UserUsernameSerializer(data=request.data)
+    if serializer.is_valid():
+        data = await serializer.adata
+        username = data.get('username')
+        if username == request.user.username: raise UserExceptions.AlreadyThisUsername()
+        if await is_user_exist(username=username): raise UserExceptions.UsernameAlreadyExists()
+        request.user.username = username
+        await request.user.asave()
+        return Responses.Success.RenameCurrentUser
+    raise SerializerErrors(
+        message=CORRECT_ERRORS_IN_FIELDS,
+        serializer_errors=serializer.errors,
+        status_code=status.HTTP_400_BAD_REQUEST
+    )
 
 
 @rest_framework.decorators.api_view(['GET'])

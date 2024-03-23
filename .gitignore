@@ -146,3 +146,4 @@ audio_data/
 
 db_fixtures
 .env*
+/backend/new_db/

@@ -5,8 +5,7 @@ from apps.referral.funcs import sync_ref_program_license_bonus
 from apps.referral.models import RefLinking
 from apps.shop.models import UserSoftwareSubscription
 from apps.Core.error_messages import REF_CODE_NOT_SPECIFIED, INVITER_ALREADY_SETTED, REF_CODE_SELF_USAGE, REF_CODE_DOES_NOT_EXIST
-from apps.Core.models import User
-from apps.Core.services.services import render_invalid
+from apps.Core.models.user import User
 
 
 @login_required(redirect_field_name=None, login_url='signin')

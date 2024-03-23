@@ -1,8 +1,8 @@
 from django import forms
 
 from apps.Core.error_messages import PASSWORDS_NOT_EQUAL, RECAPTCHA_INVALID
-from apps.Core.models import User
-from apps.Core.services.services import get_user_by_email_or_name, check_recaptcha_is_valid
+from apps.Core.models.user import User
+from apps.Core.services.base import get_user_by_email_or_name, check_recaptcha_is_valid
 
 
 class FormWithRecaptchaValidator(forms.Form):

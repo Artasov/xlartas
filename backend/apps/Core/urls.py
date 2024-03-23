@@ -8,9 +8,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView, TokenVerifyView
 )
 
-from .controllers.auth.common import signup, verify_email
+from .controllers.auth.common import signup
 from .controllers.auth.social import discord_oauth2_callback, google_oauth2_callback
-from .controllers.common import health_test, theme_list, current_user
+from .controllers.common import health_test, theme_list, current_user, rename_current_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/themes/', theme_list, name='theme_list'),
     path('api/current_user/', current_user, name='current_user'),
+    path('api/rename_current_user/', rename_current_user, name='rename_current_user'),
 
     path('accounts/discord/oauth2/callback/',
          discord_oauth2_callback, name='discord_oauth2_callback'),
@@ -27,9 +28,9 @@ urlpatterns = [
          google_oauth2_callback, name='google_oauth2_callback'),
 
     path('api/signup/', signup, name='signup'),
-    path('api/verify_email/', verify_email, name='verify_email'),
     path('api/v1/', include('apps.shop.desktop_software_urls')),
     path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),
+    path('', include(('apps.confirmation.routes.base', 'apps.confirmation'), namespace='confirmation')),
 
     path('pay/', include('apps.tinkoff.urls')),
 ]

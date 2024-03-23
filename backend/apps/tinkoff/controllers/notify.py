@@ -67,4 +67,4 @@ async def notify(request) -> Response:
             if order_id:
                 await execute_order_by_id(order_id=order_id)
                 return Response('Order executed successfully.')
-    raise SomethingGoWrong
+    raise SomethingGoWrong()

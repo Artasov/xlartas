@@ -31,10 +31,19 @@ class DetailExceptionDict(TypedDict):
 class DetailAPIException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
 
-    def __init__(self, detail: DetailExceptionDict, code=None, status_code=None):
+    def __init__(self, detail: DetailExceptionDict, code: str = None, status_code: str = None):
         if status_code is not None:
             self.status_code = status_code
         super().__init__(detail=detail, code=code or 'error')
+
+
+class SerializerErrors(DetailAPIException):
+    def __init__(self, message: str, serializer_errors: dict, code: str = None, status_code: str = None):
+        detail = DetailExceptionDict(
+            message=message,
+            fields_errors=serializer_errors_to_field_errors(serializer_errors)
+        )
+        super().__init__(detail=detail, code=code, status_code=status_code)
 
 
 class SomethingGoWrong(APIException):

@@ -6,7 +6,8 @@ from asgiref.sync import sync_to_async
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.Core.models import User, DiscordUser
+from apps.Core.models.social import DiscordUser
+from apps.Core.models.user import User
 
 log = logging.getLogger('base')
 

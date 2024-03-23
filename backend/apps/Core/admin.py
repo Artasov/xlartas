@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.timezone import now
 
-from apps.Core.models import *
+from apps.Core.models.common import CompanyData, Theme, File
+from apps.Core.models.user import User
 
 # ADMIN SETTINGS
 admin.site.site_title = 'admin'
@@ -13,12 +15,6 @@ admin.site.index_title = 'xlartas'
 class CompanyDataAdmin(admin.ModelAdmin):
     list_display = ['param', 'value']
     list_editable = ['value']
-    save_on_top = True
-
-
-@admin.register(ConfirmationCode)
-class ConfirmationCodeAdmin(admin.ModelAdmin):
-    list_display = ['user', 'code']
     save_on_top = True
 
 
@@ -46,7 +42,7 @@ class UserAdmin(admin.ModelAdmin):
 
     def days_from_join(self, obj: User):
         if obj.date_joined is not None:
-            count_days = (timezone.now().date() - obj.date_joined.date()).days
+            count_days = (now().date() - obj.date_joined.date()).days
             if count_days == 0:
                 count_days = 'Today'
             elif count_days < 0:
@@ -56,12 +52,6 @@ class UserAdmin(admin.ModelAdmin):
             return None
 
     days_from_join.short_description = 'Joined ago'
-
-
-@admin.register(PasswordReset)
-class PasswordResetAdmin(admin.ModelAdmin):
-    list_display = ['user', 'code', 'created_at']
-    save_on_top = True
 
 
 @admin.register(File)

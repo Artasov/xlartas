@@ -112,7 +112,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30)),
-                ('priceRub', models.PositiveSmallIntegerField()),
+                ('amount', models.PositiveSmallIntegerField()),
                 ('software', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='shop.softwareproduct')),
                 ('time_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.subscriptiontimecategory')),
             ],

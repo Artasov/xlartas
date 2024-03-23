@@ -1,7 +1,6 @@
 import logging
 
 from asgiref.sync import sync_to_async
-from django.db.models import QuerySet
 
 from apps.Core.exceptions.base import SomethingGoWrong
 from apps.shop.models import SoftwareSubscriptionOrder
@@ -10,10 +9,29 @@ from apps.tinkoff.models import TinkoffDepositOrder
 log = logging.getLogger('base')
 
 
-def get_user_orders(user_id: int) -> QuerySet[SoftwareSubscriptionOrder]:
-    return SoftwareSubscriptionOrder.objects.filter(
-        user_id=user_id
-    ).order_by('created_at')
+async def get_all_user_orders(user_id: int) -> list:
+    software_subscription_list = await get_user_software_orders(user_id)
+    tinkoff_deposit_list = await get_user_tinkoff_deposit_orders(user_id)
+    all_orders = software_subscription_list + tinkoff_deposit_list
+    all_orders_sorted = sorted(all_orders, key=lambda order: order.created_at)
+    all_orders_sorted.reverse()
+    return all_orders_sorted
+
+
+async def get_user_software_orders(user_id: int) -> list:
+    return await sync_to_async(list)(
+        SoftwareSubscriptionOrder.objects.filter(
+            user_id=user_id
+        ).order_by('created_at')
+    )
+
+
+async def get_user_tinkoff_deposit_orders(user_id: int) -> list:
+    return await sync_to_async(list)(
+        TinkoffDepositOrder.objects.filter(
+            user_id=user_id
+        ).order_by('created_at')
+    )
 
 
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
@@ -32,5 +50,5 @@ async def execute_order_by_id(order_id: str):
     """
     order = await TinkoffDepositOrder.objects.aget(order_id=order_id)
     if order.is_paid:
-        raise SomethingGoWrong
+        raise SomethingGoWrong()
     await execute_tinkoff_deposit_order(order)

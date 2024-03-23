@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.Core.exceptions.base import SomethingGoWrong
-from apps.Core.services.services import acontroller
+from apps.Core.services.base import acontroller
 from apps.tinkoff.models import TinkoffDepositOrder
 
 
@@ -26,7 +26,7 @@ class TinkoffDepositOrderSerializer(ModelSerializer):
 @permission_classes((IsAuthenticated,))
 async def tinkoff_pay_form(request) -> HttpResponse:
     amount = request.data.get('amount')
-    if amount is None: raise SomethingGoWrong
+    if amount is None: raise SomethingGoWrong()
     order: TinkoffDepositOrder = await TinkoffDepositOrder.objects.acreate(
         user=request.user, amount=amount
     )

@@ -1,18 +1,18 @@
 from datetime import timedelta
 from typing import TypedDict
 
-from django.conf import settings
 from django.db.models import (
     TextField, ForeignKey, Model, CharField,
     ImageField, IntegerField, BooleanField,
     ManyToManyField, CASCADE,
     PositiveSmallIntegerField, SET_NULL,
-    DateTimeField, TextChoices, DecimalField,
+    DateTimeField, TextChoices, DecimalField, PositiveIntegerField,
 )
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.Core.models import File, User
+from apps.Core.models.common import File
+from apps.Core.models.user import User
 
 
 class UserDeposit(Model):
@@ -79,7 +79,7 @@ class SoftwareSubscription(Model):
     name = CharField(max_length=30)
     software = ForeignKey(SoftwareProduct, on_delete=CASCADE, related_name='subscriptions')
     time_category = ForeignKey(SubscriptionTimeCategory, on_delete=CASCADE)
-    priceRub = PositiveSmallIntegerField()
+    amount = PositiveIntegerField()
 
 
 class SoftwareSubscriptionInfo(TypedDict):
@@ -87,11 +87,11 @@ class SoftwareSubscriptionInfo(TypedDict):
     name: str
     software: int
     hours: int
-    priceRub: int
+    amount: int
 
 
 class UserSoftwareSubscription(Model):
-    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
+    user = ForeignKey(User, on_delete=CASCADE)
     software = ForeignKey(SoftwareProduct, on_delete=CASCADE)
     is_test_period_activated = BooleanField(default=False, verbose_name='Is tested')
     starts = IntegerField(default=0, verbose_name='Starts')
@@ -100,19 +100,6 @@ class UserSoftwareSubscription(Model):
 
     def __str__(self):
         return f'{self.user} - {self.software}'
-
-
-class SoftwareSubscriptionOrder(Model):
-    user = ForeignKey(User, on_delete=CASCADE)
-    is_complete = BooleanField(default=False)
-    promo = ForeignKey('Promo', on_delete=SET_NULL, null=True, blank=True)
-    desc = CharField(max_length=250, blank=True)
-    software = ForeignKey(SoftwareProduct, on_delete=SET_NULL, null=True)
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["created_at"]
 
 
 def NowPlus30Days():
@@ -144,3 +131,27 @@ class Promo(Model):
 
     def __str__(self):
         return f'{self.code}'
+
+
+class BaseOrder(Model):
+    class OrderTypes(TextChoices):
+        DEPOSIT = 'deposit', 'Deposit'
+        SOFTWARE = 'software', 'Software'
+
+    user = ForeignKey(User, on_delete=CASCADE)
+    amount = DecimalField(max_digits=10, decimal_places=2)
+    type = CharField(max_length=100, choices=OrderTypes.choices)
+    promo = ForeignKey(Promo, on_delete=SET_NULL, null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
+    is_completed = BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class SoftwareSubscriptionOrder(BaseOrder):
+    software = ForeignKey(SoftwareProduct, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        ordering = ["created_at"]

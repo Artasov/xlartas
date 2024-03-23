@@ -4,8 +4,8 @@ import pytz
 from django import template
 
 from apps.Core.forms import UserLoginForm
-from apps.Core.models import CompanyData
-from apps.Core.services.services import get_plural_form_number
+from apps.Core.models.common import CompanyData
+from apps.Core.services.base import get_plural_form_number
 
 register = template.Library()
 

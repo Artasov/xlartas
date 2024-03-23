@@ -15,7 +15,7 @@ def execute_selected_orders(request, queryset):
 
 @admin.register(SoftwareSubscriptionOrder)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'software', 'is_complete', 'created_at')
+    list_display = ('user', 'software', 'is_completed', 'created_at')
     search_fields = ('user__username',)
     save_on_top = True
     actions = (execute_selected_orders,)
@@ -31,9 +31,9 @@ class SoftwareProductAdmin(admin.ModelAdmin):
 
 @admin.register(SoftwareSubscription)
 class SoftwareSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'software', 'time_category', 'priceRub',)
-    list_editable = ('name', 'time_category', 'priceRub',)
-    ordering = ('software', 'priceRub')
+    list_display = ('id', 'name', 'software', 'time_category', 'amount',)
+    list_editable = ('name', 'time_category', 'amount',)
+    ordering = ('software', 'amount')
 
 
 @admin.register(SubscriptionTimeCategory)

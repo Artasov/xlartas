@@ -2,13 +2,18 @@ from adrf.serializers import ModelSerializer
 from adrf.serializers import Serializer
 from rest_framework import serializers
 
-from .models import Theme, User
+from apps.Core.models.common import Theme
+from apps.Core.models.user import User
 
 
 class ThemeSerializer(ModelSerializer):
     class Meta:
         model = Theme
         fields = ['name', 'bg_image']
+
+
+class UserUsernameSerializer(Serializer):
+    username = serializers.CharField(min_length=2)
 
 
 class CurrentUserSerializer(ModelSerializer):

@@ -17,45 +17,37 @@ const Deposit = ({className}) => {
             Message.noAuthentication();
             return;
         }
-        if (amount < 300) {
-            Message.error('Minimum deposit amount 300 RUB');
+        if (amount < 150) {
+            Message.error('Minimum deposit amount 150 RUB');
             return;
         }
         axiosInstance.post('/pay/deposit/', {amount: parseFloat(amount)})
             .then(response => {
                 console.log(response.data);
-                if(response.data.order_id){
+                if (response.data.order_id) {
                     setOrderId(response.data.order_id);
                 }
-            })
-            .catch(e => Message.errorsByData(e.response.data));
+            }).catch(e => Message.errorsByData(e.response.data));
     }
 
-    return (
-        <div className={'mx-auto'}>
-            {orderId
-                ?
-                <PaymentForm orderId={orderId} amount={amount}/>
-                :
-                <DynamicForm className={className}
-                             requestFunc={createDepositOrder}
-                             submitBtnClassName={'fw-6'}
-                             loadingClassName={'text-white-c0'}
-                             submitBtnText={'DEPOSIT'}>
-                    <TextField
-                        label="Amount"
-                        variant="outlined"
-                        type="number" // изменено с text на number
-                        helperText="Deposit amount (RUB currency)"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
-                </DynamicForm>
-            }
-        </div>
-    );
+    return (<div className={'mx-auto'}>
+        {orderId ? <PaymentForm orderId={orderId} amount={amount}/> : <DynamicForm className={className}
+                                                                                   requestFunc={createDepositOrder}
+                                                                                   submitBtnClassName={'fw-6'}
+                                                                                   loadingClassName={'text-white-c0'}
+                                                                                   submitBtnText={'DEPOSIT'}>
+            <TextField
+                label="Amount"
+                variant="outlined"
+                type="number" // изменено с text на number
+                helperText="Deposit amount (RUB currency)"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                fullWidth
+                margin="dense"
+            />
+        </DynamicForm>}
+    </div>);
 };
 
 export default Deposit;
