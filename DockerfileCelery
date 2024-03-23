@@ -4,6 +4,7 @@ COPY . /srv
 WORKDIR /srv
 
 RUN apk update
+RUN chmod -R 777 /srv/logs
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/backend/requirements.txt
 
@@ -12,7 +13,6 @@ RUN python -m pip install -r /srv/backend/requirements.txt
 #    /logs/django_dev/celery/sql \
 #    /logs/django_prod/web/sql  \
 #    /logs/django_dev/web/sql && \
-RUN chmod -R 777 /srv/logs
 
 RUN adduser -D celeryuser
 USER celeryuser
