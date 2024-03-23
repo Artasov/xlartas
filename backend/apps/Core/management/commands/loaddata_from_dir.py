@@ -21,5 +21,5 @@ class Command(BaseCommand):
                 self.stdout.write(f'Loading data from {filename}')
                 try:
                     call_command('loaddata', os.path.join(directory, filename))
-                except Exception:
+                except Exception as e:
                     print(f'{filename} Not Loaded')
