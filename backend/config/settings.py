@@ -89,7 +89,6 @@ TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
 TINKOFF_PASSWORD_KEY = "Password"
 TINKOFF_PASSWORD = env('TINKOFF_PASSWORD')
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
