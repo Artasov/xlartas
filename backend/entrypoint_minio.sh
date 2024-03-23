@@ -1,5 +1,5 @@
 #!/bin/sh
-# entrypoint-minio.sh
+# entrypoint_minio.sh
 
 echo "#####################################"
 echo "######### Minio Starting... #########"

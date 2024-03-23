@@ -225,11 +225,11 @@ services:
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-    command: sh -c "/data/entrypoint-minio.sh && minio server /data --console-address :9001"
+    command: sh -c "/data/entrypoint_minio.sh && minio server /data --console-address :9001"
     volumes:
       - ./data/minio/data:/data
       - ./data/minio/config:/root/.minio
-      - ./backend/entrypoint-minio.sh:/opt/entrypoint-minio.sh
+      - ./backend/entrypoint_minio.sh:/opt/entrypoint_minio.sh
     networks:
       - net
     healthcheck:
