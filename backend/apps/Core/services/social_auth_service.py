@@ -6,6 +6,7 @@ from asgiref.sync import sync_to_async
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.Core.exceptions.user import UserExceptions
 from apps.Core.models.social import DiscordUser
 from apps.Core.models.user import User
 
@@ -120,12 +121,14 @@ async def get_jwt_by_google_oauth2_code(code: str) -> JwtData:
     :return: JwtData dictionary with access and refresh keys for the user received via oauth2 code.
     """
     user_dict: GoogleUserResponse = await get_google_user_by_code(code=code)
+    email = user_dict.get('email')
+    if not email: raise UserExceptions.GoogleEmailWasNotProvided()
     try:
-        user = await User.objects.aget(email=user_dict.get('email'))
+        user = await User.objects.aget(email=email)
     except User.DoesNotExist:
         user = await User.objects.acreate(
-            email=user_dict.get('email'),
-            username=user_dict.get('email').split('@')[0],
+            email=email,
+            username=email.split('@')[0],
             is_confirmed=True
         )
     return get_jwt_by_user(user)
@@ -137,14 +140,25 @@ async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
     :return: JwtData dictionary with access and refresh keys for the user received via oauth2 code.
     """
     user_dict: DiscordUserResponse = await get_discord_user_by_code(code)
+    username = user_dict.get('username')
+    email = user_dict.get('email')
+    social_user_id = int(user_dict.get('id', -1))
+
+    if not username: raise UserExceptions.DiscordUsernameWasNotProvided()
+    if not email: raise UserExceptions.DiscordEmailWasNotProvided()
+    if social_user_id == -1: raise UserExceptions.DiscordUserIdWasNotProvided()
+
     try:
-        discord_user = await DiscordUser.objects.aget(id=int(user_dict.get('id')))
+        discord_user = await DiscordUser.objects.aget(id=social_user_id)
         user = await sync_to_async(getattr)(discord_user, 'user', None)
     except DiscordUser.DoesNotExist:
-        user = await User.objects.acreate(
-            username=user_dict.get('username'),
-            email=user_dict.get('email'),
-            is_confirmed=True
-        )
-        await DiscordUser.objects.acreate(id=int(user_dict.get('id')), user=user)
+        try:
+            user = await User.objects.aget(email=email).aexists()
+        except User.DoesNotExist:
+            user = await User.objects.acreate(
+                username=username,
+                email=email,
+                is_confirmed=True
+            )
+    await DiscordUser.objects.acreate(id=social_user_id, user=user)
     return get_jwt_by_user(user)
