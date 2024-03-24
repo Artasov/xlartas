@@ -153,7 +153,7 @@ async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
         user = await sync_to_async(getattr)(discord_user, 'user', None)
     except DiscordUser.DoesNotExist:
         try:
-            user = await User.objects.aget(email=email).aexists()
+            user = await User.objects.aget(email=email)
         except User.DoesNotExist:
             user = await User.objects.acreate(
                 username=username,
