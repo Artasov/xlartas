@@ -22,14 +22,14 @@ from apps.shop.services.subscription import subscribe_user_software, activate_te
 
 
 @acontroller('Get list of software')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([AllowAny])
 async def software_list(request) -> Response:
     return Response(await get_softwares(is_available=True))
 
 
 @acontroller('Get software data by name')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([AllowAny])
 async def software_by_name(request, name) -> Response:
     softwares = await get_softwares(is_available=True, name=name)
@@ -75,7 +75,7 @@ async def software_subscribe_current_user(request) -> Response:
 
 
 @acontroller('Download software file by id')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([IsAuthenticated])
 async def download_software_file(request, id) -> Response | FileResponse:
     user = request.user

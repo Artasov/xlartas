@@ -15,14 +15,6 @@ from apps.Core.models.common import File
 from apps.Core.models.user import User
 
 
-class UserDeposit(Model):
-    user = ForeignKey(User, on_delete=SET_NULL, null=True)
-    amount = DecimalField(decimal_places=2, max_digits=8)
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now=True)
-    is_paid = BooleanField(default=False)
-
-
 class SoftwareProductInfo(TypedDict):
     id: int
     name: str

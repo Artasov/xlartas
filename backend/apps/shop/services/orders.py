@@ -49,6 +49,6 @@ async def execute_order_by_id(order_id: str):
     :return: If it turns out True, otherwise False.
     """
     order = await TinkoffDepositOrder.objects.aget(order_id=order_id)
-    if order.is_paid:
+    if order.is_completed:
         raise SomethingGoWrong()
     await execute_tinkoff_deposit_order(order)

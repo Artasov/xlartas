@@ -15,7 +15,10 @@ async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
     )
     softwares_info: list[SoftwareProductInfo] = []
     for software in softwares:
-        file_url = software.file.file.url if software.file and hasattr(software.file, 'file') else None
+        if software.file and hasattr(software.file, 'file') and software.file.file:
+            file_url = software.file.file.url
+        else:
+            file_url = None
         subscriptions_info = []
         for sub in software.subscriptions.all():
             # No need to use sync_to_async to access model attributes here
@@ -25,7 +28,7 @@ async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
                     name=sub.name,
                     software=sub.software.id,
                     hours=sub.time_category.hours,  # Access the attribute directly
-                    priceRub=sub.amount,
+                    amount=sub.amount,
                 ))
         softwares_info.append(
             SoftwareProductInfo(
