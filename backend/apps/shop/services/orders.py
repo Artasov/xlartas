@@ -3,6 +3,7 @@ import logging
 from asgiref.sync import sync_to_async
 
 from apps.Core.exceptions.base import SomethingGoWrong
+from apps.Core.models.user import User
 from apps.shop.models import SoftwareSubscriptionOrder
 from apps.tinkoff.models import TinkoffDepositOrder
 
@@ -35,9 +36,9 @@ async def get_user_tinkoff_deposit_orders(user_id: int) -> list:
 
 
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
-    user = await sync_to_async(getattr)(order, 'user', None)
+    user: User = await sync_to_async(getattr)(order, 'user', None)
     user.balance += order.amount
-    order.is_paid = True
+    order.is_completed = True
     await order.asave()
     await user.asave()
 
@@ -49,6 +50,5 @@ async def execute_order_by_id(order_id: str):
     :return: If it turns out True, otherwise False.
     """
     order = await TinkoffDepositOrder.objects.aget(order_id=order_id)
-    if order.is_completed:
-        raise SomethingGoWrong()
+    if order.is_completed: raise SomethingGoWrong()
     await execute_tinkoff_deposit_order(order)
