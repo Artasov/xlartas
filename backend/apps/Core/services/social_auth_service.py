@@ -160,5 +160,5 @@ async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
                 email=email,
                 is_confirmed=True
             )
-    await DiscordUser.objects.acreate(id=social_user_id, user=user)
+        await DiscordUser.objects.acreate(id=social_user_id, user=user)
     return get_jwt_by_user(user)

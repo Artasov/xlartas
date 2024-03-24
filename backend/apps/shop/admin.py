@@ -14,7 +14,7 @@ def execute_selected_orders(request, queryset):
 
 
 @admin.register(SoftwareSubscriptionOrder)
-class OrderAdmin(admin.ModelAdmin):
+class SoftwareSubscriptionOrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'software', 'is_completed', 'created_at')
     search_fields = ('user__username',)
     save_on_top = True

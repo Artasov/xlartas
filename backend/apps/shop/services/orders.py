@@ -2,7 +2,6 @@ import logging
 
 from asgiref.sync import sync_to_async
 
-from apps.Core.exceptions.base import SomethingGoWrong
 from apps.Core.models.user import User
 from apps.shop.models import SoftwareSubscriptionOrder
 from apps.tinkoff.models import TinkoffDepositOrder
@@ -41,14 +40,3 @@ async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
     order.is_completed = True
     await order.asave()
     await user.asave()
-
-
-async def execute_order_by_id(order_id: str):
-    """
-    Fulfills the order by its id.
-    :param order_id: order id str uuid4.
-    :return: If it turns out True, otherwise False.
-    """
-    order = await TinkoffDepositOrder.objects.aget(order_id=order_id)
-    if order.is_completed: raise SomethingGoWrong()
-    await execute_tinkoff_deposit_order(order)
