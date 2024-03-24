@@ -3,8 +3,9 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     ImageField, CharField, BooleanField,
-    DecimalField
+    DecimalField, EmailField
 )
+from transliterate.utils import _
 
 
 def generate_custom_key() -> str:
@@ -16,6 +17,7 @@ def generate_referral_code() -> str:
 
 
 class User(AbstractUser):
+    email = EmailField(unique=True)
     avatar = ImageField(upload_to='images/users/avatar/', blank=True)
     secret_key = CharField(max_length=20, default=generate_custom_key)
     referral_code = CharField(max_length=10, default=generate_referral_code)
