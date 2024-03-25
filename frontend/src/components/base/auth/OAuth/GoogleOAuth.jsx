@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useAuth} from '../useAuth';
+import {CircularProgress} from "@mui/material";
 
 
 const GoogleOAuth = () => {
@@ -11,7 +12,9 @@ const GoogleOAuth = () => {
         }
     })
     return (
-        <div>Loading...</div>
+        <div className={'h-70 frcc'}>
+            <CircularProgress style={{width: 180, height: 180}}/>
+        </div>
     )
 }
 export default GoogleOAuth;

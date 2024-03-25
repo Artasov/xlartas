@@ -28,6 +28,7 @@ const UsernameEditable = ({className}) => {
         }).then(response => {
             setUsername(editingUsername);
             setEditing(false);
+            usernameInput.current.blur()
             Message.success(response.data.message);
         }).catch(
             e => Message.errorsByData(e.response.data)
@@ -36,7 +37,7 @@ const UsernameEditable = ({className}) => {
     return (
         <form onSubmit={renameMe} className={'frcc pe-2'}>
             <input value={editingUsername} name={'username'} ref={usernameInput}
-                   size={username.length - 1}
+                   size={editing ? 0 : username.length - 1}
                    onChange={(e) => {
                        setEditingUsername(e.target.value);
                    }}

@@ -14,7 +14,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Получаем пользователя по email или username
+        # Get the user by email or username
         user = None
         username_or_email = attrs.get('username', None)
         password = attrs.get('password')
@@ -32,10 +32,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             if not user.check_password(password):
                 raise AuthenticationFailed('Wrong password')
 
-            # Аутентификация пользователя
+            # User authentication
             authenticate(username=user.username, password=password)
 
-            # Возвращаем данные для создания токена
+            # Return data to create a token
             return super().validate({
                 'username': user.username,
                 'password': password

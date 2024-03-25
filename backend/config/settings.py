@@ -56,7 +56,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # REFERRER_POLICY = 'origin'
 WSGI_APPLICATION = None  # 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
-#SAVE docker test COMMIT
+
 AUTH_USER_MODEL = 'Core.User'
 INSTALLED_APPS = [
     'daphne',
