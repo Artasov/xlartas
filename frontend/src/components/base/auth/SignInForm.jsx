@@ -13,7 +13,7 @@ const SignInForm = ({className, navigate}) => {
     const signIn = async () => {
         try {
             if (!username || !password) {
-                Message.error('Username and password fields are required');
+                Message.error('Username/Email and password fields are required');
                 return;
             }
             await login(username, password);
@@ -34,10 +34,10 @@ const SignInForm = ({className, navigate}) => {
                      loadingClassName={'text-white-c0'}
                      submitBtnText={'Sign In'}>
             <TextField
-                label="Username"
+                label="Username / Email"
                 variant="outlined"
                 type="text"
-                helperText="Enter your username"
+                helperText="Enter your username or email"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 fullWidth
