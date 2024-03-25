@@ -35,10 +35,7 @@ async def software_list(request) -> Response:
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 async def software_by_name(request, name) -> Response:
-    softwares = await get_softwares(
-        SoftwareProduct,
-        is_available=True, name=name
-    )
+    softwares = await get_softwares(SoftwareProduct.objects, is_available=True, name=name)
     if not softwares: raise SoftwareByNameNotFound()
     return Response(softwares[0])
 

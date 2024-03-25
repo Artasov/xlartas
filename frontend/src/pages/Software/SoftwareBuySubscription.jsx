@@ -57,7 +57,7 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
     return (
         <DynamicForm className={`fccc pb-3`}
                      requestFunc={handleBuySubmit}
-                     loadingClassName={'text-black-c0 '}
+                     loadingClassName={'text-black-c0 bg-black-45'}
                      submitBtnClassName={'fw-7 bg-white-c0'}
                      submitBtnText={'Confirm purchase'}>
             <SoftwareLogoTitle
@@ -67,7 +67,7 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
                 size={45}/>
             {software.subscriptions.length > 0
                 ?
-                <div>
+                <div style={{width: "99%"}}>
                     <ButtonGroup className={'fc gap-1 mb-2 mt-1 w-100'} variant="contained"
                                  aria-label="outlined primary button group"
                                  sx={{mb: 2}}>
@@ -83,13 +83,13 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
                             </Button>
                         ))}
                     </ButtonGroup>
-                    <Typography variant="caption" display="block" className={'mb-2 text-white-60'}>
+                    <Typography variant="caption" display="block" className={'mb-2 text-center text-white-60'}>
                         From your account will be
                         charged {selectedSubscriptionId ? software.subscriptions.find(sub => sub.id === selectedSubscriptionId)?.amount : 0}&nbsp;₽
                     </Typography>
                 </div>
                 :
-                <div>
+                <div className={'text-center'}>
                     <Typography variant="caption" display="block" className={'fs-6 text-center px-4 mb-2 text-white-a0'}>
                         Unfortunately, it is not yet possible to subscribe to this product.
                     </Typography>

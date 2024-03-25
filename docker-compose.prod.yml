@@ -73,7 +73,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: prod
+      target: web
     volumes:
       - ./data/:/srv/data
       - ./logs/:/srv/logs
@@ -152,11 +152,11 @@ services:
     hostname: celery
     build:
       context: .
-      dockerfile: DockerfileCelery
+      dockerfile: Dockerfile
+      target: celery
     volumes:
       - ./data/:/srv/data
       - ./logs/:/srv/logs
-      - ./backend/entrypoint_celery.sh:/srv/backend/entrypoint_celery.sh
     links:
       - redis
     environment:
