@@ -13,11 +13,12 @@ from .controllers.auth.social import discord_oauth2_callback, google_oauth2_call
 from .controllers.other import theme_list
 from .controllers.health import health_test
 from .controllers.user.base import current_user, rename_current_user
+from .services.user.base import CustomTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health_test/', health_test),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/themes/', theme_list, name='theme_list'),
