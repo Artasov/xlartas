@@ -61,6 +61,7 @@ services:
 
   react:
     container_name: react
+    command: sh -c "npm run build"
     build:
       context: .
       dockerfile: DockerfileReact

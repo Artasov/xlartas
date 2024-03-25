@@ -4,5 +4,5 @@ COPY ./frontend /srv
 COPY ./frontend /srv
 WORKDIR /srv
 RUN npm install
-RUN npm run build
+#RUN npm run build
 
