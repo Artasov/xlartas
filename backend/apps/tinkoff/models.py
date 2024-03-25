@@ -10,4 +10,4 @@ class TinkoffDepositOrder(BaseOrder):
     order_id = CharField(max_length=100, default=uuid.uuid4, unique=True, editable=False)
 
     def __str__(self):
-        return f"Order #{self.order_id}"
+        return f"Order {self.order_id}"

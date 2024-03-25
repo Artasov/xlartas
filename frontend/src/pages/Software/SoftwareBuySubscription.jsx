@@ -21,6 +21,7 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
             axiosInstance.get(`/api/software/${software_name}`)
                 .then(response => {
                     setSoftware(response.data);
+                    console.log(software)
                 })
                 .catch(e => {
                     setSoftware(false);
@@ -64,26 +65,36 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
                 className={'frsc gap-2 px-3 mt-3 mb-2'}
                 software={software}
                 size={45}/>
-            <ButtonGroup className={'fc gap-1 mb-2 mt-1 w-100'} variant="contained"
-                         aria-label="outlined primary button group"
-                         sx={{mb: 2}}>
-                {software.subscriptions.map((subscription) => (
-                    <Button
-                        key={subscription.id}
-                        onClick={() => handleSubscriptionSelect(subscription.id)}
-                        className={`
+            {software.subscriptions.length > 0
+                ?
+                <div>
+                    <ButtonGroup className={'fc gap-1 mb-2 mt-1 w-100'} variant="contained"
+                                 aria-label="outlined primary button group"
+                                 sx={{mb: 2}}>
+                        {software.subscriptions.map((subscription) => (
+                            <Button
+                                key={subscription.id}
+                                onClick={() => handleSubscriptionSelect(subscription.id)}
+                                className={`
                             ${selectedSubscriptionId === subscription.id ? 'text-black-c0 fw-6 bg-white-c0' : 'bg-black-50 text-white-c0'} 
                             rounded-2 border-0 transition-d-300 transition-all
                            `}>
-                        {subscription.name} - {subscription.priceRub}₽
-                    </Button>
-                ))}
-            </ButtonGroup>
-
-            <Typography variant="caption" display="block" className={'mb-2 text-white-60'}>
-                From your account will be
-                charged {selectedSubscriptionId ? software.subscriptions.find(sub => sub.id === selectedSubscriptionId)?.priceRub : 0}&nbsp;₽
-            </Typography>
+                                {subscription.name} - {subscription.amount}₽
+                            </Button>
+                        ))}
+                    </ButtonGroup>
+                    <Typography variant="caption" display="block" className={'mb-2 text-white-60'}>
+                        From your account will be
+                        charged {selectedSubscriptionId ? software.subscriptions.find(sub => sub.id === selectedSubscriptionId)?.amount : 0}&nbsp;₽
+                    </Typography>
+                </div>
+                :
+                <div>
+                    <Typography variant="caption" display="block" className={'fs-6 text-center px-4 mb-2 text-white-a0'}>
+                        Unfortunately, it is not yet possible to subscribe to this product.
+                    </Typography>
+                </div>
+            }
         </DynamicForm>
     );
 };

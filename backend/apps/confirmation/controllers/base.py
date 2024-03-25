@@ -47,10 +47,8 @@ async def new_confirm_code(request) -> Response:
 @api_view(('POST',))
 @permission_classes([AllowAny])
 async def confirm_code(request) -> Response:
-    print(request.data)
     code_manager = await sync_to_async(CoreConfirmation)(
         code_str=request.data.get('code'), ACTIONS=ActionTypes)
     del request.data['code']
-    print(request.data)
     await code_manager.execute(**request.data)
     return Response({'message': 'The code has been successfully verified.'})

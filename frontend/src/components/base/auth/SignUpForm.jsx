@@ -90,7 +90,7 @@ const SignUpForm = () => {
                 <ConfirmationCode action={'signup'} onConfirm={onConfirm} autoSend={true}
                                   email={user ? user.email : formData.email}/>
             )}
-            <SocialLogin className={'frsc text-white-a0'} pxIconSize={60}/>
+            <SocialLogin className={'frsc'} iconsClassName={'text-white-c5'} pxIconSize={60}/>
         </div>
     );
 };

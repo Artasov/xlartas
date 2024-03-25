@@ -22,5 +22,13 @@ def aatomic(fun, *args, **kwargs) -> callable:
     return wrapper
 
 
-async def get_related_field(model_object, related_field_name: str):
+async def arelated(model_object, related_field_name: str):
     return await sync_to_async(getattr)(model_object, related_field_name, None)
+
+
+async def aall(queryset) -> list: 
+    return await sync_to_async(list)(queryset.all())
+
+
+async def afilter(queryset, *args, **kwargs) -> list:
+    return await sync_to_async(list)(queryset.filter(*args, **kwargs))

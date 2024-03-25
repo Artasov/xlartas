@@ -50,7 +50,7 @@ const ConfirmationCode = ({
         });
     }
     const sendNewCode = async () => {
-        setResendTimeout(5);
+        setResendTimeout(60);
         setCodeSent(true);
         await axiosInstance.post('/api/generate-confirm-code/', {
             action: action,

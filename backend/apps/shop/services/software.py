@@ -1,15 +1,16 @@
 from asgiref.sync import sync_to_async
 from django.db.models import Sum, Prefetch
 
+from apps.Core.async_django import aall
 from apps.shop.models import (
     UserSoftwareSubscription, SoftwareProduct, SoftwareProductInfo,
     SoftwareSubscriptionInfo, SoftwareSubscription
 )
 
 
-async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
-    softwares = await sync_to_async(list)(
-        SoftwareProduct.objects.filter(**kwargs).select_related('file').prefetch_related(
+async def get_softwares(queryset, **kwargs) -> list[SoftwareProductInfo]:
+    softwares = await aall(
+        queryset.filter(**kwargs).select_related('file').prefetch_related(
             Prefetch('subscriptions', queryset=SoftwareSubscription.objects.select_related('time_category'))
         )
     )
@@ -21,7 +22,6 @@ async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
             file_url = None
         subscriptions_info = []
         for sub in software.subscriptions.all():
-            # No need to use sync_to_async to access model attributes here
             subscriptions_info.append(
                 SoftwareSubscriptionInfo(
                     id=sub.id,
@@ -49,7 +49,7 @@ async def get_softwares(**kwargs) -> list[SoftwareProductInfo]:
                 starts=await get_software_starts(software_id=software.id),
                 subscriptions=subscriptions_info
             ))
-    return softwares_info
+    return sorted(softwares_info, key=lambda x: x.get('starts'), reverse=True)
 
 
 async def get_software_starts(**kwargs) -> int:

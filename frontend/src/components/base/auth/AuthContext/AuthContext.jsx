@@ -41,8 +41,9 @@ export const AuthProvider = ({children}) => {
             hideLoginModal: () => setIsLoginModalOpen(false),
             logout
         }}>
-            {isLoginModalOpen && !user &&
-                <SignInModal navigate={navigate} show={isLoginModalOpen} onSubmit={() => setIsLoginModalOpen(false)}/>}
+            {!user &&
+                <SignInModal navigate={navigate} isOpen={isLoginModalOpen} onSubmit={() => setIsLoginModalOpen(false)}/>
+            }
             {children}
         </AuthContext.Provider>
     );

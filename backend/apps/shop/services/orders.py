@@ -1,7 +1,6 @@
 import logging
 
-from asgiref.sync import sync_to_async
-
+from apps.Core.async_django import afilter, arelated
 from apps.Core.models.user import User
 from apps.shop.models import SoftwareSubscriptionOrder
 from apps.tinkoff.models import TinkoffDepositOrder
@@ -9,33 +8,29 @@ from apps.tinkoff.models import TinkoffDepositOrder
 log = logging.getLogger('base')
 
 
-async def get_all_user_orders(user_id: int) -> list:
-    software_subscription_list = await get_user_software_orders(user_id)
-    tinkoff_deposit_list = await get_user_tinkoff_deposit_orders(user_id)
+async def get_orders(*args, **kwargs) -> list:
+    """
+    Returns a list of all orders from all order models (both deposits and subscriptions).
+    You can use this as get_orders(user_id=user_id, is_completed=True).
+    :param args, kwargs: Parameters for filtering orders (use BaseOrder fields).
+    :return: List of model objects inherited from BaseOrder
+    """
+    software_subscription_list = await afilter(
+        SoftwareSubscriptionOrder.objects.order_by('created_at'),
+        *args, **kwargs
+    )
+    tinkoff_deposit_list = await afilter(
+        TinkoffDepositOrder.objects.order_by('created_at'),
+        *args, **kwargs
+    )
     all_orders = software_subscription_list + tinkoff_deposit_list
     all_orders_sorted = sorted(all_orders, key=lambda order: order.created_at)
     all_orders_sorted.reverse()
     return all_orders_sorted
 
 
-async def get_user_software_orders(user_id: int) -> list:
-    return await sync_to_async(list)(
-        SoftwareSubscriptionOrder.objects.filter(
-            user_id=user_id
-        ).order_by('created_at')
-    )
-
-
-async def get_user_tinkoff_deposit_orders(user_id: int) -> list:
-    return await sync_to_async(list)(
-        TinkoffDepositOrder.objects.filter(
-            user_id=user_id
-        ).order_by('created_at')
-    )
-
-
 async def execute_tinkoff_deposit_order(order: TinkoffDepositOrder):
-    user: User = await sync_to_async(getattr)(order, 'user', None)
+    user: User = await arelated(order, 'user')
     user.balance += order.amount
     order.is_completed = True
     await order.asave()

@@ -14,6 +14,7 @@ const Software = () => {
     useEffect(() => {
         axios.get('/api/software/')
             .then(response => {
+                console.log(response.data)
                 setSoftwares(response.data);
                 setLoadingSoftwares(false);
             })

@@ -10,7 +10,9 @@ from rest_framework_simplejwt.views import (
 
 from .controllers.auth.common import signup
 from .controllers.auth.social import discord_oauth2_callback, google_oauth2_callback
-from .controllers.common import health_test, theme_list, current_user, rename_current_user
+from .controllers.other import theme_list
+from .controllers.health import health_test
+from .controllers.user.base import current_user, rename_current_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -13,8 +13,8 @@ import {useAuth} from "../../components/base/auth/useAuth";
 import Head from "../../components/base/Head";
 import {Message} from "../../components/base/Message";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleCheck} from "@fortawesome/free-regular-svg-icons";
 import UsernameEditable from "../../components/base/user/UsernameEditable";
+import {faCircleCheck} from "@fortawesome/free-regular-svg-icons/faCircleCheck";
 
 const Home = () => {
     const {user, isAuthenticated, showLoginModal, updateCurrentUser, discord_oauth2} = useAuth(AuthContext);
@@ -97,17 +97,17 @@ const Home = () => {
         };
         return (orders && orders.length > 0 ? (<div>
             {orders.map((order, index) => (
-                <div key={index} className={'gap-2 my-2 py-2 pe-3 ps-2 bg-black-25 rounded hover-scale-2 text-white-75'}
-                     style={{display: 'grid', gridTemplateColumns: '0.6fr 1fr 1fr 1fr'}}>
+                <div key={index}
+                     className={'frsc gap-2 my-2 py-2 pe-3 ps-2 bg-black-25 rounded hover-scale-2 text-white-75'}>
                     <p className={'pt-1px fs-3 frcc'}>
                         {(order.is_completed) ?
                             <FontAwesomeIcon icon={faCircleCheck} className={'hover-scale-5 text-success'}/> :
                             <FontAwesomeIcon icon={faCircleCheck} className={'hover-scale-5'}/>}
                     </p>
-                    <p className={'pt-2px frcc'} style={{textTransform: 'uppercase'}}>{order.type}</p>
+                    <p className={'pt-2px frcc me-auto'} style={{textTransform: 'uppercase'}}>{order.type}</p>
                     <p className={`pt-2px frcc 
                     ${order.type === 'deposit' && order.is_completed ? 'text-success' : ''}
-                    ${order.type === 'software' && order.is_completed ? 'text-danger' : ''}
+                    ${order.type === 'software' && order.is_completed ? 'text-danger fw-bold' : ''}
                     ${!order.is_completed ? 'text-white-75' : ''}
                     `}>
                         {order.type === 'deposit' && order.is_completed ? '+' : ''}
@@ -184,7 +184,14 @@ const Home = () => {
                         <UserAvatar width={'1.7em'} height={'1.7em'}
                                     className={user.avatar ? '' : 'invert-80'}
                                     userImage={user.avatar}/>
-                        <UsernameEditable username={user.username}/>
+                        <UsernameEditable username={user.username} className={`
+                            ${user.username.length <= 8 ? 'fs-1' : ''}
+                            ${user.username.length > 8 && user.username.length <= 10 ? 'fs-2' : ''}
+                            ${user.username.length > 10 && user.username.length <= 12 ? 'fs-3' : ''}
+                            ${user.username.length > 12 && user.username.length <= 14 ? 'fs-4' : ''}
+                            ${user.username.length > 14 && user.username.length <= 18 ? 'fs-5' : ''}
+                            ${user.username.length > 18 ? 'fs-6' : ''}
+                        `}/>
                     </div>
                 </div>
                 <div className={'bg-white-25 p-3 rounded-2 pb-2'}>

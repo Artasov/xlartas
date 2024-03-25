@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from apps.Core.models.user import User
 from apps.Core.services.base import acontroller
-from apps.shop.services.orders import get_all_user_orders
+from apps.shop.services.orders import get_orders
 
 
 class Order(TypedDict):
@@ -18,11 +18,11 @@ class Order(TypedDict):
 
 
 @acontroller('Get software data by name')
-@api_view(['GET'])
+@api_view(('GET',))
 @permission_classes([IsAuthenticated])
 async def current_user_orders(request) -> Response:
     user: User = request.user
-    user_orders = await get_all_user_orders(user_id=user.id)
+    user_orders = await get_orders(user_id=user.id)
     orders = []
     for order in user_orders:
         orders.append(

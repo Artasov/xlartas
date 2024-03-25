@@ -37,6 +37,7 @@ const SoftwareProductCard = ({software}) => {
         if (!isAuthenticated) {
             Message.noAuthentication();
             showLoginModal();
+            return;
         }
         setIsTestPeriodModalOpen(true);
     }
@@ -128,7 +129,7 @@ const SoftwareProductCard = ({software}) => {
                                          onClick={() => {
                                              setIsInfoModalOpen(true)
                                          }}/>
-                        <Modal className={'fs-6 bg-black-65 mw-450px text-white-d0 text-shadow-black-2-80'}
+                        <Modal className={'fs-6 mw-450px text-white-d0 rounded-4 bg-black-65 shadow-black-5-90 transition-all transition-d-300'}
                                isOpen={isInfoModalOpen}
                                onClose={() => {
                                    setIsInfoModalOpen(false)
@@ -148,12 +149,12 @@ const SoftwareProductCard = ({software}) => {
                                          onClick={() => {
                                              setIsChangeLogModalOpen(true)
                                          }}/>
-                        <Modal className={'fs-6 bg-black-65 mw-450px text-white-d0 text-shadow-black-2-80'}
+                        <Modal className={'fs-6 mw-450px text-white-d0 rounded-4 bg-black-65 shadow-black-5-90 transition-all transition-d-300'}
                                isOpen={isChangeLogModalOpen}
                                onClose={() => {
                                    setIsChangeLogModalOpen(false)
                                }}>
-                            <div className={'p-4 fc gap-4'}>
+                            <div className={'p-4 mh-80vh fc gap-4'}>
                                 <SoftwareLogoTitle
                                     titleClassName={'fs-1 m-0'}
                                     className={'frsc gap-2'}
@@ -222,7 +223,7 @@ const SoftwareProductCard = ({software}) => {
                         onClick={handleClickOpenTestPeriodModal}>
                         <span style={{marginTop: 1}}>Free first month</span>
                     </Button>
-                    <Modal className={`fs-6 rounded-4 bg-black-45 mw-450px text-white-d0 text-shadow-black-2-80
+                    <Modal className={`fs-6 mw-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
                                         transition-all transition-d-300
                                         ${isTestPeriodActivate ? 'rotate3dZX-90' : ''}`}
                            isOpen={isTestPeriodModalOpen}

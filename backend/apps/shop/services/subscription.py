@@ -3,14 +3,19 @@ from typing import TypedDict
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
-from django.utils import timezone
+from django.utils.timezone import now
 
-from apps.Core.async_django import get_related_field
+from apps.Core.async_django import arelated, afilter
 from apps.Core.services.base import aget_object_or_404
-from apps.shop.exceptions.base import InsufficientFundsError, TestPeriodAlreadyUsed, \
+from apps.shop.exceptions.base import (
+    InsufficientFundsError, TestPeriodAlreadyUsed,
     TestPeriodActivationFailed
-from apps.shop.models import UserSoftwareSubscription, SoftwareSubscription, SoftwareProduct, SoftwareSubscriptionOrder, \
+)
+from apps.shop.models import (
+    UserSoftwareSubscription, SoftwareSubscription,
+    SoftwareProduct, SoftwareSubscriptionOrder,
     BaseOrder
+)
 
 
 class SoftwareSmallInfo(TypedDict):
@@ -34,7 +39,7 @@ class UserInfo(TypedDict):
 
 async def calculate_remaining_hours(expiration_date) -> int:
     """Вычисляет оставшиеся часы до истечения подписки."""
-    delta = expiration_date - timezone.now()
+    delta = expiration_date - now()
     return max(int(delta.total_seconds() / 3600), 0)
 
 
@@ -49,8 +54,8 @@ async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
     :return: A list of UserSoftwareSubscriptionInfo instances, each
     representing detailed information about a user's software subscription.
     """
-    subscriptions: list[UserSoftwareSubscription] = await sync_to_async(list)(
-        UserSoftwareSubscription.objects.filter(user=user)
+    subscriptions: list[UserSoftwareSubscription] = await afilter(
+        UserSoftwareSubscription.objects, user=user
     )
     subscription_infos = []
     for sub in subscriptions:
@@ -78,16 +83,12 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
     :return:
     """
     sub: SoftwareSubscription = await aget_object_or_404(SoftwareSubscription, id=subscription_id)
-    print(sub.amount)
-    print(sub.amount)
-    print(sub)
-    print(sub.amount)
     if user.balance < sub.amount:
         raise InsufficientFundsError()
 
     sub_order: SoftwareSubscriptionOrder = await SoftwareSubscriptionOrder.objects.acreate(
         user=user,
-        software=await get_related_field(sub, 'software'),
+        software=await arelated(sub, 'software'),
         amount=sub.amount,
         type=BaseOrder.OrderTypes.SOFTWARE,
     )
@@ -98,19 +99,16 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
         user=user,
         software=sub.software,
     )
-    print('#1')
     user_sub: UserSoftwareSubscription
-    time_category = await get_related_field(sub, 'time_category'),
+    time_category = await arelated(sub, 'time_category'),
     time_category = time_category[0]
     if created:
-        user_sub.expires_at = timezone.now() + timedelta(hours=time_category.hours)
+        user_sub.expires_at = now() + timedelta(hours=time_category.hours)
     else:
         user_sub.expires_at = user_sub.expires_at + timedelta(hours=time_category.hours)
-    print('#2')
     await user_sub.asave()
     sub_order.is_completed = True
     await sub_order.asave()
-    print('#3')
 
 
 async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_id: int):
@@ -123,11 +121,11 @@ async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_i
         )
         if user_sub.is_test_period_activated:
             raise TestPeriodAlreadyUsed()
-        now = timezone.now()
+        now_ = now()
         user_sub.is_test_period_activated = True
-        user_sub.expires_at = (now if created else
+        user_sub.expires_at = (now_ if created else
                                user_sub.expires_at
-                               if user_sub.expires_at > now else now
+                               if user_sub.expires_at > now_ else now_
                                ) + timedelta(days=software.test_period_days)
         await user_sub.asave()
     except TestPeriodAlreadyUsed as e:

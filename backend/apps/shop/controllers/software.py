@@ -1,6 +1,5 @@
 from adrf.decorators import api_view
 from adrf.serializers import Serializer
-from asgiref.sync import sync_to_async
 from django.http import FileResponse
 from django.utils import timezone
 from rest_framework import status, serializers
@@ -8,6 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from apps.Core.async_django import arelated
 from apps.Core.exceptions.base import (
     SomethingGoWrong
 )
@@ -23,23 +23,29 @@ from apps.shop.services.subscription import subscribe_user_software, activate_te
 
 @acontroller('Get list of software')
 @api_view(('GET',))
-@permission_classes([AllowAny])
+@permission_classes((AllowAny,))
 async def software_list(request) -> Response:
-    return Response(await get_softwares(is_available=True))
+    return Response(await get_softwares(
+        SoftwareProduct.objects,
+        is_available=True
+    ))
 
 
 @acontroller('Get software data by name')
 @api_view(('GET',))
-@permission_classes([AllowAny])
+@permission_classes((AllowAny,))
 async def software_by_name(request, name) -> Response:
-    softwares = await get_softwares(is_available=True, name=name)
+    softwares = await get_softwares(
+        SoftwareProduct,
+        is_available=True, name=name
+    )
     if not softwares: raise SoftwareByNameNotFound()
     return Response(softwares[0])
 
 
 @acontroller('Apply software subscription by id to current user')
 @api_view(('POST',))
-@permission_classes([IsAuthenticated])
+@permission_classes((IsAuthenticated,))
 async def software_test_activate_current_user(request) -> Response:
     class SoftwareIdSerializer(Serializer):
         software_id = serializers.IntegerField()
@@ -56,7 +62,7 @@ async def software_test_activate_current_user(request) -> Response:
 
 @acontroller('Apply software subscription by id to current user')
 @api_view(('POST',))
-@permission_classes([IsAuthenticated])
+@permission_classes((IsAuthenticated,))
 async def software_subscribe_current_user(request) -> Response:
     class SubscriptionIdSerializer(Serializer):
         software_subscription_id = serializers.IntegerField()
@@ -76,7 +82,7 @@ async def software_subscribe_current_user(request) -> Response:
 
 @acontroller('Download software file by id')
 @api_view(('GET',))
-@permission_classes([IsAuthenticated])
+@permission_classes((IsAuthenticated,))
 async def download_software_file(request, id) -> Response | FileResponse:
     user = request.user
     software = await aget_object_or_404(SoftwareProduct, id=id)
@@ -87,7 +93,7 @@ async def download_software_file(request, id) -> Response | FileResponse:
 
     if not subscription: raise NoValidLicenseFound()
 
-    file = await sync_to_async(getattr)(software, 'file', None)
+    file = await arelated(software, 'file')
 
     if not file: raise SoftwareFileNotFound()
 

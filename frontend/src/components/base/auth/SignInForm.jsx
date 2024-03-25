@@ -54,20 +54,19 @@ const SignInForm = ({className, navigate}) => {
                 margin="dense"
             />
         </DynamicForm>
-        <small className={'fc text-center mt-2'}>
-            <span className={'text-white-80 fs-6'}
+        <small className={'fc mt-2 text-right'}>
+            <span className={'mt-3px text-white-80 fs-6'}
                   onClick={() => {
                       navigate('/reset-password')
                   }}>
                 Forgot password?
             </span>
-            <span className={'text-secondary fs-6'}>Not registered yet?</span>
             <span onClick={signUpRedirect}
-                  className={'text-white-a0 fs-6 cursor-pointer hover-scale-2'}>
+                  className={'mt-3px text-white-a0 fs-6 cursor-pointer hover-scale-2'}>
                     Create your account now.
                 </span>
         </small>
-        <SocialLogin/>
+        <SocialLogin iconsClassName={'text-white-c0'}/>
     </div>);
 };
 

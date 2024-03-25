@@ -2,10 +2,10 @@ import logging
 from typing import TypedDict, Optional
 
 import aiohttp
-from asgiref.sync import sync_to_async
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.Core.async_django import arelated
 from apps.Core.exceptions.user import UserExceptions
 from apps.Core.models.social import DiscordUser
 from apps.Core.models.user import User
@@ -150,7 +150,7 @@ async def get_jwt_by_discord_oauth2_code(code) -> JwtData:
 
     try:
         discord_user = await DiscordUser.objects.aget(id=social_user_id)
-        user = await sync_to_async(getattr)(discord_user, 'user', None)
+        user = await arelated(discord_user, 'user')
     except DiscordUser.DoesNotExist:
         try:
             user = await User.objects.aget(email=email)

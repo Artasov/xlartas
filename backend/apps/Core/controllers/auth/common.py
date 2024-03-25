@@ -12,7 +12,7 @@ from apps.Core.exceptions.user import UserExceptions
 from apps.Core.messages.errors import CORRECT_ERRORS_IN_FIELDS
 from apps.Core.messages.success import USER_CREATED_CONFIRM_EMAIL
 from apps.Core.models.user import User
-from apps.Core.serializers import SignUpSerializer
+from apps.Core.serializers.user.base import SignUpSerializer
 from apps.Core.services.base import acontroller
 
 log = logging.getLogger('base')
