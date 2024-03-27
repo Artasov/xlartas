@@ -3,7 +3,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import SomethingGoWrong
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.services.base import acontroller
 from apps.Core.services.social_auth_service import get_jwt_by_google_oauth2_code, get_jwt_by_discord_oauth2_code
 
@@ -13,7 +13,7 @@ from apps.Core.services.social_auth_service import get_jwt_by_google_oauth2_code
 @permission_classes([AllowAny])
 async def discord_oauth2_callback(request) -> Response:
     code = request.GET.get('code')
-    if not code: raise SomethingGoWrong()
+    if not code: raise CoreExceptions.SomethingGoWrong()
     return Response(await get_jwt_by_discord_oauth2_code(code=code))
 
 
@@ -22,7 +22,7 @@ async def discord_oauth2_callback(request) -> Response:
 @permission_classes([AllowAny])
 async def google_oauth2_callback(request) -> Response:
     code = request.GET.get('code')
-    if not code: raise SomethingGoWrong()
+    if not code: raise CoreExceptions.SomethingGoWrong()
     return Response(await get_jwt_by_google_oauth2_code(code=code))
 
 #

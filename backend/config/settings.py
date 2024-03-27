@@ -99,14 +99,14 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
-    # 'DEFAULT_THROTTLE_CLASSES': [
-    #     'rest_framework.throttling.AnonRateThrottle',
-    #     'rest_framework.throttling.UserRateThrottle'
-    # ],
-    # 'DEFAULT_THROTTLE_RATES': {
-    #     'anon': '60/minute',
-    #     'user': '60/minute'
-    # }
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '135/minute',
+        'user': '115/minute',
+    }
 }
 REST_USE_JWT = True
 SIMPLE_JWT = {
@@ -277,6 +277,8 @@ FK_SHOP_ID = '666'
 MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
 DEFAULT_DEPOSIT_AMOUNT = 100
+
+YANDEX_RECAPTCHA_SECRET_KEY = env('YANDEX_RECAPTCHA_SECRET_KEY')
 
 if DEV:
     DATABASES = {

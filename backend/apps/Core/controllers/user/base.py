@@ -4,9 +4,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import SerializerErrors
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.exceptions.user import UserExceptions
-from apps.Core.messages.errors import CORRECT_ERRORS_IN_FIELDS
 from apps.Core.messages.success import Responses
 from apps.Core.serializers.user.base import UserUsernameSerializer, CurrentUserSerializer
 from apps.Core.services.base import acontroller
@@ -34,8 +33,7 @@ async def rename_current_user(request) -> Response:
         request.user.username = username
         await request.user.asave()
         return Responses.Success.RenameCurrentUser
-    raise SerializerErrors(
-        message=CORRECT_ERRORS_IN_FIELDS,
+    raise CoreExceptions.SerializerErrors(
         serializer_errors=serializer.errors,
         status_code=status.HTTP_400_BAD_REQUEST
     )

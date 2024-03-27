@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from apps.Core.confirmations.generators import generate_confirm_code_and_send
 from apps.Core.confirmations.manager import CoreConfirmation
-from apps.Core.exceptions.base import SomethingGoWrong
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.exceptions.user import UserExceptions
 from apps.Core.models.user import User
 from apps.Core.services.base import acontroller
@@ -26,7 +26,7 @@ async def new_confirm_code(request) -> Response:
         action = serializers.CharField(min_length=2, max_length=30)
 
     serializer = GenerateConfirmationCodeSerializer(data=request.data)
-    if not serializer.is_valid(): raise SomethingGoWrong
+    if not serializer.is_valid(): raise CoreExceptions.SomethingGoWrong
     data = await serializer.adata
     email = data.get('email').lower()
     action = data.get('action')

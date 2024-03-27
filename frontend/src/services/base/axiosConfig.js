@@ -5,6 +5,8 @@ export const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID;
 export const TINKOFF_TERMINAL_KEY = process.env.REACT_APP_TINKOFF_TERMINAL_KEY;
 export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 export const DOMAIN = process.env.REACT_APP_MAIN_DOMAIN;
+export const GOOGLE_RECAPTCHA_SITE_KEY = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
+export const YANDEX_RECAPTCHA_SITE_KEY = process.env.REACT_APP_YANDEX_RECAPTCHA_SITE_KEY;
 export const DOMAIN_URL = `${protocol}//${DOMAIN}${protocol === 'http:' ? ':8000' : ''}`
 export const DOMAIN_URL_ENCODED = encodeURIComponent(DOMAIN_URL)
 

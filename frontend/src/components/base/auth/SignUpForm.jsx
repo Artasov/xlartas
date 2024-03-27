@@ -1,13 +1,14 @@
 // SignUpForm.jsx
 import React, {useState} from 'react';
 import {TextField} from '@mui/material';
-import axiosInstance from "../../../services/base/axiosConfig";
+import axiosInstance, {YANDEX_RECAPTCHA_SITE_KEY} from "../../../services/base/axiosConfig";
 import DynamicForm from "../elements/DynamicForm";
 import {useAuth} from "./useAuth";
 import {Message} from "../Message";
 import SocialLogin from "./SocialLogin";
 import ConfirmationCode from "../ConfirmationCode";
 import {AuthContext} from "./AuthContext/AuthContext";
+import {SmartCaptcha} from "@yandex/smart-captcha";
 
 const SignUpForm = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const SignUpForm = () => {
     });
     const [codeSent, setCodeSent] = useState(false);
     const {showLoginModal, user} = useAuth(AuthContext);
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [resetCaptcha, setResetCaptcha] = useState(0);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -27,16 +30,25 @@ const SignUpForm = () => {
     };
 
     const signUp = async () => {
+        if (captchaToken === null) {
+            Message.error('Please complete the captcha');
+            handleResetCaptcha();
+            return;
+        }
         await axiosInstance.post('/api/signup/', {
             username: formData.username,
             email: formData.email,
             password: formData.password,
+            captchaToken: captchaToken,
         }).then(response => {
             Message.success(response.data.message)
             setCodeSent(true);
-        }).catch(e => Message.errorsByData(e.response.data));
+        }).catch(e => {
+            Message.errorsByData(e.response.data);
+            handleResetCaptcha();
+        });
     };
-
+    const handleResetCaptcha = () => setResetCaptcha((prev) => prev + 1);
     const onConfirm = () => {
         showLoginModal();
         setCodeSent(false);
@@ -45,10 +57,11 @@ const SignUpForm = () => {
     return (
         <div>
             {!codeSent ? (
-                <DynamicForm requestFunc={signUp}
-                             submitBtnText={'Create ACCOUNT'}
-                             submitBtnClassName={'fw-6 bg-white-c0'}
-                             loadingClassName={'text-white-c0'}>
+                <DynamicForm
+                    requestFunc={signUp}
+                    submitBtnText={'Create ACCOUNT'}
+                    submitBtnClassName={'fw-6 bg-white-c0'}
+                    loadingClassName={'text-white-c0'}>
                     <TextField
                         required={true}
                         name="username"
@@ -85,7 +98,11 @@ const SignUpForm = () => {
                         margin="dense"
                         helperText={"Enter password"}
                     />
+                    <SmartCaptcha sitekey={YANDEX_RECAPTCHA_SITE_KEY}
+                                  key={resetCaptcha} onSuccess={setCaptchaToken}/>
+                    <span className={'mb-1'}></span>
                 </DynamicForm>
+
             ) : (
                 <ConfirmationCode action={'signup'} onConfirm={onConfirm} autoSend={true}
                                   email={user ? user.email : formData.email}/>

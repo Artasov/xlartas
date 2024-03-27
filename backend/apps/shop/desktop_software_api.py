@@ -16,7 +16,7 @@ from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 
 @csrf_exempt
 @api_view(('POST',))
-@permission_classes([AllowAny])
+@permission_classes((AllowAny,))
 def software_auth(request) -> Response:
     data = json.loads(request.body)
 
@@ -24,13 +24,13 @@ def software_auth(request) -> Response:
     software_name = data.get('product')
     is_first_license_checking = data.get('is_first_license_checking')
 
-    if not all([hw_id, software_name, str(is_first_license_checking)]):
+    if not all((hw_id, software_name, str(is_first_license_checking))):
         return Response({'accept': False, 'error': SOMETHING_WRONG},
                         status=status.HTTP_200_OK,
                         headers={'Content-Type': 'application/json'})
 
     try:
-        user_ = User.objects.get(username=data['username'], secret_key=data['secret_key'])
+        user_ = User.objects.aget(username=data['username'], secret_key=data['secret_key'])
     except User.DoesNotExist:
         return Response({'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
                         status=status.HTTP_200_OK,

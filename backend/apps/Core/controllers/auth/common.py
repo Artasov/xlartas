@@ -7,13 +7,13 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import SerializerErrors
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.exceptions.user import UserExceptions
-from apps.Core.messages.errors import CORRECT_ERRORS_IN_FIELDS
 from apps.Core.messages.success import USER_CREATED_CONFIRM_EMAIL
 from apps.Core.models.user import User
 from apps.Core.serializers.user.base import SignUpSerializer
 from apps.Core.services.base import acontroller
+from apps.captcha.yandex import captcha_required
 
 log = logging.getLogger('base')
 
@@ -21,7 +21,9 @@ log = logging.getLogger('base')
 @acontroller('Sign Up')
 @api_view(('POST',))
 @permission_classes([AllowAny])
+@captcha_required
 async def signup(request) -> Response:
+    if not request.is_captcha_valid: raise CoreExceptions.CaptchaInvalid()
     serializer = SignUpSerializer(data=request.data)
     if serializer.is_valid():
         data = await serializer.adata
@@ -39,8 +41,7 @@ async def signup(request) -> Response:
             username=username, email=email, password=password, is_confirmed=False
         )
         return Response({'message': USER_CREATED_CONFIRM_EMAIL}, status=201)
-    raise SerializerErrors(
-        message=CORRECT_ERRORS_IN_FIELDS,
+    raise CoreExceptions.SerializerErrors(
         serializer_errors=serializer.errors,
         status_code=status.HTTP_400_BAD_REQUEST
     )

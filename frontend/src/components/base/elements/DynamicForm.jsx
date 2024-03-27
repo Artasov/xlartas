@@ -1,11 +1,20 @@
 import React, {useState} from 'react';
 import {Button, CircularProgress, FormControl, TextField} from '@mui/material';
 
-const DynamicForm = ({children, className, requestFunc, submitBtnText, submitBtnClassName, loadingClassName}) => {
+const DynamicForm = ({
+                         children,
+                         className,
+                         requestFunc,
+                         submitBtnText,
+                         submitBtnClassName,
+                         loadingClassName,
+                         submitDisabled = false
+                     }) => {
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (submitDisabled) return;
         setLoading(true);
         try {
             await requestFunc().then(() => {
@@ -40,7 +49,7 @@ const DynamicForm = ({children, className, requestFunc, submitBtnText, submitBtn
                     type="submit"
                     variant="contained"
                     color="primary"
-                    disabled={loading}
+                    disabled={loading || submitDisabled}
                     className={`${submitBtnClassName} ${loading ? loadingClassName : 'text-black-c0'}`}
                     startIcon={loading &&
                         <CircularProgress className={loadingClassName ? loadingClassName : 'text-black-c0'} size={24}/>}

@@ -2,8 +2,6 @@ from rest_framework.reverse import reverse
 
 NOT_FOUND_404 = 'По этому адресу ничего не найдено.'
 
-#
-
 RECAPTCHA_INVALID = 'Не пройдена проверка reCaptcha.'
 FORBIDDEN = 'Доступ запрещён.'
 USER_UNCONFIRMED = 'Ваш аккаунт не подтверждён. ' \

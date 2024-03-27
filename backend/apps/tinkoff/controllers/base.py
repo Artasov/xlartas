@@ -8,7 +8,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import SomethingGoWrong
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.services.base import acontroller
 from apps.shop.models import BaseOrder
 from apps.tinkoff.models import TinkoffDepositOrder
@@ -25,7 +25,7 @@ class TinkoffDepositOrderSerializer(ModelSerializer):
 @permission_classes((IsAuthenticated,))
 async def tinkoff_pay_form(request) -> HttpResponse:
     amount = request.data.get('amount')
-    if amount is None: raise SomethingGoWrong()
+    if amount is None: raise CoreExceptions.SomethingGoWrong()
     order: TinkoffDepositOrder = await TinkoffDepositOrder.objects.acreate(
         user=request.user, amount=amount, type=BaseOrder.OrderTypes.DEPOSIT
     )
@@ -50,4 +50,4 @@ async def create_tinkoff_deposit_order(request) -> Response:
         amount_in_kopecks = (Decimal(order.amount) * 100).quantize(Decimal('1.'), rounding=ROUND_HALF_UP)
         payment_link = f"https://securepay.tinkoff.ru/v2/Init?TerminalKey={settings.TINKOFF_TERMINAL_KEY}&Amount={amount_in_kopecks}&OrderId={order.id}&DATA=Email={request.user.email}"
         return Response({'payment_link': payment_link}, status=status.HTTP_201_CREATED)
-    raise SomethingGoWrong
+    raise CoreExceptions.SomethingGoWrong

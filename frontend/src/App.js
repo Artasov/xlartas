@@ -22,17 +22,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import './static/base/css/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import ResetPassword from "./pages/ResetPassword";
-function HeaderWithNavigate() {
-  const navigate = useNavigate(); // получаем navigate с помощью хука
-  return <Header navigate={navigate} />; // передаем navigate как prop в Header
-}
-class App extends Component {
 
+function HeaderWithNavigate() {
+    const navigate = useNavigate();
+    return <Header navigate={navigate}/>;
+}
+
+class App extends Component {
     render() {
         return (
             <ThemeProvider theme={darkTheme}>
-                    <Router>
-                <AuthProvider>
+                <Router>
+                    <AuthProvider>
                         <ToastContainer
                             position="top-right"
                             autoClose={5000}
@@ -48,7 +49,6 @@ class App extends Component {
                         />
                         <div className={'App h-100 fc disable-tap-select'} data-bs-theme="dark">
                             <img src="" className="bg-image" alt=""/>
-
                             <HeaderWithNavigate/>
                             <main className={'overflow-y-auto no-scrollbar pb-5'}>
                                 <Routes>
@@ -66,8 +66,8 @@ class App extends Component {
                             </main>
                             {/*<Footer/>*/}
                         </div>
-                </AuthProvider>
-                    </Router>
+                    </AuthProvider>
+                </Router>
             </ThemeProvider>
         );
     }

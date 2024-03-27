@@ -8,9 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.Core.async_django import arelated
-from apps.Core.exceptions.base import (
-    SomethingGoWrong
-)
+from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.services.base import aget_object_or_404, acontroller
 from apps.shop.exceptions.base import (
     NoValidLicenseFound, SoftwareFileNotFound, SoftwareByNameNotFound
@@ -48,7 +46,7 @@ async def software_test_activate_current_user(request) -> Response:
         software_id = serializers.IntegerField()
 
     serializer = SoftwareIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise SomethingGoWrong()
+    if not serializer.is_valid(): raise CoreExceptions.SomethingGoWrong()
 
     data = await serializer.adata
     await activate_test_software_user(
@@ -65,7 +63,7 @@ async def software_subscribe_current_user(request) -> Response:
         software_subscription_id = serializers.IntegerField()
 
     serializer = SubscriptionIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise SomethingGoWrong()
+    if not serializer.is_valid(): raise CoreExceptions.SomethingGoWrong()
     data = await serializer.adata
     try:
         await subscribe_user_software(

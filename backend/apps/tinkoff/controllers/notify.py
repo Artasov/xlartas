@@ -9,7 +9,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import SomethingGoWrong
+from apps.Core.exceptions.base import CoreExceptions
 from apps.tinkoff.services.orders import execute_tinkoff_deposit_order_by_id
 
 log = logging.getLogger('base')
@@ -67,4 +67,4 @@ async def notify(request) -> Response:
             if order_id:
                 await execute_tinkoff_deposit_order_by_id(order_id=order_id)
                 return Response('Order executed successfully.')
-    raise SomethingGoWrong()
+    raise CoreExceptions.SomethingGoWrong()

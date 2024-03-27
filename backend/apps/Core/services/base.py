@@ -36,7 +36,16 @@ def get_timedelta(**kwargs) -> datetime:
     return now() + timedelta(**kwargs)
 
 
-def reCAPTCHA_validation(request):
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+def google_captcha_validation(request):
     recaptcha_response = request.POST.get('g-recaptcha-response')
     url = 'https://www.google.com/recaptcha/api/siteverify'
     values = {

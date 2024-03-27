@@ -20,12 +20,10 @@ RUN apk update && apk add --no-cache libpq netcat-openbsd dos2unix supervisor ch
 # Конфигурация Supervisor сохраняется в базовом слое
 COPY backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Финальная стадия для web
 FROM base as web
 
 ENTRYPOINT ["sh", "/srv/backend/entrypoint.prod.sh"]
 
-# Финальная стадия для celery
 FROM base as celery
 
 RUN adduser -D celeryuser
