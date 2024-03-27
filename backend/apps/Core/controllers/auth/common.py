@@ -20,7 +20,7 @@ log = logging.getLogger('base')
 
 @acontroller('Sign Up')
 @api_view(('POST',))
-@permission_classes([AllowAny])
+@permission_classes((AllowAny,))
 @captcha_required
 async def signup(request) -> Response:
     if not request.is_captcha_valid: raise CoreExceptions.CaptchaInvalid()
@@ -31,11 +31,11 @@ async def signup(request) -> Response:
         email = data['email']
         password = data['password']
 
-        username_exists = await User.objects.filter(username=username).aexists()
-        if username_exists: raise UserExceptions.UsernameAlreadyExists()
+        if await User.objects.filter(username=username).aexists():
+            raise UserExceptions.UsernameAlreadyExists()
 
-        email_exists = await User.objects.filter(email=email).aexists()
-        if email_exists: raise UserExceptions.UserEmailAlreadyExists()
+        if await User.objects.filter(email=email).aexists():
+            raise UserExceptions.UserEmailAlreadyExists()
 
         await sync_to_async(User.objects.create_user, thread_sensitive=True)(
             username=username, email=email, password=password, is_confirmed=False
