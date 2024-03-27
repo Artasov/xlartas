@@ -10,6 +10,7 @@ from rest_framework.response import Response
 
 from apps.Core.exceptions.base import CoreExceptions
 from apps.Core.services.base import acontroller
+from apps.captcha.yandex import captcha_required
 from apps.shop.models import BaseOrder
 from apps.tinkoff.models import TinkoffDepositOrder
 
@@ -21,7 +22,7 @@ class TinkoffDepositOrderSerializer(ModelSerializer):
 
 
 @acontroller('Tinkoff pay form')
-@api_view(['POST'])
+@api_view(('POST',))
 @permission_classes((IsAuthenticated,))
 async def tinkoff_pay_form(request) -> HttpResponse:
     amount = request.data.get('amount')
@@ -36,12 +37,12 @@ async def tinkoff_pay_form(request) -> HttpResponse:
 
 
 @acontroller('Creating a Tinkoff deposit and receiving a payment link')
-@api_view(['POST'])
+@api_view(('POST',))
 @permission_classes((IsAuthenticated,))
+@captcha_required
 async def create_tinkoff_deposit_order(request) -> Response:
-    print(request.data)
+    if not request.is_captcha_valid: raise CoreExceptions.CaptchaInvalid()
     serializer = TinkoffDepositOrderSerializer(data=request.data)
-    print(serializer)
     if serializer.is_valid():
         data = await serializer.adata
         order = await TinkoffDepositOrder.objects.create(

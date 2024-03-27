@@ -48,7 +48,10 @@ const SignUpForm = () => {
             handleResetCaptcha();
         });
     };
-    const handleResetCaptcha = () => setResetCaptcha((prev) => prev + 1);
+    const handleResetCaptcha = () => {
+        setResetCaptcha((prev) => prev + 1);
+        setCaptchaToken(null);
+    };
     const onConfirm = () => {
         showLoginModal();
         setCodeSent(false);
