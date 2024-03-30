@@ -221,7 +221,7 @@ const SoftwareProductCard = ({software}) => {
                         type="button"
                         variant="contained"
                         onClick={handleClickOpenTestPeriodModal}>
-                        <span style={{marginTop: 1}}>Free first month</span>
+                        <span style={{marginTop: 1}}>Free test period</span>
                     </Button>
                     <Modal className={`fs-6 mw-450px text-white-d0 rounded-4 bg-black-45 shadow-black-5-90 
                                         transition-all transition-d-300

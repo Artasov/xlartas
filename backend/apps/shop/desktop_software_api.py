@@ -66,7 +66,6 @@ async def software_auth(request) -> Response:
     # if license expired
     if sub_.expires_at <= timezone.now():
         if software_name == 'xLUMRA':
-            # Give FREE version
             if is_first_license_checking:
                 await sub_.asave()
             return Response(
@@ -117,9 +116,9 @@ async def set_user_hw_id(request) -> Response:
 
 
 @api_view(('GET',))
-def get_software_version(request, software) -> Response:
+async def get_software_version(request, software_name) -> Response:
     try:
-        software_ = SoftwareProduct.objects.get(name=software)
+        software_ = await SoftwareProduct.objects.aget(name=software_name)
         url = request.build_absolute_uri(reverse('shop:software_download', kwargs={'id': software_.id}))
         return Response({
             'version': software_.version,
