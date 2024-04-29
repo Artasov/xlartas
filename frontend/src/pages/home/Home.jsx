@@ -161,6 +161,12 @@ const Home = () => {
     return (<div className={'mt-2'} style={{maxWidth: 400, margin: 'auto'}}>
         <Head title={`${isAuthenticated ? user.username : 'xl'}`}/>
         <div className={'w-90 mx-auto'}>
+
+            <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
+                Внимание! Тинькофф решил отключить терминалы без объяснения причин.
+                Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'}
+                                    className={'text-decoration-none'}>tg</a> для оплаты.
+            </Alert>
             {!isAuthenticated ? (<div>
                 <h1 className={'fw-1 fs-07'}>Welcome</h1>
                 <p className={'mb-2'}>
@@ -172,7 +178,8 @@ const Home = () => {
                 </p>
                 <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
                     Внимание! Тинькофф решил отключить терминалы без объяснения причин.
-                    Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'} className={'fw-bold'}>tg</a> для оплаты.
+                    Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'}
+                                        className={'text-decoration-none'}>tg</a> для оплаты.
                 </Alert>
                 <SignUpForm/>
             </div>) : (<div className={'fc gap-2'}>
