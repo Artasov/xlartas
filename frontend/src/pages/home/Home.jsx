@@ -176,11 +176,6 @@ const Home = () => {
                                 sign in
                             </span>
                 </p>
-                <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
-                    Внимание! Тинькофф решил отключить терминалы без объяснения причин.
-                    Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'}
-                                        className={'text-decoration-none'}>tg</a> для оплаты.
-                </Alert>
                 <SignUpForm/>
             </div>) : (<div className={'fc gap-2'}>
                 <div className={'px-1'}>
