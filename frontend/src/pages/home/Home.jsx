@@ -3,7 +3,7 @@ import {AuthContext} from "../../components/base/auth/AuthContext/AuthContext";
 import SignUpForm from "../../components/base/auth/SignUpForm";
 import axiosInstance from "../../services/base/axiosConfig";
 import {timeAgo} from "../../services/base/timeAgo";
-import {Button, CircularProgress} from "@mui/material";
+import {Alert, Button, CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import UserAvatar from "../../components/base/user/UserAvatar/UserAvatar";
 import SoftwareImage from "../Software/SoftwareImage";
@@ -171,7 +171,8 @@ const Home = () => {
                             </span>
                 </p>
                 <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
-                    Внимание! Тинькофф решил отключить терминалы без объяснения причин. Пишите в личку в tg для оплаты.
+                    Внимание! Тинькофф решил отключить терминалы без объяснения причин.
+                    Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'} className={'fw-bold'}>tg</a> для оплаты.
                 </Alert>
                 <SignUpForm/>
             </div>) : (<div className={'fc gap-2'}>
