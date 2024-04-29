@@ -170,12 +170,9 @@ const Home = () => {
                                 sign in
                             </span>
                 </p>
-                {/*<Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">*/}
-                {/*    Внимание! Авторизация через Google, Telegram пока не работает в связи с переносом сайта*/}
-                {/*    на другой хостинг и реализацией single page application. Если у вас были подписки*/}
-                {/*    и вы не можете войти, напишите мне в личку в tg @artasov. По любым вопросам не стесняемся*/}
-                {/*    писать. Спасибо за поддержку проекта, работаю на энтузиазме по факту.*/}
-                {/*</Alert>*/}
+                <Alert className={'bg-danger bg-opacity-10 mt-3'} severity="error">
+                    Внимание! Тинькофф решил отключить терминалы без объяснения причин. Пишите в личку в tg для оплаты.
+                </Alert>
                 <SignUpForm/>
             </div>) : (<div className={'fc gap-2'}>
                 <div className={'px-1'}>
