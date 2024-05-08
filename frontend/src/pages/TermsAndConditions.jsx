@@ -1,49 +1,53 @@
-import {Container, Typography} from "@mui/material";
+import {Container} from "@mui/material";
 import Head from "../components/base/Head";
 import React from "react";
 
 const TermsAndConditions = () => (
     <Container maxWidth="sm" style={{marginTop: '20px'}}>
         <Head title={'xl | Terms And Conditions'}/>
-        <Typography variant="h4" component="h1" gutterBottom>
-            Terms And Conditions Of Use
-        </Typography>
-        <Typography variant="h6">
-            Intellectual Property Rights
-        </Typography>
-        <Typography paragraph>
-            xlartas owns all the intellectual property rights and materials contained in this Website.
-        </Typography>
-
-        <Typography variant="h6">
-            Copyright
-        </Typography>
-        <Typography paragraph>
-            All content included on this site, such as text, graphics, logos, button icons, images, audio clips, digital
-            downloads, data compilations, and software, is the property of xlartas. The compilation of all content on
-            this site is the exclusive property of xlartas, with copyright authorship for this collection by xlartas,
-            and protected by international copyright laws.
-        </Typography>
-
-        <Typography variant="h6">
-            Your Membership Account
-        </Typography>
-        <Typography paragraph>
-            If you use this product, you are responsible for maintaining the confidentiality of your account and
-            password and for restricting access to your computer, and you agree to accept responsibility for all
-            activities that occur under your account or password. If you are under 18, you may use our product only with
-            involvement of a parent or guardian. xlartas and its associates reserve the right to refuse service,
-            terminate accounts, remove or edit content, or cancel orders in their sole discretion.
-        </Typography>
-
-        <Typography variant="h6">
-            Additional Terms and Conditions
-        </Typography>
-        <Typography paragraph>
-            The absence of a video recording of the purchase means that you transferred the money in the form of a gift
-            or donation. We do not bear any responsibility for providing you with services, products. We(xlartas) in
-            turn, at our discretion, can help you.
-        </Typography>
+        <h2 className={'mb-3 text-center'}>
+            Условия использования
+        </h2>
+        <h4 className={'mb-2 mt-3'}>Права интеллектуальной собственности</h4>
+        <p>
+            xlartas владеет всеми правами интеллектуальной собственности
+            и материалами, содержащимися на этом веб-сайте.
+        </p>
+        <h4 className={'mb-2 mt-3'}>Авторские права</h4>
+        <p>
+            Программное обеспечение, логотипы(сайта и продуктов),
+            код продукта, названия являются собственностью xlartas
+            и защищены международными законами об авторском праве.
+        </p>
+        <h4 className={'mb-2 mt-3'}>Ваша учетная запись пользователя</h4>
+        <p>
+            Если вы используете этот продукт, вы несете ответственность за сохранение
+            конфиденциальности вашей учетной записи и пароль и для ограничения доступа к
+            вашему компьютеру, и вы соглашаетесь принять на себя ответственность за все
+            действия, которые происходят под вашей учетной записью или паролем. Если вам
+            меньше 18 лет, вы можете использовать наш продукт только с участие родителя
+            или опекуна. xlartas и ее партнеры оставляют за собой право отказать в обслуживании,
+            закрывать учетные записи, удалять или редактировать контент или отменять заказы
+            по своему усмотрению.
+        </p>
+        <h4 className={'mb-2 mt-3'} style={{lineHeight: 1.3}}>
+            Положения и условия использования программного обеспечения xlartas
+        </h4>
+        <p>
+            Оплачивая подписку на продукт(software) на ваш аккаунт зачисляется выбранное при оплате
+            количество часов(недель, месяцев и т.п.) для использования выбранного товара.
+            Для скачивания продукта перейдите на страницу Software и нажмите на кнопку скачивания.
+            Для входа в программу используется ваш логин и секретный ключ(secret key), вы их можете найти
+            на главной страницы, но при условии, что вы вошли в аккаунт.
+        </p>
+        <h4 className={'mb-2 mt-3'}>Условия возврата и обмена покупки</h4>
+        <p>
+            Причиной возврата денежных средств за приобретенную подписку на программный продукт
+            может служить неработоспособность продукта более 1 дня в любой период оплаченной подписки.
+            Резерв в 1 день нужен для возможных технических работ.
+            Подписка на продукт(программное обеспечение) обмену не подлежит.
+            Для возврата свяжитесь с нами по контактным данным в разделе `О нас`(About)
+        </p>
     </Container>
 );
 

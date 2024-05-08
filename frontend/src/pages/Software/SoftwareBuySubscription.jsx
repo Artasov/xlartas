@@ -83,18 +83,31 @@ const SoftwareBuySubscription = ({software_obj, software_name, setIsSubscribe}) 
                             </Button>
                         ))}
                     </ButtonGroup>
-                    <Typography variant="caption" display="block" className={'mb-2 text-center text-white-60'}>
+                    <Typography variant="caption" display="block" className={'text-center text-white-60'}>
                         From your account will be
-                        charged {selectedSubscriptionId ? software.subscriptions.find(sub => sub.id === selectedSubscriptionId)?.amount : 0}&nbsp;₽
+                        charged {selectedSubscriptionId ? software.subscriptions.find(
+                        sub => sub.id === selectedSubscriptionId)?.amount : 0}&nbsp;₽
                     </Typography>
                 </div>
                 :
                 <div className={'text-center'}>
-                    <Typography variant="caption" display="block" className={'fs-6 text-center px-4 mb-2 text-white-a0'}>
+                    <Typography variant="caption" display="block"
+                                className={'fs-6 text-center px-4 text-white-a0'}>
                         Unfortunately, it is not yet possible to subscribe to this product.
                     </Typography>
                 </div>
             }
+            <div className={'fccc fs-7 text-white-60 mb-2'}>
+                <button className={'fw-bold'} onClick={() => navigate('/offer')}>
+                    Оферта
+                </button>
+                <button className={'fw-bold'} onClick={() => navigate('/terms-and-conditions')}>
+                    Условия использования
+                </button>
+                <button className={'fw-bold'} onClick={() => navigate('/privacy-policy')}>
+                    Политика конфиденциальности
+                </button>
+            </div>
         </DynamicForm>
     );
 };

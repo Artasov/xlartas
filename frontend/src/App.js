@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './static/base/css/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import ResetPassword from "./pages/ResetPassword";
+import Offer from "./pages/Offer";
 
 function HeaderWithNavigate() {
     const navigate = useNavigate();
@@ -57,6 +58,7 @@ class App extends Component {
                                     <Route path="/software/" element={<Software/>}/>
                                     <Route path="/software/:softwareName/" element={<SoftwareDetail/>}/>
                                     <Route path="/about/" element={<About/>}/>
+                                    <Route path="/offer/" element={<Offer/>}/>
                                     <Route path="/terms-and-conditions/" element={<TermsAndConditions/>}/>
                                     <Route path="/privacy-policy/" element={<PrivacyPolicy/>}/>
                                     <Route path="/discord-callback/" element={<DiscordOAuth/>}/>

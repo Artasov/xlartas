@@ -1,50 +1,44 @@
-import {Container, Typography} from "@mui/material";
+import {Container} from "@mui/material";
 import Head from "../components/base/Head";
 import React from "react";
 
 const PrivacyPolicy = () => (
     <Container maxWidth="sm" style={{marginTop: '20px'}}>
         <Head title={'xl | Privacy Policy'}/>
-        <Typography variant="h4" component="h1" gutterBottom>
-            Privacy Policy
-        </Typography>
-        <Typography variant="h6">
-            How do we collect your personal details?
-        </Typography>
-        <Typography paragraph>
-            When you sign up for our service, we store your account's email address and username. In the future, the
-            nickname and the name of the guild, if you add them. We do not have access to the password or other details
-            of your third-party account.
-        </Typography>
-
-        <Typography variant="h6">
-            What other data do we collect from you?
-        </Typography>
-        <Typography paragraph>
-            When you use xlartas's products, we may collect various usage data and errors to make future improvements to
-            our service and solve your problems more efficiently.
-        </Typography>
-
-        <Typography variant="h6">
-            Do we share your information with third parties?
-        </Typography>
-        <Typography paragraph>
-            No, any data we collect from you, solely serves the purpose of potentially improving our service. We do not
-            share or sell any information to third-parties.
-        </Typography>
-
-        <Typography variant="h6">
-            For the participants of the referral program.
-        </Typography>
-        <ul>
-            <li>Inviter - the one who invited the user via his personal link.</li>
-            <li>Referral - the one who clicked on the link provided by the inviter.</li>
-        </ul>
-        <Typography paragraph>
-            The inviter will be able to see the referral's nickname and its total number of program launches from the
-            catalog(/shop).
-        </Typography>
+        <h2 className={'mb-3 text-center'}>Политика конфиденциальности</h2>
+        <h4 className={'mb-2 mt-3'}>Какие персональные данные мы собираем?</h4>
+        <p>
+            Мы собираем ваш адрес электронной почты, имя пользователя, IP-адрес при каждой авторизации в системе, а
+            также специальный код, сформированный из названий комплектующих вашего ПК для защиты от несанкционированного
+            распространения программ.
+        </p>
+        <h4 className={'mb-2 mt-3'}>Как мы используем ваши данные?</h4>
+        <p>
+            Ваши данные используются для обеспечения доступа к нашим услугам, улучшения их качества, анализа
+            использования продуктов и коммуникации с вами, включая, но не ограничиваясь, отправку уведомлений, запросов
+            на обновление информации и информационных сообщений.
+        </p>
+        <h4 className={'mb-2 mt-3'}>С кем мы делимся вашей информацией?</h4>
+        <p>
+            Мы не передаем ваши данные третьим сторонам, за исключением случаев, предусмотренных законом, или если это
+            необходимо для исполнения наших обязательств перед вами (например, при использовании облачных сервисов для
+            хранения данных).
+        </p>
+        <h4 className={'mb-2 mt-3'}>Какие у вас права?</h4>
+        <p>
+            Вы имеете право запросить доступ к вашим персональным данным, их исправление, удаление или ограничение
+            обработки. Также вы можете возражать против обработки ваших данных и имеете право на портативность данных.
+        </p>
+        <h4 className={'mb-2 mt-3'}>Как мы защищаем вашу информацию?</h4>
+        <p>
+            Мы применяем технические и организационные меры безопасности для защиты ваших данных от несанкционированного
+            доступа, изменения, раскрытия или уничтожения.
+        </p>
     </Container>
 );
 
 export default PrivacyPolicy;
+
+
+
+

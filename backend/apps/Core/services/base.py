@@ -15,11 +15,14 @@ from time import time
 from typing import Optional, Tuple
 
 import aiohttp
+from asgiref.sync import sync_to_async
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponseNotAllowed, HttpResponse
+from django.shortcuts import redirect
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
@@ -30,6 +33,12 @@ from apps.Core.models.user import User
 from apps.Core.services.mail.base import send_text_email
 
 log = logging.getLogger('base')
+
+
+def add_user_to_group(user, group_name):
+    group, created = Group.objects.get_or_create(name=group_name)
+    if user not in group.user_set.all():
+        group.user_set.add(user)
 
 
 def get_timedelta(**kwargs) -> datetime:
@@ -169,7 +178,7 @@ def aforbidden_with_login(fn) -> callable:
     return inner
 
 
-def acontroller(name=None, log_time=False) -> callable:
+def acontroller(name=None, log_time=False, auth=False) -> callable:
     def decorator(fn) -> callable:
         @functools.wraps(fn)
         async def inner(request: ASGIRequest, *args, **kwargs):
@@ -177,6 +186,10 @@ def acontroller(name=None, log_time=False) -> callable:
             log.info(f'Async Controller: {request.method} | {fn_name}')
             if log_time:
                 start_time = time()
+
+            if auth:
+                if not request.user.is_authenticated:
+                    return redirect(settings.LOGIN_URL)
 
             if settings.DEBUG:
                 async with AsyncAtomicContextManager():
@@ -204,7 +217,7 @@ def acontroller(name=None, log_time=False) -> callable:
     return decorator
 
 
-def controller(name=None, log_time=False) -> callable:
+def controller(name=None, log_time=False, auth=False) -> callable:
     def decorator(fn) -> callable:
         @functools.wraps(fn)
         def inner(request: WSGIRequest, *args, **kwargs):
@@ -212,7 +225,9 @@ def controller(name=None, log_time=False) -> callable:
             log.info(f'Sync Controller: {request.method} | {fn_name}')
             if log_time:
                 start_time = time()
-
+            if auth:
+                if not request.user.is_authenticated:
+                    return redirect(settings.LOGIN_URL)
             if settings.DEBUG:
                 with transaction.atomic():
                     return fn(request, *args, **kwargs)
