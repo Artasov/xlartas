@@ -14,12 +14,32 @@ const axiosInstance = axios.create({
     baseURL: `${protocol}//${DOMAIN}${window.location.protocol === 'http:' ? ':8000' : ''}/`,
 });
 
+function getCookie(name) {
+    if (!document.cookie) {
+        return null;
+    }
+
+    const xsrfCookies = document.cookie.split(';')
+        .map(c => c.trim())
+        .filter(c => c.startsWith(name + '='));
+
+    if (xsrfCookies.length === 0) {
+        return null;
+    }
+    return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+}
 
 axiosInstance.interceptors.request.use(config => {
     const token = localStorage.getItem('access');
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
+
+    const csrfToken = getCookie('csrftoken');
+    if (csrfToken) {
+        config.headers['X-CSRFToken'] = csrfToken;
+    }
+
     return config;
 }, error => Promise.reject(error));
 
