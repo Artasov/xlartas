@@ -43,14 +43,19 @@ class SubscriptionTimeCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(UserSoftwareSubscription)
-class SoftwareSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('user',
-                    'is_test_period_activated',
-                    'starts',
-                    'count_days_for_expiration',
-                    'expires_at',
-                    )
-    list_editable = ('expires_at',)
+class UserSoftwareSubscriptionAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'software',
+        'is_test_period_activated',
+        'starts',
+        'count_days_for_expiration',
+        'expires_at',
+    )
+    list_editable = (
+        'is_test_period_activated',
+        'expires_at',
+    )
     search_fields = ('user__username',)
     save_on_top = True
 

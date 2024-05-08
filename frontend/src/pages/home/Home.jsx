@@ -164,6 +164,7 @@ const Home = () => {
 
             <Alert className={'bg-danger bg-opacity-10 my-2'} severity="error">
                 Внимание! Тинькофф решил отключить терминалы без объяснения причин.
+                Разбираюсь в чем дело, простите.
                 Пишите в личку в <a href={'https://t.me/artasov'} target={'_blank'}
                                     className={'text-decoration-none'}>tg</a> для оплаты.
             </Alert>
