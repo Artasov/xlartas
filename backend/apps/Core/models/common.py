@@ -1,11 +1,17 @@
 from django.db.models import (
-    ImageField, CharField, Model, FileField
+    ImageField, CharField, Model, FileField, TextChoices, BooleanField
 )
 
 
 class Theme(Model):
+    class ThemeMode(TextChoices):
+        LIGHT = 'light', 'light'
+        DARK = 'dark', 'Dark'
+
     name = CharField(max_length=100)
-    bg_image = ImageField(upload_to='images/theme/background/')
+    mode = CharField(max_length=10, choices=ThemeMode.choices)
+    bg_image = ImageField(upload_to='images/theme/background/', null=True, blank=True)
+    is_default = BooleanField(default=False)
 
 
 class File(Model):

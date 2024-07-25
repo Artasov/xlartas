@@ -6,4 +6,4 @@ from apps.Core.models.common import Theme
 class ThemeSerializer(ModelSerializer):
     class Meta:
         model = Theme
-        fields = ('name', 'bg_image')
+        fields = '__all__'

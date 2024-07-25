@@ -28,9 +28,7 @@ def check_captcha(token: str, user_ip: str) -> bool:
 
 def captcha_required(controller):
     async def wrapper(request, *args, **kwargs):
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        captcha_token = body.get('captchaToken', '')
+        captcha_token = request.data.get('captchaToken', '')
         request.is_captcha_valid = check_captcha(
             token=captcha_token,
             user_ip=get_client_ip(request)

@@ -21,7 +21,8 @@ class CompanyDataAdmin(admin.ModelAdmin):
 
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image_preview')
+    list_display = ('name', 'mode', 'is_default', 'image_preview')
+    list_editable = ('mode', 'is_default')
 
     def image_preview(self, obj):
         if obj.bg_image:

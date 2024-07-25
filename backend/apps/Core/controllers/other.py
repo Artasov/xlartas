@@ -17,5 +17,4 @@ log = logging.getLogger('base')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 async def theme_list(request) -> Response:
-    serializer = ThemeSerializer(await aall(Theme.objects), many=True)
-    return Response(await serializer.adata)
+    return Response(await ThemeSerializer(await aall(Theme.objects), many=True).adata)

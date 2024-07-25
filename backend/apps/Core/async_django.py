@@ -22,13 +22,28 @@ def aatomic(fun, *args, **kwargs) -> callable:
     return wrapper
 
 
+async def aget_or_none(queryset, *args, **kwargs):
+    """ Return object or None """
+    try:
+        return await queryset.aget(*args, **kwargs)
+    except queryset.model.DoesNotExist:
+        return None
+
+
 async def arelated(model_object, related_field_name: str):
     return await sync_to_async(getattr)(model_object, related_field_name, None)
 
 
-async def aall(queryset) -> list: 
+async def aall(queryset) -> list:
     return await sync_to_async(list)(queryset.all())
 
 
 async def afilter(queryset, *args, **kwargs) -> list:
+    """
+    This function is used to filter objects...
+    :param queryset:
+    :param args:
+    :param kwargs:
+    :return: List of ...
+    """
     return await sync_to_async(list)(queryset.filter(*args, **kwargs))

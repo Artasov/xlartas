@@ -19,7 +19,7 @@ class Order(TypedDict):
 
 @acontroller('Get software data by name')
 @api_view(('GET',))
-@permission_classes([IsAuthenticated])
+@permission_classes((IsAuthenticated,))
 async def current_user_orders(request) -> Response:
     user: User = request.user
     user_orders = await get_orders(user_id=user.id)

@@ -13,7 +13,9 @@ class ActionsMail(TypedDict):
 
 class ActionTypes(TextChoices):
     SIGNUP = 'signup', 'Sign Up'
-    RESET_PASSWORD = 'reset_password'
+    RESET_PASSWORD = 'reset_password', 'Reset Password'
+    SURVEY_ACCESS = 'survey_access', 'Survey Access'
+    AUTO_CREATED_USER = 'auto_created_user', 'Auto Created User'
 
 
 ActionsMails = {
@@ -24,6 +26,14 @@ ActionsMails = {
     ActionTypes.RESET_PASSWORD: ActionsMail(
         subject='xlartas | Reset password',
         text='This is the confirmation code for reset password at xlartas.ru'
+    ),
+    ActionTypes.SURVEY_ACCESS: ActionsMail(
+        subject='xlartas | Survey Access',
+        text='Access to survey granted xlartas.ru. Survey link below.'
+    ),
+    ActionTypes.AUTO_CREATED_USER: ActionsMail(
+        subject='xlartas | User auto-create',
+        text='An account on xlartas.ru was automatically created for you. Below are your account login details.'
     )
 }
 

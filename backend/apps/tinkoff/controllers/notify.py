@@ -30,8 +30,7 @@ class TinkoffPaymentNotification(TypedDict):
 
 
 def generate_token(parameters: TinkoffPaymentNotification) -> str:
-    params = {k: v for k, v in parameters.items() if
-              k not in ('Shops', 'DATA', 'Receipt', 'Token')}
+    params = {k: v for k, v in parameters.items() if k not in ('Shops', 'DATA', 'Receipt', 'Token')}
 
     for key in params.keys():
         if params[key] == 'True':

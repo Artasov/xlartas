@@ -1,6 +1,5 @@
 import logging
 import os
-import os
 from datetime import timedelta
 from pathlib import Path
 from pathlib import Path
@@ -69,12 +68,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django.contrib.sites',
+    'corsheaders',
 
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'adrf',
-    'corsheaders',
     'channels',
     'django_celery_beat',
 
@@ -83,6 +82,8 @@ INSTALLED_APPS = [
     'apps.shop',
     'apps.tinkoff',
     'apps.referral',
+    'apps.surveys',
+    'apps.filehost',
 
 ]
 TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
@@ -99,14 +100,14 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
-    'DEFAULT_THROTTLE_CLASSES' if not DEV else '': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '70/minute',
-        'user': '70/minute',
-    }
+    # 'DEFAULT_THROTTLE_CLASSES' if not DEV else '': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '600/minute',
+    #     'user': '600/minute',
+    # }
 }
 REST_USE_JWT = True
 SIMPLE_JWT = {
@@ -123,7 +124,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://localhost:3000',
 ]
-
+# REFERRER_POLICY = 'origin'
 MIDDLEWARE = [
     # 'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -402,35 +403,35 @@ TEMPLATES = [
     },
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-if DEV:
-    import mimetypes
-
-    mimetypes.add_type("application/javascript", ".js", True)
-    INTERNAL_IPS = ('127.0.0.1',)
-    MIDDLEWARE += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-    INSTALLED_APPS += (
-        'debug_toolbar',
-    )
-    DEBUG_TOOLBAR_PANELS = [
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.logging.LoggingPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
-    ]
-
-    DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': False,
-    }
+# if DEV:
+#     import mimetypes
+#
+#     mimetypes.add_type("application/javascript", ".js", True)
+#     INTERNAL_IPS = ('127.0.0.1',)
+#     MIDDLEWARE += (
+#         'debug_toolbar.middleware.DebugToolbarMiddleware',
+#     )
+#     INSTALLED_APPS += (
+#         'debug_toolbar',
+#     )
+#     DEBUG_TOOLBAR_PANELS = [
+#         'debug_toolbar.panels.versions.VersionsPanel',
+#         'debug_toolbar.panels.timer.TimerPanel',
+#         'debug_toolbar.panels.settings.SettingsPanel',
+#         'debug_toolbar.panels.headers.HeadersPanel',
+#         'debug_toolbar.panels.request.RequestPanel',
+#         'debug_toolbar.panels.sql.SQLPanel',
+#         'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+#         'debug_toolbar.panels.templates.TemplatesPanel',
+#         'debug_toolbar.panels.cache.CachePanel',
+#         'debug_toolbar.panels.signals.SignalsPanel',
+#         'debug_toolbar.panels.logging.LoggingPanel',
+#         'debug_toolbar.panels.redirects.RedirectsPanel',
+#     ]
+#
+#     DEBUG_TOOLBAR_CONFIG = {
+#         'INTERCEPT_REDIRECTS': False,
+#     }
 
 LANGUAGES = [
     ('en', _('English')),

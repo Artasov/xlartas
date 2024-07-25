@@ -22,12 +22,11 @@ from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponseNotAllowed, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.Core.async_django import AsyncAtomicContextManager
 from apps.Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
 from apps.Core.models.user import User
 from apps.Core.services.mail.base import send_text_email
@@ -187,21 +186,24 @@ def acontroller(name=None, log_time=False, auth=False) -> callable:
             if log_time:
                 start_time = time()
 
-            if auth:
-                if not request.user.is_authenticated:
-                    return redirect(settings.LOGIN_URL)
+            # if auth:
+            #     user = await sync_to_async(lambda: request.user)()
+            #     print(user)
+            #     is_authenticated = await sync_to_async(lambda: request.user.is_authenticated)()
+            #     print('0-0')
+            #     print(is_authenticated)
+            #     if not is_authenticated:
+            #         return redirect(settings.LOGIN_URL)
 
             if settings.DEBUG:
-                async with AsyncAtomicContextManager():
-                    return await fn(request, *args, **kwargs)
+                return await fn(request, *args, **kwargs)
             else:
                 try:
                     if log_time:
                         end_time = time()
                         elapsed_time = end_time - start_time
                         log.info(f"Execution time of {fn_name}: {elapsed_time:.2f} seconds")
-                    async with AsyncAtomicContextManager():
-                        return await fn(request, *args, **kwargs)
+                    return await fn(request, *args, **kwargs)
                 except Exception as e:
                     log.critical(f"ERROR in {fn_name}: {str(e)}", exc_info=True)
                     send_text_email(
@@ -255,4 +257,11 @@ def controller(name=None, log_time=False, auth=False) -> callable:
 
 
 async def aget_object_or_404(klass, *args, **kwargs):
-    return await klass.objects.aget(*args, **kwargs)
+    return await sync_to_async(get_object_or_404)(klass, *args, **kwargs)
+
+
+async def aget(klass, *args, **kwargs):
+    try:
+        return await klass.objects.aget(*args, **kwargs)
+    except Exception:
+        return None

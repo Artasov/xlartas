@@ -2,9 +2,10 @@ import logging
 
 from adrf.decorators import api_view
 from asgiref.sync import sync_to_async
+from django.contrib.auth import alogout
 from rest_framework import status
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.Core.exceptions.base import CoreExceptions
@@ -16,6 +17,17 @@ from apps.Core.services.base import acontroller
 from apps.captcha.yandex import captcha_required
 
 log = logging.getLogger('base')
+
+
+@acontroller('Logout')
+@api_view(('POST',))
+@permission_classes((IsAuthenticated,))
+async def logout(request) -> Response:
+    try:
+        await alogout(request)
+    except Exception:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_200_OK)
 
 
 @acontroller('Sign Up')

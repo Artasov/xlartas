@@ -1,0 +1,37 @@
+.wmde-markdown
+  font-family: Nunito, sans-serif
+  background-color: transparent !important
+
+  .copied
+    display: none !important
+
+  pre
+    background-color: transparent !important
+
+    code
+      &::-webkit-scrollbar
+        width: 0
+        height: 0
+      -ms-overflow-style: none
+      overflow: -moz-scrollbars-none
+
+  .token.class-name
+    color: #7b92ff
+
+  .token.number
+    color: #4eaeff
+// THEMES
+._dark
+  .wmde-markdown
+    color: #fff !important
+
+    h1, h2, h3, h4, h5, h6
+      border-bottom-color: #fff7 !important
+
+
+._light
+  .wmde-markdown
+    color: #000 !important
+
+    h1, h2, h3, h4, h5, h6
+      border-bottom-color: #0007 !important

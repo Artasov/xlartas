@@ -23,3 +23,4 @@ class Command(BaseCommand):
                     call_command('loaddata', os.path.join(directory, filename))
                 except Exception as e:
                     print(f'{filename} Not Loaded')
+                    print(e)

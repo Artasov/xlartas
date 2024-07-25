@@ -1,0 +1,93 @@
+@import "../../../../../../static/base/css/vars"
+.btn-submit
+  transition: all .3s ease
+  appearance: none
+  border: none
+  border-radius: 0.3rem
+  padding: 0.35rem 1rem
+  background: $serviceElBg
+  box-shadow: 0 0 0.3rem #00000055
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: center
+  cursor: wait
+  width: min-content
+  margin: 0 auto
+  position: relative
+  &:hover
+    filter: invert(1)
+
+  &:not(.loading)
+    cursor: pointer
+
+.spinner
+  --size: 1.25rem
+  --offset-r: calc(var(--size) * -1)
+  --offset-l: 0
+  --opacity: 0
+
+  position: absolute
+  display: inline-flex
+  height: var(--size)
+  width: var(--size)
+  top: calc(50% - var(--size) / 2)
+  left: .8rem
+  box-sizing: border-box
+  border: 0.125rem solid rgba(white, 0.333)
+  border-top-color: white
+  border-radius: 50%
+  opacity: var(--opacity)
+  transition: 0.25s
+
+  @keyframes load
+    to
+      transform: rotate(360deg)
+
+.btn-submit.loading
+  padding-left: 2.5rem
+
+.btn-submit.loading .spinner
+  //--width: 1em
+  --offset-r: 0.333rem
+  --offset-l: -0.333rem
+  --opacity: 1
+  animation: 0.666s load infinite
+
+//.btn-submit
+//  padding: 10px 20px
+//  background-color: blue
+//  color: white
+//  border: none
+//  border-radius: 2em
+//  font-size: 1.75em
+//  display: inline-flex
+//  align-items: center
+//  cursor: wait
+//  position: relative
+//
+//  &.loading
+//    .spinner
+//      --size: 1.25em
+//      --offset-r: calc(var(--size) * -1)
+//      --offset-l: 0
+//      --opacity: 0
+//
+//      position: absolute
+//      left: 50%
+//      top: 50%
+//      transform: translate(-50%, -50%)
+//      display: inline-flex
+//      height: var(--size)
+//      width: var(--size)
+//      box-sizing: border-box
+//      border: 0.125em solid rgba(white, 0.333)
+//      border-top-color: white
+//      border-radius: 50%
+//      opacity: var(--opacity)
+//      animation: 0.666s load infinite
+//
+//      @keyframes load
+//        to
+//          transform: rotate(360deg) translate(-50%, -50%)
+

@@ -7,7 +7,7 @@ from apps.shop.services.subscription import UserInfo, get_user_subscriptions
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes((IsAuthenticated,))
 async def current_user_subscriptions(request) -> Response:
     user = request.user
     user_info = UserInfo(

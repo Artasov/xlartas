@@ -37,6 +37,11 @@ class CoreExceptions:
         default_detail = {'message': _('Correct the mistakes.')}
         default_code = 'wrong_filled_fields'
 
+    class AccessDenied(APIException):
+        status_code = status.HTTP_403_FORBIDDEN
+        default_detail = {'message': _('Access denied.')}
+        default_code = 'access_denied'
+
     class CaptchaInvalid(APIException):
         status_code = status.HTTP_403_FORBIDDEN
         default_detail = {'message': _('Looks like there was a captcha error. Please try again.')}
