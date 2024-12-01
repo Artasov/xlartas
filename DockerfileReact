@@ -3,6 +3,6 @@ FROM node:21-alpine
 COPY ./frontend /srv
 COPY ./frontend /srv
 WORKDIR /srv
-RUN npm install
+RUN npm install --legacy-peer-deps
 #RUN npm run build
 
