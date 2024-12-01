@@ -12,23 +12,37 @@ import urllib.parse
 import urllib.request
 from datetime import timedelta, datetime
 from time import time
+from typing import Optional, TYPE_CHECKING
 
 import aiohttp
-from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponseNotAllowed, HttpResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
 
+from apps.Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
 from apps.Core.services.mail.base import send_text_email
 
 log = logging.getLogger('base')
+
+if TYPE_CHECKING:
+    from apps.Core.models.user import User
+
+
+async def get_user_by_email_or_name(identifier: str) -> tuple[Optional['User'], str]:
+    """Retrieve User by email or username. Returns User and empty string or None and error message."""
+    from apps.Core.models.user import User
+    try:
+        lookup_field = 'email' if '@' in identifier else 'username'
+        return await User.objects.aget(**{lookup_field: identifier}), ''
+    except User.DoesNotExist:
+        return None, USER_EMAIL_NOT_EXISTS if '@' in identifier else USER_USERNAME_NOT_EXISTS
 
 
 def add_user_to_group(user, group_name):
@@ -261,3 +275,7 @@ def controller(name=None, log_time=False, auth=False) -> callable:
         return inner
 
     return decorator
+
+
+async def aget_object_or_404(klass, *args, **kwargs):
+    return await klass.objects.aget(*args, **kwargs)
