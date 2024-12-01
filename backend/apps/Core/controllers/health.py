@@ -11,7 +11,7 @@ from apps.Core.controllers.other import log
 @api_view(('GET',))
 def health_test(request) -> Response:
     # Check Redis
-    if not get_redis_connection().flushall():
+    if not get_redis_connection():
         log.error('Redis have not yet come to life')
         return Response('Redis error', status=status.HTTP_503_SERVICE_UNAVAILABLE)
     try:

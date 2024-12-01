@@ -12,7 +12,6 @@ import urllib.parse
 import urllib.request
 from datetime import timedelta, datetime
 from time import time
-from typing import Optional, Tuple
 
 import aiohttp
 from asgiref.sync import sync_to_async
@@ -27,8 +26,6 @@ from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.Core.error_messages import USER_EMAIL_NOT_EXISTS, USER_USERNAME_NOT_EXISTS
-from apps.Core.models.user import User
 from apps.Core.services.mail.base import send_text_email
 
 log = logging.getLogger('base')
@@ -45,15 +42,24 @@ def get_timedelta(**kwargs) -> datetime:
 
 
 def get_client_ip(request):
+    """
+    Возвращает IP-адрес клиента из запроса.
+
+    @param request: Объект запроса, содержащий метаданные запроса.
+    @return: IP-адрес клиента.
+    """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+        return x_forwarded_for.split(',')[0]
 
 
 def google_captcha_validation(request):
+    """
+    Проверяет валидность Google reCAPTCHA.
+
+    @param request: Объект запроса, содержащий метаданные запроса.
+    @return: Результат проверки reCAPTCHA в виде словаря.
+    """
     recaptcha_response = request.POST.get('g-recaptcha-response')
     url = 'https://www.google.com/recaptcha/api/siteverify'
     values = {
@@ -68,10 +74,24 @@ def google_captcha_validation(request):
 
 
 def decrease_by_percentage(num: int, percent: int) -> int:
+    """
+    Уменьшает число на заданный процент.
+
+    @param num: Исходное число, которое нужно уменьшить.
+    @param percent: Процент, на который нужно уменьшить число.
+    @return: Число, уменьшенное на заданный процент.
+    """
     return round(num * (1 - percent / 100))
 
 
 def get_plural_form_number(number: int, forms: tuple):
+    """
+    Определяет правильную форму слова в зависимости от числа.
+
+    @param number: Число, для которого нужно определить форму слова.
+    @param forms: Кортеж из трех форм слова (например, ('минуту', 'минуты', 'минут')).
+    @return: Правильная форма слова в зависимости от числа.
+    """
     """get_plural_form_number(minutes, ('минуту', 'минуты', 'минут'))"""
     if number % 10 == 1 and number % 100 != 11:
         return forms[0]
@@ -81,16 +101,13 @@ def get_plural_form_number(number: int, forms: tuple):
         return forms[2]
 
 
-async def get_user_by_email_or_name(identifier: str) -> Tuple[Optional[User], str]:
-    """Retrieve User by email or username. Returns User and empty string or None and error message."""
-    try:
-        lookup_field = 'email' if '@' in identifier else 'username'
-        return await User.objects.aget(**{lookup_field: identifier}), ''
-    except User.DoesNotExist:
-        return None, USER_EMAIL_NOT_EXISTS if '@' in identifier else USER_USERNAME_NOT_EXISTS
-
-
 def telegram_verify_hash(auth_data):
+    """
+    Проверяет хэш данных аутентификации Telegram.
+
+    @param auth_data: Словарь с данными аутентификации, полученными от Telegram.
+    @return: True, если хэш действителен и данные не устарели, иначе False.
+    """
     check_hash = auth_data['hash']
 
     del auth_data['hash']
@@ -108,7 +125,7 @@ def telegram_verify_hash(auth_data):
     return True
 
 
-async def check_recaptcha_is_valid(recaptcha_response: str) -> bool:
+async def check_google_captcha_is_valid(recaptcha_response: str) -> bool:
     if not recaptcha_response:
         return False
 
@@ -185,16 +202,6 @@ def acontroller(name=None, log_time=False, auth=False) -> callable:
             log.info(f'Async Controller: {request.method} | {fn_name}')
             if log_time:
                 start_time = time()
-
-            # if auth:
-            #     user = await sync_to_async(lambda: request.user)()
-            #     print(user)
-            #     is_authenticated = await sync_to_async(lambda: request.user.is_authenticated)()
-            #     print('0-0')
-            #     print(is_authenticated)
-            #     if not is_authenticated:
-            #         return redirect(settings.LOGIN_URL)
-
             if settings.DEBUG:
                 return await fn(request, *args, **kwargs)
             else:
@@ -254,14 +261,3 @@ def controller(name=None, log_time=False, auth=False) -> callable:
         return inner
 
     return decorator
-
-
-async def aget_object_or_404(klass, *args, **kwargs):
-    return await sync_to_async(get_object_or_404)(klass, *args, **kwargs)
-
-
-async def aget(klass, *args, **kwargs):
-    try:
-        return await klass.objects.aget(*args, **kwargs)
-    except Exception:
-        return None

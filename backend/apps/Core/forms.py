@@ -2,13 +2,13 @@ from django import forms
 
 from apps.Core.error_messages import PASSWORDS_NOT_EQUAL, RECAPTCHA_INVALID
 from apps.Core.models.user import User
-from apps.Core.services.base import get_user_by_email_or_name, check_recaptcha_is_valid
+from apps.Core.services.base import get_user_by_email_or_name, check_google_captcha_is_valid
 
 
 class FormWithRecaptchaValidator(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
-        # if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
+        # if not check_google_captcha_is_valid(self.data.get('g-recaptcha-response')):
         #     raise forms.ValidationError(RECAPTCHA_INVALID)
         return cleaned_data
 
@@ -16,7 +16,7 @@ class FormWithRecaptchaValidator(forms.Form):
 class ModelFormWithRecaptchaValidator(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
-        if not check_recaptcha_is_valid(self.data.get('g-recaptcha-response')):
+        if not check_google_captcha_is_valid(self.data.get('g-recaptcha-response')):
             raise forms.ValidationError(RECAPTCHA_INVALID)
         return cleaned_data
 

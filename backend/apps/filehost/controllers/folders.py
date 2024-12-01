@@ -17,8 +17,7 @@ from apps.filehost.serializers import AFolderSerializer, FileSerializer
 @permission_classes((IsAuthenticated,))
 async def get_folder_by_id(request) -> Response:
     folder_id = request.data.get('id')
-    if not folder_id:
-        raise IdWasNotProvided()
+    if not folder_id: raise IdWasNotProvided()
     folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
     serializer = AFolderSerializer(folder)
     return Response(serializer.data, status=status.HTTP_200_OK)
