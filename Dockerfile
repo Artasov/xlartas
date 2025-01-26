@@ -9,7 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apk update && \
-    apk add --no-cache dos2unix libpq-dev netcat-openbsd chrony postgresql-client && \
+    apk add --no-cache dos2unix libpq-dev netcat-openbsd chrony postgresql-client gcc python3-dev musl-dev linux-headers && \
     python -m pip install --upgrade pip && \
     pip install poetry && \
     poetry config virtualenvs.create false && \
