@@ -4,7 +4,7 @@ from adjango.managers.base import AUserManager
 from adjango.utils.base import is_email, is_phone, phone_format
 
 if TYPE_CHECKING:
-    from core.models.user import User
+    from apps.core.models.user import User
 
 
 class UserManager(AUserManager):

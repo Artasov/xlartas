@@ -79,7 +79,6 @@ try:
         'apps.core',
         'apps.shop',
         'apps.tinkoff',
-        'apps.referral',
         'apps.surveys',
         'apps.filehost',
 
