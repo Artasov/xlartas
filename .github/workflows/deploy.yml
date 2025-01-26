@@ -34,9 +34,10 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -v root@82.97.240.216 << 'EOF'
+            cd /root/xlartas
             git restore --staged .
             git restore .
-          
+            
             git pull
           
             chmod -R 777 ./build_images.sh

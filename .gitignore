@@ -173,3 +173,5 @@ poetry.lock
 /static/
 /.idea/.gitignore
 /.idea
+/deploy_key
+/deploy_key.pub
