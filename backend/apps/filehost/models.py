@@ -4,12 +4,11 @@ from django.db.models import (
 )
 from django.utils.crypto import get_random_string
 
-from apps.core.models.user import User
 
 
 class Folder(AModel):
     name = CharField(max_length=255)
-    user = ForeignKey(User, related_name='folders', on_delete=CASCADE)
+    user = ForeignKey('core.User', related_name='folders', on_delete=CASCADE)
     parent = ForeignKey('self', null=True, blank=True, related_name='subfolders', on_delete=CASCADE)
     tags = ManyToManyField('Tag', through='FolderTag')
 
@@ -20,7 +19,7 @@ class Folder(AModel):
 class File(AModel):
     name = CharField(max_length=255)
     file = FileField(upload_to='files/')
-    user = ForeignKey(User, related_name='files', on_delete=CASCADE)
+    user = ForeignKey('core.User', related_name='files', on_delete=CASCADE)
     folder = ForeignKey(Folder, null=True, blank=True, related_name='files', on_delete=CASCADE)
     tags = ManyToManyField('Tag', through='FileTag')
 
@@ -35,7 +34,7 @@ class File(AModel):
 
 class Tag(AModel):
     name = CharField(max_length=255)
-    user = ForeignKey(User, related_name='tags', on_delete=CASCADE)
+    user = ForeignKey('core.User', related_name='tags', on_delete=CASCADE)
     color = CharField(max_length=9, default='#ffffff')
 
     def __str__(self):
@@ -55,7 +54,7 @@ class FolderTag(AModel):
 class Access(AModel):
     folder = ForeignKey(Folder, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     file = ForeignKey(File, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
-    user = ForeignKey(User, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
+    user = ForeignKey('core.User', related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     is_public = BooleanField(default=False)
     public_link = CharField(max_length=255, blank=True, null=True, unique=True)
 
