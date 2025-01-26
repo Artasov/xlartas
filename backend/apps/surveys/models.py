@@ -1,3 +1,4 @@
+from adjango.models import AModel
 from django.db.models import (
     Model, CharField, PositiveSmallIntegerField,
     SlugField, TextField, BooleanField, ForeignKey,
@@ -5,11 +6,11 @@ from django.db.models import (
     ManyToManyField, SmallIntegerField
 )
 
-from apps.Core.models.common import Theme
-from apps.Core.models.user import User
+from apps.core.models.common import Theme
+from apps.core.models.user import User
 
 
-class Survey(Model):
+class Survey(AModel):
     title = CharField(max_length=255)
     slug = SlugField(max_length=255, unique=True, blank=True, null=True)
     description = TextField(help_text='Use Markdown for formatting', blank=True, null=True)
@@ -34,7 +35,7 @@ class Survey(Model):
         return self.title
 
 
-class Question(Model):
+class Question(AModel):
     class QuestionType(TextChoices):
         CHOICES = 'choices', 'Multiple Choice'
         TEXT = 'text', 'Text'
@@ -53,7 +54,7 @@ class Question(Model):
         return self.text
 
 
-class Choice(Model):
+class Choice(AModel):
     title = CharField(max_length=255, null=True, blank=True)
     points = SmallIntegerField(default=0)
     question = ForeignKey(Question, related_name='choices', on_delete=CASCADE)
@@ -64,7 +65,7 @@ class Choice(Model):
         return self.text
 
 
-class SurveyAccess(Model):
+class SurveyAccess(AModel):
     survey = ForeignKey(Survey, related_name='accesses', on_delete=CASCADE)
     user = ForeignKey(User, related_name='survey_accesses', on_delete=CASCADE)
     attempts_allowed = PositiveSmallIntegerField(default=1)
@@ -77,7 +78,7 @@ class SurveyAccess(Model):
         return f"{self.user.username} - {self.survey.title}"
 
 
-class SurveyAttempt(Model):
+class SurveyAttempt(AModel):
     survey = ForeignKey(Survey, related_name='attempts', on_delete=CASCADE)
     user = ForeignKey(User, related_name='survey_attempts', on_delete=CASCADE)
     start_time = DateTimeField(auto_now_add=True)
@@ -87,7 +88,7 @@ class SurveyAttempt(Model):
         return f"{self.user.username} - {self.survey.title} - Attempt {self.id}"
 
 
-class QuestionAttempt(Model):
+class QuestionAttempt(AModel):
     attempt = ForeignKey(SurveyAttempt, related_name='question_attempts', on_delete=CASCADE)
     question = ForeignKey(Question, related_name='attempts', on_delete=CASCADE)
     start_time = DateTimeField(auto_now_add=True)

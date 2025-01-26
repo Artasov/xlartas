@@ -1,4 +1,4 @@
-from apps.Core.exceptions.base import CoreExceptions
+from apps.core.exceptions.base import CoreExceptions
 from apps.shop.services.orders import execute_tinkoff_deposit_order
 from apps.tinkoff.models import TinkoffDepositOrder
 

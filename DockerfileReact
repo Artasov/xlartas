@@ -1,8 +1,8 @@
-FROM node:21-alpine
+FROM node:22-alpine
 
-COPY ./frontend /srv
-COPY ./frontend /srv
 WORKDIR /srv
+COPY ./frontend/package*.json ./
 RUN npm install --legacy-peer-deps
-#RUN npm run build
-
+COPY ./frontend ./
+COPY ./frontend/build-and-copy.sh /srv/build-and-copy.sh
+RUN chmod +x /srv/build-and-copy.sh

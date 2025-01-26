@@ -4,8 +4,6 @@ import sys
 import requests
 from django.conf import settings
 
-from apps.Core.services.base import get_client_ip
-
 
 def check_captcha(token: str, user_ip: str) -> bool:
     resp = requests.get(
@@ -31,10 +29,10 @@ def captcha_required(controller):
         captcha_token = request.data.get('captchaToken', '')
         request.is_captcha_valid = check_captcha(
             token=captcha_token,
-            user_ip=get_client_ip(request)
+            user_ip=request.ip
         )
         print(f'{request.is_captcha_valid=}')
-        print(f'{get_client_ip(request)=}')
+        print(f'{request.ip=}')
         return await controller(request, *args, **kwargs)
 
     return wrapper

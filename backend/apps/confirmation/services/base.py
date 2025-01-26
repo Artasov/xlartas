@@ -3,8 +3,8 @@ from typing import Optional
 
 from django.utils.timezone import now
 
-from apps.Core.models.user import User
-from apps.Core.services.base import get_timedelta
+from apps.core.models.user import User
+from apps.core.services.base import get_timedelta
 from apps.confirmation.exceptions.base import (
     ConfirmationCodeOutdated,
     ConfirmationCodeInvalid,

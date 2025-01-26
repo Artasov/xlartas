@@ -1,6 +1,7 @@
 from datetime import timedelta
 from typing import TypedDict
 
+from adjango.models import AModel
 from django.db.models import (
     TextField, ForeignKey, Model, CharField,
     ImageField, IntegerField, BooleanField,
@@ -11,8 +12,9 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.Core.models.common import File
-from apps.Core.models.user import User
+from apps.core.models.common import File
+from apps.core.models.user import User
+from shop.services.subscription import SoftwareSubscriptionService
 
 
 class SoftwareProductInfo(TypedDict):
@@ -34,7 +36,7 @@ class SoftwareProductInfo(TypedDict):
     subscriptions: list[dict]
 
 
-class SoftwareProduct(Model):
+class SoftwareProduct(AModel):
     name = CharField(max_length=50)
     long_name = CharField(max_length=100, blank=True)
     version = CharField(max_length=5, blank=True)
@@ -59,7 +61,7 @@ class SoftwareProduct(Model):
         return f'{self.name}'
 
 
-class SubscriptionTimeCategory(Model):
+class SubscriptionTimeCategory(AModel):
     name = CharField(max_length=30)
     hours = PositiveSmallIntegerField()
 
@@ -67,7 +69,7 @@ class SubscriptionTimeCategory(Model):
         return f'{self.name}'
 
 
-class SoftwareSubscription(Model):
+class SoftwareSubscription(AModel, SoftwareSubscriptionService):
     name = CharField(max_length=30)
     software = ForeignKey(SoftwareProduct, on_delete=CASCADE, related_name='subscriptions')
     time_category = ForeignKey(SubscriptionTimeCategory, on_delete=CASCADE)
@@ -82,7 +84,7 @@ class SoftwareSubscriptionInfo(TypedDict):
     amount: int
 
 
-class UserSoftwareSubscription(Model):
+class UserSoftwareSubscription(AModel):
     user = ForeignKey(User, on_delete=CASCADE)
     software = ForeignKey(SoftwareProduct, on_delete=CASCADE)
     is_test_period_activated = BooleanField(default=False, verbose_name='Is tested')
@@ -98,14 +100,14 @@ def NowPlus30Days():
     return timezone.now() + timedelta(days=30)
 
 
-class PromoGroup(Model):
+class PromoGroup(AModel):
     name = CharField(max_length=150)
 
     def __str__(self):
         return f'{self.name}'
 
 
-class Promo(Model):
+class Promo(AModel):
     class PromoType(TextChoices):
         DISCOUNT = 'discount', _('Discount')
         BALANCE = 'balance', _('Balance')
@@ -125,7 +127,7 @@ class Promo(Model):
         return f'{self.code}'
 
 
-class BaseOrder(Model):
+class BaseOrder(AModel):
     class OrderTypes(TextChoices):
         DEPOSIT = 'deposit', 'Deposit'
         SOFTWARE = 'software', 'Software'

@@ -10,11 +10,11 @@ from rest_framework.status import (
     HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST
 )
 
-from apps.Core.async_django import arelated, aget_or_none, afilter
-from apps.Core.exceptions.base import CoreExceptions
-from apps.Core.exceptions.user import UserExceptions
-from apps.Core.models.user import User
-from apps.Core.services.base import acontroller
+from apps.core.async_django import arelated, aget_or_none, afilter
+from apps.core.exceptions.base import CoreExceptions
+from apps.core.exceptions.user import UserExceptions
+from apps.core.models.user import User
+from adjango.adecorators import acontroller
 from apps.surveys.exceptions.base import (
     CurrentUserNotSurveyAuthor, SurveyIdWasNotProvided,
     ChangeCompletedSurveyAttemptForbidden, HaveNoMoreAttemptsLeftToPass

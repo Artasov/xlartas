@@ -1,0 +1,33 @@
+{% extends 'apps.core/base.html' %}
+{% load static %}
+{% load apps.core_tags %}
+{% load apps.core_tags %}
+
+{% block title %}xlartas | About{% endblock %}
+
+{% block meta_keywords %}About{% endblock %}
+{% block meta_description %}About us{% endblock %}
+{% block meta_og_description %}О нас{% endblock %}
+{% block meta_twitter_description %}About us{% endblock %}
+
+{% block content %}
+    <div id="content" class="container d-none jus  fcc flex-grow-1"
+         data-bs-theme="dark" style="max-width: 500px;">
+        <div class="row p-3 pt-2 my-3 disable-tap-and-selection overflow-x-hidden">
+            <h1 class="text-white fs-1 fw-bold text-center mb-3">ABOUT</h1>
+            <p class="fs-6 text-light text-opacity-75">
+                В <a href="{% url 'shop:catalog' %}">каталоге</a> представлены наши продукты.<br>
+                Создаём web-приложения на заказ под ключ.<br><br>
+                ТЕХНОЛОГИИ<br>
+                Python Django DRF Celery Django Channels Docker Redis Minio Html Sass JS MySQL PostgreSQL WS
+            </p>
+            <h2 class="fs-5 text-dark-emphasis">Связь с администратором.</h2>
+            <ul class="fs-6 text-light text-opacity-75 ms-4">
+                <li><a href="{% get_company_data "tg" %}">Telegram</a></li>
+                <li>ivanhvalevskey@gmail.com</li>
+            </ul>
+            <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+            <a href="{% url 'terms_and_conditions' %}">Terms And Conditions</a>
+        </div>
+    </div>
+{% endblock %}

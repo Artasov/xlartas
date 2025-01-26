@@ -1,4 +1,4 @@
-from adrf.serializers import ModelSerializer
+from adjango.aserializers import AModelSerializer
 from rest_framework import serializers
 
 from apps.surveys.models import (
@@ -7,43 +7,43 @@ from apps.surveys.models import (
 )
 
 
-class ChoiceSerializer(ModelSerializer):
+class ChoiceSerializer(AModelSerializer):
     class Meta:
         model = Choice
         exclude = ('is_correct',)
 
 
-class ChoiceEditSerializer(ModelSerializer):
+class ChoiceEditSerializer(AModelSerializer):
     class Meta:
         model = Choice
         fields = '__all__'
 
 
-class QuestionSerializer(ModelSerializer):
+class QuestionSerializer(AModelSerializer):
     class Meta:
         model = Question
         exclude = ('correct_text_answer',)
 
 
-class QuestionEditSerializer(ModelSerializer):
+class QuestionEditSerializer(AModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
 
 
-class SurveySerializer(ModelSerializer):
+class SurveySerializer(AModelSerializer):
     class Meta:
         model = Survey
         fields = '__all__'
 
 
-class SurveyAccessSerializer(ModelSerializer):
+class SurveyAccessSerializer(AModelSerializer):
     class Meta:
         model = SurveyAccess
         fields = '__all__'
 
 
-class SurveyAttemptSerializer(ModelSerializer):
+class SurveyAttemptSerializer(AModelSerializer):
     class Meta:
         model = SurveyAttempt
         fields = '__all__'

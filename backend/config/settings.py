@@ -1,62 +1,59 @@
 import logging
-import os
 from datetime import timedelta
+from os import environ, makedirs
+from os.path import join
+from os.path import join, exists
 from pathlib import Path
 from pathlib import Path
 
+from adjango.utils.common import is_celery
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
-from transliterate.utils import _
+
+from utils.handle_exceptions import handling_function
+
+# Environment helper
+env = environ.get
+MAIN_PROCESS = True if env('RUN_MAIN') != 'true' else False
 
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=join(BASE_DIR.parent, '.env'))
+APPS_DIR = join(BASE_DIR, 'apps')
+FRONTEND_DIR = BASE_DIR.parent / 'frontend'
 BASE_DATA_DIR = BASE_DIR / 'data'
-
-# Environment helper
-env = os.environ.get
-
-dotenv_path = os.path.join(BASE_DIR, '../.env.production')
-load_dotenv(dotenv_path=dotenv_path)
+SECRET_KEY = env('SECRET_KEY')
 
 # Basic settings
 DEV = bool(int(env('DEV', 0)))
 DEBUG = bool(int(env('DEBUG', 0)))
-SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ['localhost', env('MAIN_DOMAIN', '127.0.0.1')] + env('ALLOWED_HOSTS', '').split(',')
-ROOT_URLCONF = 'apps.Core.urls'
+INTENSIVE_HEALTH_TEST = bool(int(env('INTENSIVE_HEALTH_TEST')))
+ROOT_URLCONF = 'apps.core.urls'
 
 # Security and domain settings
-HTTPS = bool(int(env('HTTPS', 0)))
+HTTPS = bool(int(env('HTTPS')))
+SITE_ID = int(env('SITE_ID'))
 MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
-DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{"" if HTTPS else ":8000"}'
+DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{":8000" if DEV else ""}'
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'web',
+    'life-help.ru',
+    '92.53.105.149',
+    MAIN_DOMAIN,
+]
+MINIO_USE = bool(int(env('MINIO_USE')))
+POSTGRES_USE = bool(int(env('POSTGRES_USE')))
 
-# Database and cache
-REDIS_BASE_URL = 'redis://127.0.0.1:6379/'
-REDIS_URL = env('REDIS_URL', REDIS_BASE_URL + '0')
-REDIS_CACHE_URL = env('REDIS_CACHE_URL', REDIS_BASE_URL + '1')
-DJANGO_REDIS_LOGGER = 'RedisLogger'
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-# SESSION_ENGINE = 'redis_sessions.session'
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_CACHE_ALIAS = "default"
-SESSION_COOKIE_AGE = 86400  # seconds 2 days
-# SESSION_SAVE_EVERY_REQUEST = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [f'http{"s" if not DEV else ""}://{MAIN_DOMAIN}']
-
-# if HTTPS:
-#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#     SECURE_SSL_REDIRECT = True
-
-# REFERRER_POLICY = 'origin'
-DATA_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# REFERRER_POLICY = 'origin'
 WSGI_APPLICATION = None  # 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
+TIME_ZONE = 'Europe/Moscow'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
-AUTH_USER_MODEL = 'Core.User'
+AUTH_USER_MODEL = 'core.User'
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
@@ -74,11 +71,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'adrf',
+    'adjango',
     'channels',
     'django_celery_beat',
 
     'apps.confirmation',
-    'apps.Core',
+    'apps.core',
     'apps.shop',
     'apps.tinkoff',
     'apps.referral',
@@ -86,20 +84,93 @@ INSTALLED_APPS = [
     'apps.filehost',
 
 ]
-TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
-TINKOFF_PASSWORD_KEY = "Password"
-TINKOFF_PASSWORD = env('TINKOFF_PASSWORD')
+if MINIO_USE: INSTALLED_APPS.append('django_minio_backend')
+
+# Database
+if POSTGRES_USE:
+    DATABASES = {
+        'default': {
+            'ENGINE': env('DB_ENGINE'),
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# Redis
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = int(env('REDIS_PORT'))
+REDIS_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+REDIS_CACHE_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
+REDISUI_URL_PREFIX = 'redis/'
+REDISUI_CONTROLLERS_SETTINGS = {
+    'auth_required': True,
+    'log_name': False,
+    'not_auth_redirect': f'/admin/login/?next=/{REDISUI_URL_PREFIX}'
+}
+
+# adjango
+ADJANGO_BACKENDS_APPS = BASE_DIR / 'apps'
+ADJANGO_FRONTEND_APPS = BASE_DIR.parent / 'frontend' / 'src' / 'Components'
+ADJANGO_APPS_PREPATH = 'apps.'
+ADJANGO_UNCAUGHT_EXCEPTION_HANDLING_FUNCTION = handling_function
+ADJANGO_CONTROLLERS_LOGGER_NAME = 'global'
+ADJANGO_CONTROLLERS_LOGGING = False
+ADJANGO_EMAIL_LOGGER_NAME = 'email'
+# ADJANGO_IP_LOGGER = 'global'
+ADJANGO_IP_META_NAME = 'HTTP_X_FORWARDED_FOR'
+IS_CELERY = is_celery()
+
+# Silk
+SILKY_PYTHON_PROFILER = False
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True
+SILKY_META = True
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'adjango.middleware.IPAddressMiddleware',
+    'logui.middleware.RequestResponseLoggerMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {'hosts': [(REDIS_HOST, REDIS_PORT)], },
+    },
+}
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ],
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
     # 'DEFAULT_THROTTLE_CLASSES' if not DEV else '': [
     #     'rest_framework.throttling.AnonRateThrottle',
     #     'rest_framework.throttling.UserRateThrottle'
@@ -117,90 +188,102 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+# Cache
+CACHALOT_ENABLED = bool(int(env('CACHALOT_ENABLED')))
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_CACHE_URL,
+        'OPTIONS': {'CLIENT_CLASS': 'django_redis.client.DefaultClient', }
+    }
+}
+USER_AGENTS_CACHE = 'default'
+
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://localhost:3000',
 ]
-# REFERRER_POLICY = 'origin'
-MIDDLEWARE = [
-    # 'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-SITE_ID = int(env('SITE_ID'))
 
 GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = f'{DOMAIN_URL}/google-callback/'
-
 DISCORD_CLIENT_ID = env('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = env('DISCORD_CLIENT_SECRET')
 DISCORD_REDIRECT_URI = f'{DOMAIN_URL}/discord-callback/'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_EMAIL_UNIQUE = True
-# ACCOUNT_EMAIL_VERIFICATION = "none"
-# ACCOUNT_RATE_LIMITS = {
-#     'login_failed': '5/m'
-# }
-# ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
-# LOGIN_REDIRECT_URL = 'main'  # default to /accounts/profile
-# ACCOUNT_USERNAME_REQUIRED = True
-# SOCIALACCOUNT_AUTO_SIGNUP = True
-# SOCIALACCOUNT_LOGIN_ON_GET = True
-# ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
-# ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# ACCOUNT_FORMS = {
-#     'login': 'allauth.ACCOUNT.forms.SignInForm',
-#     'signup': 'allauth.ACCOUNT.forms.SignupForm',
-#     'add_email': 'allauth.ACCOUNT.forms.AddEmailForm',
-#     'change_password': 'allauth.ACCOUNT.forms.ChangePasswordForm',
-#     'set_password': 'allauth.ACCOUNT.forms.SetPasswordForm',
-#     'reset_password': 'allauth.ACCOUNT.forms.ResetPasswordForm',
-#     'reset_password_from_key': 'allauth.ACCOUNT.forms.ResetPasswordKeyForm',
-#     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
-# }
 
-# Static and media files
-STATICFILES_FINDERS = [
+# Logging
+LOGS_DIR = join(BASE_DIR, 'logs')
+LOGUI_URL_PREFIX = 'logui/'
+if not exists(LOGS_DIR): makedirs(LOGS_DIR)
+LOGUI_REQUEST_RESPONSE_LOGGER_NAME = 'global'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {asctime}: {message}',
+            'datefmt': '%d-%m %H:%M:%S',
+            'style': '{',
+        },
+        'request': {
+            'format': '{levelname} {asctime}: {message} - {method} {url} {status}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'daily_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': join(LOGS_DIR, 'django.log'),
+            'when': 'midnight',  # Ротация происходит в полночь
+            'interval': 1,  # Интервал ротации — 1 день
+            'backupCount': 356,  # Хранить логи за последний год
+            'formatter': 'simple',
+            'encoding': 'utf8',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'tbank': {
+            'handlers': ['daily_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'global': {
+            'handlers': ['daily_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+# Static | Media
+STATICFILES_DIRS = (
+    FRONTEND_DIR / 'build' / 'static',
+    BASE_DIR / 'static'
+)
+STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR.parent, 'frontend/build/static'),
-]
-MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = None
-MINIO_USE_HTTPS = None
-
-if DEV:
-    STATIC_ROOT = BASE_DIR.parent / 'static'
-    MEDIA_ROOT = BASE_DIR.parent / 'media'
-    STATIC_URL = '/static/'
-    MEDIA_URL = '/media/'
-else:
-    STATIC_ROOT = None
-    MEDIA_ROOT = None
-    STATIC_URL = f'{DOMAIN_URL}/static/'
-    MEDIA_URL = f'{DOMAIN_URL}/media/'
-
+)
+MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = True
+MINIO_USE_HTTPS = False
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = BASE_DIR.parent / 'static'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
+if MINIO_USE:
     MINIO_ENDPOINT = 'minio:9000'
-    MINIO_EXTERNAL_ENDPOINT = f'{MAIN_DOMAIN}'  # For external access use Docker hostname and MinIO port
+    MINIO_EXTERNAL_ENDPOINT = MAIN_DOMAIN
     MINIO_ACCESS_KEY = env('MINIO_ROOT_USER')
     MINIO_SECRET_KEY = env('MINIO_ROOT_PASSWORD')
     MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = bool(int(env('MINIO_EXTERNAL_ENDPOINT_USE_HTTPS') or 0))
@@ -226,12 +309,33 @@ else:
     STATICFILES_STORAGE = 'django_minio_backend.models.MinioBackendStatic'
     FILE_UPLOAD_MAX_MEMORY_SIZE = 65536
 
+# dj-endpoints
+EP_NOT_AUTH_REDIRECT_URL = '/admin/login/?next=/endpoints/'
+EP_EXCLUDED_APPS = ('logui', 'swagger', 'rest_framework')
+EP_CUSTOM_LINKS = [
+    {'name': 'Site', 'url': f'{DOMAIN_URL}'},
+    {'name': 'Logs', 'url': f'{DOMAIN_URL}/{LOGUI_URL_PREFIX}'},
+    {'name': 'Silk', 'url': f'{DOMAIN_URL}/silk/'},
+    {'name': 'Redis', 'url': f'{DOMAIN_URL}/{REDISUI_URL_PREFIX}'},
+    {'name': 'Swagger', 'url': f'{DOMAIN_URL}/swagger/'},
+    {'name': 'Nginx', 'url': 'http://92.53.105.149:81/'},
+    {'name': 'Minio', 'url': 'https://minio.life-helpsy.ru/'},
+    {'name': 'Pg Admin', 'url': 'https://pgadmin.life-helpsy.ru/'},
+    {'name': 'Flower', 'url': 'https://flower.life-helpsy.ru/flower/'},
+]
+
 # Celery
-CELERY_BROKER_URL = REDIS_URL
-CELERY_RESULT_BACKEND = REDIS_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+timezone = TIME_ZONE
+CELERY_BROKER_URL = REDIS_BROKER_URL
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400 * 30}
+result_backend = REDIS_BROKER_URL
+accept_content = ['application/json']
+task_serializer = 'json'
+result_serializer = 'json'
+task_default_queue = 'default'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_TASK_EAGER_PROPAGATES = True
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -281,102 +385,6 @@ DEFAULT_DEPOSIT_AMOUNT = 100
 
 YANDEX_RECAPTCHA_SECRET_KEY = env('YANDEX_RECAPTCHA_SECRET_KEY')
 
-if DEV:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': env('SQL_ENGINE'),
-            'NAME': env('SQL_DATABASE_NAME'),
-            'USER': env('SQL_USER'),
-            'PASSWORD': env('SQL_PASSWORD'),
-            'HOST': env('SQL_HOST'),
-            'PORT': env('SQL_PORT'),
-        }
-    }
-
-CACHES = {
-    'default': {
-        "BACKEND": "django_redis.cache.RedisCache",
-        'LOCATION': REDIS_CACHE_URL,
-        'OPTIONS': {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            # "hosts": [('redis', 6379)],
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
-# Logging
-LOG_PREFIX = env('LOG_PREFIX', 'server')
-logs_prod_dir = os.path.join(BASE_DIR.parent, 'logs/django_prod', LOG_PREFIX)
-logs_dev_dir = os.path.join(BASE_DIR.parent, 'logs/django_dev', LOG_PREFIX)
-logs_sql_prod_dir = os.path.join(logs_prod_dir, 'sql')
-logs_sql_dev_dir = os.path.join(logs_dev_dir, 'sql')
-
-for path in [logs_prod_dir, logs_dev_dir, logs_sql_prod_dir, logs_sql_dev_dir]:
-    os.makedirs(path, exist_ok=True)
-
-if not DEV:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'base_formatter': {
-                'format': '{levelname} {asctime} {module}: {message}',
-                'style': '{',
-            }
-        },
-        'handlers': {
-            'file_sql': {
-                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
-                'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': os.path.join(logs_sql_dev_dir if DEBUG and DEV else logs_sql_prod_dir, 'sql.log'),
-                'when': 'midnight',
-                'backupCount': 30,  # How many days to keep logs
-                'formatter': 'base_formatter',
-                'encoding': 'utf-8',
-            },
-            'file': {
-                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
-                'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': os.path.join(logs_dev_dir if DEBUG and DEV else logs_prod_dir, 'django.log'),
-                'when': 'midnight',
-                'backupCount': 30,  # How many days to keep logs
-                'formatter': 'base_formatter',
-                'encoding': 'utf-8',
-            },
-            'console': {
-                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
-                'class': 'logging.StreamHandler',
-                'formatter': 'base_formatter',
-            },
-        },
-        'loggers': {
-            'base': {
-                'handlers': ['console', 'file'],
-                'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
-                'propagate': True,
-            },
-            # 'django.db.backends': {  # All SQL
-            #     'level': 'DEBUG' if DEBUG and DEV else 'WARNING',
-            #     'handlers': ['file_sql'],
-            #     'propagate': False,
-            # },
-        },
-    }
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
@@ -389,7 +397,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'apps' / 'Core' / 'templates',
-            os.path.join(BASE_DIR.parent, 'frontend/build')
+            join(BASE_DIR.parent, 'frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -402,47 +410,22 @@ TEMPLATES = [
         },
     },
 ]
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# if DEV:
-#     import mimetypes
-#
-#     mimetypes.add_type("application/javascript", ".js", True)
-#     INTERNAL_IPS = ('127.0.0.1',)
-#     MIDDLEWARE += (
-#         'debug_toolbar.middleware.DebugToolbarMiddleware',
-#     )
-#     INSTALLED_APPS += (
-#         'debug_toolbar',
-#     )
-#     DEBUG_TOOLBAR_PANELS = [
-#         'debug_toolbar.panels.versions.VersionsPanel',
-#         'debug_toolbar.panels.timer.TimerPanel',
-#         'debug_toolbar.panels.settings.SettingsPanel',
-#         'debug_toolbar.panels.headers.HeadersPanel',
-#         'debug_toolbar.panels.request.RequestPanel',
-#         'debug_toolbar.panels.sql.SQLPanel',
-#         'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-#         'debug_toolbar.panels.templates.TemplatesPanel',
-#         'debug_toolbar.panels.cache.CachePanel',
-#         'debug_toolbar.panels.signals.SignalsPanel',
-#         'debug_toolbar.panels.logging.LoggingPanel',
-#         'debug_toolbar.panels.redirects.RedirectsPanel',
-#     ]
-#
-#     DEBUG_TOOLBAR_CONFIG = {
-#         'INTERCEPT_REDIRECTS': False,
-#     }
 
-LANGUAGES = [
+# Locale
+LANGUAGES = (
     ('en', _('English')),
-    # ('ru', _('Russian')),
-    # Добавьте другие языки по необходимости
-]
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
+    ('ru', _('Russian')),
+)
+LOCALE_PATHS = (join(BASE_DIR, 'locale'),)
 
-log = logging.getLogger('base')
+# TBank
+TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
+TINKOFF_PASSWORD = env('TINKOFF_PASSWORD')
+
+# Other
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+log = logging.getLogger('global')
 
 log.info('#####################################')
 log.info('########## Server Settings ##########')

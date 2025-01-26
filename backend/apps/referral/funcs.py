@@ -3,7 +3,7 @@ from django.db import transaction
 from apps.referral.models import RefLinking
 from apps.shop.funcs import add_license_time
 from apps.shop.models import UserSoftwareSubscription, SoftwareProduct
-from apps.Core.models.user import User
+from apps.core.models.user import User
 
 
 @transaction.atomic

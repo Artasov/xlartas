@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
 from django.db.models import Sum, Prefetch
 
-from apps.Core.async_django import aall
+from apps.core.async_django import aall
 from apps.shop.models import (
     UserSoftwareSubscription, SoftwareProduct, SoftwareProductInfo,
     SoftwareSubscriptionInfo, SoftwareSubscription

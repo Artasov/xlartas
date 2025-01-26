@@ -3,19 +3,18 @@ from typing import TypedDict
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
+from django.shortcuts import aget_object_or_404
 from django.utils.timezone import now
 
-from apps.Core.async_django import arelated, afilter
-from apps.Core.services.base import aget_object_or_404
+from apps.core.async_django import arelated, afilter
 from apps.shop.exceptions.base import (
     InsufficientFundsError, TestPeriodAlreadyUsed,
     TestPeriodActivationFailed
 )
-from apps.shop.models import (
-    UserSoftwareSubscription, SoftwareSubscription,
-    SoftwareProduct, SoftwareSubscriptionOrder,
-    BaseOrder
-)
+
+
+class SoftwareSubscriptionService:
+    pass
 
 
 class SoftwareSmallInfo(TypedDict):
@@ -54,6 +53,9 @@ async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
     :return: A list of UserSoftwareSubscriptionInfo instances, each
     representing detailed information about a user's software subscription.
     """
+    from apps.shop.models import (
+        UserSoftwareSubscription
+    )
     subscriptions: list[UserSoftwareSubscription] = await afilter(
         UserSoftwareSubscription.objects, user=user
     )
@@ -82,7 +84,14 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
     :param subscription_id: software subscription id.
     :return:
     """
-    sub: SoftwareSubscription = await aget_object_or_404(SoftwareSubscription, id=subscription_id)
+    from apps.shop.models import (
+        UserSoftwareSubscription, SoftwareSubscription,
+        SoftwareSubscriptionOrder,
+        BaseOrder
+    )
+    sub: SoftwareSubscription = await SoftwareSubscription.objects.agetorn(
+        SoftwareSubscription.DoesNotExist, id=subscription_id
+    )
     if user.balance < sub.amount:
         raise InsufficientFundsError()
 
@@ -112,6 +121,9 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
 
 
 async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_id: int):
+    from apps.shop.models import (
+        UserSoftwareSubscription, SoftwareProduct
+    )
     try:
         software = await aget_object_or_404(SoftwareProduct, id=software_id)
         user_sub: UserSoftwareSubscription

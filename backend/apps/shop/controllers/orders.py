@@ -5,8 +5,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.models.user import User
-from apps.Core.services.base import acontroller
+from apps.core.models.user import User
+from adjango.adecorators import acontroller
 from apps.shop.services.orders import get_orders
 
 

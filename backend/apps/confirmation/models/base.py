@@ -1,9 +1,10 @@
 import uuid
 from typing import TypedDict
 
+from adjango.models import AModel
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE, UUIDField, BooleanField, TextChoices
 
-from apps.Core.models.user import User
+from apps.core.models.user import User
 
 
 class ActionsMail(TypedDict):
@@ -38,7 +39,7 @@ ActionsMails = {
 }
 
 
-class ConfirmationCode(Model):
+class ConfirmationCode(AModel):
     user = ForeignKey(User, on_delete=CASCADE, related_name='confirmation_codes')
     code = UUIDField(default=uuid.uuid4, editable=False, unique=True)
     action = CharField(max_length=20, choices=ActionTypes.choices)

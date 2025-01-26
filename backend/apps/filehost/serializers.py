@@ -11,7 +11,7 @@ class AFolderSerializer(AModelSerializer):
         fields = '__all__'
 
 
-class FolderSerializer(ModelSerializer):
+class FolderSerializer(AModelSerializer):
     class Meta:
         model = Folder
         fields = '__all__'
@@ -28,7 +28,7 @@ class FileSerializer(AModelSerializer):
         return obj.file.size if obj.file else None
 
 
-class AccessSerializer(ModelSerializer):
+class AccessSerializer(AModelSerializer):
     class Meta:
         model = Access
         fields = '__all__'
@@ -40,7 +40,7 @@ class ATagSerializer(AModelSerializer):
         fields = '__all__'
 
 
-class TagSerializer(ModelSerializer):
+class TagSerializer(AModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'

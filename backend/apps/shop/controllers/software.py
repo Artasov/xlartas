@@ -1,4 +1,7 @@
+from adjango.adecorators import acontroller
+from adjango.aserializers import ASerializer
 from adrf.decorators import api_view
+from adrf.generics import aget_object_or_404
 from adrf.serializers import Serializer
 from django.http import FileResponse
 from django.utils import timezone
@@ -7,9 +10,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.async_django import arelated
-from apps.Core.exceptions.base import CoreExceptions
-from apps.Core.services.base import aget_object_or_404, acontroller
+from apps.core.async_django import arelated
+from apps.core.exceptions.base import CoreExceptions
 from apps.shop.exceptions.base import (
     NoValidLicenseFound, SoftwareFileNotFound, SoftwareByNameNotFound
 )
@@ -42,7 +44,7 @@ async def software_by_name(request, name) -> Response:
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
 async def software_test_activate_current_user(request) -> Response:
-    class SoftwareIdSerializer(Serializer):
+    class SoftwareIdSerializer(ASerializer):
         software_id = serializers.IntegerField()
 
     serializer = SoftwareIdSerializer(data=request.data)
@@ -59,7 +61,7 @@ async def software_test_activate_current_user(request) -> Response:
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
 async def software_subscribe_current_user(request) -> Response:
-    class SubscriptionIdSerializer(Serializer):
+    class SubscriptionIdSerializer(ASerializer):
         software_subscription_id = serializers.IntegerField()
 
     serializer = SubscriptionIdSerializer(data=request.data)

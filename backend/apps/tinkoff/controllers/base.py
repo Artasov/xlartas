@@ -1,6 +1,8 @@
 from _decimal import Decimal, ROUND_HALF_UP
+
+from adjango.adecorators import acontroller
+from adjango.aserializers import AModelSerializer
 from adrf.decorators import api_view
-from adrf.serializers import ModelSerializer
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import status
@@ -8,14 +10,13 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.Core.exceptions.base import CoreExceptions
-from apps.Core.services.base import acontroller
 from apps.captcha.yandex import captcha_required
+from apps.core.exceptions.base import CoreExceptions
 from apps.shop.models import BaseOrder
 from apps.tinkoff.models import TinkoffDepositOrder
 
 
-class TinkoffDepositOrderSerializer(ModelSerializer):
+class TinkoffDepositOrderSerializer(AModelSerializer):
     class Meta:
         model = TinkoffDepositOrder
         fields = ('amount',)

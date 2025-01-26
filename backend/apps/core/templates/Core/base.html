@@ -1,0 +1,19 @@
+{% extends 'apps.core/base_document.html' %}
+{% block body %}
+    <body class="bg-dark">
+    <img class="bg-image" id="bg-image" src="{% static 'Core/img/theme_bg.jpg' %}" alt="#">
+
+    <div id="wrapper" class="wrapper d-flex flex-column overflow-hidden position-relative">
+        {% include 'Core/includes/header.html' %}
+        <main class="no_scrollbar overflow-y-scroll d-flex flex-column flex-grow-1" style="margin-top: 66px;">
+            <div id="loading_spinner_block">
+                <div id="loading_spinner_block-help">
+                    <div id="loading_spinner" class="spinner-border fs-4 text-white-50 opacity-50" role="status"></div>
+                </div>
+            </div>
+            {% block content %}{% endblock %}</main>
+        {% include 'Core/includes/footer.html' %}
+    </div>
+    {% block scripts %}{% endblock %}
+    </body>
+{% endblock %}

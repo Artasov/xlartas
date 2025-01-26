@@ -1,3 +1,4 @@
+from adjango.aserializers import ASerializer
 from adrf.decorators import api_view
 from adrf.serializers import Serializer
 from asgiref.sync import sync_to_async
@@ -6,12 +7,12 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.confirmations.generators import generate_confirm_code_and_send
-from apps.Core.confirmations.manager import CoreConfirmation
-from apps.Core.exceptions.base import CoreExceptions
-from apps.Core.exceptions.user import UserExceptions
-from apps.Core.models.user import User
-from apps.Core.services.base import acontroller
+from apps.core.confirmations.generators import generate_confirm_code_and_send
+from apps.core.confirmations.manager import CoreConfirmation
+from apps.core.exceptions.base import CoreExceptions
+from apps.core.exceptions.user import UserExceptions
+from apps.core.models.user import User
+from adjango.adecorators import acontroller
 from apps.confirmation.exceptions.base import UserAlreadyConfirmed
 from apps.confirmation.messages.success import Responses
 from apps.confirmation.models.base import ActionTypes
@@ -21,7 +22,7 @@ from apps.confirmation.models.base import ActionTypes
 @api_view(('POST',))
 @permission_classes([AllowAny])
 async def new_confirm_code(request) -> Response:
-    class GenerateConfirmationCodeSerializer(Serializer):
+    class GenerateConfirmationCodeSerializer(ASerializer):
         email = serializers.CharField(min_length=2, max_length=30)
         action = serializers.CharField(min_length=2, max_length=30)
 

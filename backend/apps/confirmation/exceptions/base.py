@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.exceptions import APIException
-from transliterate.utils import _
+from django.utils.translation import gettext_lazy as _
 
 
 class ConfirmationCodeNotFound(APIException):

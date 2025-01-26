@@ -1,12 +1,13 @@
+from adjango.models import AModel
 from django.db.models import (
     Model, CharField, ForeignKey, CASCADE, BooleanField, FileField, ManyToManyField
 )
 from django.utils.crypto import get_random_string
 
-from apps.Core.models.user import User
+from apps.core.models.user import User
 
 
-class Folder(Model):
+class Folder(AModel):
     name = CharField(max_length=255)
     user = ForeignKey(User, related_name='folders', on_delete=CASCADE)
     parent = ForeignKey('self', null=True, blank=True, related_name='subfolders', on_delete=CASCADE)
@@ -16,7 +17,7 @@ class Folder(Model):
         return self.name
 
 
-class File(Model):
+class File(AModel):
     name = CharField(max_length=255)
     file = FileField(upload_to='files/')
     user = ForeignKey(User, related_name='files', on_delete=CASCADE)
@@ -32,7 +33,7 @@ class File(Model):
         return self.name
 
 
-class Tag(Model):
+class Tag(AModel):
     name = CharField(max_length=255)
     user = ForeignKey(User, related_name='tags', on_delete=CASCADE)
     color = CharField(max_length=9, default='#ffffff')
@@ -41,17 +42,17 @@ class Tag(Model):
         return self.name
 
 
-class FileTag(Model):
+class FileTag(AModel):
     file = ForeignKey(File, related_name='file_tags', on_delete=CASCADE)
     tag = ForeignKey(Tag, related_name='file_tags', on_delete=CASCADE)
 
 
-class FolderTag(Model):
+class FolderTag(AModel):
     folder = ForeignKey(Folder, related_name='folder_tags', on_delete=CASCADE)
     tag = ForeignKey(Tag, related_name='folder_tags', on_delete=CASCADE)
 
 
-class Access(Model):
+class Access(AModel):
     folder = ForeignKey(Folder, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     file = ForeignKey(File, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     user = ForeignKey(User, related_name='accesses', on_delete=CASCADE, null=True, blank=True)

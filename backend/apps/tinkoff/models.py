@@ -2,7 +2,7 @@ import uuid
 
 from django.db.models import Model, CharField
 
-from apps.Core.models.user import User
+from apps.core.models.user import User
 from apps.shop.models import BaseOrder
 
 

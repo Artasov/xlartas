@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.Core.models.user import User
+from apps.core.models.user import User
 
 
 class RefLinking(models.Model):

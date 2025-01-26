@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from transliterate.utils import _
+from django.utils.translation import gettext_lazy as _
 
 SUCCESS_CONFIRMATION_CODE_SENT = _('Confirmation code has been successfully sent to your email.')
 

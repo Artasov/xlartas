@@ -9,9 +9,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.Core.error_messages import LOGIN_OR_SECRET_KEY_WRONG, MULTI_ACCOUNT_PROHIBITED, PRODUCT_NOT_EXISTS, \
+from apps.core.error_messages import LOGIN_OR_SECRET_KEY_WRONG, MULTI_ACCOUNT_PROHIBITED, PRODUCT_NOT_EXISTS, \
     LICENSE_TIMEOUT, SOMETHING_WRONG, HWID_NOT_EQUAL
-from apps.Core.models.user import User
+from apps.core.models.user import User
 from apps.shop.models import SoftwareProduct, UserSoftwareSubscription
 
 

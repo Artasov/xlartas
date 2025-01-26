@@ -1,16 +1,6 @@
-from django.contrib import admin, messages
-from django.db import transaction
+from django.contrib import admin
 
-from .funcs import execute_software_order
 from .models import *
-
-
-@admin.action(description='Execute selected orders')
-def execute_selected_orders(request, queryset):
-    with transaction.atomic():
-        for order in queryset:
-            execute_software_order(order)
-    messages.success(request, f'Executed {queryset.count()} orders successfully.')
 
 
 @admin.register(SoftwareSubscriptionOrder)
@@ -18,7 +8,6 @@ class SoftwareSubscriptionOrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'software', 'is_completed', 'created_at')
     search_fields = ('user__username',)
     save_on_top = True
-    actions = (execute_selected_orders,)
     ordering = ('-created_at',)
 
 

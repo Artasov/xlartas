@@ -1,11 +1,11 @@
 import logging
 
-from apps.Core.async_django import afilter, arelated
-from apps.Core.models.user import User
+from apps.core.async_django import afilter, arelated
+from apps.core.models.user import User
 from apps.shop.models import SoftwareSubscriptionOrder
 from apps.tinkoff.models import TinkoffDepositOrder
 
-log = logging.getLogger('base')
+log = logging.getLogger('global')
 
 
 async def get_orders(*args, **kwargs) -> list:
