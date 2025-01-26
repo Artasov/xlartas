@@ -101,11 +101,11 @@ async def get_survey_by_slug(request, slug) -> Response:
 @permission_classes((IsAuthenticated,))
 async def get_current_user_surveys(request) -> Response:
     user = request.user
-    surveys = await aall(Survey.objects.filter(
+    surveys = await Survey.objects.afilter(
         Q(is_public=True) |
         Q(author=user) |
         Q(accesses__user=user)
-    ).distinct())
+    ).distinct()
     serializer = SurveySerializer(surveys, many=True)
     data = []
     for survey in serializer.data:

@@ -30,7 +30,7 @@ async def get_survey_accesses(request) -> Response:
     survey = await aget_object_or_404(Survey, id=survey_id)
     if await arelated(survey, 'author') != request.user:
         raise CurrentUserNotSurveyAuthor()
-    accesses = await aall(SurveyAccess.objects.filter(survey=survey))
+    accesses = await SurveyAccess.objects.afilter(survey=survey)
     accesses_data = []
     for access in accesses:
         user = await arelated(access, 'user')

@@ -44,8 +44,8 @@ async def download_archive(request):
     archive_format = request.data.get('archive_format', 'zip')  # Default to zip
     user = request.user
 
-    folders = await aall(Folder.objects.filter(id__in=folder_ids, user=user))
-    files = await aall(File.objects.filter(id__in=file_ids, user=user))
+    folders = await Folder.objects.afilter(id__in=folder_ids, user=user)
+    files = await File.objects.afilter(id__in=file_ids, user=user)
 
     if not folders and not files:
         return Response({'error': 'No valid files or folders selected'}, status=status.HTTP_400_BAD_REQUEST)

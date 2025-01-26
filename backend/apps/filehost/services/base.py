@@ -104,7 +104,7 @@ async def create_archive(folders, files, archive_format='zip'):
 
 
 async def get_all_subfolders(folder):
-    subfolders = await aall(Folder.objects.filter(parent=folder))
+    subfolders = await Folder.objects.afilter(parent=folder)
     all_subfolders = list(subfolders)
     for subfolder in subfolders:
         all_subfolders += await get_all_subfolders(subfolder)

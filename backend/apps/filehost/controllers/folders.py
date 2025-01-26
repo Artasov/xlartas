@@ -28,8 +28,8 @@ async def get_folder_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_folders(request) -> Response:
-    folders = await aall(Folder.objects.filter(user=request.user))
-    serializer = AFolderSerializer(folders, many=True)
+    folders = await Folder.objects.afilter(user=request.user)
+    serializer = AFolderSerializer(await Folder.objects.afilter(user=request.user), many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -41,8 +41,8 @@ async def get_folder_content(request) -> Response:
     if not folder_id:
         raise IdWasNotProvided()
     folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
-    subfolders = await aall(Folder.objects.filter(parent=folder))
-    files = await aall(File.objects.filter(folder=folder))
+    subfolders = await Folder.objects.afilter(parent=folder)
+    files = await File.objects.afilter(folder=folder)
     subfolders_serializer = AFolderSerializer(subfolders, many=True)
     files_serializer = FileSerializer(files, many=True)
     return Response({

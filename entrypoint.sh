@@ -17,7 +17,7 @@ echo "Collecting static files"
 echo "-----------------------"
 python manage.py collectstatic --noinput &&
   echo "------------"
-echo "Migrating FAKE..."
+echo "Migrating..."
 echo "------------"
 
 python manage.py migrate

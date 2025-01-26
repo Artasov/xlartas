@@ -6,7 +6,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import aall
 from apps.core.exceptions.user import UserExceptions
 from apps.core.models.user import User
 from apps.filehost.models import Access
@@ -68,14 +67,14 @@ async def list_accesses(request):
     file_id = request.query_params.get('file_id')
 
     if folder_id:
-        accesses = await aall(Access.objects.filter(folder_id=folder_id))
+        accesses = await Access.objects.afilter(folder_id=folder_id)
     elif file_id:
-        accesses = await aall(Access.objects.filter(file_id=file_id))
+        accesses = await Access.objects.afilter(file_id=file_id)
     else:
         return Response({'error': 'Folder ID or File ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(
-        await sync_to_async(lambda: AccessSerializer(accesses, many=True).data)(),
+        await AccessSerializer(accesses, many=True).adata,
         status=status.HTTP_200_OK
     )
 

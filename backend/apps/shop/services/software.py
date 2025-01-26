@@ -1,19 +1,17 @@
 from asgiref.sync import sync_to_async
 from django.db.models import Sum, Prefetch
 
-from apps.core.async_django import aall
 from apps.shop.models import (
-    UserSoftwareSubscription, SoftwareProduct, SoftwareProductInfo,
+    UserSoftwareSubscription, SoftwareProductInfo,
     SoftwareSubscriptionInfo, SoftwareSubscription
 )
 
 
 async def get_softwares(queryset, **kwargs) -> list[SoftwareProductInfo]:
-    softwares = await aall(
-        queryset.filter(**kwargs).select_related('file').prefetch_related(
-            Prefetch('subscriptions', queryset=SoftwareSubscription.objects.select_related('time_category'))
-        )
-    )
+    softwares = await queryset.filter(**kwargs).select_related('file').prefetch_related(
+        Prefetch('subscriptions', queryset=SoftwareSubscription.objects.select_related('time_category'))
+    ).aall()
+
     softwares_info: list[SoftwareProductInfo] = []
     for software in softwares:
         if software.file and hasattr(software.file, 'file') and software.file.file:

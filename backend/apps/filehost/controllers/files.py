@@ -1,3 +1,4 @@
+from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from asgiref.sync import sync_to_async
@@ -7,13 +8,11 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import aall
 from apps.core.exceptions.base import CoreExceptions
-from adjango.adecorators import acontroller
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
-from apps.filehost.models import Folder, File
+from apps.filehost.models import File
 from apps.filehost.serializers import (
-    AFolderSerializer, FileSerializer
+    FileSerializer
 )
 
 
@@ -33,9 +32,11 @@ async def get_file_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_files(request) -> Response:
-    files = await aall(File.objects.filter(user=request.user))
-    serializer = FileSerializer(files, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(await FileSerializer(
+        await File.objects.afilter(
+            user=request.user
+        ), many=True
+    ).adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Add File')
@@ -56,8 +57,3 @@ async def add_file(request) -> Response:
         )
     file = await serializer.asave()
     return Response(FileSerializer(file).data, status=status.HTTP_201_CREATED)
-
-
-
-
-
