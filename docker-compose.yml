@@ -1,38 +1,4 @@
 services:
-#  nginxproxymanager:
-#    image: 'jc21/nginx-proxy-manager:latest'
-#    environment:
-#      - PUID=1001
-#      - PGID=1001
-#    volumes:
-#      - ./nginx/data/:/data
-#      - ./nginx/letsencrypt:/etc/letsencrypt
-#      - ./static:/data/static
-#      - ./media:/data/media
-#    networks:
-#      - net
-#    stop_grace_period: 5s
-#    deploy:
-#      replicas: 1
-#      update_config:
-#        parallelism: 1
-#        delay: 10s
-#      restart_policy:
-#        condition: on-failure
-#      labels:
-#        # Включаем обнаружение сервисов для traefik
-#        - "traefik.enable=true"
-#        # Указываем правило маршрутизации (замените на ваш домен)
-#        - "traefik.http.routers.nginxproxy.rule=Host(`life-helpsy.ru`)"
-#        # Traefik должен знать на какой порт идти внутри контейнера
-#        # По умолчанию NPM слушает на 81 для Dashboard и на 80 для фронтенда.
-#        # Предположим, что вы хотите пробрасывать запросы к основному сайту (80 порт) через Traefik:
-#        - "traefik.http.services.nginxproxy.loadbalancer.server.port=80"
-#
-#        # Если хотите также доступ к Dashboard на другом host или поддомене:
-#        # Например: "traefik.http.routers.nginxproxy-dash.rule=Host(`admin.life-helpsy.ru`)"
-#        # "traefik.http.routers.nginxproxy-dash.service=nginxproxy-dash"
-#        # "traefik.http.services.nginxproxy-dash.loadbalancer.server.port=81"
   nginxproxymanager:
     image: 'jc21/nginx-proxy-manager:latest'
     environment:
@@ -67,49 +33,6 @@ services:
       restart_policy:
         condition: on-failure
 
-  #      resources:
-  #        limits:
-  #          cpus: '1.0'
-  #          memory: 512M
-  #        reservations:
-  #          cpus: '0.5'
-  #          memory: 256M
-
-  #  postgres:
-  #    hostname: postgres
-  #    image: postgres:alpine
-  #    environment:
-  #      - POSTGRES_DB=${DB_NAME}
-  #      - POSTGRES_USER=${DB_USER}
-  #      - POSTGRES_PASSWORD=${DB_PASSWORD}
-  #      - POSTGRES_PORT=${DB_PORT}
-  #      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
-  #    ports:
-  #      - "5432:5432"
-  #    volumes:
-  #      - ./data/postgres/:/var/lib/postgresql/data
-  #    healthcheck:
-  #      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME} -h localhost" ]
-  #      timeout: 5s
-  #      retries: 10
-  #      start_period: 5s
-  #    networks:
-  #      - net
-  #    stop_grace_period: 5s
-  #    deploy:
-  #      replicas: 1
-  #      update_config:
-  #        parallelism: 1
-  #        delay: 10s
-  #      restart_policy:
-  #        condition: on-failure
-  #      resources:
-  #        limits:
-  #          cpus: '1.0'
-  #        reservations:
-  #          cpus: '0.5'
-  #          memory: 512M
-
   pgadmin:
     image: dpage/pgadmin4
     hostname: pgadmin
@@ -140,7 +63,6 @@ services:
     image: redis:alpine
     volumes:
       - ./data/redis/:/data
-    #      - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
     healthcheck:
@@ -203,13 +125,6 @@ services:
         delay: 30s
       restart_policy:
         condition: on-failure
-  #      resources:
-  #        limits:
-  #          cpus: '1.5'
-  #          memory: 2G
-  #        reservations:
-  #          cpus: '0.75'
-  #          memory: 1G
 
   celery:
     hostname: celery
@@ -260,14 +175,6 @@ services:
       restart_policy:
         condition: on-failure
 
-  #      resources:
-  #        limits:
-  #          cpus: '1.0'
-  #          memory: 1G
-  #        reservations:
-  #          cpus: '0.5'
-  #          memory: 512M
-
   flower:
     hostname: flower
     image: localhost:5000/iflower:latest
@@ -296,56 +203,6 @@ services:
           cpus: '0.25'
           memory: 128M
 
-#  minio:
-#    hostname: minio
-#    image: localhost:5000/iminio:latest
-#    ports:
-#      - "9000:9000"
-#      - "9001:9001"
-#    environment:
-#      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-#      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-#    volumes:
-#      - ./data/minio/data:/data
-#      - ./data/minio/config:/root/.minio
-#      - ./entrypoint_minio.sh:/opt/entrypoint_minio.sh
-#    networks:
-#      - net
-#    healthcheck:
-#      test: [ "CMD", "echo", "'MinIO is up'" ]
-#      timeout: 4s
-#      retries: 10
-#      start_period: 5s
-#    stop_grace_period: 10s
-#    deploy:
-#      replicas: 1
-#      update_config:
-#        parallelism: 1
-#        delay: 10s
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: '1.0'
-#          memory: 1G
-#        reservations:
-#          cpus: '0.5'
-#          memory: 256M
-
 networks:
   net:
     driver: overlay
-
-  #  react:
-  #    command: sh -c "npm run build-and-copy"
-  #    image: localhost:5000/ireact:latest
-  #    volumes:
-  #      - ./frontend/build/:/srv/real_build
-  #      - ./frontend/updated_build/:/srv/build
-  #    deploy:
-  #      replicas: 1
-  #      update_config:
-  #        parallelism: 1
-  #        delay: 10s
-  #      restart_policy:
-  #        condition: on-failure
