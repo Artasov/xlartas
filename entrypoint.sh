@@ -19,8 +19,8 @@ python manage.py collectstatic --noinput &&
   echo "------------"
 echo "Migrating FAKE..."
 echo "------------"
-# TODO: УЮРАТЬ
-python manage.py migrate --fake
+
+python manage.py migrate
 echo "----------------------------------"
 echo "Set public policy for media bucket"
 echo "----------------------------------"
