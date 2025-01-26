@@ -37,7 +37,6 @@ jobs:
             cd /root/xlartas
             git restore --staged .
             git restore .
-            
             git pull
           
             chmod -R 777 ./build_images.sh
