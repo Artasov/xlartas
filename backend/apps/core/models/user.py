@@ -19,6 +19,7 @@ def generate_referral_code() -> str:
 
 class User(AbstractUser):
     objects = UserManager()
+
     email = EmailField(unique=True)
     avatar = ImageField(upload_to='images/users/avatar/', blank=True)
     secret_key = CharField(max_length=20, default=generate_custom_key)
