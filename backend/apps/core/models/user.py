@@ -6,7 +6,7 @@ from django.db.models import (
     DecimalField, EmailField
 )
 
-from core.managers.user import UserManager
+from apps.core.managers.user import UserManager
 
 
 def generate_custom_key() -> str:

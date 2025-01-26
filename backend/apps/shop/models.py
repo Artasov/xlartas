@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.common import File
 from apps.core.models.user import User
-from shop.services.subscription import SoftwareSubscriptionService
+from apps.shop.services.subscription import SoftwareSubscriptionService
 
 
 class SoftwareProductInfo(TypedDict):
