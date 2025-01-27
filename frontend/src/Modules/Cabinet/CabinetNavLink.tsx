@@ -11,9 +11,10 @@ interface CabinetNavLinkProps {
     urlActiveMark?: string;
     onClick?: () => void;
     icon?: SvgIconComponent;
+    iconSx?: React.CSSProperties;
 }
 
-const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark, onClick, icon: Icon}) => {
+const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark, onClick, icon: Icon, iconSx}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const {theme} = useTheme();
@@ -48,7 +49,10 @@ const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark,
             {Icon && (
                 <Icon
                     className={`fs-4`}
-                    style={{color: theme.palette.text.primary70}}
+                    style={{
+                        color: theme.palette.text.primary70,
+                        ...iconSx
+                    }}
                 />
             )}
             <span

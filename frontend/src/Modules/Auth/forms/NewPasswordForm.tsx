@@ -33,9 +33,9 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
 
     useEffect(() => {
         if (isAuthenticated === false) {
-            navigate('/auth');
+            navigate('/');
             Message.info(
-                'Войдите в аккаунт по номеру телефона или ' +
+                'Войдите в аккаунт по ' +
                 'адресу электронной почты, внутри профиля' +
                 ' вы сможете сменить пароль.', 1, 8000);
         }

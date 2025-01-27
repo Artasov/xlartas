@@ -54,7 +54,7 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
 
         frontendLogout();
         Message.notAuthentication();
-        navigate('/auth');
+        navigate('/?auth_modal=True');
         hideMobileMenu();
     };
 

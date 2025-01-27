@@ -37,6 +37,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     // !isAuthenticated не значит, что авторизация не прошла, может она null и еще выполняется.
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {headerNavHeight, mainRef, isAuthModalOpen, setIsAuthModalOpen} = useNavigation();
+
     const {hideMobileMenu} = useNavigation();
 
     useEffect(() => {
@@ -65,13 +67,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         pprint(nextFromUrl ? nextFromUrl : next ? next : '/profile')
         navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
         hideMobileMenu();
+        setIsAuthModalOpen(false);
         Message.success('Добро пожаловать! Вы успешно вошли в свой аккаунт.');
     };
     const logout = () => axios.post('/api/v1/logout/')
         .then(() => {
             frontendLogout();
             Message.success('Успешный выход из системы.');
-            navigate('/auth');
+            navigate('/');
         }).catch(() => Message.error('Ошибка выхода из системы.'));
 
     const updateCurrentUser = async () => {

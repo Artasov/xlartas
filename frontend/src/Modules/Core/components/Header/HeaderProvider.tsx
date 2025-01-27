@@ -1,5 +1,11 @@
-// Core/components/Header/HeaderProvider.tsx
-import React, {createContext, ReactNode, RefObject, useContext, useRef, useState} from 'react';
+import React, {
+    createContext,
+    ReactNode,
+    RefObject,
+    useContext,
+    useRef,
+    useState,
+} from 'react';
 import Logo from "Core/Logo";
 import {useTheme} from "@mui/material/styles";
 import {useNavigate} from "react-router-dom";
@@ -27,13 +33,20 @@ interface HeaderContextType {
     setProfileBtnVisible: (visible: boolean) => void;
     logoContent: ReactNode;
     setLogoContent: (content: ReactNode) => void;
+    mainRef: RefObject<HTMLDivElement>;
+
+    // Добавляем состояние и сеттер для модалки авторизации
+    isAuthModalOpen: boolean;
+    setIsAuthModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
 
 export const useNavigation = () => {
     const context = useContext(HeaderContext);
-    if (!context) throw new Error('useNavigation must be used within a HeaderProvider');
+    if (!context) {
+        throw new Error('useNavigation must be used within a HeaderProvider');
+    }
     return context;
 };
 
@@ -52,14 +65,23 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
     const [headerNavHeight, setHeaderNavHeight] = useState<number>(70);
     const [profileBtnVisible, setProfileBtnVisible] = useState<boolean>(true);
 
+    const mainRef = useRef<HTMLDivElement>(null);
+
     const theme = useTheme();
     const navigate = useNavigate();
+
     const defaultLogoContent = (
-        <Logo onClick={() => {
-            navigate('/');
-        }} height={45}/>
+        <Logo
+            onClick={() => {
+                navigate('/');
+            }}
+            height={45}
+        />
     );
     const [logoContent, setLogoContent] = useState<ReactNode>(defaultLogoContent);
+
+    // ============ Добавляем управление модалкой ============
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     const openMenu = () => {
         if (headerNavRef.current) {
@@ -84,7 +106,9 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
             headerRef.current.classList.toggle('header-mobile-menu-active');
             if (headerRef.current.classList.contains('header-mobile-menu-active')) {
                 openMenu();
-            } else closeMenu();
+            } else {
+                closeMenu();
+            }
         }
     };
 
@@ -112,30 +136,35 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
     const disableDesktopMenu = () => setDesktopMenuEnabled(false);
 
     return (
-        <HeaderContext.Provider value={{
-            mobileNavigationContent,
-            desktopNavigationContent,
-            defaultLogoContent,
-            mobileMenuEnabled,
-            desktopMenuEnabled,
-            setMobileNavigationContent,
-            setDesktopNavigationContent,
-            toggleMobileMenu,
-            hideMobileMenu,
-            showMobileMenu,
-            enableMobileMenu,
-            disableMobileMenu,
-            enableDesktopMenu,
-            disableDesktopMenu,
-            headerNavRef,
-            headerRef,
-            headerNavHeight,
-            setHeaderNavHeight,
-            profileBtnVisible,
-            setProfileBtnVisible,
-            logoContent,
-            setLogoContent
-        }}>
+        <HeaderContext.Provider
+            value={{
+                mobileNavigationContent,
+                desktopNavigationContent,
+                defaultLogoContent,
+                mobileMenuEnabled,
+                desktopMenuEnabled,
+                setMobileNavigationContent,
+                setDesktopNavigationContent,
+                toggleMobileMenu,
+                hideMobileMenu,
+                showMobileMenu,
+                enableMobileMenu,
+                disableMobileMenu,
+                enableDesktopMenu,
+                disableDesktopMenu,
+                headerNavRef,
+                headerRef,
+                headerNavHeight,
+                setHeaderNavHeight,
+                profileBtnVisible,
+                setProfileBtnVisible,
+                logoContent,
+                setLogoContent,
+                mainRef,
+                isAuthModalOpen,
+                setIsAuthModalOpen,
+            }}
+        >
             {children}
         </HeaderContext.Provider>
     );

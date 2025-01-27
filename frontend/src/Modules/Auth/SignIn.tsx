@@ -8,7 +8,7 @@ import AuthForm from "Auth/forms/AuthForm";
 import {FC, FCAC, FR} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Logo from "Core/Logo";
+import ParallaxLogo from "Core/ParallaxLogo";
 
 const SignIn = () => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
@@ -72,12 +72,8 @@ const SignIn = () => {
             w={'90%'}
             mx={'auto'}
             maxW={350}>
-            <FC style={{transform: `scale(${scale}) translateY(${translateY}px)`}}>
-                <Head title={`Вход`}/>
-                <Logo width={'100%'} cls={'w-100 ms-3 maxw-350px'}/>
-                <AuthForm ways={['social', 'password', 'email']}/>
-            </FC>
-            <div></div>
+            <Head title={`Вход`}/>
+
         </FCAC>
     );
 };

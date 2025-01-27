@@ -1,8 +1,10 @@
 // User/UserAvatar.tsx
 import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
-import PersonIcon from '@mui/icons-material/Person';
 import CircularProgress from "Core/components/elements/CircularProgress";
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import {FC, FCCC} from "WideLayout/Layouts";
+import {useTheme} from "Theme/ThemeContext";
 
 interface UserAvatarProps {
     avatar?: string | null;
@@ -26,33 +28,28 @@ const UserAvatar: React.FC<UserAvatarProps> = (
         backBlur = '10px',
         onClick,
     }) => {
+    const {theme} = useTheme();
     const [loading, setLoading] = useState<boolean>(true);
-
     const avatarStyle = {
         width: size,
         height: size,
         ...sx,
     };
-
     const handleImageLoad = () => {
         setLoading(false);
     };
-
     const handleImageError = () => {
         setLoading(false); // You might want to handle errors differently
     };
+
     return (
         avatar && avatar.length > 1
             ?
-            <div onClick={onClick}
-                 className={`${className} ratio-1-1 position-relative w-min transition-all transition-d-300 transition-tf-l`}
-                 style={avatarStyle}>
-                {loading && (
-                    <div className="fccc position-absolute top-0 start-0 w-100 h-100"
-                         style={{zIndex: zIndex + 1}}>
-                        <CircularProgress size={`calc(${size} - 35%)`}/>
-                    </div>
-                )}
+            <FC cls={`${className} ratio-1-1 ftrans-300-eio`} w={'min-content'}
+                pos={'relative'} onClick={onClick} style={avatarStyle}>
+                {loading && <FCCC pos={'absolute'} top={0} w={'100%'} h={'100%'} zIndex={zIndex + 1}>
+                    <CircularProgress size={`calc(${size} - 35%)`}/>
+                </FCCC>}
                 <img
                     className={`object-fit-cover ${roundedClassName ? roundedClassName : 'rounded-circle'} transition-all transition-d-300 transition-tf-l`}
                     style={{
@@ -84,57 +81,45 @@ const UserAvatar: React.FC<UserAvatarProps> = (
                         alt="User Avatar Background"
                     />
                 )}
-            </div>
+            </FC>
             :
-            <div onClick={onClick}
-                 className={`${className} position-relative w-min transition-all transition-d-300 transition-tf-l`}
-                 style={avatarStyle}>
-                <Avatar
-                    className={'transition-all transition-d-300 transition-tf-l'}
-                    sx={{
-                        overflow: 'hidden',
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        width: size,
-                        height: sx?.height ? sx.height : size,
-                        zIndex: zIndex,
-                        position: 'absolute',
-                        display: 'flex',
-                    }}
-                >
-                    <PersonIcon
-                        className={'transition-all transition-d-300 transition-tf-l'}
-                        style={{
-                            width: `80%`,
-                            height: `80%`
-                        }}
-                    />
+            <FC onClick={onClick} cls={`${className} ratio-1-1 ftrans-300-eio`}
+                w={'min-content'} pos={'relative'} sx={avatarStyle}>
+                <Avatar className={'ftrans-300-eio'} sx={{
+                    overflow: 'hidden',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    width: size,
+                    height: sx?.height ? sx.height : size,
+                    zIndex: zIndex,
+                    position: 'absolute',
+                    display: 'flex',
+                    background: 'transparent',
+                }}>
+                    <PersonRoundedIcon className={'ftrans-300-eio'} style={{
+                        width: `100%`, height: `100%`,
+                        color: theme.palette.text.primary80
+                    }}/>
                 </Avatar>
-                <Avatar
-                    className={'transition-all transition-d-300 transition-tf-l'}
-                    sx={{
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        position: 'absolute',
-                        width: size,
-                        height: sx?.height ? sx.height : size,
-                        filter: `blur(${backBlur})`,
-                        opacity: '40%',
-                        bottom: '0',
-                        right: '0',
-                        zIndex: zIndex - 1
-                    }}
-                >
-                    <PersonIcon
-                        className={'transition-all transition-d-300 transition-tf-l'}
-                        style={{
-                            width: `80%`,
-                            height: `80%`,
-                        }}
-                    />
+                <Avatar className={'ftrans-300-eio'} sx={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    position: 'absolute',
+                    width: size,
+                    height: sx?.height ? sx.height : size,
+                    filter: `blur(${backBlur})`,
+                    opacity: '40%',
+                    bottom: '0',
+                    right: '0',
+                    zIndex: zIndex - 1,
+                    background: 'transparent',
+                }}>
+                    <PersonRoundedIcon className={'ftrans-300-eio'} style={{
+                        width: `100%`, height: `100%`,
+                        color: theme.palette.text.primary80
+                    }}/>
                 </Avatar>
-
-            </div>
+            </FC>
     );
 };
 

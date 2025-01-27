@@ -1,6 +1,6 @@
 // User/Logo.tsx
 import React from 'react';
-import logo from '../../Static/img/icon/logo.svg';
+import logo from '../../Static/img/icon/logo.png';
 import {FC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 
