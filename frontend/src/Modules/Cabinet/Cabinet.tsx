@@ -8,14 +8,14 @@ import OrderTemplate from "Order/OrderTemplate";
 import NavLink from "Core/components/Header/NavLink";
 import {FC, FCSC, FRC} from "WideLayout/Layouts";
 import UserAvatarEditable from "User/UserAvatarEditable";
-import DateRangeIcon from "@mui/icons-material/DateRange";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import {Navigate, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import pprint from "Utils/pprint";
 import Profile from "User/Profile";
+import CreditScoreRoundedIcon from '@mui/icons-material/CreditScoreRounded';
+import WebhookIcon from '@mui/icons-material/Webhook';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
 
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
@@ -44,7 +44,7 @@ const Cabinet: React.FC = () => {
     const {theme} = useTheme();
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
-    const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("1220px");
+    const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("700px");
 
     const [isLeaveConferenceModalOpen, setIsLeaveConferenceModalOpen] = useState(false);
     const [pendingPath, setPendingPath] = useState<string | null>(null);
@@ -83,13 +83,17 @@ const Cabinet: React.FC = () => {
     useEffect(() => {
         if (!isLargeScreen) {
             setMobileNavigationContent(<>
+                <NavLink onClick={() => handleMenuLinkClick('/software', true)}
+                         to="/software" icon={<WebhookIcon/>}>
+                    Software
+                </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/profile', true)}
-                         to="/profile" icon={<AssignmentIndIcon/>}>
-                    Профиль
+                         to="/profile" icon={<PersonOutlineRoundedIcon/>}>
+                    Profile
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
-                         to="/orders" icon={<AccountBalanceWalletIcon/>}>
-                    Заказы
+                         to="/orders" icon={<CreditScoreRoundedIcon/>}>
+                    Orders
                 </NavLink>
             </>);
         }
@@ -97,7 +101,7 @@ const Cabinet: React.FC = () => {
     }, [setMobileNavigationContent, selectedProfile, isLargeScreen]);
 
     useEffect(() => {
-        if (isAuthenticated === false) navigate('/auth');
+        if (isAuthenticated === false) navigate('/?auth_modal=True');
         pprint('Cabinet');
     }, [isAuthenticated, navigate]);
 
@@ -105,7 +109,8 @@ const Cabinet: React.FC = () => {
 
     return (
         <CabinetWidthContext.Provider value={{cabinetMaxWidth, setCabinetMaxWidth}}>
-            <FC mx={'auto'} h={'100%'} w={'100%'} maxW={cabinetMaxWidth}>
+            <FC maxW={cabinetMaxWidth}
+                mx={'auto'} h={'100%'} w={'100%'}>
                 <FRC h={'100%'} w={'100%'} scroll={'y-hidden'} maxH={`calc(100vh - ${headerNavHeight}px)`}>
                     <FCSC minW={'fit-content'} scroll={'y-auto'}
                           cls={'no-scrollbar d-sm-flex d-none'} p={2} g={2}
@@ -120,13 +125,16 @@ const Cabinet: React.FC = () => {
                         </FCSC>
                         <FC g={1}>
                             <CabinetNavLink
-                                text={'Software'} to="/software" urlActiveMark={'software'}
-                                icon={DateRangeIcon} onClick={() => handleMenuLinkClick('/software')}/>
-                            <CabinetNavLink
-                                text={'Профиль'} to="/profile" urlActiveMark={'profile'} icon={AssignmentIndIcon}
+                                text={'Profile'} iconSx={{transform: 'scale(1.2)'}} to="/profile"
+                                urlActiveMark={'profile'}
+                                icon={PersonOutlineRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/profile')}/>
                             <CabinetNavLink
-                                text={'Orders'} to="/orders" urlActiveMark={'order'} icon={AccountBalanceWalletIcon}
+                                text={'Software'} iconSx={{transform: 'scale(1.04)'}} to="/software"
+                                urlActiveMark={'software'}
+                                icon={WebhookIcon} onClick={() => handleMenuLinkClick('/software')}/>
+                            <CabinetNavLink
+                                text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
 
                         </FC>
@@ -137,7 +145,8 @@ const Cabinet: React.FC = () => {
                         bg={theme.palette.bg.primary} boxShadow={theme.palette.shadow.XLO005}
                         ref={cabinetContainerRef}>
                         <Routes>
-                            <Route path="profile/*" element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
+                            <Route path="profile/*"
+                                   element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
                             <Route path="software" element={<div>software</div>}/>
                             <Route path="software/:id" element={<div>software X</div>}/>
                             {!isAuthenticated && <>

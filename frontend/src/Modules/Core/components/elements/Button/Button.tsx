@@ -71,7 +71,7 @@ const Button = React.forwardRef(
                 component={component}
                 startIcon={loading && (
                     <CircularProgress
-                        style={{color: theme.palette.text.primary70}}
+                        style={{color: theme.palette.text.contrast70}}
                         size={24}
                     />
                 )}

@@ -154,9 +154,10 @@ const UserPersonalInfoForm: React.FC = () => {
                         onChange={handleChange}/>
 
                     <Button onClick={() => setIsPasswordModalOpen(true)}
-                            classNameOverride={`px-2 pb-0 pt-0 text-nowrap minw-150px`}
+                            classNameOverride={`px-2 opacity-75 pb-0 pt-3px text-nowrap minw-150px`}
                             style={{
-                                fontWeight: 500,
+                                fontWeight: 600,
+                                color: theme.palette.text.contrast70,
                             }}>
                         Сменить пароль
                     </Button>
@@ -223,9 +224,10 @@ const UserPersonalInfoForm: React.FC = () => {
                         ? <EditIcon onClick={() => setIsPhoneModalOpen(true)}
                                     style={{cursor: 'pointer', color: theme.palette.text.primary60}}/>
                         : <Button onClick={() => setIsPhoneModalOpen(true)}
-                                  sx={{
-                                      fontWeight: 500, minWidth: 130
-                                  }}>ПОДТВЕРДИТЬ</Button>
+                                  classNameOverride={`px-2 opacity-75 pb-0 pt-3px h-100 text-nowrap minw-150px`} sx={{
+                            color: theme.palette.text.contrast70,
+                            fontWeight: 600, minWidth: 130
+                        }}>ПОДТВЕРДИТЬ</Button>
                     }
                     <Modal cls={'px-3'} bg={theme.palette.bg.primary} closeOnOutsideClick={false}
                            isOpen={isPhoneModalOpen}
