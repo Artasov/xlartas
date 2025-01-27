@@ -4,7 +4,7 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
+
 
 # Backup files #
 *.bak
@@ -161,8 +161,14 @@ fabfile.py
 .scannerwork
 workspace.xml
 
-./media
-./backend/media
+./media/*
+./media/**
+media/*
+media/**
+./backend/media/*
+./backend/media/**
+/backend/media/*
+/backend/media/**
 
 /backend/logs/
 /backend/bug_daily_report.csv
