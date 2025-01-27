@@ -1,3 +1,4 @@
+# shop/messages/errors.py
 from django.utils.translation import gettext_lazy as _
 
 FAILED_TO_ACTIVATE_TEST_PERIOD = _('Failed to activate test period.')

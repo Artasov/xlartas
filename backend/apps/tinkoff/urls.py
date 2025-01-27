@@ -1,3 +1,4 @@
+# tinkoff/urls.py
 from django.urls import path
 
 from apps.tinkoff.controllers.base import create_tinkoff_deposit_order, tinkoff_pay_form

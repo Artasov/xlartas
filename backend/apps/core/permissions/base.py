@@ -1,3 +1,4 @@
+# core/permissions/base.py
 from rest_framework import permissions
 
 

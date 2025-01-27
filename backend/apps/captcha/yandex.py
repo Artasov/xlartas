@@ -1,3 +1,4 @@
+# captcha/yandex.py
 import json
 import sys
 
@@ -31,8 +32,6 @@ def captcha_required(controller):
             token=captcha_token,
             user_ip=request.ip
         )
-        print(f'{request.is_captcha_valid=}')
-        print(f'{request.ip=}')
         return await controller(request, *args, **kwargs)
 
     return wrapper

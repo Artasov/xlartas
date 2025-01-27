@@ -1,3 +1,4 @@
+# core/management/commands/loaddata_from_dir.py
 import os
 
 from django.core.management import call_command

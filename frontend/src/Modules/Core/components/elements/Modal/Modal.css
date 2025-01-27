@@ -1,0 +1,14 @@
+.modal-wrapper {
+    z-index: 4;
+    backdrop-filter: blur(0px)
+}
+
+.modal-wrapper .x-modal {
+    opacity: 0;
+    visibility: hidden
+}
+
+.show .x-modal {
+    opacity: 1;
+    visibility: visible
+}

@@ -1,3 +1,4 @@
+# core/management/commands/clear_all_user_hw_id.py
 from django.core.management.base import BaseCommand
 from django.db import transaction
 

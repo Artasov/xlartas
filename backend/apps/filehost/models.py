@@ -1,3 +1,4 @@
+# filehost/models.py
 from adjango.models import AModel
 from django.db.models import (
     Model, CharField, ForeignKey, CASCADE, BooleanField, FileField, ManyToManyField

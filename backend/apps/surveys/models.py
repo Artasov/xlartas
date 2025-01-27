@@ -1,3 +1,4 @@
+# surveys/models.py
 from adjango.models import AModel
 from django.db.models import (
     Model, CharField, PositiveSmallIntegerField,
@@ -6,8 +7,8 @@ from django.db.models import (
     ManyToManyField, SmallIntegerField
 )
 
-from apps.core.models.common import Theme
 from apps.core.models.user import User
+from apps.theme.models import Theme
 
 
 class Survey(AModel):
@@ -18,7 +19,7 @@ class Survey(AModel):
     is_public = BooleanField(default=False)
     author = ForeignKey(User, related_name='surveys', on_delete=CASCADE)
     author_visible = BooleanField(default=False)
-    theme_mode = CharField(max_length=10, choices=Theme.ThemeMode.choices, default=Theme.ThemeMode.LIGHT)
+    theme_mode = CharField(max_length=10, choices=Theme.Mode.choices, default=Theme.Mode.LIGHT)
     bg_image = ImageField(upload_to='images/survey/background/', null=True, blank=True)
     finish_text = TextField(null=True, blank=True)
 

@@ -1,4 +1,4 @@
-# import logging
+# shop/services/qiwi.py
 # import os
 # import secrets
 # import urllib.parse

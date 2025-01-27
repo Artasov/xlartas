@@ -1,3 +1,4 @@
+# shop/funcs.py
 from adjango.utils.base import decrease_by_percentage
 
 from .models import *

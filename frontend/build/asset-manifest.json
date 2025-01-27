@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.651c7c42.css",
-    "main.js": "/static/js/main.ba1ff4ad.js",
-    "static/media/art-square-logo.png": "/static/media/art-square-logo.a443056666251b4b3d79.png",
-    "static/media/tinkoff_full_en.svg": "/static/media/tinkoff_full_en.ff3182614162073315aa7c1dabacb273.svg",
+    "main.css": "/static/css/main.30f0a330.css",
+    "main.js": "/static/js/main.6b5b6ac0.js",
+    "static/media/logo.svg": "/static/media/logo.969a55362567f7ff02601d4c9c6741b4.svg",
+    "static/media/long_dark_logo.svg": "/static/media/long_dark_logo.ab5884fbbdbe4f15fc8c6aefd6cc6639.svg",
     "index.html": "/index.html",
-    "main.651c7c42.css.map": "/static/css/main.651c7c42.css.map",
-    "main.ba1ff4ad.js.map": "/static/js/main.ba1ff4ad.js.map"
+    "main.30f0a330.css.map": "/static/css/main.30f0a330.css.map",
+    "main.6b5b6ac0.js.map": "/static/js/main.6b5b6ac0.js.map"
   },
   "entrypoints": [
-    "static/css/main.651c7c42.css",
-    "static/js/main.ba1ff4ad.js"
+    "static/css/main.30f0a330.css",
+    "static/js/main.6b5b6ac0.js"
   ]
 }

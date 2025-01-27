@@ -1,0 +1,85 @@
+.react-tel-input
+  font-family: inherit !important
+
+  .special-label
+    top: -9px !important
+    left: 8px !important
+
+  .country-list
+    margin-top: .5rem !important
+
+  .form-control
+    padding: 15px 14px 15px 58px !important
+    background-color: transparent !important
+    overflow: hidden
+    border-width: 1px !important
+    border-style: solid !important
+
+  .search-box
+    width: 100% !important
+    margin: 0 !important
+    padding: 0.7rem !important
+
+  .flag.ru
+
+.react-tel-input.error
+  .special-label
+    color: #ff6a7d
+
+  .form-control
+    &:focus
+      border-color: #ff6a7d !important
+
+//.react-tel-input.error.form-control
+//box-shadow: none !important
+.react-tel-input
+  .special-label
+    display: none
+
+._dark
+  .react-tel-input
+    .form-control
+      &:hover
+        border-color: rgb(247, 247, 247) !important
+
+    .special-label
+      background-color: #262529 !important
+
+    .country.highlight
+      background-color: #fff3 !important
+
+  .react-tel-input:not(.error)
+    .form-control
+      border-color: rgba(255, 255, 255, 0.23) !important
+
+      &:hover
+        border-color: rgb(247, 247, 247) !important
+
+      &:focus
+        box-shadow: 0 0 0 1px rgb(247, 247, 247) !important
+        border-color: rgb(247, 247, 247) !important
+
+  .react-tel-input.error
+    .form-control
+      border-color: #ff6a7d !important
+
+      &:focus
+        box-shadow: 0 0 0 1px #ff6a7d !important
+
+._light
+  .react-tel-input
+    //.special-label
+    //  background-color: #ffffff88 !important
+
+    .country.highlight
+      background-color: #0003 !important
+
+    .form-control
+      border-color: rgba(0, 0, 0, .23) !important
+
+      &:hover
+        border-color: rgba(0, 0, 0, .7) !important
+
+      &:focus
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, .7) !important
+        border-color: rgba(0, 0, 0, .7) !important

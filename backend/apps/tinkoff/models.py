@@ -1,3 +1,4 @@
+# tinkoff/models.py
 import uuid
 
 from django.db.models import Model, CharField

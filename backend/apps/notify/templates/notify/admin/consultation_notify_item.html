@@ -1,0 +1,47 @@
+<li style="
+border-radius: .7rem;
+display: flex;
+flex-direction: column;
+gap: .1rem;
+background: #0002;
+padding: .5rem .8rem .7rem .8rem;">
+    <a href="{{ notify_url }}">
+        <span style="opacity: 60%;">
+            {{ notify.id }}
+        </span>
+        <strong style="
+                color: #fff;
+                margin-left: .3rem;
+                padding: 0 5px 2px 5px;
+                border-radius: 5px;
+                background-color:
+                {% if notify.status == 'sent' %}
+                    #46a350
+                {% elif 'failed' in notify.status %}
+                    #ce3244
+                {% elif 'pending' in notify.status %}
+                    #3276ce
+                {% else %}
+                    #808080
+                {% endif %}
+                ">
+            {% if notify.status == 'sent' %}
+                Отправлено
+            {% elif 'failed' in notify.status %}
+                Ошибка
+            {% elif 'pending' in notify.status %}
+                В ожидании
+            {% else %}
+                Хз что это
+            {% endif %}
+        </strong>
+    </a>
+    <strong><a href="{{ recipient_url }}">{{ recipient.first_name }} {{ recipient.last_name }}</a></strong>
+    <span>Тип: <strong>{{ notify.notify_type }}</strong></span>
+    {% if sent_time != '-' %}
+        <span>Отправил в <strong>{{ sent_time }}</strong></span>
+    {% else %}
+        <span>Планирует в <strong>{{ scheduled_time }}</strong></span>
+    {% endif %}
+    <span>{{ context_json }}</span>
+</li>

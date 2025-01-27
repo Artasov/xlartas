@@ -1,3 +1,4 @@
+# filehost/urls.py
 from django.urls import path
 
 from apps.filehost.controllers.accesses import (

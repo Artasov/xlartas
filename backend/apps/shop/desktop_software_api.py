@@ -1,3 +1,4 @@
+# shop/desktop_software_api.py
 import json
 
 from adrf.decorators import api_view

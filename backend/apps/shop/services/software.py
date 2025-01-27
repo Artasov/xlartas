@@ -1,3 +1,4 @@
+# shop/services/software.py
 from asgiref.sync import sync_to_async
 from django.db.models import Sum, Prefetch
 

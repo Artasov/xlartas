@@ -1,0 +1,130 @@
+{% extends 'redisui/base.html' %}
+{% block title %}Redis UI{% endblock %}
+{% block head %}
+    <style>
+        .sticky-header th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+    </style>
+{% endblock %}
+{% block main %}
+    <div class="fc mx-auto maxw-1100px maxh-100">
+        <h1 class="text-center">Redis <span class="text-success">Online</span></h1>
+
+
+        <!-- Bootstrap Tabs -->
+        <ul class="nav nav-tabs" id="redisTab" role="tablist">
+            {% if cache_keys %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="cache-tab" data-bs-toggle="tab" data-bs-target="#cache"
+                            type="button" role="tab" aria-controls="cache" aria-selected="true">Cache
+                    </button>
+                </li>
+            {% endif %}
+            {% if broker_keys %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if not cache_keys %}active{% endif %}" id="broker-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#broker" type="button" role="tab" aria-controls="broker"
+                            aria-selected="false">
+                        Broker
+                    </button>
+                </li>
+            {% endif %}
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content overflow-y-auto" id="redisTabContent">
+            {% if cache_keys %}
+                <div class="tab-pane fade show active" id="cache" role="tabpanel" aria-labelledby="cache-tab">
+                    <table class="table table-striped maxw-1100px table-responsive">
+                        <thead class="sticky-header">
+                        <tr>
+                            <th>Key</th>
+                            <th style="word-wrap: break-word; white-space: normal;">Value</th>
+                            <!-- Ограничение для ячейки -->
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for key, value in cache_keys.items %}
+                            <tr data-key="{{ key }}" data-type="cache">
+                                <td>{{ key }}</td>
+                                <td style="max-width: 400px; word-wrap: break-word; white-space: normal;">{{ value }}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm delete-key" data-key="{{ key }}"
+                                            data-type="cache">Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if broker_keys %}
+                <div class="tab-pane fade {% if not cache_keys %}show active{% endif %}" id="broker" role="tabpanel"
+                     aria-labelledby="broker-tab">
+                    <table class="table table-striped maxw-1100px table-responsive">
+                        <thead class="sticky-header">
+                        <tr>
+                            <th>Key</th>
+                            <th style="word-wrap: break-word; white-space: normal;">Value</th>
+                            <!-- Ограничение для ячейки -->
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for key, value in broker_keys.items %}
+                            <tr data-key="{{ key }}" data-type="broker">
+                                <td>{{ key }}</td>
+                                <td style="max-width: 400px; word-wrap: break-word; white-space: normal;">{{ value }}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm delete-key" data-key="{{ key }}"
+                                            data-type="broker">Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.delete-key').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const key = event.target.getAttribute('data-key');
+                const clientType = event.target.getAttribute('data-type');
+                const row = event.target.closest('tr');
+                const url = `{% url 'redisui:delete_redis_key' %}`;
+
+                // Отключаем кнопку во время удаления
+                event.target.disabled = true;
+
+                try {
+                    // Отправляем POST запрос с ключом и типом клиента
+                    const response = await Client.sendPost(url, {key: key, client_type: clientType});
+
+                    console.log(response)
+                    console.log(response.status)
+                    if (response.status === 'success') {
+                        // Удаляем строку после успешного ответа
+                        row.remove();
+                    } else {
+                        console.error('Ошибка удаления ключа:', response.data.message);
+                        event.target.disabled = false;
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке запроса:', error);
+                    event.target.disabled = false;
+                }
+            });
+        });
+    </script>
+{% endblock %}

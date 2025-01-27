@@ -1,15 +1,16 @@
+# core/managers/user.py
 from typing import Optional, TYPE_CHECKING
 
 from adjango.managers.base import AUserManager
-from adjango.utils.base import is_email, is_phone, phone_format
+from adjango.utils.base import phone_format, is_phone, is_email
 
-if TYPE_CHECKING:
-    from apps.core.models.user import User
+if TYPE_CHECKING: from apps.core.models import User
 
 
 class UserManager(AUserManager):
     async def by_creds(self, credential) -> Optional['User']:
         """ phone / email / username """
+        from apps.core.models import User
         try:
             if is_email(credential):
                 return await self.aget(email=credential)

@@ -23,6 +23,7 @@ django-cors-headers = "4.6.0"
 django-logui = "0.1.2"
 django-endpoints = "0.0.3"
 django-extensions = "3.2.3"
+django-polymorphic = "3.1.0"
 djangorestframework-simplejwt = "5.4.0"
 django-minio-backend = "3.8.0"
 django-celery-beat = "2.7.0"
@@ -31,6 +32,10 @@ django-silk = "5.3.2"
 django-imagekit = "5.0.0"
 django-user-agents = "0.4.0"
 django-object-actions = "4.3.0"
+django-phonenumber-field = { extras = ["phonenumbers"], version = "^8.0.0" }
+phonenumbers = "8.13.53"
+django-jazzmin = "3.0.1"
+django-import-export = { version = "4.3.4", extras = ["all"] }
 
 flower = "2.0.1"
 drf-yasg = "1.21.8"

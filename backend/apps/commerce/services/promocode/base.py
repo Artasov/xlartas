@@ -1,0 +1,136 @@
+# commerce/services/promocode/base.py
+import logging
+from decimal import Decimal
+from typing import TYPE_CHECKING
+
+from django.utils import timezone
+
+from apps.commerce.exceptions.promocode import PromocodeException
+
+commerce_log = logging.getLogger('commerce')
+
+if TYPE_CHECKING:
+    from apps.commerce.models.promocode import Promocode, PromocodeUsage
+    from apps.core.models.user import User
+    from apps.commerce.models import Product, Order
+
+
+class PromoCodeService:
+    async def is_applicable_for(
+            self: 'Promocode',
+            user: 'User',
+            product: 'Product',
+            currency: str,
+            raise_exception: bool = False
+    ) -> bool:
+        from apps.commerce.models.promocode import PromocodeUsage
+        now = timezone.now()
+
+        # Проверка даты начала
+        if self.start_date and now < self.start_date:
+            if raise_exception:
+                raise PromocodeException.NotStarted()
+            return False
+
+        # Проверка даты конца
+        if self.end_date and now > self.end_date:
+            if raise_exception:
+                raise PromocodeException.Expired()
+            return False
+
+        # Получаем скидку для продукта
+        discount = await self.discounts.filter(product=product).afirst()
+
+        # Проверка, если промокод не применим для продукта
+        if not discount:
+            if raise_exception:
+                raise PromocodeException.NotApplicableForProduct()
+            return False
+
+        # Проверка, если промокод не применим для валюты
+        if discount.currency != currency:
+            if raise_exception:
+                raise PromocodeException.NotApplicableForCurrency()
+            return False
+
+        # Проверка специфичных пользователей (если есть)
+        specific_users = discount.specific_users
+        if await specific_users.aexists() and not await specific_users.filter(id=user.id).aexists():
+            if raise_exception:
+                raise PromocodeException.NotApplicableForClient()
+            return False
+
+        # Проверка максимального общего числа применений
+        if discount.max_usage is not None:
+            total_usage = await PromocodeUsage.objects.filter(promocode=self).acount()
+            if total_usage >= discount.max_usage:
+                if raise_exception:
+                    raise PromocodeException.MaxUsageExceeded()
+                return False
+
+        # Проверка максимального числа применений на пользователя
+        if discount.max_usage_per_user is not None:
+            user_usage = await PromocodeUsage.objects.filter(promocode=self, user=user).acount()
+            if user_usage >= discount.max_usage_per_user:
+                if raise_exception:
+                    raise PromocodeException.MaxUsagePerClientExceeded()
+                return False
+
+        # Проверка интервала между применениями
+        if discount.interval_days is not None:
+            last_usage = await self.last_usage(user)
+            if last_usage:
+                delta_days = (now - last_usage.created_at).days
+                if delta_days < discount.interval_days:
+                    if raise_exception:
+                        raise PromocodeException.UsageTooFrequent()
+                    return False
+        return True
+
+    async def last_usage(self: 'Promocode', user: 'User') -> 'PromocodeUsage':
+        from apps.commerce.models.promocode import PromocodeUsage
+        return await PromocodeUsage.objects.filter(promocode=self, user=user).order_by('-created_at').afirst()
+
+    async def usage_count(self: 'Promocode') -> int:
+        from apps.commerce.models.promocode import PromocodeUsage
+        return await PromocodeUsage.objects.filter(promocode=self).acount()
+
+    async def apply(self: 'Promocode', order):
+        # Логика применения промокода к заказу (создание PromocodeUsage и т.д.)
+        # Это можно будет реализовать при фактической оплате.
+        pass
+
+    async def calc_price_for_order(self: 'Promocode', order: 'Order') -> Decimal:
+        """
+        Рассчитывает итоговую цену для заказа с учётом данного промокода.
+        """
+        product = order.product
+
+        # Ищем скидку для продукта
+        discount = await self.discounts.filter(product=product).afirst()
+        if not discount:
+            # Если нет скидки для продукта, возвращаем исходную цену
+            return await order.product.aget_price(currency=order.currency)
+
+        original_price = await order.product.aget_price(currency=order.currency)
+        if original_price is None:
+            # Нет цены или ошибка
+            return Decimal('0.00')
+
+        # Применяем скидку в зависимости от типа промокода
+        if self.discount_type == self.DiscountType.PERCENTAGE:
+            # Понимаем amount из discount - это процент?
+            # В модели PromocodeProductDiscount: amount - это сумма, но если discount_type = PERCENTAGE,
+            # то amount должен интерпретироваться как процент.
+            # Предположим amount хранит числовое значение процента (например 10 для 10%)
+            final_price = original_price - (original_price * Decimal(discount.amount) / Decimal(100))
+        elif self.discount_type == self.DiscountType.FIXED_AMOUNT:
+            # amount - фиксированная скидка
+            final_price = original_price - Decimal(discount.amount)
+            if final_price < Decimal('0.00'):
+                final_price = Decimal('0.00')
+        else:
+            # Неизвестный тип скидки
+            final_price = original_price
+
+        return final_price

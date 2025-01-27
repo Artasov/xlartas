@@ -10,7 +10,14 @@ from adjango.utils.common import is_celery, traceback_str
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
+from config.jazzmin import JAZZMIN_SETTINGS as _JAZZMIN_SETTINGS
+from config.jazzmin import JAZZMIN_UI_TWEAKS
 from utils.handle_exceptions import handling_function
+
+# Product
+DEBUG_SEND_NOTIFIES = False
+MINUTES_CONFIRMATION_CODE_EXPIRES = 2
+SECONDS_MAX_FREQUENCY_SENDING_CONFIRMATION_CODE = 60
 
 # Environment helper
 env = environ.get
@@ -28,7 +35,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEV = bool(int(env('DEV', 0)))
 DEBUG = bool(int(env('DEBUG', 0)))
 INTENSIVE_HEALTH_TEST = bool(int(env('INTENSIVE_HEALTH_TEST')))
-ROOT_URLCONF = 'apps.core.urls'
+ROOT_URLCONF = 'apps.core.routes.root'
 
 # Security and domain settings
 HTTPS = bool(int(env('HTTPS')))
@@ -39,8 +46,6 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'web',
-    'life-help.ru',
-    '92.53.105.149',
     MAIN_DOMAIN,
 ]
 MINIO_USE = bool(int(env('MINIO_USE')))
@@ -56,6 +61,7 @@ USE_TZ = True
 AUTH_USER_MODEL = 'core.User'
 INSTALLED_APPS = [
     'daphne',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,11 +80,26 @@ INSTALLED_APPS = [
     'adjango',
     'channels',
     'django_celery_beat',
+    'phonenumber_field',
+    'timezone_field',
+    'import_export',
+    'django_object_actions',
+    'silk',
+    'endpoints',
+    'logui',
+    'cachalot',
 
     'apps.confirmation',
+    'apps.commerce',
+    'apps.redisui',
+    'apps.social_oauth',
+    'apps.notify',
+    'apps.chat',
     'apps.core',
     'apps.shop',
     'apps.tinkoff',
+    'apps.tbank',
+    'apps.theme',
     'apps.surveys',
     'apps.filehost',
 
@@ -317,10 +338,10 @@ EP_CUSTOM_LINKS = [
     {'name': 'Silk', 'url': f'{DOMAIN_URL}/silk/'},
     {'name': 'Redis', 'url': f'{DOMAIN_URL}/{REDISUI_URL_PREFIX}'},
     {'name': 'Swagger', 'url': f'{DOMAIN_URL}/swagger/'},
-    {'name': 'Nginx', 'url': 'http://92.53.105.149:81/'},
-    {'name': 'Minio', 'url': 'https://minio.life-helpsy.ru/'},
-    {'name': 'Pg Admin', 'url': 'https://pgadmin.life-helpsy.ru/'},
-    {'name': 'Flower', 'url': 'https://flower.life-helpsy.ru/flower/'},
+    {'name': 'Nginx', 'url': 'http://:81/'},
+    {'name': 'Minio', 'url': 'https://minio.xlartas.ru/'},
+    {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/'},
+    {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/'},
 ]
 
 # Celery
@@ -423,6 +444,21 @@ TINKOFF_PASSWORD = env('TINKOFF_PASSWORD')
 
 # Other
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Jazzmin
+JAZZMIN_SETTINGS = _JAZZMIN_SETTINGS | {
+    'usermenu_links': [
+        {'name': 'Site', 'url': f'{DOMAIN_URL}', 'new_window': True},
+        {'name': 'Logs', 'url': f'{DOMAIN_URL}/{LOGUI_URL_PREFIX}', 'new_window': True},
+        {'name': 'Silk', 'url': f'{DOMAIN_URL}/silk/', 'new_window': True},
+        {'name': 'Redis', 'url': f'{DOMAIN_URL}/{REDISUI_URL_PREFIX}', 'new_window': True},
+        {'name': 'Swagger', 'url': f'{DOMAIN_URL}/swagger/', 'new_window': True},
+        {'name': 'Nginx', 'url': 'http://:81/', 'new_window': True},
+        {'name': 'Minio', 'url': 'https://minio.xlartas.ru/', 'new_window': True},
+        {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/', 'new_window': True},
+        {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/', 'new_window': True},
+    ],
+}
 
 log = logging.getLogger('global')
 

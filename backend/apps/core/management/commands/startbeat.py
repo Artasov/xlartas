@@ -1,3 +1,4 @@
+# core/management/commands/startbeat.py
 from celery import current_app
 from django.core.management.base import BaseCommand
 from django_celery_beat.schedulers import DatabaseScheduler

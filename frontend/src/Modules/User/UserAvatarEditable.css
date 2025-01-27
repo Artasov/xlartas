@@ -1,0 +1,9 @@
+.user-avatar-editable:hover .user-avatar-editable-upload-icon {
+    opacity: 50% !important
+}
+
+@media (hover: hover)and (pointer: fine) {
+    .user-avatar-editable:hover .user-avatar-editable-overlay {
+        opacity: 100% !important
+    }
+}

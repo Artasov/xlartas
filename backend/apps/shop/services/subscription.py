@@ -1,3 +1,4 @@
+# shop/services/subscription.py
 from datetime import timedelta
 from typing import TypedDict
 
@@ -6,7 +7,6 @@ from django.conf import settings
 from django.shortcuts import aget_object_or_404
 from django.utils.timezone import now
 
-from apps.core.async_django import arelated, afilter
 from apps.shop.exceptions.base import (
     InsufficientFundsError, TestPeriodAlreadyUsed,
     TestPeriodActivationFailed
@@ -56,9 +56,7 @@ async def get_user_subscriptions(user) -> list[UserSoftwareSubscriptionInfo]:
     from apps.shop.models import (
         UserSoftwareSubscription
     )
-    subscriptions: list[UserSoftwareSubscription] = await afilter(
-        UserSoftwareSubscription.objects, user=user
-    )
+    subscriptions: list[UserSoftwareSubscription] = await UserSoftwareSubscription.objects.afilter(user=user)
     subscription_infos = []
     for sub in subscriptions:
         subscription_info = UserSoftwareSubscriptionInfo(
@@ -97,7 +95,7 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
 
     sub_order: SoftwareSubscriptionOrder = await SoftwareSubscriptionOrder.objects.acreate(
         user=user,
-        software=await arelated(sub, 'software'),
+        software=await sub.arelated('software'),
         amount=sub.amount,
         type=BaseOrder.OrderTypes.SOFTWARE,
     )
@@ -109,7 +107,7 @@ async def subscribe_user_software(user: settings.AUTH_USER_MODEL, subscription_i
         software=sub.software,
     )
     user_sub: UserSoftwareSubscription
-    time_category = await arelated(sub, 'time_category'),
+    time_category = await sub.arelated('time_category'),
     time_category = time_category[0]
     if created:
         user_sub.expires_at = now() + timedelta(hours=time_category.hours)

@@ -1,3 +1,4 @@
+# core/management/commands/uploadmedia.py
 import os
 
 from django.conf import settings

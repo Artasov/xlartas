@@ -1,0 +1,84 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "static/*": [
+        "Static/*"
+      ],
+      "types/*": [
+        "Types/*"
+      ],
+      "Utils/*": [
+        "Utils/*"
+      ],
+      "Redux/*": [
+        "Redux/*"
+      ],
+      "WideLayout/*": [
+        "WideLayout/*"
+      ],
+      "Auth/*": [
+        "Modules/Auth/*"
+      ],
+      "TBank/*": [
+        "Modules/TBank/*"
+      ],
+      "Extra/*": [
+        "Modules/Extra/*"
+      ],
+      "Cabinet/*": [
+        "Modules/Cabinet/*"
+      ],
+      "Chat/*": [
+        "Modules/Chat/*"
+      ],
+      "Docs/*": [
+        "Modules/Docs/*"
+      ],
+      "Landing/*": [
+        "Modules/Landing/*"
+      ],
+      "Confirmation/*": [
+        "Modules/Confirmation/*"
+      ],
+      "Core/*": [
+        "Modules/Core/*"
+      ],
+      "Order/*": [
+        "Modules/Order/*"
+      ],
+      "Theme/*": [
+        "Modules/Theme/*"
+      ],
+      "User/*": [
+        "Modules/User/*"
+      ]
+    },
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/Types"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}

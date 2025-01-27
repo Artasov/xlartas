@@ -1,3 +1,4 @@
+# core/management/commands/set_is_confirmed_all_users.py
 from django.core.management.base import BaseCommand
 
 from apps.core.models.user import User

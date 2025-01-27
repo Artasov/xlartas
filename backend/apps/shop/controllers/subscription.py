@@ -1,3 +1,4 @@
+# shop/controllers/subscription.py
 from adrf.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated

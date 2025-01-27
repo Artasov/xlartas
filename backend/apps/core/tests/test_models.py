@@ -1,3 +1,4 @@
+# core/tests/test_models.py
 from django.test import TestCase
 from apps.core.models.user import User
 

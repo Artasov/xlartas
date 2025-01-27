@@ -1,3 +1,4 @@
+# shop/controllers/software.py
 from adjango.adecorators import acontroller
 from adjango.aserializers import ASerializer
 from adrf.decorators import api_view

@@ -1,3 +1,4 @@
+# shop/middleware.py
 import ipaddress
 
 from django.http import HttpResponseForbidden

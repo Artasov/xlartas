@@ -1,3 +1,4 @@
+# shop/models.py
 from datetime import timedelta
 from typing import TypedDict
 
@@ -12,7 +13,7 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.common import File
+from apps.core.models import File
 from apps.core.models.user import User
 from apps.shop.services.subscription import SoftwareSubscriptionService
 
