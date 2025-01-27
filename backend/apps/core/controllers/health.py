@@ -21,10 +21,12 @@ from django.http import JsonResponse
 from django_minio_backend import MinioBackend
 from django_redis import get_redis_connection
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_503_SERVICE_UNAVAILABLE, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR, \
+from rest_framework.status import (
+    HTTP_503_SERVICE_UNAVAILABLE, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR,
     HTTP_403_FORBIDDEN
+)
 
 from apps.core.tasks.test_tasks import test_task
 
@@ -32,6 +34,7 @@ log = logging.getLogger('console')
 
 
 @api_view(('GET',))
+@permission_classes((AllowAny,))
 def health(_request) -> Response:
     # Redis
     if not get_redis_connection():
