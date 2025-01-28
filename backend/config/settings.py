@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.shop',
     'apps.tinkoff',
+    'apps.software',
     'apps.tbank',
     'apps.theme',
     'apps.surveys',

@@ -2,28 +2,13 @@
 from collections import OrderedDict
 
 from apps.commerce.exceptions.order import OrderException
-from apps.commerce.models import GiftCertificateOrder
+from apps.software.models import SoftwareOrder
+from apps.software.serializers.software import SoftwareOrderSmallSerializer, SoftwareOrderFullSerializer
 
 ORDER_SERIALIZERS = OrderedDict([
-    # (PackageOrder, {
-    #     'small': PackageOrderSmallSerializer,
-    #     'full': PackageOrderSerializer,
-    # }),
-    # (CourseOrder, {
-    #     'small': CourseOrderSmallSerializer,
-    #     'full': CourseOrderSerializer,
-    # }),
-    # (GuideOrder, {
-    #     'small': GuideOrderSmallSerializer,
-    #     'full': GuideOrderSerializer,
-    # }),
-    # (TariffOrder, {
-    #     'small': TariffOrderSmallSerializer,
-    #     'full': TariffOrderSerializer,
-    # }),
-    (GiftCertificateOrder, {
-        # 'small': GiftCertificateOrderSmallSerializer,
-        # 'full': GiftCertificateOrderSerializer,
+    (SoftwareOrder, {
+        'small': SoftwareOrderSmallSerializer,
+        'full': SoftwareOrderFullSerializer,
     }),
 ])
 

@@ -3,13 +3,13 @@ JAZZMIN_SETTINGS = {
     'site_title': 'xlartas',
     'site_header': 'xlartas',
     'site_brand': 'xlartas',
-    'site_logo': '/core/img/icon/logo.svg',  # Ссылка на логотип
+    'site_logo': '/img/icon/logo.png',  # Ссылка на логотип
     'site_logo_classes': '',
-    'site_icon': '/core/img/icon/logo.svg',  # Ссылка на favicon (32x32 px)
+    'site_icon': '/img/icon/logo.png',  # Ссылка на favicon (32x32 px)
 
     # Логотип на странице входа
-    "login_logo": '/core/img/icon/logo.svg',
-    "login_logo_dark": '/core/img/icon/logo.svg',
+    "login_logo": '/img/icon/logo.png',
+    "login_logo_dark": '/img/icon/logo.png',
 
     # Текст на экране входа
     "welcome_sign": "",

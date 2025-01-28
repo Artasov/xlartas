@@ -2,7 +2,7 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField, DecimalField
 
-from apps.commerce.models.payment import Payment, ShopozzPayment, ProdamusPayment
+from apps.commerce.models.payment import Payment
 
 
 class BasePaymentSerializer(AModelSerializer):

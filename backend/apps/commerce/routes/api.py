@@ -4,7 +4,7 @@ from django.urls import path
 from apps.commerce.controllers.employee_availability import EmployeeAvailabilityViewSet
 from apps.commerce.controllers.gift_certificate import apply_gift_certificate
 from apps.commerce.controllers.order import (
-    order_detail, user_orders, order_cancel, order_execute, resend_payment_notification, order_init
+    order_detail, user_orders, order_cancel, order_execute, resend_payment_notification, order_init, create_order
 )
 from apps.commerce.controllers.product import payment_types
 from apps.commerce.controllers.promocode import is_promocode_applicable
@@ -21,6 +21,7 @@ employee_availability_detail = EmployeeAvailabilityViewSet.as_view({
 })
 
 urlpatterns = [
+    path('orders/create/', create_order),
     path('user/orders/', user_orders),
     path('orders/<str:id>/', order_detail),
     path('orders/<str:id>/cancel/', order_cancel),

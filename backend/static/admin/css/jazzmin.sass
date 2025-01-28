@@ -1,7 +1,7 @@
 @import "admin"
 \:root
   // Основные цвета
-  --primary: #ff5733
+  --primary: #f1495b
   // Основной цвет темы
   --secondary: #444444
   // Вторичный цвет темы
@@ -43,14 +43,14 @@ $grey: #8b8b8b
 $greyLower: rgba(161, 161, 161, 0.3)
 $greyDark: rgba(128, 128, 128, 0.3)
 
-$primaryMain: #FE6B58
-$primaryLight: #ff917f
-$primaryDark: #E56A59
+$primaryMain: #fe586b
+$primaryLight: #ff808e
+$primaryDark: #e65a6a
 
-$secondaryMain: #84cbff
-$secondaryLight: #b8deff
-$secondaryLighter: #e4f1ff
-$secondaryDark: #3f6791
+$secondaryMain: #9084ff
+$secondaryLight: #bfb8ff
+$secondaryLighter: #e6e3ff
+$secondaryDark: #473f91
 
 
 $bgDark: #343a40
@@ -60,6 +60,19 @@ $bgPrimary: #454d55
   background-color: $primaryMain
   color: #fff
 
+.dark-mode .content-wrapper
+  background-color: #27262b
+  color: #fff
+
+.dark-mode .navbar-dark
+  background-color: #37363d
+  border-color: #4b545c
+
+[class*=sidebar-dark-]
+  background-color: #37363d
+
+.main-sidebar .brand-link
+  background-color: #37363d !important
 
 @media (prefers-color-scheme: dark)
   .card-header

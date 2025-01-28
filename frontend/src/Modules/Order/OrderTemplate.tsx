@@ -6,9 +6,9 @@ import {Message} from 'Core/components/Message';
 import {useTheme} from 'Theme/ThemeContext';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {redirectWithNextBack} from "Utils/redirectNext";
 import {FC} from "WideLayout/Layouts";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
+import {redirectWithNextBack} from 'Utils/redirectNext';
 
 const OrderTemplate: React.FC = () => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
