@@ -49,6 +49,14 @@ ALLOWED_HOSTS = [
     'web',
     MAIN_DOMAIN,
 ]
+CSRF_TRUSTED_ORIGINS = [
+    MAIN_DOMAIN,
+    'localhost',
+    '127.0.0.1',
+]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 MINIO_USE = bool(int(env('MINIO_USE')))
 POSTGRES_USE = bool(int(env('POSTGRES_USE')))
 
