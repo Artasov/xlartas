@@ -1,4 +1,4 @@
-// User/UserAvatar.tsx
+// Modules/User/UserAvatar.tsx
 import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import CircularProgress from "Core/components/elements/CircularProgress";

@@ -1,7 +1,5 @@
-// Order/PaymentTypePicker.tsx
+// Modules/Order/PaymentTypePicker.tsx
 import React, {useEffect, useState} from 'react';
-import {axios} from "Auth/axiosConfig";
-import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {ICurrency, ICurrencyWithPrice, IPaymentSystem, IProductPrice} from "types/commerce/shop";
 import RadioLine from "Core/components/elements/RadioLine";
 
@@ -9,6 +7,7 @@ import logoTBank from '../../Static/img/icon/tbank/logo.svg'
 import RadioCustomLine from "Core/components/elements/RadioCustomLine";
 import {FRCC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
+import {useApi} from "../Api/useApi";
 
 interface PaymentTypePickerProps {
     prices: IProductPrice[];
@@ -27,14 +26,12 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     const [selectedCurrency, setSelectedCurrency] = useState<string>('');
     const [paymentTypes, setPaymentTypes] = useState<{ [key: string]: IPaymentSystem[] }>({});
     const [selectedPaymentType, setSelectedPaymentType] = useState<IPaymentSystem | null>(null);
-    const {byResponse} = useErrorProcessing();
     const {theme} = useTheme();
+    const {api} = useApi();
+
     useEffect(() => {
-        axios.get('/api/v1/payment/types/')
-            .then(response => {
-                setPaymentTypes(response.data);
-            }).catch(error => byResponse(error));
-    }, [byResponse]);
+        api.get('/api/v1/payment/types/').then(data => setPaymentTypes(data));
+    }, [api]);
 
     useEffect(() => {
         if (Object.keys(paymentTypes).length === 0) return; // Wait until paymentTypes are loaded

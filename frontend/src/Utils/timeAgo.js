@@ -1,4 +1,4 @@
-// core/services/base/timeAgo.js
+// Utils/timeAgo.js
 export function timeAgo(timestamp) {
     const date = new Date(timestamp * 1000); // Convert timestamp to milliseconds
     const seconds = Math.floor((new Date() - date) / 1000);

@@ -3,12 +3,12 @@ from collections import OrderedDict
 
 from apps.commerce.exceptions.order import OrderException
 from apps.software.models import SoftwareOrder
-from apps.software.serializers.software import SoftwareOrderSmallSerializer, SoftwareOrderFullSerializer
+from apps.software.serializers import SoftwareOrderSerializer
 
 ORDER_SERIALIZERS = OrderedDict([
     (SoftwareOrder, {
-        'small': SoftwareOrderSmallSerializer,
-        'full': SoftwareOrderFullSerializer,
+        'small': SoftwareOrderSerializer,
+        'full': SoftwareOrderSerializer,
     }),
 ])
 

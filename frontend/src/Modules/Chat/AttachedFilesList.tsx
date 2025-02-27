@@ -1,4 +1,4 @@
-// Chat/AttachedFilesList.tsx
+// Modules/Chat/AttachedFilesList.tsx
 import React, {useEffect, useState} from 'react';
 import {Avatar, Box, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';

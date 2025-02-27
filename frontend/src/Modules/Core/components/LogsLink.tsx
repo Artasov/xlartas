@@ -1,8 +1,8 @@
-// Core/components/LogsLink.tsx
+// Modules/Core/components/LogsLink.tsx
 import React from 'react';
 import {Link} from 'react-router-dom';
-import NotesIcon from '@mui/icons-material/Notes';
 import {useTheme} from "Theme/ThemeContext";
+import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
 const LogsLink: React.FC = () => {
     const {theme} = useTheme();
@@ -19,7 +19,7 @@ const LogsLink: React.FC = () => {
 
     return (
         <Link to={logsUrl} target="_blank" rel="noopener noreferrer">
-            <NotesIcon
+            <SortRoundedIcon
                 className={`fs-1 ps-3px`}
                 style={{color: theme.palette.text.primary60}}
             />

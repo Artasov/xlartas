@@ -1,3 +1,4 @@
+// Types/chat/models.ts
 import {IUser} from "types/core/user";
 
 export interface IRoom {

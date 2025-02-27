@@ -1,4 +1,4 @@
-// core/services/base/redirectNext.ts
+// Utils/redirectNext.ts
 import {Location} from 'react-router-dom';
 import pprint from 'Utils/pprint';
 

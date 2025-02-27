@@ -1,4 +1,4 @@
-// Core/components/elements/Tabs/TabPanel.tsx
+// Modules/Core/components/elements/Tabs/TabPanel.tsx
 import React, {ReactNode} from 'react';
 import {Box} from '@mui/material'; // Assuming you are using Material-UI Box component
 

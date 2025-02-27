@@ -1,4 +1,4 @@
-// Core/hooks/useViewportHeight.ts
+// Modules/Core/hooks/useViewportHeight.ts
 import {useEffect, useState} from 'react';
 
 const useViewportHeight = () => {

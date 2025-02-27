@@ -1,4 +1,4 @@
-// Chat/MessageInput.tsx
+// Modules/Chat/MessageInput.tsx
 
 import React, {useState} from 'react';
 import TextareaAutosize from 'react-textarea-autosize';

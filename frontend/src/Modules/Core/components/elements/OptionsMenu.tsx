@@ -1,4 +1,4 @@
-// Core/components/elements/OptionsMenu.tsx
+// Modules/Core/components/elements/OptionsMenu.tsx
 import React, {MouseEvent, ReactNode, useState} from 'react';
 import {IconButton, Menu} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';

@@ -1,3 +1,4 @@
+// Types/core/common.ts
 export type WeekDays = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export type Language = 'RUS' | 'ENG';
 

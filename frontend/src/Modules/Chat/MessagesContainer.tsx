@@ -1,4 +1,4 @@
-// Chat/MessagesContainer.tsx
+// Modules/Chat/MessagesContainer.tsx
 
 import React, {useContext} from 'react';
 import {CircularProgress} from '@mui/material';

@@ -1,4 +1,4 @@
-// Core/components/Message.tsx
+// Modules/Core/components/Message.tsx
 import {toast} from 'react-toastify';
 
 function capitalizeFirstLetter(string: string): string {

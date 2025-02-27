@@ -1,4 +1,4 @@
-// Core/components/elements/Button/Button.tsx
+// Modules/Core/components/elements/Button/Button.tsx
 import React from 'react';
 import {Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress} from '@mui/material';
 import {useTheme} from "Theme/ThemeContext";

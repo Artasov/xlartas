@@ -1,4 +1,4 @@
-// Core/components/Header/NavLink.tsx
+// Modules/Core/components/Header/NavLink.tsx
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {useTheme} from 'Theme/ThemeContext';

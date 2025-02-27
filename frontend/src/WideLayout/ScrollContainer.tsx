@@ -1,4 +1,4 @@
-// core/components/elements/ScrollContainer.tsx
+// WideLayout/ScrollContainer.tsx
 import React, {CSSProperties, forwardRef, useImperativeHandle, useRef} from 'react';
 import {IconButton} from '@mui/material';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';

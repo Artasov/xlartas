@@ -1,8 +1,37 @@
-// Chat/Room.tsx
-
+// Modules/Chat/Room.tsx
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+///////Скопировать заново с нормального места//////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
 import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState,} from 'react';
 import {useParams} from 'react-router-dom';
-import {axios} from 'Auth/axiosConfig';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import Divider from 'Core/components/elements/Divider';
 import {parseISO} from 'date-fns';
@@ -10,7 +39,6 @@ import {Message as ToastMessage} from 'Core/components/Message';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {IMessage, IRoom} from 'types/chat/models';
 import {FC} from 'WideLayout/Layouts';
-import pprint from 'Utils/pprint';
 import MessageInput from 'Chat/MessageInput';
 import {useRooms} from './RoomsContext';
 import RoomHeader from './RoomHeader';
@@ -18,6 +46,7 @@ import MessagesContainer from './MessagesContainer';
 import DateLabel from './DateLabel';
 import useWebSocket from './useWebSocket';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
+import {useApi} from "../Api/useApi";
 
 interface RoomProps {
     /** Если хотим передать комнату напрямую (чтобы не делать запрос на получение Room). */
@@ -35,21 +64,18 @@ const Room: React.FC<RoomProps> = (
     }) => {
     const {roomId: routeRoomId} = useParams<{ roomId: string }>();
     const roomId = propRoomId ?? routeRoomId;
-
     const {headerNavHeight} = useNavigation();
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [room, setRoom] = useState<IRoom | null>(roomProp ?? null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const messagesContainerRef = useRef<HTMLDivElement | null>(null);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
-
     const {isAuthenticated: authStatus, user} =
         useContext(AuthContext) as AuthContextType;
     const isAuthenticated = authStatus ?? false; // Обеспечиваем, что это всегда boolean
-
-    const {byResponse, notAuthentication} = useErrorProcessing();
+    const {notAuthentication} = useErrorProcessing();
     const {updateRoom} = useRooms();
-
+    const {api} = useApi();
     const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
     const isInitialLoad = useRef<boolean>(true);
     const prevScrollHeightRef = useRef<number>(0);
@@ -75,28 +101,19 @@ const Room: React.FC<RoomProps> = (
             if (isLoadingMore || isFetchingRef.current) return;
             if (url === null && !isInitialLoad.current) return;
             if (!roomId) return;
-
             isFetchingRef.current = true;
             setIsLoadingMore(true);
-
-            try {
-                // Если прокручиваем, запоминаем текущую высоту, чтобы после подгрузки сохранить позицию
-                if (url && messagesContainerRef.current) {
-                    prevScrollHeightRef.current = messagesContainerRef.current.scrollHeight;
-                }
-
-                const response = await axios.get(
-                    url || `/api/v1/rooms/${roomId}/messages/`
-                );
-                pprint('Messages fetched:', response.data);
-
+            if (url && messagesContainerRef.current) {
+                prevScrollHeightRef.current = messagesContainerRef.current.scrollHeight;
+            }
+            api.get(url || `/api/v1/rooms/${roomId}/messages/`).then(data => {
                 setMessages((prevMessages) => {
-                    const newMessages = response.data.results.filter(
+                    const newMessages = data.results.filter(
                         (msg: IMessage) => !prevMessages.some((existing) => existing.id === msg.id)
                     );
                     return [...newMessages, ...prevMessages];
                 });
-                setNextPageUrl(response.data.next);
+                setNextPageUrl(data.next);
 
                 // При первой загрузке скроллим вниз
                 if (isInitialLoad.current && !url) {
@@ -117,30 +134,18 @@ const Room: React.FC<RoomProps> = (
                         }
                     }, 100);
                 }
-            } catch (error) {
-                byResponse(error);
-            } finally {
+            }).finally(() => {
                 setIsLoadingMore(false);
                 isFetchingRef.current = false;
-            }
+            })
         },
-        [roomId, byResponse, isLoadingMore]
+        [roomId, api, isLoadingMore]
     );
 
     const fetchRoom = useCallback(async () => {
-        // Если у нас уже есть roomProp, то не запрашиваем заново
-        if (roomProp || !roomId) {
-            return;
-        }
-
-        try {
-            const response = await axios.get(`/api/v1/rooms/${roomId}/`);
-            pprint('Room fetched:', response.data);
-            setRoom(response.data);
-        } catch (error) {
-            byResponse(error);
-        }
-    }, [roomId, byResponse, roomProp]);
+        if (roomProp || !roomId) return;
+        api.get(`/api/v1/rooms/${roomId}/`).then(data => setRoom(data));
+    }, [roomId, api, roomProp]);
 
     const handleWebSocketMessage = useCallback(
         (data: any) => {
@@ -259,17 +264,13 @@ const Room: React.FC<RoomProps> = (
 
             setMessages((prevMessages) => [...prevMessages, tempMessage]);
 
-            try {
-                if (sendMessage) {
-                    sendMessage(JSON.stringify(messagePayload));
-                } else {
-                    ToastMessage.error('WebSocket не подключен.');
-                }
-            } catch (error) {
-                byResponse(error);
+            if (sendMessage) {
+                sendMessage(JSON.stringify(messagePayload));
+            } else {
+                ToastMessage.error('WebSocket не подключен.');
             }
         },
-        [roomId, user, byResponse, base64ToBlob, sendMessage]
+        [roomId, user, base64ToBlob, sendMessage]
     );
 
     const handleFileChange = useCallback((_updatedFiles: File[]) => {

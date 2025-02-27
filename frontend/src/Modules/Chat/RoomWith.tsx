@@ -1,12 +1,10 @@
-// Chat/RoomWith.tsx
+// Modules/Chat/RoomWith.tsx
 
 import React, {useContext, useEffect, useState} from 'react';
-import {axios} from 'Auth/axiosConfig';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import pprint from 'Utils/pprint';
 import Room from './Room';
 import {IRoom} from 'types/chat/models';
+import {useApi} from "../Api/useApi";
 
 interface RoomWithProps {
     userId?: number;
@@ -19,23 +17,20 @@ const RoomWith: React.FC<RoomWithProps> = (
         showHeader,
     }) => {
 
-    const {byResponse} = useErrorProcessing();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const [room, setRoom] = useState<IRoom | null>(null);
+    const {api} = useApi();
 
     useEffect(() => {
         if (!userId) {
             setRoom(null);
             return;
         }
-        axios.get(`api/v1/rooms/personal/with/${userId}/`
-        ).then((response) => {
-            pprint(`Personal room with user ID: ${userId}`, response.data);
-            setRoom(response.data);
-        }).catch((error) => byResponse(error));
-    }, [userId, byResponse]);
+        api.get(`api/v1/rooms/personal/with/${userId}/`).then(data => setRoom(data));
+    }, [userId, api]);
+
     if (!room || !isAuthenticated) return null;
-    return <Room key={room.id} showHeader={showHeader ? true : false} roomId={String(room.id)} room={room}/>;
+    return <Room key={room.id} showHeader={!!showHeader} roomId={String(room.id)} room={room}/>;
 };
 
 export default RoomWith;

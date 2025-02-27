@@ -1,9 +1,7 @@
 import 'moment/locale/ru';
 import moment from "moment";
 import './Static/css/base.sass';
-import SignIn from "Auth/SignIn";
 import pprint from "Utils/pprint";
-import About from "Core/pages/About";
 import './Static/css/wide-classes.css';
 import Cabinet from "Cabinet/Cabinet";
 import './Static/css/ReactToastify.sass';
@@ -12,7 +10,6 @@ import './Static/css/bootstrap_overwrite.sass';
 import SettingsTool from "Core/SettingsTool";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {ToastContainer} from "react-toastify";
-import ContractOffer from "Docs/ContractOffer";
 import 'react-toastify/dist/ReactToastify.css';
 import OrderTemplate from "Order/OrderTemplate";
 import NewPassword from "Core/pages/NewPassword";
@@ -31,6 +28,12 @@ import Landing from "Landing/Landing";
 import Header from "Core/components/Header/Header";
 import Modal from "Core/components/elements/Modal/Modal";
 import AuthForm from "Auth/forms/AuthForm";
+import CompanyPage from "Company/CompanyPage";
+import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
+
+function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
+    return null;
+}
 
 const App: React.FC = () => {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
@@ -41,7 +44,7 @@ const App: React.FC = () => {
     const {headerNavHeight, mainRef, isAuthModalOpen, setIsAuthModalOpen} = useNavigation();
 
     useEffect(() => {
-        moment.locale('ru');
+        moment.locale('en');
         pprint('START');
     }, []);
 
@@ -74,7 +77,8 @@ const App: React.FC = () => {
                 <Header/>
                 <SettingsTool/>
                 <Modal closeBtn={false} title={''}
-                       isOpen={isAuthModalOpen} cls={'px-3 w-100 maxw-300px'}
+                       clsModalScroll={'px-3 '}
+                       isOpen={isAuthModalOpen} cls={'w-100 maxw-380px'}
                        onClose={() => setIsAuthModalOpen(false)}>
                     <AuthForm ways={['social', 'password', 'email']}/>
                 </Modal>
@@ -88,9 +92,9 @@ const App: React.FC = () => {
                 >
                     <Routes>
                         {/* <Route path="/" element={<Navigate to={'/auth'}/>}/> */}
-                        <Route path="/" element={<Landing/>}/>
-                        <Route path="/new-password" element={<NewPassword/>}/>
-                        <Route path="oauth/:provider/callback/" element={<OAuthCallback/>}/>
+                        <Route path='/' element={<Landing/>}/>
+                        <Route path='/new-password' element={<NewPassword/>}/>
+                        <Route path='oauth/:provider/callback/' element={<OAuthCallback/>}/>
 
                         {isAuthenticated === null
                             ? ''
@@ -98,7 +102,7 @@ const App: React.FC = () => {
                                 ? ''
                                 : (
                                     <>
-                                        <Route path="/order" element={<OrderTemplate/>}>
+                                        <Route path='/order' element={<OrderTemplate/>}>
                                             <Route
                                                 index
                                                 element={<Navigate to="software" replace/>}
@@ -108,10 +112,11 @@ const App: React.FC = () => {
                                 )
                         }
 
-                        <Route path="/about" element={<About/>}/>
-                        <Route path="/contract-offer" element={<ContractOffer/>}/>
+                        {/* Маршрут для компании */}
+                        <Route path='/companies/:name' element={<CompanyPage/>}/>
+                        <Route path='/docs/:id' element={<CompanyDocumentDetail/>}/>
 
-                        <Route path="/*" element={<Cabinet/>}/>
+                        <Route path='/*' element={<Cabinet/>}/>
                     </Routes>
                 </main>
             </div>

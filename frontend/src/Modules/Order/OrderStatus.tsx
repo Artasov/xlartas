@@ -1,4 +1,4 @@
-// Order/OrderStatus.tsx
+// Modules/Order/OrderStatus.tsx
 import React from 'react';
 import {IOrder} from "types/commerce/shop";
 import {FR} from "WideLayout/Layouts";
@@ -14,31 +14,31 @@ const OrderStatus: React.FC<OrderStatusProps> = ({order}) => {
 
     const statusList = [
         {
-            label: 'Оплачен',
+            label: 'Paid',
             isActive: order.is_paid,
             color: order.is_paid ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не оплачен"
         },
         {
-            label: 'Инициализирован',
+            label: 'Inited',
             isActive: order.is_inited,
             color: order.is_inited ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не инициализирован"
         },
         {
-            label: 'Выполнен',
+            label: 'Executed',
             isActive: order.is_executed,
             color: order.is_executed ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не выполнен"
         },
         {
-            label: 'Отменён',
+            label: 'Cancelled',
             isActive: order.is_cancelled,
             color: order.is_cancelled ? theme.colors.error.main : theme.colors.secondary.main,
             showNegative: false, // Не показывать "Не отменён"
         },
         {
-            label: 'Возвращен',
+            label: 'Refunded',
             isActive: order.is_refunded,
             color: order.is_refunded ? theme.colors.error.main : theme.colors.success.main,
             showNegative: false, // Не показывать "Не возвращен"

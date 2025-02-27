@@ -1,4 +1,4 @@
-// core/services/validator/base.ts
+// Utils/validator/base.ts
 export const isEmail = (value: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(value);

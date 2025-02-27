@@ -1,4 +1,4 @@
-// visibilitySlice.js
+// Redux/visibilitySlice.js
 import {createSlice} from '@reduxjs/toolkit';
 
 export const visibilitySlice = createSlice({

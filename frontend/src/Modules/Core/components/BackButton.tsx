@@ -1,4 +1,4 @@
-// Core/components/BackButton.tsx
+// Modules/Core/components/BackButton.tsx
 
 import React from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';

@@ -1,16 +1,15 @@
-// User/UserAvatarEditable.tsx
+// Modules/User/UserAvatarEditable.tsx
 import React, {ChangeEvent, useContext, useRef, useState} from 'react';
 import UserAvatar from 'User/UserAvatar';
-import {axios} from "Auth/axiosConfig";
 import {Message} from "Core/components/Message";
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 
 import './UserAvatarEditable.sass';
-import {ErrorContextType, useErrorProcessing} from "Core/components/ErrorProvider";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FCCC} from "WideLayout/Layouts";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import {useApi} from "../Api/useApi";
 
 interface UserAvatarEditableProps {
     size: string;
@@ -19,11 +18,11 @@ interface UserAvatarEditableProps {
 }
 
 const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, className}) => {
-    const {byResponse} = useErrorProcessing() as ErrorContextType;
     const {user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
     const {theme} = useTheme();
     const uploadIconRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {api} = useApi();
 
     const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -31,19 +30,16 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             setIsLoading(true);
             const formData = new FormData();
             formData.append('avatar', file);
-            try {
-                await axios.patch('/api/v1/user/update/avatar/', formData, {
-                    headers: {'Content-Type': 'multipart/form-data'},
-                });
-                await updateCurrentUser();
-                Message.success('Аватар успешно обновлен.');
-            } catch (e) {
-                byResponse(e);
-                Message.error('Не удалось обновить аватар.');
-            } finally {
+            api.patch('/api/v1/user/update/avatar/', formData, {
+                headers: {'Content-Type': 'multipart/form-data'},
+            }).then(_ => {
+                updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
+            }).catch(_ =>
+                Message.error('Не удалось обновить аватар.')
+            ).finally(() => {
                 setIsLoading(false);
                 uploadIconRef?.current?.blur();
-            }
+            })
         }
     };
 

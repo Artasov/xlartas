@@ -1,4 +1,4 @@
-// Core/components/elements/RadioCustomLine.tsx
+// Modules/Core/components/elements/RadioCustomLine.tsx
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 import {FR} from "WideLayout/Layouts";

@@ -63,7 +63,10 @@ async def create_order(request):
             return Response('/consultations', status=HTTP_201_CREATED)
         if not order.payment:
             return Response('/consultations', status=HTTP_201_CREATED)
-        return Response(order.payment.payment_url, status=HTTP_201_CREATED)
+        return Response({
+            'payment_url': order.payment.payment_url,
+            'id': order.id,
+        }, status=HTTP_201_CREATED)
 
 
 @acontroller('User Orders')

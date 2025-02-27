@@ -181,3 +181,4 @@ poetry.lock
 /.idea
 /deploy_key
 /deploy_key.pub
+/backend/utils/copy_configuration.py

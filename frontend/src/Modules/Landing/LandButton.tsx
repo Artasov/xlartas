@@ -1,4 +1,4 @@
-// Landing/LandButton.tsx
+// Modules/Landing/LandButton.tsx
 
 import React from 'react';
 import {Button, ButtonProps} from '@mui/material';

@@ -19,7 +19,7 @@ class UserSelfSerializer(AModelSerializer):
         model = User
         fields = (
             'id',
-            'username', 'full_name',
+            'username', 'full_name', 'secret_key',
             'email', 'phone', 'avatar',
             'first_name', 'last_name', 'middle_name',
             'birth_date', 'gender', 'date_joined', 'timezone',
@@ -68,8 +68,8 @@ class UserPublicSerializer(AModelSerializer):
 
 class SignUpSerializer(ASerializer):
     first_name = CharField(required=False, )
-    email = EmailField(required=False, )
-    phone = PhoneNumberField(required=True)
+    email = EmailField(required=True, )
+    phone = PhoneNumberField(required=False)
     timezone = TimeZoneSerializerField(
         use_pytz=True,
         required=False,

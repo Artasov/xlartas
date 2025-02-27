@@ -7,12 +7,12 @@ from adjango.aserializers import SerializerErrors
 from adjango.utils.base import phone_format
 from adrf.decorators import api_view
 from django.contrib.auth import alogout
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from django.utils.translation import gettext_lazy as _
 from apps.captcha.yandex import captcha_required
 from apps.confirmation.models.base import ConfirmationCode
 from apps.core.confirmations.actions import CoreConfirmationActionType
@@ -42,17 +42,18 @@ async def signup(request) -> Response:
     if await serializer.ais_valid():
         data = await serializer.adata
         first_name = data.get('first_name', '')
-        email = data.get('email', None)
-        phone = data.get('phone', None)
+        email = data.get('email')
+        phone = data.get('phone')
         timezone = data.get('timezone')
-        if not phone:
+        if email is None:
             raise UserException.WrongCredential()
-        phone = phone_format(phone)
+
+        if phone: phone = phone_format(phone)
 
         if email is not None and await User.objects.filter(
                 email=email
         ).aexists(): raise UserException.AlreadyExistsWithThisEmail()
-        if email is not None and await User.objects.filter(
+        if phone is not None and await User.objects.filter(
                 phone=phone
         ).aexists(): raise UserException.AlreadyExistsWithThisPhone()
 
@@ -61,7 +62,7 @@ async def signup(request) -> Response:
         else:
             username = f'{phone}_{randint(1000, 9999)}'
         if email:
-            user = await User.objects.acreate_user(
+            await User.objects.acreate_user(
                 username=username,
                 first_name=first_name,
                 email=email,
@@ -69,7 +70,7 @@ async def signup(request) -> Response:
                 timezone=timezone
             )
         else:
-            user = await User.objects.acreate_user(
+            await User.objects.acreate_user(
                 username=username,
                 first_name=first_name,
                 phone=phone,
@@ -78,14 +79,14 @@ async def signup(request) -> Response:
         await ConfirmationCode.create_and_send(
             request=request,
             action=CoreConfirmationActionType.SIGNUP,
-            method='phone',  # Потому что у нас только по телефону подтверждения создания аккаунта
-            credential=phone,
+            method='email',  # Потому что у нас только по email подтверждения создания аккаунта
+            credential=email,
             raise_exceptions=True
         )
         return Response({
             'message': _('Your account has been created, please confirm your phone number'),
             'confirmation_sent': True,
-            'credential': phone,
-            'confirmation_method': 'phone'
+            'credential': email,
+            'confirmation_method': 'email'
         }, status=201)
     raise SerializerErrors(serializer.errors)

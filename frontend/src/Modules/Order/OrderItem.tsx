@@ -1,4 +1,4 @@
-// Order/OrderItem.tsx
+// Modules/Order/OrderItem.tsx
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
@@ -33,7 +33,7 @@ const OrderItem: React.FC<OrderItemProps> = ({order, onClick, onSomeUpdatingOrde
                     <FRBC wrap mb={1}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={theme.colors.secondary.lighter} color={theme.palette.text.primary80}>
+                                bg={theme.palette.bg.contrast10} color={theme.palette.text.primary80}>
                                 {order.product.polymorphic_ctype.name}
                             </FR>
                             <FR cls={`fs-5`} color={theme.palette.text.primary80}>

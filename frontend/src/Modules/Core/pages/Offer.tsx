@@ -1,4 +1,4 @@
-// Core/pages/Offer.tsx
+// Modules/Core/pages/Offer.tsx
 import {Container} from "@mui/material";
 import React from "react";
 import Head from "Core/components/Head";

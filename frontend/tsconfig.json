@@ -17,6 +17,9 @@
       "WideLayout/*": [
         "WideLayout/*"
       ],
+      "Company/*": [
+        "Modules/Company/*"
+      ],
       "Auth/*": [
         "Modules/Auth/*"
       ],

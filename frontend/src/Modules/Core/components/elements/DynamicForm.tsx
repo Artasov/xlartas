@@ -1,4 +1,4 @@
-// Core/components/elements/DynamicForm.tsx
+// Modules/Core/components/elements/DynamicForm.tsx
 
 import React, {ReactNode, useState} from 'react';
 import {FormControl, TextField} from '@mui/material';

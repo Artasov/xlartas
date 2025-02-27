@@ -1,4 +1,4 @@
-// Core/pages/NewPassword.tsx
+// Modules/Core/pages/NewPassword.tsx
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import {Message} from "Core/components/Message";

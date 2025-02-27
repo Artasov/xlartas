@@ -1,4 +1,4 @@
-// Auth/SignIn.tsx
+// Modules/Auth/SignIn.tsx
 import React, {useContext, useEffect} from 'react';
 import Head from "Core/components/Head";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";

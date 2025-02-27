@@ -1,8 +1,8 @@
-// Core/components/AdminLink.tsx
+// Modules/Core/components/AdminLink.tsx
 import React from 'react';
 import {Link} from 'react-router-dom';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {useTheme} from "Theme/ThemeContext";
+import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 
 const AdminLink: React.FC = () => {
     const {theme} = useTheme();
@@ -18,9 +18,11 @@ const AdminLink: React.FC = () => {
 
     return (
         <Link to={adminUrl} target="_blank" rel="noopener noreferrer">
-            <ManageAccountsIcon
-                className={`fs-1 ps-3px`}
-                style={{color: theme.palette.text.primary60}}
+            <AdminPanelSettingsRoundedIcon
+                style={{
+                    color: theme.palette.text.primary60,
+                    fontSize: '2rem',
+                }}
             />
         </Link>
     );

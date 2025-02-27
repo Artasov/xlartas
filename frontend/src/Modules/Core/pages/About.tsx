@@ -1,4 +1,4 @@
-// Core/pages/About.tsx
+// Modules/Core/pages/About.tsx
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button, Container, Link, Typography} from '@mui/material';

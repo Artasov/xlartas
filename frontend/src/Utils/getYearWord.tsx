@@ -1,4 +1,4 @@
-// utils/getYearWord.ts
+// Utils/getYearWord.tsx
 
 /**
  * Возвращает правильную форму слова "год" в зависимости от числа.

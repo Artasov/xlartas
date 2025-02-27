@@ -1,4 +1,4 @@
-// Core/components/Header/DesktopNavigationMenu.tsx
+// Modules/Core/components/Header/DesktopNavigationMenu.tsx
 import React, {ReactNode} from "react";
 import {useTheme} from "Theme/ThemeContext";
 

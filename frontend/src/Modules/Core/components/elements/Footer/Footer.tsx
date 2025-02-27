@@ -1,4 +1,4 @@
-// Core/components/elements/Footer/Footer.tsx
+// Modules/Core/components/elements/Footer/Footer.tsx
 import React from 'react';
 
 const Footer = () => (

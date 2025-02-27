@@ -1,4 +1,4 @@
-// User/UserAvatarGroup.tsx
+// Modules/User/UserAvatarGroup.tsx
 import React from 'react';
 import UserAvatar from "./UserAvatar";
 import {IUser} from 'types/core/user';

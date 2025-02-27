@@ -1,4 +1,4 @@
-// Chat/RoomHeader.tsx
+// Modules/Chat/RoomHeader.tsx
 
 import React, {useContext, useMemo} from 'react';
 import {CircularProgress, IconButton, useMediaQuery} from '@mui/material';

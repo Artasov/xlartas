@@ -1,4 +1,4 @@
-// Core/components/Head.tsx
+// Modules/Core/components/Head.tsx
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
 

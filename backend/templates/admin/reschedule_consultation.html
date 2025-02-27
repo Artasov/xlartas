@@ -1,0 +1,28 @@
+<!-- templates/admin/reschedule_consultation.html -->
+
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .reschedule_field * {
+            margin: 0;
+        }
+    </style>
+    <div class="d-flex flex-column" style="gap: .5rem">
+        <h1 style="font-size: 2rem">{{ title }}</h1>
+        <span style="font-weight: bold">Текущая дата консультации: {{ consultation.date }}</span>
+        <form method="post" class="d-flex flex-column" style="gap: .5rem">
+            {% csrf_token %}
+            <div class="reschedule_field d-flex flex-column" style="gap: .5rem">
+                {{ form.new_date.label_tag }}
+                {{ form.new_date }}
+                {{ form.reason.label_tag }}
+                {{ form.reason }}
+            </div>
+            <button type="submit" class="btn btn-primary">Перенести</button>
+            <a href="{% url 'admin:psychology_consultation_change' consultation.pk %}"
+               class="btn btn-danger">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

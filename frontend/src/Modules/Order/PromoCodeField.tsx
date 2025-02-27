@@ -1,9 +1,8 @@
-// Order/PromoCodeField.tsx
+// Modules/Order/PromoCodeField.tsx
 
 import React, {useEffect, useRef, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {FC} from "WideLayout/Layouts";
-import {axios} from "Auth/axiosConfig";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {TextField} from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -13,6 +12,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IPromocode} from "types/commerce/promocode";
 import {ICurrency} from "types/commerce/shop";
 import {Message} from "Core/components/Message";
+import {useApi} from "../Api/useApi";
 
 interface PromoCodeFieldProps {
     cls?: string;
@@ -37,7 +37,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
     const [promoCode, setPromoCode] = useState<string>('');
     const [status, setStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
     const promoCodeRef = useRef<HTMLInputElement>(null);
-
+    const {api} = useApi();
     const {theme} = useTheme();
     const {byResponse} = useErrorProcessing();
 
@@ -49,7 +49,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
         }
         setStatus('checking');
         try {
-            const response = await axios.post('api/v1/promocode/applicable/', {
+            const response = await api.post('api/v1/promocode/applicable/', {
                 promocode: code,
                 employee: employeeId,
                 product: productId,

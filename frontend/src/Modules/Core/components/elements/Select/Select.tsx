@@ -1,4 +1,4 @@
-// Core/components/elements/Select/Select.tsx
+// Modules/Core/components/elements/Select/Select.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import './Select.sass';
 import {useTheme} from "@mui/material/styles";

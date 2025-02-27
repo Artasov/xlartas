@@ -1,4 +1,4 @@
-// src/types/custom.d.ts
+// Types/custom.d.ts
 
 // SVG как React-компоненты
 declare module '*.svg' {

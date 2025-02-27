@@ -21,7 +21,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
     list_display = (
         'id',
         'display_avatar',
-        'display_full_name',
+        'username',
         'email',
         'phone',
         'gender',
@@ -46,7 +46,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         'display_user_id',
     )
     list_per_page = 20
-    list_display_links = ('id', 'display_avatar', 'display_full_name', 'email')
+    list_display_links = ('id', 'display_avatar', 'email')
 
     fieldsets = (
         (_('General info'), {'fields': (
@@ -105,10 +105,6 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
     def display_user_id(self, obj):
         url = reverse('admin:core_user_change', args=[obj.id])
         return format_html('<a href="{}">{}</a>', url, obj.id)
-
-    @admin_description(_('User'))
-    def display_full_name(self, obj):
-        return f'{obj.first_name} {obj.last_name}'
 
     def save_model(self, request, obj, form, change):
         if 'password' in form.changed_data:

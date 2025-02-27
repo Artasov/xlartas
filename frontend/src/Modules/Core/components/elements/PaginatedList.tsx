@@ -1,4 +1,4 @@
-// Core/components/elements/PaginatedList.tsx
+// Modules/Core/components/elements/PaginatedList.tsx
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FC, FCCC} from "WideLayout/Layouts";

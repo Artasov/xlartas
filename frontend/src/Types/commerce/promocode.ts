@@ -1,3 +1,4 @@
+// Types/commerce/promocode.ts
 import {IUser} from "types/core/user";
 import {ICurrency, IProduct} from "types/commerce/shop";
 

@@ -1,4 +1,4 @@
-// Auth/forms/NewPasswordForm.tsx
+// Modules/Auth/forms/NewPasswordForm.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';

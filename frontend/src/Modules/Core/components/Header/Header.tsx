@@ -1,9 +1,8 @@
-// Core/components/Header/Header.tsx
+// Modules/Core/components/Header/Header.tsx
 import React, {useContext, useRef} from 'react';
 import './Header.sass';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Link, useLocation} from "react-router-dom";
-import LogoutIcon from '@mui/icons-material/Logout';
 import {useSelector} from "react-redux";
 import ThemeToggleButton from "Theme/ThemeToggleButton";
 import {useTheme} from "Theme/ThemeContext";
@@ -14,7 +13,7 @@ import AdminLink from "Core/components/AdminLink";
 import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
 import {FRCC} from "WideLayout/Layouts";
-
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 const Header: React.FC = () => {
     const {
@@ -41,10 +40,9 @@ const Header: React.FC = () => {
 
     if (!isHeaderVisible) return null;
     return (
-        <header ref={headerRef} className={`frbc w-100 mx-auto maxw-1000px gap-4 px-4`} style={{height: headerNavHeight}}>
-            <FRCC
-                onClick={hideMobileMenu}
-                color={theme.palette.text.primary60}>
+        <header ref={headerRef} style={{height: headerNavHeight}}
+                className={`frbc w-100 mx-auto maxw-750px gap-4 px-4`}>
+            <FRCC onClick={hideMobileMenu} color={theme.palette.text.primary60}>
                 {logoContent}
             </FRCC>
             <FRCC g={3} mt={'5px'}>
@@ -70,28 +68,24 @@ const Header: React.FC = () => {
                 )}
                 <FRCC g={1}>
                     {profileBtnVisible && !location.pathname.includes('/profile') && (
-                        <Link to={'/profile'}>
-                            <UserAvatar
-                                size={user?.avatar ? '37px' : '30px'}
-                                className={`fs-1`}
-                                avatar={user?.avatar}
-                            />
-                        </Link>
+                        <Link to={'/profile'}> <UserAvatar
+                            size={user?.avatar ? '37px' : '30px'}
+                            className={`fs-1`}
+                            avatar={user?.avatar}
+                        /> </Link>
                     )}
-                    {isAuthenticated && user?.is_staff && (
-                        <>
-                            <AdminLink/>
-                            <LogsLink/>
-                        </>
-                    )}
-                    <ThemeToggleButton className={`fs-2`}/>
-                    {isAuthenticated && (
-                        <LogoutIcon
-                            className={`fs-2`}
-                            style={{color: theme.palette.text.primary60}}
-                            onClick={logout}
-                        />
-                    )}
+                    {isAuthenticated && user?.is_staff && <>
+                        <AdminLink/>
+                        <LogsLink/>
+                    </>}
+                    <ThemeToggleButton/>
+                    {isAuthenticated && <LogoutRoundedIcon
+                        style={{
+                            color: theme.palette.text.primary60,
+                            fontSize: '1.8rem'
+                        }}
+                        onClick={logout}
+                    />}
                 </FRCC>
             </FRCC>
         </header>

@@ -1,11 +1,10 @@
-// User/UserPersonalInfoForm.tsx
+// Modules/User/UserPersonalInfoForm.tsx
 
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
 import {format} from 'date-fns';
 import {FormControlLabel, Radio, RadioGroup, Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {axios} from "Auth/axiosConfig";
 import TextField from "Core/components/elements/TextField/TextField";
 import {Message} from "Core/components/Message";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
@@ -24,6 +23,8 @@ import TimeZonePicker from "Core/components/elements/TimeZonePicker";
 import {FC, FR, FRC, FRSC} from "WideLayout/Layouts";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import UserAvatarEditable from "User/UserAvatarEditable";
+import copyToClipboard from "Utils/clipboard";
+import {useApi} from "../Api/useApi";
 
 interface FormData {
     username: string;
@@ -40,8 +41,9 @@ const UserPersonalInfoForm: React.FC = () => {
     const [formData, setFormData] = useState<FormData | null>(null);
     const [showSaveButton, setShowSaveButton] = useState(false);
     const {isAuthenticated, user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
-    const {byResponse, notAuthentication} = useErrorProcessing();
+    const {notAuthentication} = useErrorProcessing();
     const {theme} = useTheme();
+    const {api} = useApi();
 
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
     const [isEmailModalOpen, setIsEmailModalOpen] = useState<boolean>(false);
@@ -89,16 +91,16 @@ const UserPersonalInfoForm: React.FC = () => {
             delete dataToSubmit.birth_date;
         }
 
-        axios.patch('/api/v1/user/update/', dataToSubmit).then(() => {
+        api.patch('/api/v1/user/update/', dataToSubmit).then(() => {
             setShowSaveButton(false);
             updateCurrentUser().then(
                 () => Message.success('Пользователь успешно обновлен.')
             );
-        }).catch(e => byResponse(e))
-            .finally(() => setIsSubmitting(false)); // Сброс состояния отправки
+        }).finally(() => setIsSubmitting(false)); // Сброс состояния отправки
     };
 
     if (!formData) return null;
+    if (!user) return null;
 
     return (
         <FC component={'form'} pb={'5rem'} pos={'relative'} mt={1} onSubmit={handleSubmit} maxW={400}>
@@ -162,6 +164,20 @@ const UserPersonalInfoForm: React.FC = () => {
                         Сменить пароль
                     </Button>
                 </FR>
+                {user.secret_key &&
+                    <FC pEvents={true} onClick={() => {
+                        if (user.secret_key) copyToClipboard(user.secret_key)
+                    }}>
+                        <FC pEvents={false}>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                margin="none"
+                                disabled={true}
+                                label="Secret key"
+                                value={user.secret_key}/>
+                        </FC>
+                    </FC>}
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -237,19 +253,19 @@ const UserPersonalInfoForm: React.FC = () => {
                 </FRSC>
             </FC>
             <RadioGroup
-                className={'mb-1'}
+                className={'my-2 gap-2'}
                 row aria-label="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}>
                 <FormControlLabel
-                    className={'m-0'}
+                    className={'m-0 gap-1'}
                     labelPlacement="start"
                     value="male"
                     control={<Radio/>}
                     label="Мужской"/>
                 <FormControlLabel
-                    className={'m-0'}
+                    className={'m-0 gap-1'}
                     value="female"
                     control={<Radio/>}
                     label="Женский"/>

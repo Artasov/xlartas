@@ -1,4 +1,4 @@
-// Core/components/elements/Modal/Modal.tsx
+// Modules/Core/components/elements/Modal/Modal.tsx
 import React, {MouseEvent, ReactNode, useEffect, useRef, useState} from 'react';
 import './Modal.sass';
 import IconButton from "@mui/material/IconButton";
@@ -10,8 +10,9 @@ interface ModalProps {
     onClose?: () => void;
     title?: string;
     cls?: string;
+    clsContent?: string;
     titleCls?: string;
-    modalScrollCls?: string;
+    clsModalScroll?: string;
     bg?: string;
     children: ReactNode;
     zIndex?: number;
@@ -26,9 +27,10 @@ const Modal: React.FC<ModalProps> = (
         onClose,
         title,
         cls,
+        clsContent,
         titleCls,
         bg,
-        modalScrollCls,
+        clsModalScroll,
         children,
         zIndex = 20,
         closeBtn = false, // Default value set to false
@@ -132,8 +134,8 @@ const Modal: React.FC<ModalProps> = (
                         </IconButton>
                     )}
                 </FRBC>
-                <FC h={'100%'} cls={'xmodal-content'}>
-                    <div className={`${modalScrollCls} pt-2 overflow-y-scroll no-scrollbar`}>
+                <FC h={'100%'} cls={`xmodal-content ${clsContent}`}>
+                    <div className={`${clsModalScroll} pt-2 overflow-y-scroll no-scrollbar`}>
                         {children}
                     </div>
                 </FC>

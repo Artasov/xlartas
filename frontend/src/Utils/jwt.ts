@@ -1,4 +1,4 @@
-// core/services/base/jwt.ts
+// Utils/jwt.ts
 import {jwtDecode} from 'jwt-decode';
 
 export const isTokenExpiringSoon = (token: string | null): boolean => {

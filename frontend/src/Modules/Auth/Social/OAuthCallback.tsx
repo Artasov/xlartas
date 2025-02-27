@@ -1,4 +1,4 @@
-// Auth/Social/OAuthCallback.tsx
+// Modules/Auth/Social/OAuthCallback.tsx
 import {OAUTH_PROVIDERS} from 'Auth/Social/constants';
 import {useParams} from 'react-router-dom';
 import React, {useContext, useEffect} from "react";

@@ -1,7 +1,7 @@
-// Chat/useWebSocket.ts
+// Modules/Chat/useWebSocket.ts
 
 import {useCallback, useEffect, useRef} from 'react';
-import {axios} from 'Auth/axiosConfig';
+import {axios} from '../Api/axiosConfig';
 import {isTokenExpiringSoon} from 'Utils/jwt';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {useRooms} from './RoomsContext';

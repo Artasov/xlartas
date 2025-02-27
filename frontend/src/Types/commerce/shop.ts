@@ -1,3 +1,4 @@
+// Types/commerce/shop.ts
 import {IUser} from "types/core/user";
 import {IPromocode} from "types/commerce/promocode";
 
@@ -7,7 +8,7 @@ export interface ICurrencyPaymentSystemMapping {
     get_currencies(payment: string): string[];
 }
 
-export type IPaymentSystem = 'tbank' | 'stripe' | 'shopozz' | 'prodamus' | 'tbank_installment';
+export type IPaymentSystem = 'handmade' | 'tbank' | 'stripe' | 'shopozz' | 'prodamus' | 'tbank_installment';
 export type ICurrency = 'USD' | 'RUB' | 'EUR';
 
 export interface ICurrencyWithPrice {
@@ -20,13 +21,17 @@ export interface IProductPrice {
     product: IProduct | number | string;
     currency: string;
     amount: number;
+    exponent?: number | null;
+    offset?: number | null;
 }
 
 export interface IProduct {
     id: number
     name: string;
+    pic: string;
     polymorphic_ctype: IPolymorphicContentType;
     description?: string;
+    short_description?: string;
     is_installment_available: boolean;
     prices: IProductPrice[];
 }

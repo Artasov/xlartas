@@ -1,7 +1,6 @@
-// Order/OrderDetail.tsx
+// Modules/Order/OrderDetail.tsx
 import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {axios} from "Auth/axiosConfig";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -12,8 +11,9 @@ import {IOrder} from "types/commerce/shop";
 import OrderActions from "Order/OrderActions";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
-import pprint from 'Utils/pprint';
 import {FCCC, FR, FRSC} from "WideLayout/Layouts";
+import {useApi} from "../Api/useApi";
+import {Alert, AlertTitle} from "@mui/material";
 
 interface OrderDetailProps {
     className?: string;
@@ -22,12 +22,13 @@ interface OrderDetailProps {
 const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const {id} = useParams<{ id: string }>();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
-    const {byResponse, notAuthentication} = useErrorProcessing();
+    const {notAuthentication} = useErrorProcessing();
     const [order, setOrder] = useState<IOrder | null>(null);
     const [orderNotFound, setOrderNotFound] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
     const {theme} = useTheme();
+    const {api} = useApi();
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -35,15 +36,11 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
             return;
         }
         setLoading(true);
-        axios.get(`/api/v1/orders/${id}/`)
-            .then(response => {
-                pprint(`Order ID: ${id}`, response.data);
-                setOrder(response.data);
-                if (!response.data) setOrderNotFound(true);
-            })
-            .catch(error => byResponse(error))
-            .finally(() => setLoading(false));
-    }, [id, isAuthenticated, notAuthentication, byResponse]);
+        api.get(`/api/v1/orders/${id}/`).then(data => {
+            setOrder(data);
+            if (!data) setOrderNotFound(true);
+        }).finally(() => setLoading(false));
+    }, [id, isAuthenticated, notAuthentication, api]);
 
     if (loading) return <CircularProgress size={'150px'}/>;
     if (orderNotFound || !order) return <div className={'p-3 text-center mt-2'}>Заказ не найден.</div>;
@@ -58,10 +55,19 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                         </span>
                         <ContentCopyIcon className={'fs-5'}/>
                     </div>
+                    <Alert severity="warning" variant="outlined">
+                        <AlertTitle>Внимание</AlertTitle>
+                        Пока TBank не подключён оплата через личку{' '}
+                        <a href="https://t.me/artasov"
+                           target="_blank" className={'tdn'}
+                           rel="noopener noreferrer"
+                           style={{color: theme.palette.info.main}}
+                        >@artasov</a>. Пишите id заказа. Кликните на него, чтобы скопировать.
+                    </Alert>
                     <div className={'frbc flex-wrap'}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={theme.colors.secondary.lighter}
+                                bg={theme.palette.bg.contrast10}
                                 color={theme.palette.text.primary80}>
                                 {order.product.polymorphic_ctype.name}
                             </FR>
@@ -82,9 +88,9 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                 </div>
                 <div className={'fc'}>
                     <OrderStatus order={order}/>
-                    <span>Платежная система: {order.payment_system}</span>
+                    <span>Payment system: {order.payment_system}</span>
                     <span>
-                        <span>Создан </span>
+                        <span>Created </span>
                         <span>
                             {moment(order.created_at).calendar().charAt(0).toLowerCase() +
                                 moment(order.created_at).calendar().slice(1)}

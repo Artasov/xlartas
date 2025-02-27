@@ -1,4 +1,4 @@
-// Chat/RoomItem.tsx
+// Modules/Chat/RoomItem.tsx
 
 import React, {useContext, useMemo} from 'react';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";

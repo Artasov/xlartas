@@ -1,4 +1,4 @@
-// Auth/axiosConfig.tsx
+// Modules/Api/axiosConfig.tsx
 import axios, {AxiosInstance} from 'axios';
 
 const protocol = window.location.protocol;

@@ -1,4 +1,4 @@
-// Theme/Theme.tsx
+// Modules/Theme/Theme.tsx
 import {createTheme} from '@mui/material/styles';
 
 declare module '@mui/material/styles/createPalette' {
@@ -412,6 +412,55 @@ export const darkTheme = createTheme({
         },
     },
     components: {
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    padding: '.1rem',
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {},
+                h1: {
+                    lineHeight: '1em',
+                },
+                h2: {
+                    lineHeight: '1em',
+                },
+                h3: {
+                    lineHeight: '1em',
+                },
+                h4: {
+                    lineHeight: '1em',
+                },
+                h5: {
+                    lineHeight: '1em',
+                },
+                h6: {
+                    lineHeight: '1em',
+                },
+            },
+        },
+        MuiCard: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '.5rem',
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    padding: '0',
+                },
+            },
+        },
+        MuiCardContent: {
+            styleOverrides: {
+                root: {
+                    padding: '.5rem 1rem',
+                    '&:last-child': {
+                        paddingBottom: '.5rem',
+                    },
+                },
+            },
+        },
         MuiRadio: {
             styleOverrides: {
                 root: {
@@ -674,9 +723,9 @@ export const darkTheme = createTheme({
             dark: '#f57c00',
         },
         info: {
-            main: '#275cc6',
-            light: '#417ad2',
-            dark: '#0c50bf',
+            main: '#3c74e3',
+            light: '#4b91ff',
+            dark: '#1e5abb',
         },
         success: {
             main: '#77ff7d',

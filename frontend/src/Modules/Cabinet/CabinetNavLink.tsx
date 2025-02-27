@@ -1,4 +1,4 @@
-// Cabinet/CabinetNavLink.tsx
+// Modules/Cabinet/CabinetNavLink.tsx
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {SvgIconComponent} from '@mui/icons-material';

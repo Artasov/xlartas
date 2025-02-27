@@ -2,10 +2,17 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
-from apps.commerce.models import Order
+from apps.commerce.models import Order, HandMadePayment
+from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.commerce.serializers.promocode import PromocodeSerializer
 from apps.tbank.models import TBankPayment, TBankInstallment
 from apps.tbank.serializers import TBankPaymentSerializer, TBankInstallmentSmallPublicSerializer
+
+
+class HandMadePaymentSmallPublicSerializer(BasePaymentSerializer):
+    class Meta(BasePaymentSerializer.Meta):
+        model = HandMadePayment
+        fields = BasePaymentSerializer.Meta.fields
 
 
 class BaseOrderSerializer(AModelSerializer):
@@ -35,6 +42,8 @@ class BaseOrderSerializer(AModelSerializer):
                 return TBankPaymentSerializer(payment).data
             if isinstance(payment, TBankInstallment):
                 return TBankInstallmentSmallPublicSerializer(payment).data
+            if isinstance(payment, HandMadePayment):
+                return HandMadePaymentSmallPublicSerializer(payment).data
             else:
                 raise TypeError('Unknown payment type')
         return None

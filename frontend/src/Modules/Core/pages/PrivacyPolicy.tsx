@@ -1,4 +1,4 @@
-// Core/pages/PrivacyPolicy.tsx
+// Modules/Core/pages/PrivacyPolicy.tsx
 import {Container} from "@mui/material";
 import Head from "Core/components/Head";
 import React from "react";

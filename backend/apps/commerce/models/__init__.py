@@ -1,5 +1,4 @@
 from .client import *
-from .company import *
 from .employee import *
 from .gift_certificate import *
 from .order import *

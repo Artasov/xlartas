@@ -1,4 +1,4 @@
-// Core/components/elements/Slider/Slider.tsx
+// Modules/Core/components/elements/Slider/Slider.tsx
 import React from 'react';
 import {Slider as MuiSlider, SliderProps as MuiSliderProps} from '@mui/material';
 import './Slider.sass';

@@ -1,3 +1,4 @@
+// Types/commerce/client.ts
 import {IUser} from "types/core/user";
 
 export interface IBitrixClient {

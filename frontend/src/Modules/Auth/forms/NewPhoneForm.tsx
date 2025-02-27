@@ -1,4 +1,4 @@
-// Auth/forms/NewPhoneForm.tsx
+// Modules/Auth/forms/NewPhoneForm.tsx
 import React, {useContext, useState} from 'react';
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import Button from 'Core/components/elements/Button/Button';

@@ -1,11 +1,10 @@
-// Confirmation/ConfirmationCode.tsx
+// Modules/Confirmation/ConfirmationCode.tsx
 
 import React, {useEffect, useState} from 'react';
 import {TextField} from '@mui/material';
-import {axios, YANDEX_RECAPTCHA_SITE_KEY} from 'Auth/axiosConfig';
+import {YANDEX_RECAPTCHA_SITE_KEY} from '../Api/axiosConfig';
 import {Message} from 'Core/components/Message';
 import DynamicForm from 'Core/components/elements/DynamicForm';
-import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {SmartCaptcha} from '@yandex/smart-captcha';
 import Button from 'Core/components/elements/Button/Button';
 import {useTheme} from 'Theme/ThemeContext';
@@ -13,6 +12,7 @@ import {FC, FCCC} from 'WideLayout/Layouts';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import pprint from 'Utils/pprint';
+import {useApi} from "../Api/useApi";
 
 export type ConfirmationMethod = 'email' | 'phone';
 
@@ -30,7 +30,7 @@ interface ConfirmationCodeProps {
     autoFocus?: boolean;
     initialCodeSent?: boolean;
     onResend?: () => void;
-    disableCaptcha?: boolean; // Новый проп
+    disableCaptcha?: boolean;
 }
 
 const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
@@ -54,7 +54,6 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
         },
         disableCaptcha = false, // Значение по умолчанию
     }) => {
-    const {byResponse} = useErrorProcessing();
     const [code, setCode] = useState<string>('');
     const [codeSent, setCodeSent] = useState<boolean>(initialCodeSent);
     const [resendTimeout, setResendTimeout] = useState<number>(0);
@@ -62,6 +61,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSending, setIsSending] = useState<boolean>(false);
     const {theme} = useTheme();
+    const {api} = useApi();
 
     useEffect(() => {
         /**
@@ -74,9 +74,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
          * Тогда отправляем код.
          */
         if (autoSend && !initialCodeSent && !codeSent && !isSending) {
-            if (disableCaptcha || (!disableCaptcha && captchaToken)) {
-                sendNewCode();
-            }
+            if (disableCaptcha || (!disableCaptcha && captchaToken)) sendNewCode().then();
         }
     }, [autoSend, initialCodeSent, codeSent, isSending, disableCaptcha, captchaToken]);
 
@@ -97,19 +95,18 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
 
     const confirmCode = async () => {
         try {
-            const response = await axios.post('/api/v1/confirmation-code/confirm/', {
+            const data = await api.post('/api/v1/confirmation-code/confirm/', {
                 code,
                 credential,
                 action,
                 ...additional_params,
             });
-            pprint('Confirm success:', response.data);
-            onConfirm(response.data);
-            Message.success(response.data.message);
+            pprint('Confirm success:', data);
+            onConfirm(data);
+            Message.success(data.message);
         } catch (error) {
             pprint('Confirm error: ', error);
             onErrorConfirm();
-            byResponse(error);
         }
     };
 
@@ -139,14 +136,13 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
             const endpoint = initialCodeSent
                 ? '/api/v1/confirmation-code/resend/'
                 : '/api/v1/confirmation-code/new/';
-            const response = await axios.post(endpoint, payload);
+            const data = await api.post(endpoint, payload);
             if (onGeneratedCode) onGeneratedCode();
             setResendTimeout(60);
             setCodeSent(true);
-            Message.success(response.data.message, 0, 8000);
+            Message.success(data.message, 0, 8000);
         } catch (error) {
             onErrorGeneration();
-            byResponse(error);
             if (!disableCaptcha) handleResetCaptcha();
         } finally {
             setIsSending(false);
@@ -162,9 +158,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
         onResend();
         setIsSending(false);
         setCodeSent(false);
-        if (disableCaptcha) {
-            sendNewCode();
-        }
+        if (disableCaptcha) sendNewCode().then();
     };
 
     return (

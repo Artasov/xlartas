@@ -36,19 +36,32 @@ class IOrderService:
             primary_price_for_init: Decimal
     ):
         from apps.commerce.models import PaymentSystem
-        from apps.tbank.classes.TBank import (
-            SUCCESS_FAILURE_GET_PARAMS_TEMPLATE,
-            ReceiptFFD105, ItemFFD105, AgentData,
-            SupplierInfo, Payments, OperationInitiatorType
-        )
-        from apps.tbank.managers.payment import TBankPaymentManager
         from apps.commerce.exceptions.payment import PaymentException
 
         self.check_available_to_init_payment()
 
+        ### HandMade ###
+
+        if self.payment_system == PaymentSystem.HandMade:
+            from apps.commerce.models import HandMadePayment
+            from apps.commerce.models import Currency
+            tbank_log.info('HandMade Payment init...')
+            self.payment = await HandMadePayment.objects.acreate(
+                amount=primary_price_for_init,
+                currency=Currency.RUB,
+                user_id=self.user_id
+            )
+            await self.asave()
+
         ### TBank ###
 
-        if self.payment_system == PaymentSystem.TBank:
+        elif self.payment_system == PaymentSystem.TBank:
+            from apps.tbank.classes.TBank import (
+                SUCCESS_FAILURE_GET_PARAMS_TEMPLATE,
+                ReceiptFFD105, ItemFFD105, AgentData,
+                SupplierInfo, Payments, OperationInitiatorType
+            )
+            from apps.tbank.managers.payment import TBankPaymentManager
             tbank_log.info('TBank Payment init...')
             price_for_init = int(primary_price_for_init * 100)
             quantity = 1
@@ -109,6 +122,12 @@ class IOrderService:
             # Рассрочка Tinkoff Forma
             # ----------------------------------
             from apps.tbank.models import TBankInstallment
+            from apps.tbank.classes.TBank import (
+                SUCCESS_FAILURE_GET_PARAMS_TEMPLATE,
+                ReceiptFFD105, ItemFFD105, AgentData,
+                SupplierInfo, Payments, OperationInitiatorType
+            )
+            from apps.tbank.managers.payment import TBankPaymentManager
 
             # Преобразуем рубли в копейки
             amount_cents = int(primary_price_for_init * 100)
@@ -169,17 +188,48 @@ class IOrderService:
             # Привязываем Payment к заказу
             self.payment = installment
             await self.asave()
+
         else:
             commerce_log.info(f'Payment system {self.payment_system} not found')
             raise PaymentException.PaymentSystemNotFound()
 
     @property
     async def receipt_price(self: 'Order'):
-        self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()
-        price = await self.product.aget_price(currency=self.currency)
+        """
+        Возвращает финальную сумму для чека.
+        Для SoftwareOrder учитываем license_hours и хранимые в ProductPrice
+        amount + exponent + offset.
+        """
+        from apps.software.services.license import SoftwareLicenseService
+        from apps.software.models import SoftwareOrder
+        price_row = await self.product.prices.agetorn(currency=self.currency)
+        if not price_row:
+            # Если нет строки цены, 0
+            return Decimal('0')
+
+        # Вытаскиваем нужные значения
+        amount = float(price_row.amount)
+        exponent = float(price_row.exponent or 1.0)  # По умолчанию можно 1.0
+        offset = float(price_row.offset or 0.0)  # По умолчанию 0.0
+
+        if isinstance(self, SoftwareOrder):
+            hours = self.license_hours
+            final_cost_int = SoftwareLicenseService.calculate_price(
+                hours=hours,
+                amount=amount,
+                exponent=exponent,
+                offset=offset
+            )
+            price = Decimal(str(final_cost_int))
+        else:
+            # Для других типов заказа (не SoftwareOrder)
+            # просто берём amount (например, * 1 шт.)
+            price = price_row.amount
+
+        # Если есть промокод, учитываем скидку
         if self.promocode:
-            price = await self.promocode.calc_price_for_order(self)
+            price = await self.promocode.calc_price_for_order(order=self)
+
         return price
 
     async def safe_cancel(
@@ -248,7 +298,6 @@ class IOrderService:
         обновление моделей оплат, отправка уведомлений если нужно и т.д.
         """
         from apps.commerce.models import PromocodeUsage
-        from apps.bitrix24.tasks import sync_bitrix_with_us_task
         if self.is_refunded: raise OrderException.CannotExecuteRefunded()
         if self.is_executed: raise OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
@@ -260,7 +309,6 @@ class IOrderService:
             )
         self.is_executed = True
         await self.asave()
-        sync_bitrix_with_us_task.delay(self.user_id)
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
         # Send notifications to client about successful order executing
         # await Notify.objects.acreate(
@@ -283,9 +331,7 @@ class IOrderService:
         if getattr(self, 'payment_id'):
             await self.cancel_payment()
         self.product = await self.arelated('product')
-        await self.product.cancel_given(
-            request=request, order=self, reason=reason
-        )
+        await self.product.cancel_given(request=request, order=self, reason=reason)
         self.is_cancelled = True
         await self.asave()
 

@@ -1,4 +1,4 @@
-// Auth/Social/types.ts
+// Modules/Auth/Social/types.ts
 // apps/SocialOAuth/types.ts
 import {OAUTH_PROVIDERS} from "Auth/Social/constants";
 

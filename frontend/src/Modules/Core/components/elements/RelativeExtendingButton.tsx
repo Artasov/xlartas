@@ -1,4 +1,4 @@
-// Core/components/elements/RelativeExtendingButton.tsx
+// Modules/Core/components/elements/RelativeExtendingButton.tsx
 
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import {FC, FCCC} from 'WideLayout/Layouts';

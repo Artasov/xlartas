@@ -1,4 +1,4 @@
-// Order/OrderStatusItem.tsx
+// Modules/Order/OrderStatusItem.tsx
 import React from 'react';
 import {Typography} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
@@ -22,7 +22,7 @@ const OrderStatusItem: React.FC<StatusItemProps> = ({label, isActive, color, sho
                 textShadow: theme.palette.shadow.XXSO02C, // Убедитесь, что такая тень определена в вашей теме
             }}
         >
-            {isActive ? label : (showNegative ? `Не ${label.toLowerCase()}` : null)}
+            {isActive ? label : (showNegative ? `Not ${label.toLowerCase()}` : null)}
         </Typography>
     );
 };

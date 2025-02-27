@@ -1,4 +1,4 @@
-// store.ts
+// Redux/store.ts
 import {configureStore} from '@reduxjs/toolkit';
 import visibilityReducer from 'Redux/visibilitySlice';
 

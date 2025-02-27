@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin
 
-from apps.commerce.models import Payment, Currency, Product
+from apps.commerce.models import Payment, Currency, Product, HandMadePayment
 from apps.commerce.models.product import ProductPrice
 from apps.tbank.models import TBankPayment
 
@@ -60,7 +60,7 @@ class PaymentChildAdmin(PolymorphicChildModelAdmin):
 @admin.register(Payment)
 class PaymentParentAdmin(PolymorphicParentModelAdmin):
     base_model = Payment
-    child_models = (TBankPayment,)
+    child_models = (TBankPayment, HandMadePayment)
     list_display = (
         'id', 'user',
         'amount', 'currency',
@@ -74,3 +74,12 @@ class PaymentParentAdmin(PolymorphicParentModelAdmin):
     @admin_order_field('polymorphic_ctype')
     def get_subclass(self, obj):
         return obj.get_real_instance().__class__.__name__
+
+
+@admin.register(HandMadePayment)
+class HandMadePaymentAdmin(PolymorphicChildModelAdmin):
+    base_model = HandMadePayment
+    show_in_index = True
+    list_display = ('__str__', 'amount', 'currency', 'payment_url', 'created_at', 'updated_at')
+    search_fields = ('payment_url',)
+    list_filter = ('currency',)

@@ -1,12 +1,15 @@
-// Auth/Social/components/SocialOAuth.tsx
+// Modules/Auth/Social/components/SocialOAuth.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Snackbar} from '@mui/material';
+import {Button as MuiButton, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar} from '@mui/material';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {faGoogle, faYandex} from '@fortawesome/free-brands-svg-icons';
-import {axios, GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from 'Auth/axiosConfig';
+import {axios, GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from '../../../Api/axiosConfig';
 import OAuthButton from "Auth/Social/elements/OAuthButton";
 import {ProviderConfig} from "Auth/Social/types";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import TermsCheckboxes from "Core/components/TermsCheckboxes";
+import {useTheme} from "Theme/ThemeContext";
+import Button from "Core/components/elements/Button/Button";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -21,7 +24,11 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [socialAccounts, setSocialAccounts] = useState<{ [key: string]: boolean }>({});
-
+    const [pendingOAuthUrl, setPendingOAuthUrl] = useState<string | null>(null);
+    const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+    const [modalFirstChecked, setModalFirstChecked] = useState<boolean>(false);
+    const [modalSecondChecked, setModalSecondChecked] = useState<boolean>(false);
+    const {theme} = useTheme();
     const handleCloseSnackbar = (_event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') return;
         setOpenSnackbar(false);
@@ -36,7 +43,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                 .catch(error => {
                     console.error(error);
                 });
-    }, []);
+    }, [isAuthenticated]);
 
     const providers: ProviderConfig[] = [
         {
@@ -46,13 +53,6 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
             redirectUri: 'https://accounts.google.com/o/oauth2/v2/auth',
             scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
         },
-        // {
-        //     provider: 'vk',
-        //     icon: faVk,
-        //     clientId: VK_AUTH_CLIENT_ID,
-        //     redirectUri: 'https://oauth.vk.com/authorize',
-        //     scope: 'email',
-        // },
         {
             provider: 'yandex',
             icon: faYandex,
@@ -60,15 +60,31 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
             redirectUri: 'https://oauth.yandex.ru/authorize',
             scope: 'login:email login:info',
         },
-        // {
-        //     provider: 'discord',
-        //     icon: faDiscord,
-        //     clientId: DISCORD_CLIENT_ID,
-        //     redirectUri: 'https://discord.com/api/oauth2/authorize',
-        //     scope: 'identify email',
-        // },
     ];
 
+    const handleOAuthClick = (oauthUrl: string) => {
+        if (localStorage.getItem('social_terms_accepted') === 'true') {
+            window.location.href = oauthUrl;
+        } else {
+            setPendingOAuthUrl(oauthUrl);
+            setShowTermsModal(true);
+        }
+    };
+
+    const handleModalConfirm = () => {
+        if (modalFirstChecked) {
+            localStorage.setItem('social_terms_accepted', 'true');
+            setShowTermsModal(false);
+            if (pendingOAuthUrl) {
+                window.location.href = pendingOAuthUrl;
+            }
+        }
+    };
+
+    const handleModalCancel = () => {
+        setShowTermsModal(false);
+        setPendingOAuthUrl(null);
+    };
 
     return (
         <div ref={socialDiv} className={`${className} fr gap-2`}>
@@ -82,6 +98,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                     scope={scope}
                     pxIconSize={50}
                     linked={socialAccounts[provider]}
+                    onClick={handleOAuthClick}
                 />
             ))}
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
@@ -89,6 +106,27 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                     Login process was interrupted. Please try again.
                 </Alert>
             </Snackbar>
+            <Dialog open={showTermsModal} onClose={handleModalCancel}>
+                <DialogTitle sx={{background: theme.palette.bg.primary}}>Подтвердите условия</DialogTitle>
+                <DialogContent sx={{background: theme.palette.bg.primary}}>
+                    <TermsCheckboxes
+                        firstChecked={modalFirstChecked}
+                        secondChecked={modalSecondChecked}
+                        onFirstCheckedChange={(checked) => {
+                            setModalFirstChecked(checked);
+                            setModalSecondChecked(checked);
+                        }}
+                        onSecondCheckedChange={setModalSecondChecked}
+                    />
+                </DialogContent>
+                <DialogActions sx={{background: theme.palette.bg.primary}}>
+                    <MuiButton onClick={handleModalCancel}>Отмена</MuiButton>
+                    <Button onClick={handleModalConfirm} disabled={!modalFirstChecked} variant="contained"
+                            color="primary">
+                        Подтвердить
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

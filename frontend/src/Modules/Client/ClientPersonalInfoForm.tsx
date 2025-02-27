@@ -1,25 +1,24 @@
-// Client/ClientPersonalInfoForm.tsx
+// Modules/Client/ClientPersonalInfoForm.tsx
 import React, {ChangeEvent, FormEvent, useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {axios} from "Auth/axiosConfig";
-import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {FC} from "WideLayout/Layouts";
 import {Message} from "Core/components/Message";
 import TextField from "Core/components/elements/TextField/TextField";
 import Button from "Core/components/elements/Button/Button";
+import {useApi} from "../Api/useApi";
 
 interface FormData {
     about_me: string;
 }
 
 const ClientPersonalInfoForm: React.FC = () => {
-    const {byResponse} = useErrorProcessing();
     const {user} = useContext(AuthContext) as AuthContextType;
 
     const [formData, setFormData] = useState<FormData>({
         about_me: user?.client?.about_me || '',
     });
 
+    const {api} = useApi();
     const [showSaveButton, setShowSaveButton] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,13 +34,10 @@ const ClientPersonalInfoForm: React.FC = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        axios.patch('/api/v1/client/update/', formData)
-            .then(() => {
-                Message.success('Клиент успешно обновлен.');
-                setShowSaveButton(false);
-            })
-            .catch((e) => byResponse(e))
-            .finally(() => setIsSubmitting(false)); // Завершаем submit независимо от успеха или ошибки
+        api.patch('/api/v1/client/update/', formData).then(() => {
+            Message.success('Клиент успешно обновлен.');
+            setShowSaveButton(false);
+        }).finally(() => setIsSubmitting(false));
     };
 
     return (

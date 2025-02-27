@@ -1,4 +1,4 @@
-// Auth/Social/constants.ts
+// Modules/Auth/Social/constants.ts
 // apps/SocialOAuth/constants.ts
 export const OAUTH_PROVIDERS = {
     GOOGLE: 'google',

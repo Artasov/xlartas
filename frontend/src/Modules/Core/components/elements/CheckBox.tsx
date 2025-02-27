@@ -1,4 +1,4 @@
-// Core/components/elements/CheckBox.tsx
+// Modules/Core/components/elements/CheckBox.tsx
 
 import React from 'react';
 import {Checkbox as MuiCheckbox, CheckboxProps} from '@mui/material';

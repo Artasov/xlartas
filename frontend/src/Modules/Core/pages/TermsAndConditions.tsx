@@ -1,4 +1,4 @@
-// Core/pages/TermsAndConditions.tsx
+// Modules/Core/pages/TermsAndConditions.tsx
 import {Container} from "@mui/material";
 import React from "react";
 import Head from "Core/components/Head";

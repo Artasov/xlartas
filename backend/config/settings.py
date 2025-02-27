@@ -18,7 +18,7 @@ from utils.handle_exceptions import handling_function
 DEBUG_SEND_NOTIFIES = False
 MINUTES_CONFIRMATION_CODE_EXPIRES = 2
 SECONDS_MAX_FREQUENCY_SENDING_CONFIRMATION_CODE = 60
-
+DEBUG_INIT_PAYMENT = True
 # Environment helper
 env = environ.get
 MAIN_PROCESS = True if env('RUN_MAIN') != 'true' else False
@@ -42,6 +42,7 @@ HTTPS = bool(int(env('HTTPS')))
 SITE_ID = int(env('SITE_ID'))
 MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
 DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{":8000" if DEV else ""}'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
@@ -57,6 +58,124 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+XL_DASHBOARD = {
+    'General': {
+        'User': 'core.User',
+        'File': 'core.File',
+        'Theme': 'core.Theme',
+    },
+    'Products': {
+        'All': 'commerce.Product',
+        'Prices': 'commerce.ProductPrice',
+    },
+    'Orders': {
+        'All': 'commerce.Order',
+        'Software': 'software.Software',
+        'Software File': 'software.SoftwareFile',
+    },
+    'Payments': {
+        'All': 'commerce.Payment',
+    },
+    'Promocode': {
+        'Promocode Product Discount': 'commerce.PromocodeProductDiscount',
+        'Promocode': 'commerce.Promocode',
+        'Promocode Usage': 'commerce.PromocodeUsage',
+    },
+    'TBank': {
+        'TBank Customer': 'tbank.TBankCustomer',
+        'TBank Pay': 'tbank.TBankPayment',
+        'TBank Recurring Pay': 'tbank.TBankRecurringPayment',
+        'TBank Installment': 'tbank.TBankInstallment',
+    },
+    'Notify': {
+        'Notify': 'notify.Notify',
+        'Confirmation Code': 'confirmation.ConfirmationCode',
+        'Email Confirm. Code': 'confirmation.EmailConfirmationCode',
+        'Phone Confirm. Code': 'confirmation.PhoneConfirmationCode',
+    },
+    'Commerce': {
+        'Client': 'commerce.Client',
+        'Employee': 'commerce.Employee',
+        'Employee Availability Interval': 'commerce.EmployeeAvailabilityInterval',
+        'Employee Leave': 'commerce.EmployeeLeave',
+        'GiftCert.': 'commerce.GiftCertificate',
+        'GiftCert. Order': 'commerce.GiftCertificateOrder',
+        'Gift Cert. Usage': 'commerce.GiftCertificateUsage',
+    },
+    'Survey': {
+        'Survey': 'surveys.Survey',
+        'Question': 'surveys.Question',
+        'Choice': 'surveys.Choice',
+        'Survey Access': 'surveys.SurveyAccess',
+        'Survey Attempt': 'surveys.SurveyAttempt',
+        'Question Attempt': 'surveys.QuestionAttempt',
+    },
+    'File host': {
+        'Folder': 'filehost.Folder',
+        'File': 'filehost.File',
+        'Tag': 'filehost.Tag',
+        'File Tag': 'filehost.FileTag',
+        'Folder Tag': 'filehost.FolderTag',
+        'Access': 'filehost.Access',
+    },
+    'Beat': {
+        'Solar': 'django_celery_beat.SolarSchedule',
+        'Interval': 'django_celery_beat.IntervalSchedule',
+        'Clocked': 'django_celery_beat.ClockedSchedule',
+        'Crontab': 'django_celery_beat.CrontabSchedule',
+        'Periodic Tasks': 'django_celery_beat.PeriodicTasks',
+        'Periodic Task': 'django_celery_beat.PeriodicTask',
+    },
+    'Auth': {
+        'Permission': 'auth.Permission',
+        'Group': 'auth.Group',
+        'Discord User': 'social_oauth.DiscordUser',
+        'Google User': 'social_oauth.GoogleUser',
+        'VK User': 'social_oauth.VKUser',
+        'Yandex User': 'social_oauth.YandexUser',
+    },
+    'Admin': {
+        'Log Entry': 'admin.LogEntry',
+        'Content Type': '/xladmin/contenttypes/contenttype/',
+        'Django Migrations': 'core.MigrationProxy',
+        'Session': 'sessions.Session',
+        'Site': 'sites.Site',
+        'Token': 'authtoken.Token',
+        'TokenProxy': 'authtoken.TokenProxy',
+    },
+    'Silk': {
+        'Request': 'silk.Request',
+        'Response': 'silk.Response',
+        'SQLQuery': 'silk.SQLQuery',
+        'Profile': 'silk.Profile',
+    },
+    'Company': {
+        'Company': 'company.Company',
+        'Document': 'company.CompanyDocument',
+    },
+    'Chat': {
+        'Room': 'chat.Room',
+        'Message': 'chat.Message',
+        'File': 'chat.File',
+    },
+    'OLD': {
+        'SoftwareProduct': 'shop.SoftwareProduct',
+        'SubscriptionTimeCategory': 'shop.SubscriptionTimeCategory',
+        'SoftwareSubscription': 'shop.SoftwareSubscription',
+        'UserSoftwareSubscription': 'shop.UserSoftwareSubscription',
+        'PromoGroup': 'shop.PromoGroup',
+        'Promo': 'shop.Promo',
+        'SoftwareSubscriptionOrder': 'shop.SoftwareSubscriptionOrder',
+        'TinkoffDepositOrder': 'tinkoff.TinkoffDepositOrder',
+        'Software': 'software.Software',
+        'SoftwareOrder': 'software.SoftwareOrder',
+        'SoftwareLicense': 'software.SoftwareLicense',
+    },
+    'xl-actions': {
+        'Collect Static': 'run_collectstatic',
+    }
+}
 
 AUTH_USER_MODEL = 'core.User'
 INSTALLED_APPS = [
@@ -89,6 +208,8 @@ INSTALLED_APPS = [
     'logui',
     'cachalot',
 
+    'apps.xl_dashboard',
+    'apps.company',
     'apps.confirmation',
     'apps.commerce',
     'apps.redisui',
@@ -106,7 +227,7 @@ INSTALLED_APPS = [
 
 ]
 if MINIO_USE: INSTALLED_APPS.append('django_minio_backend')
-
+# TODO заменять базовое DoesNotExists исключение модели на кастомное подмешенное с APIException
 # Database
 if POSTGRES_USE:
     DATABASES = {
@@ -141,7 +262,7 @@ REDISUI_CONTROLLERS_SETTINGS = {
 
 # adjango
 ADJANGO_BACKENDS_APPS = BASE_DIR / 'apps'
-ADJANGO_FRONTEND_APPS = BASE_DIR.parent / 'frontend' / 'src' / 'Components'
+ADJANGO_FRONTEND_APPS = BASE_DIR.parent / 'frontend' / 'src'
 ADJANGO_APPS_PREPATH = 'apps.'
 ADJANGO_UNCAUGHT_EXCEPTION_HANDLING_FUNCTION = handling_function
 ADJANGO_CONTROLLERS_LOGGER_NAME = 'global'
@@ -149,6 +270,7 @@ ADJANGO_CONTROLLERS_LOGGING = False
 ADJANGO_EMAIL_LOGGER_NAME = 'email'
 # ADJANGO_IP_LOGGER = 'global'
 ADJANGO_IP_META_NAME = 'HTTP_X_FORWARDED_FOR'
+COPY_PROJECT_CONFIGURATIONS = BASE_DIR / 'utils' / 'copy_configuration.py'
 IS_CELERY = is_celery()
 
 # Silk
@@ -203,7 +325,7 @@ REST_FRAMEWORK = {
 }
 REST_USE_JWT = True
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20 if DEV else 60 * 24 * 2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60 * 24 * 2 if DEV else 60 * 24 * 2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -418,6 +540,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'apps' / 'Core' / 'templates',
+            BASE_DIR / 'templates',
             join(BASE_DIR.parent, 'frontend/build')
         ],
         'APP_DIRS': True,
@@ -440,11 +563,12 @@ LANGUAGES = (
 LOCALE_PATHS = (join(BASE_DIR, 'locale'),)
 
 # TBank
-TINKOFF_TERMINAL_KEY = env('TINKOFF_TERMINAL_KEY')
-TINKOFF_PASSWORD = env('TINKOFF_PASSWORD')
+TBANK_TERMINAL_KEY = env('TBANK_TERMINAL_KEY')
+TBANK_TERMINAL_PASSWORD = env('TBANK_TERMINAL_PASSWORD')
 
 # Other
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+IMAGEKIT_DEFAULT_CACHEFILE_BACKEND = 'imagekit.cachefiles.backends.Simple'
 
 # Jazzmin
 JAZZMIN_SETTINGS = _JAZZMIN_SETTINGS | {

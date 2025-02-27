@@ -5,10 +5,20 @@ import json
 import os
 import time
 import urllib
+from typing import Any, Generator
 
 import aiohttp
 from PIL import ExifTags
+from django.apps import apps
 from django.conf import settings
+
+
+def get_models_list() -> Generator[str, Any, None]:
+    """
+    Функция возвращает список строк вида 'app.Model' для всех зарегистрированных моделей.
+    """
+    models = apps.get_models()
+    return (f"{model._meta.app_label}.{model.__name__}" for model in models)
 
 
 class CorrectOrientation:

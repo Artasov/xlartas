@@ -1,13 +1,12 @@
-// Core/SettingsTool.tsx
+// Modules/Core/SettingsTool.tsx
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {axios} from 'Auth/axiosConfig';
-import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import Modal from "Core/components/elements/Modal/Modal";
 import pprint from "Utils/pprint";
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import {useApi} from "../Api/useApi";
 
 interface BackendConfigResponse {
     config: {
@@ -21,9 +20,9 @@ interface BackendConfigResponse {
 const SettingsTool: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [data, setData] = useState<BackendConfigResponse | null>(null);
-    const {byResponse} = useErrorProcessing();
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
     const {theme} = useTheme();
+    const {api} = useApi();
     const openModal = useCallback(() => {
         setIsOpen(true);
     }, []);
@@ -37,16 +36,9 @@ const SettingsTool: React.FC = () => {
             pprint("Not authenticated or not admin, cannot fetch config.");
             return;
         }
-        try {
-            pprint("Fetching backend config...");
-            const response = await axios.get('/api/v1/backend/config/');
-            pprint("Config data received:");
-            pprint(response.data);
-            setData(response.data);
-        } catch (error) {
-            byResponse(error);
-        }
-    }, [byResponse, isAuthenticated, user]);
+        pprint("Fetching backend config...");
+        api.get('/api/v1/backend/config/').then(data => setData(data));
+    }, [api, isAuthenticated, user]);
 
     useEffect(() => {
         if (isOpen) {
@@ -93,7 +85,7 @@ const SettingsTool: React.FC = () => {
                 titleCls="fs-3 fw-bold"
                 closeBtn={true}
                 closeOnOutsideClick={false}
-                modalScrollCls="px-2 py-2"
+                clsModalScroll="px-2 py-2"
                 zIndex={201}
                 animDuration={200}
             >

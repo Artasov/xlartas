@@ -112,7 +112,8 @@ async def user_auth_methods(request):
 @permission_classes((AllowAny,))
 async def check_email_exists(request):
     email = request.data.get('email')
-    if not is_email(email): raise UserException.WrongCredential()
+    if not is_email(email):
+        raise UserException.WrongCredential()
     exists = await User.objects.filter(email=email).aexists()
     return Response({'exists': exists}, status=200)
 

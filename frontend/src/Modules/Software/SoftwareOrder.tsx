@@ -1,0 +1,169 @@
+// Modules/Software/SoftwareOrder.tsx
+import React, {useContext, useEffect, useState} from 'react';
+import {IconButton, Slider, useMediaQuery} from '@mui/material';
+import {Message} from 'Core/components/Message';
+import CircularProgress from 'Core/components/elements/CircularProgress';
+import {FC, FCC, FRSC} from 'WideLayout/Layouts';
+import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
+import {ISoftware} from "./Types/Software";
+import {IPromocode} from "types/commerce/promocode";
+import PromoCodeField from "Order/PromoCodeField";
+import Button from "Core/components/elements/Button/Button";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
+import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useNavigate} from "react-router-dom";
+import {useApi} from "../Api/useApi";
+
+/**
+ * Возвращает целое число:
+ * cost(H) = round( amount * (H^exponent) + offset )
+ */
+function calculatePrice(hours: number, amount: number, exponent: number, offset: number): number {
+    if (hours <= 0) return 0;
+    const raw = amount * Math.pow(hours, exponent) + offset;
+    return Math.round(raw);
+}
+
+interface SoftwareOrderProps {
+    software: ISoftware;
+    onSuccess?: (data?: any) => void;
+}
+
+const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
+    const [licenseHours, setLicenseHours] = useState(software.min_license_order_hours || 1);
+    const [creatingOrder, setCreatingOrder] = useState(false);
+    const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const [_isPromoValid, setIsPromoValid] = useState<boolean | null>(null);
+    const [promoCode, setPromoCode] = useState<string>('');
+    const [_promocodeData, setPromocodeData] = useState<IPromocode | null>(null);
+    const [revalidateKey, setRevalidateKey] = useState<number>(0);
+    const [showPromo, setShowPromo] = useState(false);
+    const navigate = useNavigate();
+    const {api} = useApi();
+
+    const _isGt576 = useMediaQuery('(min-width: 576px)');
+    const _isGt740 = useMediaQuery('(min-width: 740px)');
+
+    useEffect(() => {
+        if (promoCode) {
+            setIsPromoValid(null);
+            setPromocodeData(null);
+            setRevalidateKey(prev => prev + 1);
+        }
+    }, [software, promoCode]);
+    // Если software.prices пустой, не показываем покупку, а выводим сообщение
+    if (!software.prices || software.prices.length === 0) {
+        return (
+            <FCC w={'100%'} g={'.2rem'}>
+                Товар сейчас не продается.
+            </FCC>
+        );
+    }
+
+    // Вытаскиваем поля из software.prices[0]
+    const priceRow = software.prices[0];
+    const amount: number = parseFloat(priceRow.amount.toString()) || 0;
+    const exponent: number = parseFloat(priceRow.exponent?.toString() || '1');
+    const offset: number = parseFloat(priceRow.offset?.toString() || '0');
+
+    // Вычисляем финальную стоимость
+    const totalPrice = calculatePrice(licenseHours, amount, exponent, offset);
+
+
+    const handleConfirm = async (
+        currencyWithPrice: ICurrencyWithPrice,
+        paymentSystem: IPaymentSystem,
+        promocodeId: string,
+        email?: string
+    ) => {
+        if (licenseHours < software.min_license_order_hours) {
+            Message.error(`Минимальное количество часов: ${software.min_license_order_hours}`);
+            return;
+        }
+        setCreatingOrder(true);
+        try {
+            const payload = {
+                product: software.id,
+                license_hours: licenseHours,
+                currency: currencyWithPrice.currency, // 'RUB'
+                payment_system: paymentSystem,        // 'tbank' и т.д.
+                promocode: promocodeId || null,
+                email,
+            };
+            const data = await api.post('/api/v1/orders/create/', payload);
+            Message.success('Заказ успешно создан.', 2, 5000);
+            if (typeof data === 'string' && data.startsWith('http')) window.open(data, '_blank');
+            if (onSuccess) onSuccess(data);
+        } finally {
+            setCreatingOrder(false);
+        }
+    };
+
+    return (
+        <FCC w={'100%'} g={'.2rem'}>
+            <FC g={1}>
+                <Button
+                    size={'small'}
+                    className={'minw-250px fw-bold'}
+                    onClick={() => {
+                        if (isAuthenticated && user) {
+                            handleConfirm(
+                                {currency: 'RUB', priceObject: priceRow},
+                                'handmade',
+                                promoCode,
+                                user.email
+                            );
+                        } else {
+                            navigate('/?auth_modal=True');
+                        }
+                    }}>
+                    Buy {licenseHours} hours for {totalPrice} RUB
+                </Button>
+
+                <FRSC>
+                    <Slider
+                        value={licenseHours}
+                        onChange={(_, val) => setLicenseHours(val as number)}
+                        min={software.min_license_order_hours}
+                        max={3000}
+                        step={1}
+                        valueLabelDisplay={'off'}
+                        className={'w-100 ms-2 pt-2'}
+                    />
+
+                    <IconButton
+                        className={'ms-3'}
+                        sx={{width: 36, height: 36}}
+                        onClick={() => setShowPromo(prev => !prev)}>
+                        {showPromo
+                            ? <RemoveRoundedIcon sx={{fontSize: '2rem'}}/>
+                            : <AddRoundedIcon sx={{fontSize: '2rem'}}/>}
+                    </IconButton>
+                </FRSC>
+            </FC>
+
+            {showPromo && (
+                <PromoCodeField
+                    cls={'mt-1'}
+                    currency={'RUB'}
+                    productId={software.id}
+                    onValidChange={(isValid: boolean | null, promocode?: IPromocode) => {
+                        setIsPromoValid(isValid);
+                        if (promocode) {
+                            setPromocodeData(promocode);
+                        } else {
+                            setPromocodeData(null);
+                        }
+                    }}
+                    onPromoCodeChange={(code: string) => setPromoCode(code)}
+                    revalidateKey={revalidateKey}
+                />
+            )}
+
+            {creatingOrder && <CircularProgress size="60px"/>}
+        </FCC>
+    );
+};
+
+export default SoftwareOrder;

@@ -1,4 +1,4 @@
-// Core/components/StarRating.tsx
+// Modules/Core/components/StarRating.tsx
 
 import React from 'react';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';

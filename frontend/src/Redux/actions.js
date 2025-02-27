@@ -1,4 +1,4 @@
-// src/redux/actions.js
+// Redux/actions.js
 import store from "Redux/store";
 import {hideHeader, showHeader} from "Redux/visibilitySlice";
 

@@ -1,4 +1,4 @@
-// Core/components/elements/RadioLine.tsx
+// Modules/Core/components/elements/RadioLine.tsx
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 

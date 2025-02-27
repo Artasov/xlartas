@@ -1,4 +1,4 @@
-// Order/PaymentSelector.tsx
+// Modules/Order/PaymentSelector.tsx
 
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
@@ -10,13 +10,13 @@ import {IPromocode} from "types/commerce/promocode";
 import PromoCodeField from "Order/PromoCodeField";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {debounce} from 'lodash';
-import {axios} from "Auth/axiosConfig";
 import {isEmail} from 'Utils/validator/base';
 import {useTheme} from "Theme/ThemeContext";
 import TextField from "Core/components/elements/TextField/TextField";
 import installmentTBankLogo from '../../Static/img/icon/tbank/by_parts.svg'
 import CircularProgress from "Core/components/elements/CircularProgress";
 import pprint from "Utils/pprint";
+import {useApi} from "../Api/useApi";
 
 interface IProductInstallment {
     id: number;
@@ -60,6 +60,7 @@ const PaymentSelector: React.FC<PaymentSelectorProps> = (
     const [emailTouched, setEmailTouched] = useState<boolean>(false);
     const emailCheckRef = useRef<ReturnType<typeof debounce> | null>(null);
     const {theme} = useTheme();
+    const {api} = useApi();
 
     useEffect(() => {
         if (promoCode) {
@@ -77,28 +78,21 @@ const PaymentSelector: React.FC<PaymentSelectorProps> = (
             setIsEmailValid(valid);
             setIsEmailAvailable(true);
 
-            if (emailCheckRef.current) {
-                emailCheckRef.current.cancel();
-            }
+            if (emailCheckRef.current) emailCheckRef.current.cancel();
 
             if (valid) {
                 emailCheckRef.current = debounce(async () => {
-                    try {
-                        const response = await axios.post('/api/v1/check-email-exists/', {email});
-                        setIsEmailAvailable(!response.data.exists);
-                    } catch (error) {
-                        Message.error('Ошибка при проверке email.');
-                    }
+                    api.post('/api/v1/check-email-exists/', {email}).then(data =>
+                        setIsEmailAvailable(!data.exists)
+                    ).catch((_) => Message.error('Ошибка при проверке email.'))
                 }, 500);
                 emailCheckRef.current();
             }
             return () => {
-                if (emailCheckRef.current) {
-                    emailCheckRef.current.cancel();
-                }
+                if (emailCheckRef.current) emailCheckRef.current.cancel();
             };
         }
-    }, [email, emailTouched]);
+    }, [email, emailTouched, api]);
 
     const validateEmail = (email: string): boolean => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -161,48 +155,40 @@ const PaymentSelector: React.FC<PaymentSelectorProps> = (
                 setPaymentCurrency={setSelectedCurrency}
                 setPaymentSystem={setSelectedPaymentSystem}
             />
-            {selectedCurrency &&
-                <PromoCodeField
-                    cls={'mt-1'}
-                    currency={selectedCurrency?.currency}
-                    productId={product.id}
-                    employeeId={employeeId}
-                    onValidChange={(isValid: boolean | null, promocode?: IPromocode) => {
-                        setIsPromoValid(isValid);
-                        if (promocode) {
-                            setPromocodeData(promocode);
-                        } else {
-                            setPromocodeData(null);
-                        }
-                    }}
-                    onPromoCodeChange={(code: string) => setPromoCode(code)}
-                    revalidateKey={revalidateKey}
-                />
+            {selectedCurrency && <PromoCodeField
+                cls={'mt-1'}
+                currency={selectedCurrency?.currency}
+                productId={product.id}
+                employeeId={employeeId}
+                onValidChange={(isValid: boolean | null, promocode?: IPromocode) => {
+                    setIsPromoValid(isValid);
+                    if (promocode) setPromocodeData(promocode);
+                    else setPromocodeData(null);
+                }}
+                onPromoCodeChange={(code: string) => setPromoCode(code)}
+                revalidateKey={revalidateKey}
+            />}
+            {!user?.email && <TextField
+                label="Email"
+                className={'mt-2'}
+                variant="outlined"
+                type="email"
+                value={email}
+                style={{
+                    borderColor: !isEmailValid ? theme.colors.error.main : 'unset',
+                }}
+                onChange={handleEmailChange}
+                onBlur={() => setEmailTouched(true)}
+                fullWidth
+                error={!isEmailValid || !isEmailAvailable}
+                helperText={
+                    !isEmailValid
+                        ? 'Некорректный формат почты'
+                        : emailTouched && !isEmailAvailable
+                            ? 'Почта уже используется'
+                            : undefined
+                }/>
             }
-            {!user?.email && (
-                <div className="mt-2">
-                    <TextField
-                        label="Email"
-                        variant="outlined"
-                        type="email"
-                        value={email}
-                        style={{
-                            borderColor: !isEmailValid ? theme.colors.error.main : 'unset',
-                        }}
-                        onChange={handleEmailChange}
-                        onBlur={() => setEmailTouched(true)}
-                        fullWidth
-                        error={!isEmailValid || !isEmailAvailable}
-                        helperText={
-                            !isEmailValid
-                                ? 'Некорректный формат почты'
-                                : emailTouched && !isEmailAvailable
-                                    ? 'Почта уже используется'
-                                    : undefined
-                        }
-                    />
-                </div>
-            )}
             {selectedPaymentSystem === 'tbank' && finalPrice !== null && selectedCurrency && selectedPaymentSystem && <>
                 <Button
                     disabled={isLoading || disabled || isButtonDisabled}

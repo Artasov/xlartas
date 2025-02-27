@@ -1,4 +1,4 @@
-// Core/components/TermsCheckboxes.tsx
+// Modules/Core/components/TermsCheckboxes.tsx
 
 import React from 'react';
 import {FormControlLabel, Typography} from '@mui/material';

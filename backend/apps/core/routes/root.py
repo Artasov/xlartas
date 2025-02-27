@@ -29,6 +29,10 @@ urlpatterns = [
     path('api/v1/', include('apps.theme.routes.api')),
     path('api/v1/', include('apps.chat.routes.api')),
     path('api/v1/', include('apps.commerce.routes.api')),
+    path('api/v1/', include('apps.company.routes.api')),
+    path('api/v1/', include('apps.xl_dashboard.routes.api')),
+    path('api/v1/', include('apps.software.routes.api')),
+    path('api/v1/', include('apps.shop.desktop_software_urls')),
     path('api/v1/confirmation-code/', include('apps.confirmation.routes.api')),
 
     # TBank

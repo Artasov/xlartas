@@ -13,6 +13,7 @@ module.exports = {
             Utils: path.resolve(__dirname, 'src/Utils/'),
             WideLayout: path.resolve(__dirname, 'src/WideLayout/'),
             Auth: path.resolve(__dirname, 'src/Modules/Auth/'),
+            Company: path.resolve(__dirname, 'src/Modules/Company/'),
             TBank: path.resolve(__dirname, 'src/Modules/TBank/'),
             Extra: path.resolve(__dirname, 'src/Modules/Extra/'),
             Landing: path.resolve(__dirname, 'src/Modules/Landing/'),

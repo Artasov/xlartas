@@ -13,7 +13,6 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models import File
 from apps.core.models.user import User
 from apps.shop.services.subscription import SoftwareSubscriptionService
 
@@ -40,16 +39,17 @@ class SoftwareProductInfo(TypedDict):
 class SoftwareProduct(AModel):
     name = CharField(max_length=50)
     long_name = CharField(max_length=100, blank=True)
-    version = CharField(max_length=5, blank=True)
     img = ImageField(upload_to='images/products', blank=True)
     discount = IntegerField(default=0)
+    version = CharField(max_length=5, blank=True)
     desc = TextField(blank=True)
     desc_short = CharField(max_length=100, null=True, blank=True)
     review_url = CharField(max_length=200, null=True, blank=True)
-    is_available = BooleanField(default=True)
     log_changes = TextField(blank=True, null=True)
-    file = ForeignKey(File, on_delete=SET_NULL, null=True, blank=True)
     test_period_days = IntegerField(default=3)
+
+    is_available = BooleanField(default=True)
+    # file = ForeignKey('software.SoftwareFile', on_delete=SET_NULL, null=True, blank=True)
 
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)

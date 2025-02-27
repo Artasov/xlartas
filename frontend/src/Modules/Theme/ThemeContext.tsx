@@ -1,9 +1,8 @@
-// Theme/ThemeContext.tsx
+// Modules/Theme/ThemeContext.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
 import darkTheme, {lightTheme} from "./Theme";
-import {axios} from "Auth/axiosConfig";
-import {useErrorProcessing} from "Core/components/ErrorProvider";
+import {useApi} from "../Api/useApi";
 
 interface ThemeContextType {
     theme: any;
@@ -30,15 +29,15 @@ interface BackgroundImages {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
-    const {byResponse} = useErrorProcessing();
     const [theme, setTheme] = useState(lightTheme);
     const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
     const [backgroundImages, setBackgroundImages] = useState<BackgroundImages>({dark: [], light: []});
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
     const [themeLoading, setThemeLoading] = useState<boolean>(true);
+    const {api} = useApi();
     const processTheme = async () => {
         try {
-            const response = await axios.get('/api/v1/themes/');
+            const response = await api.get('/api/v1/themes/');
             const data = response.data;
             const darkImages = data.filter((theme: any) => theme.mode === 'dark').map((theme: any) => theme.bg_image);
             const lightImages = data.filter((theme: any) => theme.mode === 'light').map((theme: any) => theme.bg_image);
@@ -50,8 +49,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
                 setTheme(defaultTheme.mode === 'dark' ? darkTheme : lightTheme);
                 setCurrentBackgroundIndex(defaultTheme.bg_image ? 0 : -1);
             }
-        } catch (error) {
-            byResponse(error);
+        } catch (_) {
         }
         setThemeLoading(false);
     }

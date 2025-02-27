@@ -1,4 +1,4 @@
-// Chat/DateLabel.tsx
+// Modules/Chat/DateLabel.tsx
 
 import React from 'react';
 import {FC} from "WideLayout/Layouts";

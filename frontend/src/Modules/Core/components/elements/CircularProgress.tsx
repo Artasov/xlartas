@@ -1,4 +1,4 @@
-// Core/components/elements/CircularProgress.tsx
+// Modules/Core/components/elements/CircularProgress.tsx
 import React from 'react';
 import {CircularProgress as CP} from "@mui/material";
 import {useTheme} from "Theme/ThemeContext";

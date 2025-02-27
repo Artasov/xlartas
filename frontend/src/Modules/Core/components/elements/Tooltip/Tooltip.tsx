@@ -1,4 +1,4 @@
-// Core/components/elements/Tooltip/Tooltip.tsx
+// Modules/Core/components/elements/Tooltip/Tooltip.tsx
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import './Tooltip.sass';
 import ReactDOM from 'react-dom';

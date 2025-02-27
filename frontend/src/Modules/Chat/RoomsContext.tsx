@@ -1,7 +1,7 @@
-// Chat/RoomsContext.tsx
+// Modules/Chat/RoomsContext.tsx
 import React, {createContext, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {IRoom} from 'types/chat/models';
-import {axios} from 'Auth/axiosConfig';
+import {axios} from '../Api/axiosConfig';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import pprint from 'Utils/pprint';
 

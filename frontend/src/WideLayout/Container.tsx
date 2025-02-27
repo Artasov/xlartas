@@ -1,4 +1,4 @@
-// Core/components/elements/Container.tsx
+// WideLayout/Container.tsx
 
 import React, {CSSProperties, forwardRef, ReactNode} from 'react';
 import {Box, BoxProps, SxProps, Theme} from '@mui/material';

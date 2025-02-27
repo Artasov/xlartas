@@ -1,4 +1,4 @@
-// Core/components/EmojiRatingPicker.tsx
+// Modules/Core/components/EmojiRatingPicker.tsx
 import React from 'react';
 import e1 from '../../../Static/img/emoji/rating/1.png';
 import e2 from '../../../Static/img/emoji/rating/2.png';

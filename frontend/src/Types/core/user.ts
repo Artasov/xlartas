@@ -1,3 +1,4 @@
+// Types/core/user.ts
 import {IClient} from "types/commerce/client";
 
 
@@ -19,6 +20,7 @@ export interface IUser {
     is_phone_confirmed?: boolean;
     is_password_exists?: boolean;
     is_test?: boolean;
+    secret_key?: string;
     age?: number;
     client?: IClient | null;
     full_name?: string;

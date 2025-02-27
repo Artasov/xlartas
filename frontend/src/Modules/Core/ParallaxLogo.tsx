@@ -1,3 +1,4 @@
+// Modules/Core/ParallaxLogo.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {FCCC} from 'WideLayout/Layouts';
 import Logo from "Core/Logo";
@@ -96,8 +97,7 @@ const ParallaxLogo: React.FC = () => {
               style={{perspective: '1000px', overflow: 'hidden'}}>
             <FCCC w={'min-content'} pos={'relative'}
                   mt={-16} maxW={'100%'} style={{
-                transform,
-                transition: 'transform 0.1s ease-out',
+                transform, transition: 'transform 0.1s ease-out',
             }}>
                 <Logo width={'100%'} cls={'w-100 ms-3 maxw-700'}/>
                 <StyledH1 fontSize={fontSize}>XLARTAS</StyledH1>
@@ -111,6 +111,14 @@ const ParallaxLogo: React.FC = () => {
                     }}>
                         {isAuthenticated ? 'Profile' : 'Sign in'}
                     </Button>
+                </FCCC>
+                {/* Кнопка "About" */}
+                <FCCC pos={'absolute'} zIndex={22} left={'6.6%'} top={'32%'}>
+                    <Button className={`fw-bold pt-7px hover-scale-10 ${
+                        isGt1400 ? 'fs-5 px-4' : 'fs-6 px-3'
+                    }`} onClick={() => {
+                        navigate('/companies/XLARTAS')
+                    }}>About</Button>
                 </FCCC>
                 {/* Блок SocialOAuth */}
                 <FCCC pos={'absolute'} zIndex={22}

@@ -1,11 +1,10 @@
-// Auth/forms/AuthForm.tsx
+// Modules/Auth/forms/AuthForm.tsx
 
 import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import 'react-phone-input-2/lib/material.css'
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
-import {axios} from "Auth/axiosConfig";
 import TextField from "@mui/material/TextField";
 import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";
@@ -19,6 +18,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import SignUpForm from "Auth/forms/SignUpForm";
 import BackButton from "Core/components/BackButton";
 import {Tab, Tabs} from "@mui/material";
+import {useApi} from "../../Api/useApi";
 
 type AuthFormProps = {
     ways?: string[];
@@ -46,7 +46,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const [confirmationAction, setConfirmationAction] = useState<string>('auth'); // 'auth' or 'signup'
     const {theme} = useTheme();
     const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false);
-
+    const {api} = useApi();
     useEffect(() => {
         if (!hasPhone && hasEmail) {
             setSelectedTab(1);
@@ -108,24 +108,21 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const handleNextStep = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            const response = await axios.post('/api/v1/user/auth_methods/', {credential});
-            pprint(`Auth Methods by ${credential}`);
-            pprint(response.data);
-            if (response.data.user_not_exists) {
+        api.post('/api/v1/user/auth_methods/', {credential}).then(data => {
+            if (data.user_not_exists) {
                 setStep(3);
             } else {
-                setIsEmailConfirmed(response.data.is_email_confirmed);
-                setIsPhoneConfirmed(response.data.is_phone_confirmed);
-                setIsPasswordExists(response.data.password_exists);
-                if (!response.data.password_exists &&
-                    (response.data.is_email_confirmed || response.data.is_phone_confirmed)) {
+                setIsEmailConfirmed(data.is_email_confirmed);
+                setIsPhoneConfirmed(data.is_phone_confirmed);
+                setIsPasswordExists(data.password_exists);
+                if (!data.password_exists &&
+                    (data.is_email_confirmed || data.is_phone_confirmed)) {
                     Message.info(
                         'Установите пароль после входа, чтобы в следующий раз была возможность войти по паролю',
                         6000
                     );
                 }
-                if (!response.data.is_email_confirmed && !response.data.is_phone_confirmed) {
+                if (!data.is_email_confirmed && !data.is_phone_confirmed) {
                     setConfirmationAction('signup');
                     setInitialCodeSent(true);
                     setStep(4);
@@ -133,11 +130,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                     setStep(2);
                 }
             }
-        } catch (error) {
-            byResponse(error);
-        } finally {
-            setLoading(false);
-        }
+        }).finally(() => setLoading(false));
     };
 
     const handleConfirmWithCode = (method: ConfirmationMethod) => {
@@ -299,7 +292,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
             }
 
             {step === 3 && (
-                <SignUpForm className={'mt-3'}
+                <SignUpForm cls={'mt-3'}
                             credential={credential}
                             onSignupSuccess={handleSignupSuccess}/>
             )}

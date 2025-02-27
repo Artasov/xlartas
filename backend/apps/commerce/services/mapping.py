@@ -1,4 +1,4 @@
-# Это старый файл # commerce/services/mapping.py
+# commerce/services/mapping.py
 # from apps.serializers import (
 #     PackageOrderCreateSerializer,
 #     PackageOrderSerializer

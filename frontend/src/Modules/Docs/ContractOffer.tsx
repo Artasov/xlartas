@@ -1,4 +1,4 @@
-// Docs/ContractOffer.tsx
+// Modules/Docs/ContractOffer.tsx
 import React from "react";
 import {FC} from "WideLayout/Layouts";
 // @ts-ignore

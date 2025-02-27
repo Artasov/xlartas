@@ -13,11 +13,9 @@ class Currency(TextChoices):
 
 
 class PaymentSystem(TextChoices):
+    HandMade = 'handmade', 'HandMade'
     TBank = 'tbank', 'TBank'
     TBankInstallment = 'tbank_installment', 'Tinkoff (Installment)'
-    Stripe = 'stripe', 'Stripe'
-    Shopozz = 'shopozz', 'Shopozz'
-    Prodamus = 'prodamus', 'Prodamus'
 
 
 class ACurrencyMixin(AModel):
@@ -37,13 +35,12 @@ class ACurrencyAmountMixin(AModel):
 
 class CurrencyPaymentSystemMapping:
     CURRENCY_TO_PAYMENT = {
-        'USD': (PaymentSystem.Stripe,),
-        'EUR': (PaymentSystem.Stripe,),
+        # 'USD': (PaymentSystem.Stripe,),
+        # 'EUR': (PaymentSystem.Stripe,),
         'RUB': (
             PaymentSystem.TBank,
             PaymentSystem.TBankInstallment,
-            PaymentSystem.Shopozz,
-            PaymentSystem.Prodamus
+            PaymentSystem.HandMade,
         ),
     }
 
@@ -75,3 +72,7 @@ class Payment(
         verbose_name_plural = _('Payments')
 
 
+class HandMadePayment(Payment):
+    class Meta:
+        verbose_name = _('Hand made payment')
+        verbose_name_plural = _('Hand made payments')

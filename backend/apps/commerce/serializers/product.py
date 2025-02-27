@@ -1,5 +1,5 @@
 # commerce/serializers/product.py
-from adjango.aserializers import AModelSerializer, ASerializer
+from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
 from apps.commerce.models import Product
@@ -12,25 +12,6 @@ class ProductPriceSerializer(AModelSerializer):
         fields = '__all__'
 
 
-class ProductPolymorphicSerializer(ASerializer):
-    def to_representation(self, instance):
-        pass
-        # from apps.commerce.models import GiftCertificate
-        # if isinstance(instance, Guide):
-        #     serializer = GuideSerializer(instance, context=self.context)
-        # elif isinstance(instance, Tariff):
-        #     serializer = TariffSerializer(instance, context=self.context)
-        # elif isinstance(instance, GiftCertificate):
-        #     serializer = GiftCertificateSerializer(instance, context=self.context)
-        # elif isinstance(instance, Course):
-        #     serializer = CourseSerializer(instance, context=self.context)
-        # elif isinstance(instance, Package):
-        #     serializer = PackageSerializer(instance, context=self.context)
-        # else:
-        #     return {'error': 'Invalid product type'}
-        # return serializer.data
-
-
 class BaseProductSerializer(AModelSerializer):
     prices = ProductPriceSerializer(many=True)
     polymorphic_ctype = SerializerMethodField()
@@ -38,16 +19,16 @@ class BaseProductSerializer(AModelSerializer):
     class Meta:
         model = Product
         fields = (
-            'id', 'name',
-            'is_available',
-            'description',
-            'prices',
-            'polymorphic_ctype',
-            'is_installment_available'
+            'id', 'name', 'pic',
+            'prices', 'description',
+            'is_available', 'short_description',
+            'polymorphic_ctype', 'is_installment_available'
         )
 
     @staticmethod
     def get_polymorphic_ctype(obj):
+        print(obj.__dict__)
+        print(obj.polymorphic_ctype)
         content_type = obj.polymorphic_ctype
         if content_type:
             return {

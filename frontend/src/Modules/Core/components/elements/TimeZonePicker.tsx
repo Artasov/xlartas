@@ -1,4 +1,4 @@
-// Core/components/elements/TimeZonePicker.tsx
+// Modules/Core/components/elements/TimeZonePicker.tsx
 
 import React, {useMemo} from 'react';
 import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, Theme,} from '@mui/material';

@@ -1,30 +1,38 @@
-// Auth/forms/SignUpForm.tsx
+// Modules/Auth/forms/SignUpForm.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import ConfirmationCode, {ConfirmationMethod} from 'Confirmation/ConfirmationCode';
-import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {Message} from 'Core/components/Message';
 import PhoneField from 'Core/components/elements/PhoneField/PhoneField';
+import TextField from '@mui/material/TextField';
 import {SmartCaptcha} from '@yandex/smart-captcha';
 import Button from 'Core/components/elements/Button/Button';
-import {isPhone} from 'Utils/validator/base';
+import {isEmail, isPhone} from 'Utils/validator/base';
 import {FC, FCCC} from 'WideLayout/Layouts';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import {debounce} from 'lodash';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
-import {axios, YANDEX_RECAPTCHA_SITE_KEY} from "Auth/axiosConfig";
+import {YANDEX_RECAPTCHA_SITE_KEY} from "../../Api/axiosConfig";
 import pprint from "Utils/pprint";
+import {useApi} from "../../Api/useApi";
 
 interface SignUpFormProps {
     credential: string;
-    className?: string;
+    cls?: string;
+    mode?: 'phone' | 'email';
     onSignupSuccess: (credential: string, confirmationMethod: ConfirmationMethod) => void;
 }
 
-const SignUpForm: React.FC<SignUpFormProps> = ({credential, onSignupSuccess, className}) => {
-    const {byResponse} = useErrorProcessing();
-    const [phone, setPhone] = useState<string>(isPhone(credential) ? credential : '');
+const SignUpForm: React.FC<SignUpFormProps> = (
+    {
+        credential,
+        onSignupSuccess,
+        cls,
+        mode = 'email'
+    }) => {
+    const [phone, setPhone] = useState<string>(mode === 'phone' && isPhone(credential) ? credential : '');
+    const [email, setEmail] = useState<string>(mode === 'email' && isEmail(credential) ? credential : '');
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -35,138 +43,170 @@ const SignUpForm: React.FC<SignUpFormProps> = ({credential, onSignupSuccess, cla
 
     const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
     const [isPhoneAvailable, setIsPhoneAvailable] = useState<boolean>(true);
-
     const [phoneTouched, setPhoneTouched] = useState<boolean>(false);
 
+    const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+    const [isEmailAvailable, setIsEmailAvailable] = useState<boolean>(true);
+    const [emailTouched, setEmailTouched] = useState<boolean>(false);
+
     const phoneCheckRef = useRef<ReturnType<typeof debounce> | null>(null);
+    const emailCheckRef = useRef<ReturnType<typeof debounce> | null>(null);
 
     const [confirmationSent, setConfirmationSent] = useState<boolean>(false);
     const [confirmationMethod, setConfirmationMethod] = useState<ConfirmationMethod | null>(null);
 
-    const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false); // Новое состояние
+    const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false);
+
+    const {api} = useApi();
 
     useEffect(() => {
         pprint('credential');
         pprint(credential);
-        if (isPhone(credential)) {
-            setPhone(credential);
+        if (mode === 'phone') {
+            if (isPhone(credential)) {
+                setPhone(credential);
+            }
+        } else {
+            if (isEmail(credential)) {
+                setEmail(credential);
+            }
         }
-    }, [credential]);
+    }, [credential, mode]);
 
     useEffect(() => {
-        if (phoneTouched) {
+        if (mode === 'phone' && phoneTouched) {
             const valid = isPhone(phone);
             setIsPhoneValid(valid);
             setIsPhoneAvailable(true);
-
-            if (phoneCheckRef.current) {
-                phoneCheckRef.current.cancel();
-            }
-
+            if (phoneCheckRef.current) phoneCheckRef.current.cancel();
             if (valid) {
                 phoneCheckRef.current = debounce(async () => {
-                    try {
-                        const response = await axios.post('/api/v1/check-phone-exists/', {phone});
-                        setIsPhoneAvailable(!response.data.exists);
-                    } catch (error) {
-                        byResponse(error);
-                    }
+                    api.post('/api/v1/check-phone-exists/', {phone}).then(
+                        data => setIsPhoneAvailable(!data.exists)
+                    );
                 }, 500);
-
                 phoneCheckRef.current();
             }
-
             return () => {
-                if (phoneCheckRef.current) {
-                    phoneCheckRef.current.cancel();
-                }
+                if (phoneCheckRef.current) phoneCheckRef.current.cancel();
             };
         }
-    }, [phone, byResponse, phoneTouched]);
+    }, [phone, api, phoneTouched, mode]);
+
+    useEffect(() => {
+        if (mode === 'email' && emailTouched) {
+            const valid = isEmail(email);
+            setIsEmailValid(valid);
+            setIsEmailAvailable(true);
+            if (emailCheckRef.current) emailCheckRef.current.cancel();
+            if (valid) {
+                emailCheckRef.current = debounce(async () => {
+                    api.post('/api/v1/check-email-exists/', {email}).then(
+                        data => setIsEmailAvailable(!data.exists)
+                    );
+                }, 500);
+                emailCheckRef.current();
+            }
+            return () => {
+                if (emailCheckRef.current) emailCheckRef.current.cancel();
+            };
+        }
+    }, [email, api, emailTouched, mode]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const submitEvent = e.nativeEvent as SubmitEvent & { submitter?: HTMLElement };
         const button = submitEvent.submitter as HTMLButtonElement | undefined;
         const confirmationMethodSelected: ConfirmationMethod | undefined = button?.value as ConfirmationMethod | undefined;
-
         if (!confirmationMethodSelected) {
             Message.error('Пожалуйста, выберите метод подтверждения');
             return;
         }
-
         setIsSubmitting(true);
-        try {
-            const timeZone = localStorage.getItem('timeZone');
-            const data: any = {
-                phone: phone || null,
-                captchaToken,
-                agree_terms: firstChecked,
-                agree_newsletters: secondChecked,
-                ...(timeZone && {timezone: timeZone}),
-            };
-            const response = await axios.post('/api/v1/signup/', data);
-            Message.success(response.data.message);
+        const timeZone = localStorage.getItem('timeZone');
+        const data: any = {
+            captchaToken,
+            agree_terms: firstChecked,
+            agree_newsletters: secondChecked,
+            ...(timeZone && {timezone: timeZone}),
+        };
+        if (mode === 'phone') data.phone = phone || null;
+        else data.email = email || null;
 
-            if (response.data.confirmation_sent) {
+        api.post('/api/v1/signup/', data).then(data => {
+            Message.success(data.message);
+            if (data.confirmation_sent) {
                 setConfirmationSent(true);
-                setConfirmationMethod(response.data.confirmation_method);
-                setInitialCodeSent(true); // Устанавливаем initialCodeSent в true после отправки кода
+                setConfirmationMethod(data.confirmation_method);
+                setInitialCodeSent(true);
             }
-
-            const credentialValue = confirmationMethodSelected === 'email' ? phone : phone;
+            const credentialValue = mode === 'email' ? email : phone;
             onSignupSuccess(credentialValue!, confirmationMethodSelected);
-        } catch (error) {
-            byResponse(error);
-            handleResetCaptcha();
-        } finally {
-            setIsSubmitting(false);
-        }
+        }).catch(_ => handleResetCaptcha()).finally(() => setIsSubmitting(false));
     };
-
     const handleResetCaptcha = () => {
         setResetCaptcha((prev) => prev + 1);
         setCaptchaToken(null);
     };
-
     const isFormValid = () => {
-        return isPhoneValid && isPhoneAvailable &&
-            firstChecked &&
-            (confirmationSent || captchaToken);
+        if (mode === 'phone') {
+            return isPhoneValid && isPhoneAvailable &&
+                firstChecked &&
+                (confirmationSent || captchaToken);
+        } else {
+            return isEmailValid && isEmailAvailable &&
+                firstChecked &&
+                (confirmationSent || captchaToken);
+        }
     };
-
-    const handleConfirm = (data: any) => {
-        // Handle успешное подтверждение
-        Message.success('Ваш аккаунт успешно подтвержден!');
-    };
-
-    // Функция для обработки повторной отправки кода
-    const handleResend = () => {
-        setInitialCodeSent(false); // Сбрасываем initialCodeSent, чтобы показать капчу
-    };
+    const handleConfirm = (data: any) => Message.success('Ваш аккаунт успешно подтвержден!');
+    const handleResend = () => setInitialCodeSent(false);
 
     return (
-        <div className={`${className} fcc`}>
+        <div className={`${cls} fcc`}>
             {!confirmationSent ? (
                 <form className={`fcc gap-2 pt-2`} onSubmit={handleSubmit} noValidate>
-                    <FC g={'.8rem'}>
-                        <PhoneField
-                            autoFocus={!isPhone(credential)}
-                            phone={phone}
-                            onReturn={() => {
-                            }}
-                            onChange={(value) => {
-                                setPhone(value);
-                                setPhoneTouched(true);
-                            }}
-                            disabled={false}
-                            error={(!isPhoneAvailable && isPhoneValid)
-                                ? 'Телефон уже используется'
-                                : (!isPhoneValid && phone.trim().length > 0)
-                                    ? 'Некорректный номер телефона'
-                                    : undefined}
-                        />
-                    </FC>
+                    {mode === 'phone' ? (
+                        <FC g={'.8rem'}>
+                            <PhoneField
+                                autoFocus={!isPhone(credential)}
+                                phone={phone}
+                                onReturn={() => {
+                                }}
+                                onChange={(value) => {
+                                    setPhone(value);
+                                    setPhoneTouched(true);
+                                }}
+                                disabled={false}
+                                error={(!isPhoneAvailable && isPhoneValid)
+                                    ? 'Телефон уже используется'
+                                    : (!isPhoneValid && phone.trim().length > 0)
+                                        ? 'Некорректный номер телефона'
+                                        : undefined}
+                            />
+                        </FC>
+                    ) : (
+                        <FC g={'.8rem'}>
+                            <TextField
+                                autoFocus={!(isEmail(credential))}
+                                label="Почта"
+                                variant="outlined"
+                                type="email"
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    setEmailTouched(true);
+                                }}
+                                fullWidth
+                                error={(!isEmailAvailable && isEmailValid) || (!isEmailValid && email.trim().length > 0)}
+                                helperText={(!isEmailAvailable && isEmailValid)
+                                    ? 'Email уже используется'
+                                    : (!isEmailValid && email.trim().length > 0)
+                                        ? 'Некорректный email'
+                                        : undefined}
+                            />
+                        </FC>
+                    )}
                     <TermsCheckboxes
                         cls={'mt-2px'}
                         firstChecked={firstChecked}
@@ -179,7 +219,10 @@ const SignUpForm: React.FC<SignUpFormProps> = ({credential, onSignupSuccess, cla
                             <FCCC w={'100%'} h={'100%'} pos={'absolute'} top={0} left={0}>
                                 <CircularProgress size={'3rem'}/>
                             </FCCC>
-                            <FC sx={{filter: theme.palette.mode === 'dark' ? 'invert(.87) hue-rotate(180deg)' : 'none'}}>
+                            <FC sx={{
+                                transformOrigin: '0 0', width: '100%',
+                                filter: theme.palette.mode === 'dark' ? 'invert(.87) hue-rotate(180deg)' : 'none',
+                            }}>
                                 <SmartCaptcha
                                     sitekey={YANDEX_RECAPTCHA_SITE_KEY}
                                     key={resetCaptcha}
@@ -190,10 +233,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({credential, onSignupSuccess, cla
                     )}
                     <FC g={1}>
                         <Button
-                            // color={'primary'}
                             type="submit"
                             name="confirmationMethod"
-                            value="phone"
+                            value={mode}
                             disabled={isSubmitting || !isFormValid()}
                             loading={isSubmitting}
                         >
@@ -204,12 +246,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({credential, onSignupSuccess, cla
             ) : confirmationMethod && (
                 <ConfirmationCode
                     className={'mt-3'}
-                    credential={credential}
+                    credential={mode === 'phone' ? phone : email}
                     confirmationMethod={confirmationMethod}
                     action={'signup'}
-                    initialCodeSent={initialCodeSent} // Передаем состояние initialCodeSent
-                    onConfirm={handleConfirm} // Передаем функцию обработчика подтверждения
-                    onResend={handleResend} // Передаем функцию обработчика повторной отправки
+                    initialCodeSent={initialCodeSent}
+                    onConfirm={handleConfirm}
+                    onResend={handleResend}
                 />
             )}
         </div>

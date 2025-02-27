@@ -1,4 +1,4 @@
-// Core/components/BottomButton.tsx
+// Modules/Core/components/BottomButton.tsx
 import React, {useEffect, useState} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 import useViewportHeight from "Core/hooks/useViewportHeight";

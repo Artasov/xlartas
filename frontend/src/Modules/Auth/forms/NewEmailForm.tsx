@@ -1,4 +1,4 @@
-// Auth/forms/NewEmailForm.tsx
+// Modules/Auth/forms/NewEmailForm.tsx
 import React, {ChangeEvent, useContext, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";

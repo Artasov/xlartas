@@ -1,4 +1,4 @@
-// Core/components/elements/Divider.tsx
+// Modules/Core/components/elements/Divider.tsx
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 

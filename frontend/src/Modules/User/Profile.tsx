@@ -1,4 +1,4 @@
-// User/Profile.tsx
+// Modules/User/Profile.tsx
 
 import React from 'react';
 import {NavLink, Route, Routes, useLocation, useNavigate} from 'react-router-dom';

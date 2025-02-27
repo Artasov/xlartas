@@ -1,4 +1,4 @@
-// Chat/Chat.tsx
+// Modules/Chat/Chat.tsx
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import RoomItem from 'Chat/RoomItem';
@@ -6,7 +6,6 @@ import {useMediaQuery} from '@mui/material';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useRooms} from './RoomsContext';
-import {useTheme} from "Theme/ThemeContext";
 import {IRoom} from "types/chat/models";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {FC, FCSC} from "WideLayout/Layouts";
@@ -20,7 +19,6 @@ const Chat: React.FC = () => {
     const location = useLocation();
     const isMdOrLarger = useMediaQuery('(min-width: 992px)');
     const {notAuthentication} = useErrorProcessing();
-    const {theme} = useTheme();
 
     const {
         headerNavHeight,

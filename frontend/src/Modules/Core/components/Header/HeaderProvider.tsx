@@ -1,3 +1,4 @@
+// Modules/Core/components/Header/HeaderProvider.tsx
 import React, {
     createContext,
     ReactNode,

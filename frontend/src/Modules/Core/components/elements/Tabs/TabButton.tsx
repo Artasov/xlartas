@@ -1,4 +1,4 @@
-// Core/components/elements/Tabs/TabButton.tsx
+// Modules/Core/components/elements/Tabs/TabButton.tsx
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 import {ContainerProps} from "WideLayout/Container";
