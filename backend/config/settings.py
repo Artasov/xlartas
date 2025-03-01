@@ -40,7 +40,7 @@ ROOT_URLCONF = 'apps.core.routes.root'
 # Security and domain settings
 HTTPS = bool(int(env('HTTPS')))
 SITE_ID = int(env('SITE_ID'))
-MAIN_DOMAIN = env('MAIN_DOMAIN', '127.0.0.1')
+MAIN_DOMAIN = env('MAIN_DOMAIN', 'localhost')
 DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{":8000" if DEV else ""}'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 ALLOWED_HOSTS = [
@@ -351,13 +351,25 @@ CACHES = {
 }
 USER_AGENTS_CACHE = 'default'
 
+# Celery
+timezone = TIME_ZONE
+CELERY_BROKER_URL = REDIS_BROKER_URL
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400 * 30}
+result_backend = REDIS_BROKER_URL
+accept_content = ['application/json']
+task_serializer = 'json'
+result_serializer = 'json'
+task_default_queue = 'default'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_TASK_EAGER_PROPAGATES = True
+
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://localhost:3000',
 ]
-
 
 # Google
 GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
@@ -487,19 +499,6 @@ EP_CUSTOM_LINKS = [
     {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/'},
     {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/'},
 ]
-
-# Celery
-timezone = TIME_ZONE
-CELERY_BROKER_URL = REDIS_BROKER_URL
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400 * 30}
-result_backend = REDIS_BROKER_URL
-accept_content = ['application/json']
-task_serializer = 'json'
-result_serializer = 'json'
-task_default_queue = 'default'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_TASK_ALWAYS_EAGER = False
-CELERY_TASK_EAGER_PROPAGATES = True
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

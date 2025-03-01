@@ -13,7 +13,7 @@ from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import GoogleUser
 from apps.social_oauth.oauth_provider import OAuthProvider
 
-log = logging.getLogger('social_auth')
+log = logging.getLogger('global')
 
 
 class GoogleOAuthProvider(OAuthProvider):
@@ -49,6 +49,14 @@ class GoogleOAuthProvider(OAuthProvider):
                     }
             ) as resp:
                 response_data = await resp.json()
+                log.info('OAuth Google request:')
+                log.info({
+                    "client_id": settings.GOOGLE_CLIENT_ID,
+                    "client_secret": settings.GOOGLE_CLIENT_SECRET,
+                    "grant_type": 'authorization_code',
+                    "code": code,
+                    "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+                })
                 log.info('OAuth Google response:')
                 log.info(response_data)
                 resp.raise_for_status()
