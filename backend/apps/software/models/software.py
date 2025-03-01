@@ -4,13 +4,15 @@ import logging
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin, ACreatedAtIndexedMixin
 from django.db.models import (
     ForeignKey, CASCADE, DateTimeField, SET_NULL, CharField, URLField, TextField,
-    IntegerField, PositiveIntegerField, OneToOneField, FileField
+    IntegerField, PositiveIntegerField, OneToOneField, FileField, BooleanField
 )
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.models import Product, Order
 from apps.core.models import User
+from apps.software.exceptions.license import SoftwareLicenseException
+from apps.software.exceptions.software import SoftwareException
 from apps.software.services.license import SoftwareLicenseService
 from apps.software.services.order import SoftwareOrderService
 from apps.software.services.software import SoftwareService
@@ -30,7 +32,7 @@ class SoftwareFile(ACreatedAtIndexedMixin):
         return f'SoftwareFile: (v{self.version})'
 
 
-class Software(Product, SoftwareService):
+class Software(Product, SoftwareService, SoftwareException):
     file = OneToOneField(
         'software.SoftwareFile', SET_NULL,
         null=True, blank=True, verbose_name=_('File')
@@ -60,10 +62,11 @@ class SoftwareOrder(Order, SoftwareOrderService):
         verbose_name_plural = _('Software Orders')
 
 
-class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseService):
+class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseService, SoftwareLicenseException):
     user = ForeignKey(User, CASCADE, 'software_licenses', verbose_name=_('User'))
     software = ForeignKey(Software, CASCADE, 'licenses', verbose_name=_('Software'))
     license_ends_at = DateTimeField(_('License ends at'), blank=True, null=True)
+    is_tested = BooleanField(_('Is tested'), default=False)
 
     class Meta:
         verbose_name = _('Software License')

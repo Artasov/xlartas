@@ -22,42 +22,45 @@ configurations = {
         #       BACKEND       #
         #######################
 
-        'xl.backend': {
-            # 'config.settings': '__copy__',
-            'apps.core': {
-                'routes.root': '__copy__',
-            },
-            'apps.commerce': {
-                'routes.api': '__copy__',
-                'controllers': {
-
-                },
-                'models': '__copy__',
-                'services': '__copy__',
-                'serializers': '__copy__',
-            },
-            'apps.software': {
-                'routes.api': '__copy__',
-                'controllers': {
-                    'software': '__copy__',
-                    'license': '__copy__',
-                },
-                'models': {
-                    'software': '__copy__',
-                },
-                'services': {
-                    'license': '__copy__',
-                    'order': '__copy__',
-                    'software': '__copy__',
-                },
-                'serializers': {
-                    'software': '__copy__',
-                },
-                'tasks': {
-
-                },
-            },
-        },
+        # 'xl.backend': {
+        #     # 'config.settings': '__copy__',
+        #     # 'apps.shop': '__copy__',
+        #     'apps.core': {
+        #         'routes.root': '__copy__',
+        #     },
+        #     'apps.commerce': {
+        #         'admin': '__copy__',
+        #         'routes.api': '__copy__',
+        #         'controllers': {
+        #
+        #         },
+        #         'models': '__copy__',
+        #         'services': '__copy__',
+        #         'serializers': '__copy__',
+        #     },
+        #     'apps.software': {
+        #         'admin': '__copy__',
+        #         'routes.api': '__copy__',
+        #         'controllers': {
+        #             'software': '__copy__',
+        #             'license': '__copy__',
+        #         },
+        #         'models': {
+        #             'software': '__copy__',
+        #         },
+        #         'services': {
+        #             'license': '__copy__',
+        #             'order': '__copy__',
+        #             'software': '__copy__',
+        #         },
+        #         'serializers': {
+        #             'software': '__copy__',
+        #         },
+        #         'tasks': {
+        #
+        #         },
+        #     },
+        # },
 
         #######################
         #       FRONTEND      #
@@ -66,16 +69,21 @@ configurations = {
         'xl.frontend.src': {
             'App': '__copy__',
             'Modules': {
-                # 'Auth': '__copy__',
-                # 'Core': {
-                #     'ErrorProvider.ErrorProvider': '__copy__',
-                # },
+                'Auth': '__copy__',
+                'Api': '__copy__',
+                'Core': {
+                    'components': {
+                        'Header': '__copy__',
+                        'ErrorProvider': '__copy__',
+                    }
+                },
                 'Cabinet': '__copy__',
-                'Order': '__copy__',
+                # 'Order': '__copy__',
                 'Software': '__copy__',
             },
             'Types': {},
             'Utils': {},
+            'Redux': '__copy__',
         }
     },
     #######################

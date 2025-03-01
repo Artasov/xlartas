@@ -26,7 +26,7 @@ const Softwares: React.FC = () => {
     if (loading) return <FRCC mt={4} w={'100%'}><CircularProgress size={'90px'}/></FRCC>;
 
     return (
-        <FCC g={2} wrap>
+        <FRCC g={2} wrap>
             {softwares.length
                 ? softwares.map(s => (
                     <FC rounded={3} maxW={300} cursorPointer
@@ -57,7 +57,7 @@ const Softwares: React.FC = () => {
                 ))
                 : <FRCC>Нет доступных программ</FRCC>
             }
-        </FCC>
+        </FRCC>
     );
 };
 

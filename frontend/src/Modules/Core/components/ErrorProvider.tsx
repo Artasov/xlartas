@@ -5,6 +5,8 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import pprint from 'Utils/pprint';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Message} from "Core/components/Message";
+import {openAuthModal} from "Redux/modalsSlice";
+import {useDispatch} from "react-redux";
 
 // Типизация для ErrorContext
 export interface ErrorContextType {
@@ -19,7 +21,7 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
     const location = useLocation();
     const {hideMobileMenu} = useNavigation();
     const {frontendLogout} = useContext(AuthContext) as AuthContextType;
-
+    const dispatch = useDispatch();
     const isHandlingAuthError = useRef(false);
 
     useEffect(() => {
@@ -51,10 +53,10 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
     const notAuthentication = () => {
         if (isHandlingAuthError.current) return;
         isHandlingAuthError.current = true;
-
         frontendLogout();
         Message.notAuthentication();
-        navigate('/?auth_modal=True');
+        // navigate('/?auth_modal=True');
+        dispatch(openAuthModal());
         hideMobileMenu();
     };
 
@@ -88,9 +90,10 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
             )
         ) notAuthentication();
         else if (status === 401) {
-
             notAuthentication();
-        } else Message.errorsByData(data);
+        } else {
+            Message.errorsByData(data);
+        }
 
     };
 

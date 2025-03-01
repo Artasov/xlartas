@@ -73,12 +73,14 @@ XL_DASHBOARD = {
     },
     'Products': {
         'All': 'commerce.Product',
+        'Softwares': 'software.Software',
+        'Software Licenses': 'software.SoftwareLicense',
+        'Software files': 'software.SoftwareFile',
         'Prices': 'commerce.ProductPrice',
     },
     'Orders': {
         'All': 'commerce.Order',
-        'Software': 'software.Software',
-        'Software File': 'software.SoftwareFile',
+        'Software': 'software.SoftwareOrder',
     },
     'Payments': {
         'All': 'commerce.Payment',

@@ -51,10 +51,10 @@ class SoftwareLicenseSerializer(AModelSerializer):
 
     class Meta:
         model = SoftwareLicense
-        fields = ('id', 'software', 'license_ends_at', 'remaining_hours')
+        fields = ('id', 'software', 'license_ends_at', 'remaining_hours', 'is_tested')
 
     @staticmethod
-    def get_remaining_hours(obj):
+    def get_remaining_hours(obj: SoftwareLicense):
         if obj.license_ends_at and obj.license_ends_at > timezone.now():
             delta = obj.license_ends_at - timezone.now()
             return int(delta.total_seconds() // 3600)

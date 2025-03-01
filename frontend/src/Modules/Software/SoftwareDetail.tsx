@@ -1,21 +1,21 @@
-// Modules/Software/SoftwareDetail.tsx
-
-import React, {useContext, useEffect, useState} from 'react';
+// xl/frontend/src/Modules/Software/SoftwareDetail.tsx
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Message} from 'Core/components/Message';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FC, FR, FRCC, FRSE} from 'WideLayout/Layouts';
-import {useTheme} from 'Theme/ThemeContext';
-import SoftwareOrder from './SoftwareOrder';
-import {ISoftware} from "./Types/Software";
+import CircularProgress from "Core/components/elements/CircularProgress";
+import {IconButton} from "@mui/material";
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Button from "Core/components/elements/Button/Button";
+import {FC, FR, FRCC, FRSE} from "WideLayout/Layouts";
+import {useTheme} from "Theme/ThemeContext";
+import SoftwareOrder from './SoftwareOrder';
+import {ISoftware} from "./Types/Software";
+import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useApi} from "../Api/useApi";
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import {IconButton} from "@mui/material";
+import {Message} from "Core/components/Message";
+import SoftwareTestPeriodButton from "./SoftwareTestPeriodButton";
 
-const SoftwareDetail: React.FC = () => {
+const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {theme} = useTheme();
@@ -25,9 +25,10 @@ const SoftwareDetail: React.FC = () => {
     const [software, setSoftware] = useState<ISoftware | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // --- Новые состояния для лицензии ---
+    // Новые состояния для лицензии
     const [licenseHours, setLicenseHours] = useState<number | null>(null);
     const [licenseLoading, setLicenseLoading] = useState(false);
+    const [isTested, setIsTested] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id) {
@@ -38,22 +39,32 @@ const SoftwareDetail: React.FC = () => {
         setLoading(true);
         api.get(`/api/v1/software/${id}/`)
             .then(data => setSoftware(data))
-            .catch(_ => Message.error('Ошибка загрузки Software'))
+            .catch(() => Message.error('Ошибка загрузки Software'))
             .finally(() => setLoading(false));
     }, [id, api]);
 
-    // --- Получение количества лицензированных часов ---
+    // Запрос лицензии зависит только от software и isAuthenticated
     useEffect(() => {
         if (isAuthenticated && software) {
             setLicenseLoading(true);
-            api.get(`/api/v1/software/${software.id}/license-hours/`).then(data => {
-                setLicenseHours(data.license_hours);
-            }).finally(() => setLicenseLoading(false));
+            api.get(`/api/v1/license/${software.id}/`).then(data => {
+                setLicenseHours(data.remaining_hours);
+                setIsTested(data.is_tested);
+            }).catch(_ => null).finally(() => setLicenseLoading(false));
         }
     }, [isAuthenticated, software, api]);
 
-    if (loading) return <FRCC h="70vh"><CircularProgress size="80px"/></FRCC>;
+    const refreshLicense = () => {
+        if (isAuthenticated && software) {
+            setLicenseLoading(true);
+            api.get(`/api/v1/license/${software.id}/`).then(data => {
+                setLicenseHours(data.remaining_hours);
+                setIsTested(data.is_tested);
+            }).catch(_ => null).finally(() => setLicenseLoading(false));
+        }
+    };
 
+    if (loading) return <FRCC h="70vh"><CircularProgress size="80px"/></FRCC>;
     if (!software) return <FRCC h="70vh">Software не найдено</FRCC>;
 
     return (
@@ -64,6 +75,16 @@ const SoftwareDetail: React.FC = () => {
                         ? <CircularProgress size="20px"/>
                         : <FR lh={'1rem'}>{licenseHours !== null ? licenseHours : 0} hours left</FR>
                     }
+                </FR>
+            )}
+            {((licenseHours !== null && licenseHours < 1) || !isAuthenticated) && (
+                <FR p={1} pos={'absolute'} top={0} left={0}>
+                    <SoftwareTestPeriodButton
+                        softwareId={software.id}
+                        testPeriodDays={software.test_period_days}
+                        isTested={isTested}
+                        refreshLicense={refreshLicense}
+                    />
                 </FR>
             )}
             <img src={software.pic} className={'rounded-top-3'} style={{
@@ -84,7 +105,7 @@ const SoftwareDetail: React.FC = () => {
                     {software.file?.file && (
                         <IconButton className={'ms-auto me-2'}
                                     onClick={() => window.open(software.file?.file, '_blank')} color="primary">
-                            <DownloadRoundedIcon sx={{color: theme.palette.text.primary80,}}/>
+                            <DownloadRoundedIcon sx={{color: theme.palette.text.primary80}}/>
                         </IconButton>
                     )}
                     {software.review_url &&
@@ -110,9 +131,8 @@ const SoftwareDetail: React.FC = () => {
                     </FR>
                 }
             </FC>
-
         </FC>
     );
 };
 
-export default SoftwareDetail;
+export default memo(SoftwareDetailComponent);

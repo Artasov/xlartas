@@ -26,12 +26,13 @@ import {AuthContext, AuthContextType, AuthProvider} from 'Auth/AuthContext';
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 import Landing from "Landing/Landing";
 import Header from "Core/components/Header/Header";
-import Modal from "Core/components/elements/Modal/Modal";
-import AuthForm from "Auth/forms/AuthForm";
+import GlobalAuthModal from "Auth/GlobalAuthModal";
 import CompanyPage from "Company/CompanyPage";
 import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
 import {FC, FCCC} from "WideLayout/Layouts";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import Softwares from "./Modules/Software/Softwares";
+import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 
 function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
     return null;
@@ -41,9 +42,7 @@ const App: React.FC = () => {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const {theme} = useTheme();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
-
-    // Берем mainRef и headerNavHeight из контекста
-    const {headerNavHeight, mainRef, isAuthModalOpen, setIsAuthModalOpen} = useNavigation();
+    const {headerNavHeight, mainRef} = useNavigation();
 
     useEffect(() => {
         moment.locale('en');
@@ -78,14 +77,7 @@ const App: React.FC = () => {
                 <Head/>
                 <Header/>
                 <SettingsTool/>
-                <Modal closeBtn={false} title={''}
-                       clsModalScroll={'px-3 '}
-                       isOpen={isAuthModalOpen} cls={'w-100 maxw-380px'}
-                       onClose={() => setIsAuthModalOpen(false)}>
-                    <FC mb={20}>
-                        <AuthForm ways={['social', 'password', 'email']}/>
-                    </FC>
-                </Modal>
+                <GlobalAuthModal/>
                 <main className={`overflow-y-auto no-scrollbar w-100`}
                       ref={mainRef} style={{
                     minHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
@@ -119,6 +111,14 @@ const App: React.FC = () => {
                         {/* Маршрут для компании */}
                         <Route path='/companies/:name' element={<CompanyPage/>}/>
                         <Route path='/docs/:id' element={<CompanyDocumentDetail/>}/>
+
+                        <Route path="/softwares" element={<FC g={2} p={2} mx={'auto'} maxW={800}>
+                            <h1 className={'fs-1 lh-1 text-center'}>Softwares</h1>
+                            <Softwares/>
+                        </FC>}/>
+                        <Route path="/softwares/:id" element={<FC g={2} p={2} mx={'auto'} maxW={700}>
+                            <SoftwareDetail/>
+                        </FC>}/>
 
                         <Route path='/*' element={<Cabinet/>}/>
                     </Routes>

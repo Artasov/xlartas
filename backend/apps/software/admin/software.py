@@ -1,7 +1,8 @@
-# software/admin/software.py
+# xl/backend/apps/software/admin/software.py
 from adjango.decorators import admin_description, admin_boolean
-from django.contrib.admin import register, TabularInline, ModelAdmin
-from django.utils.html import format_html
+from django.contrib.admin import TabularInline
+from django.contrib.admin import register, ModelAdmin
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.models import ProductPrice
@@ -14,7 +15,7 @@ class ProductPriceInline(TabularInline):
     мы можем редактировать связанные цены (ProductPrice).
     """
     model = ProductPrice
-    extra = 1
+    extra = 1  # Количество дополнительных пустых полей для добавления новых цен
     readonly_fields = ()
     can_delete = True
     verbose_name = _('Price')
@@ -38,12 +39,11 @@ class SoftwareAdmin(ModelAdmin):
     list_filter = ('is_available',)
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-created_at',)
-    inlines = [ProductPriceInline]
 
     @admin_description(_('Review'))
     def review_link(self, obj):
         if obj.review_url:
-            return format_html('<a href="{}" target="_blank">Обзор</a>', obj.review_url)
+            return f'<a href="{obj.review_url}" target="_blank">Обзор</a>'
         return '-'
 
     @admin_description(_('Version'))
@@ -53,7 +53,7 @@ class SoftwareAdmin(ModelAdmin):
     @admin_description(_('File'))
     def file_link(self, obj):
         if obj.file and obj.file.file:
-            return format_html('<a href="{}" target="_blank">Скачать</a>', obj.file.file.url)
+            return f'<a href="{obj.file.file.url}" target="_blank">Скачать</a>'
         return '-'
 
 
@@ -70,20 +70,28 @@ class SoftwareOrderAdmin(ModelAdmin):
     ordering = ('-created_at',)
     raw_id_fields = ('user', 'payment', 'product')
 
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related(
-            'user', 'product', 'payment'
-        )
-
 
 @register(SoftwareLicense)
 class SoftwareLicenseAdmin(ModelAdmin):
-    list_display = ('user', 'software', 'license_ends_at', 'is_active_display', 'created_at', 'updated_at')
+    list_display = (
+        'user', 'software', 'days_left', 'is_tested', 'is_active_display', 'created_at', 'updated_at'
+    )
     search_fields = ('user__username', 'software__name')
-    list_filter = ('software',)
+    list_filter = ('software', 'is_tested',)
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-created_at',)
 
     @admin_description(_('Is Active'))
     @admin_boolean(True)
-    def is_active_display(self, obj): return obj.is_active()
+    def is_active_display(self, obj):
+        return obj.is_active()
+
+    @admin_description('Days left')
+    def days_left(self, obj):
+        if obj.license_ends_at:
+            delta = obj.license_ends_at - timezone.now()
+            days = delta.days
+            if days < 0:
+                days = 0
+            return days
+        return '-'

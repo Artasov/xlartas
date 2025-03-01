@@ -35,10 +35,6 @@ interface HeaderContextType {
     logoContent: ReactNode;
     setLogoContent: (content: ReactNode) => void;
     mainRef: RefObject<HTMLDivElement>;
-
-    // Добавляем состояние и сеттер для модалки авторизации
-    isAuthModalOpen: boolean;
-    setIsAuthModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
@@ -80,9 +76,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
         />
     );
     const [logoContent, setLogoContent] = useState<ReactNode>(defaultLogoContent);
-
-    // ============ Добавляем управление модалкой ============
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     const openMenu = () => {
         if (headerNavRef.current) {
@@ -162,8 +155,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
                 logoContent,
                 setLogoContent,
                 mainRef,
-                isAuthModalOpen,
-                setIsAuthModalOpen,
             }}
         >
             {children}

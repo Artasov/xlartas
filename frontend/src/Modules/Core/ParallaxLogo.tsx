@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {useTheme} from 'Theme/ThemeContext';
 import Button from 'Core/components/elements/Button/Button';
 import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
@@ -10,6 +9,8 @@ import {FCCC} from 'WideLayout/Layouts';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import ParallaxContainer from './ParallaxContainer';
+import {openAuthModal} from "Redux/modalsSlice";
+import {useDispatch} from "react-redux";
 
 type StyledH1Props = {
     fontSize: string;
@@ -25,10 +26,10 @@ const StyledH1 = styled('h1')<StyledH1Props>(({theme, fontSize}) => ({
 }));
 
 const ParallaxLogo: React.FC = () => {
-    const {theme} = useTheme();
-    const {headerNavHeight, isAuthModalOpen, setIsAuthModalOpen, mainRef} = useNavigation();
+    const {mainRef} = useNavigation();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Определение размера шрифта на основе медиазапросов
     const isGt1600 = useMediaQuery('(min-width:1600px)');
@@ -61,18 +62,31 @@ const ParallaxLogo: React.FC = () => {
                     <Button
                         className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : 'fs-6 px-3'}`}
                         onClick={() => {
-                            isAuthenticated ? navigate('/profile') : setIsAuthModalOpen(true);
-                        }}
-                    >
+                            isAuthenticated ? navigate('/profile') : dispatch(openAuthModal());
+                        }}>
                         {isAuthenticated ? 'Profile' : 'Sign in'}
                     </Button>
                 </FCCC>
-                {/* Кнопка "About" */}
-                <FCCC pos="absolute" zIndex={22} left="6.6%" top="32%">
+                {/* Кнопка "Software" */}
+                <FCCC pos="absolute" zIndex={22} left="6.6%" top="27%">
                     <Button
-                        className={`fw-bold pt-7px hover-scale-10 ${isGt1400 ? 'fs-5 px-4' : 'fs-6 px-3'}`}
-                        onClick={() => navigate('/companies/XLARTAS')}
-                    >
+                        className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
+                        onClick={() => navigate('/softwares')}>
+                        Software
+                    </Button>
+                </FCCC>
+                {/* Кнопка "About" */}
+                <FCCC pos="absolute" zIndex={22} left="24%" bottom="25%">
+                    <Button size={'small'}
+                            className={`fw-bold pb-3px hover-scale-5 ${isGt1400 
+                                ? 'fs-6 px-3 pt-4px' 
+                                : isGt1000 
+                                    ? 'fs-7 px-3 pt-4px'
+                                    : 'fs-7 px-2 pt-2px pb-0'
+                            }`}
+                            sx={{
+                            }}
+                            onClick={() => navigate('/companies/XLARTAS')}>
                         About
                     </Button>
                 </FCCC>

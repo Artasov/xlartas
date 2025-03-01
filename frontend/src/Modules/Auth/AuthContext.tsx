@@ -10,6 +10,7 @@ import {JWTPair} from "types/core/auth";
 import {OAUTH_PROVIDERS} from "Auth/Social/constants";
 import {OAuthProvider} from "Auth/Social/types";
 import pprint from "Utils/pprint";
+import {closeAuthModal} from "Redux/modalsSlice";
 
 export interface AuthContextType {
     user: IUser | null;
@@ -37,7 +38,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     // !isAuthenticated не значит, что авторизация не прошла, может она null и еще выполняется.
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {headerNavHeight, mainRef, isAuthModalOpen, setIsAuthModalOpen} = useNavigation();
 
     const {hideMobileMenu} = useNavigation();
 
@@ -64,10 +64,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         await updateCurrentUser()
         const nextFromUrl = new URLSearchParams(window.location.search).get('next');
         pprint('Final auth next')
-        pprint(nextFromUrl ? nextFromUrl : next ? next : '/profile')
-        navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
+        // pprint(nextFromUrl ? nextFromUrl : next ? next : '/profile')
+        if (nextFromUrl) navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
         hideMobileMenu();
-        setIsAuthModalOpen(false);
+        dispatch(closeAuthModal());
         Message.success('Добро пожаловать! Вы успешно вошли в свой аккаунт.');
     };
     const logout = () => axios.post('/api/v1/logout/')
