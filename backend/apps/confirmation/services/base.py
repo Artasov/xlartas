@@ -124,7 +124,7 @@ class ConfirmationCodeService:
         action: ConfirmationAction = confirmation_actions.get(code.action).copy()
         del action['func']
         method_name = cls.get_confirmation_method().upper()
-        if (settings.DEBUG and not settings.DEBUG_SEND_NOTIFIES) or user.is_test:
+        if False and (settings.DEBUG and not settings.DEBUG_SEND_NOTIFIES) or user.is_test:
             log.debug(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')
         else:
             log.info(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')

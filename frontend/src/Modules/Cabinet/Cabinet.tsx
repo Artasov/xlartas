@@ -9,7 +9,7 @@ import {FC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import pprint from "Utils/pprint";
 import Profile from "User/Profile";
 import CreditScoreRoundedIcon from '@mui/icons-material/CreditScoreRounded';
@@ -35,8 +35,6 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
     },
 });
 
-export const useCabinetWidth = () => useContext(CabinetWidthContext);
-// =========================================================
 
 const Cabinet: React.FC = () => {
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
@@ -51,44 +49,16 @@ const Cabinet: React.FC = () => {
     const {selectedProfile, switchProfile} = useProfile();
     const cabinetContainerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-    const location = useLocation();
     const {theme} = useTheme();
     const isGtSm = useMediaQuery('(min-width: 576px)');
-
     const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("700px");
 
-    const [isLeaveConferenceModalOpen, setIsLeaveConferenceModalOpen] = useState(false);
-    const [pendingPath, setPendingPath] = useState<string | null>(null);
-
     const handleMenuLinkClick = (path: string, closeMobile?: boolean) => {
-        const isInConference = location.pathname.includes('/conference');
-        if (isInConference) {
-            pprint(`Confirm leave from conference -> ${path}`);
-            setPendingPath(path);
-            setIsLeaveConferenceModalOpen(true);
-        } else {
-            if (closeMobile) hideMobileMenu();
-            setTimeout(() => {
-                navigate(path);
-                pprint(`Cabinet navigate -> ${path}`);
-            }, 0);
-        }
-    };
-
-    const confirmLeaveConference = () => {
-        setIsLeaveConferenceModalOpen(false);
-        if (pendingPath) {
-            navigate(
-                `${pendingPath}?for_feedback=${
-                    window.location.href.split('/')[window.location.href.split('/').length - 1]
-                }`
-            );
-        }
-        setPendingPath(null);
-    };
-    const cancelLeaveConference = () => {
-        setIsLeaveConferenceModalOpen(false);
-        setPendingPath(null);
+        if (closeMobile) hideMobileMenu();
+        setTimeout(() => {
+            navigate(path);
+            pprint(`Cabinet navigate -> ${path}`);
+        }, 0);
     };
 
     useEffect(() => {
@@ -99,7 +69,7 @@ const Cabinet: React.FC = () => {
                          to="/profile" icon={<PersonOutlineRoundedIcon/>}>
                     Profile
                 </NavLink>
-                <NavLink onClick={() => handleMenuLinkClick('/software', true)}
+                <NavLink onClick={() => handleMenuLinkClick('/softwares', true)}
                          to="/software" icon={<WebhookIcon/>}>
                     Software
                 </NavLink>
@@ -132,7 +102,6 @@ const Cabinet: React.FC = () => {
 
     useEffect(() => {
         if (isAuthenticated === false) navigate('/?auth_modal=True');
-        pprint('Cabinet');
     }, [isAuthenticated, navigate]);
 
     if (!isAuthenticated) return null;

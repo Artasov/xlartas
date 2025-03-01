@@ -18,7 +18,8 @@ const MobileNavigationMenu = forwardRef<HTMLDivElement, MobileNavigationMenuProp
                 zIndex: 20,
                 height: 0,
                 gap: '20px',
-                boxShadow: theme.palette.shadow.LO06
+                boxShadow: theme.palette.shadow.LO06,
+                backgroundColor: theme.palette.bg.primary30
             }}>
             {children}
         </nav>

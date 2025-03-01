@@ -10,6 +10,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import Button from "Core/components/elements/Button/Button";
+import {FR} from "WideLayout/Layouts";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -87,7 +88,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
     };
 
     return (
-        <div ref={socialDiv} className={`${className} fr gap-2`}>
+        <FR g={.2} ref={socialDiv} cls={`${className}`}>
             {providers.map(({provider, icon, clientId, redirectUri, scope}) => (
                 <OAuthButton
                     key={provider}
@@ -127,7 +128,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </FR>
     );
 };
 

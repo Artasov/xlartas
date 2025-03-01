@@ -16,3 +16,4 @@ class ExceptionLoggingMiddleware(MiddlewareMixin):
         # Можно также отправить уведомление или выполнить другие действия.
         # Возвращаем None, чтобы использовать стандартную обработку ошибок Django
         return None
+

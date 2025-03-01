@@ -25,7 +25,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = (
         clientId,
         redirectUri,
         scope,
-        pxIconSize = 50,
+        pxIconSize = 40,
         linked = false,
         onClick
     }) => {
@@ -39,7 +39,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = (
     return (
         <div style={{ position: 'relative', display: 'inline-block' }}>
             {linked ? (
-                <IconButton className="ratio-1-1" style={iconStyle} disabled>
+                <IconButton className="ratio-1-1 hover-scale-10" style={iconStyle} disabled>
                     <FontAwesomeIcon icon={icon} className="h-100" />
                     <CheckCircleIcon style={{
                         color: theme.palette.success.main,
@@ -50,13 +50,13 @@ const OAuthButton: React.FC<OAuthButtonProps> = (
                     }} />
                 </IconButton>
             ) : onClick ? (
-                <IconButton className="ratio-1-1" style={iconStyle} onClick={() => onClick(oauthUrl)}>
-                    <FontAwesomeIcon icon={icon} className="hover-scale-5 h-100" />
+                <IconButton sx={{p: 1}} className="ratio-1-1" style={iconStyle} onClick={() => onClick(oauthUrl)}>
+                    <FontAwesomeIcon icon={icon} className="hover-scale-10 h-100" />
                 </IconButton>
             ) : (
                 <a href={oauthUrl}>
-                    <IconButton className="ratio-1-1" style={iconStyle}>
-                        <FontAwesomeIcon icon={icon} className="hover-scale-5 h-100" />
+                    <IconButton sx={{p: 1}} className="ratio-1-1" style={iconStyle}>
+                        <FontAwesomeIcon icon={icon} className="hover-scale-10 h-100" />
                     </IconButton>
                 </a>
             )}

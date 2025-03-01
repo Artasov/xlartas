@@ -297,7 +297,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+if DEV: MIDDLEWARE.append('apps.core.middleware.other.MediaDomainSubstitutionJSONMiddleware')
+MEDIA_DOMAIN = 'https://xlartas.ru'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -497,9 +500,9 @@ GOOGLE_RECAPTCHA_SITE_KEY = env('GOOGLE_RECAPTCHA_SITE_KEY')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.timeweb.ru'
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 25
+EMAIL_HOST_USER = env('EMAIL_HOST_USER2')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD2')
+EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')

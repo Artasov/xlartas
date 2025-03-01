@@ -13,8 +13,6 @@ import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import {FC, FCC} from "WideLayout/Layouts";
 import {Message} from "Core/components/Message";
 import {isEmail, isPhone} from "Utils/validator/base";
-import {useTheme} from "Theme/ThemeContext";
-import {useErrorProcessing} from "Core/components/ErrorProvider";
 import SignUpForm from "Auth/forms/SignUpForm";
 import BackButton from "Core/components/BackButton";
 import {Tab, Tabs} from "@mui/material";
@@ -31,7 +29,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const hasPasswordWay = ways.includes('password');
 
     const {isAuthenticated, login, handleAuthResponse} = useContext(AuthContext) as AuthContextType;
-    const {byResponse} = useErrorProcessing();
     const [credential, setCredential] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [step, setStep] = useState<number>(1);  // 1 - Enter credential, 2 - Choose login method, 3 - SignUpForm, 4 - ConfirmationCode
@@ -44,15 +41,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const [confirmationMethod, setConfirmationMethod] = useState<ConfirmationMethod | null>(null);
     const [useConfirmation, setUseConfirmation] = useState<boolean>(false);
     const [confirmationAction, setConfirmationAction] = useState<string>('auth'); // 'auth' or 'signup'
-    const {theme} = useTheme();
     const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false);
     const {api} = useApi();
+
     useEffect(() => {
-        if (!hasPhone && hasEmail) {
-            setSelectedTab(1);
-        } else {
-            setSelectedTab(0);
-        }
+        if (!hasPhone && hasEmail) setSelectedTab(1);
+        else setSelectedTab(0);
     }, [hasPhone, hasEmail]);
 
     const handlePasswordLogin = () => {
@@ -124,7 +118,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                 }
                 if (!data.is_email_confirmed && !data.is_phone_confirmed) {
                     setConfirmationAction('signup');
-                    setInitialCodeSent(true);
+                    // setInitialCodeSent(true);
                     setStep(4);
                 } else {
                     setStep(2);

@@ -30,6 +30,8 @@ import Modal from "Core/components/elements/Modal/Modal";
 import AuthForm from "Auth/forms/AuthForm";
 import CompanyPage from "Company/CompanyPage";
 import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
+import {FC, FCCC} from "WideLayout/Layouts";
+import CircularProgress from "Core/components/elements/CircularProgress";
 
 function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
     return null;
@@ -80,16 +82,18 @@ const App: React.FC = () => {
                        clsModalScroll={'px-3 '}
                        isOpen={isAuthModalOpen} cls={'w-100 maxw-380px'}
                        onClose={() => setIsAuthModalOpen(false)}>
-                    <AuthForm ways={['social', 'password', 'email']}/>
+                    <FC mb={20}>
+                        <AuthForm ways={['social', 'password', 'email']}/>
+                    </FC>
                 </Modal>
-                <main
-                    className={`overflow-y-auto no-scrollbar w-100`}
-                    ref={mainRef}
-                    style={{
-                        minHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
-                        maxHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
-                    }}
-                >
+                <main className={`overflow-y-auto no-scrollbar w-100`}
+                      ref={mainRef} style={{
+                    minHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
+                    maxHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
+                }}>
+                    {isAuthenticated === null && <FCCC h={'80%'}>
+                        <CircularProgress size={'100px'}/>
+                    </FCCC>}
                     <Routes>
                         {/* <Route path="/" element={<Navigate to={'/auth'}/>}/> */}
                         <Route path='/' element={<Landing/>}/>
