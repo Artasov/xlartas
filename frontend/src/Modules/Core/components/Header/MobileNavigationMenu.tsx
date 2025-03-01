@@ -15,8 +15,8 @@ const MobileNavigationMenu = forwardRef<HTMLDivElement, MobileNavigationMenuProp
             className={`header-nav overflow-hidden fs-5 fccc flex-md-row`}
             ref={headerNavRef}
             style={{
-                zIndex: 20,
                 height: 0,
+                zIndex: 20,
                 gap: '20px',
                 boxShadow: theme.palette.shadow.LO06,
                 backgroundColor: theme.palette.bg.primary30
