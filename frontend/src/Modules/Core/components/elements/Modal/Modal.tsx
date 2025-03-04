@@ -1,4 +1,4 @@
-// ../../asutp_frontend/src/Modules/Core/Components/Modal/Modal.tsx
+// Modules/Core/components/elements/Modal/Modal.tsx
 import React, {MouseEvent, ReactNode, useEffect, useRef, useState} from 'react';
 import './Modal.sass';
 import IconButton from "@mui/material/IconButton";

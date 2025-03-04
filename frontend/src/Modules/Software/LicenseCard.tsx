@@ -1,3 +1,4 @@
+// Modules/Software/LicenseCard.tsx
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Card, CardContent, CardMedia, Typography} from '@mui/material';

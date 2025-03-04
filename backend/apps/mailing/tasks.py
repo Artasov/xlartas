@@ -1,3 +1,4 @@
+# mailing/tasks.py
 from adjango.decorators import task
 from adjango.utils.mail import send_emails
 from celery import shared_task

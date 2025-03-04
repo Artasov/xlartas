@@ -1,3 +1,4 @@
+// Modules/Core/ParallaxContainer.tsx
 import React, { useEffect, useState } from 'react';
 import { FC, FCCC, FC as FCLayout } from "WideLayout/Layouts";
 

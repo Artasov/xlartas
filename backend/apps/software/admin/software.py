@@ -1,4 +1,4 @@
-# xl/backend/apps/software/admin/software.py
+# software/admin/software.py
 from ckeditor.widgets import CKEditorWidget
 from django.contrib.admin import TabularInline, display
 from django.contrib.admin import register, ModelAdmin

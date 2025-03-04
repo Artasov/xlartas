@@ -1,4 +1,4 @@
-// src/Redux/modalsSlice.ts
+// Redux/modalsSlice.ts
 import {createSlice} from '@reduxjs/toolkit';
 
 interface ModalsState {

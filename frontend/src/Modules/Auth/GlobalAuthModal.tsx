@@ -1,4 +1,4 @@
-// src/Modules/Auth/GlobalAuthModal.tsx
+// Modules/Auth/GlobalAuthModal.tsx
 import React from 'react';
 import Modal from "Core/components/elements/Modal/Modal";
 import AuthForm from "Auth/forms/AuthForm";

@@ -1,3 +1,4 @@
+// Modules/Software/Licenses.tsx
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import CircularProgress from 'Core/components/elements/CircularProgress';

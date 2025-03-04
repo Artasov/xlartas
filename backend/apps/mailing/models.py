@@ -1,3 +1,4 @@
+# mailing/models.py
 from adjango.models.mixins import ACreatedUpdatedAtMixin
 from django.conf import settings
 from django.db.models import CharField, TextField, DateTimeField, ManyToManyField, BooleanField

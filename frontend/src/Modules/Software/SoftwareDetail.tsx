@@ -1,4 +1,4 @@
-// xl/frontend/src/Modules/Software/SoftwareDetail.tsx
+// Modules/Software/SoftwareDetail.tsx
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgress from "Core/components/elements/CircularProgress";

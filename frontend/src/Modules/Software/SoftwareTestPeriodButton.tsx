@@ -1,4 +1,4 @@
-// src/Modules/Software/SoftwareTestPeriodButton.tsx
+// Modules/Software/SoftwareTestPeriodButton.tsx
 import React, {useContext, useState} from 'react';
 import Button from "Core/components/elements/Button/Button";
 import Modal from "Core/components/elements/Modal/Modal";

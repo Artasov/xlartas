@@ -1,3 +1,4 @@
+# mailing/admin.py
 from ckeditor.widgets import CKEditorWidget  # импорт виджета CKEditor
 from django.contrib.admin import ModelAdmin, register, action
 from django.forms import ModelForm

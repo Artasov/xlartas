@@ -1,3 +1,4 @@
+// Modules/Core/ParallaxLogo.tsx
 import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';

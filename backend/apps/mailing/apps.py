@@ -1,4 +1,4 @@
-# company/apps.py
+# mailing/apps.py
 from django.apps import AppConfig
 
 
