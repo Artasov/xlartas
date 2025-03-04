@@ -38,6 +38,7 @@ class Software(Product, SoftwareService, SoftwareException):
         null=True, blank=True, verbose_name=_('File')
     )
     review_url = URLField(_('Review URL'), max_length=500, blank=True, null=True)
+    guide_url = URLField(_('Guide URL'), max_length=500, blank=True, null=True)
     log_changes = TextField(blank=True, null=True)
     test_period_days = IntegerField(default=3)
     min_license_order_hours = PositiveIntegerField(default=1, help_text='Minimum number of hours to order')

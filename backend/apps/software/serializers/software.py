@@ -1,6 +1,5 @@
 # software/serializers/software.py
 from adjango.aserializers import AModelSerializer
-from adjango.models import AModel
 from django.utils import timezone
 from rest_framework.fields import SerializerMethodField
 
@@ -31,6 +30,7 @@ class SoftwareSerializer(BaseProductSerializer):
             'min_license_order_hours',
             'file',
             'review_url',
+            'guide_url',
         )
 
 

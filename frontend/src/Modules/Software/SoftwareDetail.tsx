@@ -14,6 +14,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useApi} from "../Api/useApi";
 import {Message} from "Core/components/Message";
 import SoftwareTestPeriodButton from "./SoftwareTestPeriodButton";
+import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 
 const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
@@ -102,9 +103,14 @@ const SoftwareDetailComponent: React.FC = () => {
                         fontSize: '.8rem',
                         lineHeight: '.9rem'
                     }}>v.{software.file.version}</span>}
-                    {software.file?.file && (
+                    {software.guide_url && (
                         <IconButton className={'ms-auto me-2'}
-                                    onClick={() => window.open(software.file?.file, '_blank')} color="primary">
+                                    onClick={() => window.open(software.guide_url, '_blank')} color="primary">
+                            <FeedRoundedIcon sx={{color: theme.palette.text.primary80}}/>
+                        </IconButton>
+                    )}
+                    {software.file?.file && (
+                        <IconButton onClick={() => window.open(software.file?.file, '_blank')} color="primary">
                             <DownloadRoundedIcon sx={{color: theme.palette.text.primary80}}/>
                         </IconButton>
                     )}
