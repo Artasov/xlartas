@@ -17,8 +17,11 @@ from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import Order, Currency, Product
 from apps.commerce.serializers.order_registry import get_order_serializer
+from apps.commerce.services.order import IOrderService
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
+from apps.software.models import SoftwareOrder
+from apps.software.serializers import SoftwareOrderSerializer
 from apps.tbank.models import TBankPayment
 
 log = logging.getLogger('global')
@@ -114,24 +117,15 @@ async def order_init(request, id, init_payment):
 @acontroller('Order Cancel')
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
-async def order_cancel(_request, _id):
-    pass
-    # order: Order | IOrderService = await Order.objects.agetorn(
-    #     OrderException.NotFound, id=id, user=request.user
-    # )
-    # async with AsyncAtomicContextManager():
-    #     await order.safe_cancel(request=request, reason='')
-    #     if isinstance(order, PackageOrder):
-    #         return Response(await PackageOrderSerializer(order).adata, status=HTTP_200_OK)
-    #     elif isinstance(order, GuideOrder):
-    #         return Response(await GuideOrderSerializer(order).adata, status=HTTP_200_OK)
-    #     elif isinstance(order, CourseOrder):
-    #         return Response(await CourseOrderSerializer(order).adata, status=HTTP_200_OK)
-    #     elif isinstance(order, GiftCertificateOrder):
-    #         return Response(await GiftCertificateOrderSerializer(order).adata, status=HTTP_200_OK)
-    #     elif isinstance(order, TariffOrder):
-    #         return Response(await TariffOrderSerializer(order).adata, status=HTTP_200_OK)
-    #     raise OrderException.UnknownOrderInstance()
+async def order_cancel(request, id):
+    order: Order | IOrderService = await Order.objects.agetorn(
+        OrderException.NotFound, id=id, user=request.user
+    )
+    async with AsyncAtomicContextManager():
+        await order.safe_cancel(request=request, reason='')
+        if isinstance(order, SoftwareOrder):
+            return Response(await SoftwareOrderSerializer(order).adata, status=HTTP_200_OK)
+        raise OrderException.UnknownOrderInstance()
 
 
 @acontroller('Resend payment notification')

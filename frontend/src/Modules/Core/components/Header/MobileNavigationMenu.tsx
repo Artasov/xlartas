@@ -9,7 +9,7 @@ interface MobileNavigationMenuProps {
 
 const MobileNavigationMenu = forwardRef<HTMLDivElement, MobileNavigationMenuProps>(({children}, _ref) => {
     const {headerNavRef} = useNavigation();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     return (
         <nav
             className={`header-nav overflow-hidden fs-5 fccc flex-md-row`}
@@ -18,8 +18,8 @@ const MobileNavigationMenu = forwardRef<HTMLDivElement, MobileNavigationMenuProp
                 height: 0,
                 zIndex: 20,
                 gap: '20px',
-                boxShadow: theme.palette.shadow.LO06,
-                backgroundColor: theme.palette.bg.primary30
+                boxShadow: plt.shadow.LO06,
+                backgroundColor: plt.bg.primary30
             }}>
             {children}
         </nav>

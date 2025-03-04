@@ -15,7 +15,7 @@ const OrderTemplate: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const {headerNavHeight} = useNavigation();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

@@ -19,7 +19,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
     const navigate = useNavigate();
     const {selectedProfile} = useProfile();
     const {user} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const isMdOrLarger = useMediaQuery('(min-width: 992px)');
 
     const otherParticipant = useMemo(() => {
@@ -69,7 +69,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                     : <CircularProgress/>
             }
             <Link className={'tdn'} style={{
-                color: theme.palette.text.primary60
+                color: plt.text.primary60
             }} to={room && roomName === 'Избранное'
                 ? '/profile' : profileLink}>
                 <h4 className={'m-0 ps-1'}>

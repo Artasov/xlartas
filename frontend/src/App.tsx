@@ -40,7 +40,7 @@ function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
 
 const App: React.FC = () => {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {headerNavHeight, mainRef} = useNavigation();
 
@@ -61,14 +61,14 @@ const App: React.FC = () => {
                 pauseOnFocusLoss={false}
                 draggable
                 pauseOnHover
-                theme={theme.palette.mode}
+                theme={plt.mode}
                 className={`disable-tap-select`}
             />
             <div
                 className={`App h-100 fc disable-tap-select`}
                 style={{
-                    color: theme.palette.text.primary70,
-                    backgroundColor: theme.palette.bg.primary
+                    color: plt.text.primary70,
+                    backgroundColor: plt.bg.primary
                 }}
             >
                 <div className="bg-image-wrapper">

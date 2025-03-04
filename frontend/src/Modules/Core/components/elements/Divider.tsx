@@ -10,14 +10,14 @@ interface DividerProps {
 }
 
 const Divider: React.FC<DividerProps> = ({height = '1px', width = '100%', className}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     return (
         <div
             className={`${className ? className : ''} rounded-2`}
             style={{
                 width: width,
                 height: height,
-                backgroundColor: theme.palette.bg.contrast30
+                backgroundColor: plt.bg.contrast30
             }}
         ></div>
     );

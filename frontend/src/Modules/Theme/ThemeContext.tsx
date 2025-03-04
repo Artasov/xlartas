@@ -1,6 +1,6 @@
 // Modules/Theme/ThemeContext.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
+import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
 import darkTheme, {lightTheme} from "./Theme";
 import {useApi} from "../Api/useApi";
 
@@ -9,6 +9,7 @@ interface ThemeContextType {
     toggleTheme: () => void;
     nextBackground: () => void;
     themeLoading: boolean;
+    plt: Palette | any;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -115,9 +116,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
             }
         }
     };
-
+    const plt = theme.palette
     return (
-        <ThemeContext.Provider value={{theme, toggleTheme, nextBackground, themeLoading}}>
+        <ThemeContext.Provider value={{theme, toggleTheme, nextBackground, themeLoading, plt}}>
             <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
         </ThemeContext.Provider>
     );

@@ -12,7 +12,7 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
 

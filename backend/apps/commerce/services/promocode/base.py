@@ -29,13 +29,13 @@ class PromoCodeService:
         # Проверка даты начала
         if self.start_date and now < self.start_date:
             if raise_exception:
-                raise PromocodeException.NotStarted()
+                raise PromocodeException.ApiEx.NotStarted()
             return False
 
         # Проверка даты конца
         if self.end_date and now > self.end_date:
             if raise_exception:
-                raise PromocodeException.Expired()
+                raise PromocodeException.ApiEx.Expired()
             return False
 
         # Получаем скидку для продукта
@@ -44,20 +44,20 @@ class PromoCodeService:
         # Проверка, если промокод не применим для продукта
         if not discount:
             if raise_exception:
-                raise PromocodeException.NotApplicableForProduct()
+                raise PromocodeException.ApiEx.NotApplicableForProduct()
             return False
 
         # Проверка, если промокод не применим для валюты
         if discount.currency != currency:
             if raise_exception:
-                raise PromocodeException.NotApplicableForCurrency()
+                raise PromocodeException.ApiEx.NotApplicableForCurrency()
             return False
 
         # Проверка специфичных пользователей (если есть)
         specific_users = discount.specific_users
         if await specific_users.aexists() and not await specific_users.filter(id=user.id).aexists():
             if raise_exception:
-                raise PromocodeException.NotApplicableForClient()
+                raise PromocodeException.ApiEx.NotApplicableForClient()
             return False
 
         # Проверка максимального общего числа применений
@@ -65,7 +65,7 @@ class PromoCodeService:
             total_usage = await PromocodeUsage.objects.filter(promocode=self).acount()
             if total_usage >= discount.max_usage:
                 if raise_exception:
-                    raise PromocodeException.MaxUsageExceeded()
+                    raise PromocodeException.ApiEx.MaxUsageExceeded()
                 return False
 
         # Проверка максимального числа применений на пользователя
@@ -73,7 +73,7 @@ class PromoCodeService:
             user_usage = await PromocodeUsage.objects.filter(promocode=self, user=user).acount()
             if user_usage >= discount.max_usage_per_user:
                 if raise_exception:
-                    raise PromocodeException.MaxUsagePerClientExceeded()
+                    raise PromocodeException.ApiEx.MaxUsagePerClientExceeded()
                 return False
 
         # Проверка интервала между применениями
@@ -83,7 +83,7 @@ class PromoCodeService:
                 delta_days = (now - last_usage.created_at).days
                 if delta_days < discount.interval_days:
                     if raise_exception:
-                        raise PromocodeException.UsageTooFrequent()
+                        raise PromocodeException.ApiEx.UsageTooFrequent()
                     return False
         return True
 

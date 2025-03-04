@@ -36,7 +36,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     const [firstChecked, setFirstChecked] = useState<boolean>(false);
     const [secondChecked, setSecondChecked] = useState<boolean>(false);
@@ -221,7 +221,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                             </FCCC>
                             <FC sx={{
                                 transformOrigin: '0 0', width: '100%',
-                                filter: theme.palette.mode === 'dark' ? 'invert(.87) hue-rotate(180deg)' : 'none',
+                                filter: plt.mode === 'dark' ? 'invert(.87) hue-rotate(180deg)' : 'none',
                             }}>
                                 <SmartCaptcha
                                     sitekey={YANDEX_RECAPTCHA_SITE_KEY}

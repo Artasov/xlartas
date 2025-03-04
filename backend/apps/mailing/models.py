@@ -21,6 +21,13 @@ class Mailing(ACreatedUpdatedAtMixin):
         verbose_name=_('Users'),
         help_text=_('Выберите пользователей, которым будет отправлена рассылка')
     )
+    sent_users = ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='mailings_received',
+        verbose_name=_('Отправленные пользователи'),
+        help_text=_('Пользователи, которым уже было отправлено письмо')
+    )
     sent = BooleanField(_('Sent'), default=False)
 
     class Meta:

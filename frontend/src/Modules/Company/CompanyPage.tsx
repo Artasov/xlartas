@@ -14,7 +14,7 @@ const CompanyPage: React.FC = () => {
     const [company, setCompany] = useState<Company | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {

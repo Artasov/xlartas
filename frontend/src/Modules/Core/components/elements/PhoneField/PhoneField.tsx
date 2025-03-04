@@ -28,7 +28,7 @@ const PhoneField: React.FC<PhoneFieldProps> = (
         error
     }) => {
 
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -42,7 +42,7 @@ const PhoneField: React.FC<PhoneFieldProps> = (
                 pos={'absolute'} top={-9} left={15}
                 zIndex={1} fontSize={'.85rem'}
                 sx={{lineHeight: '1rem'}} px={'5px'}
-                bg={theme.palette.bg.primary}>
+                bg={plt.bg.primary}>
                 Номер телефона
             </FR>}
             <PhoneInput
@@ -67,17 +67,17 @@ const PhoneField: React.FC<PhoneFieldProps> = (
                 autoFormat={true}
                 containerClass={`${disabled ? 'opacity-50' : ''} ${error ? 'error' : ''}`}
                 dropdownStyle={{
-                    color: theme.palette.text.primary80,
-                    backgroundColor: theme.palette.bg.primary,
+                    color: plt.text.primary80,
+                    backgroundColor: plt.bg.primary,
                 }}
                 searchClass={`p-2`}
                 searchStyle={{
-                    color: theme.palette.text.primary80,
-                    backgroundColor: theme.palette.bg.primary,
+                    color: plt.text.primary80,
+                    backgroundColor: plt.bg.primary,
                 }}
                 inputClass={`w-100`}
                 inputStyle={{
-                    color: theme.palette.text.primary80,
+                    color: plt.text.primary80,
                 }}
             />
             {error &&

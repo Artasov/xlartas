@@ -10,11 +10,11 @@ interface CircularProgressProps {
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({size, sx}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     return (
         <div className={'h-100 w-100 fccc'}>
             <CP size={size}
-                style={{color: theme.palette.text.primary40, ...sx}}/>
+                style={{color: plt.text.primary40, ...sx}}/>
         </div>
     );
 };

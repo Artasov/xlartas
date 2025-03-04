@@ -1,19 +1,22 @@
-// Modules/Core/components/elements/Modal/Modal.tsx
+// ../../asutp_frontend/src/Modules/Core/Components/Modal/Modal.tsx
 import React, {MouseEvent, ReactNode, useEffect, useRef, useState} from 'react';
 import './Modal.sass';
 import IconButton from "@mui/material/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {FC, FRBC, FRC} from "WideLayout/Layouts";
+import {SxProps} from "@mui/material";
 
 interface ModalProps {
     isOpen: boolean;
     onClose?: () => void;
     title?: string;
     cls?: string;
-    clsContent?: string;
     titleCls?: string;
-    clsModalScroll?: string;
+    sxModalChildContainer?: SxProps;
+    sxContent?: SxProps;
+    sxTitle?: SxProps;
     bg?: string;
+    bgContent?: string;
     children: ReactNode;
     zIndex?: number;
     animDuration?: number;
@@ -27,10 +30,12 @@ const Modal: React.FC<ModalProps> = (
         onClose,
         title,
         cls,
-        clsContent,
         titleCls,
         bg,
-        clsModalScroll,
+        sxModalChildContainer,
+        sxContent,
+        sxTitle,
+        bgContent,
         children,
         zIndex = 20,
         closeBtn = false, // Default value set to false
@@ -108,18 +113,19 @@ const Modal: React.FC<ModalProps> = (
             onClick={handleClose}
         >
             <FC scroll={'y-auto'} zIndex={zIndex ? zIndex : 4} rounded={3} p={2} pt={'.9rem'}
-                cls={`${cls} x-modal`} bg={bg}
+                cls={`${cls} x-modal`} bg={bgContent}
                 onClick={handleModalContentClick}
                 sx={{
                     pointerEvents: 'all',
-                    transition: `opacity ${animDuration}ms ease, visibility ${animDuration}ms`
+                    transition: `opacity ${animDuration}ms ease, visibility ${animDuration}ms`,
+                    ...sxContent
                 }}>
                 <FRBC g={1}>
-                    {title && <FRC cls={`${titleCls} fs-4 mb-1`}>{title}</FRC>}
+                    {title && <FRC sx={sxTitle} cls={`${titleCls} fs-4 mb-1`}>{title}</FRC>}
                     {showCloseBtn && onClose && (
                         <IconButton
                             onClick={onClose}
-                            size="small"
+                            size={'small'}
                             style={{
                                 zIndex: zIndex ? zIndex : 10,
                                 pointerEvents: 'all',
@@ -134,10 +140,8 @@ const Modal: React.FC<ModalProps> = (
                         </IconButton>
                     )}
                 </FRBC>
-                <FC h={'100%'} cls={`xmodal-content ${clsContent}`}>
-                    <div className={`${clsModalScroll} pt-2 overflow-y-scroll no-scrollbar`}>
-                        {children}
-                    </div>
+                <FC h={'100%'} sx={sxModalChildContainer} cls={`xmodal-content pt-2 overflow-y-scroll no-scrollbar`}>
+                    {children}
                 </FC>
             </FC>
         </div>

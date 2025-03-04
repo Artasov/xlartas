@@ -10,7 +10,7 @@ interface LicenseCardProps {
 
 const LicenseCard: React.FC<LicenseCardProps> = ({license}) => {
     const navigate = useNavigate();
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
 
     const handleClick = () => {
         navigate(`/softwares/${license.software.id}`);

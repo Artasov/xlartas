@@ -9,7 +9,7 @@ interface DesktopNavigationMenuProps {
 
 const DesktopNavigationMenu: React.FC<DesktopNavigationMenuProps> = (
     {children, cls}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     return (
         <nav
             className={`${cls} desktop-nav frcc gap-4`}

@@ -42,7 +42,7 @@ const UserPersonalInfoForm: React.FC = () => {
     const [showSaveButton, setShowSaveButton] = useState(false);
     const {isAuthenticated, user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
     const {notAuthentication} = useErrorProcessing();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi();
 
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
@@ -111,14 +111,14 @@ const UserPersonalInfoForm: React.FC = () => {
                     {user?.is_email_confirmed
                         ? <div className={'fr gap-2 pe-3'}>
                             <CheckCircleOutlineIcon style={{
-                                color: theme.palette.success.main,
+                                color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Почта подтверждена</span>
                         </div>
                         : <div className={'fr gap-2 pe-3'}>
                             <HighlightOffIcon style={{
-                                color: theme.palette.error.main,
+                                color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Почта не подтверждена</span>
@@ -127,14 +127,14 @@ const UserPersonalInfoForm: React.FC = () => {
                     {user?.is_phone_confirmed
                         ? <div className={'fr gap-2 pe-3'}>
                             <CheckCircleOutlineIcon style={{
-                                color: theme.palette.success.main,
+                                color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Телефон подтвержден</span>
                         </div>
                         : <div className={'fr gap-2 pe-3'}>
                             <HighlightOffIcon style={{
-                                color: theme.palette.error.main,
+                                color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Телефон не подтвержден</span>
@@ -159,7 +159,7 @@ const UserPersonalInfoForm: React.FC = () => {
                             classNameOverride={`px-2 opacity-75 pb-0 pt-3px text-nowrap minw-150px`}
                             style={{
                                 fontWeight: 600,
-                                color: theme.palette.text.contrast70,
+                                color: plt.text.contrast70,
                             }}>
                         Сменить пароль
                     </Button>
@@ -215,13 +215,13 @@ const UserPersonalInfoForm: React.FC = () => {
                         margin="none"/>
                     {user?.is_email_confirmed
                         ? <EditIcon onClick={() => setIsEmailModalOpen(true)}
-                                    style={{cursor: 'pointer', color: theme.palette.text.primary60}}/>
+                                    style={{cursor: 'pointer', color: plt.text.primary60}}/>
                         : <Button onClick={() => setIsEmailModalOpen(true)}
                                   sx={{
                                       fontWeight: 500, minWidth: 130
                                   }}>{user?.email ? 'ПОДТВЕРДИТЬ' : 'ДОБАВИТЬ'}</Button>
                     }
-                    <Modal isOpen={isEmailModalOpen} bg={theme.palette.bg.primary}
+                    <Modal isOpen={isEmailModalOpen} bg={plt.bg.primary}
                            onClose={() => setIsEmailModalOpen(false)}>
                         <NewEmailForm onSuccess={() => setIsEmailModalOpen(false)}/>
                     </Modal>
@@ -238,14 +238,14 @@ const UserPersonalInfoForm: React.FC = () => {
                         margin="none"/>
                     {user?.is_phone_confirmed
                         ? <EditIcon onClick={() => setIsPhoneModalOpen(true)}
-                                    style={{cursor: 'pointer', color: theme.palette.text.primary60}}/>
+                                    style={{cursor: 'pointer', color: plt.text.primary60}}/>
                         : <Button onClick={() => setIsPhoneModalOpen(true)}
                                   classNameOverride={`px-2 opacity-75 pb-0 pt-3px h-100 text-nowrap minw-150px`} sx={{
-                            color: theme.palette.text.contrast70,
+                            color: plt.text.contrast70,
                             fontWeight: 600, minWidth: 130
                         }}>ПОДТВЕРДИТЬ</Button>
                     }
-                    <Modal cls={'px-3'} bg={theme.palette.bg.primary} closeOnOutsideClick={false}
+                    <Modal cls={'px-3'} bg={plt.bg.primary} closeOnOutsideClick={false}
                            isOpen={isPhoneModalOpen}
                            onClose={() => setIsPhoneModalOpen(false)}>
                         <NewPhoneForm onSuccess={() => setIsPhoneModalOpen(false)}/>
@@ -286,7 +286,7 @@ const UserPersonalInfoForm: React.FC = () => {
                     onChange={handleChange}
                 />
             </FR>
-            <Typography mt={1} fontSize={'.8rem'} color={theme.palette.text.primary30}>
+            <Typography mt={1} fontSize={'.8rem'} color={plt.text.primary30}>
                 Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
             </Typography>
 

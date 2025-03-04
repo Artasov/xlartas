@@ -37,7 +37,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
     const [newMessage, setNewMessage] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
     const [isImportant, setIsImportant] = useState<boolean>(false); // New state for the checkbox
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewMessage(e.target.value);
@@ -107,8 +107,8 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
         <FC
             p={1}
             w={'100%'}
-            color={theme.palette.text.primary}
-            bg={theme.palette.bg.primary}
+            color={plt.text.primary}
+            bg={plt.bg.primary}
         >
             <FRSC>
                 <label htmlFor="file-input" style={{cursor: 'pointer'}}>
@@ -125,7 +125,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                 />
                 <FCCC pos={'relative'} mr={1}>
                     <span style={{
-                        color: theme.palette.text.primary40,
+                        color: plt.text.primary40,
                         fontSize: '.8rem',
                         position: 'absolute',
                         top: -2,
@@ -149,9 +149,9 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                         flexGrow: 1,
                         padding: '0.5rem',
                         borderRadius: '8px',
-                        border: `2px solid ${theme.palette.text.primary20}`,
-                        backgroundColor: theme.palette.bg.primary,
-                        color: theme.palette.text.primary90,
+                        border: `2px solid ${plt.text.primary20}`,
+                        backgroundColor: plt.bg.primary,
+                        color: plt.text.primary90,
                         resize: 'none',
                         overflow: 'auto',
                         outline: 'none',

@@ -1,7 +1,7 @@
 # commerce/services/order.py
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Union
 
 from adjango.utils.base import build_full_url
 from adjango.utils.common import traceback_str
@@ -17,7 +17,7 @@ tbank_log = logging.getLogger('tbank')
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order
+    from apps.commerce.models import Order, HandMadePayment
 
 
 class IOrderService:
@@ -264,6 +264,13 @@ class IOrderService:
         # Выполняем pregive по продукту
         await self.product.pregive(self)
         # Если нужно, инициализируем оплату
+        print('@@@@@@@@@@@@@@@@@')
+        print('@@@@@@@@@@@@@@@@@')
+        print('@@@@@@@@@@@@@@@@@')
+        print('@@@@@@@@@@@@@@@@@')
+        print('@@@@@@@@@@@@@@@@@')
+        print('@@@@@@@@@@@@@@@@@')
+        print(price_for_init)
         if not request.data.get('not_init_payment') and price_for_init > 0 and init_payment and (
                 settings.DEBUG and settings.DEBUG_INIT_PAYMENT or not settings.DEBUG
         ): await self.init_payment(request, primary_price_for_init=price_for_init)
@@ -276,6 +283,7 @@ class IOrderService:
 
     async def sync_with_payment_system(self: 'Order'):
         from apps.tbank.models import TBankPayment
+        from apps.commerce.models.payment import HandMadePayment
         payment = await self.arelated('payment')
         if isinstance(self.payment, TBankPayment):
             payment: TBankPayment
@@ -288,6 +296,8 @@ class IOrderService:
                     and not self.is_executed and not self.is_refunded):
                 await self.execute()
             tbank_log.info(f'TBank Payment {payment.id} synchronization successfully.')
+        elif isinstance(self.payment, HandMadePayment):
+            pass  # Ручная оплата, и тут ничего не надо
         else:
             raise PaymentException.PaymentSystemNotFound()
 
@@ -310,21 +320,9 @@ class IOrderService:
         self.is_executed = True
         await self.asave()
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
-        # Send notifications to client about successful order executing
-        # await Notify.objects.acreate(
-        #     recipient=self.user,
-        #     notify_type=NOTIFY_ORDER_MAPPING[product_type],
-        #     context={
-        #         'order_id': str(self.id),
-        #         'product': await order_serializer_mapping[
-        #             product_type
-        #         ]['get'](self).adata,
-        #     },
-        #     send_immediately=True
-        # )
 
     async def cancel(
-            self: 'Order',
+            self: Union['Order', 'IOrderService'],
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             reason: str
     ):
@@ -335,7 +333,7 @@ class IOrderService:
         self.is_cancelled = True
         await self.asave()
 
-    def check_available_to_init_payment(self):
+    def check_available_to_init_payment(self: Union['Order', 'IOrderService']):
         from apps.commerce.models import Order
         from apps.commerce.models.payment import CurrencyPaymentSystemMapping
         self: Order
@@ -349,10 +347,11 @@ class IOrderService:
                 f'Платежная система {self.payment_system} не поддерживается для валюты {self.currency}.'
             )
 
-    async def cancel_payment(self: 'Order'):
+    async def cancel_payment(self: Union['Order', 'IOrderService']):
         """Отменяет только платеж в шлюзе."""
         await self.sync_with_payment_system()
         from apps.tbank.models import TBankPayment
+        from apps.commerce.models.payment import HandMadePayment
         if isinstance(self.payment, TBankPayment):
             payment: TBankPayment = await self.arelated('payment')
             if payment.is_paid:
@@ -360,6 +359,8 @@ class IOrderService:
                 raise OrderException.CannotCancelPaid()
             else:
                 await self.payment.cancel()
+        elif isinstance(self.payment, HandMadePayment):
+            pass  # Ручная оплата, отмена тоже ручная
         else:
             commerce_log.info(f'Payment system {self.payment_system} not found')
             raise PaymentException.PaymentSystemNotFound()

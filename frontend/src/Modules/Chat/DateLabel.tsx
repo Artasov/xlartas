@@ -10,7 +10,7 @@ interface DateLabelProps {
 }
 
 const DateLabel: React.FC<DateLabelProps> = ({date}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const messageDate = parseISO(date);
 
     const formatDateLabel = () => {
@@ -28,10 +28,10 @@ const DateLabel: React.FC<DateLabelProps> = ({date}) => {
             <FC
                 rounded={5}
                 px={1}
-                bg={theme.palette.bg.contrast05}
-                boxShadow={theme.palette.shadows ? theme.palette.shadows.MO005C : ''}
+                bg={plt.bg.contrast05}
+                boxShadow={plt.shadows ? plt.shadows.MO005C : ''}
             >
-                <FC cls={`date-label text-nowrap`} color={theme.palette.text.primary40}>
+                <FC cls={`date-label text-nowrap`} color={plt.text.primary40}>
                     {formatDateLabel()}
                 </FC>
             </FC>

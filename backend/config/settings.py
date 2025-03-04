@@ -131,12 +131,11 @@ XL_DASHBOARD = {
         'Access': 'filehost.Access',
     },
     'Beat': {
-        'Solar': 'django_celery_beat.SolarSchedule',
+        'Periodic Task': 'django_celery_beat.PeriodicTask',
+        'Crontab': 'django_celery_beat.CrontabSchedule',
         'Interval': 'django_celery_beat.IntervalSchedule',
         'Clocked': 'django_celery_beat.ClockedSchedule',
-        'Crontab': 'django_celery_beat.CrontabSchedule',
-        'Periodic Tasks': 'django_celery_beat.PeriodicTasks',
-        'Periodic Task': 'django_celery_beat.PeriodicTask',
+        'Solar': 'django_celery_beat.SolarSchedule',
     },
     'Auth': {
         'Permission': 'auth.Permission',

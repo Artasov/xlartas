@@ -17,7 +17,7 @@ interface CabinetNavLinkProps {
 const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark, onClick, icon: Icon, iconSx}) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const isActive = (urlActiveMark || to)
         ? location.pathname.includes(urlActiveMark ? urlActiveMark : to ? to : '\//\\/')
         : false;
@@ -41,23 +41,23 @@ const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark,
                           ? () => navigate(to)
                           : undefined
               }
-              bg={isActive ? theme.palette.bg.contrast10 : ''}
-              boxShadow={isActive ? theme.palette.shadow.MO005C : ''}
+              bg={isActive ? plt.bg.contrast10 : ''}
+              boxShadow={isActive ? plt.shadow.MO005C : ''}
               sx={{
-                  textShadow: isActive ? theme.palette.shadow.XXSO02 : '',
+                  textShadow: isActive ? plt.shadow.XXSO02 : '',
               }}>
             {Icon && (
                 <Icon
                     className={`fs-4`}
                     style={{
-                        color: theme.palette.text.primary70,
+                        color: plt.text.primary70,
                         ...iconSx
                     }}
                 />
             )}
             <span
                 className={`fs-5 text-nowrap`}
-                style={{color: theme.palette.text.primary70}}
+                style={{color: plt.text.primary70}}
             >
                 {text}
             </span>

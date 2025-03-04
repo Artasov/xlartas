@@ -26,7 +26,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     const [selectedCurrency, setSelectedCurrency] = useState<string>('');
     const [paymentTypes, setPaymentTypes] = useState<{ [key: string]: IPaymentSystem[] }>({});
     const [selectedPaymentType, setSelectedPaymentType] = useState<IPaymentSystem | null>(null);
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {
@@ -113,7 +113,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                         content: paymentType.includes('tbank')
                             ? <FRCC
                                 cls={'ftrans-300-eio'} px={1.2} pt={'.3rem'} pb={'.2rem'} rounded={3} g={'.4rem'}
-                                bg={theme.palette.bg.primary35}
+                                bg={plt.bg.primary35}
                                 boxShadow={paymentType === selectedPaymentType
                                     ? '0 0 3px 1px' + theme.colors.secondary.main
                                     : ''}

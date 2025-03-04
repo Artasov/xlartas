@@ -10,6 +10,7 @@ export interface ISoftwareFile {
 export interface ISoftware extends IProduct {
     min_license_order_hours: number;
     test_period_days: number;
+    log_changes: string;
     review_url: string;
     guide_url: string;
     file?: ISoftwareFile;

@@ -9,17 +9,17 @@ interface SliderProps extends MuiSliderProps {
 }
 
 const Slider: React.FC<SliderProps> = ({className = '', ...props}) => {
-    const {theme} = useTheme();
-    const isDarkMode = theme.palette.mode === 'dark';
+    const {plt} = useTheme();
+    const isDarkMode = plt.mode === 'dark';
     return (
         <MuiSlider
             {...props}
             className={`custom-slider ${className}`}
             sx={{
-                color: theme.palette.primary.bgContrast55, // Цвет основного трека и ползунка
+                color: plt.text.contrast + '99', // Цвет основного трека и ползунка
                 '& .MuiSlider-thumb': {
                     backgroundColor: isDarkMode ? '#555555' : '#eee', // Цвет ползунка
-                    border: `2px solid ${theme.palette.bg.contrast25}`, // Обводка для ползунка
+                    border: `2px solid ${plt.bg.contrast25}`, // Обводка для ползунка
                 },
                 // '& .MuiSlider-rail': {
                 //     backgroundColor: isDarkMode ? '#eee' : '#555555', // Цвет заднего трека
@@ -30,12 +30,12 @@ const Slider: React.FC<SliderProps> = ({className = '', ...props}) => {
                     backgroundColor: isDarkMode ? '#eee' : '#0000', // Цвет переднего трека
                 },
                 // '& .MuiSlider-mark': {
-                //     backgroundColor: theme.palette.background.default, // Цвет маркеров
+                //     backgroundColor: plt.background.default, // Цвет маркеров
                 // },
                 '& .MuiSlider-markLabel': {
                     fontSize: '0.8em',
                     marginTop: '-4px', // Отступ текста маркеров
-                    color: theme.palette.text.primary70, // Цвет текста маркеров
+                    color: plt.text.primary70, // Цвет текста маркеров
                 }
             }}
         />

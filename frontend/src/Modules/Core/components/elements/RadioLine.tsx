@@ -24,7 +24,7 @@ const RadioLine: React.FC<RadioLineProps> = (
         itemClass = ''
     }) => {
 
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const handleClick = (value: string | number) => {
         onChange(value);
     };
@@ -42,10 +42,10 @@ const RadioLine: React.FC<RadioLineProps> = (
                     style={{
                         color: selectedValue === option.value
                             ? '#fff'
-                            : theme.palette.text.primary70,
+                            : plt.text.primary70,
                         backgroundColor: selectedValue === option.value
                             ? theme.colors.secondary.main
-                            : theme.palette.bg.contrast10,
+                            : plt.bg.contrast10,
                     }}
                     onClick={() => {
                         handleClick(option.value)

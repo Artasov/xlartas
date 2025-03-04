@@ -14,6 +14,7 @@ import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {useApi} from "../Api/useApi";
+import {useErrorProcessing} from "Core/components/ErrorProvider";
 
 /**
  * Возвращает целое число:
@@ -41,7 +42,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const [showPromo, setShowPromo] = useState(false);
     const navigate = useNavigate();
     const {api} = useApi();
-
+    const {notAuthentication} = useErrorProcessing();
     const _isGt576 = useMediaQuery('(min-width: 576px)');
     const _isGt740 = useMediaQuery('(min-width: 740px)');
 
@@ -115,7 +116,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                                 user.email
                             );
                         } else {
-                            navigate('/?auth_modal=True');
+                            notAuthentication()
                         }
                     }}>
                     Buy {licenseHours} hours for {totalPrice} RUB

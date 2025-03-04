@@ -36,7 +36,7 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
         },
         ref
     ) => {
-        const {theme} = useTheme();
+        const {plt} = useTheme();
         const containerRef = useRef<HTMLDivElement>(null);
 
         // Expose the containerRef to the parent via forwarded ref
@@ -117,8 +117,8 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             width: enableArrows && isHorizontal ? `calc(100% - ${arrowWidth * 2}px)` : '100%', // Объёмное покрытие, но с отступами
             height: isHorizontal ? '100%' : '100%',
             background: isHorizontal
-                ? `linear-gradient(90deg, ${theme.palette.bg.primary.replace(' !important', '')} 0%, rgba(0,0,0,0) 2%,rgba(0,0,0,0) 98%, ${theme.palette.bg.primary.replace(' !important', '')} 100%)`
-                : `linear-gradient(0deg, ${theme.palette.bg.primary.replace(' !important', '')} 0%, rgba(0,0,0,0) 2%,rgba(0,0,0,0) 98%, ${theme.palette.bg.primary.replace(' !important', '')} 100%)`,
+                ? `linear-gradient(90deg, ${plt.bg.primary.replace(' !important', '')} 0%, rgba(0,0,0,0) 2%,rgba(0,0,0,0) 98%, ${plt.bg.primary.replace(' !important', '')} 100%)`
+                : `linear-gradient(0deg, ${plt.bg.primary.replace(' !important', '')} 0%, rgba(0,0,0,0) 2%,rgba(0,0,0,0) 98%, ${plt.bg.primary.replace(' !important', '')} 100%)`,
             pointerEvents: 'none',
             ...gradientOverlaySx,
         };

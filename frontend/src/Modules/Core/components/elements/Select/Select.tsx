@@ -1,7 +1,7 @@
 // Modules/Core/components/elements/Select/Select.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import './Select.sass';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from "Theme/ThemeContext";
 
 interface Option {
     value: string | number;
@@ -43,7 +43,7 @@ const Select: React.FC<SelectProps> = (
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const hiddenPlaceholderRef = useRef<HTMLSpanElement | null>(null);
 
-    const theme = useTheme();
+    const {theme, plt} = useTheme();
 
     // Обработчик кликов вне компонента
     useEffect(() => {
@@ -146,14 +146,14 @@ const Select: React.FC<SelectProps> = (
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 style={{
-                    backgroundColor: theme.palette.bg.primary,
-                    color: theme.palette.text.primary,
+                    backgroundColor: plt.bg.primary,
+                    color: plt.text.primary,
                     zIndex: zIndex,
                     borderColor: isOpen
-                        ? theme.palette.text.primary55
+                        ? plt.text.primary55
                         : isHovered // Если курсор наведен, меняем цвет рамки
-                            ? theme.palette.text.primary75 // Цвет рамки при наведении
-                            : theme.palette.text.primary25,
+                            ? plt.text.primary75 // Цвет рамки при наведении
+                            : plt.text.primary25,
                     borderRadius: isOpen ? '4px 4px 0 0' : '4px',
                     paddingLeft: '10px',
                     paddingRight: '10px',
@@ -161,12 +161,12 @@ const Select: React.FC<SelectProps> = (
                 }}
             >
                 <span className={`custom-select-placeholder ${isFloating ? 'floating' : ''}`}
-                      style={{color: theme.palette.text.primary70}}>
+                      style={{color: plt.text.primary70}}>
                     {placeholder}
                 </span>
                 {selectedValue && (
                     <span className="custom-select-value" style={{
-                        color: theme.palette.text.primary80,
+                        color: plt.text.primary80,
                     }}>{selectedValue.label}</span>
                 )}
             </div>
@@ -174,12 +174,12 @@ const Select: React.FC<SelectProps> = (
                 ref={dropdownRef}
                 className={`custom-select-dropdown no-scrollbar ${isOpen ? `open` : 'closing'}`}
                 style={{
-                    backgroundColor: theme.palette.bg.primary,
+                    backgroundColor: plt.bg.primary,
                     height: isOpen ? `${dropdownHeight}px` : '0',
                     width: '100%',
                     overflowY: 'auto',
                     borderColor: isOpen
-                        ? theme.palette.text.primary55
+                        ? plt.text.primary55
                         : '#0000',
                     borderTopWidth: '0',
                     zIndex: zIndex + 1,
@@ -194,8 +194,8 @@ const Select: React.FC<SelectProps> = (
                             onClick={() => handleSelect(null)}
                             className={`custom-select-option`}
                             style={{
-                                backgroundColor: theme.palette.bg.primary,
-                                color: theme.palette.text.primary
+                                backgroundColor: plt.bg.primary,
+                                color: plt.text.primary
                             }}
                         >
                             {menuPlaceholder}
@@ -206,11 +206,11 @@ const Select: React.FC<SelectProps> = (
                              onClick={() => handleSelect(option)}
                              className={'custom-select-option'}
                              style={{
-                                 color: theme.palette.text.primary,
+                                 color: plt.text.primary,
                                  backgroundColor: selectedValue?.value === option.value
                                      //@ts-ignore
                                      ? theme.colors.secondary.light
-                                     : theme.palette.bg.primary
+                                     : plt.bg.primary
                              }}>
                             {option.label}
                         </div>

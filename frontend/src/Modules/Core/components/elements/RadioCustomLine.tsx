@@ -27,7 +27,7 @@ const RadioCustomLine: React.FC<RadioCustomLineProps> = ({
                                                              itemClass = '',
                                                              className = '',
                                                          }) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     const handleClick = (value: string | number) => {
         onChange(value);

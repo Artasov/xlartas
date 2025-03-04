@@ -31,7 +31,7 @@ const Header: React.FC = () => {
     const btnToggleMenuRef = useRef<HTMLDivElement>(null);
     const {user, isAuthenticated, logout} = useContext(AuthContext) as AuthContextType;
     const location = useLocation();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const isHeaderVisible = useSelector((state: any) => state.visibility.isHeaderVisible);
 
     // Теперь не привязываемся к медиазапросу, а показываем меню по состоянию.
@@ -42,7 +42,7 @@ const Header: React.FC = () => {
     return (
         <header ref={headerRef} style={{height: headerNavHeight}}
                 className={`frbc w-100 mx-auto maxw-750px gap-4 px-4`}>
-            <FRCC onClick={hideMobileMenu} color={theme.palette.text.primary60}>
+            <FRCC onClick={hideMobileMenu} color={plt.text.primary60}>
                 {logoContent}
             </FRCC>
             <FRCC g={3} mt={'5px'}>
@@ -59,9 +59,9 @@ const Header: React.FC = () => {
                         <FRCC cls={'header-tools'}>
                             <div ref={btnToggleMenuRef} className="btn-toggle-header-mobile-menu"
                                  onClick={toggleMobileMenu}>
-                                <span style={{backgroundColor: theme.palette.bg.contrast60}}></span>
-                                <span style={{backgroundColor: theme.palette.bg.contrast60}}></span>
-                                <span style={{backgroundColor: theme.palette.bg.contrast60}}></span>
+                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
+                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
+                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
                             </div>
                         </FRCC>
                     </>
@@ -81,7 +81,7 @@ const Header: React.FC = () => {
                     <ThemeToggleButton/>
                     {isAuthenticated && <LogoutRoundedIcon
                         style={{
-                            color: theme.palette.text.primary60,
+                            color: plt.text.primary60,
                             fontSize: '1.8rem'
                         }}
                         onClick={logout}

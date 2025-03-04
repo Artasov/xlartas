@@ -1,8 +1,11 @@
 # software/serializers/software.py
 from adjango.aserializers import AModelSerializer
 from django.utils import timezone
-from rest_framework.fields import SerializerMethodField
+from rest_framework.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField, HiddenField, CurrentUserDefault
+from rest_framework.relations import PrimaryKeyRelatedField, SlugRelatedField
 
+from apps.commerce.models import Promocode
 from apps.commerce.serializers.order import BaseOrderSerializer
 from apps.commerce.serializers.product import BaseProductSerializer
 from apps.software.models import Software, SoftwareOrder, SoftwareLicense, SoftwareFile
@@ -43,6 +46,35 @@ class SoftwareOrderSerializer(BaseOrderSerializer):
             'product',
             'license_hours'
         )
+
+
+class SoftwareOrderCreateSerializer(AModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+    product = PrimaryKeyRelatedField(queryset=Software.objects.all())
+    promocode = SlugRelatedField(
+        slug_field='code',
+        queryset=Promocode.objects.all(),
+        required=False,
+        allow_null=True
+    )
+
+    class Meta:
+        model = SoftwareOrder
+        fields = (
+            'user',
+            'product',
+            'currency',
+            'promocode',
+            'license_hours',
+            'payment_system',
+        )
+
+    def validate(self, data):
+        license_hours = data.get('license_hours')
+        product = data.get('product')
+        if not license_hours or int(license_hours) < product.min_license_order_hours:
+            raise ValidationError(f'License hours must be >= {product.min_license_order_hours}')
+        return data
 
 
 class SoftwareLicenseSerializer(AModelSerializer):

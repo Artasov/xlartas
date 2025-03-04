@@ -14,6 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.services.promocode.base import PromoCodeService
 from .payment import Currency
+from ..exceptions.promocode import PromocodeException
 
 
 def generate_promo_code(length=20):
@@ -50,7 +51,7 @@ class PromocodeProductDiscount(AModel):
         return f'[{self.amount}] {self.product} [{self.currency}]'
 
 
-class Promocode(ACreatedUpdatedAtIndexedMixin, PromoCodeService):
+class Promocode(ACreatedUpdatedAtIndexedMixin, PromoCodeService, PromocodeException):
     class DiscountType(TextChoices):
         PERCENTAGE = 'percentage', _('Percentage')
         FIXED_AMOUNT = 'fixed_amount', _('Fixed amount')

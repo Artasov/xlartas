@@ -13,13 +13,13 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({height, width, imgCls, cls, onClick}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     return (
         <FC cls={cls} pos={'relative'}>
             <img src={logo}
                  onClick={onClick}
                  style={{
-                     filter: theme.palette.mode === 'dark' ? '' : 'invert(.8)',
+                     filter: plt.mode === 'dark' ? '' : 'invert(.8)',
                      zIndex: 9,
                      height: height,
                      width: width ? width : 'unset',
@@ -36,7 +36,7 @@ const Logo: React.FC<LogoProps> = ({height, width, imgCls, cls, onClick}) => {
                     opacity: '0.2',
                     height: height,
                     width: width ? width : 'unset',
-                    filter: 'blur(17px) contrast(1.5) brightness(2.3) ' + theme.palette.mode === 'dark' ? '' : 'invert(1)',
+                    filter: 'blur(17px) contrast(1.5) brightness(2.3) ' + plt.mode === 'dark' ? '' : 'invert(1)',
                 }}
                 className={`${imgCls} logo d-inline-block align-top object-fit-cover`}
                 alt="Logo"

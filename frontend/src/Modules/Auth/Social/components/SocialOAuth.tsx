@@ -29,7 +29,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
     const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
     const [modalFirstChecked, setModalFirstChecked] = useState<boolean>(false);
     const [modalSecondChecked, setModalSecondChecked] = useState<boolean>(false);
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const handleCloseSnackbar = (_event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') return;
         setOpenSnackbar(false);
@@ -108,8 +108,8 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                 </Alert>
             </Snackbar>
             <Dialog open={showTermsModal} onClose={handleModalCancel}>
-                <DialogTitle sx={{background: theme.palette.bg.primary}}>Подтвердите условия</DialogTitle>
-                <DialogContent sx={{background: theme.palette.bg.primary}}>
+                <DialogTitle sx={{background: plt.bg.primary}}>Подтвердите условия</DialogTitle>
+                <DialogContent sx={{background: plt.bg.primary}}>
                     <TermsCheckboxes
                         firstChecked={modalFirstChecked}
                         secondChecked={modalSecondChecked}
@@ -120,7 +120,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                         onSecondCheckedChange={setModalSecondChecked}
                     />
                 </DialogContent>
-                <DialogActions sx={{background: theme.palette.bg.primary}}>
+                <DialogActions sx={{background: plt.bg.primary}}>
                     <MuiButton onClick={handleModalCancel}>Отмена</MuiButton>
                     <Button onClick={handleModalConfirm} disabled={!modalFirstChecked} variant="contained"
                             color="primary">

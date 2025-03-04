@@ -29,7 +29,7 @@ const RadioImgLine: React.FC<RadioImgLineProps> = (
         maxWidth = 80,
         itemClass = ''
     }) => {
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
 
     const handleClick = (value: string | number) => {
         onChange(value);
@@ -52,7 +52,7 @@ const RadioImgLine: React.FC<RadioImgLineProps> = (
                             width: 'min-content',
                             boxShadow: '0 0 15px ' + isSelected
                                 ? theme.colors.primary.main
-                                : theme.palette.bg.contrast10,
+                                : plt.bg.contrast10,
                             cursor: 'pointer',
                         }}
                         onClick={() => handleClick(option.value)}

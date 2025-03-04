@@ -35,15 +35,15 @@ const Button = React.forwardRef(
             ...restProps
         } = props;
 
-        const {theme} = useTheme();
+        const {plt, theme} = useTheme();
 
         // List of predefined colors for checking
         const predefinedColors: ColorVariant[] = ['primary', 'secondary', 'error', 'success', 'warning'];
 
         // Function to get the background color based on the variant
         const getBackgroundColor = (): string | undefined => {
-            if (!color) return theme.palette.text.primary90;
-            if (disabled) return theme.palette.bg.contrast10;
+            if (!color) return plt.text.primary90;
+            if (disabled) return plt.bg.contrast10;
 
             if (predefinedColors.includes(color as ColorVariant)) {
                 switch (color) {
@@ -57,7 +57,7 @@ const Button = React.forwardRef(
                     case 'warning':
                         return theme.colors.warning.main;
                     default:
-                        return theme.palette.text.primary;
+                        return plt.text.primary;
                 }
             }
 
@@ -71,14 +71,14 @@ const Button = React.forwardRef(
                 component={component}
                 startIcon={loading && (
                     <CircularProgress
-                        style={{color: theme.palette.text.contrast70}}
+                        style={{color: plt.text.contrast70}}
                         size={24}
                     />
                 )}
                 style={{
                     backgroundColor: getBackgroundColor(),
                     ...style,
-                    color: disabled ? theme.palette.text.contrast40 : props?.sx?.color ? props.sx.color : style?.color ? style.color : theme.palette.bg.primary70,
+                    color: disabled ? plt.text.contrast40 : props?.sx?.color ? props.sx.color : style?.color ? style.color : plt.bg.primary70,
                 }}
                 disabled={disabled}
                 className={

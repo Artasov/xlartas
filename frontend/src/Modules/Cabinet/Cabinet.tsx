@@ -49,7 +49,7 @@ const Cabinet: React.FC = () => {
     const {selectedProfile, switchProfile} = useProfile();
     const cabinetContainerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("700px");
 
@@ -118,7 +118,7 @@ const Cabinet: React.FC = () => {
                             <FC pos={'relative'}>
                                 <UserAvatarEditable size={'8em'}/>
                             </FC>
-                            <h6 className={`fw-6 fs-5 text-wrap`} style={{color: theme.palette.text.primary70}}>
+                            <h6 className={`fw-6 fs-5 text-wrap`} style={{color: plt.text.primary70}}>
                                 {user?.first_name} {user?.last_name}
                             </h6>
                         </FCSC>
@@ -146,11 +146,11 @@ const Cabinet: React.FC = () => {
                     <FC cls={'profile-section'} rounded={3} flexGrow={1} pos={'relative'}
                         maxH={`calc(100vh - ${headerNavHeight}px)`}
                         bg={isGtSm
-                            ? theme.palette.mode === 'dark'
-                                ? theme.palette.bg.contrast + '05'
+                            ? plt.mode === 'dark'
+                                ? plt.bg.contrast + '05'
                                 : ''
                             : ''
-                        } boxShadow={theme.palette.shadow.XLO005}
+                        } boxShadow={plt.shadow.XLO005}
                         ref={cabinetContainerRef}>
                         <Routes>
                             <Route path="profile/*"

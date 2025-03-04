@@ -19,7 +19,7 @@ interface UserAvatarEditableProps {
 
 const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, className}) => {
     const {user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const uploadIconRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {api} = useApi();
@@ -64,8 +64,8 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
                 {isLoading && <CircularProgress size={size}/>}
                 <FCCC
                     cls={`user-avatar-editable-overlay ftrans-200-eio ${isLoading ? 'visible' : ''}`}
-                    color={theme.palette.text.contrast90}
-                    bg={theme.palette.bg.contrast40}
+                    color={plt.text.contrast90}
+                    bg={plt.bg.contrast40}
                     w={size}
                     h={size}
                     pos={'absolute'}

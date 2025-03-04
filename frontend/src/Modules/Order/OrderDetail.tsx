@@ -27,7 +27,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const [orderNotFound, setOrderNotFound] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
         api.get(`/api/v1/orders/${id}/`).then(data => {
             setOrder(data);
             if (!data) setOrderNotFound(true);
-        }).finally(() => setLoading(false));
+        }).catch(_=>null).finally(() => setLoading(false));
     }, [id, isAuthenticated, notAuthentication, api]);
 
     if (loading) return <CircularProgress size={'150px'}/>;
@@ -50,7 +50,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
             <div className={'fc gap-2'}>
                 <div className={'fc gap-1'}>
                     <div className={'frsc gap-2'} onClick={() => copyToClipboard(String(order.id))}>
-                        <span className={`fs-6`} style={{color: theme.palette.text.primary50}}>
+                        <span className={`fs-6`} style={{color: plt.text.primary50}}>
                             # {order.id}
                         </span>
                         <ContentCopyIcon className={'fs-5'}/>
@@ -61,29 +61,34 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                         <a href="https://t.me/artasov"
                            target="_blank" className={'tdn'}
                            rel="noopener noreferrer"
-                           style={{color: theme.palette.info.main}}
+                           style={{color: plt.info.main}}
                         >@artasov</a>. Пишите id заказа. Кликните на него, чтобы скопировать.
                     </Alert>
                     <div className={'frbc flex-wrap'}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={theme.palette.bg.contrast10}
-                                color={theme.palette.text.primary80}>
+                                bg={plt.bg.contrast10}
+                                color={plt.text.primary80}>
                                 {order.product.polymorphic_ctype.name}
                             </FR>
-                            <FR cls={`fs-5 text-nowrap`} color={theme.palette.text.primary80}>
+                            <FR cls={`fs-5 text-nowrap`} color={plt.text.primary80}>
                                 {order.product.name}
                             </FR>
                         </FRSC>
-                        <span className={`fs-5 fw-3 mt-2`}
-                              style={{
-                                  color: theme.palette.text.primary80,
-                                  lineHeight: '1rem'
-                              }}>
+                        <span
+                            className={`fs-5 fw-3 mt-2`}
+                            style={{
+                                color: plt.text.primary80,
+                                lineHeight: '1rem'
+                            }}>
                             {order.payment?.amount !== undefined
-                                ? `${order.payment.amount} ${order.currency}`
-                                : ''}
+                                   ? `${parseFloat(String(order.payment.amount)) % 1 === 0
+                                       ? parseInt(String(order.payment.amount))
+                                       : parseFloat(String(order.payment.amount)).toFixed(2)
+                                     } ${order.currency}`
+                                   : ''}
                         </span>
+
                     </div>
                 </div>
                 <div className={'fc'}>

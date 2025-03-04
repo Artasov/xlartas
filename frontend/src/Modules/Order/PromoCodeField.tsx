@@ -1,5 +1,4 @@
 // Modules/Order/PromoCodeField.tsx
-
 import React, {useEffect, useRef, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {FC} from "WideLayout/Layouts";
@@ -21,24 +20,17 @@ interface PromoCodeFieldProps {
     currency: ICurrency;
     onValidChange?: (isValid: boolean | null, promocode?: IPromocode) => void;
     onPromoCodeChange?: (code: string) => void;
-    revalidateKey?: number; // новый параметр для перезапуска валидации
+    revalidateKey?: number; // параметр для перезапуска валидации
 }
 
 const PromoCodeField: React.FC<PromoCodeFieldProps> = (
-    {
-        cls,
-        employeeId,
-        productId,
-        currency,
-        onValidChange,
-        onPromoCodeChange,
-        revalidateKey
-    }) => {
+    {cls, employeeId, productId, currency, onValidChange, onPromoCodeChange, revalidateKey}
+) => {
     const [promoCode, setPromoCode] = useState<string>('');
     const [status, setStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
     const promoCodeRef = useRef<HTMLInputElement>(null);
     const {api} = useApi();
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const {byResponse} = useErrorProcessing();
 
     const checkPromoCode = debounce(async (code: string) => {
@@ -56,7 +48,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
                 currency,
             });
             setStatus('valid');
-            if (promoCodeRef.current) promoCodeRef.current.blur();
+            promoCodeRef.current && promoCodeRef.current.blur();
             if (onValidChange) onValidChange(true, response.data);
             Message.success('Отлично, ваш промокод подходит!');
         } catch (error) {
@@ -66,19 +58,16 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
         }
     }, 2000);
 
+    // Объединённый useEffect для promoCode и revalidateKey
     useEffect(() => {
-        checkPromoCode(promoCode);
-        return () => checkPromoCode.cancel();
-    }, [promoCode]);
-
-    // Если revalidateKey изменился и есть промокод, перевалидация
-    useEffect(() => {
-        if (revalidateKey !== undefined && revalidateKey !== null) {
-            if (promoCode) {
-                checkPromoCode(promoCode);
-            }
+        if (promoCode) {
+            checkPromoCode(promoCode);
+        } else {
+            setStatus('idle');
+            if (onValidChange) onValidChange(null);
         }
-    }, [revalidateKey]);
+        return () => checkPromoCode.cancel();
+    }, [promoCode, revalidateKey]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPromoCode(e.target.value);
@@ -88,7 +77,6 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
             setStatus('idle');
             if (onValidChange) onValidChange(null);
         }
-        if (onValidChange) onValidChange(null);
         if (onPromoCodeChange) onPromoCodeChange(e.target.value);
     };
 

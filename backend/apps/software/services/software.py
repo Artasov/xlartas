@@ -10,11 +10,13 @@ if TYPE_CHECKING:
 
 class SoftwareService:
     async def new_order(self: 'Software', request) -> 'SoftwareOrder':
+        from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder
-        data = request.data
-        license_hours = data.get('license_hours')
-        if not license_hours or int(license_hours) < self.min_license_order_hours:
-            raise ValueError(f'License hours must be >= {self.min_license_order_hours}')
+        s = SoftwareOrderCreateSerializer(
+            data=request.data, context={'request': request}
+        )
+        await s.ais_valid(raise_exception=True)
+        data = s.validated_data
         promocode = data.get('promocode', None)
         if promocode:
             await promocode.is_applicable_for(
@@ -25,10 +27,11 @@ class SoftwareService:
             )
         order = SoftwareOrder(
             user=request.user,
-            currency=request.data.get('currency'),
-            payment_system=request.data.get('payment_system'),
+            currency=request.data['currency'],
+            payment_system=request.data['payment_system'],
             product=self,
-            license_hours=int(license_hours),
+            license_hours=int(data['license_hours']),
+            promocode=promocode
         )
         await order.asave()
         await order.init(request)
@@ -39,6 +42,9 @@ class SoftwareService:
         return True
 
     async def pregive(self: 'Software', order: 'SoftwareOrder'):
+        pass
+
+    async def cancel_given(self, request, order: 'SoftwareOrder', reason: str, ):
         pass
 
     async def postgive(self: 'Software', order: 'SoftwareOrder'):

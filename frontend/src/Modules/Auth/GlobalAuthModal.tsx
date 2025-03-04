@@ -14,7 +14,7 @@ const GlobalAuthModal: React.FC = () => {
         <Modal
             closeBtn={false}
             title=""
-            clsModalScroll="px-3 "
+            sxContent={{px: 2}}
             isOpen={authModalOpen}
             cls="w-100 maxw-380px"
             onClose={() => dispatch(closeAuthModal())}

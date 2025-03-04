@@ -22,7 +22,7 @@ const StarRating: React.FC<StarRatingProps> = (
         ratingValueClassName = '',
         ratingValueStyle,
     }) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const getStarFillPercentage = (index: number, rating: number) => {
         const fullStars = Math.floor(rating);
         if (index < fullStars) return 100;
@@ -33,10 +33,10 @@ const StarRating: React.FC<StarRatingProps> = (
     return (
         <div className={`frc ${ratingWrapperClassName}`}>
             <div className={`frcc ${ratingContentClassName}`} style={{
-                backgroundColor: theme.palette.bg.contrast20,
+                backgroundColor: plt.bg.contrast20,
             }}>
                 <span className={`${ratingValueClassName}`} style={{
-                    color: theme.palette.text.contrast, ...ratingValueStyle
+                    color: plt.text.contrast, ...ratingValueStyle
                 }}>
                     {rating?.toFixed(1) || 0}
                 </span>
@@ -45,8 +45,8 @@ const StarRating: React.FC<StarRatingProps> = (
                     return (
                         <div key={index} style={{position: 'relative', display: 'inline-block'}}>
                             <StarRoundedIcon className={starClassName} sx={{
-                                color: theme.palette.text.contrast70,
-                                filter: `drop-shadow(0 0 2px ${theme.palette.text.contrast70.replace(' !important', '')});`
+                                color: plt.text.contrast70,
+                                filter: `drop-shadow(0 0 2px ${plt.text.contrast70.replace(' !important', '')});`
                             }}/>
                             {fillPercentage > 0 && (
                                 <div

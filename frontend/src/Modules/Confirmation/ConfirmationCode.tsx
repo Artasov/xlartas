@@ -60,7 +60,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSending, setIsSending] = useState<boolean>(false);
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {
@@ -226,7 +226,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                         {resendTimeout > 0 ? (
                             <p
                                 className="fs-7 mt-1 text-right"
-                                style={{color: theme.palette.text.primary55}}
+                                style={{color: plt.text.primary55}}
                             >
                                 {`Отправить код повторно можно через ${resendTimeout} секунд`}
                             </p>
@@ -235,7 +235,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                                 onClick={handleResend}
                                 className="fs-6 text-right"
                                 style={{
-                                    color: theme.palette.text.primary80,
+                                    color: plt.text.primary80,
                                     cursor: 'pointer',
                                 }}
                             >

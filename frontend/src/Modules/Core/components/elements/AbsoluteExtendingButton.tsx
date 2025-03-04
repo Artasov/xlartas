@@ -20,7 +20,7 @@ const AbsoluteExtendingButton: React.FC<AbsoluteExtendingButtonProps> = (
         clsMenuActive,
         children
     }) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const [isExpanded, setIsExpanded] = useState(false);
     const buttonRef = useRef<HTMLDivElement>(null);
 

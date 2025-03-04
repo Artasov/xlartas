@@ -6,7 +6,7 @@ import {IconButton} from "@mui/material";
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Button from "Core/components/elements/Button/Button";
-import {FC, FR, FRCC, FRSE} from "WideLayout/Layouts";
+import {FC, FCCC, FR, FRCC, FRSE} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import SoftwareOrder from './SoftwareOrder';
 import {ISoftware} from "./Types/Software";
@@ -15,22 +15,26 @@ import {useApi} from "../Api/useApi";
 import {Message} from "Core/components/Message";
 import SoftwareTestPeriodButton from "./SoftwareTestPeriodButton";
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
+import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
+import Modal from "Core/components/elements/Modal/Modal";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi();
     const navigate = useNavigate();
 
     const [software, setSoftware] = useState<ISoftware | null>(null);
     const [loading, setLoading] = useState(true);
-
+    const [isLogModalOpen, setIsLogModalOpen] = useState(false);
     // Новые состояния для лицензии
     const [licenseHours, setLicenseHours] = useState<number | null>(null);
     const [licenseLoading, setLicenseLoading] = useState(false);
     const [isTested, setIsTested] = useState<boolean>(false);
 
+    const isGt576 = useMediaQuery('(min-width:576px)');
     useEffect(() => {
         if (!id) {
             Message.error('Не указан software ID');
@@ -91,38 +95,46 @@ const SoftwareDetailComponent: React.FC = () => {
             <img src={software.pic} className={'rounded-top-3'} style={{
                 maxHeight: 190, objectFit: 'cover', maxWidth: '100%'
             }} alt="software"/>
-            <FC px={3} pt={2.1}>
-                <FRSE g={'.1rem'} mb={2}>
-                    <h1 style={{
-                        lineHeight: '1.6rem',
-                        fontSize: '1.8rem',
-                        margin: 0,
-                    }}>{software.name}</h1>
-                    {software.file && <span style={{
-                        color: theme.palette.text.primary30,
-                        fontSize: '.8rem',
-                        lineHeight: '.9rem'
-                    }}>v.{software.file.version}</span>}
-                    {software.guide_url && (
-                        <IconButton className={'ms-auto me-2'}
-                                    onClick={() => window.open(software.guide_url, '_blank')} color="primary">
-                            <FeedRoundedIcon sx={{color: theme.palette.text.primary80}}/>
-                        </IconButton>
-                    )}
-                    {software.file?.file && (
-                        <IconButton onClick={() => window.open(software.file?.file, '_blank')} color="primary">
-                            <DownloadRoundedIcon sx={{color: theme.palette.text.primary80}}/>
-                        </IconButton>
-                    )}
-                    {software.review_url &&
-                        <a style={{color: theme.palette.text.primary70}} href={software.review_url}
-                           className={'tdn'}
-                           target="_blank" rel="noreferrer">
-                            <Button size={'small'} sx={{
-                                paddingY: '.11rem'
-                            }} className={'gap-1 fw-bold'}><YouTubeIcon/><span>Review</span></Button>
-                        </a>
-                    }
+            <FC px={isGt576 ? 3 : 1} pt={2.1}>
+                <FRSE wrap g={'.1rem'} mb={2}>
+                    <FR>
+                        <h1 style={{
+                            lineHeight: '1.6rem',
+                            fontSize: '1.8rem',
+                            margin: 0,
+                        }}>{software.name}</h1>
+                        {software.file && <span style={{
+                            color: plt.text.primary30,
+                            fontSize: '.8rem',
+                            lineHeight: '.9rem'
+                        }}>v.{software.file.version}</span>}
+                    </FR>
+                    <FR g={'.1rem'} ml={'auto'}>
+                        {software.log_changes && (
+                            <IconButton sx={{mr: .44}} onClick={() => setIsLogModalOpen(true)}>
+                                <HistoryRoundedIcon sx={{color: plt.text.primary80}}/>
+                            </IconButton>
+                        )}
+                        {software.guide_url && (
+                            <IconButton onClick={() => window.open(software.guide_url, '_blank')}>
+                                <FeedRoundedIcon sx={{color: plt.text.primary80}}/>
+                            </IconButton>
+                        )}
+                        {software.file?.file && (
+                            <IconButton onClick={() => window.open(software.file?.file, '_blank')}>
+                                <DownloadRoundedIcon sx={{color: plt.text.primary80}}/>
+                            </IconButton>
+                        )}
+                        {software.review_url &&
+                            <a style={{color: plt.text.primary70, marginLeft: '.3rem'}}
+                               href={software.review_url}
+                               className={'tdn'}
+                               target="_blank" rel="noreferrer">
+                                <Button size={'small'} sx={{
+                                    paddingY: '.11rem'
+                                }} className={'gap-1 fw-bold'}><YouTubeIcon/><span>Review</span></Button>
+                            </a>
+                        }</FR>
                 </FRSE>
 
                 <SoftwareOrder software={software} onSuccess={(data: any) => {
@@ -137,6 +149,18 @@ const SoftwareDetailComponent: React.FC = () => {
                     </FR>
                 }
             </FC>
+            {/* Модальное окно для отображения логов изменений */}
+            <Modal
+                isOpen={isLogModalOpen}
+                onClose={() => setIsLogModalOpen(false)}
+                title="Лог изменений"
+                sxContent={{maxWidth: 500}}>
+                <FCCC pos={'relative'}>
+                    <div style={{
+                        textShadow: '0 0 5px ' + plt.bg.primary + '88'
+                    }} dangerouslySetInnerHTML={{__html: software.log_changes}}/>
+                </FCCC>
+            </Modal>
         </FC>
     );
 };

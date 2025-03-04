@@ -16,7 +16,7 @@ interface RoomItemProps {
 
 const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
     const {user} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const {roomId: currentRoomId} = useParams<{ roomId: string }>();
 
     const otherParticipants = useMemo(() => {
@@ -71,7 +71,7 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
             g={1}
             pos={'relative'}
             className={`room-item ${isActive ? 'active-room' : ''}`}
-            bg={isActive ? `${theme.palette.bg.contrast}09` : `${theme.palette.bg.contrast}05`}
+            bg={isActive ? `${plt.bg.contrast}09` : `${plt.bg.contrast}05`}
             onClick={!isActive ? onClick : undefined}
             sx={{
                 cursor: isActive ? 'default' : 'pointer',
@@ -82,8 +82,8 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
             <FCS g={1} pl={1} flexGrow={1} h={'100%'} className={'room-info'}>
                 <FRSC g={1} cls={'fs-5 lh-1'} style={{
                     color: isActive
-                        ? theme.palette.text.primary70
-                        : theme.palette.text.primary50
+                        ? plt.text.primary70
+                        : plt.text.primary50
                 }}>
                     <span>{roomName}</span>
                     {otherParticipants.length > 0
@@ -93,7 +93,7 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
                         }}>Заметки</span>}
                 </FRSC>
                 {lastMessage && <>
-                    <FRBC g={1} cls={`last-message fs-6`} color={theme.palette.text.primary50}>
+                    <FRBC g={1} cls={`last-message fs-6`} color={plt.text.primary50}>
                         <FRSC>
                             {/* Avatar of the user who sent the last message */}
                             {(lastMessage.user.id !== user?.id) && <UserAvatar

@@ -45,5 +45,5 @@ class PromocodeCheckSerializer(ASerializer):
         try:
             promocode = Promocode.objects.get(code=code)
         except Promocode.DoesNotExist:
-            raise PromocodeException.NotFound()
+            raise PromocodeException.ApiEx.DoesNotExist()
         return promocode

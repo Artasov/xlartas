@@ -13,7 +13,7 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = (
     {
         users,
     }) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     return (
         users.map((user, index) => (
@@ -29,7 +29,7 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = (
                             zIndex={2 + users.length - index}/>
                 {users.length === 1 && (
                     <span style={{
-                        color: theme.palette.text.primary65,
+                        color: plt.text.primary65,
                     }} className="fs-5">
                                     {`${user.first_name} ${user.last_name}`}
                                 </span>

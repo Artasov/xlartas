@@ -5,7 +5,7 @@ import {useTheme} from "Theme/ThemeContext";
 import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 
 const AdminLink: React.FC = () => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     const adminUrl = (() => {
         const url = new URL(window.location.href);
@@ -20,7 +20,7 @@ const AdminLink: React.FC = () => {
         <Link to={adminUrl} target="_blank" rel="noopener noreferrer">
             <AdminPanelSettingsRoundedIcon
                 style={{
-                    color: theme.palette.text.primary60,
+                    color: plt.text.primary60,
                     fontSize: '2rem',
                 }}
             />

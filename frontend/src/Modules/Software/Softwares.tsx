@@ -13,7 +13,7 @@ const Softwares: React.FC = () => {
     const [softwares, setSoftwares] = useState<ISoftware[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Softwares: React.FC = () => {
             {softwares.length
                 ? softwares.map(s => (
                     <FC rounded={3} maxW={300} cursorPointer
-                        bg={theme.palette.bg.primary}
+                        bg={plt.bg.primary}
                         key={s.id} onClick={() => navigate(`/softwares/${s.id}`)}>
                         <img src={s.pic} className={'rounded-top-3'} style={{
                             maxHeight: 120, objectFit: 'cover'
@@ -43,12 +43,12 @@ const Softwares: React.FC = () => {
                                     margin: 0,
                                 }}>{s.name}</h2>
                                 {s.file && <span style={{
-                                    color: theme.palette.text.primary30,
+                                    color: plt.text.primary30,
                                     fontSize: '.8rem',
                                     lineHeight: '.8rem'
                                 }}>v.{s.file.version}</span>}
                             </FRSE>
-                            <p style={{color: theme.palette.text.primary50}}>
+                            <p style={{color: plt.text.primary50}}>
                                 {s.short_description?.slice(0, 120)}
                                 {(s.short_description && s.short_description.length > 120) ? '...' : ''}
                             </p>

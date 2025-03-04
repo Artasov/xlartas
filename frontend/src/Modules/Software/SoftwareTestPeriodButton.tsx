@@ -29,7 +29,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {api} = useApi();
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -70,7 +70,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
                 sx={{
                     width: 'fit-content',
                     color: '#fff',
-                    background: theme.palette.text.primary + '33',
+                    background: plt.text.primary + '33',
                     py: 0,
                     px: 0.9,
                 }}

@@ -3,7 +3,7 @@
 import React, {useMemo} from 'react';
 import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, Theme,} from '@mui/material';
 import {getTimeZones, TimeZone} from '@vvo/tzdb';
-import {useTheme as useCustomTheme} from "Theme/ThemeContext";
+import {useTheme} from "Theme/ThemeContext";
 
 interface TimeZonePickerProps {
     label?: string;
@@ -25,7 +25,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
         className,
         sx,
     }) => {
-    const {theme} = useCustomTheme();
+    const {plt} = useTheme();
 
     const popularTimezones = useMemo(
         () => [
@@ -75,7 +75,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
                 sx={{
                     // Пример использования темы
                     '& .MuiSelect-select': {
-                        color: theme.palette.text.primary70,
+                        color: plt.text.primary70,
                     },
                     ...sx, // Позволяет переопределить стили через пропс sx
                 }}>
@@ -89,7 +89,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
                     const offsetString = `UTC ${offsetInHoursNum >= 0 ? '+' : ''}${Number(offsetInHours)}`;
                     return (
                         <MenuItem key={tz.name} value={tz.name}>
-                            <span style={{color: theme.palette.text.primary70}}>
+                            <span style={{color: plt.text.primary70}}>
                                 {cityName} {offsetString}
                             </span>
                         </MenuItem>

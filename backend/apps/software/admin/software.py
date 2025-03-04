@@ -1,7 +1,8 @@
 # xl/backend/apps/software/admin/software.py
-from adjango.decorators import admin_description, admin_boolean
+from ckeditor.widgets import CKEditorWidget
 from django.contrib.admin import TabularInline, display
 from django.contrib.admin import register, ModelAdmin
+from django.forms import ModelForm
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -30,8 +31,18 @@ class SoftwareFileAdmin(ModelAdmin):
     )
 
 
+class SoftwareAdminForm(ModelForm):
+    class Meta:
+        model = Software
+        fields = '__all__'
+        widgets = {
+            'log_changes': CKEditorWidget(),  # Используем CKEditor для поля log_changes
+        }
+
+
 @register(Software)
 class SoftwareAdmin(ModelAdmin):
+    form = SoftwareAdminForm
     list_display = (
         'name', 'version_display', 'is_available', 'min_license_order_hours',
         'file_link', 'review_link', 'created_at', 'updated_at',
@@ -40,17 +51,17 @@ class SoftwareAdmin(ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-created_at',)
 
-    @admin_description(_('Review'))
+    @display(description='Review')
     def review_link(self, obj):
         if obj.review_url:
             return f'<a href="{obj.review_url}" target="_blank">Обзор</a>'
         return '-'
 
-    @admin_description(_('Version'))
+    @display(description='Version')
     def version_display(self, obj):
         return f'v{obj.file.version}' if obj.file else ''
 
-    @admin_description(_('File'))
+    @display(description='File')
     def file_link(self, obj):
         if obj.file and obj.file.file:
             return f'<a href="{obj.file.file.url}" target="_blank">Скачать</a>'

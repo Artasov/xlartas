@@ -5,7 +5,7 @@ import {useTheme} from "Theme/ThemeContext";
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
 const LogsLink: React.FC = () => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
 
     // Динамически изменяем порт, если текущий — 3000
     const logsUrl = (() => {
@@ -21,7 +21,7 @@ const LogsLink: React.FC = () => {
         <Link to={logsUrl} target="_blank" rel="noopener noreferrer">
             <SortRoundedIcon
                 className={`fs-1 ps-3px`}
-                style={{color: theme.palette.text.primary60}}
+                style={{color: plt.text.primary60}}
             />
         </Link>
     );

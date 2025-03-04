@@ -56,6 +56,12 @@ $secondaryDark: #473f91
 $bgDark: #343a40
 $bgPrimary: #454d55
 
+.django-ckeditor-widget
+  filter: invert(.9) hue-rotate(180deg)
+  img
+    filter: invert(1) hue-rotate(180deg)
+
+
 .dark-mode .sidebar-dark-indigo .nav-sidebar > .nav-item > .nav-link.active, .dark-mode .sidebar-light-indigo .nav-sidebar > .nav-item > .nav-link.active
   background-color: $primaryMain
   color: #fff

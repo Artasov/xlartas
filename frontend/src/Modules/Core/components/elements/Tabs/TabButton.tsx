@@ -18,14 +18,14 @@ const TabButton: React.FC<TabButtonProps> = (
         onClick,
         textSx
     }) => {
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
 
     const styles: React.CSSProperties = {
         transition: 'all 0.3s ease-in-out',
         border: 'none',
         background: 'none',
         cursor: 'pointer',
-        color: active ? theme.palette.text.primary80 : theme.palette.text.primary60,
+        color: active ? plt.text.primary80 : plt.text.primary60,
         outline: 'none',
     };
 

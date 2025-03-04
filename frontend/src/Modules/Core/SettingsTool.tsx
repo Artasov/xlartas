@@ -85,7 +85,7 @@ const SettingsTool: React.FC = () => {
                 titleCls="fs-3 fw-bold"
                 closeBtn={true}
                 closeOnOutsideClick={false}
-                clsModalScroll="px-2 py-2"
+                sxContent={{px: 1}}
                 zIndex={201}
                 animDuration={200}
             >

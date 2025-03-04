@@ -26,7 +26,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                                                    }) => {
     const navigate = useNavigate();
     const {user} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const {api} = useApi()
     // Action Handlers
     const handleCancelOrder = () => {
@@ -34,7 +34,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         api.post(`/api/v1/orders/${order.id}/cancel/`).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order canceled successfully.')}`);
-        }).finally(() => setLoading(false));
+        }).catch(_=>null).finally(() => setLoading(false));
     };
 
     const handleExecuteOrder = () => {
@@ -42,7 +42,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         api.post(`/api/v1/orders/${order.id}/execute/`).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order executed successfully.')}`);
-        }).finally(() => setLoading(false));
+        }).catch(_=>null).finally(() => setLoading(false));
     };
 
     const handleResendNotificationOrder = () => {
@@ -51,7 +51,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             pprint(`Order ID: ${order.id} notification resent`, data);
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order notification resent successfully.')}`);
-        }).finally(() => setLoading(false));
+        }).catch(_=>null).finally(() => setLoading(false));
     };
 
     const handleRedirectToPayment = () => {
@@ -74,12 +74,12 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             actions.push({
                 label: 'Execute',
                 onClick: handleExecuteOrder,
-                style: {backgroundColor: theme.palette.bg.contrast10},
+                style: {backgroundColor: plt.bg.contrast10},
             });
             actions.push({
                 label: 'Notification',
                 onClick: handleResendNotificationOrder,
-                style: {backgroundColor: theme.palette.bg.contrast10},
+                style: {backgroundColor: plt.bg.contrast10},
             });
         }
 
@@ -88,7 +88,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             actions.push({
                 label: 'Request a refund',
                 onClick: handleRedirectToRefund,
-                style: {backgroundColor: theme.palette.bg.contrast10},
+                style: {backgroundColor: plt.bg.contrast10},
             });
         }
 
@@ -97,7 +97,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             actions.push({
                 label: 'Cancel',
                 onClick: handleCancelOrder,
-                style: {backgroundColor: theme.palette.bg.contrast10},
+                style: {backgroundColor: plt.bg.contrast10},
             });
         }
 
@@ -106,7 +106,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             actions.push({
                 label: 'Pay',
                 onClick: handleRedirectToPayment,
-                style: {backgroundColor: theme.palette.info.main},
+                style: {backgroundColor: plt.info.main},
             });
         }
 
@@ -125,7 +125,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                             : <Button
                                 key={index}
                                 className="h-min px-2 pt-6px"
-                                style={{color: theme.palette.text.primary70, ...action.style}}
+                                style={{color: plt.text.primary70, ...action.style}}
                                 onClick={action.onClick}
                                 size="small">
                                 {action.label}

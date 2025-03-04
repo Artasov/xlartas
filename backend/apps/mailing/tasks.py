@@ -6,6 +6,14 @@ from django.utils import timezone
 from .models import Mailing
 
 
+def chunk_list(lst: list, chunk_size: int):
+    """
+    Разбивает список на чанки (пакеты) указанного размера.
+    """
+    for i in range(0, len(lst), chunk_size):
+        yield lst[i:i + chunk_size]
+
+
 @shared_task
 @task('global')
 def check_and_send_mailings():
@@ -29,9 +37,9 @@ def send_mailing(mailing_id):
     except Mailing.DoesNotExist:
         return
 
-    # Получаем список email адресов получателей
-    recipients: list[str] = list(mailing.users.values_list('email', flat=True))
-    if not recipients:
+    # Выбираем пользователей, которым еще не отправлялось письмо
+    unsent_users = mailing.users.exclude(id__in=mailing.sent_users.values_list('id', flat=True))
+    if not unsent_users.exists():
         mailing.sent = True
         mailing.save(update_fields=['sent'])
         return
@@ -41,6 +49,25 @@ def send_mailing(mailing_id):
         'subject': mailing.subject,
         'content': mailing.html_content,
     }
-    send_emails(emails=recipients, context=context, subject=mailing.subject, template='mailing/base.html')
-    mailing.sent = True
-    mailing.save(update_fields=['sent'])
+
+    # Получаем список кортежей (user_id, email) пользователей, которым еще не отправлялось письмо
+    user_data = list(unsent_users.values_list('id', 'email'))
+
+    # Определяем размер чанка для рассылки (например, 50 адресов)
+    BATCH_SIZE = 50
+    for chunk in chunk_list(user_data, BATCH_SIZE):
+        recipient_ids = [uid for uid, email in chunk]
+        recipient_emails = [email for uid, email in chunk]
+        send_emails(
+            emails=recipient_emails,
+            context=context,
+            subject=mailing.subject,
+            template='mailing/base.html'
+        )
+        # Отмечаем, что письма отправлены указанным пользователям
+        mailing.sent_users.add(*recipient_ids)
+
+    # Если письма отправлены всем пользователям, помечаем рассылку как завершённую
+    if not mailing.users.exclude(id__in=mailing.sent_users.values_list('id', flat=True)).exists():
+        mailing.sent = True
+        mailing.save(update_fields=['sent'])

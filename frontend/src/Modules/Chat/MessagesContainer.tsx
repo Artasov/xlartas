@@ -28,7 +28,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
     }) => {
     const {user} = useContext(AuthContext) as AuthContextType;
 
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const isSelfDialog = (room: IRoom | null): boolean => {
         if (!room || !user) return false;
         if (room.participants.length !== 2) return false;
@@ -50,7 +50,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
                     g={1}
                     py={1}
                     cls={`messages`}
-                    boxShadow={theme.palette.shadows ? theme.palette.shadows.SO005 : ''}
+                    boxShadow={plt.shadows ? plt.shadows.SO005 : ''}
                     style={{display: 'flex', flexDirection: 'column'}}
                 >
                     {isLoadingMore && <CircularProgress/>}
@@ -64,7 +64,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
                         : <FCCC p={2} textAlign={'center'} mx={'auto'} rounded={4}
                                 fontWeight={'bold'} fontSize={22}
                                 bg={theme.colors.secondary.lighter}
-                                color={theme.palette.text.primary30}>
+                                color={plt.text.primary30}>
                             Начните писать первым
                         </FCCC>
                     }

@@ -13,7 +13,7 @@ interface BottomButtonProps {
 }
 
 const BottomButton: React.FC<BottomButtonProps> = ({cls, onClick, disabled, children, containerRef}) => {
-    const {theme} = useTheme();
+    const {plt} = useTheme();
     const viewportHeight = useViewportHeight();
     const [isVisible, setIsVisible] = useState(true);
 
@@ -58,7 +58,7 @@ const BottomButton: React.FC<BottomButtonProps> = ({cls, onClick, disabled, chil
                 fullWidth
                 disabled={disabled}
                 sx={{
-                    boxShadow: `0 0 20px 10px ${theme.palette.bg.primary}`,
+                    boxShadow: `0 0 20px 10px ${plt.bg.primary}`,
                 }}
             >
                 {children}

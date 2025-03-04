@@ -20,7 +20,7 @@ interface RoomMessageProps {
 
 const RoomMessage: React.FC<RoomMessageProps> = ({message, room_capacity}) => {
     const {user} = useContext(AuthContext) as AuthContextType;
-    const {theme} = useTheme();
+    const {plt, theme} = useTheme();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -76,7 +76,7 @@ const RoomMessage: React.FC<RoomMessageProps> = ({message, room_capacity}) => {
                         </span>
                         <div
                             className={`w-min frcc gap-2 ps-3 fs-7 align-self-end`}
-                            style={{color: theme.palette.text.primary40}}
+                            style={{color: plt.text.primary40}}
                         >
                             {formattedDate}
                             {user?.id === message.user.id && getStatusIcon()}
