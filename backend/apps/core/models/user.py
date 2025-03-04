@@ -53,7 +53,7 @@ class User(AAbstractUser, UserService):
     balance = DecimalField(decimal_places=2, max_digits=8, default=0)
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.full_name if self.full_name else self.username}:{self.id}'
 
     def save(self, *args, **kwargs):
         if not self.username:

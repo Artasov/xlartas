@@ -1,6 +1,6 @@
 # xl/backend/apps/software/admin/software.py
 from adjango.decorators import admin_description, admin_boolean
-from django.contrib.admin import TabularInline
+from django.contrib.admin import TabularInline, display
 from django.contrib.admin import register, ModelAdmin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -74,24 +74,17 @@ class SoftwareOrderAdmin(ModelAdmin):
 @register(SoftwareLicense)
 class SoftwareLicenseAdmin(ModelAdmin):
     list_display = (
-        'user', 'software', 'days_left', 'is_tested', 'is_active_display', 'created_at', 'updated_at'
+        'user', 'software', 'days_left', 'is_tested', 'created_at', 'updated_at'
     )
     search_fields = ('user__username', 'software__name')
     list_filter = ('software', 'is_tested',)
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-created_at',)
 
-    @admin_description(_('Is Active'))
-    @admin_boolean(True)
-    def is_active_display(self, obj):
-        return obj.is_active()
-
-    @admin_description('Days left')
+    @display(description='Days left', ordering='license_ends_at')
     def days_left(self, obj):
         if obj.license_ends_at:
             delta = obj.license_ends_at - timezone.now()
             days = delta.days
-            if days < 0:
-                days = 0
-            return days
+            return days if days >= 0 else 0
         return '-'

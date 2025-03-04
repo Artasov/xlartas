@@ -102,6 +102,9 @@ XL_DASHBOARD = {
         'Email Confirm. Code': 'confirmation.EmailConfirmationCode',
         'Phone Confirm. Code': 'confirmation.PhoneConfirmationCode',
     },
+    'Mailing': {
+        'All': 'mailing.Mailing',
+    },
     'Commerce': {
         'Client': 'commerce.Client',
         'Employee': 'commerce.Employee',
@@ -213,11 +216,13 @@ INSTALLED_APPS = [
     'django_object_actions',
     'silk',
     'endpoints',
+    'ckeditor',
     'logui',
     'cachalot',
 
     'apps.xl_dashboard',
     'apps.company',
+    'apps.mailing',
     'apps.confirmation',
     'apps.commerce',
     'apps.redisui',

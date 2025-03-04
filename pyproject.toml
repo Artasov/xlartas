@@ -49,6 +49,7 @@ aiohttp = "3.11.10"
 chardet = "5.2.0"
 python-dotenv = "1.0.1"
 celery-singleton = "0.3.1"
+django-ckeditor = "6.7.2"
 
 Pillow = "11.0.0"
 psycopg2-binary = "2.9.10"
