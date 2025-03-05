@@ -67,9 +67,11 @@ USE_TZ = True
 
 XL_DASHBOARD = {
     'General': {
-        'User': 'core.User',
-        'File': 'core.File',
+        'Users': 'core.User',
+        'Files': 'core.File',
         'Theme': 'core.Theme',
+        'Visits': 'analytics.Visit',
+        'Visits graphic': '/xladmin/analytics/chart/',
     },
     'Products': {
         'All': 'commerce.Product',
@@ -228,6 +230,7 @@ INSTALLED_APPS = [
     'apps.social_oauth',
     'apps.notify',
     'apps.chat',
+    'apps.analytics',
     'apps.core',
     'apps.shop',
     'apps.tinkoff',
@@ -239,7 +242,6 @@ INSTALLED_APPS = [
 
 ]
 if MINIO_USE: INSTALLED_APPS.append('django_minio_backend')
-# TODO заменять базовое DoesNotExists исключение модели на кастомное подмешенное с APIException
 # Database
 if POSTGRES_USE:
     DATABASES = {
@@ -303,10 +305,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.analytics.middleware.VisitLoggingMiddleware'
 
 ]
-if DEV: MIDDLEWARE.append('apps.core.middleware.other.MediaDomainSubstitutionJSONMiddleware')
-MEDIA_DOMAIN = 'https://xlartas.ru'
+if DEV: MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
+MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 
 CHANNEL_LAYERS = {
     'default': {

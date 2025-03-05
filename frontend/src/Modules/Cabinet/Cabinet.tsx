@@ -51,7 +51,7 @@ const Cabinet: React.FC = () => {
     const navigate = useNavigate();
     const {plt} = useTheme();
     const isGtSm = useMediaQuery('(min-width: 576px)');
-    const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("700px");
+    const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("845px");
 
     const handleMenuLinkClick = (path: string, closeMobile?: boolean) => {
         if (closeMobile) hideMobileMenu();
@@ -156,7 +156,6 @@ const Cabinet: React.FC = () => {
                             <Route path="profile/*"
                                    element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
                             <Route path="/softwares" element={<FCSS g={2} p={2}>
-                                <h1 className={'fs-3 lh-1'}>Softwares</h1>
                                 <Softwares/>
                             </FCSS>}/>
                             <Route path="/softwares/:id" element={<SoftwareDetail/>}/>

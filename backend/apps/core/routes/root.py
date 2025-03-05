@@ -13,6 +13,7 @@ from apps.core.controllers.health import health, change_user_id, clear_redis, ru
 urlpatterns = [
     # Base
     path('health/', health),
+    path('xladmin/analytics/', include('apps.analytics.routes.graphics', namespace='analytics')),
     path('xladmin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 

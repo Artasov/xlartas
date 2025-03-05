@@ -112,14 +112,15 @@ const App: React.FC = () => {
                         <Route path='/companies/:name' element={<CompanyPage/>}/>
                         <Route path='/docs/:id' element={<CompanyDocumentDetail/>}/>
 
-                        <Route path="/softwares" element={<FC g={2} p={2} mx={'auto'} maxW={800}>
-                            <h1 className={'fs-1 lh-1 text-center'}>Softwares</h1>
-                            <Softwares/>
-                        </FC>}/>
-                        <Route path="/softwares/:id" element={<FC g={2} p={2} mx={'auto'} maxW={700}>
-                            <SoftwareDetail/>
-                        </FC>}/>
-
+                        {isAuthenticated === false && <>
+                            <Route path="/softwares" element={<FC g={2} p={2} mx={'auto'} maxW={800}>
+                                <h1 className={'fs-1 lh-1 text-center'}>Softwares</h1>
+                                <Softwares/>
+                            </FC>}/>
+                            <Route path="/softwares/:id" element={<FC g={2} p={2} mx={'auto'} maxW={700}>
+                                <SoftwareDetail/>
+                            </FC>}/>
+                        </>}
                         <Route path='/*' element={<Cabinet/>}/>
                     </Routes>
                 </main>
