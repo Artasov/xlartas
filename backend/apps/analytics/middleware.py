@@ -24,21 +24,24 @@ class VisitLoggingMiddleware:
     def log_visit(self, request: WSGIRequest):
         # Фиксируем только запросы, URL которых содержит 'current_user'
         full_path = request.get_full_path()
-        if len(request.path) > 1 and 'current_user' not in full_path and \
-                'software' not in full_path:
+        if (len(request.path) > 1 and
+                'current_user' not in full_path and
+                'software' not in full_path):
             return
 
         ip = self.get_client_ip(request)
-        if not ip:
-            return
+        if not ip or ip in ('localhost', '127.0.0.1'): return
 
         now = datetime.now()
         current_hour = now.replace(minute=0, second=0, microsecond=0)
         next_hour = current_hour + timedelta(hours=1)
 
         # Если уже существует запись с этим IP в текущем часу, выходим
-        if Visit.objects.filter(ip_address=ip, created_at__gte=current_hour, created_at__lt=next_hour).exists():
-            return
+        if Visit.objects.filter(
+                ip_address=ip,
+                created_at__gte=current_hour,
+                created_at__lt=next_hour
+        ).exists(): return
 
         Visit.objects.create(
             ip_address=ip,

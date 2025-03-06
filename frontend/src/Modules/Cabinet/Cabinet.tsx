@@ -5,7 +5,7 @@ import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
-import {FC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
+import {FC, FCCC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -22,6 +22,8 @@ import Logo from "Core/Logo";
 import OrderDetail from "Order/OrderDetail";
 import Licenses from "../Software/Licenses";
 import EarbudsRoundedIcon from '@mui/icons-material/EarbudsRounded';
+import CircularProgress from "Core/components/elements/CircularProgress";
+import {useErrorProcessing} from "Core/components/ErrorProvider";
 
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
@@ -52,6 +54,7 @@ const Cabinet: React.FC = () => {
     const {plt} = useTheme();
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("845px");
+    const {notAuthentication} = useErrorProcessing();
 
     const handleMenuLinkClick = (path: string, closeMobile?: boolean) => {
         if (closeMobile) hideMobileMenu();
@@ -101,10 +104,15 @@ const Cabinet: React.FC = () => {
     }, [setMobileNavigationContent, selectedProfile, isGtSm]);
 
     useEffect(() => {
-        if (isAuthenticated === false) navigate('/?auth_modal=True');
-    }, [isAuthenticated, navigate]);
+        if (isAuthenticated === false) notAuthentication();
+    }, [isAuthenticated]);
 
-    if (!isAuthenticated) return null;
+    if (isAuthenticated === null) return <FCCC h={'80%'}>
+        <CircularProgress size={'100px'}/>
+    </FCCC>;
+    if (!isAuthenticated) return <FCCC h={'80%'}>
+        You haven't entered the account yet
+    </FCCC>;
 
     return (
         <CabinetWidthContext.Provider value={{cabinetMaxWidth, setCabinetMaxWidth}}>
@@ -139,7 +147,6 @@ const Cabinet: React.FC = () => {
                             <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
-
                         </FC>
                     </FCSC>
 
@@ -162,7 +169,6 @@ const Cabinet: React.FC = () => {
                             <Route path='/licenses' element={<Licenses/>}/>
 
                             <Route path="/orders" element={<FCSS g={1} pt={2} p={1}>
-                                <h1 className={'fs-3 lh-1'}>Orders</h1>
                                 <UserOrders className={'px-2'}/>
                             </FCSS>}/>
                             <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>

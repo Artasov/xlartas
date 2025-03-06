@@ -29,8 +29,7 @@ import Header from "Core/components/Header/Header";
 import GlobalAuthModal from "Auth/GlobalAuthModal";
 import CompanyPage from "Company/CompanyPage";
 import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
-import {FC, FCCC} from "WideLayout/Layouts";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import {FC} from "WideLayout/Layouts";
 import Softwares from "./Modules/Software/Softwares";
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 
@@ -83,9 +82,6 @@ const App: React.FC = () => {
                     minHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
                     maxHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
                 }}>
-                    {isAuthenticated === null && <FCCC h={'80%'}>
-                        <CircularProgress size={'100px'}/>
-                    </FCCC>}
                     <Routes>
                         {/* <Route path="/" element={<Navigate to={'/auth'}/>}/> */}
                         <Route path='/' element={<Landing/>}/>

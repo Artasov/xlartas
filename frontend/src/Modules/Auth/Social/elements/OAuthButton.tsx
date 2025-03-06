@@ -45,7 +45,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = (
     return (
         <div style={{position: 'relative', display: 'inline-block'}}>
             {linked ? (
-                <IconButton className="ratio-1-1 hover-scale-10" style={iconStyle} disabled>
+                <IconButton sx={{p: 1}} className="ratio-1-1 hover-scale-10" style={iconStyle} disabled>
                     <FontAwesomeIcon icon={icon} className="h-100"/>
                     <CheckCircleIcon style={{
                         color: plt.success.main,

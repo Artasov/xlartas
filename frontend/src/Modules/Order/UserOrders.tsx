@@ -5,7 +5,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {IOrder} from "types/commerce/shop";
 import OrderItem from "Order/OrderItem";
-import {FC as FCC, FR, FRC} from "WideLayout/Layouts";
+import {FC as FCC, FCCC, FR, FRC} from "WideLayout/Layouts";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
 
@@ -40,7 +40,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
     };
 
     return (
-        <FR wrap g={3} py={1} scroll={'y-auto'} cls={`no-scrollbar ${className}`}>
+        <FR wrap w={'100%'} g={2} py={1} scroll={'y-auto'} cls={`no-scrollbar ${className}`}>
             {orders.length > 0 ?
                 orders.map((order) => (
                     <OrderItem
@@ -51,7 +51,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
                     />
                 ))
                 : loading
-                    ? <FRC w={'100%'} mt={5}><CircularProgress size={'110px'}/></FRC>
+                    ? <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>
                     : <FCC w={'100%'} g={1} p={2} h={'100%'} scroll={'y-auto'}
                            cls={'no-scrollbar'} textAlign={'center'}>
                         <p>У вас еще нет заказов</p>

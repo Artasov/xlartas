@@ -448,6 +448,12 @@ export const darkTheme = createTheme({
                     borderRadius: '.5rem',
                     backgroundColor: 'rgba(0,0,0,0)',
                     padding: '0',
+                    boxShadow: `0 0 10px #0002`,
+                    transition: 'all 200ms ease-in-out',
+                    '&:hover': {
+                        transform: 'scale(1.02)',
+                        boxShadow: `0 0 0 #0002`,
+                    },
                 },
             },
         },

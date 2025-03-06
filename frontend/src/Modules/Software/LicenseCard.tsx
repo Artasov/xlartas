@@ -18,14 +18,11 @@ const LicenseCard: React.FC<LicenseCardProps> = ({license}) => {
     };
 
     return (
-        <Card onClick={handleClick}
-              sx={{cursor: 'pointer', maxWidth: 300, margin: theme.spacing(1)}}>
-            <CardMedia
-                component="img"
-                height="140"
-                image={license.software.pic || ''}
-                alt={license.software.name}
-            />
+        <Card onClick={handleClick} sx={{cursor: 'pointer', maxWidth: 300}}>
+            <CardMedia component="img"
+                       height="140"
+                       image={license.software.pic || ''}
+                       alt={license.software.name}/>
             <CardContent>
                 <FC g={.5}>
                     <Typography variant="h6" component="div">

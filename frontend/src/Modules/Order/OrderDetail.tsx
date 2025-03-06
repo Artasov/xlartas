@@ -42,7 +42,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
         }).catch(_=>null).finally(() => setLoading(false));
     }, [id, isAuthenticated, notAuthentication, api]);
 
-    if (loading) return <CircularProgress size={'150px'}/>;
+    if (loading) return <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>;
     if (orderNotFound || !order) return <div className={'p-3 text-center mt-2'}>Заказ не найден.</div>;
 
     return (

@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FCC, FR} from 'WideLayout/Layouts';
+import {FCC, FCCC, FR} from 'WideLayout/Layouts';
 import LicenseCard from './LicenseCard';
 import {Message} from 'Core/components/Message';
 
@@ -21,9 +21,9 @@ const Licenses: React.FC = () => {
 
 
     return (
-        <FR wrap gap={2} justifyContent="center" padding={2}>
+        <FR wrap g={2} p={2}>
             {loading
-                ? <FCC mt={4}><CircularProgress size="90px"/></FCC>
+                ? <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>
                 : licenses && licenses.length > 0
                     ? licenses.map(license => <LicenseCard key={license.id} license={license}/>)
                     : <FCC>Лицензии не найдены</FCC>
