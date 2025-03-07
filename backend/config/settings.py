@@ -69,9 +69,12 @@ XL_DASHBOARD = {
     'General': {
         'Users': 'core.User',
         'Files': 'core.File',
-        'Theme': 'core.Theme',
-        'Visits': 'analytics.Visit',
-        'Visits graphic': '/xladmin/analytics/chart/',
+        'Theme': 'theme.Theme',
+    },
+    'Analytics': {
+        'Visits': '/xladmin/analytics/visits/',
+        'Orders': '/xladmin/analytics/orders/',
+        'visits_objs': 'analytics.Visit',
     },
     'Products': {
         'All': 'commerce.Product',

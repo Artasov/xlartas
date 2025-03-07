@@ -97,7 +97,7 @@ const SoftwareDetailComponent: React.FC = () => {
             }} alt="software"/>
             <FC px={isGt576 ? 3 : 1} pt={2.1}>
                 <FRSE wrap g={'.1rem'} mb={2}>
-                    <FR>
+                    <FR g={.3}>
                         <h1 style={{
                             lineHeight: '1.6rem',
                             fontSize: '1.8rem',
@@ -106,7 +106,8 @@ const SoftwareDetailComponent: React.FC = () => {
                         {software.file && <span style={{
                             color: plt.text.primary30,
                             fontSize: '.8rem',
-                            lineHeight: '.9rem'
+                            lineHeight: '.9rem',
+                            marginTop: 'auto',
                         }}>v.{software.file.version}</span>}
                     </FR>
                     <FR g={'.1rem'} ml={'auto'}>

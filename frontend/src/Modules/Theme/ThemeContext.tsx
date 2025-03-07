@@ -30,16 +30,15 @@ interface BackgroundImages {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
-    const [theme, setTheme] = useState(lightTheme);
-    const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+    const [theme, setTheme] = useState(darkTheme);
+    const [themeMode, setThemeMode] = useState<'light' | 'dark'>('dark');
     const [backgroundImages, setBackgroundImages] = useState<BackgroundImages>({dark: [], light: []});
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
     const [themeLoading, setThemeLoading] = useState<boolean>(true);
     const {api} = useApi();
     const processTheme = async () => {
         try {
-            const response = await api.get('/api/v1/themes/');
-            const data = response.data;
+            const data = await api.get('/api/v1/themes/');
             const darkImages = data.filter((theme: any) => theme.mode === 'dark').map((theme: any) => theme.bg_image);
             const lightImages = data.filter((theme: any) => theme.mode === 'light').map((theme: any) => theme.bg_image);
             setBackgroundImages({dark: darkImages, light: lightImages});

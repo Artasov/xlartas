@@ -14,6 +14,7 @@ import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
 import {FRCC} from "WideLayout/Layouts";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import CircularProgress from "Core/components/elements/CircularProgress";
 
 const Header: React.FC = () => {
     const {
@@ -67,6 +68,7 @@ const Header: React.FC = () => {
                     </>
                 )}
                 <FRCC g={1}>
+                    {isAuthenticated === null && <CircularProgress size={'35px'}/>}
                     {profileBtnVisible && !location.pathname.includes('/profile') && (
                         <Link to={'/profile'}> <UserAvatar
                             size={user?.avatar ? '37px' : '30px'}

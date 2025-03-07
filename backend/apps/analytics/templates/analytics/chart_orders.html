@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block title %}Гибкий график заказов{% endblock %}
+{% block content %}
+    <div class="fc w-100">
+        <form method="get">
+            <label for="period">Период:</label>
+            <select name="period" id="period">
+                <option value="day" {% if selected_period == 'day' %}selected{% endif %}>За день</option>
+                <option value="week" {% if selected_period == 'week' %}selected{% endif %}>За неделю</option>
+                <option value="month" {% if selected_period == 'month' %}selected{% endif %}>За месяц</option>
+                <option value="year" {% if selected_period == 'year' %}selected{% endif %}>За год</option>
+            </select>
+
+            <label for="group_by">Группировка:</label>
+            <select name="group_by" id="group_by">
+                <option value="" {% if not group_by %}selected{% endif %}>По умолчанию</option>
+                <option value="hour" {% if group_by == 'hour' %}selected{% endif %}>Час</option>
+                <option value="day" {% if group_by == 'day' %}selected{% endif %}>День</option>
+                <option value="month" {% if group_by == 'month' %}selected{% endif %}>Месяц</option>
+            </select>
+
+            <label for="start_date">Начало (YYYY-MM-DD):</label>
+            <input type="text" name="start_date" id="start_date" value="{{ start_date }}">
+            <label for="end_date">Конец (YYYY-MM-DD):</label>
+            <input type="text" name="end_date" id="end_date" value="{{ end_date }}">
+            <button type="submit">Применить</button>
+        </form>
+
+        <canvas id="ordersChart" style="width: 100%; max-width: 800px; max-height: 300px"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('ordersChart').getContext('2d');
+        const ordersChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ labels|safe }},
+                datasets: [
+                    {
+                        label: 'Всего заказов',
+                        data: {{ total_data|safe }},
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Выполненные заказы',
+                        data: {{ executed_data|safe }},
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Отменённые заказы',
+                        data: {{ cancelled_data|safe }},
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {display: true, position: 'top'},
+                    title: {display: true, text: 'График заказов'}
+                },
+                scales: {
+                    x: {title: {display: true, text: 'Время'}},
+                    y: {title: {display: true, text: 'Количество заказов'}, beginAtZero: true}
+                }
+            }
+        });
+    </script>
+{% endblock %}
