@@ -20,7 +20,7 @@ def test_task(rand_integer):
 
 @shared_task(base=Singleton, unique_on=['rand_integer', ])
 @task('global')
-def test_task(rand_integer):
+def test_singleton_task(rand_integer):
     sleep(5)
     if settings.INTENSIVE_HEALTH_TEST:
         log.info(f'TASK SINGLETON SUCCESS {rand_integer}')
