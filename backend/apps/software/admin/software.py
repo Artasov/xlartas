@@ -5,6 +5,7 @@ from django.contrib.admin import register, ModelAdmin
 from django.forms import ModelForm
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from polymorphic.admin import PolymorphicChildModelAdmin
 
 from apps.commerce.models import ProductPrice
 from apps.software.models import Software, SoftwareOrder, SoftwareLicense, SoftwareFile
@@ -69,7 +70,8 @@ class SoftwareAdmin(ModelAdmin):
 
 
 @register(SoftwareOrder)
-class SoftwareOrderAdmin(ModelAdmin):
+class SoftwareOrderAdmin(PolymorphicChildModelAdmin):
+    
     list_display = (
         'id', 'user', 'product', 'license_hours', 'currency',
         'payment_system', 'is_paid', 'is_executed', 'is_cancelled',

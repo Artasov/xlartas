@@ -15,7 +15,7 @@ from rest_framework.exceptions import APIException
 from apps.commerce.models.order import (
     Order,
 )
-from apps.software.models import Software
+from apps.software.models import Software, SoftwareOrder
 
 log = logging.getLogger('commerce')
 
@@ -24,7 +24,7 @@ log = logging.getLogger('commerce')
 class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     base_model = Order
     child_models = (
-        Software,
+        SoftwareOrder,
     )
 
     list_display = (
