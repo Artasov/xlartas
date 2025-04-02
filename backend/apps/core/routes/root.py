@@ -34,6 +34,7 @@ urlpatterns = [
     path('api/v1/', include('apps.xl_dashboard.routes.api')),
     path('api/v1/', include('apps.software.routes.api')),
     path('api/v1/', include('apps.shop.desktop_software_urls')),
+    path('api/v1/xlmine/', include('apps.xlmine.routes.api')),
     path('api/v1/confirmation-code/', include('apps.confirmation.routes.api')),
 
     # TBank

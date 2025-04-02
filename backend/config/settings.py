@@ -242,6 +242,7 @@ INSTALLED_APPS = [
     'apps.theme',
     'apps.surveys',
     'apps.filehost',
+    'apps.xlmine',
 
 ]
 if MINIO_USE: INSTALLED_APPS.append('django_minio_backend')

@@ -31,6 +31,7 @@ axiosInstance.interceptors.request.use(config => {
     if (csrfToken) config.headers['X-CSRFToken'] = csrfToken;
     return config;
 }, error => Promise.reject(error));
+
 axiosInstance.interceptors.response.use(response => response, error => {
     if (error.response && error.response.status === 401) {
         localStorage.removeItem('access');
@@ -38,4 +39,5 @@ axiosInstance.interceptors.response.use(response => response, error => {
     }
     throw error;
 });
+
 export {axiosInstance as axios};

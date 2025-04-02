@@ -1,7 +1,9 @@
 # core/models/user.py
 import uuid
 
-from adjango.models.base import AAbstractUser
+from adjango.fields import AManyToManyField
+from adjango.models.base import AAbstractUser, AModel
+from adjango.models.choices import ATextChoices
 from django.db.models import (
     CharField, BooleanField,
     DecimalField, EmailField, DateField
@@ -26,6 +28,13 @@ def generate_referral_code() -> str:
     return uuid.uuid4().hex[:10]
 
 
+class Role(AModel):
+    class Variant(ATextChoices):
+        MINE_DEV = 'MINE-DEV', _('Minecraft Developer')
+
+    name = CharField(max_length=20, unique=True, choices=Variant.choices)
+
+
 class User(AAbstractUser, UserService):
     objects = UserManager()
 
@@ -36,12 +45,11 @@ class User(AAbstractUser, UserService):
     birth_date = DateField(_('Birth date'), null=True, blank=True)
     gender = CharField(_('Gender'), max_length=10, choices=Gender.choices, blank=True, null=True)
     avatar = ProcessedImageField(
-        verbose_name=_('Avatar'),
-        upload_to='user/images/avatar/',
+        verbose_name=_('Avatar'), upload_to='user/images/avatar/',
         processors=(ResizeToFit(500, 500), CorrectOrientation()),
-        format='JPEG', options={'quality': 70},
-        null=True, blank=True
+        format='JPEG', options={'quality': 70}, null=True, blank=True
     )
+    roles = AManyToManyField('Role', related_name='users', blank=True)
     timezone = TimeZoneField(default='UTC')
     is_email_confirmed = BooleanField(_('Is email confirmed'), default=False)
     is_phone_confirmed = BooleanField(_('Is phone confirmed'), default=False)

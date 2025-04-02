@@ -24,7 +24,7 @@ import Licenses from "../Software/Licenses";
 import EarbudsRoundedIcon from '@mui/icons-material/EarbudsRounded';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
-
+import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -37,6 +37,10 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
     },
 });
 
+
+function MinecraftVersionsManager() {
+    return null;
+}
 
 const Cabinet: React.FC = () => {
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
@@ -79,6 +83,10 @@ const Cabinet: React.FC = () => {
                 <NavLink onClick={() => handleMenuLinkClick('/licenses', true)} to="/licenses"
                          icon={<EarbudsRoundedIcon/>}>
                     Licenses
+                </NavLink>
+                <NavLink onClick={() => handleMenuLinkClick('/xlmine-release', true)} to="/xlmine-release"
+                         icon={<DeveloperBoardRoundedIcon/>}>
+                    RELEASES
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
                          to="/orders" icon={<CreditScoreRoundedIcon/>}>
@@ -145,6 +153,10 @@ const Cabinet: React.FC = () => {
                                 urlActiveMark={'license'}
                                 icon={EarbudsRoundedIcon} onClick={() => handleMenuLinkClick('/licenses')}/>
                             <CabinetNavLink
+                                text={'Releases'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
+                                urlActiveMark={'xlmine-release'}
+                                icon={DeveloperBoardRoundedIcon} onClick={() => handleMenuLinkClick('/xlmine-release')}/>
+                            <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
                         </FC>
@@ -167,6 +179,7 @@ const Cabinet: React.FC = () => {
                             </FCSS>}/>
                             <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
                             <Route path='/licenses' element={<Licenses/>}/>
+                            <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
 
                             <Route path="/orders" element={<FCSS g={1} pt={2} p={1}>
                                 <UserOrders className={'px-2'}/>

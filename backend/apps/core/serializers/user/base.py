@@ -4,7 +4,13 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework.fields import CharField, SerializerMethodField, EmailField, DateField
 from timezone_field.rest_framework import TimeZoneSerializerField
 
-from apps.core.models.user import User
+from apps.core.models.user import User, Role
+
+
+class RoleSerializer(AModelSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
 
 
 class UserUsernameSerializer(ASerializer):
@@ -14,13 +20,14 @@ class UserUsernameSerializer(ASerializer):
 class UserSelfSerializer(AModelSerializer):
     timezone = TimeZoneSerializerField(use_pytz=True)
     is_password_exists = SerializerMethodField()
+    roles = RoleSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
         fields = (
             'id',
             'username', 'full_name', 'secret_key',
-            'email', 'phone', 'avatar',
+            'email', 'phone', 'avatar', 'roles',
             'first_name', 'last_name', 'middle_name',
             'birth_date', 'gender', 'date_joined', 'timezone',
             'is_email_confirmed', 'is_phone_confirmed', 'is_staff',
