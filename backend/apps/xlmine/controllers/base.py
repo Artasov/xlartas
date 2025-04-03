@@ -1,9 +1,6 @@
 # xlmine/controllers/base.py
 from adjango.adecorators import acontroller
-from adrf.decorators import api_view
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
 
 from apps.xlmine.models import Launcher, Release, calculate_sha256, increment_version
@@ -46,20 +43,16 @@ class ReleaseViewSet(ModelViewSet):
 
 
 @acontroller('Get latest launcher')
-@api_view(('GET',))
-@permission_classes((AllowAny,))
 async def get_latest_launcher(_):
     try:
-        return Response(await LauncherSerializer(await Launcher.objects.alatest('created_at')).adata)
+        return JsonResponse(await LauncherSerializer(await Launcher.objects.alatest('created_at')).adata)
     except Launcher.DoesNotExist:
-        return Response({})
+        return JsonResponse({})
 
 
 @acontroller('Get latest release')
-@api_view(('GET',))
-@permission_classes((AllowAny,))
 async def get_latest_release(_):
     try:
-        return Response(await ReleaseSerializer(await Release.objects.alatest('created_at')).adata)
+        return JsonResponse(await ReleaseSerializer(await Release.objects.alatest('created_at')).adata)
     except Release.DoesNotExist:
-        return Response({})
+        return JsonResponse({})
