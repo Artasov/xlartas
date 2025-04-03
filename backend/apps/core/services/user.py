@@ -3,10 +3,15 @@ import string
 from random import choices
 from typing import TYPE_CHECKING
 
+from adjango.querysets.base import AQuerySet
 from adjango.utils.base import calculate_age
 from django.db import transaction, connection
 
-if TYPE_CHECKING: from apps.core.models import User
+if TYPE_CHECKING:
+    from apps.core.models import User
+    from apps.xlmine.models import DonateOrder
+    from apps.software.models import SoftwareOrder
+    from apps.commerce.models import GiftCertificateOrder
 
 
 def generate_random_username():
@@ -14,6 +19,21 @@ def generate_random_username():
 
 
 class UserService:
+    @property
+    def donate_orders(self: 'User') -> AQuerySet['DonateOrder']:
+        from apps.xlmine.models import DonateOrder
+        return DonateOrder.objects.filter(user_id=self.id)
+
+    @property
+    def software_orders(self: 'User') -> AQuerySet['SoftwareOrder']:
+        from apps.software.models import SoftwareOrder
+        return SoftwareOrder.objects.filter(user_id=self.id)
+
+    @property
+    def gift_certificate_orders(self: 'User') -> AQuerySet['GiftCertificateOrder']:
+        from apps.commerce.models import GiftCertificateOrder
+        return GiftCertificateOrder.objects.filter(user_id=self.id)
+
     @property
     def age(self: 'User'):
         return calculate_age(self.birth_date)

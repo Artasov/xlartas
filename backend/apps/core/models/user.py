@@ -17,6 +17,7 @@ from timezone_field import TimeZoneField
 from apps.core.managers.user import UserManager
 from apps.core.models.choices import Gender
 from apps.core.services.user import UserService, generate_random_username
+from apps.xlmine.services.user import UserXLMineService
 from utils.pictures import CorrectOrientation
 
 
@@ -38,7 +39,11 @@ class Role(AModel):
         return str(self.Variant.get_label(self.name))
 
 
-class User(AAbstractUser, UserService):
+class User(
+    AAbstractUser,
+    UserService,
+    UserXLMineService
+):
     objects = UserManager()
 
     password = CharField(_('Password'), max_length=128, blank=True)

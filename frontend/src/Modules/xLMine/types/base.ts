@@ -16,3 +16,10 @@ export interface ILauncher {
     created_at: string;
     updated_at: string;
 }
+export interface IPrivilege {
+    id: string;
+    name: string;
+    threshold: string;
+    description?: string;
+    color?: string | null;
+}

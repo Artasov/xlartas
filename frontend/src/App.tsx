@@ -32,6 +32,7 @@ import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
 import {FC} from "WideLayout/Layouts";
 import Softwares from "./Modules/Software/Softwares";
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
+import XLMineLanding from "./Modules/xLMine/XLMineLanding";
 
 function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
     return null;
@@ -117,6 +118,7 @@ const App: React.FC = () => {
                                 <SoftwareDetail/>
                             </FC>}/>
                         </>}
+                        <Route path='/xlmine' element={<XLMineLanding/>}/>
                         <Route path='/*' element={<Cabinet/>}/>
                     </Routes>
                 </main>

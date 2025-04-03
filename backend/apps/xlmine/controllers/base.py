@@ -1,11 +1,17 @@
 # xlmine/controllers/base.py
 from adjango.adecorators import acontroller
+from adrf.decorators import api_view
 from django.http import JsonResponse
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.xlmine.models import Launcher, Release, calculate_sha256, increment_version
+from apps.xlmine.models import Launcher, Release, DonateProduct, Privilege
 from apps.xlmine.permissions import IsMinecraftDev
-from apps.xlmine.serializers import LauncherSerializer, ReleaseSerializer
+from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
+from apps.xlmine.serializers.donate import DonateProductSerializer
+from apps.xlmine.services.base import calculate_sha256, increment_version
 
 
 class LauncherViewSet(ModelViewSet):
@@ -56,3 +62,29 @@ async def get_latest_release(_):
         return JsonResponse(await ReleaseSerializer(await Release.objects.alatest('created_at')).adata)
     except Release.DoesNotExist:
         return JsonResponse({})
+
+
+@acontroller('Get current privilege')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_current_privilege(request):
+    privilege = await request.user.privilege()
+    if not privilege: return Response({"privilege": None})
+    return Response(await PrivilegeSerializer(privilege).adata)
+
+
+@acontroller('Get latest donate product')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_latest_donate_product(_):
+    donate_product = await DonateProduct.objects.latest('id')
+    if not donate_product: return Response(None)
+    return Response(await DonateProductSerializer(donate_product).adata)
+
+
+@acontroller('List privileges')
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+async def list_privileges(_):
+    privileges = await Privilege.objects.aall()
+    return Response(await PrivilegeSerializer(privileges, many=True).adata)

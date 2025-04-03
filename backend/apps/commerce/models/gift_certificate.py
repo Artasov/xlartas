@@ -3,7 +3,7 @@ import uuid
 
 from adjango.models.mixins import ACreatedAtIndexedMixin
 from django.db.models import (
-    CASCADE, ForeignKey, UUIDField, OneToOneField
+    CASCADE, ForeignKey, UUIDField, OneToOneField, SET_NULL
 )
 from django.utils.translation import gettext_lazy as _
 

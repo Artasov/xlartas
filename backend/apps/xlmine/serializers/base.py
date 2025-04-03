@@ -1,7 +1,7 @@
-# xlmine/serializers.py
+# xlmine/serializers/base.py
 from adjango.aserializers import AModelSerializer
 
-from apps.xlmine.models import Launcher, Release
+from apps.xlmine.models import Launcher, Release, Privilege
 
 
 class LauncherSerializer(AModelSerializer):
@@ -22,3 +22,9 @@ class ReleaseSerializer(AModelSerializer):
             'version': {'read_only': True},
             'sha256_hash': {'read_only': True}
         }
+
+
+class PrivilegeSerializer(AModelSerializer):
+    class Meta:
+        model = Privilege
+        fields = '__all__'
