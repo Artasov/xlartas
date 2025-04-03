@@ -1,3 +1,4 @@
+# xlmine/permissions.py
 from rest_framework.permissions import BasePermission
 
 from apps.core.models import Role

@@ -1,4 +1,4 @@
-# company/apps.py
+# xlmine/apps.py
 from django.apps import AppConfig
 
 

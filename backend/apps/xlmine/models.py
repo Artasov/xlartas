@@ -1,4 +1,4 @@
-# company/models.py
+# xlmine/models.py
 import hashlib
 
 from adjango.models import AModel

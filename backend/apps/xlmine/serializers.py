@@ -1,3 +1,4 @@
+# xlmine/serializers.py
 from adjango.aserializers import AModelSerializer
 
 from apps.xlmine.models import Launcher, Release

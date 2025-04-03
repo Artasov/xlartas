@@ -1,4 +1,4 @@
-# company/apps.py
+# analytics/apps.py
 from django.apps import AppConfig
 
 

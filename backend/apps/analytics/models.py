@@ -1,4 +1,4 @@
-# company/models.py
+# analytics/models.py
 from adjango.models.mixins import ACreatedAtMixin
 from django.db.models import GenericIPAddressField, ForeignKey, CASCADE
 

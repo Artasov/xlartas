@@ -1,3 +1,4 @@
+# analytics/middleware.py
 from datetime import datetime, timedelta
 
 from django.core.handlers.wsgi import WSGIRequest
