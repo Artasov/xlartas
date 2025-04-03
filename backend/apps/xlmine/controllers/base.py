@@ -50,7 +50,7 @@ class ReleaseViewSet(ModelViewSet):
 @permission_classes((AllowAny,))
 async def get_latest_launcher(_):
     try:
-        return await LauncherSerializer(await Launcher.objects.alatest('created_at')).adata
+        return Response(await LauncherSerializer(await Launcher.objects.alatest('created_at')).adata)
     except Launcher.DoesNotExist:
         return Response({})
 
@@ -60,6 +60,6 @@ async def get_latest_launcher(_):
 @permission_classes((AllowAny,))
 async def get_latest_release(_):
     try:
-        return await ReleaseSerializer(await Release.objects.alatest('created_at')).adata
+        return Response(await ReleaseSerializer(await Release.objects.alatest('created_at')).adata)
     except Release.DoesNotExist:
         return Response({})
