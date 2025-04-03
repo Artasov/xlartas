@@ -34,6 +34,9 @@ class Role(AModel):
 
     name = CharField(max_length=20, unique=True, choices=Variant.choices)
 
+    def __str__(self):
+        return str(self.Variant.get_label(self.name))
+
 
 class User(AAbstractUser, UserService):
     objects = UserManager()

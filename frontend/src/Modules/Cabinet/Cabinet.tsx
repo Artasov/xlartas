@@ -25,6 +25,7 @@ import EarbudsRoundedIcon from '@mui/icons-material/EarbudsRounded';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
+import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -37,10 +38,6 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
     },
 });
 
-
-function MinecraftVersionsManager() {
-    return null;
-}
 
 const Cabinet: React.FC = () => {
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
@@ -152,10 +149,11 @@ const Cabinet: React.FC = () => {
                                 text={'Licenses'} iconSx={{transform: 'scale(1.04)'}} to="/licenses"
                                 urlActiveMark={'license'}
                                 icon={EarbudsRoundedIcon} onClick={() => handleMenuLinkClick('/licenses')}/>
-                            <CabinetNavLink
+                            {user?.roles?.includes('MINE-DEV') && <CabinetNavLink
                                 text={'Releases'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
                                 urlActiveMark={'xlmine-release'}
-                                icon={DeveloperBoardRoundedIcon} onClick={() => handleMenuLinkClick('/xlmine-release')}/>
+                                icon={DeveloperBoardRoundedIcon}
+                                onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
                             <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>

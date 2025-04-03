@@ -68,6 +68,7 @@ USE_TZ = True
 XL_DASHBOARD = {
     'General': {
         'Users': 'core.User',
+        'Roles': 'core.Role',
         'Files': 'core.File',
         'Theme': 'theme.Theme',
     },

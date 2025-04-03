@@ -10,7 +10,7 @@ python = "^3.12"
 
 # Tier 1
 Django = "5.1.6"
-adjango = "0.5.1"
+adjango = "0.5.2"
 djangorestframework = "3.16.0"
 adrf = "0.1.9"
 celery = "5.5.0"

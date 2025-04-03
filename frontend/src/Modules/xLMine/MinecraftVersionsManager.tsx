@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Box,
-    Button,
+    CircularProgress,
     IconButton,
     LinearProgress,
     Paper,
@@ -16,6 +16,9 @@ import {
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
+import Button from "Core/components/elements/Button/Button";
+import {FC, FRSC} from "WideLayout/Layouts";
+import FileUpload from "../../UI/FileUpload";
 
 interface VersionItem {
     id: number;
@@ -27,16 +30,20 @@ interface VersionItem {
 const LauncherManager: React.FC = () => {
     const {api} = useApi();
     const [file, setFile] = useState<File | null>(null);
+    const [fileReset, setFileReset] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [versions, setVersions] = useState<VersionItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchVersions = async () => {
+        setLoading(true);
         try {
-            const data = await api.get('/api/v1/launcher/');
-            setVersions(data);
+            const data = await api.get('/api/v1/xlmine/launcher/');
+            setVersions(data.results);
         } catch (error) {
             Message.error('Ошибка загрузки версий лаунчера');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -44,10 +51,8 @@ const LauncherManager: React.FC = () => {
         fetchVersions();
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        }
+    const handleFileSelect = (file: File | null) => {
+        if (file) setFile(file);
     };
 
     const handleUpload = async () => {
@@ -59,7 +64,7 @@ const LauncherManager: React.FC = () => {
         formData.append('file', file);
         setUploadProgress(0);
         try {
-            await api.post('/api/v1/launcher/', formData, {
+            await api.post('/api/v1/xlmine/launcher/', formData, {
                 headers: {'Content-Type': 'multipart/form-data'},
                 onUploadProgress: (progressEvent: any) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -68,6 +73,9 @@ const LauncherManager: React.FC = () => {
             });
             Message.success('Новая версия лаунчера загружена');
             setFile(null);
+            setFileReset(true);
+            // Сброс reset-флага после рендера
+            setTimeout(() => setFileReset(false), 0);
             fetchVersions();
         } catch (error) {
             Message.error('Ошибка загрузки файла');
@@ -77,7 +85,7 @@ const LauncherManager: React.FC = () => {
     const handleDelete = async (id: number) => {
         if (!window.confirm('Удалить версию?')) return;
         try {
-            await api.delete(`/api/v1/launcher/${id}/`);
+            await api.delete(`/api/v1/xlmine/launcher/${id}/`);
             Message.success('Версия удалена');
             fetchVersions();
         } catch (error) {
@@ -86,21 +94,29 @@ const LauncherManager: React.FC = () => {
     };
 
     return (
-        <Box>
-            <Paper sx={{p: 2, mb: 2}}>
-                <h2>Создать новую версию лаунчера</h2>
-                <input type="file" onChange={handleFileChange}/>
-                <Button variant="contained" onClick={handleUpload} disabled={!file} sx={{mt: 1}}>
-                    Загрузить
-                </Button>
-                {uploadProgress > 0 && uploadProgress < 100 && (
-                    <LinearProgress variant="determinate" value={uploadProgress} sx={{mt: 2}}/>
-                )}
-            </Paper>
+        <FC g={1}>
             <Paper sx={{p: 2}}>
-                <h2>Список версий лаунчера</h2>
+                <FC g={1}>
+                    <FRSC g={2}>
+                        <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
+                        <Button variant="contained" onClick={handleUpload} disabled={!file}
+                                sx={{fontWeight: file ? 'bold' : ''}}>
+                            {uploadProgress > 0 && uploadProgress < 100 ? (
+                                <CircularProgress size={24} sx={{mr: 1, color: 'inherit'}}/>
+                            ) : null}
+                            Загрузить
+                        </Button>
+                        {uploadProgress > 0 && uploadProgress < 100 && (
+                            <LinearProgress variant="determinate" value={uploadProgress} sx={{mt: 2}}/>
+                        )}
+                    </FRSC>
+                </FC>
+            </Paper>
+            <Paper sx={{p: 2, pt: 1}}>
                 {loading ? (
-                    <LinearProgress/>
+                    <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+                        <CircularProgress/>
+                    </Box>
                 ) : (
                     <Table>
                         <TableHead>
@@ -116,7 +132,7 @@ const LauncherManager: React.FC = () => {
                                 <TableRow key={item.id}>
                                     <TableCell>{item.id}</TableCell>
                                     <TableCell>{item.version}</TableCell>
-                                    <TableCell>{item.sha256_hash}</TableCell>
+                                    <TableCell style={{wordBreak: 'break-all'}}>{item.sha256_hash}</TableCell>
                                     <TableCell>
                                         <IconButton onClick={() => handleDelete(item.id)}>
                                             <DeleteIcon/>
@@ -128,23 +144,27 @@ const LauncherManager: React.FC = () => {
                     </Table>
                 )}
             </Paper>
-        </Box>
+        </FC>
     );
 };
 
 const ReleaseManager: React.FC = () => {
     const {api} = useApi();
     const [file, setFile] = useState<File | null>(null);
+    const [fileReset, setFileReset] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [versions, setVersions] = useState<VersionItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchVersions = async () => {
+        setLoading(true);
         try {
-            const data = await api.get('/api/v1/release/');
-            setVersions(data);
+            const data = await api.get('/api/v1/xlmine/release/');
+            setVersions(data.results);
         } catch (error) {
             Message.error('Ошибка загрузки версий релиза');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -152,10 +172,8 @@ const ReleaseManager: React.FC = () => {
         fetchVersions();
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        }
+    const handleFileChange = (file: File | null) => {
+        if (file) setFile(file);
     };
 
     const handleUpload = async () => {
@@ -167,7 +185,7 @@ const ReleaseManager: React.FC = () => {
         formData.append('file', file);
         setUploadProgress(0);
         try {
-            await api.post('/api/v1/release/', formData, {
+            await api.post('/api/v1/xlmine/release/', formData, {
                 headers: {'Content-Type': 'multipart/form-data'},
                 onUploadProgress: (progressEvent: any) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -176,6 +194,8 @@ const ReleaseManager: React.FC = () => {
             });
             Message.success('Новая версия релиза загружена');
             setFile(null);
+            setFileReset(true);
+            setTimeout(() => setFileReset(false), 0);
             fetchVersions();
         } catch (error) {
             Message.error('Ошибка загрузки файла');
@@ -185,7 +205,7 @@ const ReleaseManager: React.FC = () => {
     const handleDelete = async (id: number) => {
         if (!window.confirm('Удалить версию?')) return;
         try {
-            await api.delete(`/api/v1/release/${id}/`);
+            await api.delete(`/api/v1/xlmine/release/${id}/`);
             Message.success('Версия удалена');
             fetchVersions();
         } catch (error) {
@@ -194,21 +214,29 @@ const ReleaseManager: React.FC = () => {
     };
 
     return (
-        <Box>
-            <Paper sx={{p: 2, mb: 2}}>
-                <h2>Создать новую версию релиза</h2>
-                <input type="file" onChange={handleFileChange}/>
-                <Button variant="contained" onClick={handleUpload} disabled={!file} sx={{mt: 1}}>
-                    Загрузить
-                </Button>
-                {uploadProgress > 0 && uploadProgress < 100 && (
-                    <LinearProgress variant="determinate" value={uploadProgress} sx={{mt: 2}}/>
-                )}
-            </Paper>
+        <FC g={1}>
             <Paper sx={{p: 2}}>
-                <h2>Список версий релиза</h2>
+                <FC g={1}>
+                    <FRSC g={2}>
+                        <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
+                        <Button variant="contained" sx={{fontWeight: file ? 'bold' : ''}}
+                                onClick={handleUpload} disabled={!file}>
+                            {uploadProgress > 0 && uploadProgress < 100 ? (
+                                <CircularProgress size={24} sx={{mr: 1, color: 'inherit'}}/>
+                            ) : null}
+                            Загрузить
+                        </Button>
+                        {uploadProgress > 0 && uploadProgress < 100 && (
+                            <LinearProgress variant="determinate" value={uploadProgress}/>
+                        )}
+                    </FRSC>
+                </FC>
+            </Paper>
+            <Paper sx={{p: 2, pt: 1}}>
                 {loading ? (
-                    <LinearProgress/>
+                    <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+                        <CircularProgress/>
+                    </Box>
                 ) : (
                     <Table>
                         <TableHead>
@@ -224,7 +252,7 @@ const ReleaseManager: React.FC = () => {
                                 <TableRow key={item.id}>
                                     <TableCell>{item.id}</TableCell>
                                     <TableCell>{item.version}</TableCell>
-                                    <TableCell>{item.sha256_hash}</TableCell>
+                                    <TableCell style={{wordBreak: 'break-all'}}>{item.sha256_hash}</TableCell>
                                     <TableCell>
                                         <IconButton onClick={() => handleDelete(item.id)}>
                                             <DeleteIcon/>
@@ -236,7 +264,7 @@ const ReleaseManager: React.FC = () => {
                     </Table>
                 )}
             </Paper>
-        </Box>
+        </FC>
     );
 };
 
@@ -248,16 +276,16 @@ const MinecraftVersionsManager: React.FC = () => {
     };
 
     return (
-        <Box sx={{width: '100%', p: 2}}>
+        <FC>
             <Tabs value={tabIndex} onChange={handleTabChange}>
-                <Tab label="Launcher версии"/>
-                <Tab label="Release версии"/>
+                <Tab label="Launcher"/>
+                <Tab label="Release"/>
             </Tabs>
-            <Box sx={{mt: 2}}>
+            <FC>
                 {tabIndex === 0 && <LauncherManager/>}
                 {tabIndex === 1 && <ReleaseManager/>}
-            </Box>
-        </Box>
+            </FC>
+        </FC>
     );
 };
 

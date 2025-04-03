@@ -2,6 +2,7 @@
 from adjango.aserializers import ASerializer, AModelSerializer
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework.fields import CharField, SerializerMethodField, EmailField, DateField
+from rest_framework.relations import SlugRelatedField
 from timezone_field.rest_framework import TimeZoneSerializerField
 
 from apps.core.models.user import User, Role
@@ -20,7 +21,7 @@ class UserUsernameSerializer(ASerializer):
 class UserSelfSerializer(AModelSerializer):
     timezone = TimeZoneSerializerField(use_pytz=True)
     is_password_exists = SerializerMethodField()
-    roles = RoleSerializer(many=True, read_only=True)
+    roles = SlugRelatedField(many=True, read_only=True, slug_field='name')
 
     class Meta:
         model = User

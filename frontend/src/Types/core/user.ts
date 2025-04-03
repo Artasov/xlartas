@@ -2,6 +2,8 @@
 import {IClient} from "types/commerce/client";
 
 
+
+
 export interface IUser {
     id: number;
     username?: string;
@@ -14,6 +16,7 @@ export interface IUser {
     date_joined?: string;
     gender?: 'male' | 'female';
     avatar?: string;
+    roles?: 'MINE-DEV';
     timezone?: string;
     is_email_confirmed?: boolean;
     is_staff?: boolean;

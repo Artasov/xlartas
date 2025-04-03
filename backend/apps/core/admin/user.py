@@ -9,11 +9,16 @@ from django.utils.translation import gettext_lazy as _
 from django_object_actions import DjangoObjectActions
 from import_export.admin import ImportExportModelAdmin
 
-from apps.core.models import User
+from apps.core.models import User, Role
 
 admin.site.site_header = 'xlartas'
 admin.site.site_title = 'xlartas'
 admin.site.index_title = ''
+
+
+@admin.register(Role)
+class RoleAdmin(DjangoObjectActions, ImportExportModelAdmin):
+    list_display = ('id', 'name')
 
 
 @admin.register(User)
@@ -56,6 +61,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
             'first_name', 'last_name', 'middle_name',
             'email', 'phone',
             'password',
+            'roles',
             'birth_date', 'gender',
             'timezone',
             'is_email_confirmed',
