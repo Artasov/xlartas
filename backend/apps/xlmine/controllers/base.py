@@ -7,10 +7,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.xlmine.models import Launcher, Release, DonateProduct, Privilege
+from apps.xlmine.models import Launcher, Release, Donate, Privilege
 from apps.xlmine.permissions import IsMinecraftDev
 from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
-from apps.xlmine.serializers.donate import DonateProductSerializer
+from apps.xlmine.serializers.donate import DonateSerializer
 from apps.xlmine.services.base import calculate_sha256, increment_version
 
 
@@ -68,18 +68,24 @@ async def get_latest_release(_):
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_current_privilege(request):
-    privilege = await request.user.privilege()
-    if not privilege: return Response({"privilege": None})
-    return Response(await PrivilegeSerializer(privilege).adata)
+    sum_donate_amount = await request.user.sum_donate_amount()
+    privilege = await Privilege.objects.get_by_threshold(sum_donate_amount)
+    return Response({
+        'privilege': await PrivilegeSerializer(privilege).adata if privilege else None,
+        'total_donate_amount': float(sum_donate_amount),
+    })
 
 
 @acontroller('Get latest donate product')
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_latest_donate_product(_):
-    donate_product = await DonateProduct.objects.latest('id')
+    try:
+        donate_product = await Donate.objects.alatest('id')
+    except Donate.DoesNotExist:
+        raise Donate.ApiEx.DoesNotExist()
     if not donate_product: return Response(None)
-    return Response(await DonateProductSerializer(donate_product).adata)
+    return Response(await DonateSerializer(donate_product).adata)
 
 
 @acontroller('List privileges')

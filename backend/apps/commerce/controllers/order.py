@@ -34,7 +34,6 @@ async def create_order(request):
     log.info(f'Create order {request.data}')
     log.info(f'User {request.user}')
 
-    # Первичная валидация запроса
     class OrderCreateRequestValidationSerializer(ASerializer):
         user = HiddenField(default=CurrentUserDefault())
         currency = ChoiceField(choices=Currency.choices, required=True)
@@ -47,6 +46,7 @@ async def create_order(request):
         data=request.data, context={'request': request}
     )
     await s.ais_valid(raise_exception=True)
+
     # Сохранение почты
     if not request.user.email:
         # Так как не сохраняли при регистрации, а чек куда-то выслать нужно

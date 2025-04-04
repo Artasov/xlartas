@@ -20,7 +20,7 @@ const UserPrivilege: React.FC = () => {
                     setPrivilege(null);
                 } else {
                     // data = { name, threshold, color, ... }
-                    setPrivilege(data);
+                    setPrivilege(data.privilege);
                 }
             })
             .catch(err => {

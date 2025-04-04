@@ -102,6 +102,14 @@ export const lightTheme = createTheme({
                 },
             },
         },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    lineHeight: '1em',
+                    padding: '.6em 1em .5em 1em',
+                }
+            }
+        }
     },
     palette: {
         mode: 'light',
@@ -489,6 +497,14 @@ export const darkTheme = createTheme({
                 },
             },
         },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    lineHeight: '1em',
+                    padding: '.6em 1em .5em 1em',
+                }
+            }
+        }
     },
     palette: {
         mode: 'dark',

@@ -1,12 +1,13 @@
 # xlmine/models/product.py
-from django.db.models import CASCADE, ForeignKey, SET_NULL
+from adjango.exceptions.base import ModelApiBaseException
+from django.db.models import CASCADE, ForeignKey
 from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.models import Product, Order
-from apps.xlmine.services.donate import DonateProductService, DonateOrderService
+from apps.xlmine.services.donate import DonateService, DonateOrderService
 
 
-class DonateProduct(Product, DonateProductService):
+class Donate(Product, DonateService, ModelApiBaseException):
     """
     Продукт «Донат». При покупке данного продукта пользователю начисляются
     внутриигровые коины (coins_amount).
@@ -21,9 +22,9 @@ class DonateProduct(Product, DonateProductService):
 
 class DonateOrder(Order, DonateOrderService):
     """
-    Заказ на покупку DonateProduct (донат).
+    Заказ на покупку Donate (донат).
     """
-    product = ForeignKey(DonateProduct, CASCADE, 'donate_orders', verbose_name=_('Donate product'))
+    product = ForeignKey(Donate, CASCADE, 'donate_orders', verbose_name=_('Donate product'))
 
     class Meta:
         verbose_name = _('Donate order')

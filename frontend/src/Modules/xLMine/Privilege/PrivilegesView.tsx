@@ -4,109 +4,118 @@ import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useTheme} from "Theme/ThemeContext";
 import {IPrivilege} from "../types/base";
-import {FRCC} from "WideLayout/Layouts";
+import {FC, FCCC, FRBC, FRC, FRSC} from "WideLayout/Layouts";
+
+interface ICurrentPrivilegeResponse {
+    privilege: IPrivilege | null;
+    total_donate_amount: number;
+}
 
 const PrivilegesView: React.FC = () => {
     const {api} = useApi();
     const {plt} = useTheme();
 
-    // Список привилегий
+    // Список всех привилегий
     const [privileges, setPrivileges] = useState<IPrivilege[] | null>(null);
-    // Флаг загрузки
+    // Сумма доната текущего пользователя
+    const [totalDonate, setTotalDonate] = useState<number | null>(null);
+    // Состояние загрузки
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setLoading(true);
-        // Предполагаем, что эндпоинт: GET /api/v1/xlmine/privileges/
-        api.get<IPrivilege[]>('/api/v1/xlmine/privilege/')
-            .then(data => {
-                setPrivileges(data);
+        Promise.all([
+            api.get<IPrivilege[]>('/api/v1/xlmine/privilege/'),
+            api.get<ICurrentPrivilegeResponse>('/api/v1/xlmine/privilege/current/')
+        ])
+            .then(([privData, currentData]) => {
+                setPrivileges(privData);
+                setTotalDonate(currentData.total_donate_amount);
             })
             .catch(() => {
                 Message.error('Ошибка загрузки привилегий');
                 setPrivileges([]);
+                setTotalDonate(0);
             })
             .finally(() => setLoading(false));
     }, [api]);
 
-    if (loading) return <FRCC><CircularProgress size="60px"/> </FRCC>;
-    if (!privileges || privileges.length === 0) return <FRCC>Нет привилегий</FRCC>;
+    if (loading) return <FCCC><CircularProgress size="60px"/></FCCC>;
+    if (!privileges || privileges.length === 0) return <FRC>Привилегий нет</FRC>;
+    if (totalDonate === null) return null;
 
-    // Преобразуем threshold в число
-    const thresholdNumbers = privileges.map(p => parseFloat(p.threshold));
-    // Ищем минимальный и максимальный порог
-    const minThreshold = Math.min(...thresholdNumbers);
-    const maxThreshold = Math.max(...thresholdNumbers);
+    // Сортировка привилегий по порогу (threshold) от меньшего к большему
+    const sortedPrivileges = [...privileges].sort(
+        (a, b) => parseFloat(a.threshold) - parseFloat(b.threshold)
+    );
 
-    // Если все пороги равны (например, 0) — сделаем maxThreshold = minThreshold+1, чтобы избежать деления на 0.
-    const range = (maxThreshold === minThreshold)
-        ? 1
-        : (maxThreshold - minThreshold);
+    // Определяем минимальный и максимальный пороги
+    const minThreshold = parseFloat(sortedPrivileges[0].threshold);
+    const maxThreshold = parseFloat(sortedPrivileges[sortedPrivileges.length - 1].threshold);
+
+    // Формируем плавный градиент (от minThreshold к maxThreshold)
+    let gradientStops: string[] = [];
+    sortedPrivileges.forEach((priv) => {
+        const thresholdValue = parseFloat(priv.threshold);
+        const pos = ((thresholdValue - minThreshold) / (maxThreshold - minThreshold)) * 100;
+        gradientStops.push(`${priv.color || plt.text.accent} ${pos}%`);
+    });
+
+    // Добавляем 0% и 100% если не хватает
+    if (gradientStops.length && !gradientStops[0].includes('0%')) {
+        gradientStops.unshift(`${sortedPrivileges[0].color || plt.text.accent} 0%`);
+    }
+    if (gradientStops.length && !gradientStops[gradientStops.length - 1].includes('100%')) {
+        gradientStops.push(`${sortedPrivileges[sortedPrivileges.length - 1].color || plt.text.accent} 100%`);
+    }
+    const gradientBackground = `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
+
+    // Высота полосы (в процентах от контейнера)
+    const progressHeight = 80; // например, 80%
+    // Отступ сверху (или снизу), чтобы полоса не была во всю высоту
+    const progressVPadding = (100 - progressHeight) / 2; // = 10%, если 80%
+
+    // Подсчёт прогресса (процент), где 0% = minThreshold, 100% = maxThreshold
+    let donationPercent = ((totalDonate - minThreshold) / (maxThreshold - minThreshold)) * 100;
+    if (donationPercent < 0) donationPercent = 0;
+    if (donationPercent > 100) donationPercent = 100;
+
+    // Фактическая высота заливки (цвета) в %
+    // от всей полосы (которая занимает progressHeight% контейнера)
+    const userProgressHeight = (donationPercent / 100) * progressHeight;
+    const progressWidth = 5;
 
     return (
-        <div style={{width: '100%', padding: '1rem 0'}}>
-            <h2 style={{textAlign: 'center', marginBottom: '1rem'}}>Привилегии</h2>
-            <div style={{
-                position: 'relative',
-                height: '80px',
-                width: '100%',
-                margin: 'auto',
-                maxWidth: '800px',
-            }}>
-                {/* Линия (ось) по центру по вертикали */}
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: '50%',  // по центру
-                        left: 0,
-                        right: 0,
-                        height: '2px',
-                        background: plt.text.primary50, // например серый
-                        transform: 'translateY(-50%)'
-                    }}
+        <FC g={1} w={'100%'} pos={'relative'} style={{overflow: 'hidden'}}>
+            {/* Вертикальная полоса с плавным градиентом */}
+            <FRSC pos={'absolute'} left={2} bottom={`${progressVPadding}%`}
+                  w={`${progressWidth}px`} h={`${progressHeight}%`}
+                  rounded={1} style={{background: gradientBackground}}>
+                {/* Заливка (прогресс) снизу вверх: "открытая часть" – это и есть прогресс */}
+                <FC pos={'absolute'} left={0} bottom={`${progressVPadding}%`} rounded={1}
+                    w={`${progressWidth}px`} h={`${userProgressHeight}%`} bg={plt.text.accent}
                 />
+            </FRSC>
 
-                {/* Рисуем каждую привилегию как «точку» на линии */}
-                {privileges.map(priv => {
-                    const t = parseFloat(priv.threshold);
-                    // Нормируем
-                    const ratio = (t - minThreshold) / range;
-                    // Получаем процент от 0% до 100%
-                    const leftPercent = ratio * 100;
-
-                    return (
-                        <div key={priv.id} style={{
-                            position: 'absolute',
-                            // Размещаем по оси X
-                            left: `${leftPercent}%`,
-                            // Посадим «точку» в середине высоты
-                            top: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            textAlign: 'center',
-                            cursor: 'default'
-                        }}>
-                            {/* 
-                              Можно нарисовать точку (или иконку). 
-                              Ниже – прямоугольник с заливкой (цвет, если есть).
-                            */}
-                            <div style={{
-                                backgroundColor: priv.color || plt.text.accent,
-                                color: '#fff',
-                                padding: '4px 8px',
-                                borderRadius: '3px',
-                                whiteSpace: 'nowrap'
-                            }}>{priv.name}</div>
-                            {/* Чуть ниже можно добавить порог для наглядности */}
-                            <div style={{marginTop: '4px', fontSize: '.8rem', color: plt.text.primary60}}>
-                                порог: {priv.threshold}
-                            </div>
-                        </div>
-                    );
-                })}
-
-            </div>
-        </div>
+            {/* Список привилегий (правее полосы) */}
+            {sortedPrivileges.map((priv) => (
+                <FRSC g={2} key={priv.id}>
+                    <FC key={priv.id} rounded={6} w={'10px'} h={'10px'} sx={{opacity: '90%'}}
+                        bg={priv.color || plt.text.accent} border={'1px solid #fff2'}/>
+                    <FRBC g={2} w={'100%'}>
+                        <FRC>{priv.threshold}₴</FRC>
+                        <FRC fontWeight={'bold'}
+                             rounded={1} px={2} py={0.5}
+                             color={'#fff'} bg={priv.color || plt.text.accent}>
+                            {priv.name}
+                        </FRC>
+                    </FRBC>
+                </FRSC>
+            ))}
+        </FC>
     );
 };
 
 export default PrivilegesView;
+
+

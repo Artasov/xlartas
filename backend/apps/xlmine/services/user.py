@@ -16,11 +16,8 @@ class UserXLMineService:
         доступную пользователю исходя из общего объёма его успешных
         платежей (например, в RUB).
         """
-        total = await self.sum_donate_amount()  # или нужная вам валюта
         # Берём первую привилегию с threshold <= total, упорядоченных по убыванию
-        return await Privilege.objects.filter(
-            threshold__lte=total
-        ).order_by('-threshold').afirst()
+        return Privilege.objects.get_by_threshold(await self.sum_donate_amount())
 
     async def sum_donate_amount(self: 'User') -> Decimal:
-        return self.donate_orders.aggregate(total=Sum('amount'))['total']
+        return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)

@@ -4,6 +4,8 @@ from adjango.models.mixins import ACreatedUpdatedAtMixin
 from django.db.models import FileField, CharField, TextField, DecimalField
 from django.utils.translation import gettext_lazy as _
 
+from apps.xlmine.managers.privilege import PrivilegeManager
+
 
 class Launcher(ACreatedUpdatedAtMixin):
     file = FileField(upload_to='minecraft/launcher/', verbose_name=_('File'))
@@ -27,6 +29,8 @@ class Privilege(AModel):
     что если сумма всех успешных донатов >= threshold,
     пользователь получает данную привилегию.
     """
+    objects = PrivilegeManager()
+
     name = CharField(_('Name'), max_length=100, unique=True)
     color = CharField(_('Color'), max_length=10, unique=True)
     threshold = DecimalField(

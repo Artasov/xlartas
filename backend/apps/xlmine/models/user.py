@@ -9,7 +9,7 @@ class UserXLMine(AModel):
     Хранит данные о «майнкрафт-части» пользователя, в том числе текущее
     количество коинов. Связь 1 к 1 с основной моделью User.
     """
-    user = OneToOneField('core.User', CASCADE, 'xlmine', primary_key=True)
+    user = OneToOneField('core.User', CASCADE, primary_key=True)
     coins = DecimalField(
         _('Coins'),
         max_digits=10,

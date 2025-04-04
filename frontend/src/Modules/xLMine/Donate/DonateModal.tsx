@@ -6,9 +6,9 @@ import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import Button from "Core/components/elements/Button/Button";
-import {FCC, FCSC, FRSC} from "WideLayout/Layouts";
+import {FCSC, FR, FRSC} from "WideLayout/Layouts";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
-import {IDonateProduct} from "./types";
+import {IDonate} from "./types";
 import PrivilegesView from "../Privilege/PrivilegesView";
 
 interface IDonateModalProps {
@@ -17,12 +17,12 @@ interface IDonateModalProps {
 }
 
 const MIN_COINS = 10;
-const MAX_COINS = 50000;
+const MAX_COINS = 10000;
 
 
 const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const [coins, setCoins] = useState<number>(100);
-    const [donateProduct, setDonateProduct] = useState<IDonateProduct | null>(null);
+    const [donateProduct, setDonate] = useState<IDonate | null>(null);
     const [price, setPrice] = useState<number>(1); // цена «1 руб. за 1 коин» — по умолчанию
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,35 +30,27 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
 
-    // При открытии модалки — сбрасываем стейт, грузим последний DonateProduct
+    // При открытии модалки — сбрасываем стейт, грузим последний Donate
     useEffect(() => {
         if (!isOpen) return;
-
         setCoins(MIN_COINS);
-        setDonateProduct(null);
+        setDonate(null);
         setPrice(1);
-
-        (async () => {
-            try {
-                const product = await api.get('/api/v1/donate/product/latest/');
-                setDonateProduct(product);
-                // Берём price из product.prices[0].amount
-                if (product.prices && product.prices.length > 0) {
-                    const newPrice = parseFloat(product.prices[0].amount);
-                    if (!Number.isNaN(newPrice)) setPrice(newPrice);
-                }
-            } catch (error) {
-                Message.error('Ошибка загрузки DonateProduct');
+        api.get('/api/v1/xlmine/donate/product/latest/').then(data => {
+            setDonate(data);
+            // Берём price из product.prices[0].amount
+            if (data.prices && data.prices.length > 0) {
+                const newPrice = parseFloat(data.prices[0].amount);
+                if (!Number.isNaN(newPrice)) setPrice(newPrice);
             }
-        })();
+        }).catch(_ => null);
     }, [isOpen, api]);
 
     const handleClose = () => {
-        // По клику за пределами/крестику
         if (!loading) onClose();
     };
 
-    const handleBuy = async () => {
+    const handleBuy = () => {
         if (!isAuthenticated) {
             // Пользователь не авторизован => вызовем попап авторизации
             notAuthentication();
@@ -66,31 +58,24 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             return;
         }
         if (!donateProduct) {
-            Message.error('DonateProduct не загружен');
+            Message.error('Donate не загружен');
             return;
         }
-
         setLoading(true);
-        try {
-            const finalCost = coins * price;
-            const payload = {
-                product: donateProduct.id,
-                currency: "RUB",
-                payment_system: "handmade",
-                coins_amount: coins,
-                amount: finalCost
-            };
-
-            await api.post('/api/v1/orders/create/', payload);
+        const finalCost = coins * price;
+        const payload = {
+            product: donateProduct.id,
+            currency: "RUB",
+            payment_system: "handmade",
+            coins_amount: coins,
+            amount: finalCost
+        };
+        api.post('/api/v1/orders/create/', payload).then(_ => {
             Message.success('Заказ на покупку коинов успешно создан', 2, 5000);
             onClose();
-        } catch (error) {
-            Message.error('Не удалось создать заказ на покупку коинов');
-        }
-        setLoading(false);
+        }).catch(_ => null).finally(() => setLoading(false));
     };
 
-    // Вычисляем "Итого к оплате"
     const totalPrice = coins * price;
 
     return (
@@ -108,7 +93,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
                         <CircularProgress size="40px"/>
                     ) : (
                         <>
-                            <PrivilegesView/>
+                            <FR maxW={250}><PrivilegesView/></FR>
                             <span>Количество коинов</span>
                             <FRSC w={'100%'}>
                                 <Slider
@@ -133,11 +118,11 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleClose} variant="outlined" disabled={loading}>
+                <Button onClick={handleClose} disabled={loading}>
                     Отмена
                 </Button>
-                <Button onClick={handleBuy} disabled={loading || !donateProduct}>
-                    {loading ? <CircularProgress size="20px"/> : 'Купить'}
+                <Button onClick={handleBuy} loading={loading} disabled={loading || !donateProduct}>
+                    Купить
                 </Button>
             </DialogActions>
         </Dialog>

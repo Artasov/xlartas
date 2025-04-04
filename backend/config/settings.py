@@ -64,6 +64,16 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+# Ограничение размера данных POST до 3 ГБ (в байтах)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024  # 3 ГБ
+# Порог для хранения файла в памяти (при превышении файла он будет сохраняться во временную директорию)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5 МБ
+# Используем обработчик, который сохраняет загружаемые файлы во временные файлы, а не в память
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
+FILE_UPLOAD_TEMP_DIR = join(BASE_DIR.parent, 'data', 'temp')
+makedirs(FILE_UPLOAD_TEMP_DIR, exist_ok=True)
 
 XL_DASHBOARD = {
     'General': {
@@ -77,8 +87,15 @@ XL_DASHBOARD = {
         'Orders': '/xladmin/analytics/orders/',
         'visits_objs': 'analytics.Visit',
     },
+    'xLMine': {
+        'User': 'xlmine.UserXLMine',
+        'Launcher': 'xlmine.Launcher',
+        'Release': 'xlmine.Release',
+        'Privilege': 'xlmine.Privilege',
+    },
     'Products': {
         'All': 'commerce.Product',
+        'Donate': 'xlmine.Donate',
         'Softwares': 'software.Software',
         'Software Licenses': 'software.SoftwareLicense',
         'Software files': 'software.SoftwareFile',
@@ -87,6 +104,7 @@ XL_DASHBOARD = {
     'Orders': {
         'All': 'commerce.Order',
         'Software': 'software.SoftwareOrder',
+        'Donate': 'software.DonateOrder',
     },
     'Payments': {
         'All': 'commerce.Payment',

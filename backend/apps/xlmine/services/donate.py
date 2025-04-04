@@ -1,13 +1,12 @@
 # xlmine/services/donate.py
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from apps.core.models import User
-    from apps.xlmine.models import DonateProduct, DonateOrder
+    from apps.xlmine.models import Donate, DonateOrder
 
 
-class DonateProductService:
+class DonateService:
     """
      Логика для «донатного» продукта.
      """
@@ -18,9 +17,9 @@ class DonateProductService:
         Создание нового заказа на донат (например, через
         отдельный сериалайзер DonateOrderCreateSerializer).
         Но чаще всего можно просто использовать ваш универсальный
-        эндпоинт POST /orders/create/, где product=DonateProduct.
+        эндпоинт POST /orders/create/, где product=Donate.
         """
-        from apps.commerce.serializers.donate import DonateOrderCreateSerializer
+        from apps.xlmine.serializers.donate import DonateOrderCreateSerializer
         s = DonateOrderCreateSerializer(data=request.data, context={'request': request})
         await s.ais_valid(raise_exception=True)
         order: 'DonateOrder' = await s.asave()
@@ -28,18 +27,13 @@ class DonateProductService:
         await order.init(request)
         return order
 
-    async def can_pregive(self: 'DonateProduct', order: 'DonateOrder', raise_exceptions=False) -> bool:
-        """
-        Проверка, можно ли сейчас «предвыдать» продукт до оплаты.
-        Для доната обычно нет необходимости.
-        """
+    async def can_pregive(self: 'Donate', order: 'DonateOrder', raise_exceptions=False) -> bool:
         return True
 
-    async def pregive(self: 'DonateProduct', order: 'DonateOrder'):
-        """Действия до оплаты (чаще всего нет)."""
+    async def pregive(self: 'Donate', order: 'DonateOrder'):
         pass
 
-    async def postgive(self: 'DonateProduct', order: 'DonateOrder'):
+    async def postgive(self: 'Donate', order: 'DonateOrder'):
         """
         Действия после успешной оплаты: начисляем пользователю коины.
         Берём стоимость заказа в рублях (order.receipt_price) и добавляем к user.xlmine.coins
@@ -47,26 +41,22 @@ class DonateProductService:
         user = await order.arelated('user')
 
         # Получаем/создаём запись UserXLMine
-        xlmine = await user.arelated('xlmine')
-        if not xlmine:
-            from apps.xlmine.models.user import UserXLMine
-            xlmine = await UserXLMine.objects.acreate(user=user, coins=Decimal('0.00'))
-
+        from apps.xlmine.models.user import UserXLMine
+        xlmine_user = await UserXLMine.objects.aget_or_create(user=user)
         # Считаем стоимость заказа (финальная сумма, учтя промокод и т.д.)
         order_price = await order.receipt_price
         if not order_price:
             order_price = Decimal('0.00')
 
         # Начисляем коины
-        xlmine.coins = xlmine.coins + order_price
-        await xlmine.asave()
+        xlmine_user.coins = xlmine_user.coins + order_price
+        await xlmine_user.asave()
 
     async def cancel_given(self, request, order: 'DonateOrder', reason: str):
         """
         Отмена выдачи. Если хотите «забирать» коины обратно – можно реализовать здесь.
         """
         pass
-
 
 
 class DonateOrderService:

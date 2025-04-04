@@ -2,12 +2,12 @@
 
 from apps.commerce.serializers.order import BaseOrderSerializer
 from apps.commerce.serializers.product import BaseProductSerializer
-from apps.xlmine.models import DonateOrder, DonateProduct
+from apps.xlmine.models import DonateOrder, Donate
 
 
-class DonateProductSerializer(BaseProductSerializer):
+class DonateSerializer(BaseProductSerializer):
     class Meta(BaseProductSerializer.Meta):
-        model = DonateProduct
+        model = Donate
         fields = BaseProductSerializer.Meta.fields
 
 
