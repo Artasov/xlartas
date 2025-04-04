@@ -38,6 +38,7 @@ class ReleaseViewSet(ModelViewSet):
     permission_classes = [IsMinecraftDev]
 
     def perform_create(self, serializer):
+        print(self.request.upload_handlers)
         instance = serializer.save()
         instance.sha256_hash = calculate_sha256(instance.file)
         latest = Release.objects.exclude(pk=instance.pk).order_by('-created_at').first()
