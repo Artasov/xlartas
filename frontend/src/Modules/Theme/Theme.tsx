@@ -109,7 +109,14 @@ export const lightTheme = createTheme({
                     padding: '.6em 1em .5em 1em',
                 }
             }
-        }
+        },
+        MuiBackdrop: {
+            styleOverrides: {
+                root: {
+                    backdropFilter: 'blur(15px)',
+                },
+            },
+        },
     },
     palette: {
         mode: 'light',
@@ -504,7 +511,14 @@ export const darkTheme = createTheme({
                     padding: '.6em 1em .5em 1em',
                 }
             }
-        }
+        },
+        MuiBackdrop: {
+            styleOverrides: {
+                root: {
+                    backdropFilter: 'blur(15px)',
+                },
+            },
+        },
     },
     palette: {
         mode: 'dark',

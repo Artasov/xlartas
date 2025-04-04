@@ -1,24 +1,40 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Slider} from "@mui/material";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Tooltip from "@mui/material/Tooltip";
+import {Slider} from "@mui/material";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import Button from "Core/components/elements/Button/Button";
-import {FCSC, FR, FRSC} from "WideLayout/Layouts";
+import {FC, FCSC, FR, FRBC, FRSC} from "WideLayout/Layouts";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IDonate} from "./types";
 import PrivilegesView from "../Privilege/PrivilegesView";
+
+const MIN_COINS = 10;
+const MAX_COINS = 10000;
 
 interface IDonateModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const MIN_COINS = 10;
-const MAX_COINS = 10000;
-
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    borderRadius: '8px',
+    boxShadow: 24,
+    p: 4,
+};
 
 const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const [coins, setCoins] = useState<number>(100);
@@ -26,24 +42,27 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const [price, setPrice] = useState<number>(1); // цена «1 руб. за 1 коин» — по умолчанию
     const [loading, setLoading] = useState<boolean>(false);
 
-    const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
 
-    // При открытии модалки — сбрасываем стейт, грузим последний Donate
+    // При открытии модального окна — сбрасываем стейт, грузим последний Donate
     useEffect(() => {
         if (!isOpen) return;
         setCoins(MIN_COINS);
         setDonate(null);
         setPrice(1);
-        api.get('/api/v1/xlmine/donate/product/latest/').then(data => {
-            setDonate(data);
-            // Берём price из product.prices[0].amount
-            if (data.prices && data.prices.length > 0) {
-                const newPrice = parseFloat(data.prices[0].amount);
-                if (!Number.isNaN(newPrice)) setPrice(newPrice);
-            }
-        }).catch(_ => null);
+        api
+            .get("/api/v1/xlmine/donate/product/latest/")
+            .then((data) => {
+                setDonate(data);
+                // Берём price из product.prices[0].amount
+                if (data.prices && data.prices.length > 0) {
+                    const newPrice = parseFloat(data.prices[0].amount);
+                    if (!Number.isNaN(newPrice)) setPrice(newPrice);
+                }
+            })
+            .catch((_error) => null);
     }, [isOpen, api]);
 
     const handleClose = () => {
@@ -58,7 +77,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             return;
         }
         if (!donateProduct) {
-            Message.error('Donate не загружен');
+            Message.error("Donate не загружен");
             return;
         }
         setLoading(true);
@@ -68,64 +87,89 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             currency: "RUB",
             payment_system: "handmade",
             coins_amount: coins,
-            amount: finalCost
+            amount: finalCost,
         };
-        api.post('/api/v1/orders/create/', payload).then(_ => {
-            Message.success('Заказ на покупку коинов успешно создан', 2, 5000);
-            onClose();
-        }).catch(_ => null).finally(() => setLoading(false));
+        api
+            .post("/api/v1/orders/create/", payload)
+            .then((_data) => {
+                Message.success("Заказ на покупку коинов успешно создан", 2, 5000);
+                onClose();
+            })
+            .catch((_error) => null)
+            .finally(() => setLoading(false));
     };
 
     const totalPrice = coins * price;
 
     return (
-        <Dialog open={isOpen} onClose={handleClose} maxWidth="xs" fullWidth>
-            <DialogTitle className="frsc">
-                Покупка коинов
-                <IconButton sx={{ml: 'auto'}} onClick={handleClose} disabled={loading}>
-                    <CloseRoundedIcon/>
-                </IconButton>
-            </DialogTitle>
-
-            <DialogContent>
-                <FCSC>
-                    {!donateProduct ? (
-                        <CircularProgress size="40px"/>
-                    ) : (
-                        <>
-                            <FR maxW={250}><PrivilegesView/></FR>
-                            <span>Количество коинов</span>
-                            <FRSC w={'100%'}>
-                                <Slider
-                                    value={coins}
-                                    onChange={(_, v) => setCoins(v as number)}
-                                    min={MIN_COINS} max={MAX_COINS}
-                                    step={1} valueLabelDisplay="auto"
-                                    sx={{flexGrow: 1}} disabled={loading}
-                                />
-                                <span style={{width: '3rem', textAlign: 'center'}}>
-                                    {coins}
-                                </span>
-                            </FRSC>
-
-                            <p>Цена за 1 коин: {price} руб.</p>
-                            <p style={{fontWeight: 'bold'}}>
-                                Итого к оплате: {totalPrice} руб.
-                            </p>
-                        </>
-                    )}
-                </FCSC>
-            </DialogContent>
-
-            <DialogActions>
-                <Button onClick={handleClose} disabled={loading}>
-                    Отмена
-                </Button>
-                <Button onClick={handleBuy} loading={loading} disabled={loading || !donateProduct}>
-                    Купить
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <Modal
+            open={isOpen}
+            onClose={handleClose}
+            aria-labelledby="donate-modal-title"
+            aria-describedby="donate-modal-description"
+        >
+            <Box sx={modalStyle}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 2,
+                    }}
+                >
+                    <Typography id="donate-modal-title" variant="h6" component="h2">
+                        Покупка коинов
+                    </Typography>
+                    <IconButton onClick={handleClose}>
+                        <CloseIcon/>
+                    </IconButton>
+                </Box>
+                <FC g={2} px={2}>
+                    <FCSC>
+                        {!donateProduct ? (
+                            <CircularProgress size="40px"/>
+                        ) : (
+                            <>
+                                <FR maxW={250} pr={3}>
+                                    <PrivilegesView/>
+                                </FR>
+                                <FRSC w={"100%"}>
+                                    <FR w={"100%"} pl={1}>
+                                        <Slider
+                                            value={coins}
+                                            onChange={(_, v) => setCoins(v as number)}
+                                            min={MIN_COINS}
+                                            max={MAX_COINS}
+                                            step={1}
+                                            valueLabelDisplay="auto"
+                                            sx={{flexGrow: 1}}
+                                            disabled={loading}
+                                        />
+                                    </FR>
+                                </FRSC>
+                                <p style={{fontWeight: "bold"}}>
+                                    Итого к оплате: {totalPrice} руб.
+                                </p>
+                            </>
+                        )}
+                    </FCSC>
+                    <FRBC g={1}>
+                        <Tooltip title={`Цена за 1 коин: ${price} руб.`} arrow>
+                            <div>
+                                <Button
+                                    onClick={handleBuy}
+                                    fullWidth
+                                    loading={loading}
+                                    disabled={loading || !donateProduct}
+                                >
+                                    Купить за {totalPrice} руб.
+                                </Button>
+                            </div>
+                        </Tooltip>
+                    </FRBC>
+                </FC>
+            </Box>
+        </Modal>
     );
 };
 
