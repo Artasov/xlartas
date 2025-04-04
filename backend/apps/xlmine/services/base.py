@@ -15,7 +15,6 @@ def increment_version(version_str: str) -> str:
 
 
 def calculate_sha256(file):
-    return '123123'
     hash_sha256 = hashlib.sha256()
     pos = file.tell()  # сохраняем позицию
     file.seek(0)

@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
+    LinearProgress,
     Paper,
     Tab,
     Table,
@@ -21,18 +22,13 @@ import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FRSC} from "WideLayout/Layouts";
+import {FC, FRC, FRSC} from "WideLayout/Layouts";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";
+import {v4 as uuidv4} from 'uuid';
 
 // ==== Форматирование даты (если хочешь как есть — можно убрать toLocaleString) ====
-const formatDate = (isoDate: string) => {
-    try {
-        return new Date(isoDate).toLocaleString();
-    } catch {
-        return isoDate;
-    }
-};
+
 
 const LauncherManager: React.FC = () => {
     const {api} = useApi();
@@ -219,22 +215,28 @@ const LauncherManager: React.FC = () => {
     );
 };
 
+
+const formatDate = (isoDate: string) => {
+    try {
+        return new Date(isoDate).toLocaleString();
+    } catch {
+        return isoDate;
+    }
+};
+
+const CHUNK_SIZE = 50 * 1024 * 1024;
+
 const ReleaseManager: React.FC = () => {
     const {api} = useApi();
-
-    // ==== Состояния ====
     const [file, setFile] = useState<File | null>(null);
     const [fileReset, setFileReset] = useState<boolean>(false);
     const [isUploading, setIsUploading] = useState<boolean>(false);
-
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [releases, setReleases] = useState<IRelease[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-
-    // Удаление
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
 
-    // ==== Загрузка ====
     const fetchVersions = async () => {
         setLoading(true);
         try {
@@ -252,41 +254,57 @@ const ReleaseManager: React.FC = () => {
         // eslint-disable-next-line
     }, []);
 
-    // ==== Выбор файла ====
     const handleFileChange = (picked: File | null) => {
         setFile(picked);
     };
 
-    // ==== Загрузка файла ====
     const handleUpload = async () => {
         if (!file) {
             Message.error('Выберите файл');
             return;
         }
         setIsUploading(true);
+        setUploadProgress(0);
         try {
-            const formData = new FormData();
-            formData.append('file', file);
+            const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+            const uploadId = uuidv4();
+            let response: any = null;
+            // Последовательно отправляем каждый чанк
+            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+                const start = chunkIndex * CHUNK_SIZE;
+                const end = Math.min(file.size, start + CHUNK_SIZE);
+                const chunk = file.slice(start, end);
+                const formData = new FormData();
+                formData.append('upload_id', uploadId);
+                formData.append('chunk_index', String(chunkIndex));
+                formData.append('total_chunks', String(totalChunks));
+                formData.append('filename', file.name);
+                formData.append('file', chunk);
 
-            const newVersion = await api.post('/api/v1/xlmine/release/', formData, {
-                headers: {'Content-Type': 'multipart/form-data'}
-            });
-
-            setReleases(prev => [...prev, newVersion]);
-
-            // Сброс поля
+                response = await api.post('/api/v1/xlmine/chunked-release/', formData, {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                });
+                // Обновляем прогресс
+                setUploadProgress(Math.round(((chunkIndex + 1) / totalChunks) * 100));
+            }
+            // Если последний запрос вернул данные нового релиза, обновляем список
+            if (response && response.id) {
+                setReleases(prev => [...prev, response]);
+                Message.success('Новая версия релиза загружена');
+            } else {
+                Message.error('Ошибка загрузки файла');
+            }
+            // Сброс
             setFile(null);
             setFileReset(true);
             setTimeout(() => setFileReset(false), 0);
-
-            Message.success('Новая версия релиза загружена');
         } catch (error) {
             Message.error('Ошибка загрузки файла');
         }
         setIsUploading(false);
+        setUploadProgress(0);
     };
 
-    // ==== Удаление ====
     const openConfirmDelete = (id: number) => {
         setConfirmDeleteId(id);
     };
@@ -318,13 +336,19 @@ const ReleaseManager: React.FC = () => {
                         <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
                         <Button
                             variant="contained"
-                            sx={{fontWeight: file ? 'bold' : ''}}
+                            sx={{fontWeight: file ? 'bold' : '', px: 3}}
                             onClick={handleUpload}
-                            disabled={!file}
+                            disabled={!file || isUploading}
                         >
                             Загрузить
                         </Button>
-                        {isUploading && <CircularProgress size={32}/>}
+                        {isUploading && <FC flexGrow={1} g={.8}>
+                            <LinearProgress sx={{height: 10, borderRadius: '4px'}}
+                                            variant="determinate" value={uploadProgress}/>
+                            <FRC fontSize={'.8rem'} lineHeight={'.7rem'}>
+                                {uploadProgress}% загружено
+                            </FRC>
+                        </FC>}
                     </FRSC>
                 </FC>
             </Paper>
@@ -375,11 +399,7 @@ const ReleaseManager: React.FC = () => {
                 )}
             </Paper>
 
-            {/* Подтверждение удаления */}
-            <Dialog
-                open={!!confirmDeleteId}
-                onClose={closeConfirmDelete}
-            >
+            <Dialog open={!!confirmDeleteId} onClose={closeConfirmDelete}>
                 <DialogTitle>Удаление релиза</DialogTitle>
                 <DialogContent>
                     Вы уверены, что хотите удалить версию?
@@ -388,10 +408,7 @@ const ReleaseManager: React.FC = () => {
                     <Button onClick={closeConfirmDelete}>
                         Отмена
                     </Button>
-                    <Button
-                        onClick={handleConfirmDelete}
-                        disabled={deletingId === confirmDeleteId}
-                    >
+                    <Button onClick={handleConfirmDelete} disabled={deletingId === confirmDeleteId}>
                         {deletingId === confirmDeleteId ? (
                             <CircularProgress size={24}/>
                         ) : (
@@ -403,6 +420,7 @@ const ReleaseManager: React.FC = () => {
         </FC>
     );
 };
+
 
 const MinecraftVersionsManager: React.FC = () => {
     const [tabIndex, setTabIndex] = useState<number>(0);
