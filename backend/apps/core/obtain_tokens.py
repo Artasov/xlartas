@@ -39,6 +39,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             user = authenticate(username=username, password=password)
             if not user:
                 raise AuthenticationFailed('Invalid user or password')
+
             return super().validate({
                 'username': user.username,
                 'password': password

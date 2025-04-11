@@ -4,7 +4,6 @@ import './Header.sass';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
-import ThemeToggleButton from "Theme/ThemeToggleButton";
 import {useTheme} from "Theme/ThemeContext";
 import UserAvatar from "User/UserAvatar";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -80,7 +79,7 @@ const Header: React.FC = () => {
                         <AdminLink/>
                         <LogsLink/>
                     </>}
-                    <ThemeToggleButton/>
+                    {/*<ThemeToggleButton/>*/}
                     {isAuthenticated && <LogoutRoundedIcon
                         style={{
                             color: plt.text.primary60,

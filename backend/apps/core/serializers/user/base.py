@@ -22,13 +22,14 @@ class UserSelfSerializer(AModelSerializer):
     timezone = TimeZoneSerializerField(use_pytz=True)
     is_password_exists = SerializerMethodField()
     roles = SlugRelatedField(many=True, read_only=True, slug_field='name')
+    coins = SerializerMethodField()
 
     class Meta:
         model = User
         fields = (
             'id',
             'username', 'full_name', 'secret_key',
-            'email', 'phone', 'avatar', 'roles',
+            'email', 'phone', 'avatar', 'roles', 'coins',
             'first_name', 'last_name', 'middle_name',
             'birth_date', 'gender', 'date_joined', 'timezone',
             'is_email_confirmed', 'is_phone_confirmed', 'is_staff',
@@ -37,6 +38,13 @@ class UserSelfSerializer(AModelSerializer):
 
     @staticmethod
     def get_is_password_exists(user): return bool(user.password) and user.has_usable_password()
+
+    @staticmethod
+    def get_coins(user: User) -> float:
+        # У модели UserXLMine связь 1 к 1. Если она не создана, вернём 0.
+        if hasattr(user, 'userxlmine'):
+            return float(user.userxlmine.coins or 0)
+        return 0.0
 
 
 class UserUpdateSerializer(AModelSerializer):

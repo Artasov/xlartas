@@ -73,6 +73,10 @@ const Cabinet: React.FC = () => {
                          to="/profile" icon={<PersonOutlineRoundedIcon/>}>
                     Profile
                 </NavLink>
+                <NavLink onClick={() => handleMenuLinkClick('/xlmine', true)}
+                         to="/xlmine" icon={<WebhookIcon/>}>
+                    Minecraft
+                </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/softwares', true)}
                          to="/software" icon={<WebhookIcon/>}>
                     Software
@@ -141,6 +145,10 @@ const Cabinet: React.FC = () => {
                                 urlActiveMark={'profile'}
                                 icon={PersonOutlineRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/profile')}/>
+                            <CabinetNavLink
+                                text={'Minecraft'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
+                                urlActiveMark={'xlmine'}
+                                icon={WebhookIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
                             <CabinetNavLink
                                 text={'Software'} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
                                 urlActiveMark={'software'}

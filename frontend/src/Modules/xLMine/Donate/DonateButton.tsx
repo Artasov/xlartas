@@ -11,7 +11,7 @@ const DonateButton: React.FC = () => {
     return (
         <>
             <Button onClick={handleOpen}>
-                Купить коины
+                Поддержать
             </Button>
             {open && (
                 <DonateModal

@@ -148,10 +148,30 @@ configurations = {
             '.pyc',
             '.jar',
             '.png',
+            '.java~',
         ],
         '__add_paths__': True,
 
         'xlmine-core': {
+            # 'gradle': '__copy__',
+            'src': '__copy__',
+            # 'gradlew': '__copy__',
+            # 'settings': '__copy__',
+        },
+    },
+    'xlmine-launcher': {
+        '__start_dir__': r'F:\dev',
+        '__exclude__': [
+            '__init__',
+            'pycache',
+            '.pyc',
+            '.jar',
+            '.png',
+            '.java~',
+        ],
+        '__add_paths__': True,
+
+        'xlmine-launcher': {
             # 'gradle': '__copy__',
             'src': '__copy__',
             # 'gradlew': '__copy__',

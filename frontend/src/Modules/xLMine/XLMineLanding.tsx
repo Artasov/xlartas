@@ -1,116 +1,77 @@
 // xl/frontend/src/Modules/xLMine/xLMineLanding.tsx
 
 import React from 'react';
-import {FC, FCC, FCCS, FRCC, FRSC} from 'WideLayout/Layouts';
+import {FC, FCA, FCC, FCCC, FRCC, FRSC} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
-import Button from "Core/components/elements/Button/Button";
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import minecraftHero from 'Static/img/xlmine/hero-bg.png';
+import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Link} from "react-router-dom";
+import Button from "Core/components/elements/Button/Button";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import DonateButton from "./Donate/DonateButton";
-
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
-const minecraftHero = 'https://via.placeholder.com/1200x600?text=Minecraft+Hero+Banner';
 const screenshot1 = 'https://via.placeholder.com/400x250?text=Screenshot+1';
 const screenshot2 = 'https://via.placeholder.com/400x250?text=Screenshot+2';
 const screenshot3 = 'https://via.placeholder.com/400x250?text=Screenshot+3';
 
 const XLMineLanding: React.FC = () => {
     const {plt} = useTheme();
+    const {headerNavHeight, mainRef} = useNavigation();
 
     return (
-        <FCC w="100%" minH="100vh" bg={plt.bg.primary} color={plt.text.primary70}>
-            {/* HERO СЕКЦИЯ */}
-            <FCCS style={{
-                minHeight: '60vh',
-                background: `url(${minecraftHero}) center/cover no-repeat`,
-            }}>
-                <FRCC w="100%" rounded={3} style={{
-                    backgroundColor: plt.mode === 'dark'
-                        ? 'rgba(0,0,0,0.4)'
-                        : 'rgba(255,255,255,0.4)',
-                    borderRadius: '1rem',
-                    padding: '2rem'
-                }}>
-                    <FCC g={2} maxW={850} style={{textAlign: 'center'}}>
-                        <h1 style={{fontSize: '3rem', margin: 0, lineHeight: '1.2'}}>
-                            Добро пожаловать на <span style={{color: plt.text.accent}}>xLMine</span>
+        <FCC pos={'relative'} w="100%"
+             h={`calc(100vh - ${headerNavHeight}px)`}
+             maxH={`calc(100vh - ${headerNavHeight}px)`}
+             bg={plt.bg.primary} color={plt.text.primary70}>
+            <FRSC w={'100%'} h={'100%'}
+                  pos={'fixed'} pEvents={false}
+                  top={`${headerNavHeight}px`} left={0} sx={{
+                background: 'linear-gradient(' +
+                    '0deg, ' +
+                    `${plt.bg.primary} 0%, ` +
+                    `${plt.bg.primary + '99'} 30%, ` +
+                    'rgba(0, 0, 0, 0) 40%, ' +
+                    'rgba(0, 0, 0, 0) 85%, ' +
+                    `${plt.bg.primary} 100%` +
+                    ')',
+            }}></FRSC>
+            <FCA h={'100%'} sx={{background: `url(${minecraftHero}) top/cover no-repeat`}}>
+                <FCCC w="100%">
+                    <FC g={2} maxW={850} style={{textAlign: 'center'}}>
+                        <h1 style={{fontSize: '5rem', margin: 0, lineHeight: '1.2'}}>
+                            <span style={{color: plt.text.accent}}>xlmine</span>
                         </h1>
-                        <p style={{fontSize: '1.2rem'}}>
-                            Лучший Minecraft-сервер, где ты можешь развиваться, строить и
-                            общаться с другими игроками.
-                        </p>
                         <Link to="/download-launcher" style={{textDecoration: 'none'}}>
-                            <Button variant="contained" className="fw-bold gap-1" sx={{fontSize: '1rem'}}>
-                                <DownloadRoundedIcon/>
+                            <Button variant="contained" className="fw-bold gap-1 hover-scale-5 ftrans-200-eio" sx={{fontSize: '1.5rem'}}>
+                                <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>
                                 Скачать лаунчер
                             </Button>
                         </Link>
-                    </FCC>
-                </FRCC>
-            </FCCS>
+                        <FC py={2}>
+                            <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
+                                <p style={{maxWidth: 400, fontSize: '1.1rem'}}>
+                                    Просто мой личный сервер изначально для игры с кем то без плохого пинга,
+                                    Radmin, Realms, с кучей модов и базово норм шейдерами и текстурами. На домофоне
+                                    будет мало fps, модов много.
+                                </p>
+                                <FRCC w={'fit-content'}><DonateButton/></FRCC>
+                            </FCCC>
+                        </FC>
+                    </FC>
+                    {/* ФУТЕР */}
+                    <footer style={{
+                        width: '100%',
+                        color: '#fff',
+                        textAlign: 'center',
+                    }}>
+                        <span style={{fontSize: '.9rem'}}>
+                            xlmine © 2025 xlartas. All rights reserved.
+                        </span>
+                    </footer>
+                </FCCC>
+            </FCA>
 
-            {/* БЛОК ФИЧ */}
-            <FC w={'100%'}>
-                <FCC g={2} maxW={900} mx="auto" textAlign="center">
-                    <h2 style={{fontSize: '2rem', marginBottom: '1rem'}}>
-                        Почему xLMine?
-                    </h2>
-                    <FRSC wrap g={'1rem'}>
-                        <FCC w={'280px'} g={.5} p={1}
-                             style={{backgroundColor: plt.bg.contrast10, borderRadius: '.5rem'}}>
-                            <img src={screenshot1} alt={'Screenshot1'} style={{width: '100%', borderRadius: '.3rem'}}/>
-                            <h3>Уникальные режимы</h3>
-                            <p>Никакого однообразия – у нас множество разных режимов на любой вкус.</p>
-                        </FCC>
-                        <FCC w={'280px'} g={.5} p={1}
-                             style={{backgroundColor: plt.bg.contrast10, borderRadius: '.5rem'}}>
-                            <img src={screenshot2} alt="Screenshot2" style={{width: '100%', borderRadius: '.3rem'}}/>
-                            <h3>Дружелюбное сообщество</h3>
-                            <p>Мы ценим поддержку и сотрудничество между игроками.</p>
-                        </FCC>
-
-                        <FCC w={'280px'} g={.5} p={1}
-                             style={{backgroundColor: plt.bg.contrast10, borderRadius: '.5rem'}}>
-                            <img src={screenshot3} alt="Screenshot3"
-                                 style={{width: '100%', borderRadius: '.3rem'}}/>
-                            <h3>Стабильные сервера</h3>
-                            <p>Без лагов и с заботой о вашем игровом опыте.</p>
-                        </FCC>
-                    </FRSC>
-                </FCC>
-            </FC>
-            <FC bg={plt.bg.primary30}>
-                <FCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
-                    <h2 style={{fontSize: '2rem', marginBottom: '1rem'}}>Поддержи сервер и получи плюшки</h2>
-                    <p style={{maxWidth: 600}}>
-                        Покупая привилегии или коины, ты не только помогаешь в развитии сервера,
-                        но и получаешь дополнительные бонусы, ускоренный рост и уникальные возможности.
-                    </p>
-                    <FRCC g={1} wrap mt={2}>
-                        <DonateButton/>
-                        <Link to="/donate" style={{textDecoration: 'none'}}>
-                            <Button variant="outlined" sx={{fontSize: '1.1rem'}}>
-                                Поддержать сервер
-                            </Button>
-                        </Link>
-                    </FRCC>
-                </FCC>
-            </FC>
-
-            {/* ФУТЕР */}
-            <footer style={{
-                width: '100%',
-                padding: '2rem 1rem',
-                textAlign: 'center',
-                backgroundColor: plt.bg.contrast20
-            }}>
-                <span style={{fontSize: '.9rem'}}>
-                    © 2025 xLMine. All rights reserved.
-                    <br/>
-                    Minecraft © Mojang Studios / Microsoft
-                </span>
-            </footer>
         </FCC>
     );
 };

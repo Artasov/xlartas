@@ -21,3 +21,8 @@ class UserXLMineService:
 
     async def sum_donate_amount(self: 'User') -> Decimal:
         return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)
+
+    async def xlmine_uuid(self: 'User') -> str:
+        from apps.xlmine.models.user import UserXLMine
+        xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=self)
+        return xlmine_user.uuid

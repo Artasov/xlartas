@@ -2,7 +2,7 @@
 
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
 import {format} from 'date-fns';
-import {FormControlLabel, Radio, RadioGroup, Typography, useMediaQuery} from '@mui/material';
+import {Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import TextField from "Core/components/elements/TextField/TextField";
@@ -15,11 +15,8 @@ import Button from "Core/components/elements/Button/Button";
 import EditIcon from '@mui/icons-material/Edit';
 import Modal from "Core/components/elements/Modal/Modal";
 import NewEmailForm from "Auth/forms/NewEmailForm";
-import NewPhoneForm from "Auth/forms/NewPhoneForm";
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import {useTheme} from "Theme/ThemeContext";
-import CustomDatePicker from "Core/components/elements/CustomDatePicker";
-import TimeZonePicker from "Core/components/elements/TimeZonePicker";
 import {FC, FR, FRC, FRSC} from "WideLayout/Layouts";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import UserAvatarEditable from "User/UserAvatarEditable";
@@ -178,30 +175,30 @@ const UserPersonalInfoForm: React.FC = () => {
                                 value={user.secret_key}/>
                         </FC>
                     </FC>}
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    margin="none"
-                    label="Имя"
-                    name="first_name"
-                    value={formData.first_name}
-                    onChange={handleChange}/>
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    margin="none"
-                    label="Фамилия"
-                    name="last_name"
-                    value={formData.last_name}
-                    onChange={handleChange}/>
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    margin="none"
-                    label="Отчество"
-                    name="middle_name"
-                    value={formData.middle_name}
-                    onChange={handleChange}/>
+                {/*<TextField*/}
+                {/*    fullWidth*/}
+                {/*    variant="outlined"*/}
+                {/*    margin="none"*/}
+                {/*    label="Имя"*/}
+                {/*    name="first_name"*/}
+                {/*    value={formData.first_name}*/}
+                {/*    onChange={handleChange}/>*/}
+                {/*<TextField*/}
+                {/*    fullWidth*/}
+                {/*    variant="outlined"*/}
+                {/*    margin="none"*/}
+                {/*    label="Фамилия"*/}
+                {/*    name="last_name"*/}
+                {/*    value={formData.last_name}*/}
+                {/*    onChange={handleChange}/>*/}
+                {/*<TextField*/}
+                {/*    fullWidth*/}
+                {/*    variant="outlined"*/}
+                {/*    margin="none"*/}
+                {/*    label="Отчество"*/}
+                {/*    name="middle_name"*/}
+                {/*    value={formData.middle_name}*/}
+                {/*    onChange={handleChange}/>*/}
 
                 <FRSC g={1} maxW={'400px'}>
                     <TextField
@@ -226,69 +223,71 @@ const UserPersonalInfoForm: React.FC = () => {
                         <NewEmailForm onSuccess={() => setIsEmailModalOpen(false)}/>
                     </Modal>
                 </FRSC>
-                <FRSC g={1} maxW={'400px'}>
-                    <TextField
-                        variant="outlined"
-                        label="Номер телефона"
-                        name="phone"
-                        value={user?.phone ? `${user?.phone}` : ''}
-                        onChange={handleChange}
-                        className={'flex-grow-1'}
-                        disabled={true}
-                        margin="none"/>
-                    {user?.is_phone_confirmed
-                        ? <EditIcon onClick={() => setIsPhoneModalOpen(true)}
-                                    style={{cursor: 'pointer', color: plt.text.primary60}}/>
-                        : <Button onClick={() => setIsPhoneModalOpen(true)}
-                                  classNameOverride={`px-2 opacity-75 pb-0 pt-3px h-100 text-nowrap minw-150px`} sx={{
-                            color: plt.text.contrast70,
-                            fontWeight: 600, minWidth: 130
-                        }}>ПОДТВЕРДИТЬ</Button>
-                    }
-                    <Modal cls={'px-3'} bg={plt.bg.primary} closeOnOutsideClick={false}
-                           isOpen={isPhoneModalOpen}
-                           onClose={() => setIsPhoneModalOpen(false)}>
-                        <NewPhoneForm onSuccess={() => setIsPhoneModalOpen(false)}/>
-                    </Modal>
-                </FRSC>
+                {/*<FRSC g={1} maxW={'400px'}>*/}
+                {/*    <TextField*/}
+                {/*        variant="outlined"*/}
+                {/*        label="Номер телефона"*/}
+                {/*        name="phone"*/}
+                {/*        value={user?.phone ? `${user?.phone}` : ''}*/}
+                {/*        onChange={handleChange}*/}
+                {/*        className={'flex-grow-1'}*/}
+                {/*        disabled={true}*/}
+                {/*        margin="none"/>*/}
+                {/*    {user?.is_phone_confirmed*/}
+                {/*        ? <EditIcon onClick={() => setIsPhoneModalOpen(true)}*/}
+                {/*                    style={{cursor: 'pointer', color: plt.text.primary60}}/>*/}
+                {/*        : <Button onClick={() => setIsPhoneModalOpen(true)}*/}
+                {/*                  classNameOverride={`px-2 opacity-75 pb-0 pt-3px h-100 text-nowrap minw-150px`} sx={{*/}
+                {/*            color: plt.text.contrast70,*/}
+                {/*            fontWeight: 600, minWidth: 130*/}
+                {/*        }}>ПОДТВЕРДИТЬ</Button>*/}
+                {/*    }*/}
+                {/*    <Modal cls={'px-3'} bg={plt.bg.primary} closeOnOutsideClick={false}*/}
+                {/*           isOpen={isPhoneModalOpen}*/}
+                {/*           onClose={() => setIsPhoneModalOpen(false)}>*/}
+                {/*        <NewPhoneForm onSuccess={() => setIsPhoneModalOpen(false)}/>*/}
+                {/*    </Modal>*/}
+                {/*</FRSC>*/}
             </FC>
-            <RadioGroup
-                className={'my-2 gap-2'}
-                row aria-label="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}>
-                <FormControlLabel
-                    className={'m-0 gap-1'}
-                    labelPlacement="start"
-                    value="male"
-                    control={<Radio/>}
-                    label="Мужской"/>
-                <FormControlLabel
-                    className={'m-0 gap-1'}
-                    value="female"
-                    control={<Radio/>}
-                    label="Женский"/>
-            </RadioGroup>
-            <FR wrap g={2}>
-                <CustomDatePicker
-                    label={'Дата рождения'}
-                    value={formData.birth_date ? new Date(formData.birth_date) : null}
-                    onChange={(date) => {
-                        const formattedDate = date ? format(date, 'yyyy-MM-dd') : null;
-                        setFormData({...formData, birth_date: formattedDate});
-                        setShowSaveButton(true);
-                    }}
-                />
-                <TimeZonePicker
-                    className={'maxw-180px'}
-                    value={formData.timezone || ''}
-                    onChange={handleChange}
-                />
-            </FR>
-            <Typography mt={1} fontSize={'.8rem'} color={plt.text.primary30}>
-                Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
-            </Typography>
+            {/*<RadioGroup*/}
+            {/*    className={'my-2 gap-2'}*/}
+            {/*    row aria-label="gender"*/}
+            {/*    name="gender"*/}
+            {/*    value={formData.gender}*/}
+            {/*    onChange={handleChange}>*/}
+            {/*    <FormControlLabel*/}
+            {/*        className={'m-0 gap-1'}*/}
+            {/*        labelPlacement="start"*/}
+            {/*        value="male"*/}
+            {/*        control={<Radio/>}*/}
+            {/*        label="Мужской"/>*/}
+            {/*    <FormControlLabel*/}
+            {/*        className={'m-0 gap-1'}*/}
+            {/*        value="female"*/}
+            {/*        control={<Radio/>}*/}
+            {/*        label="Женский"/>*/}
+            {/*</RadioGroup>*/}
+            {/*<FR wrap g={2}>*/}
+            {/*    <CustomDatePicker*/}
+            {/*        label={'Дата рождения'}*/}
+            {/*        value={formData.birth_date ? new Date(formData.birth_date) : null}*/}
+            {/*        onChange={(date) => {*/}
+            {/*            const formattedDate = date ? format(date, 'yyyy-MM-dd') : null;*/}
+            {/*            setFormData({...formData, birth_date: formattedDate});*/}
+            {/*            setShowSaveButton(true);*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*    <TimeZonePicker*/}
+            {/*        className={'maxw-180px'}*/}
+            {/*        value={formData.timezone || ''}*/}
+            {/*        onChange={handleChange}*/}
+            {/*    />*/}
+            {/*</FR>*/}
+            <FC mt={1}>
+                <Typography fontSize={'.8rem'} color={plt.text.primary30}>
+                    Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
+                </Typography>
+            </FC>
 
 
             {showSaveButton && (
