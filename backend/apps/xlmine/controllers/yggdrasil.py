@@ -20,10 +20,6 @@ async def base(request: AsyncRequest):
     pprint(request.data)
     pprint(request.GET)
     pprint(request.user.__dict__)
-    pprint(request.auth)
-    pprint(request.authenticators)
-    pprint(request.parser_context)
-    pprint(request.content_type)
     return Response({}, status=status.HTTP_200_OK)
 
 
