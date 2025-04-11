@@ -19,7 +19,6 @@ async def base(request: AsyncRequest):
     pprint(request.__dict__)
     pprint(request.data)
     pprint(request.GET)
-    pprint(request.user.__dict__)
     return Response({}, status=status.HTTP_200_OK)
 
 
