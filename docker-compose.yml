@@ -63,7 +63,7 @@ services:
     image: redis:alpine
     volumes:
       - ./data/redis/:/data
-     ports:
+    ports:
        - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
