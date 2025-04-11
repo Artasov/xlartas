@@ -296,20 +296,37 @@ async def join_server_view(request):
 
     # Ищем сессию
     try:
-        session_obj = await MinecraftSession.objects.aget(access_token=access_token)
+        session_obj = await MinecraftSession.objects.select_related('user').aget(
+            access_token=access_token
+        )
     except MinecraftSession.DoesNotExist:
         return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
-
+    print(session_obj)
     user = session_obj.user
-    # Проверяем соответствие profile_id
-    if profile_id.lower() != user.uuid_for_minecraft().replace("-", "").lower():
-        return Response({"error": "Forbidden profile mismatch"}, status=status.HTTP_403_FORBIDDEN)
-
+    xlmine_user = UserXLMine.objects.aget_or_create(
+        user=user,
+        uuid=profile_id,
+        uuid__gte=50,
+    )
     # Сохраняем serverId (например, в поле session_obj)
     session_obj.last_server_id = server_id
     await session_obj.asave()
 
-    return Response({}, status=status.HTTP_204_NO_CONTENT)
+    return Response({
+        "accessToken": access_token,
+        "clientToken": session_obj.client_token,
+        "selectedProfile": profile_id,
+        "user": {
+            "id": profile_id,
+            "username": user.username,
+            "properties": [
+                {
+                    "name": "preferredLanguage",
+                    "value": "ru"
+                }
+            ]
+        }
+    }, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])

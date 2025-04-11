@@ -1,6 +1,6 @@
 from django.contrib.admin import register, ModelAdmin
 
-from apps.xlmine.models.user import UserXLMine
+from apps.xlmine.models.user import UserXLMine, MinecraftSession
 from .models import Launcher, Release, Donate, DonateOrder, Privilege
 
 
@@ -41,3 +41,8 @@ class PrivilegeAdmin(ModelAdmin):
 class UserXLMineAdmin(ModelAdmin):
     list_display = ('user', 'coins')
     search_fields = ('user__username',)
+
+
+@register(MinecraftSession)
+class MinecraftSessionAdmin(ModelAdmin):
+    list_display = ('user__xlmine_user__uuid', 'access_token', 'client_token', 'last_server_id', 'created_at')

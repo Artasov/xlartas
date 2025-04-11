@@ -14,6 +14,10 @@ class Launcher(ACreatedUpdatedAtMixin):
 
     def __str__(self): return f'Launcher {self.version}'
 
+    def delete(self, *args, **kwargs):
+        if self.file: self.file.delete(save=False)
+        super().delete(*args, **kwargs)
+
 
 class Release(ACreatedUpdatedAtMixin):
     file = FileField(upload_to='minecraft/core/', verbose_name=_('File'))
@@ -21,6 +25,10 @@ class Release(ACreatedUpdatedAtMixin):
     sha256_hash = CharField(max_length=64, verbose_name=_('SHA256 Hash'), blank=True, null=True)
 
     def __str__(self): return f'Release {self.version}'
+
+    def delete(self, *args, **kwargs):
+        if self.file: self.file.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class Privilege(AModel):

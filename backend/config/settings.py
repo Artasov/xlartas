@@ -92,6 +92,7 @@ XL_DASHBOARD = {
         'Launcher': 'xlmine.Launcher',
         'Release': 'xlmine.Release',
         'Privilege': 'xlmine.Privilege',
+        'MCSession': 'xlmine.MinecraftSession',
     },
     'Products': {
         'All': 'commerce.Product',
