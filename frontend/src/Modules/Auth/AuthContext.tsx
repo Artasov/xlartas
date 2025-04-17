@@ -108,11 +108,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         try {
             const r = await axios.get(`${DOMAIN_URL}/api/v1/oauth/${provider}/callback/?code=${code}`);
             if (r.data.access && r.data.refresh) {
-                await handleAuthResponse(r.data, next ? next : undefined);
+                await handleAuthResponse(r.data, next ? next : '/profile');
             } else {
                 const capitalizeFirstLetter = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                 Message.success(`${capitalizeFirstLetter(provider)} аккаунт успешно привязан.`);
-                updateCurrentUser().catch(console.error);
+                updateCurrentUser().catch(e => console.error(e));
                 navigate(next ? next : '/profile');
             }
         } catch {

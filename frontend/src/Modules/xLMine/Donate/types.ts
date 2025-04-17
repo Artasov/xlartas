@@ -1,3 +1,4 @@
+// Modules/xLMine/Donate/types.ts
 import {IOrder, IProduct} from "types/commerce/shop";
 
 export interface IDonate extends IProduct {

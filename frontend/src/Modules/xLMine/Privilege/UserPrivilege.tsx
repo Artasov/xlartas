@@ -1,4 +1,4 @@
-// src/Modules/xLMine/UserPrivilege.tsx
+// Modules/xLMine/Privilege/UserPrivilege.tsx
 
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../../Api/useApi';

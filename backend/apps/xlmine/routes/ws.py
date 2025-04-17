@@ -1,4 +1,4 @@
-# apps/xlmine/routing.py
+# xlmine/routes/ws.py
 from django.urls import re_path
 
 from apps.xlmine.consumers.eco import BalanceConsumer

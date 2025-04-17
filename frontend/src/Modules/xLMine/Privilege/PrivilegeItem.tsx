@@ -1,3 +1,4 @@
+// Modules/xLMine/Privilege/PrivilegeItem.tsx
 import React from "react";
 import {useTheme} from "Theme/ThemeContext";
 import Tooltip from "@mui/material/Tooltip";

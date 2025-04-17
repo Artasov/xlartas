@@ -1,4 +1,4 @@
-// xl/frontend/src/Modules/xLMine/xLMineLanding.tsx
+// Modules/xLMine/XLMineLanding.tsx
 
 import React from 'react';
 import {FC, FCA, FCC, FCCC, FRCC, FRSC} from 'WideLayout/Layouts';

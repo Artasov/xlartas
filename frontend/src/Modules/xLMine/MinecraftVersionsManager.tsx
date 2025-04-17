@@ -22,10 +22,11 @@ import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FRC, FRSC} from "WideLayout/Layouts";
+import {FC, FCS, FR, FRC, FRSC} from "WideLayout/Layouts";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";
 import {v4 as uuidv4} from 'uuid';
+import TextField from "@mui/material/TextField";
 
 // ==== Форматирование даты (если хочешь как есть — можно убрать toLocaleString) ====
 
@@ -228,12 +229,18 @@ const CHUNK_SIZE = 50 * 1024 * 1024;
 
 const ReleaseManager: React.FC = () => {
     const {api} = useApi();
+
     const [file, setFile] = useState<File | null>(null);
     const [fileReset, setFileReset] = useState<boolean>(false);
+    const [securityJson, setSecurityJson] = useState<string>('');
+    const [securityValid, setSecurityValid] = useState<boolean>(false);
+
     const [isUploading, setIsUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
+
     const [releases, setReleases] = useState<IRelease[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
 
@@ -242,7 +249,7 @@ const ReleaseManager: React.FC = () => {
         try {
             const {results} = await api.get('/api/v1/xlmine/release/');
             setReleases(results);
-        } catch (error) {
+        } catch {
             Message.error('Ошибка загрузки версий релиза');
         } finally {
             setLoading(false);
@@ -251,76 +258,90 @@ const ReleaseManager: React.FC = () => {
 
     useEffect(() => {
         fetchVersions();
-        // eslint-disable-next-line
     }, []);
 
     const handleFileChange = (picked: File | null) => {
         setFile(picked);
+        setSecurityJson('');
+        setSecurityValid(false);
+    };
+
+    const handleSecurityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setSecurityJson(val);
+        try {
+            const parsed = JSON.parse(val);
+            setSecurityValid(!!parsed && typeof parsed === 'object');
+        } catch {
+            setSecurityValid(false);
+        }
     };
 
     const handleUpload = async () => {
-        if (!file) {
-            Message.error('Выберите файл');
+        if (!file || !securityValid) {
+            Message.error('Выберите файл и вставьте корректный JSON');
             return;
         }
         setIsUploading(true);
         setUploadProgress(0);
+
         try {
             const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
             const uploadId = uuidv4();
             let response: any = null;
-            // Последовательно отправляем каждый чанк
-            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
-                const start = chunkIndex * CHUNK_SIZE;
+
+            for (let idx = 0; idx < totalChunks; idx++) {
+                const start = idx * CHUNK_SIZE;
                 const end = Math.min(file.size, start + CHUNK_SIZE);
                 const chunk = file.slice(start, end);
+
                 const formData = new FormData();
                 formData.append('upload_id', uploadId);
-                formData.append('chunk_index', String(chunkIndex));
+                formData.append('chunk_index', String(idx));
                 formData.append('total_chunks', String(totalChunks));
                 formData.append('filename', file.name);
                 formData.append('file', chunk);
 
+                // Добавляем security_json только в первый чанк
+                if (idx === 0) formData.append('security_json', securityJson);
+
                 response = await api.post('/api/v1/xlmine/chunked-release/', formData, {
-                    headers: {'Content-Type': 'multipart/form-data'}
+                    headers: {'Content-Type': 'multipart/form-data'},
                 });
-                // Обновляем прогресс
-                setUploadProgress(Math.round(((chunkIndex + 1) / totalChunks) * 100));
+
+                setUploadProgress(Math.round(((idx + 1) / totalChunks) * 100));
             }
-            // Если последний запрос вернул данные нового релиза, обновляем список
+
             if (response && response.id) {
                 setReleases(prev => [...prev, response]);
                 Message.success('Новая версия релиза загружена');
+                setFile(null);
+                setFileReset(true);
+                setTimeout(() => setFileReset(false), 0);
+                setSecurityJson('');
+                setSecurityValid(false);
             } else {
                 Message.error('Ошибка загрузки файла');
             }
-            // Сброс
-            setFile(null);
-            setFileReset(true);
-            setTimeout(() => setFileReset(false), 0);
-        } catch (error) {
+        } catch {
             Message.error('Ошибка загрузки файла');
         }
+
         setIsUploading(false);
         setUploadProgress(0);
     };
 
-    const openConfirmDelete = (id: number) => {
-        setConfirmDeleteId(id);
-    };
-
-    const closeConfirmDelete = () => {
-        setConfirmDeleteId(null);
-    };
+    const openConfirmDelete = (id: number) => setConfirmDeleteId(id);
+    const closeConfirmDelete = () => setConfirmDeleteId(null);
 
     const handleConfirmDelete = async () => {
         if (!confirmDeleteId) return;
         setDeletingId(confirmDeleteId);
         try {
             await api.delete(`/api/v1/xlmine/release/${confirmDeleteId}/`);
+            setReleases(prev => prev.filter(r => r.id !== confirmDeleteId));
             Message.success('Версия удалена');
-            setReleases(prev => prev.filter(item => item.id !== confirmDeleteId));
-        } catch (error) {
+        } catch {
             Message.error('Ошибка удаления версии');
         } finally {
             setConfirmDeleteId(null);
@@ -332,24 +353,46 @@ const ReleaseManager: React.FC = () => {
         <FC g={1}>
             <Paper sx={{p: 2}}>
                 <FC g={1}>
-                    <FRSC g={2}>
-                        <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
-                        <Button
-                            variant="contained"
-                            sx={{fontWeight: file ? 'bold' : '', px: 3}}
-                            onClick={handleUpload}
-                            disabled={!file || isUploading}
-                        >
-                            Загрузить
-                        </Button>
-                        {isUploading && <FC flexGrow={1} g={.8}>
-                            <LinearProgress sx={{height: 10, borderRadius: '4px'}}
-                                            variant="determinate" value={uploadProgress}/>
-                            <FRC fontSize={'.8rem'} lineHeight={'.7rem'}>
-                                {uploadProgress}% загружено
-                            </FRC>
-                        </FC>}
-                    </FRSC>
+                    <FCS g={1}>
+                        <FR>
+                            <FileUpload onFileSelect={handleFileChange} reset={fileReset}/></FR>
+                        {file && (
+                            <TextField
+                                label="security.json"
+                                value={securityJson}
+                                onChange={handleSecurityChange}
+                                multiline
+                                minRows={4}
+                                maxRows={10}
+                                sx={{flexGrow: 1, width: '100%', m: 0}}
+                                placeholder="Вставьте содержимое security.json"
+                                error={!!securityJson && !securityValid}
+                                helperText={!securityValid && securityJson ? 'Некорректный JSON' : null}
+                            />
+                        )}
+                        <FR>
+                            <Button
+                                variant="contained"
+                                sx={{fontWeight: file ? 'bold' : '', px: 3}}
+                                onClick={handleUpload}
+                                disabled={!file || !securityValid || isUploading}
+                            >
+                                Загрузить
+                            </Button>
+                        </FR>
+                        {isUploading && (
+                            <FC flexGrow={1} g={0.8}>
+                                <LinearProgress
+                                    sx={{height: 10, borderRadius: '4px'}}
+                                    variant="determinate"
+                                    value={uploadProgress}
+                                />
+                                <FRC fontSize=".8rem" lineHeight=".7rem">
+                                    {uploadProgress}% загружено
+                                </FRC>
+                            </FC>
+                        )}
+                    </FCS>
                 </FC>
             </Paper>
 
@@ -370,26 +413,16 @@ const ReleaseManager: React.FC = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {releases.map(item => (
-                                <TableRow key={item.id}>
-                                    <TableCell>{item.id}</TableCell>
-                                    <TableCell>{item.version}</TableCell>
-                                    <TableCell style={{wordBreak: 'break-all'}}>
-                                        {item.sha256_hash}
-                                    </TableCell>
+                            {releases.map(r => (
+                                <TableRow key={r.id}>
+                                    <TableCell>{r.id}</TableCell>
+                                    <TableCell>{r.version}</TableCell>
+                                    <TableCell style={{wordBreak: 'break-all'}}>{r.sha256_hash}</TableCell>
+                                    <TableCell>{new Date(r.created_at).toLocaleString()}</TableCell>
                                     <TableCell>
-                                        {formatDate(item.created_at)}
-                                    </TableCell>
-                                    <TableCell>
-                                        <IconButton
-                                            onClick={() => openConfirmDelete(item.id)}
-                                            disabled={deletingId === item.id}
-                                        >
-                                            {deletingId === item.id ? (
-                                                <CircularProgress size={24}/>
-                                            ) : (
-                                                <DeleteIcon/>
-                                            )}
+                                        <IconButton onClick={() => openConfirmDelete(r.id)}
+                                                    disabled={deletingId === r.id}>
+                                            {deletingId === r.id ? <CircularProgress size={24}/> : <DeleteIcon/>}
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
@@ -401,19 +434,11 @@ const ReleaseManager: React.FC = () => {
 
             <Dialog open={!!confirmDeleteId} onClose={closeConfirmDelete}>
                 <DialogTitle>Удаление релиза</DialogTitle>
-                <DialogContent>
-                    Вы уверены, что хотите удалить версию?
-                </DialogContent>
+                <DialogContent>Вы уверены, что хотите удалить версию?</DialogContent>
                 <DialogActions>
-                    <Button onClick={closeConfirmDelete}>
-                        Отмена
-                    </Button>
+                    <Button onClick={closeConfirmDelete}>Отмена</Button>
                     <Button onClick={handleConfirmDelete} disabled={deletingId === confirmDeleteId}>
-                        {deletingId === confirmDeleteId ? (
-                            <CircularProgress size={24}/>
-                        ) : (
-                            'Удалить'
-                        )}
+                        {deletingId === confirmDeleteId ? <CircularProgress size={24}/> : 'Удалить'}
                     </Button>
                 </DialogActions>
             </Dialog>

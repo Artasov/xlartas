@@ -5,7 +5,8 @@ from rest_framework.routers import DefaultRouter
 from apps.xlmine.controllers.base import (
     ReleaseViewSet, LauncherViewSet,
     get_latest_launcher, get_latest_release,
-    get_current_privilege, get_latest_donate_product, list_privileges, ChunkedReleaseUploadView
+    get_current_privilege, get_latest_donate_product, list_privileges, ChunkedReleaseUploadView,
+    get_latest_release_security
 )
 from apps.xlmine.controllers.eco import balance, pay
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path('chunked-release/', ChunkedReleaseUploadView.as_view()),
     path('launcher/latest/', get_latest_launcher),
     path('release/latest/', get_latest_release),
+    path('release/latest/security/', get_latest_release_security),
     path('donate/product/latest/', get_latest_donate_product),
     path('privilege/current/', get_current_privilege),
     path('privilege/', list_privileges),

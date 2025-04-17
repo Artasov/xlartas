@@ -1,3 +1,4 @@
+// Modules/xLMine/Donate/DonateButton.tsx
 import React, {useState} from "react";
 import DonateModal from "./DonateModal";
 import Button from "Core/components/elements/Button/Button";

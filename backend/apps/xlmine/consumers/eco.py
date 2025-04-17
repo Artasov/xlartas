@@ -1,4 +1,4 @@
-# apps/xlmine/consumers/eco.py
+# xlmine/consumers/eco.py
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.contrib.auth import get_user_model

@@ -5,7 +5,7 @@ import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
-import {FC, FCCC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
+import {FC, FCCC, FCSC, FCSS, FRC, FRCC} from "WideLayout/Layouts";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -26,6 +26,7 @@ import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
+import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -135,9 +136,10 @@ const Cabinet: React.FC = () => {
                             <FC pos={'relative'}>
                                 <UserAvatarEditable size={'8em'}/>
                             </FC>
-                            <h6 className={`fw-6 fs-5 text-wrap`} style={{color: plt.text.primary70}}>
-                                {user?.first_name} {user?.last_name}
-                            </h6>
+                            <FRCC color={plt.text.primary70} fontWeight={'bold'} fontSize={'1.2rem'} mb={1.2}>
+                                {user?.username}
+                            </FRCC>
+                            <UserPrivilege/>
                         </FCSC>
                         <FC g={1}>
                             <CabinetNavLink

@@ -93,6 +93,7 @@ XL_DASHBOARD = {
         'Release': 'xlmine.Release',
         'Privilege': 'xlmine.Privilege',
         'MCSession': 'xlmine.MinecraftSession',
+        'Console': '/xladmin/rcon_console/',
     },
     'Products': {
         'All': 'commerce.Product',
@@ -346,17 +347,17 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         # 'rest_framework.renderers.BrowsableAPIRenderer',
     ),
-    # 'DEFAULT_THROTTLE_CLASSES' if not DEV else '': [
+    # 'DEFAULT_THROTTLE_CLASSES': [] if DEV else [
     #     'rest_framework.throttling.AnonRateThrottle',
     #     'rest_framework.throttling.UserRateThrottle'
     # ],
@@ -477,8 +478,8 @@ LOGGING = {
 
 # Static | Media
 STATICFILES_DIRS = (
-    FRONTEND_DIR / 'build' / 'static',
-    BASE_DIR / 'static'
+    join(FRONTEND_DIR, 'build', 'static'),
+    join(BASE_DIR, 'static')
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -520,7 +521,7 @@ if MINIO_USE:
 
 # dj-endpoints
 EP_NOT_AUTH_REDIRECT_URL = '/admin/login/?next=/endpoints/'
-EP_EXCLUDED_APPS = ('logui', 'swagger', 'rest_framework')
+EP_EXCLUDED_APPS = tuple(['logui', 'swagger', 'rest_framework'])
 EP_CUSTOM_LINKS = [
     {'name': 'Site', 'url': f'{DOMAIN_URL}'},
     {'name': 'Logs', 'url': f'{DOMAIN_URL}/{LOGUI_URL_PREFIX}'},
@@ -532,6 +533,11 @@ EP_CUSTOM_LINKS = [
     {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/'},
     {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/'},
 ]
+
+# RCon
+RCON_HOST = env('RCON_HOST', '127.0.0.1')
+RCON_PORT = int(env('RCON_PORT', '25575'))
+RCON_PASSWORD = env('RCON_PASSWORD', 'test123')
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -592,8 +598,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'apps' / 'Core' / 'templates',
-            BASE_DIR / 'templates',
+            join(BASE_DIR, 'apps', 'core', 'templates'),
+            join(BASE_DIR, 'templates'),
             join(BASE_DIR.parent, 'frontend/build')
         ],
         'APP_DIRS': True,

@@ -1,4 +1,4 @@
-# apps/xlmine/routes/api.py
+# xlmine/controllers/eco.py
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes

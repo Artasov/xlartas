@@ -1,3 +1,4 @@
+# xlmine/models/user.py
 from adjango.models import AModel
 from django.db.models import OneToOneField, DecimalField, CASCADE, DateTimeField, CharField, ForeignKey
 import uuid as uuid_

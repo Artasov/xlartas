@@ -1,3 +1,4 @@
+// Modules/xLMine/Privilege/PrivilegesView.tsx
 import React, { useEffect, useState } from 'react';
 import { useApi } from "Modules/Api/useApi";
 import { Message } from "Core/components/Message";

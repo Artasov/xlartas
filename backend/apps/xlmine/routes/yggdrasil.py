@@ -1,4 +1,4 @@
-# apps/xlmine/routes/yggdrasil.py
+# xlmine/routes/yggdrasil.py
 from django.urls import path
 
 from apps.xlmine.controllers.yggdrasil import (

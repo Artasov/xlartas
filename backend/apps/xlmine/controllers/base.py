@@ -67,6 +67,7 @@ class ChunkedReleaseUploadView(APIView):
         chunk_index = request.data.get('chunk_index')
         total_chunks = request.data.get('total_chunks')
         filename = request.data.get('filename')
+        security_json = request.data.get('security_json')
         chunk_file = request.FILES.get('file')
 
         if not upload_id or chunk_index is None or not total_chunks or not filename or not chunk_file:
@@ -76,7 +77,8 @@ class ChunkedReleaseUploadView(APIView):
             chunk_index = int(chunk_index)
             total_chunks = int(total_chunks)
         except ValueError:
-            log.error("Неверные значения chunk_index или total_chunks: %s, %s", request.data.get('chunk_index'), request.data.get('total_chunks'))
+            log.error("Неверные значения chunk_index или total_chunks: %s, %s", request.data.get('chunk_index'),
+                      request.data.get('total_chunks'))
             return Response({"error": "Неверные значения chunk_index или total_chunks"},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -95,7 +97,8 @@ class ChunkedReleaseUploadView(APIView):
 
         # Если получен последний чанк, собираем все части в один файл
         if chunk_index == total_chunks - 1:
-            log.info("Получен последний чанк (%s/%s) для upload_id %s. Начинаем сборку файла.", chunk_index + 1, total_chunks, upload_id)
+            log.info("Получен последний чанк (%s/%s) для upload_id %s. Начинаем сборку файла.", chunk_index + 1,
+                     total_chunks, upload_id)
             final_path = os.path.join(temp_dir, f"{upload_id}_{filename}")
             with open(final_path, 'wb') as final_file:
                 for i in range(total_chunks):
@@ -112,7 +115,7 @@ class ChunkedReleaseUploadView(APIView):
             log.info("Собран файл: %s. Создаём объект Release.", final_path)
             with open(final_path, 'rb') as final_file_obj:
                 django_file = File(final_file_obj, name=filename)
-                release = Release.objects.create(file=django_file)
+                release = Release.objects.create(file=django_file, security=security_json)
                 # Определяем версию
                 latest = Release.objects.exclude(pk=release.pk).order_by('-created_at').first()
                 if latest and latest.version:
@@ -144,6 +147,16 @@ async def get_latest_launcher(_):
 async def get_latest_release(_):
     try:
         return JsonResponse(await ReleaseSerializer(await Release.objects.alatest('created_at')).adata)
+    except Release.DoesNotExist:
+        return JsonResponse({})
+
+
+@acontroller('Get latest security')
+async def get_latest_release_security(_):
+    try:
+        r: Release | None = await Release.objects.alatest('created_at')
+        if r is not None:
+            return JsonResponse(r.security, safe=False)
     except Release.DoesNotExist:
         return JsonResponse({})
 

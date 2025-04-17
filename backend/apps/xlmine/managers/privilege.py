@@ -1,3 +1,4 @@
+# xlmine/managers/privilege.py
 from decimal import Decimal
 from typing import Optional, TYPE_CHECKING
 
