@@ -8,7 +8,7 @@ from apps.xlmine.controllers.yggdrasil import (
 )
 
 urlpatterns = [
-    path('', base, name='base'),
+    path('', base),
     path('authserver', auth_server, name='auth_server'),
     path('authenticate', authenticate_view, name='ygg_authenticate'),
     path('refresh', refresh_view, name='ygg_refresh'),

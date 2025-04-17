@@ -27,7 +27,6 @@ DIRS_TO_COPY = [
     "config",
 ]
 
-# ───────────────── editable_files ─────────────────────────────────────────────
 EDITABLE_FILES = [
     # директории, которые пользователь может править
     "resourcepacks/",
@@ -159,10 +158,11 @@ security: dict[str, dict] = {
     "protected_files": {},
 }
 
-for dirname in ["mods", "config", "resourcepacks"]:
+for dirname in ["mods", "config"]:
     full_dir = RELEASE_DIR / dirname
-    count = sum(len(files) for _, _, files in os.walk(full_dir)) if full_dir.exists() else 0
-    security["dirs_files_count"][dirname] = count
+    security["dirs_files_count"][dirname] = (
+        sum(1 for p in full_dir.rglob("*") if p.is_file()) if full_dir.exists() else 0
+    )
 
 for root, _, files in os.walk(RELEASE_DIR):
     for file in files:

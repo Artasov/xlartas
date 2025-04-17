@@ -106,9 +106,9 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: [ "CMD-SHELL", "wget --quiet --tries=1 --spider http://web:8000/health/ || exit 1" ]
+      test: ["CMD-SHELL", "nc -z localhost 8000 || exit 1"]
       timeout: 30s
-      interval: 5m
+      interval: 5s
       retries: 3
       start_period: 120s
     cap_add:
