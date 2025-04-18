@@ -3,8 +3,9 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FCCC, FRBC, FRCC} from "WideLayout/Layouts";
+import {FC, FRCC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
+import {Message} from 'Core/components/Message';
 
 
 const SkinCapeSetter: React.FC = () => {
@@ -25,9 +26,10 @@ const SkinCapeSetter: React.FC = () => {
     const uploadFile = async (file: File, type: 'skin' | 'cape') => {
         const fd = new FormData();
         fd.append(type, file);
-        await api.post(`/api/v1/xlmine/${type === 'skin' ? 'skin' : 'cape'}/`, fd, {
+        api.post(`/api/v1/xlmine/${type === 'skin' ? 'skin' : 'cape'}/`, fd, {
             headers: {'Content-Type': 'multipart/form-data'}
-        });
+        }).then(data => Message.success('Успешно обновлено')).catch(_ => Message.error('Не удалось обновить'));
+
         await fetchCurrent();
     };
 

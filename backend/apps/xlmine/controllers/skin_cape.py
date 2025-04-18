@@ -12,7 +12,10 @@ async def upload_skin(request):
     if not skin_file:
         return Response({"detail": "skin file is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-    await request.user.set_skin(skin_file)
+    try:
+        await request.user.set_skin(skin_file)
+    except ConnectionRefusedError:
+        return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
     return Response({"detail": "skin updated"}, status=status.HTTP_200_OK)
 
 
@@ -23,7 +26,10 @@ async def upload_cape(request):
     if not cape_file:
         return Response({"detail": "cape file is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-    await request.user.set_cape(cape_file)
+    try:
+        await request.user.set_cape(cape_file)
+    except ConnectionRefusedError:
+        return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
     return Response({"detail": "cape updated"}, status=status.HTTP_200_OK)
 
 

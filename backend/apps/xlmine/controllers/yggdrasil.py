@@ -434,11 +434,10 @@ async def profile_view(request, player_uuid):
     # Нужно, чтобы user.uuid_for_minecraft() == full_uuid c тире/без тире.
     # Для простоты предположим, что user хранит в поле user.minecraft_uuid
     try:
-        xlmine_user, _ = await UserXLMine.objects.aget_or_create(uuid=full_uuid)
-        user = await xlmine_user.arelated('user')
-    except User.DoesNotExist:
+        xlmine_user = await UserXLMine.objects.select_related('user').aget(uuid=full_uuid)
+    except UserXLMine.DoesNotExist:
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
-
+    user = xlmine_user.user
     resp = {
         "id": full_uuid.replace("-", ""),
         "name": user.username,
