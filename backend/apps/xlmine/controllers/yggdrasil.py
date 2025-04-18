@@ -75,12 +75,12 @@ async def authenticate_view(request):
     # Проверяем пароль (либо делаем свою custom-логику)
     if not user.check_password(password):
         return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
-
     # Строим абсолютный URL до скина (или None)
     if xlmine_user.skin:
-        skin_url = request.build_absolute_uri(xlmine_user.skin.url)
+        skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
     else:
         skin_url = None
     # Генерируем "accessToken" (в реальности можно делать полноценный JWT, но для примера - UUID)
@@ -173,6 +173,13 @@ async def refresh_view(request):
         "id": user_uuid.replace("-", ""),
         "name": user.username
     }
+    from apps.xlmine.models.user import UserXLMine
+    xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
+    # Строим абсолютный URL до скина (или None)
+    if xlmine_user.skin:
+        skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
+    else:
+        skin_url = None
     resp = {
         "accessToken": new_access,
         "clientToken": client_token,
@@ -185,7 +192,8 @@ async def refresh_view(request):
                     "name": "preferredLanguage",
                     "value": "ru"
                 }
-            ]
+            ],
+            'skin': skin_url,
         }
     }
     return Response(resp, status=status.HTTP_200_OK)
@@ -200,21 +208,46 @@ async def validate_view(request):
       "accessToken": "...",
       "clientToken": "...",
     }
-    Возвращаем 204 No Content, если всё валидно
+    Возвращаем 200, если всё валидно
     Иначе 403
     """
     data = request.data
-    pprint(data)
     access_token = data.get('accessToken')
     client_token = data.get('clientToken')
 
-    ok = await MinecraftSession.objects.filter(
+    session: MinecraftSession = await MinecraftSession.objects.select_related('user').filter(
         access_token=access_token,
         client_token=client_token
     ).aexists()
 
-    if ok:
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    if session:
+        from apps.xlmine.models.user import UserXLMine
+        xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=session.user)
+        # Строим абсолютный URL до скина (или None)
+        if xlmine_user.skin:
+            skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
+        else:
+            skin_url = None
+        resp = {
+            "accessToken": access_token,
+            "clientToken": client_token,
+            "selectedProfile": {
+                "id": xlmine_user.uuid.replace("-", ""),
+                "name": session.user.username
+            },
+            "user": {
+                "id": xlmine_user.uuid,
+                "username": session.user.username,
+                "properties": [
+                    {
+                        "name": "preferredLanguage",
+                        "value": "ru"
+                    }
+                ],
+                'skin': skin_url,
+            }
+        }
+        return Response(resp)
     else:
         return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
 
