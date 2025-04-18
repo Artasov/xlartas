@@ -17,19 +17,12 @@ from apps.xlmine.models.user import MinecraftSession, UserXLMine
 @api_view(['GET'])
 @permission_classes([AllowAny])
 async def base(request: AsyncRequest):
-    pprint(request.__dict__)
-    pprint(request.data)
-    pprint(request.GET)
     return Response({}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 async def auth_server(request):
-    pprint(request.__dict__)
-    pprint(request.data)
-    pprint(request.GET)
-    pprint(request.user.__dict__)
     return Response({}, status=status.HTTP_200_OK)
 
 
@@ -441,8 +434,8 @@ async def profile_view(request, player_uuid):
     # Нужно, чтобы user.uuid_for_minecraft() == full_uuid c тире/без тире.
     # Для простоты предположим, что user хранит в поле user.minecraft_uuid
     try:
-        xlmine_user = await UserXLMine.objects.select_related('user').aget_or_create(uuid=full_uuid)
-        user = xlmine_user.user
+        xlmine_user, _ = await UserXLMine.objects.aget_or_create(uuid=full_uuid)
+        user = await xlmine_user.arelated('user')
     except User.DoesNotExist:
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
