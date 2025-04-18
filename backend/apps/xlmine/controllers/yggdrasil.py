@@ -218,7 +218,7 @@ async def validate_view(request):
     session: MinecraftSession = await MinecraftSession.objects.select_related('user').filter(
         access_token=access_token,
         client_token=client_token
-    ).aexists()
+    ).afirst()
 
     if session:
         from apps.xlmine.models.user import UserXLMine
