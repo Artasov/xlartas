@@ -1,4 +1,5 @@
 # xlmine/services/server/console.py
+
 import logging
 
 from adjango.utils.common import traceback_str
@@ -28,9 +29,25 @@ class RconServerConsole:
         """
         try:
             log.info(f'Rcon <-- {command}')
-            with MCRcon(self.host, self.password, port=self.port) as mcr:
+            try:
+                with MCRcon(self.host, self.password, port=self.port) as mcr:
+                    response = mcr.command(command)
+                    log.info(f'Rcon --> {response}')
+                    return response
+            except ValueError:
+                # работаем в не‑главном потоке — обходим signal‑timeout
+                mcr = MCRcon(self.host, self.password, port=self.port)
+                # если есть атрибут socket и timeout
+                try:
+                    mcr.socket.settimeout(mcr.timeout)
+                except Exception:
+                    pass
                 response = mcr.command(command)
                 log.info(f'Rcon --> {response}')
+                try:
+                    mcr.disconnect()
+                except Exception:
+                    pass
                 return response
         except Exception as e:
             log.error(f"Ошибка при выполнении команды: {traceback_str(e)}")

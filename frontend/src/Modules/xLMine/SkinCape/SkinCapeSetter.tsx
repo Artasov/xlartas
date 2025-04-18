@@ -28,7 +28,11 @@ const SkinCapeSetter: React.FC = () => {
         fd.append(type, file);
         api.post(`/api/v1/xlmine/${type === 'skin' ? 'skin' : 'cape'}/`, fd, {
             headers: {'Content-Type': 'multipart/form-data'}
-        }).then(data => Message.success('Успешно обновлено')).catch(_ => Message.error('Не удалось обновить'));
+        }).then(data => {
+            if (type === 'skin') setSkinUrl(data.skin);
+            else if (type === 'cape') setCapeUrl(data.cape);
+            Message.success('Успешно обновлено')
+        }).catch(_ => Message.error('Не удалось обновить'));
 
         await fetchCurrent();
     };

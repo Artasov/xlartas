@@ -2,6 +2,7 @@
 from typing import TYPE_CHECKING
 
 from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 
 if TYPE_CHECKING:
@@ -32,7 +33,7 @@ class UserXLMineService:
         )
 
         # 2. Берём публичный URL из поля FileField
-        skin_url = xlm.skin.url
+        skin_url = settings.DOMAIN_URL + xlm.skin.url
 
         # 3. Шлём команду на сервер по RCON
         rcon = RconServerConsole()
@@ -69,7 +70,7 @@ class UserXLMineService:
             cape_file.name, cape_file, save=True
         )
 
-        cape_url = xlm.cape.url
+        cape_url = settings.DOMAIN_URL + xlm.cape.url
 
         rcon = RconServerConsole()
         return rcon.send_command(f"/cape player {self.username} set {cape_url}")

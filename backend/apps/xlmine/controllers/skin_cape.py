@@ -1,8 +1,11 @@
 from adrf.decorators import api_view
+from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from apps.xlmine.models.user import UserXLMine
 
 
 @api_view(['POST'])
@@ -14,9 +17,10 @@ async def upload_skin(request):
 
     try:
         await request.user.set_skin(skin_file)
+        xlm = await UserXLMine.objects.aget(user=request.user)
+        return Response({"skin": settings.DOMAIN_URL + xlm.skin.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:
         return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
-    return Response({"detail": "skin updated"}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -28,9 +32,10 @@ async def upload_cape(request):
 
     try:
         await request.user.set_cape(cape_file)
+        xlm = await UserXLMine.objects.aget(user=request.user)
+        return Response({"cape": settings.DOMAIN_URL + xlm.cape.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:
         return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
-    return Response({"detail": "cape updated"}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
