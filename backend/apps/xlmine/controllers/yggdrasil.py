@@ -75,7 +75,14 @@ async def authenticate_view(request):
     # Проверяем пароль (либо делаем свою custom-логику)
     if not user.check_password(password):
         return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+    from apps.xlmine.models.user import UserXLMine
+    xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
 
+    # Строим абсолютный URL до скина (или None)
+    if xlmine_user.skin:
+        skin_url = request.build_absolute_uri(xlmine_user.skin.url)
+    else:
+        skin_url = None
     # Генерируем "accessToken" (в реальности можно делать полноценный JWT, но для примера - UUID)
     access_token = str(uuid.uuid4())
 
@@ -114,7 +121,9 @@ async def authenticate_view(request):
                     "name": "preferredLanguage",
                     "value": "ru"
                 }
-            ]
+            ],
+            'skin': skin_url,
+
         }
     }
 
