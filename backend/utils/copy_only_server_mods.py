@@ -84,7 +84,6 @@ if __name__ == '__main__':
         'skin-swapper',
         'iris',
         'lambdynamiclights',
-        'modmenu',
         'motionblur',
         'MouseTweaks',
         'Prism',

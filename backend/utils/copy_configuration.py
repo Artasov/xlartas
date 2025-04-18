@@ -73,18 +73,18 @@ configurations = {
         'xl.frontend.src': {
             'App': '__copy__',
             'Modules': {
-                'Auth': '__copy__',
-                'Api': '__copy__',
+                # 'Auth': '__copy__',
+                # 'Api': '__copy__',
                 'Core': {
                     'components': {
-                        'Header': '__copy__',
-                        'ErrorProvider': '__copy__',
+                        # 'Header': '__copy__',
+                        # 'ErrorProvider': '__copy__',
                     }
                 },
-                'Cabinet': '__copy__',
+                # 'Cabinet': '__copy__',
                 # 'Order': '__copy__',
-                'Software': '__copy__',
-                'xLMine': '__copy__',
+                # 'Software': '__copy__',
+                # 'xLMine': '__copy__',
             },
             'Types': {},
             'Utils': {},

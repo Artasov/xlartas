@@ -115,13 +115,10 @@ def sha256(path: Path) -> str:
 def is_editable(rel: str) -> bool:
     for entry in EDITABLE_FILES:
         if entry.endswith("/"):
-            # директория
             if rel.startswith(entry):
                 return True
-        else:
-            # конкретный файл
-            if rel == entry:
-                return True
+        elif rel == entry:
+            return True
     return False
 
 
@@ -148,8 +145,11 @@ for dname in DIRS_TO_COPY:
     src = SOURCE_DIR / dname
     dst = RELEASE_DIR / dname
     if src.exists():
-        shutil.copytree(src, dst)
-        log(f"Copied directory: {dname}")
+        if dst.exists():
+            shutil.rmtree(dst)
+        shutil.copytree(src, dst, dirs_exist_ok=True)
+        copied_files = sum(1 for _ in dst.rglob("*") if _.is_file())
+        log(f"Copied directory: {dname} ({copied_files} files)")
 
 # ───────────────── формирование security.json ───────────────────────────────
 security: dict[str, dict] = {
@@ -168,7 +168,7 @@ for root, _, files in os.walk(RELEASE_DIR):
     for file in files:
         rel_path = os.path.relpath(os.path.join(root, file), RELEASE_DIR).replace("\\", "/")
         if is_editable(rel_path):
-            continue  # разрешено менять
+            continue
         security["protected_files"][rel_path] = sha256(Path(root) / file)
 
 SECURITY_PATH.write_text(json.dumps(security, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -19,9 +19,10 @@ import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FR, FRC, FRSC} from "WideLayout/Layouts";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
-import UserAvatarEditable from "User/UserAvatarEditable";
 import copyToClipboard from "Utils/clipboard";
 import {useApi} from "../Api/useApi";
+import SkinCapeSetter from "../xLMine/SkinCape/SkinCapeSetter";
+import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 
 interface FormData {
     username: string;
@@ -45,7 +46,7 @@ const UserPersonalInfoForm: React.FC = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
     const [isEmailModalOpen, setIsEmailModalOpen] = useState<boolean>(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState<boolean>(false);
-    const isLargeScreen = useMediaQuery('(min-width: 576px)');
+    const isGtSm = useMediaQuery('(min-width: 576px)');
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -102,58 +103,71 @@ const UserPersonalInfoForm: React.FC = () => {
     return (
         <FC component={'form'} pb={'5rem'} pos={'relative'} mt={1} onSubmit={handleSubmit} maxW={400}>
             <FR wrap g={1} mb={2}>
-                {!isLargeScreen && <UserAvatarEditable size={'8rem'}/>}
                 <SocialOAuth className={'pe-2'}/>
                 <FC>
                     {user?.is_email_confirmed
-                        ? <div className={'fr gap-2 pe-3'}>
+                        ? <FR g={1}>
                             <CheckCircleOutlineIcon style={{
                                 color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Почта подтверждена</span>
-                        </div>
-                        : <div className={'fr gap-2 pe-3'}>
+                        </FR>
+                        : <FR g={1}>
                             <HighlightOffIcon style={{
                                 color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Почта не подтверждена</span>
-                        </div>
+                        </FR>
                     }
                     {user?.is_phone_confirmed
-                        ? <div className={'fr gap-2 pe-3'}>
+                        ? <FR g={1}>
                             <CheckCircleOutlineIcon style={{
                                 color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Телефон подтвержден</span>
-                        </div>
-                        : <div className={'fr gap-2 pe-3'}>
+                        </FR>
+                        : <FR g={1}>
                             <HighlightOffIcon style={{
                                 color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
                             <span>Телефон не подтвержден</span>
-                        </div>
+                        </FR>
                     }
                 </FC>
 
             </FR>
-
+            <FR>
+                <FR ml={-2}><SkinCapeSetter/></FR>
+                <FC g={1}>
+                    <FRSC wrap g={1}>
+                        <FR color={plt.text.primary} fontWeight={'bold'}
+                            fontSize={isGtSm ? '2.2rem' : '1.7rem'}
+                            lineHeight={'1.5rem'}>
+                            {user?.username}
+                        </FR>
+                        <FR mt={.57}
+                            fontSize={isGtSm ? '1.7rem' : '1.5rem'}
+                            fontWeight={'bold'}><UserPrivilege/></FR>
+                    </FRSC>
+                    <FR>{user.coins} монет</FR>
+                </FC>
+            </FR>
             <FC g={2} cls={'user-form'}>
                 <FR g={1}>
-                    <TextField
-                        variant="outlined"
-                        margin="none"
-                        className={'flex-grow-1'}
-                        label="Имя пользователя"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}/>
+                    {/*<TextField*/}
+                    {/*    variant="outlined"*/}
+                    {/*    margin="none"*/}
+                    {/*    className={'flex-grow-1'}*/}
+                    {/*    label="Имя пользователя"*/}
+                    {/*    name="username"*/}
+                    {/*    value={formData.username}*/}
+                    {/*    onChange={handleChange}/>*/}
 
-                    <Button onClick={() => setIsPasswordModalOpen(true)}
-                            classNameOverride={`px-2 opacity-75 pb-0 pt-3px text-nowrap minw-150px`}
+                    <Button color={'secondary'} onClick={() => setIsPasswordModalOpen(true)}
                             style={{
                                 fontWeight: 600,
                                 color: plt.text.contrast70,

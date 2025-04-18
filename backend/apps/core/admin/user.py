@@ -4,7 +4,8 @@ from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin
 from django.db import transaction
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_object_actions import DjangoObjectActions
 from import_export.admin import ImportExportModelAdmin
@@ -27,6 +28,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         'id',
         'display_avatar',
         'username',
+        'current_privilege',
         'email',
         'phone',
         'gender',
@@ -79,7 +81,10 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
 
     )
     actions = (
-
+        'upgrade_privilege',
+        'downgrade_privilege',
+        'rcon_sync_privilege',
+        'calc_and_set_current_privilege',
     )
     ordering = ('-date_joined',)
 
@@ -97,6 +102,51 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         except Exception as e:
             self.message_user(request, f'Ошибка при удалении пользователя: {str(e)}', level='error')
             raise
+
+    @admin_description(_('Privilege'))
+    def current_privilege(self, obj):
+        xlm = obj.xlmine_user
+        prefix_code = xlm.privilege.prefix if xlm.privilege else ''
+        if not prefix_code:
+            return '-'
+        html = ''
+        s = prefix_code
+        i = 0
+        while i < len(s):
+            # паттерн "&#RRGGBB<символ>" — 9 символов
+            if s.startswith('&#', i) and len(s) >= i + 9:
+                hexcode = s[i + 2:i + 8]
+                char = s[i + 8]
+                html += format_html(
+                    '<span style="color:#{}">{}</span>',
+                    hexcode,
+                    char
+                )
+                i += 9
+            else:
+                html += escape(s[i])
+                i += 1
+        return mark_safe(html)
+
+    @admin_description(_('Upgrade privilege'))
+    def upgrade_privilege(self, request, queryset):
+        for user in queryset:
+            user.sync_upgrade_privilege()
+
+    @admin_description(_('Downgrade privilege'))
+    def downgrade_privilege(self, request, queryset):
+        for user in queryset:
+            user.sync_downgrade_privilege()
+
+    @admin_description(_('RCON privilege sync'))
+    def sync_privilege(self, request, queryset):
+        for user in queryset:
+            user.sync_rcon_sync_privilege()
+
+    @admin_description(_('Calc and set current privilege'))
+    def calc_and_set_current_privilege(self, request, queryset):
+        for user in queryset:
+            user.sync_calc_and_set_current_privilege()
 
     @admin_description(_('Avatar'))
     def display_avatar(self, obj):

@@ -1,42 +1,67 @@
 // Modules/xLMine/Privilege/UserPrivilege.tsx
-
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../../Api/useApi';
-import {FCC, FRCC} from 'WideLayout/Layouts';
-import CircularProgress from "Core/components/elements/CircularProgress";
-import {Message} from "Core/components/Message";
-import {IPrivilege} from "../types/base";
-
+import {FC, FR, FRCC} from 'WideLayout/Layouts';
+import CircularProgress from 'Core/components/elements/CircularProgress';
+import {Message} from 'Core/components/Message';
+import Tooltip from '@mui/material/Tooltip';
+import {IPrivilege} from '../types/base';
 
 const UserPrivilege: React.FC = () => {
     const {api} = useApi();
     const [privilege, setPrivilege] = useState<IPrivilege | null | undefined>(undefined);
 
+    /** превращаем "&#RRGGBBХ"‑строку в набор span‑ов */
+    const renderGradient = (str: string) => {
+        const result: React.ReactNode[] = [];
+        let i = 0;
+
+        while (i < str.length) {
+            if (str.startsWith('&#', i) && str.length >= i + 9) {
+                const hex = str.slice(i + 2, i + 8);
+                const char = str[i + 8];
+                result.push(
+                    <span key={i} style={{color: `#${hex}`}}>
+                        {char}
+                    </span>
+                );
+                i += 9;
+            } else {
+                result.push(<span key={i}>{str[i]}</span>);
+                i += 1;
+            }
+        }
+        return result;
+    };
+
     useEffect(() => {
         api.get('/api/v1/xlmine/privilege/current/')
-            .then(data => {
-                if (data.privilege === null) {
-                    // Нет привилегии
-                    setPrivilege(null);
-                } else {
-                    // data = { name, threshold, color, ... }
-                    setPrivilege(data.privilege);
-                }
-            })
-            .catch(err => {
+            .then(data => setPrivilege(data.privilege))
+            .catch(() => {
                 Message.error('Ошибка загрузки привилегии');
                 setPrivilege(null);
             });
     }, [api]);
 
-    if (privilege === undefined) return <FRCC><CircularProgress size={'40'}/></FRCC>;
+    if (privilege === undefined) {
+        return (
+            <FRCC>
+                <CircularProgress size={40}/>
+            </FRCC>
+        );
+    }
     if (!privilege) return <span>Привилегий нет</span>;
 
     return (
-        <FCC g={1} color={privilege.color || '#aa00aa'}>
-            <h3 style={{margin: 0}}>{privilege.name}</h3>
-            {privilege.description && <p>{privilege.description}</p>}
-        </FCC>
+        <FC g={1} color={privilege.color || '#aa00aa'} height="min-content">
+            <Tooltip title={privilege.description || ''}>
+                {/* обёртка <span> делает children единичным ReactElement‑ом */}
+                <FR>
+                    <FR>{renderGradient(privilege.prefix || '')}</FR>
+                    <FR pos={'absolute'} sx={{filter: 'blur(10px) contrast(2) brightness(2)'}}>{renderGradient(privilege.prefix || '')}</FR>
+                </FR>
+            </Tooltip>
+        </FC>
     );
 };
 

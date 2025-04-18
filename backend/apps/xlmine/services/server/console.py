@@ -1,8 +1,11 @@
 # xlmine/services/server/console.py
-import traceback
+import logging
 
+from adjango.utils.common import traceback_str
 from django.conf import settings
 from mcrcon import MCRcon
+
+log = logging.getLogger('global')
 
 
 class RconServerConsole:
@@ -25,8 +28,10 @@ class RconServerConsole:
         """
         try:
             with MCRcon(self.host, self.password, port=self.port) as mcr:
+                log.info(f'Rcon <-- {command}')
                 response = mcr.command(command)
+                log.info(f'Rcon --> {response}')
                 return response
         except Exception as e:
-            traceback.print_exc()
+            log.error(f"Ошибка при выполнении команды: {traceback_str(e)}")
             return f"Ошибка при выполнении команды: {str(e)}"

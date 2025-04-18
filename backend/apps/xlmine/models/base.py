@@ -1,7 +1,7 @@
 # xlmine/models/base.py
 from adjango.models import AModel
 from adjango.models.mixins import ACreatedUpdatedAtMixin
-from django.db.models import FileField, CharField, TextField, DecimalField, JSONField
+from django.db.models import FileField, CharField, TextField, DecimalField, JSONField, PositiveSmallIntegerField
 from django.utils.translation import gettext_lazy as _
 
 from apps.xlmine.managers.privilege import PrivilegeManager
@@ -42,16 +42,18 @@ class Privilege(AModel, PrivilegeService):
     objects = PrivilegeManager()
 
     name = CharField(_('Name'), max_length=100, unique=True)
-    # code_name = CharField(_('Code'), max_length=100, unique=True)
-    code_name = CharField(_('Code'), max_length=100)
-    # prefix = CharField(_('Prefix'), max_length=100, unique=True)
-    prefix = CharField(_('Prefix'), max_length=100)
-    color = CharField(_('Color'), max_length=10, unique=True)
+    code_name = CharField(_('Code'), max_length=100, unique=True)
+    prefix = TextField(_('Prefix'))
+    weight = PositiveSmallIntegerField(_('Weight'), default=10)
     threshold = DecimalField(
         _('Donation threshold'), max_digits=10, decimal_places=2,
         help_text=_('Суммарная сумма донатов, начиная с которой эта привилегия доступна')
     )
     description = TextField(_('Description'), blank=True)
+    gradient_start = CharField(_('Gradient start'), max_length=7, blank=True, null=True,
+                               help_text=_('HEX, например "#FF0000"'))
+    gradient_end = CharField(_('Gradient end'), max_length=7, blank=True, null=True,
+                             help_text=_('HEX, например "#00FF00"'))
 
     class Meta:
         verbose_name = _('Privilege')

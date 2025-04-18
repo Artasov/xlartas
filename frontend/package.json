@@ -49,11 +49,13 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.1",
+    "react-skinview3d": "^5.1.0",
     "react-social-login-buttons": "^4.1.0",
     "react-textarea-autosize": "^8.5.5",
     "react-toastify": "^10.0.6",
     "redux": "^5.0.1",
     "sass": "^1.81.0",
+    "skinview3d": "^3.1.0",
     "swiper": "^11.1.15",
     "uuid": "^11.0.3",
     "web-vitals": "^2.1.4"

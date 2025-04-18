@@ -49,7 +49,7 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
                     </NavLink>
                 ))}
             </FRS>
-            <FC flexGrow={1} scroll={'y-auto'} px={3} py={1}>
+            <FC flexGrow={1} scroll={'y-auto'} px={2} py={1}>
                 <Routes>
                     <Route path="user" element={<UserPersonalInfoForm/>}/>
                 </Routes>

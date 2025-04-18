@@ -27,6 +27,7 @@ export interface IUser {
     age?: number;
     client?: IClient | null;
     full_name?: string;
+    coins?: number;
 }
 
 export interface IDiscordUser {

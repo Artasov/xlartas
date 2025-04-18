@@ -136,10 +136,6 @@ const Cabinet: React.FC = () => {
                             <FC pos={'relative'}>
                                 <UserAvatarEditable size={'8em'}/>
                             </FC>
-                            <FRCC color={plt.text.primary70} fontWeight={'bold'} fontSize={'1.2rem'} mb={1.2}>
-                                {user?.username}
-                            </FRCC>
-                            <UserPrivilege/>
                         </FCSC>
                         <FC g={1}>
                             <CabinetNavLink

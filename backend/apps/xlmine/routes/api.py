@@ -9,6 +9,7 @@ from apps.xlmine.controllers.base import (
     get_latest_release_security
 )
 from apps.xlmine.controllers.eco import balance, pay
+from apps.xlmine.controllers.skin_cape import upload_skin, upload_cape, current_skin_cape
 
 app_name = 'xlmine'
 
@@ -28,6 +29,10 @@ urlpatterns = [
     path('privilege/', list_privileges),
     path('', include(router.urls)),
 
-    path('balance/', balance, name='balance'),
-    path('pay/', pay, name='pay'),
+    path('balance/', balance),
+    path('pay/', pay),
+
+    path('current/skin-cape/', current_skin_cape),
+    path('skin/', upload_skin),
+    path('cape/', upload_cape),
 ]

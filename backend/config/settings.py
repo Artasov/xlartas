@@ -334,7 +334,8 @@ MIDDLEWARE = [
 
 ]
 if DEV: MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
-MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
+# MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
+MEDIA_SUBSTITUTION_URL = 'http://localhost:8000'
 
 CHANNEL_LAYERS = {
     'default': {

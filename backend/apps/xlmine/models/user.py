@@ -1,7 +1,8 @@
 # xlmine/models/user.py
-from adjango.models import AModel
-from django.db.models import OneToOneField, DecimalField, CASCADE, DateTimeField, CharField, ForeignKey
 import uuid as uuid_
+
+from adjango.models import AModel
+from django.db.models import OneToOneField, DecimalField, CASCADE, DateTimeField, CharField, ForeignKey, FileField
 from django.utils.translation import gettext_lazy as _
 
 
@@ -11,7 +12,18 @@ class UserXLMine(AModel):
     количество коинов. Связь 1 к 1 с основной моделью User.
     """
     user = OneToOneField('core.User', CASCADE, related_name='xlmine_user', primary_key=True)
-    uuid = CharField(max_length=100, default=uuid_.uuid4, unique=True, editable=False)
+    privilege = ForeignKey('xlmine.Privilege', CASCADE, 'xlmine_users', null=True, blank=True)
+    uuid = CharField(max_length=100, default=uuid_.uuid4, unique=True, editable=True)
+    skin = FileField(
+        upload_to='minecraft/skins/',
+        verbose_name=_('Skin'),
+        blank=True, null=True
+    )
+    cape = FileField(
+        upload_to='minecraft/capes/',
+        verbose_name=_('Cape'),
+        blank=True, null=True
+    )
     coins = DecimalField(
         _('Coins'),
         max_digits=10,

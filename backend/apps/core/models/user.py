@@ -17,6 +17,8 @@ from timezone_field import TimeZoneField
 from apps.core.managers.user import UserManager
 from apps.core.models.choices import Gender
 from apps.core.services.user import UserService, generate_random_username
+from apps.xlmine.services.donate import UserDonateService
+from apps.xlmine.services.privilege import UserPrivilegeService
 from apps.xlmine.services.user import UserXLMineService
 from utils.pictures import CorrectOrientation
 
@@ -42,7 +44,9 @@ class Role(AModel):
 class User(
     AAbstractUser,
     UserService,
-    UserXLMineService
+    UserDonateService,
+    UserXLMineService,
+    UserPrivilegeService
 ):
     objects = UserManager()
 

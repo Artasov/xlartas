@@ -2,8 +2,17 @@
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from django.db.models import Sum
+
 if TYPE_CHECKING:
+    from apps.core.models import User
     from apps.xlmine.models import Donate, DonateOrder
+
+
+class UserDonateService:
+
+    async def sum_donate_amount(self: 'User') -> Decimal:
+        return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)
 
 
 class DonateService:

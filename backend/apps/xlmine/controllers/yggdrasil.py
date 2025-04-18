@@ -399,7 +399,7 @@ async def profile_view(request, player_uuid):
     # Нужно, чтобы user.uuid_for_minecraft() == full_uuid c тире/без тире.
     # Для простоты предположим, что user хранит в поле user.minecraft_uuid
     try:
-        xlmine_user = await UserXLMine.objects.select_related('user').aget(uuid=full_uuid)
+        xlmine_user = await UserXLMine.objects.select_related('user').aget_or_create(uuid=full_uuid)
         user = xlmine_user.user
     except User.DoesNotExist:
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)

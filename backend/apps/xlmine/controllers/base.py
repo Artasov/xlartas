@@ -1,6 +1,7 @@
 # xlmine/controllers/base.py
 import logging
 import os
+from pprint import pprint
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -16,6 +17,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.xlmine.models import Launcher, Donate, Privilege
 from apps.xlmine.models import Release
+from apps.xlmine.models.user import UserXLMine
 from apps.xlmine.permissions import IsMinecraftDev  # ваша кастомная permission
 from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
 from apps.xlmine.serializers.donate import DonateSerializer
@@ -165,11 +167,11 @@ async def get_latest_release_security(_):
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_current_privilege(request):
-    sum_donate_amount = await request.user.sum_donate_amount()
-    privilege = await Privilege.objects.get_by_threshold(sum_donate_amount)
+    xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=request.user)
+    privilege = await xlmine_user.arelated('privilege') if hasattr(xlmine_user, 'privilege_id') else None
     return Response({
         'privilege': await PrivilegeSerializer(privilege).adata if privilege else None,
-        'total_donate_amount': float(sum_donate_amount),
+        'total_donate_amount': float(await request.user.sum_donate_amount()),
     })
 
 
