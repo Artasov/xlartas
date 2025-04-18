@@ -27,8 +27,8 @@ class RconServerConsole:
         :return: Ответ сервера или сообщение об ошибке.
         """
         try:
+            log.info(f'Rcon <-- {command}')
             with MCRcon(self.host, self.password, port=self.port) as mcr:
-                log.info(f'Rcon <-- {command}')
                 response = mcr.command(command)
                 log.info(f'Rcon --> {response}')
                 return response
