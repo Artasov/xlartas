@@ -37,7 +37,9 @@ class UserXLMineService:
 
         # 3. Шлём команду на сервер по RCON
         rcon = RconServerConsole()
-        return rcon.send_command(f"/skin player {self.username} set {skin_url}")
+        return rcon.send_command(
+            f'/skin set web classic "{skin_url}" {self.username}'
+        )
 
     async def clear_skin(self: 'User') -> str:
         """
@@ -73,7 +75,9 @@ class UserXLMineService:
         cape_url = settings.DOMAIN_URL + xlm.cape.url
 
         rcon = RconServerConsole()
-        return rcon.send_command(f"/cape player {self.username} set {cape_url}")
+        return rcon.send_command(
+            f"/cape player {self.username} set {cape_url}"
+        )
 
     async def clear_cape(self: 'User') -> str:
         """
