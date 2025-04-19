@@ -57,6 +57,8 @@ EDITABLE_FILES = [
     'config/lightoverlay.properties',
     'config/lithium.properties',
     'config/modelfix-client.json',
+    'config/vmp.properties',
+    'config/showmeyourskin.json',
     'config/modernfix-mixins.properties',
     'config/moonlight-client.json',
     'config/moonlight-common.json',

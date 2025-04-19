@@ -22,7 +22,7 @@ import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FCS, FR, FRC, FRSC} from "WideLayout/Layouts";
+import {FC, FCCC, FCS, FR, FRC, FRSC} from "WideLayout/Layouts";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";
 import {v4 as uuidv4} from 'uuid';
@@ -42,6 +42,7 @@ const LauncherManager: React.FC = () => {
     const [launchers, setLaunchers] = useState<ILauncher[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [version, setVersion] = useState<string>("1.0.0");
     // Удаление
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -72,13 +73,14 @@ const LauncherManager: React.FC = () => {
     // ==== Загрузка файла ====
     const handleUpload = async () => {
         if (!file) {
-            Message.error('Выберите файл');
+            Message.error('Выберите файл установщика');
             return;
         }
         setIsUploading(true);
         try {
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('version', version);
 
             const newVersion = await api.post('/api/v1/xlmine/launcher/', formData, {
                 headers: {'Content-Type': 'multipart/form-data'}
@@ -126,8 +128,19 @@ const LauncherManager: React.FC = () => {
         <FC g={1}>
             <Paper sx={{p: 2}}>
                 <FC g={1}>
-                    <FRSC g={2}>
-                        <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
+                    <FC g={1}>
+                        <FRSC g={1}>
+                            <span>Установщик</span>
+                            <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
+                        </FRSC>
+                        <TextField
+                            sx={{width: 'fit-content'}}
+                            size={'small'}
+                            label="Версия"
+                            value={version}
+                            onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
+                            fullWidth
+                        />
                         <Button
                             variant="contained"
                             onClick={handleUpload}
@@ -136,8 +149,8 @@ const LauncherManager: React.FC = () => {
                         >
                             Загрузить
                         </Button>
-                        {isUploading && <CircularProgress size={32}/>}
-                    </FRSC>
+                        {isUploading && <FCCC><CircularProgress size={32}/></FCCC>}
+                    </FC>
                 </FC>
             </Paper>
 
@@ -238,6 +251,7 @@ const ReleaseManager: React.FC = () => {
     const [isUploading, setIsUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
 
+    const [version, setVersion] = useState<string>("1.0.0");
     const [releases, setReleases] = useState<IRelease[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -301,6 +315,7 @@ const ReleaseManager: React.FC = () => {
                 formData.append('total_chunks', String(totalChunks));
                 formData.append('filename', file.name);
                 formData.append('file', chunk);
+                formData.append('version', version);
 
                 // Добавляем security_json только в первый чанк
                 if (idx === 0) formData.append('security_json', securityJson);
@@ -354,8 +369,16 @@ const ReleaseManager: React.FC = () => {
             <Paper sx={{p: 2}}>
                 <FC g={1}>
                     <FCS g={1}>
-                        <FR>
-                            <FileUpload onFileSelect={handleFileChange} reset={fileReset}/></FR>
+                        <FR g={1}>
+                            <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
+                            <TextField
+                                sx={{width: 'fit-content'}}
+                                size={'small'}
+                                label="Версия"
+                                value={version}
+                                onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
+                            />
+                        </FR>
                         {file && (
                             <TextField
                                 label="security.json"

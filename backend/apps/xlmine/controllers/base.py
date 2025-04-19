@@ -2,12 +2,13 @@
 import json
 import logging
 import os
+from pprint import pprint
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from django.conf import settings
 from django.core.files import File
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -33,14 +34,13 @@ class LauncherViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        # Вычисляем SHA256 по загруженному файлу
         instance.sha256_hash = calculate_sha256(instance.file)
-        # Генерируем новую версию: если есть предыдущая – увеличиваем, иначе "1.0.0"
-        latest = Launcher.objects.exclude(pk=instance.pk).order_by('-created_at').first()
-        if latest and latest.version:
-            instance.version = increment_version(latest.version)
-        else:
-            instance.version = "1.0.0"
+        pprint(serializer.validated_data)
+        # Теперь версия указывается вручную
+        if 'version' not in serializer.validated_data:
+            latest = Launcher.objects.exclude(pk=instance.pk).order_by('-created_at').first()
+            instance.version = increment_version(latest.version) if latest and latest.version else "1.0.0"
+
         instance.save()
 
 
@@ -50,14 +50,15 @@ class ReleaseViewSet(ModelViewSet):
     permission_classes = [IsMinecraftDev]
 
     def perform_create(self, serializer):
-        print(self.request.upload_handlers)
+        pprint(serializer.validated_data)
         instance = serializer.save()
         instance.sha256_hash = calculate_sha256(instance.file)
-        latest = Release.objects.exclude(pk=instance.pk).order_by('-created_at').first()
-        if latest and latest.version:
-            instance.version = increment_version(latest.version)
-        else:
-            instance.version = "1.0.0"
+
+        # Теперь версия указывается вручную
+        if 'version' not in serializer.validated_data:
+            latest = Release.objects.exclude(pk=instance.pk).order_by('-created_at').first()
+            instance.version = increment_version(latest.version) if latest and latest.version else "1.0.0"
+
         instance.save()
 
 

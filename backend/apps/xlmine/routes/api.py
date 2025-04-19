@@ -5,7 +5,8 @@ from rest_framework.routers import DefaultRouter
 from apps.xlmine.controllers.base import (
     ReleaseViewSet, LauncherViewSet,
     get_latest_launcher, get_latest_release,
-    get_current_privilege, get_latest_donate_product, list_privileges, ChunkedReleaseUploadView,
+    get_current_privilege, get_latest_donate_product,
+    list_privileges, ChunkedReleaseUploadView,
     get_latest_release_security
 )
 from apps.xlmine.controllers.eco import balance, pay
