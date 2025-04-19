@@ -5,7 +5,6 @@ import {FC, FCA, FCC, FCCC, FRCC, FRSC} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.png';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {Link} from "react-router-dom";
 import Button from "Core/components/elements/Button/Button";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import DonateButton from "./Donate/DonateButton";
@@ -18,7 +17,11 @@ const screenshot3 = 'https://via.placeholder.com/400x250?text=Screenshot+3';
 const XLMineLanding: React.FC = () => {
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
-
+    const handleDownload = async () => {
+        const response = await fetch('/api/v1/xlmine/launcher/latest/');
+        const data = await response.json();
+        window.location.href = data.file;
+    };
     return (
         <FCC pos={'relative'} w="100%"
              h={`calc(100vh - ${headerNavHeight}px)`}
@@ -42,12 +45,12 @@ const XLMineLanding: React.FC = () => {
                         <h1 style={{fontSize: '5rem', margin: 0, lineHeight: '1.2'}}>
                             <span style={{color: plt.text.accent}}>xlmine</span>
                         </h1>
-                        <Link to="/download-launcher" style={{textDecoration: 'none'}}>
-                            <Button variant="contained" className="fw-bold gap-1 hover-scale-5 ftrans-200-eio" sx={{fontSize: '1.5rem'}}>
-                                <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>
-                                Скачать лаунчер
-                            </Button>
-                        </Link>
+                        <Button onClick={handleDownload} variant="contained"
+                                className="fw-bold gap-1 hover-scale-5 ftrans-200-eio"
+                                sx={{fontSize: '1.5rem'}}>
+                            <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>
+                            Скачать лаунчер
+                        </Button>
                         <FC py={2}>
                             <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
                                 <p style={{maxWidth: 400, fontSize: '1.1rem'}}>
