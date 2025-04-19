@@ -19,6 +19,11 @@ FILES_TO_COPY = [
 ]
 DIRS_TO_COPY = [
     "assets",
+    "data",
+    "defaultconfigs",
+    "data",
+    "data",
+    "data",
     "versions",
     "resourcepacks",
     "shaderpacks",

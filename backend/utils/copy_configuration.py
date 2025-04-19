@@ -174,6 +174,8 @@ configurations = {
         'xlmine-launcher': {
             # 'gradle': '__copy__',
             'src': '__copy__',
+            'package': '__copy__',
+            'index': '__copy__',
             # 'gradlew': '__copy__',
             # 'settings': '__copy__',
         },
