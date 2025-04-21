@@ -46,7 +46,7 @@ const UserPrivilege: React.FC = () => {
     if (privilege === undefined) {
         return (
             <FRCC>
-                <CircularProgress size={40}/>
+                <CircularProgress size={22}/>
             </FRCC>
         );
     }

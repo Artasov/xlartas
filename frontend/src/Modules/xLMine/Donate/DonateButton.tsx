@@ -11,7 +11,13 @@ const DonateButton: React.FC = () => {
 
     return (
         <>
-            <Button onClick={handleOpen}>
+            <Button classNameOverride={' '}
+                    color={'#fff1'}
+                    sx={{
+                        fontSize: '1rem',
+                        fontWeight: 'bold',
+                        backdropFilter: 'blur(5px) saturate(2) brightness(4) hue-rotate(30deg)',
+                    }} onClick={handleOpen}>
                 Поддержать
             </Button>
             {open && (

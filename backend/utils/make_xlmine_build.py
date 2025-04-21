@@ -17,13 +17,11 @@ FILES_TO_COPY = [
     "options.txt",
     "authlib-injector-1.2.5.jar",
 ]
+
 DIRS_TO_COPY = [
     "assets",
     "data",
     "defaultconfigs",
-    "data",
-    "data",
-    "data",
     "versions",
     "resourcepacks",
     "shaderpacks",
@@ -109,6 +107,8 @@ EDITABLE_FILES = [
     'config/yosbr/options.txt',
 ]
 
+# ───────────────── запрос версии релиза ──────────────────────────────────────
+version = input("Enter release version: ").strip()
 
 # ───────────────── helpers ────────────────────────────────────────────────────
 def sha256(path: Path) -> str:
@@ -117,7 +117,6 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
-
 
 def is_editable(rel: str) -> bool:
     for entry in EDITABLE_FILES:
@@ -128,10 +127,8 @@ def is_editable(rel: str) -> bool:
             return True
     return False
 
-
 def log(msg: str) -> None:
     print(f"[BUILD] {msg}")
-
 
 # ───────────────── подготовка директории релиза ──────────────────────────────
 if RELEASE_DIR.exists():
@@ -147,6 +144,12 @@ for fname in FILES_TO_COPY:
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
         log(f"Copied file: {fname}")
+
+# ───────────────── запись версии в version.txt в папке релиза ────────────────
+version_file = RELEASE_DIR / "version.txt"
+with open(version_file, "w", encoding="utf-8") as f:
+    f.write(version + "\n")
+log(f"Release version {version} written to version.txt")
 
 for dname in DIRS_TO_COPY:
     src = SOURCE_DIR / dname

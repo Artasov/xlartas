@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FRCC} from "WideLayout/Layouts";
+import {FC, FCC, FRCC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import {Message} from 'Core/components/Message';
 
@@ -81,7 +81,7 @@ const SkinCapeSetter: React.FC = () => {
     };
 
     return (
-        <FC w={'fit-content'} pb={2} rounded={3}>
+        <FCC w={'fit-content'} pb={2} rounded={3}>
             {validSkin && (
                 <SkinCapeView
                     skinUrl={skinUrl!}
@@ -124,7 +124,7 @@ const SkinCapeSetter: React.FC = () => {
                     />
                 </Button>
             </FRCC>
-        </FC>
+        </FCC>
     );
 };
 

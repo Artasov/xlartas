@@ -72,7 +72,7 @@ const Button = React.forwardRef(
                 startIcon={loading && (
                     <CircularProgress
                         style={{color: plt.text.contrast70}}
-                        size={24}
+                        size={20}
                     />
                 )}
                 style={{
@@ -83,7 +83,7 @@ const Button = React.forwardRef(
                 disabled={disabled}
                 className={
                     classNameOverride
-                        ? classNameOverride
+                        ? classNameOverride + className
                         : `
                             transition-all transition-d-300 transition-tf-eio 
                             ${className ? className : ''} 

@@ -1,17 +1,20 @@
 // Modules/Core/ParallaxLogo.tsx
-import React, {useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Button from 'Core/components/elements/Button/Button';
 import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
-import {FCCC} from 'WideLayout/Layouts';
+import {FCCC, FR} from 'WideLayout/Layouts';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import ParallaxContainer from './ParallaxContainer';
-import {openAuthModal} from "Redux/modalsSlice";
-import {useDispatch} from "react-redux";
+import {openAuthModal} from 'Redux/modalsSlice';
+import {useDispatch} from 'react-redux';
+import {useTheme} from 'Theme/ThemeContext';
+
+import logoText from 'Static/img/xlmine/logo_text.png';
 
 type StyledH1Props = {
     fontSize: string;
@@ -24,6 +27,7 @@ const StyledH1 = styled('h1')<StyledH1Props>(({theme, fontSize}) => ({
     margin: 0,
     fontSize,
     transition: 'font-size 0.3s ease, transform 0.2s ease',
+    willChange: 'transform',
 }));
 
 const ParallaxLogo: React.FC = () => {
@@ -31,8 +35,8 @@ const ParallaxLogo: React.FC = () => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const {plt} = useTheme();
 
-    // Определение размера шрифта на основе медиазапросов
     const isGt1600 = useMediaQuery('(min-width:1600px)');
     const isGt1400 = useMediaQuery('(min-width:1400px)');
     const isGt1200 = useMediaQuery('(min-width:1200px)');
@@ -50,10 +54,23 @@ const ParallaxLogo: React.FC = () => {
     else if (isGt600) fontSize = '4.8rem';
     else if (isGt400) fontSize = '4.7rem';
 
+    const handleAuthClick = useCallback(() => {
+        isAuthenticated ? navigate('/profile') : dispatch(openAuthModal());
+    }, [isAuthenticated, navigate, dispatch]);
+
+    const handleSoftwareClick = useCallback(() => {
+        navigate('/softwares');
+    }, [navigate]);
+
+    const handleXlMineClick = useCallback(() => {
+        navigate('/xlmine');
+    }, [navigate]);
+
+    const handleAboutClick = useCallback(() => {
+        navigate('/companies/XLARTAS');
+    }, [navigate]);
+
     return (
-        // Оборачиваем содержимое логотипа в ParallaxContainer.
-        // В качестве parallaxRef передаём ref родительского контейнера (например, mainRef),
-        // от которого будем отслеживать движения мыши.
         <ParallaxContainer parallaxRef={mainRef} factor={0.1}>
             <FCCC w="min-content" pos="relative" mt={-10} maxW="100%">
                 <Logo width="100%" cls="w-100 ms-3 maxw-700"/>
@@ -62,9 +79,7 @@ const ParallaxLogo: React.FC = () => {
                 <FCCC pos="absolute" zIndex={22} right="6.6%" bottom="32%">
                     <Button
                         className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : 'fs-6 px-3'}`}
-                        onClick={() => {
-                            isAuthenticated ? navigate('/profile') : dispatch(openAuthModal());
-                        }}>
+                        onClick={handleAuthClick}>
                         {isAuthenticated ? 'Profile' : 'Sign in'}
                     </Button>
                 </FCCC>
@@ -72,22 +87,56 @@ const ParallaxLogo: React.FC = () => {
                 <FCCC pos="absolute" zIndex={22} left="6.6%" top="27%">
                     <Button
                         className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
-                        onClick={() => navigate('/softwares')}>
+                        onClick={handleSoftwareClick}>
                         Software
                     </Button>
                 </FCCC>
+                {/* Кнопка "xlmine" */}
+                <FCCC pos="absolute" zIndex={22} right="6.6%" top="35%">
+                    <FR cls="hover-scale-5" onClick={handleXlMineClick}>
+                        <FR pos="relative">
+                            <img src={logoText} style={{height: 30}} alt="xlmine"/>
+                            <img
+                                src={logoText}
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 0,
+                                    height: 30,
+                                    filter: 'blur(82px)',
+                                    opacity: '60%',
+                                    willChange: 'filter'
+                                }}
+                                alt="xlmine"
+                            />
+                            <img
+                                src={logoText}
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 0,
+                                    height: 30,
+                                    filter: 'blur(5px)',
+                                    opacity: '60%',
+                                    willChange: 'filter'
+                                }}
+                                alt="xlmine"
+                            />
+                        </FR>
+                    </FR>
+                </FCCC>
                 {/* Кнопка "About" */}
                 <FCCC pos="absolute" zIndex={22} left="24%" bottom="25%">
-                    <Button size={'small'}
-                            className={`fw-bold pb-3px hover-scale-5 ${isGt1400 
-                                ? 'fs-6 px-3 pt-4px' 
-                                : isGt1000 
+                    <Button
+                        size="small"
+                        className={`fw-bold pb-3px hover-scale-5 ${
+                            isGt1400
+                                ? 'fs-6 px-3 pt-4px'
+                                : isGt1000
                                     ? 'fs-7 px-3 pt-4px'
                                     : 'fs-7 px-2 pt-2px pb-0'
-                            }`}
-                            sx={{
-                            }}
-                            onClick={() => navigate('/companies/XLARTAS')}>
+                        }`}
+                        onClick={handleAboutClick}>
                         About
                     </Button>
                 </FCCC>
@@ -100,4 +149,4 @@ const ParallaxLogo: React.FC = () => {
     );
 };
 
-export default ParallaxLogo;
+export default React.memo(ParallaxLogo);

@@ -146,7 +146,7 @@ const UserPersonalInfoForm: React.FC = () => {
                     <FRSC wrap g={1}>
                         <FR color={plt.text.primary} fontWeight={'bold'}
                             fontSize={isGtSm ? '2.2rem' : '1.7rem'}
-                            lineHeight={'1.5rem'} sx={{
+                            lineHeight={'1.8rem'} sx={{
                                 userSelect: 'all'
                         }}>
                             {user?.username}
