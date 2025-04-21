@@ -81,7 +81,7 @@ const ParallaxContainer: React.FC<ParallaxContainerProps> = ({
     useEffect(() => {
         let rafId: number;
         const animate = () => {
-            const speed = 0.1;
+            const speed = 0.5;
             const dx = targetRotation.current.rx - currentRotation.current.rx;
             const dy = targetRotation.current.ry - currentRotation.current.ry;
             currentRotation.current = {
@@ -101,8 +101,7 @@ const ParallaxContainer: React.FC<ParallaxContainerProps> = ({
     return (
         <FCCC
             ref={containerRef}
-            h="100%"
-            w="100%"
+            h="100%" w="100%"
             cls="parallax-container"
             scroll="hidden"
             sx={{perspective: '1000px', willChange: 'transform'}}

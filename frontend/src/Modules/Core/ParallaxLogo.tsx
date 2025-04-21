@@ -71,7 +71,7 @@ const ParallaxLogo: React.FC = () => {
     }, [navigate]);
 
     return (
-        <ParallaxContainer parallaxRef={mainRef} factor={0.1}>
+        <ParallaxContainer parallaxRef={mainRef} factor={0.05}>
             <FCCC w="min-content" pos="relative" mt={-10} maxW="100%">
                 <Logo width="100%" cls="w-100 ms-3 maxw-700"/>
                 <StyledH1 fontSize={fontSize}>XLARTAS</StyledH1>
