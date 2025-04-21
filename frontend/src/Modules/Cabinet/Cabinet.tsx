@@ -130,7 +130,7 @@ const Cabinet: React.FC = () => {
                 mx={'auto'} h={'100%'} w={'100%'}>
                 <FRC h={'100%'} w={'100%'} scroll={'y-hidden'} maxH={`calc(100vh - ${headerNavHeight}px)`}>
                     <FCSC minW={'fit-content'} scroll={'y-auto'}
-                          cls={'no-scrollbar d-none d-sm-flex'} pl={3} pr={3} py={'1rem'} g={0}
+                          cls={'no-scrollbar d-none d-sm-flex'} pl={3} pr={3} py={'1rem'} g={1}
                           display={isGtSm ? 'flex' : 'none'}>
                         <FCSC g={1}>
                             <FC pos={'relative'}>

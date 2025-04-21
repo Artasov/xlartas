@@ -2,13 +2,12 @@
 import json
 import logging
 import os
-from pprint import pprint
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from django.conf import settings
 from django.core.files import File
-from django.http import JsonResponse, FileResponse
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -22,7 +21,7 @@ from apps.xlmine.models.user import UserXLMine
 from apps.xlmine.permissions import IsMinecraftDev  # ваша кастомная permission
 from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
 from apps.xlmine.serializers.donate import DonateSerializer
-from apps.xlmine.services.base import calculate_sha256, increment_version
+from apps.xlmine.services.base import calculate_sha256
 
 log = logging.getLogger('global')
 
@@ -35,12 +34,6 @@ class LauncherViewSet(ModelViewSet):
     def perform_create(self, serializer):
         instance = serializer.save()
         instance.sha256_hash = calculate_sha256(instance.file)
-        pprint(serializer.validated_data)
-        # Теперь версия указывается вручную
-        if 'version' not in serializer.validated_data:
-            latest = Launcher.objects.exclude(pk=instance.pk).order_by('-created_at').first()
-            instance.version = increment_version(latest.version) if latest and latest.version else "1.0.0"
-
         instance.save()
 
 
@@ -50,15 +43,8 @@ class ReleaseViewSet(ModelViewSet):
     permission_classes = [IsMinecraftDev]
 
     def perform_create(self, serializer):
-        pprint(serializer.validated_data)
         instance = serializer.save()
         instance.sha256_hash = calculate_sha256(instance.file)
-
-        # Теперь версия указывается вручную
-        if 'version' not in serializer.validated_data:
-            latest = Release.objects.exclude(pk=instance.pk).order_by('-created_at').first()
-            instance.version = increment_version(latest.version) if latest and latest.version else "1.0.0"
-
         instance.save()
 
 
@@ -70,12 +56,14 @@ class ChunkedReleaseUploadView(APIView):
         chunk_index = request.data.get('chunk_index')
         total_chunks = request.data.get('total_chunks')
         filename = request.data.get('filename')
+        version_str = request.data.get('version')
         security_json_str = request.data.get('security_json')
         chunk_file = request.FILES.get('file')
 
         if not upload_id or chunk_index is None or not total_chunks or not filename or not chunk_file:
             log.error("Неполные данные для загрузки чанка")
             return Response({"error": "Неполные данные"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             chunk_index = int(chunk_index)
             total_chunks = int(total_chunks)
@@ -88,18 +76,18 @@ class ChunkedReleaseUploadView(APIView):
             return Response({"error": "Неверные значения chunk_index или total_chunks"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Парсим security JSON
-        try:
-            security_data = json.loads(security_json_str) if security_json_str else None
-        except ValueError:
-            log.error("Invalid security JSON: %s", security_json_str)
-            return Response({"error": "Invalid security JSON"}, status=status.HTTP_400_BAD_REQUEST)
-
         temp_dir = os.path.join(settings.FILE_UPLOAD_TEMP_DIR, 'chunk_uploads')
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
             log.info("Создана директория для чанков: %s", temp_dir)
 
+        # сохраняем JSON безопасности на первой порции
+        security_meta_path = os.path.join(temp_dir, f"{upload_id}_security.json")
+        if chunk_index == 0 and security_json_str:
+            with open(security_meta_path, 'w') as sm:
+                sm.write(security_json_str)
+
+        # сохраняем сам чанк
         chunk_path = os.path.join(temp_dir, f"{upload_id}_{chunk_index}")
         with open(chunk_path, 'wb') as f:
             for data in chunk_file.chunks():
@@ -109,44 +97,51 @@ class ChunkedReleaseUploadView(APIView):
             chunk_index + 1, total_chunks, upload_id
         )
 
+        # если последний чанк — склеиваем и создаём объект Release
         if chunk_index == total_chunks - 1:
             final_path = os.path.join(temp_dir, f"{upload_id}_{filename}")
             with open(final_path, 'wb') as final_file:
                 for i in range(total_chunks):
-                    chunk_i_path = os.path.join(temp_dir, f"{upload_id}_{i}")
-                    if not os.path.exists(chunk_i_path):
+                    part = os.path.join(temp_dir, f"{upload_id}_{i}")
+                    if not os.path.exists(part):
                         log.error("Отсутствует чанк %s для upload_id %s", i, upload_id)
                         return Response(
                             {"error": f"Отсутствует чанк {i}"},
                             status=status.HTTP_400_BAD_REQUEST
                         )
-                    with open(chunk_i_path, 'rb') as cf:
+                    with open(part, 'rb') as cf:
                         final_file.write(cf.read())
-                    os.remove(chunk_i_path)
+                    os.remove(part)
                     log.info(
                         "Чанк %s удалён после сборки для upload_id %s",
                         i + 1, upload_id
                     )
 
+            # если на последнем нет JSON — читаем из файла мета
+            if not security_json_str and os.path.exists(security_meta_path):
+                with open(security_meta_path, 'r') as sm:
+                    security_json_str = sm.read()
+
+            # удаляем мета-файл
+            if os.path.exists(security_meta_path):
+                os.remove(security_meta_path)
+
             log.info("Собран файл: %s. Создаём объект Release.", final_path)
             with open(final_path, 'rb') as final_file_obj:
                 django_file = File(final_file_obj, name=filename)
-                release = Release.objects.create(file=django_file, security=security_data)
-                latest = Release.objects.exclude(pk=release.pk).order_by('-created_at').first()
-                release.version = increment_version(latest.version) if latest and latest.version else "1.0.0"
+                release = Release.objects.create(
+                    file=django_file,
+                    security=json.loads(security_json_str) if security_json_str else None,
+                    version=version_str
+                )
                 release.sha256_hash = calculate_sha256(release.file)
                 release.save()
             os.remove(final_path)
             log.info("Финальный файл %s удалён после создания объекта Release", final_path)
 
-            from apps.xlmine.serializers.base import ReleaseSerializer
             serializer = ReleaseSerializer(release)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            log.info(
-                "Чанк %s из %s для upload_id %s получен и сохранён.",
-                chunk_index + 1, total_chunks, upload_id
-            )
             return Response(
                 {"status": f"Получен чанк {chunk_index + 1} из {total_chunks}"},
                 status=status.HTTP_200_OK

@@ -141,40 +141,24 @@ const UserPersonalInfoForm: React.FC = () => {
 
             </FR>
             <FR>
-                <FR ml={-2}><SkinCapeSetter/></FR>
+                <FR minW={160}><SkinCapeSetter/></FR>
                 <FC g={1}>
                     <FRSC wrap g={1}>
                         <FR color={plt.text.primary} fontWeight={'bold'}
                             fontSize={isGtSm ? '2.2rem' : '1.7rem'}
-                            lineHeight={'1.5rem'}>
+                            lineHeight={'1.5rem'} sx={{
+                                userSelect: 'all'
+                        }}>
                             {user?.username}
                         </FR>
-                        <FR mt={.57}
+                        <FR mt={.57} lineHeight={'1.5rem'}
                             fontSize={isGtSm ? '1.7rem' : '1.5rem'}
                             fontWeight={'bold'}><UserPrivilege/></FR>
                     </FRSC>
                     <FR>{user.coins} монет</FR>
                 </FC>
             </FR>
-            <FC g={2} cls={'user-form'}>
-                <FR g={1}>
-                    {/*<TextField*/}
-                    {/*    variant="outlined"*/}
-                    {/*    margin="none"*/}
-                    {/*    className={'flex-grow-1'}*/}
-                    {/*    label="Имя пользователя"*/}
-                    {/*    name="username"*/}
-                    {/*    value={formData.username}*/}
-                    {/*    onChange={handleChange}/>*/}
-
-                    <Button color={'secondary'} onClick={() => setIsPasswordModalOpen(true)}
-                            style={{
-                                fontWeight: 600,
-                                color: plt.text.contrast70,
-                            }}>
-                        Сменить пароль
-                    </Button>
-                </FR>
+            <FC mt={1} g={2} cls={'user-form'}>
                 {user.secret_key &&
                     <FC pEvents={true} onClick={() => {
                         if (user.secret_key) copyToClipboard(user.secret_key)
@@ -297,6 +281,26 @@ const UserPersonalInfoForm: React.FC = () => {
             {/*        onChange={handleChange}*/}
             {/*    />*/}
             {/*</FR>*/}
+
+            <FR g={1} mt={1}>
+                {/*<TextField*/}
+                {/*    variant="outlined"*/}
+                {/*    margin="none"*/}
+                {/*    className={'flex-grow-1'}*/}
+                {/*    label="Имя пользователя"*/}
+                {/*    name="username"*/}
+                {/*    value={formData.username}*/}
+                {/*    onChange={handleChange}/>*/}
+
+                <Button color={'#888'} onClick={() => setIsPasswordModalOpen(true)}
+                        style={{
+                            fontWeight: 600,
+                            color: plt.text.contrast70,
+                        }}>
+                    Сменить пароль
+                </Button>
+            </FR>
+
             <FC mt={1}>
                 <Typography fontSize={'.8rem'} color={plt.text.primary30}>
                     Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
