@@ -107,6 +107,16 @@ if __name__ == '__main__':
         'WorldEditCUI',
         'waveycapes',
         'reeses_sodium_options',
+        'enhancedblockentities',
+        'bettermounthud',
+        'nvidium',
+        'BetterPingDisplay',
+        'InvMove',
+        'chatanimation',
+        'chatnotify',
+        'chatsigninghider',
+        'ctrlq',
+        'eating-animation',
     ]
 
     copy_mods(mods_folder, client_mods)

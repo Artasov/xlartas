@@ -30,6 +30,8 @@ class RconServerConsole:
         try:
             log.info(f'Rcon <-- {command}')
             try:
+                import signal
+                signal.signal = lambda *args, **kwargs: None
                 with MCRcon(self.host, self.password, port=self.port) as mcr:
                     response = mcr.command(command)
                     log.info(f'Rcon --> {response}')
