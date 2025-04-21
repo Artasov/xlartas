@@ -1,0 +1,4 @@
+# .dockerignore
+static/
+media/
+data/

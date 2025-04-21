@@ -6,9 +6,9 @@ import shutil
 import zipfile
 from pathlib import Path
 
-SOURCE_DIR = Path(r"C:\Users\xl\AppData\Roaming\xlartas-launcher\xlartas-client")
-RELEASE_DIR = SOURCE_DIR.parent / "xlartas-client-release"
-ARCHIVE_PATH = SOURCE_DIR.parent / "xlartas-client-release.zip"
+SOURCE_DIR = Path(r"C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client")
+RELEASE_DIR = SOURCE_DIR.parent / "xlartas-xlmine-release"
+ARCHIVE_PATH = SOURCE_DIR.parent / "xlartas-xlmine-release.zip"
 SECURITY_PATH = SOURCE_DIR.parent / "security.json"
 
 FILES_TO_COPY = [
