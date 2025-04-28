@@ -95,14 +95,15 @@ const ParallaxLogo: React.FC = () => {
                 <FCCC pos="absolute" zIndex={22} right="6.6%" top="35%">
                     <FR cls="hover-scale-5" onClick={handleXlMineClick}>
                         <FR pos="relative">
-                            <img src={logoText} style={{height: 30}} alt="xlmine"/>
+                            <img src={logoText} style={{
+                                height: isGt1200 ? 30 : 23,
+                            }} alt="xlmine"/>
                             <img
                                 src={logoText}
                                 style={{
                                     position: 'absolute',
-                                    left: 0,
-                                    top: 0,
-                                    height: 30,
+                                    left: 0, top: 0,
+                                    height: isGt1200 ? 30 : 23,
                                     filter: 'blur(82px)',
                                     opacity: '60%',
                                     willChange: 'filter'
@@ -115,7 +116,7 @@ const ParallaxLogo: React.FC = () => {
                                     position: 'absolute',
                                     left: 0,
                                     top: 0,
-                                    height: 30,
+                                    height: isGt1200 ? 30 : 23,
                                     filter: 'blur(5px)',
                                     opacity: '60%',
                                     willChange: 'filter'

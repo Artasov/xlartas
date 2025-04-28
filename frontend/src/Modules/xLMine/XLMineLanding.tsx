@@ -20,7 +20,13 @@ const XLMineLanding: React.FC = () => {
     const {headerNavHeight, mainRef} = useNavigation();
     const containerRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number | null>(null);
+    const angleRef = useRef(0);
+    const mouseOffsetRef = useRef({x: 0, y: 0});
     const [loading, setLoading] = useState(false);
+
+    // Настройки параллакса
+    const MOVE_PERCENT = 25;   // усиление движения мышью
+    const AUTO_PERCENT = 5;    // автоматическое движение
 
     const handleDownload = async () => {
         setLoading(true);
@@ -33,24 +39,28 @@ const XLMineLanding: React.FC = () => {
     };
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
         const xNorm = (e.clientX / window.innerWidth - 0.5) * 2;
         const yNorm = (e.clientY / window.innerHeight - 0.5) * 2;
-        const movePercent = 25;
-        const posX = 40 + xNorm * movePercent;
-        const posY = 50 + yNorm * movePercent;
-
-        if (rafRef.current !== null) {
-            cancelAnimationFrame(rafRef.current);
-        }
-        rafRef.current = requestAnimationFrame(() => {
-            if (containerRef.current) {
-                containerRef.current.style.backgroundPosition = `${posX}% ${posY}%`;
-            }
-        });
+        mouseOffsetRef.current = {x: xNorm, y: yNorm};
     };
 
     useEffect(() => {
+        const animate = () => {
+            angleRef.current += 0.002;
+            const autoX = Math.cos(angleRef.current);
+            const autoY = Math.sin(angleRef.current);
+
+            // комбинируем мув мышью и авто-движение
+            const x = mouseOffsetRef.current.x * MOVE_PERCENT + autoX * AUTO_PERCENT;
+            const y = mouseOffsetRef.current.y * MOVE_PERCENT + autoY * AUTO_PERCENT;
+
+            if (containerRef.current) {
+                containerRef.current.style.backgroundPosition = `${40 + x}% ${50 + y}%`;
+            }
+            rafRef.current = requestAnimationFrame(animate);
+        };
+
+        rafRef.current = requestAnimationFrame(animate);
         return () => {
             if (rafRef.current !== null) {
                 cancelAnimationFrame(rafRef.current);
@@ -83,7 +93,7 @@ const XLMineLanding: React.FC = () => {
                 transition: 'background-position 0.2s ease-out',
             }} onMouseMove={handleMouseMove}>
                 <FCCC w="100%">
-                    <FCSC g={2} maxW={850} style={{textAlign: 'center'}}>
+                    <FCSC g={1} maxW={850} style={{textAlign: 'center'}}>
                         <h1 style={{
                             fontSize: '5rem', margin: 0, lineHeight: '4rem',
                             position: 'relative', width: 'fit-content',
@@ -111,6 +121,14 @@ const XLMineLanding: React.FC = () => {
                                 position: 'absolute',
                             }}>xlmine</span>
                         </h1>
+                        <FR cls={'hover-scale-4'} cursorPointer onClick={_=>{
+                            window.open('https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html', '_blank');
+                        }}>
+                            <span>Обязательна <span style={{
+                                textDecoration: 'underline',
+                                color: plt.error.main,
+                            }}>java21</span> или выше</span>
+                        </FR>
                         <Button onClick={handleDownload} variant="contained"
                                 className="fw-bold gap-1 hover-scale-5 ftrans-200-eio" classNameOverride={' '}
                                 color={'#fff1'}
@@ -120,8 +138,7 @@ const XLMineLanding: React.FC = () => {
                                 }}>
                             {loading
                                 ? <FR mr={1}><CircularProgress color={plt.text.contrast + 'aa'} size="2.1rem"/></FR>
-                                : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>
-                            }
+                                : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}
                             Скачать лаунчер
                         </Button>
                         <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>

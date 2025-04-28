@@ -8,7 +8,6 @@ from pathlib import Path
 
 SOURCE_DIR = Path(r"C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client")
 RELEASE_DIR = SOURCE_DIR.parent / "xlartas-xlmine-release"
-ARCHIVE_PATH = SOURCE_DIR.parent / "xlartas-xlmine-release.zip"
 SECURITY_PATH = SOURCE_DIR.parent / "security.json"
 
 FILES_TO_COPY = [
@@ -109,6 +108,8 @@ EDITABLE_FILES = [
 
 # ───────────────── запрос версии релиза ──────────────────────────────────────
 version = input("Enter release version: ").strip()
+ARCHIVE_PATH = SOURCE_DIR.parent / f"xlartas-xlmine-release-{version}.zip"
+
 
 # ───────────────── helpers ────────────────────────────────────────────────────
 def sha256(path: Path) -> str:
@@ -117,6 +118,7 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
+
 
 def is_editable(rel: str) -> bool:
     for entry in EDITABLE_FILES:
@@ -127,8 +129,10 @@ def is_editable(rel: str) -> bool:
             return True
     return False
 
+
 def log(msg: str) -> None:
     print(f"[BUILD] {msg}")
+
 
 # ───────────────── подготовка директории релиза ──────────────────────────────
 if RELEASE_DIR.exists():
