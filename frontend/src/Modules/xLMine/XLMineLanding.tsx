@@ -3,7 +3,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FC, FCA, FCC, FCCC, FCSC, FR, FRSC} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
-import minecraftHero from 'Static/img/xlmine/hero-bg.png';
+import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import Button from "Core/components/elements/Button/Button";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
