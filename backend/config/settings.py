@@ -398,6 +398,8 @@ task_default_queue = 'default'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TASK_ALWAYS_EAGER = False
 CELERY_TASK_EAGER_PROPAGATES = True
+CELERY_TASK_TIME_LIMIT = 60 * 60 * 6
+CELERY_TASK_SOFT_TIME_LIMIT = CELERY_TASK_TIME_LIMIT
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',

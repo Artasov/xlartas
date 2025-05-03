@@ -28,13 +28,13 @@ class PrivilegeService:
         for priv in await Privilege.objects.aall():
             if priv.code_name != self.code_name:
                 responses.append(await priv.rcon_remove_from(user))
-        responses.append(rcon.send_command(f"/lp user {user.username} parent add {self.code_name}"))
+        responses.append(rcon.send_command(f"lp user {user.username} parent add {self.code_name}"))
         return '\n'.join(responses)
 
     async def rcon_remove_from(self: 'Privilege', user: 'User') -> str:
         from apps.xlmine.services.server.console import RconServerConsole
         rcon = RconServerConsole()
-        command = f"/lp user {user.username} parent remove {self.code_name}"
+        command = f"lp user {user.username} parent remove {self.code_name}"
         return rcon.send_command(command)
 
     async def sync_remote(self: 'Privilege') -> list[str]:
@@ -44,11 +44,11 @@ class PrivilegeService:
         from apps.xlmine.services.server.console import RconServerConsole
         rcon = RconServerConsole()
         commands = [
-            f"/lp creategroup {self.code_name}",
-            f"/lp group {self.code_name} setdisplayname \"{self.name}\"",
-            f"/lp group {self.code_name} parent set default",
-            f"/lp group {self.code_name} meta setprefix 10 \"{self.prefix}\"",
-            f"/lp group {self.code_name} setweight {self.weight}",
+            f"lp creategroup {self.code_name}",
+            f"lp group {self.code_name} setdisplayname \"{self.name}\"",
+            f"lp group {self.code_name} parent set default",
+            f"lp group {self.code_name} meta setprefix 10 \"{self.prefix}\"",
+            f"lp group {self.code_name} setweight {self.weight}",
         ]
         return [rcon.send_command(cmd) for cmd in commands]
 

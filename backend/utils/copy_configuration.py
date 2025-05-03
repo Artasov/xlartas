@@ -141,7 +141,7 @@ configurations = {
         }
     },
     'xlmine-core': {
-        '__start_dir__': r'F:\dev',
+        '__start_dir__': r'F:\dev\xlmine',
         '__exclude__': [
             '__init__',
             'pycache',
@@ -153,6 +153,26 @@ configurations = {
         '__add_paths__': True,
 
         'xlmine-core': {
+            # 'gradle': '__copy__',
+            'src': '__copy__',
+            # 'gradlew': '__copy__',
+            # 'settings': '__copy__',
+        },
+    },
+    'xlmine-duels': {
+        '__start_dir__': r'F:\TEST',
+        '__exclude__': [
+            '__init__',
+            'pycache',
+            'resources',
+            '.pyc',
+            '.jar',
+            '.png',
+            '.java~',
+        ],
+        '__add_paths__': True,
+
+        'xlartas-duels': {
             # 'gradle': '__copy__',
             'src': '__copy__',
             # 'gradlew': '__copy__',

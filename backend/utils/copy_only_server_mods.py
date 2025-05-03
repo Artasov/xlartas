@@ -117,6 +117,10 @@ if __name__ == '__main__':
         'chatsigninghider',
         'ctrlq',
         'eating-animation',
+        'CustomScoreboard',
+        'GuiScaleSplitter',
+        'scoreboardoverhaul',
+        'uglyscoreboardfi',
     ]
 
     copy_mods(mods_folder, client_mods)

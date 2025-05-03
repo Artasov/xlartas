@@ -1,7 +1,8 @@
 # core/admin/user.py
+import logging
 
 from adjango.decorators import admin_description, admin_order_field
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db import transaction
 from django.urls import reverse
 from django.utils.html import format_html, escape
@@ -11,10 +12,13 @@ from django_object_actions import DjangoObjectActions
 from import_export.admin import ImportExportModelAdmin
 
 from apps.core.models import User, Role
+from apps.xlmine.tasks import teleport_world_scan
 
 admin.site.site_header = 'xlartas'
 admin.site.site_title = 'xlartas'
 admin.site.index_title = ''
+
+log = logging.getLogger('global')
 
 
 @admin.register(Role)
@@ -63,6 +67,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
             'first_name', 'last_name', 'middle_name',
             'email', 'phone',
             'password',
+            'hw_id',
             'roles',
             'birth_date', 'gender',
             'timezone',
@@ -81,6 +86,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
 
     )
     actions = (
+        'run_world_scan',
         'upgrade_privilege',
         'downgrade_privilege',
         'rcon_sync_privilege',
@@ -102,6 +108,23 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         except Exception as e:
             self.message_user(request, f'Ошибка при удалении пользователя: {str(e)}', level='error')
             raise
+
+    @admin.action(description='Запустить телепорт-скан мира')
+    def run_world_scan(self, request, _):
+        """
+        Одним нажатием запускает Celery-задачу teleport_world_scan.
+        Выделённые пользователи ни на что не влияют — action
+        просто запускает фоновую задачу с хардкод-координатами.
+        """
+        async_result = teleport_world_scan.delay()
+        messages.success(
+            request,
+            f'Celery-задача {async_result.id} запущена. '
+            'Скан займёт ~N часов, см. логи Celery.'
+        )
+        log.info(
+            f'Admin action run_world_scan triggered Celery task {async_result.id}'
+        )
 
     @admin_description(_('Privilege'))
     def current_privilege(self, obj):
@@ -129,22 +152,22 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         return mark_safe(html)
 
     @admin_description(_('Upgrade privilege'))
-    def upgrade_privilege(self, request, queryset):
+    def upgrade_privilege(self, _, queryset):
         for user in queryset:
             user.sync_upgrade_privilege()
 
     @admin_description(_('Downgrade privilege'))
-    def downgrade_privilege(self, request, queryset):
+    def downgrade_privilege(self, _, queryset):
         for user in queryset:
             user.sync_downgrade_privilege()
 
     @admin_description(_('RCON privilege sync'))
-    def sync_privilege(self, request, queryset):
+    def sync_privilege(self, _, queryset):
         for user in queryset:
             user.sync_rcon_sync_privilege()
 
     @admin_description(_('Calc and set current privilege'))
-    def calc_and_set_current_privilege(self, request, queryset):
+    def calc_and_set_current_privilege(self, _, queryset):
         for user in queryset:
             user.sync_calc_and_set_current_privilege()
 
