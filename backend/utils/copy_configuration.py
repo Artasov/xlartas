@@ -159,8 +159,27 @@ configurations = {
             # 'settings': '__copy__',
         },
     },
-    'xlmine-duels': {
-        '__start_dir__': r'F:\TEST',
+    'xlchat': {
+        '__start_dir__': r'F:\dev\xlmine',
+        '__exclude__': [
+            '__init__',
+            'pycache',
+            '.pyc',
+            '.jar',
+            '.png',
+            '.java~',
+        ],
+        '__add_paths__': True,
+
+        'xlchat': {
+            # 'gradle': '__copy__',
+            'src': '__copy__',
+            # 'gradlew': '__copy__',
+            # 'settings': '__copy__',
+        },
+    },
+    'xlduels': {
+        '__start_dir__': r'F:\dev\xlmine',
         '__exclude__': [
             '__init__',
             'pycache',
@@ -172,7 +191,7 @@ configurations = {
         ],
         '__add_paths__': True,
 
-        'xlartas-duels': {
+        'xlduels': {
             # 'gradle': '__copy__',
             'src': '__copy__',
             # 'gradlew': '__copy__',
@@ -200,92 +219,4 @@ configurations = {
             # 'settings': '__copy__',
         },
     },
-    'minecraft': {
-        '__start_dir__': r'F:\dev\1.20.1net',
-        '__exclude__': [
-            '__init__',
-            'pycache',
-            '.pyc',
-            '.jar',
-            '.png',
-        ],
-        '__add_paths__': True,
-
-        'minecraftA': {
-            'client': {
-                'gui': '__copy__',
-                'network': {
-                    'message': {
-                        'MessageHandler': '__copy__',
-                        'MessageTrustStatus': '__copy__',
-                    },
-                    # 'AbstractClientPlayerEntity': '__copy__',
-                    'ClientLoginNetworkHandler': '__copy__',
-                    'ClientDynamicRegistryType': '__copy__',
-                    'ClientPlayerEntity': '__copy__',
-                    'ClientPlayerInteractionManager': '__copy__',
-                    'ClientPlayNetworkHandler': '__copy__',
-                    # 'DataQueryHandler': '__copy__',
-                    'LanServerInfo': '__copy__',
-                    # 'LanServerQueryManager': '__copy__',
-                    # 'OtherClientPlayerEntity': '__copy__',
-                    # 'PlayerListEntry': '__copy__',
-                    # 'RedirectResolver': '__copy__',
-                    # 'SequencedPacketCreator': '__copy__',
-                    # 'ServerAddress': '__copy__',
-                    'ServerInfo': '__copy__',
-                    # 'SocialInteractionsManager': '__copy__',
-                },
-                'main': {
-                    'main': '__copy__',
-                },
-                'model': {
-                    # 'Dilation': '__copy__',
-                    # 'Model': '__copy__',
-                    # 'ModelData': '__copy__',
-                    # 'ModelPart': '__copy__',
-                    # 'ModelCuboidData': '__copy__',
-                },
-                'util': {
-                    'math': {
-                        'MatrixStack': '__copy__',
-                        'Rect2i': '__copy__',
-                        'Vector2f': '__copy__',
-                    },
-                    'ChatMessages': '__copy__',
-                    'ClientPlayerTickable': '__copy__',
-                    'ClientSamplerSource': '__copy__',
-                    # 'Clipboard': '__copy__',
-                    # 'InputUtil': '__copy__',
-                    'Icons': '__copy__',
-                    'Monitor': '__copy__',
-                    'MonitorFactory': '__copy__',
-                    'MonitorTracker': '__copy__',
-                    'NarratorManager': '__copy__',
-                    'ProfileKeys': '__copy__',
-                    'RawTextureDataLoader': '__copy__',
-                    # 'SelectionManager': '__copy__',
-                    # 'Session': '__copy__',
-                    'Window': '__copy__',
-                    'WindowProvider': '__copy__',
-                },
-                # 'world': {
-                #     'ClientWorld': '__copy__',
-                # },
-                # 'ClientBrandRetriever': '__copy__',
-                # 'Keyboard': '__copy__',
-                # 'MinecraftClient': '__copy__',
-                # 'Mouse': '__copy__',
-                'WindowEventHandler': '__copy__',
-                'WindowSettings': '__copy__',
-            },
-            'server': {
-                'integrated': {
-                    # 'IntegratedPlayerManager': '__copy__',
-                    # 'IntegratedServer': '__copy__',
-                    # 'IntegratedServerLoader': '__copy__',
-                },
-            },
-        },
-    }
 }

@@ -34,6 +34,6 @@ def teleport_world_scan() -> None:
     teleport_player_grid(
         LEFT_TOP_X, LEFT_TOP_Z,
         SIDE_LENGTH, PLAYER_NICK,
-        196
+        481
     )
     print('Celery-task teleport_world _scan finished')

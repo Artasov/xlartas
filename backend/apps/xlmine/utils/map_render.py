@@ -27,7 +27,7 @@ def teleport_player_grid(
     chunk_size = 16
     chunks_per_square = 20
     step = chunk_size * chunks_per_square
-    wait_seconds = 80
+    wait_seconds = 7
     current_square = 0
 
     for dz in range(0, side_length, step):
@@ -39,7 +39,7 @@ def teleport_player_grid(
             x = left_top_x + dx
             z = left_top_z + dz
             print(f'[{current_square + 1}] Телепорт {player} в координаты ({x}, {z})')
-            command = f"/tp {player} {x} 120 {z}"
+            command = f"execute as {player} run tp {x} 120 {z}"
             console.send_command(command)
             for i in range(wait_seconds):
                 print(f'Ждём {i + 1}/{wait_seconds} сек')

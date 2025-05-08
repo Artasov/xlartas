@@ -38,7 +38,8 @@ class UserXLMineService:
         # 3. Шлём команду на сервер по RCON
         rcon = RconServerConsole()
         return rcon.send_command(
-            f'skinsrestorer:skin set {skin_url} {self.username} classic'
+            # f'skinsrestorer:skin set {skin_url} {self.username} classic'
+            f'skin set web classic "{skin_url}" {self.username}'
         )
 
     async def clear_skin(self: 'User') -> str:

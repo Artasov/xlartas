@@ -8,6 +8,7 @@ import {useNavigation} from "Core/components/Header/HeaderProvider";
 import Button from "Core/components/elements/Button/Button";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import XaeroMapModalButton from "./Xaero/XaeroMapModalButton";
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -121,7 +122,7 @@ const XLMineLanding: React.FC = () => {
                                 position: 'absolute',
                             }}>xlmine</span>
                         </h1>
-                        <FR cls={'hover-scale-4'} cursorPointer onClick={_=>{
+                        <FR cls={'hover-scale-4'} cursorPointer onClick={_ => {
                             window.open('https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html', '_blank');
                         }}>
                             <span>Обязательна <span style={{
@@ -149,6 +150,7 @@ const XLMineLanding: React.FC = () => {
                             </p>
                             {/*<FRCC w={'fit-content'}><DonateButton/></FRCC>*/}
                         </FCCC>
+                        {/*<XaeroMapModalButton/>*/}
                     </FCSC>
                     {/* ФУТЕР */}
                     <FC component={'footer'} mt={3} style={{
