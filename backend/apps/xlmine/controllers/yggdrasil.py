@@ -16,13 +16,13 @@ from apps.xlmine.models.user import MinecraftSession, UserXLMine
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-async def base(request: AsyncRequest):
+async def base(_request: AsyncRequest):
     return Response({}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-async def auth_server(request):
+async def auth_server(_request):
     return Response({}, status=status.HTTP_200_OK)
 
 
@@ -63,11 +63,12 @@ async def authenticate_view(request):
         else:
             user = await User.objects.aget(username=username_or_email)
     except User.DoesNotExist:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({"error": "Нет пользователя с таким credential"}, status=status.HTTP_403_FORBIDDEN)
 
     # Проверяем пароль (либо делаем свою custom-логику)
-    if not user.check_password(password):
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+    # if not user.check_password(password):
+    if user.secret_key != password:
+        return Response({"error": "Неверный ключ"}, status=status.HTTP_403_FORBIDDEN)
 
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
@@ -337,9 +338,8 @@ async def join_server_view(request):
         )
     except MinecraftSession.DoesNotExist:
         return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
-    print(session_obj)
     user = session_obj.user
-    xlmine_user = UserXLMine.objects.aget_or_create(
+    _xlmine_user = UserXLMine.objects.aget_or_create(
         user=user,
         uuid=profile_id,
         uuid__gte=50,
@@ -396,7 +396,7 @@ async def has_joined_view(request):
     # Ищем сессию, где last_server_id = server_id
     # (или как угодно вы у себя сопоставляете)
     try:
-        session_obj = await MinecraftSession.objects.aget(
+        _session_obj = await MinecraftSession.objects.aget(
             user=user,
             last_server_id=server_id
         )
@@ -408,7 +408,6 @@ async def has_joined_view(request):
     resp = {
         "id": user_uuid.replace("-", ""),
         "name": user.username,
-        # Дополнительно можно отдать скины/кастом-проперти
         "properties": []
     }
     return Response(resp, status=status.HTTP_200_OK)

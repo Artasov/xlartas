@@ -147,7 +147,7 @@ const UserPersonalInfoForm: React.FC = () => {
                         <FR color={plt.text.primary} fontWeight={'bold'}
                             fontSize={isGtSm ? '2.2rem' : '1.7rem'}
                             lineHeight={'1.8rem'} sx={{
-                                userSelect: 'all'
+                            userSelect: 'all'
                         }}>
                             {user?.username}
                         </FR>
@@ -166,6 +166,7 @@ const UserPersonalInfoForm: React.FC = () => {
                         <FC pEvents={false}>
                             <TextField
                                 fullWidth
+                                type={'password'}
                                 variant="outlined"
                                 margin="none"
                                 disabled={true}
