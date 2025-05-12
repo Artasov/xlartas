@@ -19,7 +19,7 @@ log = logging.getLogger('global')
 class GoogleOAuthProvider(OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
-        google_id = user_data['id']
+        google_id = user_data['sub']
         existing_link = await GoogleUser.objects.filter(google_id=google_id).afirst()
         if existing_link and existing_link.user != user:
             raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
@@ -96,7 +96,13 @@ class GoogleOAuthProvider(OAuthProvider):
                 )
                 if user_data.get('picture'):
                     await set_image_by_url(user, 'avatar', user_data.get('picture'))
-            await GoogleUser.objects.acreate(user=user, google_id=google_id, email=user_data.get('email'))
+            g_email = user_data.get('email')
+            if g_email:
+                user.is_email_confirmed = True
+                await user.asave()
+            await GoogleUser.objects.acreate(
+                user=user, google_id=google_id, email=g_email
+            )
 
         return user
 

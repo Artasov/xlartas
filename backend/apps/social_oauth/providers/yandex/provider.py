@@ -94,6 +94,9 @@ class YandexOAuthProvider(OAuthProvider):
                     if avatar_id:
                         avatar_url = f'https://avatars.yandex.net/get-yapic/{avatar_id}/islands-200'
                         await set_image_by_url(user, 'avatar', avatar_url)
+            if not user.is_email_confirmed:
+                user.is_email_confirmed = True
+                await user.asave()
             await YandexUser.objects.acreate(user=user, yandex_id=yandex_id, email=email)
         return user
 
