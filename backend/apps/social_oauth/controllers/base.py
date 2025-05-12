@@ -42,6 +42,9 @@ async def oauth2_callback(request, provider_name: str) -> Response:
     if request.user.is_authenticated:
         # Привязываем аккаунт к текущему пользователю
         await provider.link_user_account(user=request.user, user_data=user_data)
+        if not request.user.is_email_confirmed:
+            request.user.is_email_confirmed = True
+            await request.user.asave()
         return Response({'detail': 'Социальный аккаунт успешно привязан.'})
     else:
         return Response(await provider.get_jwt_for_user(user_data))

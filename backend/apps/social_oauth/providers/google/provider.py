@@ -26,6 +26,7 @@ class GoogleOAuthProvider(OAuthProvider):
         google_user, _ = await GoogleUser.objects.aget_or_create(user=user)
         google_user.google_id = google_id
         # Обновляем другие поля при необходимости
+
         await google_user.asave()
 
     async def get_user_data(self, code: str) -> dict[str, Any]:
@@ -74,7 +75,11 @@ class GoogleOAuthProvider(OAuthProvider):
 
     async def get_or_create_user(self, user_data: dict[str, Any]) -> User:
         google_id = user_data.get('sub')
+        email = user_data.get('email', '')
+        first_name = user_data.get('given_name', '')
+        last_name = user_data.get('family_name', '')
         if not google_id: raise SocialOAuthException.GoogleIDNotProvided()
+        if not email: raise SocialOAuthException.GoogleEmailWasNotProvided()
         try:
             google_user = await GoogleUser.objects.select_related('user').aget(google_id=google_id)
             user = google_user.user
@@ -82,11 +87,7 @@ class GoogleOAuthProvider(OAuthProvider):
             try:
                 user = await User.objects.aget(email=user_data.get('email'))
             except User.DoesNotExist:
-                email = user_data.get('email', '')
-                first_name = user_data.get('given_name', '')
-                last_name = user_data.get('family_name', '')
                 username = email.split('@')[0] if email else f'google_{google_id}'
-
                 user = await User.objects.acreate(
                     email=email,
                     username=username,
@@ -97,13 +98,12 @@ class GoogleOAuthProvider(OAuthProvider):
                 if user_data.get('picture'):
                     await set_image_by_url(user, 'avatar', user_data.get('picture'))
             g_email = user_data.get('email')
-            if g_email:
+            if not user.is_email_confirmed:
                 user.is_email_confirmed = True
                 await user.asave()
             await GoogleUser.objects.acreate(
                 user=user, google_id=google_id, email=g_email
             )
-
         return user
 
     async def get_jwt_for_user(self, user_data: dict[str, Any]) -> JWTPair:
