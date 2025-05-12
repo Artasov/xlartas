@@ -2,7 +2,8 @@
 import uuid as uuid_
 
 from adjango.models import AModel
-from django.db.models import OneToOneField, DecimalField, CASCADE, DateTimeField, CharField, ForeignKey, FileField
+from adjango.models.mixins import ACreatedAtMixin
+from django.db.models import OneToOneField, DecimalField, CASCADE, CharField, ForeignKey, FileField
 from django.utils.translation import gettext_lazy as _
 
 
@@ -35,12 +36,11 @@ class UserXLMine(AModel):
         return f"UserXLMine {self.user_id}=>{self.coins} coins"
 
 
-class MinecraftSession(AModel):
+class MinecraftSession(ACreatedAtMixin):
     user = ForeignKey('core.User', CASCADE, 'minecraft_sessions')
     access_token = CharField(max_length=100, unique=True)
     client_token = CharField(max_length=100)
     last_server_id = CharField(max_length=100, blank=True, null=True)
-    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"MC-Session for {self.user} with token {self.access_token}"

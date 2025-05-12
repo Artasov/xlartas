@@ -1,9 +1,11 @@
 # xlmine/controllers/yggdrasil.py
 import uuid
+from datetime import timedelta
 from pprint import pprint
 
 from adrf.decorators import api_view
 from adrf.requests import AsyncRequest
+from django.conf import settings
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import permission_classes
@@ -209,9 +211,17 @@ async def validate_view(request):
     access_token = data.get('accessToken')
     client_token = data.get('clientToken')
 
-    session: MinecraftSession = await MinecraftSession.objects.select_related('user').filter(
+    # Определяем порог времени жизни сессии
+    lifetime = settings.HOURS_MINECRAFT_SESSION_LIFETIME
+    threshold = timezone.now() - timedelta(hours=lifetime)
+
+    # Ищем сессию, не старее threshold
+    session: MinecraftSession = await MinecraftSession.objects.select_related(
+        'user'
+    ).filter(
         access_token=access_token,
-        client_token=client_token
+        client_token=client_token,
+        created_at__gte=threshold
     ).afirst()
 
     if session:
