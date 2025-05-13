@@ -96,6 +96,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
             Message.success('Заказ успешно создан.', 2, 5000);
             if (typeof data === 'string' && data.startsWith('http')) window.open(data, '_blank');
             if (onSuccess) onSuccess(data);
+        } catch {
         } finally {
             setCreatingOrder(false);
         }
@@ -111,7 +112,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                         if (isAuthenticated && user) {
                             handleConfirm(
                                 {currency: 'RUB', priceObject: priceRow},
-                                'handmade',
+                                'cloud_payment',
                                 promoCode,
                                 user.email
                             );

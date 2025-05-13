@@ -8,7 +8,7 @@ export interface ICurrencyPaymentSystemMapping {
     get_currencies(payment: string): string[];
 }
 
-export type IPaymentSystem = 'handmade' | 'tbank' | 'stripe' | 'shopozz' | 'prodamus' | 'tbank_installment';
+export type IPaymentSystem = 'handmade' | 'cloud_payment' | 'tbank' | 'stripe' | 'shopozz' | 'prodamus' | 'tbank_installment';
 export type ICurrency = 'USD' | 'RUB' | 'EUR';
 
 export interface ICurrencyWithPrice {

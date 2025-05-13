@@ -4,7 +4,7 @@ from adrf.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_200_OK
 
 from apps.software.models.software import Software, SoftwareLicense
 from apps.software.serializers import SoftwareLicenseSerializer
@@ -16,9 +16,9 @@ from apps.software.serializers import SoftwareLicenseSerializer
 async def license_current_user(request, software_id: int):
     software = await Software.objects.agetorn(Software.ApiEx.DoesNotExist, id=software_id)
     license = await SoftwareLicense.objects.agetorn(
-        SoftwareLicense.ApiEx.DoesNotExist,
         user=request.user, software=software
     )
+    if not license: return Response({'no_one': True}, status=HTTP_200_OK)
     return Response(await SoftwareLicenseSerializer(license).adata, status=HTTP_200_OK)
 
 

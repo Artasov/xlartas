@@ -50,7 +50,7 @@ const UserPrivilege: React.FC = () => {
             </FRCC>
         );
     }
-    if (!privilege) return <span>Привилегий нет</span>;
+    if (!privilege) return null; // Нет привилегий
 
     return (
         <FC g={1} color={privilege.color || '#aa00aa'} height="min-content">
@@ -58,7 +58,8 @@ const UserPrivilege: React.FC = () => {
                 {/* обёртка <span> делает children единичным ReactElement‑ом */}
                 <FR>
                     <FR>{renderGradient(privilege.prefix || '')}</FR>
-                    <FR pos={'absolute'} sx={{filter: 'blur(10px) contrast(2) brightness(2)'}}>{renderGradient(privilege.prefix || '')}</FR>
+                    <FR pos={'absolute'}
+                        sx={{filter: 'blur(10px) contrast(2) brightness(2)'}}>{renderGradient(privilege.prefix || '')}</FR>
                 </FR>
             </Tooltip>
         </FC>

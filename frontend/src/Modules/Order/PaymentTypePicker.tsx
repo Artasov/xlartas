@@ -30,7 +30,10 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     const {api} = useApi();
 
     useEffect(() => {
-        api.get('/api/v1/payment/types/').then(data => setPaymentTypes(data));
+        api.get('/api/v1/payment/types/').then(data => {
+            console.log(data);
+            setPaymentTypes(data)
+        });
     }, [api]);
 
     useEffect(() => {
@@ -40,7 +43,6 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             const initialCurrency: ICurrencyWithPrice = {currency: 'RUB', priceObject: rubPrice};
             setSelectedCurrency('RUB');
             setPaymentCurrency(initialCurrency);
-
             const availablePaymentTypes = paymentTypes['RUB'];
             if (availablePaymentTypes?.length === 1) {
                 setSelectedPaymentType(availablePaymentTypes[0]);
@@ -58,7 +60,6 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         const priceObject = prices.find(price => price.currency === currencyStr) || undefined;
         const currencyWithPrice: ICurrencyWithPrice = {currency: currencyStr, priceObject};
         setPaymentCurrency(currencyWithPrice);
-
         const availablePaymentTypes = paymentTypes[currencyStr];
         if (availablePaymentTypes?.length === 1) {
             setSelectedPaymentType(availablePaymentTypes[0]);
@@ -79,6 +80,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         ) || [];
 
     useEffect(() => {
+        console.log(filteredPaymentTypes)
         if (filteredPaymentTypes.length > 0) {
             // либо ничего не выбрано, либо выбранной уже нет в списке
             if (!selectedPaymentType || !filteredPaymentTypes.includes(selectedPaymentType)) {
@@ -116,8 +118,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                 bg={plt.bg.primary35}
                                 boxShadow={paymentType === selectedPaymentType
                                     ? '0 0 3px 1px' + theme.colors.secondary.main
-                                    : ''}
-                            >
+                                    : ''}>
                                 <img
                                     src={logoTBank}
                                     alt={`Иконка ${paymentType}`}

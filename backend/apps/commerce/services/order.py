@@ -1,7 +1,7 @@
 # commerce/services/order.py
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Union
 
 from adjango.utils.base import build_full_url
 from adjango.utils.common import traceback_str
@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 
+from apps.cloudpayments.managers.payment import CloudPaymentAPI
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 
@@ -40,7 +41,7 @@ class IOrderService:
 
         self.check_available_to_init_payment()
 
-        ### HandMade ###
+        # ----------------------- HandMade ------------------------- #
 
         if self.payment_system == PaymentSystem.HandMade:
             from apps.commerce.models import HandMadePayment
@@ -53,7 +54,7 @@ class IOrderService:
             )
             await self.asave()
 
-        ### TBank ###
+        # ----------------------- TBank ------------------------- #
 
         elif self.payment_system == PaymentSystem.TBank:
             from apps.tbank.classes.TBank import (
@@ -115,7 +116,7 @@ class IOrderService:
             )
             await self.asave()
 
-        ### TBankInstallment ###
+        # ----------------------- TBankInstallment ------------------------- #
 
         elif self.payment_system == PaymentSystem.TBankInstallment:
             # ----------------------------------
@@ -187,6 +188,22 @@ class IOrderService:
 
             # Привязываем Payment к заказу
             self.payment = installment
+            await self.asave()
+
+        # ----------------------- CloudPayments ------------------------- #
+        elif self.payment_system == PaymentSystem.CloudPayment:
+            from apps.cloudpayments.managers.payment import CloudPaymentAPI
+            from apps.commerce.models import Payment
+            commerce_log.info('CloudPaymentAPI init …')
+            email = request.user.email if getattr(request.user, 'email', None) else None
+            self.payment: Payment = await CloudPaymentAPI.init(
+                user=request.user,
+                amount=primary_price_for_init,
+                order_id=self.id,
+                ip=request.ip,
+                description=getattr(self, 'get_payment_description', lambda: 'Оплата заказа')(),
+                email=email
+            )
             await self.asave()
 
         else:
@@ -265,11 +282,6 @@ class IOrderService:
         await self.product.pregive(self)
         # Если нужно, инициализируем оплату
         print('@@@@@@@@@@@@@@@@@')
-        print('@@@@@@@@@@@@@@@@@')
-        print('@@@@@@@@@@@@@@@@@')
-        print('@@@@@@@@@@@@@@@@@')
-        print('@@@@@@@@@@@@@@@@@')
-        print('@@@@@@@@@@@@@@@@@')
         print(price_for_init)
         if not request.data.get('not_init_payment') and price_for_init > 0 and init_payment and (
                 settings.DEBUG and settings.DEBUG_INIT_PAYMENT or not settings.DEBUG
@@ -282,7 +294,9 @@ class IOrderService:
             await self.execute()
 
     async def sync_with_payment_system(self: 'Order'):
+        from apps.cloudpayments.managers.payment import CloudPaymentAPI
         from apps.tbank.models import TBankPayment
+        from apps.cloudpayments.models import CloudPaymentPayment
         from apps.commerce.models.payment import HandMadePayment
         payment = await self.arelated('payment')
         if isinstance(self.payment, TBankPayment):
@@ -296,6 +310,11 @@ class IOrderService:
                     and not self.is_executed and not self.is_refunded):
                 await self.execute()
             tbank_log.info(f'TBank Payment {payment.id} synchronization successfully.')
+        elif isinstance(payment, CloudPaymentPayment):
+            status = await CloudPaymentAPI.actual_status(payment)
+            if (status == CloudPaymentPayment.Status.COMPLETED
+                    and not self.is_executed and not self.is_refunded):
+                await self.execute()
         elif isinstance(self.payment, HandMadePayment):
             pass  # Ручная оплата, и тут ничего не надо
         else:
@@ -352,6 +371,7 @@ class IOrderService:
         await self.sync_with_payment_system()
         from apps.tbank.models import TBankPayment
         from apps.commerce.models.payment import HandMadePayment
+        from apps.cloudpayments.models import CloudPaymentPayment
         if isinstance(self.payment, TBankPayment):
             payment: TBankPayment = await self.arelated('payment')
             if payment.is_paid:
@@ -359,6 +379,8 @@ class IOrderService:
                 raise OrderException.CannotCancelPaid()
             else:
                 await self.payment.cancel()
+        elif isinstance(self.payment, CloudPaymentPayment):
+            await CloudPaymentAPI.cancel(self.payment)
         elif isinstance(self.payment, HandMadePayment):
             pass  # Ручная оплата, отмена тоже ручная
         else:

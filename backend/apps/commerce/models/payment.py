@@ -16,6 +16,7 @@ class PaymentSystem(TextChoices):
     HandMade = 'handmade', 'HandMade'
     TBank = 'tbank', 'TBank'
     TBankInstallment = 'tbank_installment', 'Tinkoff (Installment)'
+    CloudPayment = 'cloud_payment', 'CloudPayments'
 
 
 class ACurrencyMixin(AModel):
@@ -40,6 +41,7 @@ class CurrencyPaymentSystemMapping:
         'RUB': (
             PaymentSystem.TBank,
             PaymentSystem.TBankInstallment,
+            PaymentSystem.CloudPayment,
             PaymentSystem.HandMade,
         ),
     }

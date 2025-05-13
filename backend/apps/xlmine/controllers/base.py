@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+from pprint import pprint
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -179,7 +180,9 @@ async def get_latest_release_security(_):
 @permission_classes((IsAuthenticated,))
 async def get_current_privilege(request):
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=request.user)
-    privilege = await xlmine_user.arelated('privilege') if hasattr(xlmine_user, 'privilege_id') else None
+    pprint(xlmine_user.__dict__)
+    pprint(hasattr(xlmine_user, 'privilege_id'))
+    privilege = await xlmine_user.arelated('privilege') if getattr(xlmine_user, 'privilege_id') else None
     return Response({
         'privilege': await PrivilegeSerializer(privilege).adata if privilege else None,
         'total_donate_amount': float(await request.user.sum_donate_amount()),

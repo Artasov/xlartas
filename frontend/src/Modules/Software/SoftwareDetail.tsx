@@ -32,7 +32,7 @@ const SoftwareDetailComponent: React.FC = () => {
     // Новые состояния для лицензии
     const [licenseHours, setLicenseHours] = useState<number | null>(null);
     const [licenseLoading, setLicenseLoading] = useState(false);
-    const [isTested, setIsTested] = useState<boolean>(false);
+    const [isTested, setIsTested] = useState<boolean | null>(null);
 
     const isGt576 = useMediaQuery('(min-width:576px)');
     useEffect(() => {
@@ -46,18 +46,22 @@ const SoftwareDetailComponent: React.FC = () => {
             .then(data => setSoftware(data))
             .catch(() => Message.error('Ошибка загрузки Software'))
             .finally(() => setLoading(false));
-    }, [id, api]);
+    }, [id]);
 
-    // Запрос лицензии зависит только от software и isAuthenticated
+    // Запрос лицензии
     useEffect(() => {
         if (isAuthenticated && software) {
             setLicenseLoading(true);
             api.get(`/api/v1/license/${software.id}/`).then(data => {
+                if (data.no_one) {
+                    setIsTested(false);
+                    return;
+                }
                 setLicenseHours(data.remaining_hours);
                 setIsTested(data.is_tested);
             }).catch(_ => null).finally(() => setLicenseLoading(false));
         }
-    }, [isAuthenticated, software, api]);
+    }, [isAuthenticated, software]);
 
     const refreshLicense = () => {
         if (isAuthenticated && software) {
@@ -76,13 +80,15 @@ const SoftwareDetailComponent: React.FC = () => {
         <FC pos={'relative'}>
             {isAuthenticated && (
                 <FR p={1} pos={'absolute'} top={0} left={0}>
-                    {licenseLoading
+                    {isTested === null && licenseLoading
                         ? <CircularProgress size="20px"/>
-                        : <FR lh={'1rem'}>{licenseHours !== null ? licenseHours : 0} hours left</FR>
+                        : isTested
+                            ? <FR lh={'1rem'}>{licenseHours !== null ? licenseHours : 0} hours left</FR>
+                            : ''
                     }
                 </FR>
             )}
-            {((licenseHours !== null && licenseHours < 1) || !isAuthenticated) && (
+            {isTested !== null && ((licenseHours !== null && licenseHours < 1) || !isAuthenticated) && (
                 <FR p={1} pos={'absolute'} top={0} left={0}>
                     <SoftwareTestPeriodButton
                         softwareId={software.id}

@@ -264,6 +264,7 @@ INSTALLED_APPS = [
     'apps.tinkoff',
     'apps.software',
     'apps.tbank',
+    'apps.cloudpayments',
     'apps.theme',
     'apps.surveys',
     'apps.filehost',
@@ -632,6 +633,10 @@ LOCALE_PATHS = (join(BASE_DIR, 'locale'),)
 # TBank
 TBANK_TERMINAL_KEY = env('TBANK_TERMINAL_KEY')
 TBANK_TERMINAL_PASSWORD = env('TBANK_TERMINAL_PASSWORD')
+
+# Cloud Payments
+CLOUD_PAYMENT_PUBLIC_ID = env('CLOUD_PAYMENT_PUBLIC_ID')
+CLOUD_PAYMENT_PASSWORD = env('CLOUD_PAYMENT_PASSWORD')
 
 # Other
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

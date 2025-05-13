@@ -3,7 +3,6 @@ import logging
 from datetime import timedelta
 
 from adjango.adecorators import acontroller
-from adjango.utils.base import apprint
 from adrf.decorators import api_view
 from django.utils import timezone
 from rest_framework.decorators import permission_classes
@@ -44,21 +43,35 @@ async def detail_software(_, software_id: int):
 @permission_classes([IsAuthenticated])
 async def activate_test_period(request, software_id: int):
     software: Software = await Software.objects.agetorn(Software.ApiEx.DoesNotExist, id=software_id)
-    # Проверяем, активирован ли тестовый период уже
-    license = await SoftwareLicense.objects.filter(
-        user=request.user, software=software, is_tested=True
-    ).afirst()
-    if license: raise SoftwareLicense.ApiEx.TestPeriodAlreadyUsed()
+
     # Рассчитываем время тестового периода (количество дней из software.test_period_days переводим в часы)
     test_hours = int(software.test_period_days * 24)
     now = timezone.now()
     license_ends_at = now + timedelta(hours=test_hours)
-    license_obj = await SoftwareLicense.objects.acreate(
+
+    # Ищем существующую лицензию для данного пользователя и софта
+    license_obj = await SoftwareLicense.objects.filter(
         user=request.user,
-        software=software,
-        license_ends_at=license_ends_at,
-        is_tested=True
-    )
+        software=software
+    ).afirst()
+
+    if license_obj:
+        # Если уже использован тестовый период — ошибка
+        if license_obj.is_tested:
+            raise SoftwareLicense.ApiEx.TestPeriodAlreadyUsed()
+        # Обновляем существующую лицензию, назначая новый тестовый период
+        license_obj.license_ends_at = license_ends_at
+        license_obj.is_tested = True
+        await license_obj.asave()
+    else:
+        # Создаём новую запись лицензии для тестового периода
+        license_obj = await SoftwareLicense.objects.acreate(
+            user=request.user,
+            software=software,
+            license_ends_at=license_ends_at,
+            is_tested=True
+        )
+
     return Response(
         {'detail': 'Тестовый период активирован', 'license_ends_at': license_obj.license_ends_at},
         status=HTTP_200_OK

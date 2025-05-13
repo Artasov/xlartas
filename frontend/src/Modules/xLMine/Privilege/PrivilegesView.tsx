@@ -1,11 +1,11 @@
 // Modules/xLMine/Privilege/PrivilegesView.tsx
-import React, { useEffect, useState } from 'react';
-import { useApi } from "Modules/Api/useApi";
-import { Message } from "Core/components/Message";
+import React, {useEffect, useState} from 'react';
+import {useApi} from "Modules/Api/useApi";
+import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
-import { useTheme } from "Theme/ThemeContext";
-import { IPrivilege } from "../types/base";
-import { FC, FCCC, FRBC, FRC, FRSC } from "WideLayout/Layouts";
+import {useTheme} from "Theme/ThemeContext";
+import {IPrivilege} from "../types/base";
+import {FC, FCCC, FRSC} from "WideLayout/Layouts";
 import PrivilegeItem from "./PrivilegeItem";
 
 interface ICurrentPrivilegeResponse {
@@ -15,8 +15,8 @@ interface ICurrentPrivilegeResponse {
 
 
 const PrivilegesView: React.FC = () => {
-    const { api } = useApi();
-    const { plt } = useTheme();
+    const {api} = useApi();
+    const {plt} = useTheme();
 
     // Список всех привилегий
     const [privileges, setPrivileges] = useState<IPrivilege[] | null>(null);
@@ -43,8 +43,8 @@ const PrivilegesView: React.FC = () => {
             .finally(() => setLoading(false));
     }, [api]);
 
-    if (loading) return <FCCC><CircularProgress size="60px" /></FCCC>;
-    if (!privileges || privileges.length === 0) return <FRC>Привилегий нет</FRC>;
+    if (loading) return <FCCC><CircularProgress size="60px"/></FCCC>;
+    if (!privileges || privileges.length === 0) return null; // Привилегий нет у юзера
     if (totalDonate === null) return null;
 
     // Сортировка привилегий по порогу (threshold) от меньшего к большему
@@ -82,19 +82,19 @@ const PrivilegesView: React.FC = () => {
         <FC pl={2.5} g={1} w={'100%'} pos={'relative'} scroll={'hidden'}>
             {/* Вертикальная полоса с равномерным градиентом */}
             <FRSC pos={'absolute'} left={22.4} bottom={`${progressVPadding}%`}
-                w={`${progressWidth}px`} h={`${progressHeight}%`}
-                rounded={1} style={{ background: gradientBackground }}>
+                  w={`${progressWidth}px`} h={`${progressHeight}%`}
+                  rounded={1} style={{background: gradientBackground}}>
                 <FC pos={'absolute'} left={0} bottom={`${progressVPadding}%`} rounded={1}
-                    w={`${progressWidth}px`} h={`${userProgressHeight}%`} bg={plt.text.accent} />
+                    w={`${progressWidth}px`} h={`${userProgressHeight}%`} bg={plt.text.accent}/>
             </FRSC>
             {/* Свечение */}
             <FRSC pos={'absolute'} left={22.4} bottom={`${progressVPadding}%`}
-                w={`${progressWidth}px`} h={`${progressHeight}%`}
-                rounded={1} style={{ background: gradientBackground, filter: 'blur(10px)' }} />
+                  w={`${progressWidth}px`} h={`${progressHeight}%`}
+                  rounded={1} style={{background: gradientBackground, filter: 'blur(10px)'}}/>
 
             {/* Список привилегий (правее полосы) */}
             {sortedPrivileges.map((priv) => (
-                <PrivilegeItem key={priv.id} priv={priv} />
+                <PrivilegeItem key={priv.id} priv={priv}/>
             ))}
         </FC>
     );
