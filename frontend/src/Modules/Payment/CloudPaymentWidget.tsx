@@ -21,11 +21,11 @@ const CloudPaymentWidget: React.FC<Props> = ({open, order, onClose}) => {
     const {api} = useApi();
 
     useEffect(() => {
-        if (!open || !scriptReady) return;
+        console.log("[CPW] useEffect", {open, scriptReady, cp: (window as any).cp});
+        if (!open || !scriptReady || !(window as any).cp) return;
 
-        // проинициализируем виджет
-        // @ts-ignore
-        const widget = new window.cp.CloudPayments();
+        const widget = new (window as any).cp.CloudPayments();
+        console.log("[CPW] calling pay…");
 
         widget.pay(
             'charge',                                  // одностадийная схема

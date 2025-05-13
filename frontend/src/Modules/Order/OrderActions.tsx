@@ -27,7 +27,6 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                                                    }) => {
     const navigate = useNavigate();
     const {user} = useContext(AuthContext) as AuthContextType;
-    const [cpOpen, setCpOpen] = useState(false);
     const {plt} = useTheme();
     const {api} = useApi()
     // Action Handlers
@@ -64,11 +63,30 @@ const OrderActions: React.FC<OrderActionsProps> = ({
     const handleRedirectToRefund = () => navigate(`/refund/${order.id}`);
 
     const handlePay = () => {
-        if (order.payment_system === 'cloud_payment') {
-            setCpOpen(true);                // откроем виджет
-        } else {
-            handleRedirectToPayment();      // старое поведение для SBP / Tinkoff
+        if (order.payment_system !== 'cloud_payment') {
+            return handleRedirectToPayment();
         }
+
+        // убедимся, что скрипт точно подгрузился
+        if (!(window as any).cp?.CloudPayments) {
+            Message.error("Платёжный виджет ещё не готов, попробуйте чуть позже");
+            return;
+        }
+
+        const widget = new (window as any).cp.CloudPayments();
+        widget.pay(
+            'charge',
+            { /* ваши options */},
+            {
+                onSuccess: async () => {
+                    await api.post(`/api/v1/orders/${order.id}/sync-with-payment/`);
+                    onSomeUpdatingOrderAction({...order, is_paid: true});
+                },
+                onFail: () => Message.error("Платёж не прошёл"),
+                onComplete: () => {
+                }
+            }
+        );
     };
 
     const getActions = () => {
@@ -160,16 +178,6 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                         ))}
                     </OptionsMenu>
                 )
-            )}
-            {cpOpen && (
-                <CloudPaymentWidget
-                    open={cpOpen}
-                    order={order}
-                    onClose={(needRefresh) => {
-                        setCpOpen(false);
-                        if (needRefresh) onSomeUpdatingOrderAction({...order, is_paid: true});
-                    }}
-                />
             )}
         </div>
     );

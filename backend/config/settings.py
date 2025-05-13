@@ -249,7 +249,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'logui',
     'cachalot',
-    "csp",
+    'csp',
 
     'apps.xl_dashboard',
     'apps.company',
@@ -331,7 +331,7 @@ MIDDLEWARE = [
     'logui.middleware.RequestResponseLoggerMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "csp.middleware.CSPMiddleware",
+    # "csp.middleware.CSPMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -468,6 +468,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://localhost:3000',
+    'https://localhost:3000',
     'https://xlartas.ru',
 ]
 

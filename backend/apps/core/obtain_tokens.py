@@ -1,5 +1,4 @@
 # core/obtain_tokens.py
-from pprint import pprint
 
 from adrf.decorators import api_view
 from asgiref.sync import sync_to_async
@@ -10,7 +9,6 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.core.models.user import User
 

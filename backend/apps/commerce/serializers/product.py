@@ -27,8 +27,6 @@ class BaseProductSerializer(AModelSerializer):
 
     @staticmethod
     def get_polymorphic_ctype(obj):
-        print(obj.__dict__)
-        print(obj.polymorphic_ctype)
         content_type = obj.polymorphic_ctype
         if content_type:
             return {

@@ -30,6 +30,7 @@ const Softwares: React.FC = () => {
         <FRCC g={2} wrap>
             {softwares.length
                 ? softwares.map(software => <SoftwareCard
+                    key={software.id}
                     software={software}
                     onClick={() => navigate(`/softwares/${software.id}`)}
                 />)
