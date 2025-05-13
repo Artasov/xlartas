@@ -1,5 +1,5 @@
 // Modules/Order/OrderActions.tsx
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {MenuItem} from "@mui/material";
@@ -10,7 +10,6 @@ import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
 import {useApi} from "../Api/useApi";
-import CloudPaymentWidget from "../Payment/CloudPaymentWidget";
 
 interface OrderActionsProps {
     order: IOrder;
@@ -66,27 +65,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         if (order.payment_system !== 'cloud_payment') {
             return handleRedirectToPayment();
         }
-
-        // убедимся, что скрипт точно подгрузился
-        if (!(window as any).cp?.CloudPayments) {
-            Message.error("Платёжный виджет ещё не готов, попробуйте чуть позже");
-            return;
-        }
-
-        const widget = new (window as any).cp.CloudPayments();
-        widget.pay(
-            'charge',
-            { /* ваши options */},
-            {
-                onSuccess: async () => {
-                    await api.post(`/api/v1/orders/${order.id}/sync-with-payment/`);
-                    onSomeUpdatingOrderAction({...order, is_paid: true});
-                },
-                onFail: () => Message.error("Платёж не прошёл"),
-                onComplete: () => {
-                }
-            }
-        );
+        window.location.href = `/cloudpayments/pay/${order.id}/`;
     };
 
     const getActions = () => {
@@ -179,6 +158,14 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                     </OptionsMenu>
                 )
             )}
+            {/*{order.payment_system === 'cloud_payment' ? (*/}
+            {/*    <CloudPaymentButton*/}
+            {/*        order={order}*/}
+            {/*        onSuccess={updated => onSomeUpdatingOrderAction(updated)}*/}
+            {/*    />*/}
+            {/*) : (*/}
+            {/*    <Button onClick={handleRedirectToPayment}>Pay</Button>*/}
+            {/*)}*/}
         </div>
     );
 };

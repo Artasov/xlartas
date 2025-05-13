@@ -40,6 +40,9 @@ urlpatterns = [
     # TBank
     path('tbank/', include('apps.commerce.routes.tbank')),
 
+    # Cloud Payments
+    path('cloudpayments/', include('apps.cloudpayments.routes')),
+
     # Other
     path('silk/', include('silk.urls', namespace='silk')),
     path('endpoints/', include('endpoints.urls')),

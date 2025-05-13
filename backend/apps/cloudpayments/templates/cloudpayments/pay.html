@@ -1,0 +1,109 @@
+{% load static %}
+{# cloudpayments/pay.html #}
+<!DOCTYPE html>
+<html style="background:#151515" lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Оплата заказа #{{ order_id }}</title>
+
+    {# виджет CloudPayments #}
+    <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script>
+    {# общий клиент для AJAX #}
+    <script src="{% static 'core/js/classes/Client.js' %}"></script>
+</head>
+<body style="background:#151515">
+<script>
+    /*
+     * При закрытии вкладки возвращаем пользователя
+     * обратно на страницу заказа.
+     */
+    window.onunload = function () {
+        if (window.opener && !window.opener.closed) {
+            window.opener.location.href = '/orders/{{ order_id }}/';
+        }
+    };
+
+    /**
+     * Запускаем виджет, как только он появится в window.
+     */
+    (function initCP() {
+        if (!window.cp || !window.cp.CloudPayments) {
+            return setTimeout(initCP, 50);
+        }
+
+        /* --- Инициализация виджета --- */
+        const widget = new window.cp.CloudPayments({
+            yandexPaySupport: true,
+            applePaySupport: true,
+            googlePaySupport: true,
+            masterPassSupport: true,
+            tinkoffInstallmentSupport: true
+        });
+
+        /* чек, сформированный на сервере */
+        const receipt = {{ receipt_json|safe }};
+
+        widget.pay(
+            'charge',
+            {
+                publicId: '{{ public_id }}',
+                description: '{{ description|escapejs }}',
+                amount: {{ amount }},          // float, например 940.00
+                currency: '{{ currency }}',
+                invoiceId: '{{ order_id }}',       // UUID заказа
+                accountId: '{{ request.user.id|default_if_none:""|escapejs }}',
+                email: '{{ request.user.email|default:""|escapejs }}',
+                data: {
+                    CloudPayments: {
+                        CustomerReceipt: receipt
+                    }
+                },
+                skin: 'mini',
+                autoClose: 0
+            },
+            {
+                /**
+                 * Платёж прошёл успешно.
+                 * Отправляем весь объект _options на бек
+                 * и дожидаемся подтверждения.
+                 */
+                onSuccess: function (_options) {
+                    console.log('[CP] Success', _options)
+
+                    Client.sendPost('{% url "cloudpayments:success" %}', _options)
+                        .then(response => {
+                            console.log('[CP] Success endpoint response', response.data)
+                            // После подтверждения – на страницу заказа
+                            window.location.href = `/orders/{{ order_id }}/?success_message=Заказ успешно оплачен!`;
+                        })
+                        .catch(err => {
+                            console.error('[CP] Success endpoint error', err);
+                            alert('Платёж прошёл, но не удалось подтвердить заказ. Мы уже разбираемся.');
+                            window.location.href = `/orders/{{ order_id }}/`;
+                        });
+                },
+
+                /**
+                 * Пользователь или процесс отклонил платёж.
+                 */
+                onFail: function (reason, _options) {
+                    console.log('[CP] Fail', reason, _options);
+                    if (reason.includes('User has cancelled')) {
+                        window.location.href = '/orders/{{ order_id }}/';
+                        return;
+                    }
+                    alert('Ошибка оплаты: ' + reason);
+                },
+
+                /**
+                 * Завершение работы виджета (любой исход).
+                 */
+                onComplete: function (result, _options) {
+                    console.log('[CP] onComplete', result, _options);
+                }
+            }
+        );
+    })();
+</script>
+</body>
+</html>

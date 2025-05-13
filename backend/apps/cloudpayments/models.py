@@ -4,11 +4,8 @@ from django.db.models import (
     Model, CharField, TextChoices, BigIntegerField, )
 from django.utils.translation import gettext_lazy as _
 
+from .services.payment import CloudPaymentService
 from ..commerce.models import Payment
-
-
-class CloudPaymentService:
-    pass
 
 
 class CloudPaymentPayment(Payment, CloudPaymentService):

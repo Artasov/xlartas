@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 
-from apps.cloudpayments.managers.payment import CloudPaymentAPI
+from apps.cloudpayments.classes.payment import CloudPaymentAPI
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 
@@ -193,7 +193,7 @@ class IOrderService:
         # ----------------------- CloudPayments ------------------------- #
         elif self.payment_system == PaymentSystem.CloudPayment:
             log = logging.getLogger('global')
-            from apps.cloudpayments.managers.payment import CloudPaymentAPI
+            from apps.cloudpayments.classes.payment import CloudPaymentAPI
             from apps.commerce.models import Payment
             commerce_log.info('CloudPaymentAPI init …')
             email = request.user.email if getattr(request.user, 'email', None) else None
@@ -291,7 +291,7 @@ class IOrderService:
             await self.execute()
 
     async def sync_with_payment_system(self: 'Order'):
-        from apps.cloudpayments.managers.payment import CloudPaymentAPI
+        from apps.cloudpayments.classes.payment import CloudPaymentAPI
         from apps.tbank.models import TBankPayment
         from apps.cloudpayments.models import CloudPaymentPayment
         from apps.commerce.models.payment import HandMadePayment

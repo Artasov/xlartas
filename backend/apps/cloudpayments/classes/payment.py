@@ -1,6 +1,7 @@
 import logging
 from decimal import Decimal
-from typing import Any, Dict, Optional
+from pprint import pprint
+from typing import Any, Dict, Optional, TypedDict
 
 import httpx
 from django.conf import settings
@@ -10,6 +11,11 @@ from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models.payment import Currency
 
 log = logging.getLogger('cloud_payment')
+
+
+class CPStatusResponse(TypedDict):
+    Success: bool
+    Message: str
 
 
 class CloudPaymentAPI:
@@ -58,6 +64,19 @@ class CloudPaymentAPI:
     # PUBLIC
     # --------------------------------------------------------------------- #
     @classmethod
+    async def actual_status(cls, invoice_id: str) -> CPStatusResponse:
+        """
+        Возвращает актуальный статус из API и, если изменился, сохраняет модель.
+        """
+        data = {'InvoiceId': invoice_id}
+        resp = await cls._post('/payments/get', data)
+        pprint(resp)
+        return CPStatusResponse(
+            Success=resp['Success'],
+            Message=resp['Message'],
+        )
+
+    @classmethod
     async def init_sbp(cls, *, user, amount: Decimal, order_id, ip, description, email=None):
         """Создаём QR‑ссылку SBP (`/payments/qr/sbp/link`)."""
         data = {
@@ -92,33 +111,3 @@ class CloudPaymentAPI:
             user=user,
             payment_url=None,  # карты сразу в виджете
         )
-
-    @classmethod
-    async def actual_status(cls, payment: CloudPaymentPayment) -> str:
-        """
-        Возвращает актуальный статус из API и, если изменился, сохраняет модель.
-        """
-        data = {'TransactionId': payment.transaction_id}
-        resp = await cls._post('/payments/get', data)
-        status = resp['Model']['Status']
-        if status != payment.status:
-            payment.status = status
-            if status == CloudPaymentPayment.Status.COMPLETED:
-                payment.is_paid = True
-            await payment.asave(update_fields=('status', 'is_paid', 'updated_at'))
-        return status
-
-    @classmethod
-    async def cancel(cls, payment: CloudPaymentPayment):
-        data = {'TransactionId': payment.transaction_id}
-        await cls._post('/payments/void', data)
-        payment.status = CloudPaymentPayment.Status.DECLINED
-        await payment.asave(update_fields=('status', 'updated_at'))
-
-    @classmethod
-    async def refund(cls, payment: CloudPaymentPayment, amount: Decimal | None = None):
-        data = {'TransactionId': payment.transaction_id,
-                'Amount': float(amount or payment.amount)}
-        await cls._post('/payments/refund', data)
-        payment.status = CloudPaymentPayment.Status.REFUNDED
-        await payment.asave(update_fields=('status', 'is_paid', 'updated_at'))
