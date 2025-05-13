@@ -8,7 +8,14 @@ export interface ICurrencyPaymentSystemMapping {
     get_currencies(payment: string): string[];
 }
 
-export type IPaymentSystem = 'handmade' | 'cloud_payment' | 'tbank' | 'stripe' | 'shopozz' | 'prodamus' | 'tbank_installment';
+export type IPaymentSystem =
+    'handmade'
+    | 'cloud_payment'
+    | 'tbank'
+    | 'stripe'
+    | 'shopozz'
+    | 'prodamus'
+    | 'tbank_installment';
 export type ICurrency = 'USD' | 'RUB' | 'EUR';
 
 export interface ICurrencyWithPrice {
@@ -44,9 +51,14 @@ export interface IPolymorphicContentType {
 }
 
 
-export interface ITBankPayment {
-    customer: number
+export interface IPayment {
     order_id: string
+    amount: number
+    payment_url: string | null
+}
+
+export interface ITBankPayment extends IPayment {
+    customer: number
     status: 'NEW' |
         'FORM_SHOWED' |
         'AUTHORIZING' |
@@ -66,8 +78,6 @@ export interface ITBankPayment {
         'REJECTED' |
         'AUTH_FAIL'
     source: string
-    amount: number
-    payment_url: string
 }
 
 export interface ITBankInstallment {
@@ -83,9 +93,9 @@ export interface IOrder {
     user: IUser | null;
     product: IProduct;
     promocode?: IPromocode | null;
-    payment_system: 'tbank' | 'stripe' | 'shopozz' | 'prodamus';
+    payment_system: IPaymentSystem;
     currency: 'USD' | 'RUB' | 'EUR';
-    payment: ITBankPayment;
+    payment: IPayment;
     created_at: string;
     is_inited: boolean;
     is_paid: boolean;

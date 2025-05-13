@@ -2,6 +2,8 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
+from apps.cloudpayments.models import CloudPaymentPayment
+from apps.cloudpayments.serializers import CloudPaymentSmallPublicSerializer
 from apps.commerce.models import Order, HandMadePayment
 from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.commerce.serializers.promocode import PromocodeSerializer
@@ -42,6 +44,8 @@ class BaseOrderSerializer(AModelSerializer):
                 return TBankPaymentSerializer(payment).data
             if isinstance(payment, TBankInstallment):
                 return TBankInstallmentSmallPublicSerializer(payment).data
+            if isinstance(payment, CloudPaymentPayment):
+                return CloudPaymentSmallPublicSerializer(payment).data
             if isinstance(payment, HandMadePayment):
                 return HandMadePaymentSmallPublicSerializer(payment).data
             else:

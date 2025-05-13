@@ -23,7 +23,7 @@ class CloudPaymentPayment(Payment, CloudPaymentService):
         DECLINED = 'Declined', _('Declined')
         REFUNDED = 'Refunded', _('Refunded')
 
-    transaction_id = BigIntegerField(_('CloudPayments transaction id'), unique=True)
+    transaction_id = BigIntegerField(_('CloudPayments transaction id'), null=True, default=None)
     status = CharField(_('Status'), choices=Status.choices, max_length=20, db_index=True)
 
     class Meta:

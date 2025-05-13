@@ -7,6 +7,7 @@ from pathlib import Path
 from pathlib import Path
 
 from adjango.utils.common import is_celery, traceback_str
+from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
@@ -248,6 +249,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'logui',
     'cachalot',
+    "csp",
 
     'apps.xl_dashboard',
     'apps.company',
@@ -329,6 +331,7 @@ MIDDLEWARE = [
     'logui.middleware.RequestResponseLoggerMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "csp.middleware.CSPMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -341,6 +344,32 @@ MIDDLEWARE = [
 if DEV: MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
 MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 # MEDIA_SUBSTITUTION_URL = 'http://localhost:8000'
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        # общее
+        "default-src": [SELF],
+        # сюда добавляем все скриптовые источники + разрешаем inline:
+        "script-src": [
+            SELF,
+            "https://widget.cloudpayments.ru",
+            "https://forma.tinkoff.ru",
+            "https://pay.google.com",
+            "https://pay.yandex.ru",
+            UNSAFE_INLINE,  # ← даёт право на inline‑скрипты
+            # CloudPayments иногда вызывает new Function → нужен eval:
+            UNSAFE_EVAL,
+        ],
+        # виджет открывает себя во фрейме
+        "frame-src": [
+            SELF,
+            "https://widget.cloudpayments.ru",
+            "https://pay.google.com",
+            "https://pay.yandex.ru",
+            "https://forma.tinkoff.ru",
+        ],
+    },
+}
 
 CHANNEL_LAYERS = {
     'default': {

@@ -192,6 +192,7 @@ class IOrderService:
 
         # ----------------------- CloudPayments ------------------------- #
         elif self.payment_system == PaymentSystem.CloudPayment:
+            log = logging.getLogger('global')
             from apps.cloudpayments.managers.payment import CloudPaymentAPI
             from apps.commerce.models import Payment
             commerce_log.info('CloudPaymentAPI init …')
@@ -199,10 +200,6 @@ class IOrderService:
             self.payment: Payment = await CloudPaymentAPI.init(
                 user=request.user,
                 amount=primary_price_for_init,
-                order_id=self.id,
-                ip=request.ip,
-                description=getattr(self, 'get_payment_description', lambda: 'Оплата заказа')(),
-                email=email
             )
             await self.asave()
 

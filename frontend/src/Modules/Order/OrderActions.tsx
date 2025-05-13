@@ -1,5 +1,5 @@
 // Modules/Order/OrderActions.tsx
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {MenuItem} from "@mui/material";
@@ -10,6 +10,7 @@ import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
 import {useApi} from "../Api/useApi";
+import CloudPaymentWidget from "../Payment/CloudPaymentWidget";
 
 interface OrderActionsProps {
     order: IOrder;
@@ -26,6 +27,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                                                    }) => {
     const navigate = useNavigate();
     const {user} = useContext(AuthContext) as AuthContextType;
+    const [cpOpen, setCpOpen] = useState(false);
     const {plt} = useTheme();
     const {api} = useApi()
     // Action Handlers
@@ -34,7 +36,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         api.post(`/api/v1/orders/${order.id}/cancel/`).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order canceled successfully.')}`);
-        }).catch(_=>null).finally(() => setLoading(false));
+        }).catch(_ => null).finally(() => setLoading(false));
     };
 
     const handleExecuteOrder = () => {
@@ -42,7 +44,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         api.post(`/api/v1/orders/${order.id}/execute/`).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order executed successfully.')}`);
-        }).catch(_=>null).finally(() => setLoading(false));
+        }).catch(_ => null).finally(() => setLoading(false));
     };
 
     const handleResendNotificationOrder = () => {
@@ -51,15 +53,23 @@ const OrderActions: React.FC<OrderActionsProps> = ({
             pprint(`Order ID: ${order.id} notification resent`, data);
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order notification resent successfully.')}`);
-        }).catch(_=>null).finally(() => setLoading(false));
+        }).catch(_ => null).finally(() => setLoading(false));
     };
 
     const handleRedirectToPayment = () => {
-        if (order.payment) window.location.href = order.payment.payment_url;
+        if (order.payment?.payment_url) window.location.href = order.payment.payment_url;
         else Message.error('No link for payment was found');
     };
 
     const handleRedirectToRefund = () => navigate(`/refund/${order.id}`);
+
+    const handlePay = () => {
+        if (order.payment_system === 'cloud_payment') {
+            setCpOpen(true);                // откроем виджет
+        } else {
+            handleRedirectToPayment();      // старое поведение для SBP / Tinkoff
+        }
+    };
 
     const getActions = () => {
         const actions: Array<{
@@ -102,10 +112,15 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         }
 
         // Добавляем действие "Оплатить", если заказ инициализирован, не оплачен, не отменен, не исполнен и не возвращен
-        if (order.is_inited && !order.is_paid && !order.is_cancelled && !order.is_executed && !order.is_refunded && order.payment.payment_url) {
+        if (order.is_inited && !order.is_paid && !order.is_cancelled && !order.is_executed && !order.is_refunded) {
+            // actions.push({
+            //     label: 'Pay',
+            //     onClick: handleRedirectToPayment,
+            //     style: {backgroundColor: plt.info.main},
+            // });
             actions.push({
                 label: 'Pay',
-                onClick: handleRedirectToPayment,
+                onClick: handlePay,
                 style: {backgroundColor: plt.info.main},
             });
         }
@@ -145,6 +160,16 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                         ))}
                     </OptionsMenu>
                 )
+            )}
+            {cpOpen && (
+                <CloudPaymentWidget
+                    open={cpOpen}
+                    order={order}
+                    onClose={(needRefresh) => {
+                        setCpOpen(false);
+                        if (needRefresh) onSomeUpdatingOrderAction({...order, is_paid: true});
+                    }}
+                />
             )}
         </div>
     );

@@ -39,9 +39,9 @@ class CloudPaymentAPI:
             headers['X-Request-Id'] = idempotency_key
 
         async with httpx.AsyncClient(base_url=cls.base_url, auth=cls._auth(), timeout=30) as client:
-            log.debug('[CP] Request: %s', data)
+            log.info('[CP] Request: %s', data)
             r = await client.post(endpoint, json=data, headers=headers)
-            log.debug('[CP] Response: %s', r.text)
+            log.info('[CP] Response: %s', r.text)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
@@ -84,32 +84,13 @@ class CloudPaymentAPI:
         )
 
     @classmethod
-    async def init(cls, *, user, amount: Decimal, order_id, ip,
-                   description, email=None, card_token: str | None = None):
-        """
-        Одностадийная картовая оплата.
-        * card_token — криптограмма от CloudPayments
-        """
-        data = {
-            "Amount": float(amount),
-            "Currency": Currency.RUB,
-            "InvoiceId": str(order_id),
-            "AccountId": str(user.id) if user else '',
-            "Description": description,
-            "Email": email,
-            "IpAddress": ip,
-            "Token": card_token,  # либо CryptogramPacket
-        }
-        resp = await cls._post('/payments/cards/charge', data)
-        model = resp['Model']
+    async def init(cls, *, user, amount: Decimal):
+
         return await CloudPaymentPayment.objects.acreate(
             amount=amount,
             currency=Currency.RUB,
             user=user,
             payment_url=None,  # карты сразу в виджете
-            transaction_id=model['TransactionId'],
-            status=model['Status'],
-            is_paid=model['Status'] == 'Completed',
         )
 
     @classmethod

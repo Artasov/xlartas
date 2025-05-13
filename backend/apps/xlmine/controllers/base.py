@@ -180,8 +180,6 @@ async def get_latest_release_security(_):
 @permission_classes((IsAuthenticated,))
 async def get_current_privilege(request):
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=request.user)
-    pprint(xlmine_user.__dict__)
-    pprint(hasattr(xlmine_user, 'privilege_id'))
     privilege = await xlmine_user.arelated('privilege') if getattr(xlmine_user, 'privilege_id') else None
     return Response({
         'privilege': await PrivilegeSerializer(privilege).adata if privilege else None,
