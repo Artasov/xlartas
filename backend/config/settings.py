@@ -348,6 +348,7 @@ MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
+
         "script-src": [
             SELF,
             "https://widget.cloudpayments.ru",
@@ -356,28 +357,45 @@ CONTENT_SECURITY_POLICY = {
             "https://pay.yandex.ru",
             UNSAFE_INLINE,
             UNSAFE_EVAL,
-            UNSAFE_HASHES,  # если требуются inline-обработчики
+            UNSAFE_HASHES,
         ],
-        # Разрешаем подключения стилей из своего домена и с Google Fonts:
+
         "style-src": [
             SELF,
             "https://fonts.googleapis.com",
-            UNSAFE_INLINE,  # для inline-стилей
+            UNSAFE_INLINE,
         ],
-        # Разрешаем загрузку шрифтов из внешних источников (например, Google Fonts):
+
         "font-src": [
             SELF,
             "https://fonts.gstatic.com",
         ],
-        # Если изображений тоже внешних, то можно добавить:
+
         "img-src": [
             SELF,
             "data:",
-            "https://fonts.googleapis.com",  # если нужно
+            "https://fonts.googleapis.com",
             "https://fonts.gstatic.com",
+            "https://xlartas.ru",
         ],
-        # Если у вас на странице подключаются inline‑стили через атрибут style,
-        # и браузер жалуется, добавьте исключение в style-src (unsafe-inline уже добавили выше).
+
+        # ← Add this!
+        "frame-src": [
+            SELF,
+            "https://widget.cloudpayments.ru",
+            "https://pay.google.com",
+            "https://pay.yandex.ru",
+            "https://forma.tinkoff.ru",
+        ],
+
+        # optional, for older browsers that don’t support frame-src
+        "child-src": [
+            SELF,
+            "https://widget.cloudpayments.ru",
+            "https://pay.google.com",
+            "https://pay.yandex.ru",
+            "https://forma.tinkoff.ru",
+        ],
     },
 }
 
