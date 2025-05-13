@@ -7,7 +7,7 @@ from pathlib import Path
 from pathlib import Path
 
 from adjango.utils.common import is_celery, traceback_str
-from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL
+from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
@@ -347,27 +347,37 @@ MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
-        # общее
         "default-src": [SELF],
-        # сюда добавляем все скриптовые источники + разрешаем inline:
         "script-src": [
             SELF,
             "https://widget.cloudpayments.ru",
             "https://forma.tinkoff.ru",
             "https://pay.google.com",
             "https://pay.yandex.ru",
-            UNSAFE_INLINE,  # ← даёт право на inline‑скрипты
-            # CloudPayments иногда вызывает new Function → нужен eval:
+            UNSAFE_INLINE,
             UNSAFE_EVAL,
+            UNSAFE_HASHES,  # если требуются inline-обработчики
         ],
-        # виджет открывает себя во фрейме
-        "frame-src": [
+        # Разрешаем подключения стилей из своего домена и с Google Fonts:
+        "style-src": [
             SELF,
-            "https://widget.cloudpayments.ru",
-            "https://pay.google.com",
-            "https://pay.yandex.ru",
-            "https://forma.tinkoff.ru",
+            "https://fonts.googleapis.com",
+            UNSAFE_INLINE,  # для inline-стилей
         ],
+        # Разрешаем загрузку шрифтов из внешних источников (например, Google Fonts):
+        "font-src": [
+            SELF,
+            "https://fonts.gstatic.com",
+        ],
+        # Если изображений тоже внешних, то можно добавить:
+        "img-src": [
+            SELF,
+            "data:",
+            "https://fonts.googleapis.com",  # если нужно
+            "https://fonts.gstatic.com",
+        ],
+        # Если у вас на странице подключаются inline‑стили через атрибут style,
+        # и браузер жалуется, добавьте исключение в style-src (unsafe-inline уже добавили выше).
     },
 }
 
