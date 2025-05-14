@@ -1,6 +1,7 @@
 # seordj/utils.py
 from typing import Optional
 
+from django.conf import settings
 from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 
@@ -33,16 +34,12 @@ def generate_seo_tags(
     twitter_title = twitter_title or title
     twitter_description = twitter_description or description
 
-    # canonical и og_url
-    if not canonical:
-        canonical = request.build_absolute_uri()
-    if not og_url:
-        og_url = canonical
-
     # Получаем URL к статике
-    favicon_url = request.build_absolute_uri(static("favicon.ico"))
     og_image_url = request.build_absolute_uri(static(og_image_path))
     twitter_image_url = request.build_absolute_uri(static(twitter_image_path))
+
+    icon = f'{settings.DOMAIN_URL}/static/favicon.ico'
+    canonical = canonical if canonical else settings.DOMAIN_URL
 
     html = f"""
     <title>{title}</title>
@@ -62,7 +59,7 @@ def generate_seo_tags(
     <meta name="twitter:image" content="{twitter_image_url}" />
 
     <link rel="canonical" href="{canonical}" />
-    <link rel="shortcut icon" href="{favicon_url}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{icon}" type="image/x-icon" />
     <meta name="robots" content="{robots}" />
     """
     # Помечаем как безопасный, чтобы Django не экранировал теги

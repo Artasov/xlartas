@@ -15,6 +15,8 @@ import logging
 from collections import defaultdict
 from typing import Dict, Iterable, List, Type, TYPE_CHECKING
 
+from django.conf import settings
+
 from apps.commerce.models.payment import PaymentSystem
 
 log = logging.getLogger('payment_registry')
@@ -48,7 +50,7 @@ class PaymentSystemRegistry:
         cls._registry[info.system] = info
         for cur in info.currencies:
             cls._currency_map[cur].append(info.system)
-        log.info('[PaymentRegistry] Registered %s', info.system)
+        if settings.MAIN_PROCESS: log.info('[PaymentRegistry] Registered %s', info.system)
 
     @classmethod
     def provider_cls(cls, system: str) -> Type['BasePaymentProvider']:
