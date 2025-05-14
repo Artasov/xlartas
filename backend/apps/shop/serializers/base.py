@@ -1,1 +1,0 @@
-# shop/serializers/base.py

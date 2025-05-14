@@ -1,1 +1,0 @@
-# shop/controllers/admin.py

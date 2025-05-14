@@ -263,7 +263,6 @@ INSTALLED_APPS = [
     'apps.chat',
     'apps.analytics',
     'apps.core',
-    'apps.shop',
     'apps.software',
     'apps.tbank',
     'apps.cloudpayments',
