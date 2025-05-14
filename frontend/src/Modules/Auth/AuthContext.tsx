@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         const nextFromUrl = new URLSearchParams(window.location.search).get('next');
         pprint('Final auth next')
         // pprint(nextFromUrl ? nextFromUrl : next ? next : '/profile')
-        if (nextFromUrl) navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
+        navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
         hideMobileMenu();
         dispatch(closeAuthModal());
         Message.success('Добро пожаловать! Вы успешно вошли в свой аккаунт.');
