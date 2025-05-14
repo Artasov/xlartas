@@ -2,16 +2,16 @@
 
 import adjango.services.base
 import adjango.services.polymorphic
+import django.db.models.deletion
+from django.db import migrations, models
+
 import apps.confirmation.models.base
 import apps.confirmation.services.base
 import apps.confirmation.services.email
 import apps.confirmation.services.phone
-import django.db.models.deletion
-from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,23 +24,31 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
-                ('code', models.PositiveIntegerField(default=apps.confirmation.models.base.generate_short_code, verbose_name='Code')),
+                ('code', models.PositiveIntegerField(default=apps.confirmation.models.base.generate_short_code,
+                                                     verbose_name='Code')),
                 ('can_confirmed_by_link', models.BooleanField(default=False, verbose_name='Can be Confirmed by Link')),
                 ('action', models.CharField(max_length=20, verbose_name='Action')),
                 ('is_used', models.BooleanField(default=False, verbose_name='Is Used')),
                 ('expired_at', models.DateTimeField(verbose_name='Expiration Date')),
-                ('polymorphic_ctype', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='polymorphic_%(app_label)s.%(class)s_set+', to='contenttypes.contenttype')),
+                ('polymorphic_ctype',
+                 models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='polymorphic_%(app_label)s.%(class)s_set+',
+                                   to='contenttypes.contenttype')),
             ],
             options={
                 'verbose_name': 'Confirmation Code',
                 'verbose_name_plural': 'Confirmation Codes',
             },
-            bases=(models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService, apps.confirmation.services.base.ConfirmationCodeService),
+            bases=(
+                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService,
+                apps.confirmation.services.base.ConfirmationCodeService),
         ),
         migrations.CreateModel(
             name='EmailConfirmationCode',
             fields=[
-                ('confirmationcode_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='confirmation.confirmationcode')),
+                ('confirmationcode_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='confirmation.confirmationcode')),
             ],
             options={
                 'verbose_name': 'Email Confirmation Code',
@@ -51,7 +59,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PhoneConfirmationCode',
             fields=[
-                ('confirmationcode_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='confirmation.confirmationcode')),
+                ('confirmationcode_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='confirmation.confirmationcode')),
             ],
             options={
                 'verbose_name': 'Phone Confirmation Code',

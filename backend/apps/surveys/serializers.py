@@ -1,6 +1,5 @@
 # surveys/serializers.py
 from adjango.aserializers import AModelSerializer
-from rest_framework import serializers
 
 from apps.surveys.models import (
     Survey, Question, Choice, SurveyAccess,
@@ -50,7 +49,7 @@ class SurveyAttemptSerializer(AModelSerializer):
         fields = '__all__'
 
 
-class QuestionAttemptSerializer(serializers.ModelSerializer):
+class QuestionAttemptSerializer(AModelSerializer):
     class Meta:
         model = QuestionAttempt
         fields = '__all__'

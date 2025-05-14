@@ -3,7 +3,6 @@ from adjango.adecorators import acontroller
 from adjango.aserializers import ASerializer
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from adrf.serializers import Serializer
 from django.http import FileResponse
 from django.utils import timezone
 from rest_framework import status, serializers
@@ -11,8 +10,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import arelated
-from apps.core.exceptions.base import CoreExceptions
+from apps.core.exceptions.base import CoreException
 from apps.shop.exceptions.base import (
     NoValidLicenseFound, SoftwareFileNotFound, SoftwareByNameNotFound
 )
@@ -25,7 +23,7 @@ from apps.shop.services.subscription import subscribe_user_software, activate_te
 @acontroller('Get list of software')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-async def software_list(request) -> Response:
+async def software_list(_request) -> Response:
     return Response(await get_softwares(
         SoftwareProduct.objects,
         is_available=True
@@ -35,7 +33,7 @@ async def software_list(request) -> Response:
 @acontroller('Get software data by name')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-async def software_by_name(request, name) -> Response:
+async def software_by_name(_request, name) -> Response:
     softwares = await get_softwares(SoftwareProduct.objects, is_available=True, name=name)
     if not softwares: raise SoftwareByNameNotFound()
     return Response(softwares[0])
@@ -49,7 +47,7 @@ async def software_test_activate_current_user(request) -> Response:
         software_id = serializers.IntegerField()
 
     serializer = SoftwareIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise CoreExceptions.SomethingGoWrong()
+    if not serializer.is_valid(): raise CoreException.SomethingGoWrong()
 
     data = await serializer.adata
     await activate_test_software_user(
@@ -66,7 +64,7 @@ async def software_subscribe_current_user(request) -> Response:
         software_subscription_id = serializers.IntegerField()
 
     serializer = SubscriptionIdSerializer(data=request.data)
-    if not serializer.is_valid(): raise CoreExceptions.SomethingGoWrong()
+    if not serializer.is_valid(): raise CoreException.SomethingGoWrong()
     data = await serializer.adata
     try:
         await subscribe_user_software(
@@ -91,7 +89,7 @@ async def download_software_file(request, id) -> Response | FileResponse:
 
     if not subscription: raise NoValidLicenseFound()
 
-    file = await arelated(software, 'file')
+    file = await software.arelated('file')
 
     if not file: raise SoftwareFileNotFound()
 

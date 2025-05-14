@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-def copy_mods(source_path: str, client_mods: list) -> None:
+def copy_mods(source_path: str, client_mods: list) -> None:  # noqa
     """
     Копирует все .jar файлы из папки source_path в соседнюю папку mods_server,
     исключая моды, имена которых содержат в себе одну из подстрок, перечисленных в client_mods.

@@ -71,7 +71,7 @@ def send_sms(phone: str, message: str):
     except requests.RequestException as e:
         log.critical(f'Ошибка при отправке SMS: {phone} : {e}')
         raise SMSSendException(f'Ошибка при отправке SMS: {e}')
-    except Exception as e:
+    except Exception:
         raise
 
     log.info(f'SMS успешно отправлено: {phone} : {message}')

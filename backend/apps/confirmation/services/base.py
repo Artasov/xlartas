@@ -76,12 +76,11 @@ class ConfirmationCodeService:
     async def can_new(
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             action: str,
-            method: str,
+            method: str,  # noqa
             credential: str,
             raise_exceptions: bool = False
     ) -> Union['User', bool]:
         from apps.core.models import User
-        user = request.user
         if action not in confirmation_actions: raise ConfirmationException.Action.Unknown()
         if not request.user.is_authenticated and action not in (
                 CoreConfirmationActionType.SIGNUP,
@@ -138,7 +137,7 @@ class ConfirmationCodeService:
     async def make_action(self: 'ConfirmationCode', **kwargs) -> ConfirmationResult:
         async with AsyncAtomicContextManager():
             func = self.get_action_func()
-            self.is_used = True
+            self.is_used = True  # noqa
             await self.asave()
             result = await func(self, **kwargs)
             return ConfirmationResult(result=result, action=self.action)

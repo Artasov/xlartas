@@ -36,9 +36,9 @@ async def notification(request):
             return redirect(f'{settings.DOMAIN_URL}/orders/?error_message=Оплата не прошла. #2346')
         log.info('Stage #19')
         return Response(status=HTTP_400_BAD_REQUEST)
-    await sync_to_async(log.info)(f'{request.success=}')
-    await sync_to_async(log.info)(f'{request.is_payment_confirmed=}')
-    await sync_to_async(log.info)(f'{request.order=}')
+    await sync_to_async(log.info)(f'{request.success=}')  # noqa
+    await sync_to_async(log.info)(f'{request.is_payment_confirmed=}')  # noqa
+    await sync_to_async(log.info)(f'{request.order=}')  # noqa
     if request.success and request.is_payment_confirmed and request.order:
         log.info('Stage #20')
         request.order.payment = await request.order.arelated('payment')
@@ -66,7 +66,7 @@ async def notification(request):
                 f'User: {request.order.user.id}\n'
                 f'Payment: {request.payment.id}\n'
                 f'Request Data: {request.data}\n',
-            )
+            )  # noqa
             log.info('Stage #26')
             return Response(status=HTTP_400_BAD_REQUEST)
         log.info('Stage #27')

@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -22,10 +21,15 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Updated at')),
                 ('subject', models.CharField(max_length=255, verbose_name='Тема')),
-                ('html_content', models.TextField(help_text='Используйте HTML для форматирования (цветной, жирный текст, картинки и пр.)', verbose_name='HTML content')),
-                ('start_date', models.DateTimeField(default=django.utils.timezone.now, help_text='Дата и время, когда рассылка должна быть отправлена', verbose_name='Start date')),
+                ('html_content', models.TextField(
+                    help_text='Используйте HTML для форматирования (цветной, жирный текст, картинки и пр.)',
+                    verbose_name='HTML content')),
+                ('start_date', models.DateTimeField(default=django.utils.timezone.now,
+                                                    help_text='Дата и время, когда рассылка должна быть отправлена',
+                                                    verbose_name='Start date')),
                 ('sent', models.BooleanField(default=False, verbose_name='Sent')),
-                ('users', models.ManyToManyField(help_text='Выберите пользователей, которым будет отправлена рассылка', to=settings.AUTH_USER_MODEL, verbose_name='Users')),
+                ('users', models.ManyToManyField(help_text='Выберите пользователей, которым будет отправлена рассылка',
+                                                 to=settings.AUTH_USER_MODEL, verbose_name='Users')),
             ],
             options={
                 'verbose_name': 'Mailing',

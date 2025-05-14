@@ -30,7 +30,7 @@ def interpolate_color(start_rgb: tuple, end_rgb: tuple, factor: float) -> tuple:
     )
 
 
-def generate_gradient_text(text: str, start_hex: str, end_hex: str) -> str:
+def generate_gradient_text(text: str, start_hex: str, end_hex: str) -> str:  # noqa
     """
     Генерирует строку с градиентом для каждого символа.
 

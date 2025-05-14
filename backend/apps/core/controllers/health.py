@@ -51,7 +51,7 @@ def health(_request) -> Response:
     # Database
     try:
         connections['default'].cursor()
-    except Exception as e:
+    except Exception as e:  # noqa
         return Response(f'Database is dead', HTTP_503_SERVICE_UNAVAILABLE)
 
     # Minio

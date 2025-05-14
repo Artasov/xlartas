@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -19,16 +18,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to=settings.AUTH_USER_MODEL, verbose_name='User'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages',
+                                    to=settings.AUTH_USER_MODEL, verbose_name='User'),
         ),
         migrations.AddField(
             model_name='room',
             name='participants',
-            field=adjango.fields.AManyToManyField(related_name='rooms', to=settings.AUTH_USER_MODEL, verbose_name='Participants'),
+            field=adjango.fields.AManyToManyField(related_name='rooms', to=settings.AUTH_USER_MODEL,
+                                                  verbose_name='Participants'),
         ),
         migrations.AddField(
             model_name='message',
             name='room',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='chat.room', verbose_name='Room'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages',
+                                    to='chat.room', verbose_name='Room'),
         ),
     ]

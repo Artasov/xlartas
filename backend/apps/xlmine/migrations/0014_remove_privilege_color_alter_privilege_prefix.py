@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0013_alter_privilege_prefix'),
     ]

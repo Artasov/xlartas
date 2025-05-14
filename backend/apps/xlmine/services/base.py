@@ -10,7 +10,7 @@ def increment_version(version_str: str) -> str:
         major, minor, patch = map(int, parts[:3])
         minor += 1
         return f"{major}.{minor}.{patch}"
-    except Exception:
+    except Exception:  # noqa
         return "1.0.0"
 
 

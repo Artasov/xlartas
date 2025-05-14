@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0010_privilege_weight_alter_privilege_code_name_and_more'),
     ]
@@ -14,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userxlmine',
             name='privilege',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='xlmine_users', to='xlmine.privilege'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='xlmine_users', to='xlmine.privilege'),
         ),
     ]

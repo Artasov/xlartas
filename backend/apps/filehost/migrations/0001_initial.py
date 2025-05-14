@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -20,8 +19,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subfolders', to='filehost.folder')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folders', to=settings.AUTH_USER_MODEL)),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             related_name='subfolders', to='filehost.folder')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folders',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
@@ -34,8 +35,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
                 ('file', models.FileField(upload_to='files/')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to=settings.AUTH_USER_MODEL)),
-                ('folder', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='files', to='filehost.folder')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files',
+                                           to=settings.AUTH_USER_MODEL)),
+                ('folder', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             related_name='files', to='filehost.folder')),
             ],
             options={
                 'abstract': False,
@@ -48,9 +51,12 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_public', models.BooleanField(default=False)),
                 ('public_link', models.CharField(blank=True, max_length=255, null=True, unique=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='accesses', to=settings.AUTH_USER_MODEL)),
-                ('file', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='accesses', to='filehost.file')),
-                ('folder', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='accesses', to='filehost.folder')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                           related_name='accesses', to=settings.AUTH_USER_MODEL)),
+                ('file', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                           related_name='accesses', to='filehost.file')),
+                ('folder', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             related_name='accesses', to='filehost.folder')),
             ],
             options={
                 'abstract': False,
@@ -63,7 +69,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
                 ('color', models.CharField(default='#ffffff', max_length=9)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tags', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tags',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
@@ -74,8 +81,10 @@ class Migration(migrations.Migration):
             name='FolderTag',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('folder', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folder_tags', to='filehost.folder')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folder_tags', to='filehost.tag')),
+                ('folder', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folder_tags',
+                                             to='filehost.folder')),
+                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folder_tags',
+                                          to='filehost.tag')),
             ],
             options={
                 'abstract': False,
@@ -91,8 +100,10 @@ class Migration(migrations.Migration):
             name='FileTag',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='file_tags', to='filehost.file')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='file_tags', to='filehost.tag')),
+                ('file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='file_tags',
+                                           to='filehost.file')),
+                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='file_tags',
+                                          to='filehost.tag')),
             ],
             options={
                 'abstract': False,

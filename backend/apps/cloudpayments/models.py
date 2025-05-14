@@ -1,4 +1,4 @@
-# tbank/models.py
+# cloudpayments/models.py
 from adjango.models import AModel
 from django.db.models import (
     Model, CharField, TextChoices, BigIntegerField, )

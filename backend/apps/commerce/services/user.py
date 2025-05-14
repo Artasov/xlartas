@@ -16,14 +16,14 @@ if TYPE_CHECKING:
 
 class CommerceUserService:
     def success_payments(self: 'User', currency: str) -> AQuerySet:
-        return self.payments.filter(is_paid=True, currency=currency)
+        return self.payments.filter(is_paid=True, currency=currency)  # noqa
 
     async def sum_success_payments_amount(self: 'User', currency: str) -> float:
-        aggregate_result = await self.success_payments(currency).aaggregate(total=Sum('amount'))
+        aggregate_result = await self.success_payments(  # noqa
+            currency
+        ).aaggregate(total=Sum('amount'))
         amount = float(aggregate_result['total'] or 0.0)
         return amount
-
-
 
     async def date_last_success_payment(self, currency: str) -> Optional[datetime]:
         """
@@ -32,8 +32,7 @@ class CommerceUserService:
         :param currency: Валюта платежа. По умолчанию RUB.
         :return: Дата последнего успешного платежа или None, если платежи отсутствуют.
         """
-        return await self.payments.filter(
-            is_paid=True,
+        return await self.success_payments(
             currency=currency
         ).order_by(
             '-created_at'
@@ -42,8 +41,7 @@ class CommerceUserService:
         ).afirst()
 
     async def amount_last_success_payment(self: 'User', currency: str) -> float:
-        last_payment: Optional['Payment'] = await self.payments.filter(
-            is_paid=True,
+        last_payment: Optional['Payment'] = await self.success_payments(
             currency=currency
         ).order_by('-created_at').afirst()
         amount = float(last_payment.amount) if last_payment else 0.0
@@ -55,7 +53,7 @@ class CommerceUserService:
 
         :return: True, если были оплаты за последний месяц, иначе False.
         """
-        return await self.payments.filter(
+        return await self.payments.filter(  # noqa
             is_paid=True, created_at__gte=timezone.now() - timedelta(days=days)
         ).aexists()
 

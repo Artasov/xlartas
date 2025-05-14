@@ -46,7 +46,7 @@ def async_tbank_installment_notification(view_func):
             # (зависит от того, как вы настраивали orderNumber).
             # Ниже предполагаем, что "id" == .order_id:
             try:
-                request.payment: TBankInstallment = await TBankInstallment.objects.select_for_update().aget(
+                request.payment = await TBankInstallment.objects.select_for_update().aget(
                     order_id=tin_id
                 )
             except TBankInstallment.DoesNotExist:
@@ -65,12 +65,12 @@ def async_tbank_installment_notification(view_func):
             if data.get('created_at'):
                 try:
                     request.payment.created_at_tinkoff = dateutil.parser.isoparse(data['created_at'])
-                except:
+                except:  # noqa TODO: разобрать
                     pass
             if data.get('expected_overdue_at'):
                 try:
                     request.payment.expected_overdue_at = dateutil.parser.isoparse(data['expected_overdue_at'])
-                except:
+                except:  # noqa TODO: разобрать
                     pass
 
             # numeric fields

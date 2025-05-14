@@ -2,12 +2,12 @@
 
 import adjango.fields
 import adjango.services.base
-import apps.chat.services
 from django.db import migrations, models
+
+import apps.chat.services
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -30,7 +30,9 @@ class Migration(migrations.Migration):
             name='Room',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=255, null=True, unique=True, verbose_name='Room name')),
+                (
+                    'name',
+                    models.CharField(blank=True, max_length=255, null=True, unique=True, verbose_name='Room name')),
                 ('max_participants', models.PositiveSmallIntegerField(default=2, verbose_name='Max participants')),
             ],
             options={
@@ -48,7 +50,8 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(blank=True, null=True, verbose_name='Text')),
                 ('is_read', models.BooleanField(default=False, verbose_name='Is read')),
                 ('is_important', models.BooleanField(default=False, verbose_name='Is important')),
-                ('files', adjango.fields.AManyToManyField(blank=True, related_name='messages', to='chat.file', verbose_name='Files')),
+                ('files', adjango.fields.AManyToManyField(blank=True, related_name='messages', to='chat.file',
+                                                          verbose_name='Files')),
             ],
             options={
                 'verbose_name': 'Message',

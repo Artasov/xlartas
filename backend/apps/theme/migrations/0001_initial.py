@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,8 +16,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, verbose_name='Name')),
-                ('mode', models.CharField(choices=[('light', 'Light'), ('dark', 'Dark')], max_length=10, verbose_name='Mode')),
-                ('bg_image', models.ImageField(blank=True, null=True, upload_to='images/theme/background/', verbose_name='Background Image')),
+                ('mode',
+                 models.CharField(choices=[('light', 'Light'), ('dark', 'Dark')], max_length=10, verbose_name='Mode')),
+                ('bg_image', models.ImageField(blank=True, null=True, upload_to='images/theme/background/',
+                                               verbose_name='Background Image')),
                 ('is_default', models.BooleanField(default=False, verbose_name='Is Default')),
             ],
             options={

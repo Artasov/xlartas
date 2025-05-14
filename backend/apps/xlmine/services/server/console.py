@@ -28,15 +28,19 @@ class RconServerConsole:
         :return: Ответ сервера или сообщение об ошибке.
         """
         try:
-            if settings.IS_CELERY: print(f'Rcon <-- {command}')
-            else: log.info(f'Rcon <-- {command}')
+            if settings.IS_CELERY:
+                print(f'Rcon <-- {command}')
+            else:
+                log.info(f'Rcon <-- {command}')
             try:
                 import signal
                 signal.signal = lambda *args, **kwargs: None
                 with MCRcon(self.host, self.password, port=self.port) as mcr:
                     response = mcr.command(command)
-                    if settings.IS_CELERY: print(f'Rcon --> {response}')
-                    else: log.info(f'Rcon --> {response}')
+                    if settings.IS_CELERY:
+                        print(f'Rcon --> {response}')
+                    else:
+                        log.info(f'Rcon --> {response}')
                     return response
             except ValueError:
                 # работаем в не‑главном потоке — обходим signal‑timeout
@@ -44,17 +48,21 @@ class RconServerConsole:
                 # если есть атрибут socket и timeout
                 try:
                     mcr.socket.settimeout(mcr.timeout)
-                except Exception:
+                except Exception:  # noqa
                     pass
                 response = mcr.command(command)
-                if settings.IS_CELERY: print(f'Rcon --> {response}')
-                else: log.info(f'Rcon --> {response}')
+                if settings.IS_CELERY:
+                    print(f'Rcon --> {response}')
+                else:
+                    log.info(f'Rcon --> {response}')
                 try:
                     mcr.disconnect()
-                except Exception:
+                except Exception:  # noqa
                     pass
                 return response
         except Exception as e:
-            if settings.IS_CELERY: print(f"Ошибка при выполнении команды: {traceback_str(e)}")
-            else: log.error(f"Ошибка при выполнении команды: {traceback_str(e)}")
+            if settings.IS_CELERY:
+                print(f"Ошибка при выполнении команды: {traceback_str(e)}")
+            else:
+                log.error(f"Ошибка при выполнении команды: {traceback_str(e)}")
             return f"Ошибка при выполнении команды: {str(e)}"

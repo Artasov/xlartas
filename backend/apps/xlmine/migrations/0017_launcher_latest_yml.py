@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0016_alter_userxlmine_uuid'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='launcher',
             name='latest_yml',
-            field=models.FileField(blank=True, null=True, upload_to='minecraft/launcher/latest_yml/', verbose_name='Latest YML'),
+            field=models.FileField(blank=True, null=True, upload_to='minecraft/launcher/latest_yml/',
+                                   verbose_name='Latest YML'),
         ),
     ]

@@ -17,9 +17,9 @@ from apps.notify.registry import Notifies
 class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        self.room_id = self.scope['url_route']['kwargs']['room_id']
-        self.room_group_name = f'chat_{self.room_id}'
-        self.room = await self.get_room(self.room_id)
+        self.room_id = self.scope['url_route']['kwargs']['room_id']  # noqa
+        self.room_group_name = f'chat_{self.room_id}'  # noqa
+        self.room = await self.get_room(self.room_id)  # noqa
         if self.room and self.scope['user'].is_authenticated:
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
             await self.accept()
@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def receive(self, text_data):
+    async def receive(self, text_data):  # noqa
         data = json.loads(text_data)
         if data['type'] == 'read_message':
             await self.mark_message_as_read(data['message_id'])
@@ -55,7 +55,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     if recipient:
                         await Notify.objects.acreate(
                             recipient=recipient,
-                            notify_type=Notifies.IMPORTANT_CHAT_MESSAGE,
+                            notify_type=Notifies.IMPORTANT_CHAT_MESSAGE,  # noqa TODO: разобраться
                             send_immediately=True
                         )
                 await self.channel_layer.group_send(

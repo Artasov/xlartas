@@ -1,3 +1,4 @@
+# xlmine/controllers/skin_cape.py
 from adrf.decorators import api_view
 from django.conf import settings
 from rest_framework import status

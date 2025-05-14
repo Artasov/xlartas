@@ -24,7 +24,7 @@ HWID_NOT_EQUAL = 'Your HWID does not match the HWID saved for this account.'
 PRODUCT_NOT_EXISTS = 'Requested software product does not exist.'
 LICENSE_TIMEOUT = 'Your license has expired. Visit {} to renew.'
 # Для примера:
-URL_SHOP_SOFTWARE = '/software/' # TODO: генерировать ссылку на запрашиваемый продукт /softwares/:id
+URL_SHOP_SOFTWARE = '/software/'  # TODO: генерировать ссылку на запрашиваемый продукт /softwares/:id
 
 
 @csrf_exempt

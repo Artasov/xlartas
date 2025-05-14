@@ -14,9 +14,16 @@ interface OrderItemProps {
     order: IOrder;
     onClick: () => void;
     onSomeUpdatingOrderAction: (updatedOrder: IOrder) => void;
+    onOrderDeleted?: () => void;
 }
 
-const OrderItem: React.FC<OrderItemProps> = ({order, onClick, onSomeUpdatingOrderAction}) => {
+const OrderItem: React.FC<OrderItemProps> = (
+    {
+        order,
+        onClick,
+        onSomeUpdatingOrderAction,
+        onOrderDeleted,
+    }) => {
     const navigate = useNavigate();
     const {plt} = useTheme();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -67,6 +74,7 @@ const OrderItem: React.FC<OrderItemProps> = ({order, onClick, onSomeUpdatingOrde
                     <OrderActions
                         order={order}
                         onSomeUpdatingOrderAction={onSomeUpdatingOrderAction}
+                        onOrderDeleted={onOrderDeleted}
                         setLoading={setIsLoading}/>
                 </FRBC>
             </FC>

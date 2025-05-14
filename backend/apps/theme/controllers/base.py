@@ -12,5 +12,5 @@ from apps.theme.serializers.serializers import ThemeSerializer
 @acontroller('Get theme list')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-async def theme_list(request) -> Response:
+async def theme_list(_) -> Response:
     return Response(await ThemeSerializer(await Theme.objects.aall(), many=True).adata)

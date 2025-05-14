@@ -17,7 +17,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # Get the user by email or username
         user = None
-        username = None
         username_or_email = attrs.get('username', None)
         password = attrs.get('password')
 
@@ -51,5 +50,5 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 @permission_classes((AllowAny,))
 async def custom_token_obtain_pair_view(request):
     serializer = CustomTokenObtainPairSerializer(data=request.data)
-    await sync_to_async(serializer.is_valid, thread_sensitive=True)(raise_exception=True)
+    await sync_to_async(serializer.is_valid, thread_sensitive=True)(raise_exception=True)  # noqa
     return Response(serializer.validated_data, status=status.HTTP_200_OK)

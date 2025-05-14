@@ -1,6 +1,6 @@
 // Modules/Order/OrderActions.tsx
-import React, {useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useContext, useState} from 'react';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {MenuItem} from "@mui/material";
 import OptionsMenu from "Core/components/elements/OptionsMenu";
@@ -10,24 +10,39 @@ import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
 import {useApi} from "../Api/useApi";
+import PaymentTypePickerModal from "Order/PaymentTypePickerModal";
 
 interface OrderActionsProps {
     order: IOrder;
     extended?: boolean;
     onSomeUpdatingOrderAction: (updatedOrder: IOrder) => void;
+    onOrderDeleted?: () => void;
     setLoading: (loading: boolean) => void;
 }
 
-const OrderActions: React.FC<OrderActionsProps> = ({
-                                                       order,
-                                                       extended = false,
-                                                       onSomeUpdatingOrderAction,
-                                                       setLoading
-                                                   }) => {
+const OrderActions: React.FC<OrderActionsProps> = (
+    {
+        order,
+        extended = false,
+        onSomeUpdatingOrderAction,
+        onOrderDeleted,
+        setLoading
+    }) => {
     const navigate = useNavigate();
     const {user} = useContext(AuthContext) as AuthContextType;
-    const {plt} = useTheme();
+    const {theme, plt} = useTheme();
     const {api} = useApi()
+    const [payModal, setPayModal] = useState(false);
+    const [searchParams] = useSearchParams();
+
+    // если в URL есть `?pay=1`, открываем modal сразу
+    React.useEffect(() => {
+        if (searchParams.get('pay') === '1') {
+            handlePay();
+        }
+        // `searchParams` меняется только при изменении query
+    }, [searchParams]);
+
     // Action Handlers
     const handleCancelOrder = () => {
         setLoading(true);
@@ -42,6 +57,13 @@ const OrderActions: React.FC<OrderActionsProps> = ({
         api.post(`/api/v1/orders/${order.id}/execute/`).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent('Order executed successfully.')}`);
+        }).catch(_ => null).finally(() => setLoading(false));
+    };
+    const handleDeleteOrder = () => {
+        setLoading(true);
+        api.post(`/api/v1/orders/${order.id}/delete/`).then(data => {
+            Message.success('Order deleted successfully')
+            if (onOrderDeleted) onOrderDeleted();
         }).catch(_ => null).finally(() => setLoading(false));
     };
 
@@ -60,6 +82,7 @@ const OrderActions: React.FC<OrderActionsProps> = ({
     };
 
     const handleRedirectToRefund = () => navigate(`/refund/${order.id}`);
+
 
     const handlePay = () => {
         if (order.payment_system !== 'cloud_payment') {
@@ -87,6 +110,11 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                 label: 'Notification',
                 onClick: handleResendNotificationOrder,
                 style: {backgroundColor: plt.bg.contrast10},
+            });
+            actions.push({
+                label: 'Delete',
+                onClick: handleDeleteOrder,
+                style: {backgroundColor: theme.colors.error.main},
             });
         }
 
@@ -158,14 +186,12 @@ const OrderActions: React.FC<OrderActionsProps> = ({
                     </OptionsMenu>
                 )
             )}
-            {/*{order.payment_system === 'cloud_payment' ? (*/}
-            {/*    <CloudPaymentButton*/}
-            {/*        order={order}*/}
-            {/*        onSuccess={updated => onSomeUpdatingOrderAction(updated)}*/}
-            {/*    />*/}
-            {/*) : (*/}
-            {/*    <Button onClick={handleRedirectToPayment}>Pay</Button>*/}
-            {/*)}*/}
+            <PaymentTypePickerModal
+                open={payModal}
+                onClose={() => setPayModal(false)}
+                order={order}
+                onPaymentInited={onSomeUpdatingOrderAction}
+            />
         </div>
     );
 };

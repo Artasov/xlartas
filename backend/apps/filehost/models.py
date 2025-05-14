@@ -6,7 +6,6 @@ from django.db.models import (
 from django.utils.crypto import get_random_string
 
 
-
 class Folder(AModel):
     name = CharField(max_length=255)
     user = ForeignKey('core.User', related_name='folders', on_delete=CASCADE)
@@ -65,4 +64,4 @@ class Access(AModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Access to {"folder" if self.folder else "file"} by {self.user if self.user else self.email}'
+        return f'Access to {"folder" if self.folder else "file"} by {self.user if self.user else self.user.email}'

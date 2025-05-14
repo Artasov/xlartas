@@ -1,10 +1,25 @@
 # software/services/license.py
+from importlib import import_module
 from typing import TYPE_CHECKING
 
 from django.utils import timezone
 
+from apps.commerce.pricing.base import PricingStrategy, PriceContext
+
 if TYPE_CHECKING:
     from apps.software.models import SoftwareLicense
+
+_DEFAULT_STRATEGY_PATH = 'apps.commerce.pricing.strategies.LinearExponent'
+
+
+def _load_strategy() -> PricingStrategy:
+    module_name, attr = _DEFAULT_STRATEGY_PATH.rsplit('.', 1)
+    module = import_module(module_name)
+    cls: type[PricingStrategy] = getattr(module, attr)
+    return cls()
+
+
+_PRICING_STRATEGY = _load_strategy()
 
 
 class SoftwareLicenseService:
@@ -18,11 +33,19 @@ class SoftwareLicenseService:
                         exponent: float,
                         offset: float) -> int:
         """
-        Считаем:
-            cost(H) = round( amount * (hours ^ exponent) + offset )
-        Если exponent < 1, рост цены замедляется при больших hours.
+        Стратегия задаётся в settings.SOFTWARE_PRICING_STRATEGY
+        (по умолчанию 'linear_exponent').
         """
-        if hours <= 0:
-            return 0
-        raw = amount * (hours ** exponent) + offset
-        return round(raw)
+        from django.conf import settings
+        from apps.commerce.pricing.registry import get as get_strategy
+        strategy_name = getattr(
+            settings, 'SOFTWARE_PRICING_STRATEGY', 'linear_exponent'
+        )
+        strategy = get_strategy(strategy_name)
+        price = strategy.calculate(PriceContext(
+            hours=hours,
+            amount=amount,
+            exponent=exponent,
+            offset=offset,
+        ))
+        return int(price)

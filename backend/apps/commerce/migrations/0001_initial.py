@@ -2,6 +2,10 @@
 
 import adjango.services.base
 import adjango.services.polymorphic
+import imagekit.models.fields
+import uuid6
+from django.db import migrations, models
+
 import apps.commerce.managers.client
 import apps.commerce.managers.employee
 import apps.commerce.models.promocode
@@ -9,13 +13,9 @@ import apps.commerce.services.client
 import apps.commerce.services.employee
 import apps.commerce.services.promocode.base
 import apps.uuid6.field
-import imagekit.models.fields
-import uuid6
-from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -27,7 +27,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('about_me', models.TextField(verbose_name='About Me')),
-                ('status', models.CharField(choices=[('new', 'New'), ('active', 'Active'), ('flickering', 'Flickering'), ('rejection', 'Rejection')], db_index=True, default='new', max_length=25, verbose_name='Status')),
+                ('status', models.CharField(choices=[('new', 'New'), ('active', 'Active'), ('flickering', 'Flickering'),
+                                                     ('rejection', 'Rejection')], db_index=True, default='new',
+                                            max_length=25, verbose_name='Status')),
             ],
             options={
                 'verbose_name': 'Client',
@@ -42,17 +44,28 @@ class Migration(migrations.Migration):
             name='Employee',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('document', models.FileField(blank=True, null=True, upload_to=apps.commerce.managers.employee.get_legal_document_path, verbose_name='Legal document')),
-                ('legal_type', models.CharField(blank=True, choices=[('self_employed', 'Self employed'), ('individual_entrepreneur', 'Individual entrepreneur')], max_length=50, null=True, verbose_name='Legal type')),
+                ('document', models.FileField(blank=True, null=True,
+                                              upload_to=apps.commerce.managers.employee.get_legal_document_path,
+                                              verbose_name='Legal document')),
+                ('legal_type', models.CharField(blank=True, choices=[('self_employed', 'Self employed'), (
+                    'individual_entrepreneur', 'Individual entrepreneur')], max_length=50, null=True,
+                                                verbose_name='Legal type')),
                 ('bank_bik', models.CharField(blank=True, max_length=150, null=True, verbose_name='Bank BIK')),
                 ('bank_name', models.CharField(blank=True, max_length=250, null=True, verbose_name='Bank name')),
-                ('corr_account', models.CharField(blank=True, max_length=250, null=True, verbose_name='Correspondent account')),
-                ('balance_account', models.CharField(blank=True, max_length=250, null=True, verbose_name='Settlement account')),
+                ('corr_account',
+                 models.CharField(blank=True, max_length=250, null=True, verbose_name='Correspondent account')),
+                ('balance_account',
+                 models.CharField(blank=True, max_length=250, null=True, verbose_name='Settlement account')),
                 ('address', models.CharField(blank=True, max_length=250, null=True, verbose_name='Address')),
-                ('legal_address', models.CharField(blank=True, max_length=250, null=True, verbose_name='Legal address')),
-                ('inn', models.CharField(blank=True, help_text='Без пробелов, только цифры', max_length=250, null=True, verbose_name='INN')),
+                (
+                    'legal_address',
+                    models.CharField(blank=True, max_length=250, null=True, verbose_name='Legal address')),
+                ('inn', models.CharField(blank=True, help_text='Без пробелов, только цифры', max_length=250, null=True,
+                                         verbose_name='INN')),
                 ('ogrn', models.CharField(blank=True, max_length=250, null=True, verbose_name='OGRN')),
-                ('status', models.CharField(choices=[('new', 'New'), ('working', 'Working'), ('not_working', 'Not Working')], db_index=True, default='working', max_length=50, verbose_name='Status')),
+                ('status',
+                 models.CharField(choices=[('new', 'New'), ('working', 'Working'), ('not_working', 'Not Working')],
+                                  db_index=True, default='working', max_length=50, verbose_name='Status')),
                 ('education', models.TextField(blank=True, default=None, null=True, verbose_name='Education')),
                 ('about_me', models.TextField(blank=True, default=None, null=True, verbose_name='About me')),
                 ('experience_text', models.TextField(blank=True, default=None, null=True, verbose_name='Experience')),
@@ -64,7 +77,9 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Employee',
                 'verbose_name_plural': 'Employees',
             },
-            bases=(models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService, apps.commerce.services.employee.EmployeeService),
+            bases=(
+                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService,
+                apps.commerce.services.employee.EmployeeService),
         ),
         migrations.CreateModel(
             name='EmployeeAvailabilityInterval',
@@ -83,7 +98,9 @@ class Migration(migrations.Migration):
             name='EmployeeLeave',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('leave_type', models.CharField(choices=[('sick', 'Sick Leave'), ('maternity', 'Maternity Leave'), ('unpaid', 'Unpaid Leave')], max_length=20, verbose_name='Leave type')),
+                ('leave_type', models.CharField(
+                    choices=[('sick', 'Sick Leave'), ('maternity', 'Maternity Leave'), ('unpaid', 'Unpaid Leave')],
+                    max_length=20, verbose_name='Leave type')),
                 ('start', models.DateField(db_index=True, verbose_name='Start date')),
                 ('end', models.DateField(db_index=True, verbose_name='End date')),
                 ('reason', models.TextField(blank=True, null=True, verbose_name='Reason')),
@@ -101,26 +118,35 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
                 ('name', models.CharField(db_index=True, max_length=255, verbose_name='Name')),
-                ('pic', imagekit.models.fields.ProcessedImageField(blank=True, null=True, upload_to='product/pictures/', verbose_name='Picture')),
+                ('pic', imagekit.models.fields.ProcessedImageField(blank=True, null=True, upload_to='product/pictures/',
+                                                                   verbose_name='Picture')),
                 ('description', models.TextField(blank=True, max_length=4096, null=True, verbose_name='Description')),
-                ('short_description', models.TextField(blank=True, max_length=4096, null=True, verbose_name='Short description')),
+                ('short_description',
+                 models.TextField(blank=True, max_length=4096, null=True, verbose_name='Short description')),
                 ('is_available', models.BooleanField(default=True, verbose_name='Is available')),
-                ('is_installment_available', models.BooleanField(default=False, verbose_name='Is installment available')),
+                ('is_installment_available',
+                 models.BooleanField(default=False, verbose_name='Is installment available')),
             ],
             options={
                 'verbose_name': 'Product',
                 'verbose_name_plural': 'Products',
             },
-            bases=(models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
+            bases=(
+                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
         ),
         migrations.CreateModel(
             name='Order',
             fields=[
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
-                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')], max_length=3, verbose_name='Currency')),
-                ('id', apps.uuid6.field.UUIDv6Field(default=uuid6.uuid6, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('payment_system', models.CharField(choices=[('handmade', 'HandMade'), ('tbank', 'TBank'), ('tbank_installment', 'Tinkoff (Installment)')], db_index=True, max_length=50, verbose_name='Payment System')),
+                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')],
+                                              max_length=3, verbose_name='Currency')),
+                ('id',
+                 apps.uuid6.field.UUIDv6Field(default=uuid6.uuid6, editable=False, primary_key=True, serialize=False,
+                                              unique=True)),
+                ('payment_system', models.CharField(choices=[('handmade', 'HandMade'), ('tbank', 'TBank'),
+                                                             ('tbank_installment', 'Tinkoff (Installment)')],
+                                                    db_index=True, max_length=50, verbose_name='Payment System')),
                 ('is_inited', models.BooleanField(db_index=True, default=False, verbose_name='Is inited')),
                 ('is_executed', models.BooleanField(db_index=True, default=False, verbose_name='Is executed')),
                 ('is_paid', models.BooleanField(db_index=True, default=False, verbose_name='Is paid')),
@@ -131,7 +157,8 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Order',
                 'verbose_name_plural': 'Orders',
             },
-            bases=(models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
+            bases=(
+                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
         ),
         migrations.CreateModel(
             name='GiftCertificateUsage',
@@ -152,7 +179,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Amount')),
-                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')], max_length=3, verbose_name='Currency')),
+                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')],
+                                              max_length=3, verbose_name='Currency')),
                 ('payment_url', models.URLField(blank=True, max_length=500, null=True, verbose_name='Payment URL')),
                 ('is_paid', models.BooleanField(db_index=True, default=False, verbose_name='Is paid')),
             ],
@@ -160,16 +188,20 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Payment',
                 'verbose_name_plural': 'Payments',
             },
-            bases=(models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
+            bases=(
+                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService),
         ),
         migrations.CreateModel(
             name='ProductPrice',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Amount')),
-                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')], max_length=3, verbose_name='Currency')),
-                ('exponent', models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=10, null=True, verbose_name='Exponent')),
-                ('offset', models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=10, null=True, verbose_name='Offset')),
+                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')],
+                                              max_length=3, verbose_name='Currency')),
+                ('exponent', models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=10, null=True,
+                                                 verbose_name='Exponent')),
+                ('offset', models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=10, null=True,
+                                               verbose_name='Offset')),
             ],
             options={
                 'verbose_name': 'Product Price',
@@ -184,9 +216,12 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
                 ('name', models.CharField(db_index=True, max_length=50, verbose_name='Name')),
-                ('code', models.CharField(default=apps.commerce.models.promocode.generate_promo_code, max_length=50, unique=True, verbose_name='Code')),
+                ('code', models.CharField(default=apps.commerce.models.promocode.generate_promo_code, max_length=50,
+                                          unique=True, verbose_name='Code')),
                 ('description', models.CharField(blank=True, max_length=255, null=True, verbose_name='Description')),
-                ('discount_type', models.CharField(choices=[('percentage', 'Percentage'), ('fixed_amount', 'Fixed amount')], db_index=True, max_length=20, verbose_name='Discount type')),
+                ('discount_type',
+                 models.CharField(choices=[('percentage', 'Percentage'), ('fixed_amount', 'Fixed amount')],
+                                  db_index=True, max_length=20, verbose_name='Discount type')),
                 ('start_date', models.DateTimeField(db_index=True, verbose_name='Start date')),
                 ('end_date', models.DateTimeField(blank=True, db_index=True, null=True, verbose_name='End date')),
             ],
@@ -194,17 +229,26 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Promocode',
                 'verbose_name_plural': 'Promocodes',
             },
-            bases=(models.Model, adjango.services.base.ABaseService, apps.commerce.services.promocode.base.PromoCodeService),
+            bases=(
+                models.Model, adjango.services.base.ABaseService,
+                apps.commerce.services.promocode.base.PromoCodeService),
         ),
         migrations.CreateModel(
             name='PromocodeProductDiscount',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(db_index=True, decimal_places=2, max_digits=10, verbose_name='Discount amount')),
-                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')], db_index=True, help_text='Not used for percentage discount promotional codes.', max_length=3, verbose_name='Currency')),
-                ('max_usage', models.PositiveSmallIntegerField(blank=True, db_index=True, null=True, verbose_name='Max usage')),
-                ('max_usage_per_user', models.PositiveSmallIntegerField(blank=True, db_index=True, null=True, verbose_name='Max usage per user')),
-                ('interval_days', models.PositiveSmallIntegerField(blank=True, db_index=True, null=True, verbose_name='Interval days')),
+                ('amount',
+                 models.DecimalField(db_index=True, decimal_places=2, max_digits=10, verbose_name='Discount amount')),
+                ('currency', models.CharField(choices=[('USD', 'US Dollar'), ('RUB', 'Russian Ruble'), ('EUR', 'Euro')],
+                                              db_index=True,
+                                              help_text='Not used for percentage discount promotional codes.',
+                                              max_length=3, verbose_name='Currency')),
+                ('max_usage',
+                 models.PositiveSmallIntegerField(blank=True, db_index=True, null=True, verbose_name='Max usage')),
+                ('max_usage_per_user', models.PositiveSmallIntegerField(blank=True, db_index=True, null=True,
+                                                                        verbose_name='Max usage per user')),
+                ('interval_days',
+                 models.PositiveSmallIntegerField(blank=True, db_index=True, null=True, verbose_name='Interval days')),
             ],
             options={
                 'verbose_name': ('Promocode product discount',),

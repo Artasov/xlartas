@@ -1,4 +1,4 @@
-// src/components/CloudPaymentButton.tsx
+// Modules/Payment/CloudPaymentButton.tsx
 import React from 'react';
 import {Message} from 'Core/components/Message';
 import {IOrder} from 'types/commerce/shop';

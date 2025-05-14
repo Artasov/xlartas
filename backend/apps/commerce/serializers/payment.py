@@ -1,6 +1,6 @@
 # commerce/serializers/payment.py
 from adjango.aserializers import AModelSerializer
-from rest_framework.fields import SerializerMethodField, DecimalField
+from rest_framework.fields import SerializerMethodField
 
 from apps.commerce.models.payment import Payment
 
@@ -23,4 +23,3 @@ class BasePaymentSerializer(AModelSerializer):
                 'name': content_type.name,  # e.g., 'tbank payment'
             }
         return None
-

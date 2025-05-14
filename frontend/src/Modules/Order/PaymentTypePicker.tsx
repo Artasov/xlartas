@@ -4,10 +4,12 @@ import {ICurrency, ICurrencyWithPrice, IPaymentSystem, IProductPrice} from "type
 import RadioLine from "Core/components/elements/RadioLine";
 
 import logoTBank from '../../Static/img/icon/tbank/logo.svg'
+import logoCloudPayments from '../../Static/img/icon/cloudpayments/logo.svg'
 import RadioCustomLine from "Core/components/elements/RadioCustomLine";
-import {FRCC} from "WideLayout/Layouts";
+import {FC, FR, FRCC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "../Api/useApi";
+import CircularProgress from "Core/components/elements/CircularProgress";
 
 interface PaymentTypePickerProps {
     prices: IProductPrice[];
@@ -24,15 +26,18 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         excluded_payment_systems = []
     }) => {
     const [selectedCurrency, setSelectedCurrency] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
     const [paymentTypes, setPaymentTypes] = useState<{ [key: string]: IPaymentSystem[] }>({});
     const [selectedPaymentType, setSelectedPaymentType] = useState<IPaymentSystem | null>(null);
     const {plt, theme} = useTheme();
     const {api} = useApi();
 
     useEffect(() => {
+        setLoading(true);
         api.get('/api/v1/payment/types/').then(data => {
-            console.log(data);
             setPaymentTypes(data)
+        }).catch(_ => null).finally(() => {
+            setLoading(false);
         });
     }, [api]);
 
@@ -97,17 +102,18 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
 
 
     return (
-        <div className={'fc gap-2'}>
-            <div className="fc">
+        <FC g={1} px={1}>
+            <FC>
                 <span>Выберите валюту</span>
                 <RadioLine
                     options={prices.map(price => ({value: price.currency, label: price.currency}))}
                     selectedValue={selectedCurrency}
                     onChange={handleCurrencyChange}
                     className="w-100"
-                    itemClass={'flex-grow-1'}
+                    itemClass={'px-3'}
                 />
-            </div>
+            </FC>
+            {loading && <FR mt={1}><CircularProgress size={'40px'}/></FR>}
             {selectedCurrency && filteredPaymentTypes?.length > 0 && (
                 <RadioCustomLine
                     options={filteredPaymentTypes.map(paymentType => ({
@@ -129,13 +135,48 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                     fontSize: '1.035rem',
                                 }}>{
                                     paymentType === "tbank"
-                                        ? 'ОПЛАТА'
+                                        ? 'TBank'
                                         : paymentType === "tbank_installment"
-                                            ? 'РАССРОЧКА'
+                                            ? 'TBank Рассрочка'
                                             : ''
                                 }</span>
                             </FRCC>
-                            : <span>{paymentType}</span>
+                            : paymentType.includes('cloud_payment')
+                                ? <FRCC
+                                    cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                    bg={plt.bg.primary35}
+                                    boxShadow={paymentType === selectedPaymentType
+                                        ? '0 0 3px 1px' + theme.colors.secondary.main
+                                        : ''}>
+                                    <img
+                                        src={logoCloudPayments}
+                                        alt={`Иконка ${paymentType}`}
+                                        style={{maxHeight: 25,}}
+                                    /><span style={{
+                                    whiteSpace: 'nowrap',
+                                    fontWeight: 800,
+                                    fontSize: '1.035rem',
+                                }}>Cloud Payments</span>
+                                </FRCC>
+                                : paymentType.includes('handmade')
+                                    ? <FRCC
+                                        cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                        bg={plt.bg.primary35}
+                                        boxShadow={paymentType === selectedPaymentType
+                                            ? '0 0 3px 1px' + theme.colors.secondary.main
+                                            : ''}>
+                                        {/*<img*/}
+                                        {/*    src={logoCloudPayments}*/}
+                                        {/*    alt={`Иконка ${paymentType}`}*/}
+                                        {/*    style={{maxHeight: 25,}}*/}
+                                        {/*/>*/}
+                                        <span style={{
+                                            whiteSpace: 'nowrap',
+                                            fontWeight: 800,
+                                            fontSize: '1.035rem',
+                                        }}>Через ЛС</span>
+                                    </FRCC>
+                                    : <span>{paymentType}</span>
                     }))}
                     maxWidth={300}
                     selectedValue={selectedPaymentType}
@@ -144,7 +185,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                     itemClass={''}
                 />
             )}
-        </div>
+        </FC>
     );
 };
 

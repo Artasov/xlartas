@@ -23,7 +23,7 @@ async def get_gift_certificates(_request):
 @acontroller('Gift Certificate detail')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-async def gift_certificate_detail(request, productId):
+async def gift_certificate_detail(_request, productId):
     gift_certificate = await GiftCertificate.objects.agetorn(
         ProductException.NotFound, id=productId
     )
@@ -34,7 +34,7 @@ async def gift_certificate_detail(request, productId):
 @acontroller('Apply gift certificate')
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
-async def apply_gift_certificate(request):
+async def apply_gift_certificate(_request):
     # serializer = GiftCertificateApplySerializer(data=request.data, context={'request': request})
     # await serializer.ais_valid(raise_exception=True)
     # gift_certificate_order = serializer.validated_data['gift_certificate_order']

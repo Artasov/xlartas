@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.exceptions.user import UserExceptions
+from apps.core.exceptions.user import UserException
 from apps.core.models.user import User
 from apps.filehost.models import Access
 from apps.filehost.serializers import AccessSerializer
@@ -31,7 +31,7 @@ async def grant_access(request):
         try:
             user = await User.objects.aget(email=email)
         except User.DoesNotExist:
-            raise UserExceptions.UserWithThisEmailNotFound()
+            raise UserException.UserWithThisEmailNotFound()
 
     access = await Access.objects.acreate(
         folder_id=folder_id,

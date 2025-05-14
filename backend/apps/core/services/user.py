@@ -68,4 +68,4 @@ class UserService:
                         """)
 
             # Обновляем объект пользователя в текущей сессии
-            self.id = new_id
+            self.id = new_id  # noqa

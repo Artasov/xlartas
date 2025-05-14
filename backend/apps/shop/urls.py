@@ -1,7 +1,6 @@
 # shop/urls.py
 from django.urls import path
 
-from .controllers.orders import current_user_orders
 from .controllers.software import (
     software_list,
     download_software_file,
@@ -14,9 +13,6 @@ from .controllers.subscription import current_user_subscriptions
 app_name = 'shop'
 
 urlpatterns = [
-    path('current_user_orders/',
-         current_user_orders,
-         name='current_user_orders'),
     path('subs/current_user/',
          current_user_subscriptions,
          name='current_user_subscriptions'),

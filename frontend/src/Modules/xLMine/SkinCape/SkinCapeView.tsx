@@ -1,4 +1,4 @@
-// xl/frontend/src/Modules/xLMine/SkinCapeView.tsx
+// Modules/xLMine/SkinCape/SkinCapeView.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import ReactSkinview3d from 'react-skinview3d';
 import { FunctionAnimation, SkinViewer } from 'skinview3d';

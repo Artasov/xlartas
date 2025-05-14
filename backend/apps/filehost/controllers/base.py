@@ -1,8 +1,8 @@
 # filehost/controllers/base.py
 import os
 import shutil
-from pprint import pprint
 
+from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from asgiref.sync import sync_to_async
@@ -12,8 +12,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import aall
-from adjango.adecorators import acontroller
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import Folder, File
 from apps.filehost.serializers import FileSerializer, FolderSerializer
@@ -60,7 +58,7 @@ async def download_archive(request):
             response['Content-Disposition'] = f'attachment; filename="{os.path.basename(archive_path)}"'
     except Exception as e:
         raise e
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     finally:
         if temp_dir:
             shutil.rmtree(temp_dir)

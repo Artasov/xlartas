@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -21,7 +20,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('discord_id', models.CharField(max_length=255, unique=True, verbose_name='Discord ID')),
                 ('email', models.EmailField(max_length=254, verbose_name='Email')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                              verbose_name='User')),
             ],
             options={
                 'verbose_name': 'Discord User',
@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('google_id', models.CharField(max_length=255, unique=True, verbose_name='Google ID')),
                 ('email', models.EmailField(max_length=254, verbose_name='Email')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                              verbose_name='User')),
             ],
             options={
                 'verbose_name': 'Google User',
@@ -49,7 +50,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('vk_id', models.CharField(max_length=255, unique=True, verbose_name='VK ID')),
                 ('email', models.EmailField(max_length=254, verbose_name='Email')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                              verbose_name='User')),
             ],
             options={
                 'verbose_name': 'VK User',
@@ -63,7 +65,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('yandex_id', models.CharField(max_length=255, unique=True, verbose_name='Yandex ID')),
                 ('email', models.EmailField(max_length=254, verbose_name='Email')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                              verbose_name='User')),
             ],
             options={
                 'verbose_name': 'Yandex User',

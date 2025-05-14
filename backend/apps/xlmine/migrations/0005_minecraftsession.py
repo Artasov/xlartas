@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0004_rename_donateproduct_donate'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -22,7 +21,9 @@ class Migration(migrations.Migration):
                 ('client_token', models.CharField(max_length=100)),
                 ('last_server_id', models.CharField(blank=True, max_length=100, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='minecraft_sessions', to=settings.AUTH_USER_MODEL)),
+                ('user',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='minecraft_sessions',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,

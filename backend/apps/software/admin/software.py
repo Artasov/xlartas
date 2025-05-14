@@ -71,7 +71,6 @@ class SoftwareAdmin(ModelAdmin):
 
 @register(SoftwareOrder)
 class SoftwareOrderAdmin(PolymorphicChildModelAdmin):
-    
     list_display = (
         'id', 'user', 'product', 'license_hours', 'currency',
         'payment_system', 'is_paid', 'is_executed', 'is_cancelled',

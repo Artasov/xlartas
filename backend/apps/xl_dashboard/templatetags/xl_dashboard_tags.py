@@ -18,7 +18,7 @@ def show_xl_dashboard(context):
         {% show_xl_dashboard %}
     """
     xl_dashboard = getattr(settings, 'XL_DASHBOARD', {})
-    user = context['request'].user
+    user = context['request'].user  # noqa
 
     sections = []
     actions = xl_dashboard.get('xl-actions', {})
@@ -44,13 +44,13 @@ def show_xl_dashboard(context):
                         mod = __import__(module_path, fromlist=[class_name])
                         model = getattr(mod, class_name)
                     # Если модель не зарегистрирована в админке, генерировать URL не получится
-                    if model not in admin_site._registry:
+                    if model not in admin_site._registry:  # noqa
                         raise Exception('Model not registered in admin')
                     admin_link = reverse(
-                        f'admin:{model._meta.app_label}_{model._meta.model_name}_changelist'
+                        f'admin:{model._meta.app_label}_{model._meta.model_name}_changelist'  # noqa
                     )
                     items.append((item_name, admin_link))
-                except Exception as e:
+                except Exception as e:  # noqa
                     # print(f"Ошибка для модели {model_path}: {e}")  # Лог ошибки
                     items.append((item_name, '#invalid-model-path'))
             else:

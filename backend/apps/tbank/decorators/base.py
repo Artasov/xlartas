@@ -48,7 +48,7 @@ def async_tbank_payment_notification(view_func):
                 status = await TBankPaymentService.actual_status(payment_id)
             try:
                 log.info('Stage #5')
-                request.payment: TBankPayment = await TBankPayment.objects.select_for_update().aget(id=payment_id)
+                request.payment = await TBankPayment.objects.select_for_update().aget(id=payment_id)
                 log.info('Stage #6')
             except TBankPayment.DoesNotExist:
                 log.info('Stage #7')
@@ -76,7 +76,7 @@ def async_tbank_payment_notification(view_func):
             )
             log.info('Stage #12')
             request.order = await order.aget_real_instance()
-            await sync_to_async(log.info)(request.order)
+            await sync_to_async(log.info)(request.order)  # noqa
             log.info('Stage #13')
             return await view_func(request, *args, **kwargs)
 

@@ -1,3 +1,4 @@
+# xlmine/utils/map_render.py
 import logging
 import time
 
@@ -7,11 +8,11 @@ log = logging.getLogger('global')
 
 
 def teleport_player_grid(
-    left_top_x: int,
-    left_top_z: int,
-    side_length: int,
-    player: str = 'xlartas',
-    skip_squares: int = 0
+        left_top_x: int,
+        left_top_z: int,
+        side_length: int,
+        player: str = 'xlartas',
+        skip_squares: int = 0
 ) -> None:
     """
     Телепортирует игрока по всему миру квадратами размером 8 чанков (по умолчанию),

@@ -1,6 +1,5 @@
-# apps/cloudpayments/views.py
+# cloudpayments/views.py
 import json
-from pprint import pprint
 
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render

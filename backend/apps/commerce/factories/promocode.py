@@ -1,6 +1,7 @@
 # commerce/factories/promocode.py
+from attr import Factory
+
 from apps.commerce.models.promocode import Promocode
-from apps.core.factories.base import Factory
 
 
 class PromoCodeFactory(Factory):

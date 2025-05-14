@@ -1,6 +1,7 @@
 # commerce/factories/order.py
+from attr import Factory
+
 from apps.commerce.models import Order
-from apps.core.factories.base import Factory
 
 
 class OrderFactory(Factory):

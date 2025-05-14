@@ -16,21 +16,21 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         # Пример: ждём токен в query string: ?token=<JWT_ACCESS>
-        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=', '')
+        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=', '')  # noqa
         if not self.jwt_token:
             await self.close()
             return
 
         # Проверяем JWT
         try:
-            self.user = await self._get_user(self.jwt_token)
+            self.user = await self._get_user(self.jwt_token)  # noqa
         except AuthenticationFailed:
             await self.close()
             return
 
         # Подключаемся
         await self.accept()
-        self.group_name = f"user_{self.user.id}"
+        self.group_name = f'user_{self.user.id}'  # noqa
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         # Можно отправить initial-сообщение
         await self.send_json({
@@ -50,7 +50,7 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
         """
         action = content.get('action')
         if action == 'ping':
-            await self.send_json({"event": "pong"})
+            await self.send_json({'event': 'pong'})
         # Доп. действия не обязательны.
 
     async def balance_update(self, event):
@@ -74,5 +74,5 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
             user_id = access['user_id']
             user = User.objects.get(pk=user_id)
             return user
-        except Exception as e:
+        except Exception:
             raise AuthenticationFailed('JWT Token invalid.')

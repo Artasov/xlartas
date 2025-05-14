@@ -16,6 +16,7 @@ export type IPaymentSystem =
     | 'shopozz'
     | 'prodamus'
     | 'tbank_installment';
+
 export type ICurrency = 'USD' | 'RUB' | 'EUR';
 
 export interface ICurrencyWithPrice {

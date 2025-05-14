@@ -5,7 +5,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {IOrder} from "types/commerce/shop";
 import OrderItem from "Order/OrderItem";
-import {FC as FCC, FCCC, FR, FRC} from "WideLayout/Layouts";
+import {FC as FCC, FCCC, FR} from "WideLayout/Layouts";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
 
@@ -31,23 +31,28 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
         api.get('/api/v1/user/orders/').then(
             data => setOrders(data)
         ).finally(() => setLoading(false));
-    }, [user, notAuthentication, api, isAuthenticated]);
+    }, [user, isAuthenticated]);
 
     const handleOrderUpdate = (updatedOrder: IOrder) => {
         setOrders((prevOrders) =>
             prevOrders.map(order => order.id === updatedOrder.id ? updatedOrder : order)
         );
     };
+    const handleOrderDelete = (deletedOrderId: string) => {
+        setOrders(prev => prev.filter(o => o.id !== deletedOrderId));
+    };
 
     return (
-        <FR wrap w={'100%'} g={2} py={1} scroll={'y-auto'} cls={`no-scrollbar ${className}`}>
+        <FR wrap w={'100%'} g={2} py={1} cls={`${className}`}>
             {orders.length > 0 ?
                 orders.map((order) => (
                     <OrderItem
-                        onClick={() => navigate(`/orders/${order.id}`)}
                         key={order.id}
+                        onClick={() => navigate(`/orders/${order.id}`)}
                         order={order}
                         onSomeUpdatingOrderAction={handleOrderUpdate}
+                        // передаём колбэк удаления внутрь OrderActions
+                        onOrderDeleted={() => handleOrderDelete(String(order.id))}
                     />
                 ))
                 : loading

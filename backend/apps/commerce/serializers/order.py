@@ -27,6 +27,7 @@ class BaseOrderSerializer(AModelSerializer):
         model = Order
         fields = (
             'id',
+            'amount',
             'payment',
             'currency',
             'payment_system',

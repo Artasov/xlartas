@@ -2,14 +2,12 @@
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from asgiref.sync import sync_to_async
 from django.db.models import Sum
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.exceptions.base import CoreExceptions
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
 from apps.filehost.models import File
 from apps.filehost.serializers import (
@@ -51,10 +49,6 @@ async def add_file(request) -> Response:
         raise StorageLimitExceeded()
     request.data['user'] = user.id
     serializer = FileSerializer(data=request.data)
-    if not await sync_to_async(serializer.is_valid)():
-        raise CoreExceptions.SerializerErrors(
-            serializer_errors=serializer.errors,
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+    await serializer.ais_valid(raise_exception=True)
     file = await serializer.asave()
     return Response(FileSerializer(file).data, status=status.HTTP_201_CREATED)

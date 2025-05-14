@@ -6,7 +6,6 @@ from random import randint
 
 from asgiref.sync import sync_to_async
 
-from apps.core.async_django import aall
 from apps.filehost.models import File, Folder
 from apps.filehost.serializers import FileSerializer, FolderSerializer, TagSerializer
 

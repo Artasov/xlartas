@@ -2,7 +2,6 @@
 import json
 import logging
 import os
-from pprint import pprint
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -52,7 +51,8 @@ class ReleaseViewSet(ModelViewSet):
 class ChunkedReleaseUploadView(APIView):
     permission_classes = [IsMinecraftDev]
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         upload_id = request.data.get('upload_id')
         chunk_index = request.data.get('chunk_index')
         total_chunks = request.data.get('total_chunks')

@@ -39,6 +39,11 @@ class OrderException:
         default_detail = {'message': _('The order has already been completed.')}
         default_code = 'order_already_executed'
 
+    class AlreadyPaid(APIException):
+        status_code = HTTP_400_BAD_REQUEST
+        default_detail = {'message': _('The order has already been paid.')}
+        default_code = 'order_already_paid'
+
     class AlreadyCanceled(APIException):
         status_code = HTTP_400_BAD_REQUEST
         default_detail = {'message': _('The order has already been cancelled.')}

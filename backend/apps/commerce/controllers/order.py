@@ -17,7 +17,7 @@ from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import Order, Currency, Product
 from apps.commerce.serializers.order_registry import get_order_serializer
-from apps.commerce.services.order import IOrderService
+from apps.commerce.services.order.base import IOrderService
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
 from apps.software.models import SoftwareOrder
@@ -36,7 +36,7 @@ async def create_order(request):
 
     class OrderCreateRequestValidationSerializer(ASerializer):
         user = HiddenField(default=CurrentUserDefault())
-        currency = ChoiceField(choices=Currency.choices, required=True)
+        currency = ChoiceField(Currency.choices, required=True, allow_null=True)
         product = PrimaryKeyRelatedField(
             queryset=Product.objects.all(), required=True
         )
@@ -63,11 +63,9 @@ async def create_order(request):
     async with AsyncAtomicContextManager():
         order = await product.new_order(request=request)
         if settings.DEBUG and not settings.DEBUG_INIT_PAYMENT:
-            return Response('/consultations', status=HTTP_201_CREATED)
+            return Response('/something-go-wrong', status=HTTP_201_CREATED)
         if not order.payment:
-            return Response({
-                'id': order.id,
-            }, status=HTTP_201_CREATED)
+            return Response({'id': order.id}, status=HTTP_201_CREATED)
         return Response({
             'payment_url': order.payment.payment_url,
             'id': order.id,
@@ -103,6 +101,15 @@ async def order_execute(_request, id):
         await order.execute()
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
+
+
+@acontroller('Order Delete')
+@api_view(('POST',))
+@permission_classes((IsAdminUser,))
+async def order_delete(_request, id):
+    order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id)
+    async with AsyncAtomicContextManager(): await order.adelete()
+    return Response(True, status=HTTP_200_OK)
 
 
 @acontroller('Order Init')

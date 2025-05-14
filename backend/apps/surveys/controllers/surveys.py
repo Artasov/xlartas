@@ -1,7 +1,7 @@
 # surveys/controllers/surveys.py
+from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from asgiref.sync import sync_to_async
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import permission_classes
@@ -9,11 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import aall, arelated, afilter
-from apps.core.exceptions.base import CoreExceptions
-from apps.core.exceptions.user import UserExceptions
+from apps.core.exceptions.user import UserException
 from apps.core.models.user import User
-from adjango.adecorators import acontroller
 from apps.surveys.exceptions.base import CurrentUserNotSurveyAuthor
 from apps.surveys.models import Question, Choice
 from apps.surveys.models import SurveyAccess, Survey
@@ -27,13 +24,9 @@ from apps.surveys.serializers import SurveySerializer, QuestionSerializer, Choic
 async def survey_create(request) -> Response:
     request.data['author'] = request.user.id
     serializer = SurveySerializer(data=request.data)
-    if not await sync_to_async(serializer.is_valid)():
-        raise CoreExceptions.SerializerErrors(
-            serializer_errors=serializer.errors,
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+    await serializer.ais_valid(raise_exception=True)
     survey = await serializer.asave()
-    return Response(SurveySerializer(survey).data, status=status.HTTP_201_CREATED)
+    return Response(await SurveySerializer(survey).adata, status=status.HTTP_201_CREATED)
 
 
 @acontroller('Update a survey')
@@ -42,16 +35,12 @@ async def survey_create(request) -> Response:
 async def survey_update(request) -> Response:
     survey_id = request.data.get('survey_id')
     survey = await aget_object_or_404(Survey, id=survey_id)
-    if await arelated(survey, 'author') != request.user:
+    if await survey.arelated('author') != request.user:
         raise CurrentUserNotSurveyAuthor()
     serializer = SurveySerializer(survey, data=request.data, partial=True)
-    if not await sync_to_async(serializer.is_valid)():
-        raise CoreExceptions.SerializerErrors(
-            serializer_errors=serializer.errors,
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+    await serializer.ais_valid(raise_exception=True)
     survey = await serializer.asave()
-    return Response(SurveySerializer(survey).data, status=status.HTTP_200_OK)
+    return Response(await SurveySerializer(survey).adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Delete a survey')
@@ -60,7 +49,7 @@ async def survey_update(request) -> Response:
 async def survey_delete(request) -> Response:
     survey_id = request.data.get('survey_id')
     survey = await aget_object_or_404(Survey, id=survey_id)
-    if await arelated(survey, 'author') != request.user:
+    if await survey.arelated('author') != request.user:
         raise CurrentUserNotSurveyAuthor()
     await survey.adelete()
     return Response(status=status.HTTP_204_NO_CONTENT)
@@ -71,20 +60,20 @@ async def survey_delete(request) -> Response:
 @permission_classes((AllowAny,))
 async def get_survey_by_slug(request, slug) -> Response:
     survey = await aget_object_or_404(Survey, slug=slug)
-    author = await arelated(survey, 'author')
+    author = await survey.arelated('author')
     if not survey.is_public:
         if not request.user.is_authenticated:
-            raise UserExceptions.NotAuthorized()
+            raise UserException.NotAuthorized()
 
         if (author != request.user
                 and not await SurveyAccess.objects.filter(
                     survey=survey, user__email=request.user.email
                 ).aexists()):
             raise CurrentUserNotSurveyAuthor()
-    questions = await afilter(Question.objects, survey=survey)
+    questions = await Question.objects.afilter(survey=survey)
     questions_data = []
     for question in questions:
-        choices = await afilter(Choice.objects, question=question)
+        choices = await Choice.objects.afilter(question=question)
         if request.user == author:
             question_data = QuestionEditSerializer(question).data
             question_data['choices'] = ChoiceEditSerializer(choices, many=True).data

@@ -4,7 +4,7 @@ from adjango.utils.base import decrease_by_percentage
 from .models import *
 
 
-def try_apply_promo(promo: Promo, user_, price):
+def try_apply_promo(promo: Promo, _user, price):
     if promo.type == Promo.PromoType.DISCOUNT:
         return {'new_price': decrease_by_percentage(price, promo.value),
                 'promo_': promo}

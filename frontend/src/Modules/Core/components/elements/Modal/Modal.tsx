@@ -140,7 +140,7 @@ const Modal: React.FC<ModalProps> = (
                         </IconButton>
                     )}
                 </FRBC>
-                <FC h={'100%'} sx={sxModalChildContainer} cls={`xmodal-content pt-2 overflow-y-scroll no-scrollbar`}>
+                <FC h={'100%'} sx={sxModalChildContainer} cls={`xmodal-content overflow-y-scroll no-scrollbar`}>
                     {children}
                 </FC>
             </FC>

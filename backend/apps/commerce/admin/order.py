@@ -15,7 +15,7 @@ from rest_framework.exceptions import APIException
 from apps.commerce.models.order import (
     Order,
 )
-from apps.software.models import Software, SoftwareOrder
+from apps.software.models import SoftwareOrder
 
 log = logging.getLogger('commerce')
 

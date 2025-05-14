@@ -1,7 +1,6 @@
 # filehost/serializers.py
-from adrf.serializers import ModelSerializer as AModelSerializer
+from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
 
 from apps.filehost.models import Folder, File, Tag, FileTag, FolderTag, Access
 
@@ -25,7 +24,8 @@ class FileSerializer(AModelSerializer):
         model = File
         fields = '__all__'
 
-    def get_size(self, obj):
+    @staticmethod
+    def get_size(obj):
         return obj.file.size if obj.file else None
 
 

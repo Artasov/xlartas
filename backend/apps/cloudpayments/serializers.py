@@ -1,4 +1,4 @@
-# tbank/serializers.py
+# cloudpayments/serializers.py
 from apps.cloudpayments.models import CloudPaymentPayment
 from apps.commerce.serializers.payment import BasePaymentSerializer
 

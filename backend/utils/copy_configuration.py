@@ -27,6 +27,7 @@ configurations = {
             # 'apps.shop': '__copy__',
             # 'apps.mailing': '__copy__',
             # 'apps.analytics': '__copy__',
+            'apps.tbank': '__copy__',
             'apps.cloudpayments': '__copy__',
             'apps.core': {
                 'routes.root': '__copy__',
@@ -83,7 +84,7 @@ configurations = {
                 },
                 # 'Cabinet': '__copy__',
                 'Order': '__copy__',
-                'Software': '__copy__',
+                # 'Software': '__copy__',
                 # 'xLMine': '__copy__',
             },
             'Types': {},

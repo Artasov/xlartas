@@ -3,7 +3,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from adjango.utils.base import AsyncAtomicContextManager
-from django.db.models import Count, Q
+from django.db.models import Count
 
 if TYPE_CHECKING:
     from apps.core.models import User

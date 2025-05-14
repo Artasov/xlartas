@@ -1,2 +1,2 @@
-from .user import *
 from .django import *
+from .user import *

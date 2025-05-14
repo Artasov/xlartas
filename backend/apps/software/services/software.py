@@ -37,7 +37,10 @@ class SoftwareService:
         await order.init(request)
         return order
 
-    async def can_pregive(self: 'Software', order: 'SoftwareOrder', raise_exceptions=False) -> bool:
+    async def can_pregive(  # noqa TODO: разобрать
+            self: 'Software', order: 'SoftwareOrder',  # noqa
+            raise_exceptions=False  # noqa
+    ) -> bool:
         # Например, всегда True, если хотите какую-то проверку — добавьте:
         return True
 

@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0002_role_user_roles'),
         ('xlmine', '0002_donateproduct_privilege_donateorder'),
@@ -17,7 +16,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserXLMine',
             fields=[
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('user',
+                 models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False,
+                                      to=settings.AUTH_USER_MODEL)),
                 ('coins', models.DecimalField(decimal_places=2, default=0, max_digits=10, verbose_name='Coins')),
             ],
             options={

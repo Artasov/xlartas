@@ -36,13 +36,13 @@ class DonateService:
         await order.init(request)
         return order
 
-    async def can_pregive(self: 'Donate', order: 'DonateOrder', raise_exceptions=False) -> bool:
+    async def can_pregive(self: 'Donate', order: 'DonateOrder', raise_exceptions=False) -> bool:  # noqa TODO: разобрать
         return True
 
     async def pregive(self: 'Donate', order: 'DonateOrder'):
         pass
 
-    async def postgive(self: 'Donate', order: 'DonateOrder'):
+    async def postgive(self: 'Donate', order: 'DonateOrder'):  # noqa TODO: разобрать
         """
         Действия после успешной оплаты: начисляем пользователю коины.
         Берём стоимость заказа в рублях (order.receipt_price) и добавляем к user.xlmine.coins

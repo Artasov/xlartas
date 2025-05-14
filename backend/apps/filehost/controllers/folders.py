@@ -1,4 +1,5 @@
 # filehost/controllers/folders.py
+from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from asgiref.sync import sync_to_async
@@ -7,8 +8,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import aall
-from adjango.adecorators import acontroller
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import Folder, File
 from apps.filehost.serializers import AFolderSerializer, FileSerializer
@@ -29,7 +28,6 @@ async def get_folder_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_folders(request) -> Response:
-    folders = await Folder.objects.afilter(user=request.user)
     serializer = AFolderSerializer(await Folder.objects.afilter(user=request.user), many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

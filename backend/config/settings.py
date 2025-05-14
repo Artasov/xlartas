@@ -7,7 +7,7 @@ from pathlib import Path
 from pathlib import Path
 
 from adjango.utils.common import is_celery, traceback_str
-from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES
+from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES   # noqaq
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
@@ -263,7 +263,6 @@ INSTALLED_APPS = [
     'apps.analytics',
     'apps.core',
     'apps.shop',
-    'apps.tinkoff',
     'apps.software',
     'apps.tbank',
     'apps.cloudpayments',
@@ -595,7 +594,7 @@ EP_CUSTOM_LINKS = [
     {'name': 'Silk', 'url': f'{DOMAIN_URL}/silk/'},
     {'name': 'Redis', 'url': f'{DOMAIN_URL}/{REDISUI_URL_PREFIX}'},
     {'name': 'Swagger', 'url': f'{DOMAIN_URL}/swagger/'},
-    {'name': 'Nginx', 'url': 'http://:81/'},
+    {'name': 'Nginx', 'url': 'http://xlartas.ru:81/'},
     {'name': 'Minio', 'url': 'https://minio.xlartas.ru/'},
     {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/'},
     {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/'},

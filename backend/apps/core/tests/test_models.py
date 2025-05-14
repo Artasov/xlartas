@@ -1,5 +1,6 @@
 # core/tests/test_models.py
 from django.test import TestCase
+
 from apps.core.models.user import User
 
 
@@ -20,7 +21,6 @@ class UserModelTest(TestCase):
     def test_reject_waiting_bills(self):
         # TODO: Write test for reject_waiting_bills method
         pass
-
 
 # class UnconfirmedUserModelTest(TestCase):
 #     def test_unconfirmed_user_creation(self):

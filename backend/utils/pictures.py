@@ -2,7 +2,8 @@ from PIL import ExifTags
 
 
 class CorrectOrientation:
-    def process(self, image):
+    @staticmethod
+    def process(image):
         # Получаем EXIF-данные
         exif = image.getexif()
         if exif:

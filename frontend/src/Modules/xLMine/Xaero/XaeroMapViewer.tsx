@@ -1,4 +1,4 @@
-// src/Modules/xLMine/components/XaeroMapViewer.tsx
+// Modules/xLMine/Xaero/XaeroMapViewer.tsx
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 /* ──────────────────────────────── 81 тайл ──────────────────────────────── */

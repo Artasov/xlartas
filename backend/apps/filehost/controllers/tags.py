@@ -1,16 +1,13 @@
 # filehost/controllers/tags.py
+from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from asgiref.sync import sync_to_async
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.async_django import afilter
-from apps.core.exceptions.base import CoreExceptions
-from adjango.adecorators import acontroller
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import File, Tag, Folder, FileTag, FolderTag
 from apps.filehost.serializers import ATagSerializer, FileSerializer, AFolderSerializer
@@ -23,11 +20,7 @@ from apps.filehost.services.base import get_all_subfolders
 async def create_tag(request) -> Response:
     request.data['user'] = request.user.id
     serializer = ATagSerializer(data=request.data)
-    if not await sync_to_async(serializer.is_valid)():
-        raise CoreExceptions.SerializerErrors(
-            serializer_errors=serializer.errors,
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+    await serializer.ais_valid(raise_exception=True)
     tag = await serializer.asave()
     return Response(ATagSerializer(tag).data, status=status.HTTP_201_CREATED)
 
@@ -45,7 +38,11 @@ async def delete_tag(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_user_tags(request) -> Response:
-    return Response(ATagSerializer(await afilter(Tag.objects, user=request.user), many=True).data)
+    return Response(await ATagSerializer(
+        await Tag.objects.afilter(
+            user=request.user
+        ), many=True
+    ).adata)
 
 
 @acontroller('Add Tag to File or Folder')
@@ -95,11 +92,7 @@ async def update_tag(request) -> Response:
         raise IdWasNotProvided()
     tag = await aget_object_or_404(Tag, id=tag_id, user=request.user)
     serializer = ATagSerializer(tag, data=request.data, partial=True)
-    if not await sync_to_async(serializer.is_valid)():
-        raise CoreExceptions.SerializerErrors(
-            serializer_errors=serializer.errors,
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+    await serializer.ais_valid(raise_exception=True)
     tag = await serializer.asave()
     return Response(ATagSerializer(tag).data, status=status.HTTP_200_OK)
 

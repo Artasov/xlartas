@@ -1,4 +1,4 @@
-// Modules/xLMine/SkinCapeSetter.tsx
+// Modules/xLMine/SkinCape/SkinCapeSetter.tsx
 import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";

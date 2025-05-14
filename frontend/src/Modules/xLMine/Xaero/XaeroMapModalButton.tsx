@@ -1,4 +1,4 @@
-// src/Modules/xLMine/components/XaeroMapModalButton.tsx
+// Modules/xLMine/Xaero/XaeroMapModalButton.tsx
 import React, {CSSProperties, useState} from 'react';
 import XaeroMapViewer from './XaeroMapViewer';
 import Button from "Core/components/elements/Button/Button";

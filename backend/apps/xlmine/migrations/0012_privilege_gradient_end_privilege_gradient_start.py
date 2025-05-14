@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0011_userxlmine_privilege'),
     ]
@@ -13,11 +12,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='privilege',
             name='gradient_end',
-            field=models.CharField(blank=True, help_text='HEX, например "#00FF00"', max_length=7, null=True, verbose_name='Gradient end'),
+            field=models.CharField(blank=True, help_text='HEX, например "#00FF00"', max_length=7, null=True,
+                                   verbose_name='Gradient end'),
         ),
         migrations.AddField(
             model_name='privilege',
             name='gradient_start',
-            field=models.CharField(blank=True, help_text='HEX, например "#FF0000"', max_length=7, null=True, verbose_name='Gradient start'),
+            field=models.CharField(blank=True, help_text='HEX, например "#FF0000"', max_length=7, null=True,
+                                   verbose_name='Gradient start'),
         ),
     ]

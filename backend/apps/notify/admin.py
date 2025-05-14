@@ -66,5 +66,5 @@ class NotifyAdmin(admin.ModelAdmin):
         return False
 
     formfield_overrides = {
-        models.JSONField: {'widget': admin.widgets.AdminTextareaWidget},
+        models.JSONField: {'widget': admin.widgets.AdminTextareaWidget},  # noqa
     }

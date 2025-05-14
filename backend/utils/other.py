@@ -52,7 +52,7 @@ def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool =
         alphabet += '0123456789'
 
     if repete:
-        rand_str = ''.join(random.choice(alphabet) for i in range(length))
+        rand_str = ''.join(random.choice(alphabet) for _ in range(length))
     else:
         try:
             rand_str = ''.join(random.sample(alphabet, length))
@@ -62,27 +62,6 @@ def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool =
         return rand_str.upper()
     else:
         return rand_str
-
-
-def del_dict_values_by_value(d: dict, value=None, count_to_delete='ALL') -> dict:
-    if value is None:
-        value = ['']
-
-    done_dict = {}
-    count_deleted = 0
-    for i in range(len(d)):
-        if count_to_delete == 'ALL':
-            if d[list(d.keys())[i]] != value:
-                done_dict[list(d.keys())[i]] = d[list(d.keys())[i]]
-            else:
-                count_deleted += 1
-        elif type(count_to_delete) == 'int':
-            if count_deleted <= count_to_delete:
-                if d[list(d.keys())[i]] != value:
-                    done_dict[list(d.keys())[i]] = d[list(d.keys())[i]]
-                else:
-                    count_deleted += 1
-    return done_dict
 
 
 def anagram(first: str, second: str) -> bool:

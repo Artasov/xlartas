@@ -19,11 +19,15 @@ class Command(BaseCommand):
 
         for app in apps.get_app_configs():
             for model in app.get_models():
-                model_label = f"{app.label}_{model._meta.model_name}"
+                model_label = f"{app.label}_{model._meta.model_name}"  # noqa
                 output_file_path = os.path.join(directory, f"{model_label}.json")
                 self.stdout.write(f"Dumping data for {model_label} into {output_file_path}")
                 try:
                     with open(output_file_path, 'w', encoding='utf-8') as output_file:
-                        call_command('dumpdata', f'{app.label}.{model._meta.model_name}', stdout=output_file)
-                except Exception:
-                    print(f'{model._meta.model_name} Not Loaded')
+                        call_command(
+                            'dumpdata',
+                            f'{app.label}.{model._meta.model_name}',  # noqa
+                            stdout=output_file
+                        )
+                except Exception:  # noqa
+                    print(f'{model._meta.model_name} Not Loaded')  # noqa

@@ -24,13 +24,13 @@ def visits_chart(request):
         try:
             start_date = datetime.strptime(start_date_str, date_format)
             filters['created_at__gte'] = start_date
-        except Exception:
+        except Exception:  # noqa
             pass
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
-        except Exception:
+        except Exception:  # noqa
             pass
 
     # Определяем функцию группировки и формат метки
@@ -90,13 +90,13 @@ def orders_chart(request):
         try:
             start_date = datetime.strptime(start_date_str, date_format)
             filters['created_at__gte'] = start_date
-        except Exception:
+        except Exception:  # noqa
             pass
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
-        except Exception:
+        except Exception:  # noqa
             pass
 
     # Определяем функцию группировки и формат метки для заказов

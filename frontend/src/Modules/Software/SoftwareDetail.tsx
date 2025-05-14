@@ -145,8 +145,7 @@ const SoftwareDetailComponent: React.FC = () => {
                 </FRSE>
 
                 <SoftwareOrder software={software} onSuccess={(data: any) => {
-                    // navigate(`/orders/${data.id}`)
-                    window.location.href = `/cloudpayments/pay/${data.id}/`;
+                    navigate(`/orders/${data.id}/?pay=1`)
                 }}/>
 
                 {software.description &&

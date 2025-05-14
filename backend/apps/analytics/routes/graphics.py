@@ -1,5 +1,6 @@
 # analytics/routes/graphics.py
 from django.urls import path
+
 from apps.analytics.controllers.graphics import visits_chart, orders_chart
 
 app_name = 'analytics'

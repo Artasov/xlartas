@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,7 +23,8 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(help_text='Use Markdown for formatting')),
                 ('points_for_text', models.PositiveSmallIntegerField(default=1)),
                 ('time_limit_minutes', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('question_type', models.CharField(choices=[('choices', 'Multiple Choice'), ('text', 'Text')], max_length=20)),
+                ('question_type',
+                 models.CharField(choices=[('choices', 'Multiple Choice'), ('text', 'Text')], max_length=20)),
                 ('correct_text_answer', models.TextField(blank=True, null=True)),
                 ('is_required', models.BooleanField(default=True)),
             ],
@@ -41,7 +41,8 @@ class Migration(migrations.Migration):
                 ('points', models.SmallIntegerField(default=0)),
                 ('text', models.TextField(help_text='Use Markdown for formatting')),
                 ('is_correct', models.BooleanField(default=False)),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices', to='surveys.question')),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices',
+                                               to='surveys.question')),
             ],
             options={
                 'abstract': False,
@@ -58,7 +59,8 @@ class Migration(migrations.Migration):
                 ('is_test', models.BooleanField(default=False)),
                 ('is_public', models.BooleanField(default=False)),
                 ('author_visible', models.BooleanField(default=False)),
-                ('theme_mode', models.CharField(choices=[('light', 'Light'), ('dark', 'Dark')], default='light', max_length=10)),
+                ('theme_mode',
+                 models.CharField(choices=[('light', 'Light'), ('dark', 'Dark')], default='light', max_length=10)),
                 ('bg_image', models.ImageField(blank=True, null=True, upload_to='images/survey/background/')),
                 ('finish_text', models.TextField(blank=True, null=True)),
                 ('time_limit_minutes', models.PositiveSmallIntegerField(blank=True, null=True)),
@@ -69,7 +71,8 @@ class Migration(migrations.Migration):
                 ('show_correct_answers_after_question', models.BooleanField(default=False)),
                 ('attempts_allowed', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('author_will_see_attempts', models.BooleanField(default=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='surveys', to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='surveys',
+                                             to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
@@ -79,7 +82,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='survey',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='surveys.survey'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions',
+                                    to='surveys.survey'),
         ),
         migrations.CreateModel(
             name='SurveyAttempt',
@@ -87,8 +91,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('start_time', models.DateTimeField(auto_now_add=True)),
                 ('end_time', models.DateTimeField(blank=True, null=True)),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attempts', to='surveys.survey')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='survey_attempts', to=settings.AUTH_USER_MODEL)),
+                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attempts',
+                                             to='surveys.survey')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='survey_attempts',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
@@ -101,8 +107,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('attempts_allowed', models.PositiveSmallIntegerField(default=1)),
                 ('attempts_made', models.PositiveSmallIntegerField(default=0)),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accesses', to='surveys.survey')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='survey_accesses', to=settings.AUTH_USER_MODEL)),
+                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accesses',
+                                             to='surveys.survey')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='survey_accesses',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'unique_together': {('survey', 'user')},
@@ -116,9 +124,13 @@ class Migration(migrations.Migration):
                 ('start_time', models.DateTimeField(auto_now_add=True)),
                 ('end_time', models.DateTimeField(blank=True, null=True)),
                 ('text_answer', models.TextField(blank=True, null=True)),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attempts', to='surveys.question')),
-                ('selected_choices', models.ManyToManyField(blank=True, related_name='question_attempts', to='surveys.choice')),
-                ('attempt', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question_attempts', to='surveys.surveyattempt')),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attempts',
+                                               to='surveys.question')),
+                ('selected_choices',
+                 models.ManyToManyField(blank=True, related_name='question_attempts', to='surveys.choice')),
+                ('attempt',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question_attempts',
+                                   to='surveys.surveyattempt')),
             ],
             options={
                 'unique_together': {('attempt', 'question')},

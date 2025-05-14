@@ -25,8 +25,8 @@ async def payment_types(_request):
     """
     # Платежные системы, которые нужно исключить
     exclude_systems = (
-        PaymentSystem.Shopozz,
-        PaymentSystem.Prodamus,
+        PaymentSystem.TBank,
+        PaymentSystem.TBankInstallment,
     )
     currencies = Currency.choices
     payment_systems = {currency: tuple(

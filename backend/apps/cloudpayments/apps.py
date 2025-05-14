@@ -1,4 +1,4 @@
-# tbank/apps.py
+# cloudpayments/apps.py
 from django.apps import AppConfig
 
 

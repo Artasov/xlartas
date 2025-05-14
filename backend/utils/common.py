@@ -18,11 +18,12 @@ def get_models_list() -> Generator[str, Any, None]:
     Функция возвращает список строк вида 'app.Model' для всех зарегистрированных моделей.
     """
     models = apps.get_models()
-    return (f"{model._meta.app_label}.{model.__name__}" for model in models)
+    return (f"{model._meta.app_label}.{model.__name__}" for model in models)  # noqa
 
 
 class CorrectOrientation:
-    def process(self, image):
+    @staticmethod
+    def process(image):
         # Получаем EXIF-данные
         exif = image.getexif()
         if exif:
@@ -51,9 +52,9 @@ def google_captcha_validation(request):
         'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
         'response': recaptcha_response
     }
-    data = urllib.parse.urlencode(values).encode()
-    req = urllib.request.Request(url, data=data)
-    response = urllib.request.urlopen(req)
+    data = urllib.parse.urlencode(values).encode()  # noqa
+    req = urllib.request.Request(url, data=data)  # noqa
+    response = urllib.request.urlopen(req)  # noqa
     result = json.loads(response.read().decode())
     return result
 

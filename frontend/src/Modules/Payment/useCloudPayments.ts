@@ -1,4 +1,4 @@
-// src/hooks/useCloudPayments.ts
+// Modules/Payment/useCloudPayments.ts
 import {useEffect, useState} from 'react';
 
 export function useCloudPayments(src = 'https://widget.cloudpayments.ru/bundles/cloudpayments.js') {

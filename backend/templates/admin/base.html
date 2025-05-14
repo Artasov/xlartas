@@ -279,6 +279,9 @@
                                                     <li class="nav-item">
                                                         <a href="
 
+
+
+
                                                                 {% if model.url %}{{ model.url }}{% else %}javascript:void(0){% endif %}"
                                                            class="nav-link">
                                                             <i class="nav-icon {{ model.icon }}"></i>
@@ -298,7 +301,7 @@
         {% endblock %}
     {% endif %}
 
-    <div class="content-wrapper" {% if is_popup %}style="margin-left:0px; padding-top: 20px;"{% endif %}>
+    <div class="content-wrapper" {% if is_popup %}style="margin-left:0; padding-top: 20px;"{% endif %}>
         {% block page_content %}
             {% if not is_popup %}
                 <div class="content border-bottom mb-2">

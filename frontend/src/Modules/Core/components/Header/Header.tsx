@@ -2,7 +2,7 @@
 import React, {useContext, useRef} from 'react';
 import './Header.sass';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useTheme} from "Theme/ThemeContext";
 import UserAvatar from "User/UserAvatar";
@@ -11,9 +11,11 @@ import MobileNavigationMenu from "Core/components/Header/MobileNavigationMenu";
 import AdminLink from "Core/components/AdminLink";
 import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
-import {FRCC} from "WideLayout/Layouts";
+import {FR, FRBC, FRCC} from "WideLayout/Layouts";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import CircularProgress from "Core/components/elements/CircularProgress";
+import {IconButton} from "@mui/material";
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
 const Header: React.FC = () => {
     const {
@@ -33,17 +35,24 @@ const Header: React.FC = () => {
     const location = useLocation();
     const {plt} = useTheme();
     const isHeaderVisible = useSelector((state: any) => state.visibility.isHeaderVisible);
-
+    const navigate = useNavigate();
     // Теперь не привязываемся к медиазапросу, а показываем меню по состоянию.
     // При желании разработчик может сам управлять состоянием mobileMenuEnabled и desktopMenuEnabled
     // прямо из компонента или контекста.
 
     if (!isHeaderVisible) return null;
     return (
-        <header ref={headerRef} style={{height: headerNavHeight}}
-                className={`frbc w-100 mx-auto maxw-750px gap-4 px-4`}>
-            <FRCC onClick={hideMobileMenu} color={plt.text.primary60}>
-                {logoContent}
+        <FRBC w={'100%'} mx={'auto'} maxW={750} g={3} pl={1} pr={2} ref={headerRef}
+              sx={{height: headerNavHeight}} component={'header'}>
+            <FRCC>
+                <IconButton sx={{width: 30, height: 30, opacity: '50%', transform: 'scale(1.3)'}}>
+                    <ArrowBackIosNewRoundedIcon onClick={()=> {
+                        navigate(-1);
+                    }}/>
+                </IconButton>
+                <FRCC onClick={hideMobileMenu} color={plt.text.primary60}>
+                    {logoContent}
+                </FRCC>
             </FRCC>
             <FRCC g={3} mt={'5px'}>
                 {desktopMenuEnabled && desktopNavigationContent && (
@@ -89,7 +98,7 @@ const Header: React.FC = () => {
                     />}
                 </FRCC>
             </FRCC>
-        </header>
+        </FRBC>
     );
 };
 

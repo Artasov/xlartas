@@ -49,13 +49,13 @@ class NotifyService:
                              )}')
 
             self.status = self.Status.SENT
-            self.sent_time = timezone.now()
+            self.sent_time = timezone.now()  # noqa
             self.save(update_fields=['status', 'sent_time'])
             log.info(f'Notification id={self.id} sent successfully')
 
         except Exception as e:
             log.error(f'Failed to send notification {self.id}: {traceback_str(e)}')
-            self.status = self.Status.FAILED
+            self.status = self.Status.FAILED  # noqa
             self.save(update_fields=['status'])
 
     async def asend(self: 'Notify') -> None:

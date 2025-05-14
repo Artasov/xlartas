@@ -14,6 +14,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from pilkit.processors import ResizeToFit
 from timezone_field import TimeZoneField
 
+from apps.commerce.services.user import CommerceUserService
 from apps.core.managers.user import UserManager
 from apps.core.models.choices import Gender
 from apps.core.services.user import UserService, generate_random_username
@@ -46,7 +47,8 @@ class User(
     UserService,
     UserDonateService,
     UserXLMineService,
-    UserPrivilegeService
+    UserPrivilegeService,
+    CommerceUserService
 ):
     objects = UserManager()
 

@@ -5,7 +5,7 @@ import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
-import {FC, FCCC, FCSC, FCSS, FRC, FRCC} from "WideLayout/Layouts";
+import {FC, FCCC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -26,7 +26,6 @@ import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
-import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -102,7 +101,7 @@ const Cabinet: React.FC = () => {
                     onClick={() => {
                         navigate('/');
                     }}
-                    height={45} cls={'ms-5 ps-4'}
+                    height={45} cls={''}
                 />
             )
         }
@@ -176,8 +175,9 @@ const Cabinet: React.FC = () => {
                         } boxShadow={plt.shadow.XLO005}
                         ref={cabinetContainerRef}>
                         <Routes>
-                            <Route path="profile/*"
-                                   element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
+                            <Route path="profile/*" element={
+                                <Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>
+                            }/>
                             <Route path="/softwares" element={<FCSS g={2} p={2}>
                                 <Softwares/>
                             </FCSS>}/>
@@ -185,7 +185,7 @@ const Cabinet: React.FC = () => {
                             <Route path='/licenses' element={<Licenses/>}/>
                             <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
 
-                            <Route path="/orders" element={<FCSS g={1} pt={2} p={1}>
+                            <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}>
                                 <UserOrders className={'px-2'}/>
                             </FCSS>}/>
                             <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>

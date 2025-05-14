@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0017_launcher_latest_yml'),
     ]

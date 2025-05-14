@@ -1,4 +1,4 @@
-# your_app/management/commands/healthcheck.py
+# core/management/commands/healthcheck.py
 import sys
 
 from django.core.management.base import BaseCommand

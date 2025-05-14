@@ -1,4 +1,5 @@
 # commerce/models/payment.py
+
 from adjango.models import AModel
 from adjango.models import APolymorphicModel
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin
@@ -47,9 +48,9 @@ class CurrencyPaymentSystemMapping:
     }
 
     @classmethod
-    def get_payment(cls, currency: str) -> list[PaymentSystem] | None:
-        """Возвращает платеdжную систему для указанной валюты"""
-        return cls.CURRENCY_TO_PAYMENT.get(currency)
+    def get_payment(cls, currency: str) -> tuple[PaymentSystem, ...] | tuple:
+        """Возвращает платежную систему для указанной валюты"""
+        return cls.CURRENCY_TO_PAYMENT.get(currency, tuple())
 
     @classmethod
     def get_currencies(cls, payment: str) -> list[str]:

@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('commerce', '0002_initial'),
         ('xlmine', '0003_userxlmine'),

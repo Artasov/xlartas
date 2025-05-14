@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 from adjango.utils.mail import send_emails
 from celery import shared_task
-from django.conf import settings
 
 from apps.core.services.phone.base import send_sms
 

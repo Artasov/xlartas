@@ -140,5 +140,5 @@ async def activate_test_software_user(user: settings.AUTH_USER_MODEL, software_i
         await user_sub.asave()
     except TestPeriodAlreadyUsed as e:
         raise e
-    except Exception as e:
+    except Exception:
         raise TestPeriodActivationFailed()
