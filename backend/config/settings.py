@@ -251,6 +251,7 @@ INSTALLED_APPS = [
     'cachalot',
     'csp',
 
+    'apps.seordj',
     'apps.xl_dashboard',
     'apps.company',
     'apps.mailing',

@@ -19,7 +19,7 @@ class UUIDv6Field(models.UUIDField):
         return super().get_prep_value(value)
 
     @staticmethod
-    def from_db_value(value):
+    def from_db_value(value, expression, connection):  # noqa
         if value is None:
             return value
         if isinstance(value, uuid6.UUID):
