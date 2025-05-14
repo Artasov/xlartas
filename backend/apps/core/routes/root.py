@@ -47,12 +47,6 @@ urlpatterns = [
     path('endpoints/', include('endpoints.urls')),
     path(LOGUI_URL_PREFIX, include('logui.routes.views')),
     path(settings.REDISUI_URL_PREFIX, include('apps.redisui.routes.views')),
-
-    # path('api/', include(('apps.shop.urls', 'apps.shop'), namespace='shop')),
-    # path('api/', include(('apps.confirmation.urls', 'apps.confirmation'), namespace='confirmation')),
-    # path('api/surveys/', include(('apps.surveys.urls', 'apps.surveys'), namespace='surveys')),
-    # path('api/host/', include(('apps.filehost.urls', 'apps.filehost'), namespace='filehost')),
-    # path('pay/', include('apps.tinkoff.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
