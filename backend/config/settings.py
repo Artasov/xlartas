@@ -200,19 +200,6 @@ XL_DASHBOARD = {
         'Message': 'chat.Message',
         'File': 'chat.File',
     },
-    'OLD': {
-        'SoftwareProduct': 'shop.SoftwareProduct',
-        'SubscriptionTimeCategory': 'shop.SubscriptionTimeCategory',
-        'SoftwareSubscription': 'shop.SoftwareSubscription',
-        'UserSoftwareSubscription': 'shop.UserSoftwareSubscription',
-        'PromoGroup': 'shop.PromoGroup',
-        'Promo': 'shop.Promo',
-        'SoftwareSubscriptionOrder': 'shop.SoftwareSubscriptionOrder',
-        'TinkoffDepositOrder': 'tinkoff.TinkoffDepositOrder',
-        'Software': 'software.Software',
-        'SoftwareOrder': 'software.SoftwareOrder',
-        'SoftwareLicense': 'software.SoftwareLicense',
-    },
     'xl-actions': {
         'Collect Static': 'run_collectstatic',
     }
