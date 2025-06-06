@@ -1,5 +1,6 @@
 # xlmine/models.py
 import hashlib
+import logging
 
 from adjango.models import AModel
 from adjango.models.mixins import ACreatedUpdatedAtMixin
@@ -15,7 +16,8 @@ def increment_version(version_str: str) -> str:
         major, minor, patch = map(int, parts[:3])
         minor += 1
         return f"{major}.{minor}.{patch}"
-    except Exception:
+    except Exception as exc:
+        logging.getLogger(__name__).warning("Failed to increment version %s: %s", version_str, exc)
         return "1.0.0"
 
 
