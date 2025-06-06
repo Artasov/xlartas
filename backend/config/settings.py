@@ -1,9 +1,7 @@
 import logging
 from datetime import timedelta
 from os import environ, makedirs
-from os.path import join
 from os.path import join, exists
-from pathlib import Path
 from pathlib import Path
 
 from adjango.utils.common import is_celery, traceback_str
@@ -65,10 +63,8 @@ POSTGRES_USE = bool(int(env('POSTGRES_USE')))
 
 WSGI_APPLICATION = None  # 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
-TIME_ZONE = 'Europe/Moscow'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
+# Internationalization defaults
+# Actual values are defined near the bottom with env overrides.
 # Ограничение размера данных POST до 3 ГБ (в байтах)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024  # 3 ГБ
 # Порог для хранения файла в памяти (при превышении файла он будет сохраняться во временную директорию)
@@ -476,7 +472,6 @@ DISCORD_REDIRECT_URI = f'{DOMAIN_URL}/oauth/discord/callback/'
 # Yandex
 YANDEX_CLIENT_ID = env('YANDEX_CLIENT_ID')
 YANDEX_CLIENT_SECRET = env('YANDEX_CLIENT_SECRET')
-YANDEX_RECAPTCHA_SECRET_KEY = env('YANDEX_RECAPTCHA_BACKEND_KEY')
 YANDEX_REDIRECT_URI = f'{DOMAIN_URL}/oauth/yandex/callback/'
 
 # Logging

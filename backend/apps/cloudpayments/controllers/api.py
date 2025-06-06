@@ -3,7 +3,6 @@ import logging
 from typing import Any, Dict
 
 from adjango.adecorators import acontroller, aatomic
-from adjango.utils.base import apprint
 from adjango.utils.common import traceback_str
 from adrf.decorators import api_view
 from rest_framework.decorators import permission_classes
@@ -31,7 +30,7 @@ async def success(request):
     """
     try:
         data: Dict[str, Any] = request.data
-        await apprint(data)
+        log.debug('CloudPayments payload: %s', data)
 
         invoice_id: str | None = data.get('invoiceId')
         if not invoice_id:

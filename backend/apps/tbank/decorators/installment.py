@@ -65,13 +65,13 @@ def async_tbank_installment_notification(view_func):
             if data.get('created_at'):
                 try:
                     request.payment.created_at_tinkoff = dateutil.parser.isoparse(data['created_at'])
-                except:  # noqa TODO: разобрать
-                    pass
+                except (ValueError, TypeError) as exc:
+                    log.warning('Failed to parse created_at: %s', exc)
             if data.get('expected_overdue_at'):
                 try:
                     request.payment.expected_overdue_at = dateutil.parser.isoparse(data['expected_overdue_at'])
-                except:  # noqa TODO: разобрать
-                    pass
+                except (ValueError, TypeError) as exc:
+                    log.warning('Failed to parse expected_overdue_at: %s', exc)
 
             # numeric fields
             if data.get('term'): request.payment.term = data['term']

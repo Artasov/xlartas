@@ -1,7 +1,6 @@
 # cloudpayments/classes/payment.py
 import logging
 from decimal import Decimal
-from pprint import pprint
 from typing import Any, Dict, Optional, TypedDict
 
 import httpx
@@ -71,7 +70,7 @@ class CloudPaymentAPI:
         """
         data = {'InvoiceId': invoice_id}
         resp = await cls._post('/payments/get', data)
-        pprint(resp)
+        log.debug('CloudPayments status response: %s', resp)
         return CPStatusResponse(
             Success=resp['Success'],
             Message=resp['Message'],
