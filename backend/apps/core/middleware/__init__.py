@@ -4,15 +4,19 @@ from channels.middleware import BaseMiddleware
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from rest_framework_simplejwt.tokens import AccessToken
+import logging
 
 User = get_user_model()
+
+log = logging.getLogger('global')
 
 
 async def get_user_from_token(token):
     try:
         return await User.objects.aget(id=AccessToken(token)['user_id'])
-    except Exception as e:
-        raise e
+    except Exception:
+        log.exception('Error retrieving user from token')
+        raise
 
 
 class JWTAuthMiddleware(BaseMiddleware):
