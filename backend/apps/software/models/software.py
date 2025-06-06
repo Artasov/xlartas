@@ -48,7 +48,7 @@ class Software(Product, SoftwareService, SoftwareException):
         verbose_name_plural = _('Softwares')
 
     def __str__(self):
-        return f'{self.name} {f'(v{self.file.version})' if self.file else ''}'
+        return f'{self.name} (v{self.file.version})' if self.file else self.name
 
 
 class SoftwareOrder(Order, SoftwareOrderService):
