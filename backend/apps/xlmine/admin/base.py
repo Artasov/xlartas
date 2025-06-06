@@ -1,4 +1,5 @@
 # xlmine/admin/base.py
+import logging
 from django.contrib.admin import register, ModelAdmin, display
 from django.forms import ModelForm, TextInput
 from django.utils.html import escape, format_html
@@ -8,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from apps.xlmine.models import Launcher, Release, Donate, DonateOrder, Privilege
 from apps.xlmine.models.user import UserXLMine, MinecraftSession
 from utils.gradient_by_symbol_text import generate_gradient_text
+
+log = logging.getLogger(__name__)
 
 
 @register(Launcher)
@@ -105,7 +108,7 @@ class PrivilegeAdmin(ModelAdmin):
     def save_model(self, request, obj, form, change):
         start = obj.gradient_start
         end = obj.gradient_end
-        print(start, end)
+        log.debug('Gradient start=%s end=%s', start, end)
         if start and end:
             obj.prefix = generate_gradient_text(obj.prefix, start, end)
         super().save_model(request, obj, form, change)

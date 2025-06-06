@@ -1,9 +1,11 @@
 # captcha/yandex.py
 import json
-import sys
+import logging
 
 import requests
 from django.conf import settings
+
+log = logging.getLogger(__name__)
 
 
 def check_captcha(token: str, user_ip: str) -> bool:
@@ -20,7 +22,11 @@ def check_captcha(token: str, user_ip: str) -> bool:
     )
     server_output = resp.content.decode()
     if resp.status_code != 200:
-        print(f"Allow access due to an error: code={resp.status_code}; message={server_output}", file=sys.stderr)
+        log.error(
+            "Allow access due to an error: code=%s; message=%s",
+            resp.status_code,
+            server_output,
+        )
         return False
     return json.loads(server_output)["status"] == "ok"
 
