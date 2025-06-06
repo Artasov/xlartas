@@ -29,14 +29,6 @@ export class Message {
         try {
             const message = data.message;
             if (message) {
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
-                console.log('@@@@@@@@@@@@@@@@@@@@@@@')
                 this.error(message);
                 const fields_errors = data.fields_errors;
                 if (fields_errors && fields_errors.length) {
