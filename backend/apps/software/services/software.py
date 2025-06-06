@@ -37,15 +37,41 @@ class SoftwareService:
         await order.init(request)
         return order
 
-    async def can_pregive(  # noqa TODO: разобрать
-            self: 'Software', order: 'SoftwareOrder',  # noqa
-            raise_exceptions=False  # noqa
+    async def can_pregive(
+            self: 'Software', order: 'SoftwareOrder',
+            raise_exceptions: bool = False
     ) -> bool:
-        # Например, всегда True, если хотите какую-то проверку — добавьте:
+        """Validate that the order can be initialized."""
+        from rest_framework.exceptions import ValidationError
+
+        if not self.is_available:
+            if raise_exceptions:
+                raise ValidationError({'detail': 'Product is not available'})
+            return False
+
+        if order.license_hours < self.min_license_order_hours:
+            if raise_exceptions:
+                raise ValidationError({
+                    'detail': f'License hours must be ≥ {self.min_license_order_hours}'
+                })
+            return False
+
+        price_exists = await self.prices.filter(currency=order.currency).aexists()
+        if not price_exists:
+            if raise_exceptions:
+                raise ValidationError({'detail': 'Price for currency not found'})
+            return False
+
         return True
 
     async def pregive(self: 'Software', order: 'SoftwareOrder'):
-        pass
+        """Prepare license object before payment."""
+        from apps.software.models import SoftwareLicense
+
+        await SoftwareLicense.objects.aget_or_create(
+            user_id=order.user_id,
+            software=self,
+        )
 
     async def cancel_given(self, request, order: 'SoftwareOrder', reason: str, ):
         pass
