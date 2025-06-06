@@ -1,6 +1,7 @@
 # filehost/controllers/base.py
 import os
 import shutil
+import logging
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -16,6 +17,8 @@ from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import Folder, File
 from apps.filehost.serializers import FileSerializer, FolderSerializer
 from apps.filehost.services.base import create_archive, get_tags, get_folders, get_files
+
+log = logging.getLogger('global')
 
 
 @acontroller('Download File')
@@ -56,8 +59,9 @@ async def download_archive(request):
         with open(archive_path, 'rb') as archive:
             response = HttpResponse(archive.read(), content_type='application/octet-stream')
             response['Content-Disposition'] = f'attachment; filename="{os.path.basename(archive_path)}"'
-    except Exception as e:
-        raise e
+    except Exception:
+        log.exception('Error while creating archive')
+        raise
         # return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     finally:
         if temp_dir:
