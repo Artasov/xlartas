@@ -39,14 +39,14 @@ jobs:
             git restore . 
             git pull
           
-            chmod -R 777 ./build_images.sh
-            chmod -R 777 ./init_test_db.sh
-            chmod -R 777 ./hands_deploy.sh
-            chmod -R 777 ./entrypoint.sh
-            chmod -R 777 ./pre_init.sh
-            chmod -R 777 ./up.sh
-            chmod -R 777 ./build_up.sh
-            chmod -R 777 ./frontend/build-and-copy.sh
+            chmod +x ./build_images.sh
+            chmod +x ./init_test_db.sh
+            chmod +x ./hands_deploy.sh
+            chmod +x ./entrypoint.sh
+            chmod +x ./pre_init.sh
+            chmod +x ./up.sh
+            chmod +x ./build_up.sh
+            chmod +x ./frontend/build-and-copy.sh
           
             docker stop registry
             yes | docker system prune -a

@@ -1,7 +1,7 @@
 # xlmine/controllers/yggdrasil.py
 import uuid
 from datetime import timedelta
-from pprint import pprint
+import logging
 
 from adrf.decorators import api_view
 from adrf.requests import AsyncRequest
@@ -14,6 +14,8 @@ from rest_framework.response import Response
 
 from apps.core.models.user import User
 from apps.xlmine.models.user import MinecraftSession, UserXLMine
+
+log = logging.getLogger('yggdrasil')
 
 
 @api_view(['GET'])
@@ -53,7 +55,7 @@ async def authenticate_view(request):
     }
     """
     data = request.data
-    pprint(data)
+    log.debug('authenticate payload %s', data)
     username_or_email = data.get('username')
     password = data.get('password')
     client_token = data.get('clientToken', str(uuid.uuid4()))
@@ -144,7 +146,7 @@ async def refresh_view(request):
     }
     """
     data = request.data
-    pprint(data)
+    log.debug('refresh payload %s', data)
     old_access = data.get('accessToken')
     client_token = data.get('clientToken')
 
@@ -269,7 +271,7 @@ async def invalidate_view(request):
     Возвращаем 204 или 403
     """
     data = request.data
-    pprint(data)
+    log.debug('invalidate payload %s', data)
     access_token = data.get('accessToken')
     client_token = data.get('clientToken')
 
@@ -296,7 +298,7 @@ async def signout_view(request):
     Логически тоже самое, что invalidate, но без accessToken: мы «разлогиниваем все сессии»?
     """
     data = request.data
-    pprint(data)
+    log.debug('signout payload %s', data)
     username_or_email = data.get('username')
     password = data.get('password')
 
@@ -336,7 +338,7 @@ async def join_server_view(request):
     Сервер MC вызывает при входе игрока. Мы должны проверить токен и сохранить "serverId" за этим пользователем
     """
     data = request.data
-    pprint(data)
+    log.debug('join payload %s', data)
     access_token = data.get('accessToken')
     profile_id = data.get('selectedProfile')  # uuid без тире
     server_id = data.get('serverId')
@@ -434,11 +436,11 @@ async def profile_view(request, player_uuid):
     # Здесь player_uuid - это UUID (без тире), поэтому надо привести к нормальному формату
     # Простейший способ - вставить тире вручную или использовать UUID(player_uuid)
     # но нужно быть осторожным, т.к. Mojang иногда UUID без тире
-    pprint(request.__dict__)
-    pprint(request.data)
-    pprint(request.GET)
+    log.debug('profile request_dict %s', request.__dict__)
+    log.debug('profile request_data %s', request.data)
+    log.debug('profile query %s', request.GET)
     full_uuid = str(player_uuid)  # Django уже привёл к uuid.UUID формату, если сделали <uuid:player_uuid>
-    print("profile_view - player_uuid:", full_uuid)
+    log.debug('profile_view - player_uuid: %s', full_uuid)
 
     # Нужно, чтобы user.uuid_for_minecraft() == full_uuid c тире/без тире.
     # Для простоты предположим, что user хранит в поле user.minecraft_uuid
