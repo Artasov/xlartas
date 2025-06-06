@@ -23,8 +23,10 @@ MULTI_ACCOUNT_PROHIBITED = 'Multi account usage with the same HWID is prohibited
 HWID_NOT_EQUAL = 'Your HWID does not match the HWID saved for this account.'
 PRODUCT_NOT_EXISTS = 'Requested software product does not exist.'
 LICENSE_TIMEOUT = 'Your license has expired. Visit {} to renew.'
-# Для примера:
-URL_SHOP_SOFTWARE = '/software/'  # TODO: генерировать ссылку на запрашиваемый продукт /softwares/:id
+# Для примера ссылку на страницу продукта генерируем динамически
+def get_shop_url(software_id: int) -> str:
+    """Return relative URL to the software detail page."""
+    return f'/softwares/{software_id}/'
 
 
 @csrf_exempt
@@ -131,7 +133,7 @@ async def software_auth(request) -> Response:
             )
         else:
             # Полная лицензия просрочена:
-            shop_link = request.build_absolute_uri(URL_SHOP_SOFTWARE)
+            shop_link = request.build_absolute_uri(get_shop_url(software_.id))
             return Response(
                 {
                     'accept': False,
