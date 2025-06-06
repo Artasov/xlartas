@@ -119,7 +119,7 @@ class TBankInstallment(Payment, TBankInstallmentService, TBankInstallmentExcepti
     )
     chosen_bank = CharField(_('Chosen Bank'), max_length=100, null=True, blank=True)
     committed = BooleanField(default=False, verbose_name=_('Committed'))
-    is_demo = BooleanField(default=False, verbose_name=_('Is demo is_installment_available'))
+    is_demo = BooleanField(default=False, verbose_name=_('Is demo installment available'))
     tinkoff_internal_id = CharField(
         _('Tinkoff Form ID'), max_length=128,
         null=True, blank=True, unique=False
