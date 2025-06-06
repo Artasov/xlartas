@@ -34,16 +34,16 @@ def teleport_player_grid(
     for dz in range(0, side_length, step):
         for dx in range(0, side_length, step):
             if current_square < skip_squares:
-                print(f'Пропускаем квадрат #{current_square + 1}')
+                log.info('Skip square #%s', current_square + 1)
                 current_square += 1
                 continue
             x = left_top_x + dx
             z = left_top_z + dz
-            print(f'[{current_square + 1}] Телепорт {player} в координаты ({x}, {z})')
+            log.info('[%s] Teleport %s to coordinates (%s, %s)', current_square + 1, player, x, z)
             command = f"execute as {player} run tp {x} 120 {z}"
             console.send_command(command)
             for i in range(wait_seconds):
-                print(f'Ждём {i + 1}/{wait_seconds} сек')
+                log.info('Waiting %s/%s sec', i + 1, wait_seconds)
                 time.sleep(1)
 
             current_square += 1

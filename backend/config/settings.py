@@ -4,13 +4,13 @@ from os import environ, makedirs
 from os.path import join, exists
 from pathlib import Path
 
-from adjango.utils.common import is_celery, traceback_str
-from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES   # noqaq
+from adjango.utils.common import is_celery
+from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 from config.jazzmin import JAZZMIN_SETTINGS as _JAZZMIN_SETTINGS
-from config.jazzmin import JAZZMIN_UI_TWEAKS
+from config.jazzmin import JAZZMIN_UI_TWEAKS  # noqa: F401
 from utils.handle_exceptions import handling_function
 
 # Product
@@ -25,6 +25,7 @@ HOURS_MINECRAFT_SESSION_LIFETIME = 12 * 24
 # Environment helper
 env = environ.get
 MAIN_PROCESS = True if env('RUN_MAIN') != 'true' else False
+TIME_ZONE = env('TZ', 'Europe/Moscow')
 
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -255,7 +256,8 @@ INSTALLED_APPS = [
     'apps.xlmine',
 
 ]
-if MINIO_USE: INSTALLED_APPS.append('django_minio_backend')
+if MINIO_USE:
+    INSTALLED_APPS.append('django_minio_backend')
 # Database
 if POSTGRES_USE:
     DATABASES = {
@@ -323,7 +325,8 @@ MIDDLEWARE = [
     'apps.analytics.middleware.VisitLoggingMiddleware'
 
 ]
-if DEV: MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
+if DEV:
+    MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
 MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 # MEDIA_SUBSTITUTION_URL = 'http://localhost:8000'
 
@@ -477,7 +480,8 @@ YANDEX_REDIRECT_URI = f'{DOMAIN_URL}/oauth/yandex/callback/'
 # Logging
 LOGS_DIR = join(BASE_DIR, 'logs')
 LOGUI_URL_PREFIX = 'logui/'
-if not exists(LOGS_DIR): makedirs(LOGS_DIR)
+if not exists(LOGS_DIR):
+    makedirs(LOGS_DIR)
 LOGUI_REQUEST_RESPONSE_LOGGER_NAME = 'global'
 LOGGING = {
     'version': 1,
@@ -589,7 +593,6 @@ RCON_PASSWORD = env('RCON_PASSWORD', 'test123')
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = env('TZ', 'Europe/Moscow')
 USE_I18N = True
 USE_TZ = True
 

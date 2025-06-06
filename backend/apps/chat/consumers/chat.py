@@ -2,7 +2,7 @@
 
 import base64
 import json
-from pprint import pprint
+import logging
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.files.base import ContentFile
@@ -12,6 +12,8 @@ from apps.chat.serializers import MessageSerializer
 from apps.core.models import User
 from apps.notify.models import Notify
 from apps.notify.registry import Notifies
+
+log = logging.getLogger(__name__)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -34,7 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if data['type'] == 'read_message':
             await self.mark_message_as_read(data['message_id'])
         elif data['type'] == 'chat_message':
-            pprint(data)
+            log.debug('Received data: %s', data)
             temp_id = data.get('tempId')
             message_text = data.get('message', '')
             is_important = data.get('is_important', False)  # Get is_important flag
@@ -51,12 +53,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 if is_important:
                     # Send notification for important message
                     recipient = await self.get_recipient(self.room, user)
-                    print(recipient)
+                    log.debug('Recipient for notification: %s', recipient)
                     if recipient:
                         await Notify.objects.acreate(
                             recipient=recipient,
-                            notify_type=Notifies.IMPORTANT_CHAT_MESSAGE,  # noqa TODO: разобраться
-                            send_immediately=True
+                            notify_type=Notifies.IMPORTANT_CHAT_MESSAGE,
+                            send_immediately=True,
                         )
                 await self.channel_layer.group_send(
                     self.room_group_name, {
@@ -65,8 +67,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     }
                 )
         else:
-            print('Unknown request to consumer')
-            print(data)
+            log.warning('Unknown request to consumer: %s', data)
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps(event['message']))
@@ -79,9 +80,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def get_recipient(room: Room, sender) -> User | None:
         # Assuming one-to-one room
         participants = await room.participants.aall()
-        print('participants')
-        print(participants)
-        print(sender)
+        log.debug('Participants: %s, sender: %s', participants, sender)
         for participant in participants:
             if participant != sender:
                 return participant

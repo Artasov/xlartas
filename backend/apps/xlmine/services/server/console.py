@@ -29,18 +29,15 @@ class RconServerConsole:
         """
         try:
             if settings.IS_CELERY:
-                print(f'Rcon <-- {command}')
+                log.info('Rcon <-- %s', command)
             else:
-                log.info(f'Rcon <-- {command}')
+                log.info('Rcon <-- %s', command)
             try:
                 import signal
                 signal.signal = lambda *args, **kwargs: None
                 with MCRcon(self.host, self.password, port=self.port) as mcr:
                     response = mcr.command(command)
-                    if settings.IS_CELERY:
-                        print(f'Rcon --> {response}')
-                    else:
-                        log.info(f'Rcon --> {response}')
+                    log.info('Rcon --> %s', response)
                     return response
             except ValueError:
                 # работаем в не‑главном потоке — обходим signal‑timeout
@@ -51,18 +48,12 @@ class RconServerConsole:
                 except Exception:  # noqa
                     pass
                 response = mcr.command(command)
-                if settings.IS_CELERY:
-                    print(f'Rcon --> {response}')
-                else:
-                    log.info(f'Rcon --> {response}')
+                log.info('Rcon --> %s', response)
                 try:
                     mcr.disconnect()
                 except Exception:  # noqa
                     pass
                 return response
         except Exception as e:
-            if settings.IS_CELERY:
-                print(f"Ошибка при выполнении команды: {traceback_str(e)}")
-            else:
-                log.error(f"Ошибка при выполнении команды: {traceback_str(e)}")
+            log.error("Ошибка при выполнении команды: %s", traceback_str(e))
             return f"Ошибка при выполнении команды: {str(e)}"

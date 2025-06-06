@@ -1,10 +1,13 @@
 # xl_dashboard/controllers.py
 import asyncio
+import logging
 
 from django.conf import settings
 from django.http import HttpResponseForbidden, HttpResponseNotFound
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
+log = logging.getLogger(__name__)
 
 
 @api_view(['POST'])
@@ -13,7 +16,7 @@ async def action_view(request, action_name):
     """
     Ищет функцию (или корутину) в XL_DASHBOARD['xl-actions'] и вызывает её.
     """
-    print(f"action_view called with action_name={action_name}")  # Лог
+    log.debug("action_view called with action_name=%s", action_name)
     user = request.user
     if not (user and user.is_staff):
         return HttpResponseForbidden('Access denied')

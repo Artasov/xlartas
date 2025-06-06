@@ -19,6 +19,7 @@ class NotifyConfig:
 class Notifies(TextChoices):
     SUCCESS_GIFT_CERTIFICATE_ORDER = 'success_gift_certificate_order', _('Successful order gift certificate')
     NEW_CHAT_MESSAGE = 'new_chat_message', _('New chat message')
+    IMPORTANT_CHAT_MESSAGE = 'important_chat_message', _('Important chat message')
 
 
 NOTIFY_ORDER_MAPPING = {
@@ -29,5 +30,10 @@ NOTIFY_CONFIGS: dict[str, NotifyConfig] = {
     Notifies.SUCCESS_GIFT_CERTIFICATE_ORDER: NotifyConfig(
         providers=[SMSProvider, EmailProvider],
     ),
-
+    Notifies.NEW_CHAT_MESSAGE: NotifyConfig(
+        providers=[EmailProvider],
+    ),
+    Notifies.IMPORTANT_CHAT_MESSAGE: NotifyConfig(
+        providers=[EmailProvider],
+    ),
 }

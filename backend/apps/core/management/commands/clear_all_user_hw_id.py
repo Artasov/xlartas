@@ -12,4 +12,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = User.objects.all()
         users.update(hw_id='')
-        print(f'{len(users)} users was updated.')
+        self.stdout.write(f'{len(users)} users was updated.')

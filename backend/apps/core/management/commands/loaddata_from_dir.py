@@ -1,5 +1,6 @@
 # core/management/commands/loaddata_from_dir.py
 import os
+import logging
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -23,5 +24,4 @@ class Command(BaseCommand):
                 try:
                     call_command('loaddata', os.path.join(directory, filename))
                 except Exception as e:
-                    print(f'{filename} Not Loaded')
-                    print(e)
+                    logging.getLogger(__name__).error("%s Not Loaded: %s", filename, e)
