@@ -44,10 +44,18 @@ async def confirm_email_action(code: 'ConfirmationCode'):
 
 
 async def confirm_phone_action(code: 'ConfirmationCode', new_phone: str):
-    # TODO: Функция должна обновлять phone корректно, сейчас она просто устанавливает phone если еще нет
-    if await User.objects.filter(phone=new_phone).aexists():
+    """Confirm phone number and update it if necessary."""
+    # Ensure the phone number does not belong to another user
+    exists = await User.objects.filter(phone=new_phone).exclude(pk=code.user.pk).aexists()
+    if exists:
         raise UserException.AlreadyExistsWithThisPhone()
-    if not code.user.phone or not code.user.is_phone_confirmed:
+
+    # Update phone if it differs from the current one
+    if code.user.phone != new_phone:
         code.user.phone = new_phone
+
+    # Mark phone as confirmed
+    if not code.user.is_phone_confirmed:
         code.user.is_phone_confirmed = True
-        await code.user.asave()
+
+    await code.user.asave()
