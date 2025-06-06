@@ -72,5 +72,6 @@ def parse_and_convert(date_str, user_timezone):
     try:
         dt = dt.astimezone(user_tz)
         return dt
-    except Exception:  # noqa
+    except Exception as exc:  # noqa
+        logger.warning("Failed to convert timezone: %s", exc)
         return None

@@ -1,6 +1,11 @@
 # analytics/controllers/graphics.py
 import json
+import logging
 from datetime import datetime
+
+from django.http import HttpResponseBadRequest
+
+logger = logging.getLogger(__name__)
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Q
@@ -24,14 +29,16 @@ def visits_chart(request):
         try:
             start_date = datetime.strptime(start_date_str, date_format)
             filters['created_at__gte'] = start_date
-        except Exception:  # noqa
-            pass
+        except ValueError as exc:
+            logger.warning("Invalid start_date %s: %s", start_date_str, exc)
+            return HttpResponseBadRequest("Invalid start_date")
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
-        except Exception:  # noqa
-            pass
+        except ValueError as exc:
+            logger.warning("Invalid end_date %s: %s", end_date_str, exc)
+            return HttpResponseBadRequest("Invalid end_date")
 
     # Определяем функцию группировки и формат метки
     if group_by == 'hour':
@@ -90,14 +97,16 @@ def orders_chart(request):
         try:
             start_date = datetime.strptime(start_date_str, date_format)
             filters['created_at__gte'] = start_date
-        except Exception:  # noqa
-            pass
+        except ValueError as exc:
+            logger.warning("Invalid start_date %s: %s", start_date_str, exc)
+            return HttpResponseBadRequest("Invalid start_date")
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
-        except Exception:  # noqa
-            pass
+        except ValueError as exc:
+            logger.warning("Invalid end_date %s: %s", end_date_str, exc)
+            return HttpResponseBadRequest("Invalid end_date")
 
     # Определяем функцию группировки и формат метки для заказов
     if group_by == 'hour':
