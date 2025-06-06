@@ -43,10 +43,14 @@ class NotifyService:
                 if not settings.DEBUG and not self.recipient.is_test:
                     provider.send(self.recipient, context, self.notify_type)
                 else:
-                    log.info(f'Notify {provider.name} for {self.recipient} {context} sent \n'
-                             f'Rendered text:{render_to_string(
-                                 f'notify/{provider.name}/{self.notify_type}.html', context
-                             )}')
+                    rendered = render_to_string(
+                        f"notify/{provider.name}/{self.notify_type}.html",
+                        context,
+                    )
+                    log.info(
+                        f"Notify {provider.name} for {self.recipient} {context} sent \n"
+                        f"Rendered text:{rendered}"
+                    )
 
             self.status = self.Status.SENT
             self.sent_time = timezone.now()  # noqa

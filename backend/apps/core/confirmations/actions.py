@@ -26,26 +26,26 @@ actions = {
     CoreConfirmationActionType.AUTH: ConfirmationAction(
         subject=f'xlartas | {_('Confirm auth')}',
         text=f'{_('Код подтверждения для входа в вашу учетную запись')}',
-        func=auth_by_confirmation_code
+        func=auth_by_confirmation_code,
     ),
     CoreConfirmationActionType.SIGNUP: ConfirmationAction(
         subject=f'xlartas | {_('Confirm Registration')}',
         text=f'{_('Код подтверждения для регистрации')}',
-        func=signup_by_confirmation_code
+        func=signup_by_confirmation_code,
     ),
     CoreConfirmationActionType.NEW_PASSWORD: ConfirmationAction(
         subject=f'xlartas | {_('Set new password')}',
         text=f'{_('Код подтверждения для нового пароля')}',
-        func=set_new_password_by_confirmation_code
+        func=set_new_password_by_confirmation_code,
     ),
     CoreConfirmationActionType.NEW_EMAIL: ConfirmationAction(
         subject=f'xlartas | {_('Add new email address')}',
         text=f'{_('Код подтверждения для добавления почты')}',
-        func=confirm_email_action
+        func=confirm_email_action,
     ),
     CoreConfirmationActionType.NEW_PHONE: ConfirmationAction(
         subject=f'xlartas | {_('Add new phone number')}',
         text=f'{_('Код подтверждения для добавления телефона')} {settings.MAIN_DOMAIN}',
-        func=confirm_phone_action
+        func=confirm_phone_action,
     ),
 }
