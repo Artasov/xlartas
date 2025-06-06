@@ -36,11 +36,24 @@ class DonateService:
         await order.init(request)
         return order
 
-    async def can_pregive(self: 'Donate', order: 'DonateOrder', raise_exceptions=False) -> bool:  # noqa TODO: разобрать
+    async def can_pregive(
+            self: 'Donate', order: 'DonateOrder',
+            raise_exceptions: bool = False
+    ) -> bool:
+        """Check that donate product can be issued."""
+        from rest_framework.exceptions import ValidationError
+
+        if not self.is_available:
+            if raise_exceptions:
+                raise ValidationError({'detail': 'Product is not available'})
+            return False
         return True
 
     async def pregive(self: 'Donate', order: 'DonateOrder'):
-        pass
+        """Create XLMine user record if needed before payment."""
+        from apps.xlmine.models.user import UserXLMine
+
+        await UserXLMine.objects.aget_or_create(user_id=order.user_id)
 
     async def postgive(self: 'Donate', order: 'DonateOrder'):  # noqa TODO: разобрать
         """
@@ -60,6 +73,9 @@ class DonateService:
         # Начисляем коины
         xlmine_user.coins = xlmine_user.coins + order_price
         await xlmine_user.asave()
+
+        # Обновляем привилегию пользователя в соответствии с суммой донатов
+        await user.calc_and_set_current_privilege()
 
     async def cancel_given(self, request, order: 'DonateOrder', reason: str):
         """
