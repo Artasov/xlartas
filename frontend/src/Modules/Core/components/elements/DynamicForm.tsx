@@ -1,6 +1,8 @@
 // Modules/Core/components/elements/DynamicForm.tsx
 
 import React, {ReactNode, useState} from 'react';
+import pprint from 'Utils/pprint';
+import {Message} from "Core/components/Message";
 import {FormControl, TextField} from '@mui/material';
 import Button from "Core/components/elements/Button/Button";
 
@@ -32,8 +34,9 @@ const DynamicForm: React.FC<DynamicFormProps> = (
         try {
             await requestFunc();
         } catch (error) {
-            console.log('Ошибка обработки динамической формы');
-            console.log(error);
+            pprint('Ошибка обработки динамической формы');
+            pprint(error);
+            Message.error('Ошибка обработки формы');
         } finally {
             setLoading(false);
         }

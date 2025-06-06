@@ -10,6 +10,7 @@ import {FC, FR, FRCC} from "WideLayout/Layouts";
 import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "../Api/useApi";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import pprint from 'Utils/pprint';
 
 interface PaymentTypePickerProps {
     prices: IProductPrice[];
@@ -85,7 +86,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         ) || [];
 
     useEffect(() => {
-        console.log(filteredPaymentTypes)
+        pprint(filteredPaymentTypes)
         if (filteredPaymentTypes.length > 0) {
             // либо ничего не выбрано, либо выбранной уже нет в списке
             if (!selectedPaymentType || !filteredPaymentTypes.includes(selectedPaymentType)) {
