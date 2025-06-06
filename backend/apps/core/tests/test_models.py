@@ -18,9 +18,6 @@ class UserModelTest(TestCase):
         self.assertEqual(user.email, 'test@example.com')
         self.assertTrue(user.check_password('testpassword'))
 
-    def test_reject_waiting_bills(self):
-        # TODO: Write test for reject_waiting_bills method
-        pass
 
 # class UnconfirmedUserModelTest(TestCase):
 #     def test_unconfirmed_user_creation(self):
