@@ -76,6 +76,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
             /* Ошибки соединения. */
             wsRef.current.onerror = ev => {
                 console.error('WebSocket error:', ev);
+                Message.error(`WebSocket error: ${ev}`);
                 Message.error('Не удалось установить WebSocket-соединение');
                 setLoading(false);
             };
