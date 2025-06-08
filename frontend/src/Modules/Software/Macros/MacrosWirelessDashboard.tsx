@@ -17,11 +17,12 @@ import {useTheme} from 'Theme/ThemeContext';
 import MacroFormDialog from './MacroFormDialog';
 import {useApi} from "../../Api/useApi";
 import {WirelessMacro} from "../Types/Software";
+import {DOMAIN} from "../../Api/axiosConfig";
 
-/* —–– WS URL такой же, как в MacrosExecutorForm ––– */
+const protocol = window.location.protocol;
 const WS_URL = process.env.REACT_APP_WS_URL
     ? `${process.env.REACT_APP_WS_URL.replace(/\/$/, '')}/ws/macro-control/`
-    : 'ws://localhost:8000/ws/macro-control/';
+    : `ws://${DOMAIN}${protocol === 'http:' ? ':8000' : ''}/ws/macro-control/`;
 
 /** Отправка макроса по WebSocket и короткий toast-результат. */
 const executeMacroWS = (macro: string) => {

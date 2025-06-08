@@ -6,6 +6,7 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FR} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
 import TextField from '@mui/material/TextField';
+import {DOMAIN} from "../../Api/axiosConfig";
 
 /**
  * Форма-однострочник для отправки имени макроса на сервер.
@@ -31,10 +32,10 @@ interface Props {
     className?: string;
 }
 
-/* URL берётся из env (REACT_APP_WS_URL) или по умолчанию localhost. */
+const protocol = window.location.protocol;
 const WS_URL = process.env.REACT_APP_WS_URL
     ? `${process.env.REACT_APP_WS_URL.replace(/\/$/, '')}/ws/macro-control/`
-    : 'ws://localhost:8000/ws/macro-control/';
+    : `ws://${DOMAIN}${protocol === 'http:' ? ':8000' : ''}/ws/macro-control/`;
 
 const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
     const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
