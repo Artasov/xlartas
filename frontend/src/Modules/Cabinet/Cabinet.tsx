@@ -26,6 +26,7 @@ import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
+import MacrosExecutorPage from "../Software/Macros/MacrosExecutorPage";
 // ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -87,7 +88,11 @@ const Cabinet: React.FC = () => {
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/xlmine-release', true)} to="/xlmine-release"
                          icon={<DeveloperBoardRoundedIcon/>}>
-                    RELEASES
+                    Releases
+                </NavLink>
+                <NavLink onClick={() => handleMenuLinkClick('/wireless', true)} to="/wireless"
+                         icon={<DeveloperBoardRoundedIcon/>}>
+                    Wireless
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
                          to="/orders" icon={<CreditScoreRoundedIcon/>}>
@@ -160,6 +165,9 @@ const Cabinet: React.FC = () => {
                                 icon={DeveloperBoardRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
                             <CabinetNavLink
+                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'} icon={CreditScoreRoundedIcon}
+                                onClick={() => handleMenuLinkClick('/wireless')}/>
+                            <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
                         </FC>
@@ -183,6 +191,7 @@ const Cabinet: React.FC = () => {
                             </FCSS>}/>
                             <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
                             <Route path='/licenses' element={<Licenses/>}/>
+                            <Route path='/wireless' element={<MacrosExecutorPage/>}/>
                             <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
 
                             <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}>

@@ -15,3 +15,9 @@ export interface ISoftware extends IProduct {
     guide_url: string;
     file?: ISoftwareFile;
 }
+
+export interface WirelessMacro {
+    id: number;
+    name: string;
+    priority: number;
+}

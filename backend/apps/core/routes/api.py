@@ -8,7 +8,7 @@ from apps.core.controllers.user.base import (
     update_client, update_avatar, user_auth_methods,
     check_phone_exists, check_email_exists
 )
-from apps.core.obtain_tokens import custom_token_obtain_pair_view
+from apps.core.auth.obtain_tokens import custom_token_obtain_pair_view
 
 app_name = 'core'
 
