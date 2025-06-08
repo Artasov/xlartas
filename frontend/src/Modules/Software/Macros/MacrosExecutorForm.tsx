@@ -7,6 +7,7 @@ import {FC, FR} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
 import TextField from '@mui/material/TextField';
 import {DOMAIN} from "../../Api/axiosConfig";
+import {buildWSUrl} from "Utils/ws";
 
 /**
  * Форма-однострочник для отправки имени макроса на сервер.
@@ -32,10 +33,7 @@ interface Props {
     className?: string;
 }
 
-const protocol = window.location.protocol;
-const WS_URL = process.env.REACT_APP_WS_URL
-    ? `${process.env.REACT_APP_WS_URL.replace(/\/$/, '')}/ws/macro-control/`
-    : `ws://${DOMAIN}${protocol === 'http:' ? ':8000' : ''}/ws/macro-control/`;
+const WS_URL = buildWSUrl('/ws/macro-control/');
 
 const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
     const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;

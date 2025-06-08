@@ -87,7 +87,9 @@ configurations = {
                 },
                 # 'Cabinet': '__copy__',
                 'Order': '__copy__',
-                # 'Software': '__copy__',
+                'Software': {
+                    'Macros': '__copy__',
+                },
                 # 'xLMine': '__copy__',
             },
             'Types': {},

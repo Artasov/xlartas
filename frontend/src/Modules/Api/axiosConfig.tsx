@@ -1,19 +1,17 @@
 // Modules/Api/axiosConfig.tsx
 import axios, {AxiosInstance} from 'axios';
 
-const protocol = window.location.protocol;
+const isHttps = window.location.protocol === 'https:';
 export const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID as string;
 export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
-export const DOMAIN = window.location.hostname;
 export const YANDEX_RECAPTCHA_SITE_KEY = process.env.REACT_APP_YANDEX_RECAPTCHA_SITE_KEY as string;
 export const YANDEX_CLIENT_ID = process.env.REACT_APP_YANDEX_CLIENT_ID as string;
 export const VK_AUTH_CLIENT_ID = process.env.REACT_APP_VK_AUTH_CLIENT_ID as string;
-export const DOMAIN_URL = `${protocol}//${DOMAIN}${protocol === 'http:' ? ':8000' : ''}`;
+export const DOMAIN        = window.location.hostname;
+export const DOMAIN_URL     = `${isHttps ? 'https' : 'http'}://${DOMAIN}${isHttps ? '' : ':8000'}`;
 export const DOMAIN_URL_ENCODED = encodeURIComponent(DOMAIN_URL);
 
-const axiosInstance: AxiosInstance = axios.create({
-    baseURL: `${protocol}//${DOMAIN}${protocol === 'http:' ? ':8000' : ''}/`,
-});
+const axiosInstance = axios.create({ baseURL: `${DOMAIN_URL}/` });
 
 function getCookie(name: string): string | null {
     if (!document.cookie) return null;

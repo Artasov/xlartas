@@ -17,28 +17,23 @@ import {useTheme} from 'Theme/ThemeContext';
 import MacroFormDialog from './MacroFormDialog';
 import {useApi} from "../../Api/useApi";
 import {WirelessMacro} from "../Types/Software";
-import {DOMAIN} from "../../Api/axiosConfig";
+import {buildWSUrl} from "Utils/ws";
 
-const protocol = window.location.protocol;
-const WS_URL = process.env.REACT_APP_WS_URL
-    ? `${process.env.REACT_APP_WS_URL.replace(/\/$/, '')}/ws/macro-control/`
-    : `ws://${DOMAIN}${protocol === 'http:' ? ':8000' : ''}/ws/macro-control/`;
+const WS_URL = buildWSUrl('/ws/macro-control/');
 
-/** Отправка макроса по WebSocket и короткий toast-результат. */
-const executeMacroWS = (macro: string) => {
+export function executeMacroWS(macro: string) {
     try {
         const ws = new WebSocket(WS_URL);
         ws.onopen = () => {
             ws.send(JSON.stringify({macro}));
             ws.close();
-            Message.success(`Команда «${macro}» отправлена`);
         };
         ws.onerror = () => Message.error('Ошибка WebSocket-соединения');
     } catch (e) {
         console.error(e);
         Message.error('Не удалось отправить команду');
     }
-};
+}
 
 const MacrosWirelessDashboard: React.FC = () => {
     const {plt} = useTheme();
