@@ -27,7 +27,8 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
 import MacrosExecutorPage from "../Software/Macros/MacrosExecutorPage";
-// ====== ВАЖНАЯ ЧАСТЬ: создаём контекст для maxWidth ======
+import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded';
+
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
     setCabinetMaxWidth: (w: string) => void;
@@ -91,7 +92,7 @@ const Cabinet: React.FC = () => {
                     Releases
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/wireless', true)} to="/wireless"
-                         icon={<DeveloperBoardRoundedIcon/>}>
+                         icon={<SettingsRemoteRoundedIcon/>}>
                     Wireless
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
@@ -165,7 +166,7 @@ const Cabinet: React.FC = () => {
                                 icon={DeveloperBoardRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
                             <CabinetNavLink
-                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'} icon={CreditScoreRoundedIcon}
+                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'} icon={SettingsRemoteRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/wireless')}/>
                             <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
@@ -173,7 +174,7 @@ const Cabinet: React.FC = () => {
                         </FC>
                     </FCSC>
 
-                    <FC cls={'profile-section'} rounded={3} flexGrow={1} pos={'relative'}
+                    <FC cls={'profile-section'} rounded={3} h={'100%'} pos={'relative'}
                         maxH={`calc(100vh - ${headerNavHeight}px)`}
                         bg={isGtSm
                             ? plt.mode === 'dark'

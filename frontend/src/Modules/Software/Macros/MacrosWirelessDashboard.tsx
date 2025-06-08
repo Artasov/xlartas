@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import {Message} from 'Core/components/Message';
-import {FC, FR} from 'WideLayout/Layouts';
+import {FC, FR, FRC} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
 import MacroFormDialog from './MacroFormDialog';
 import {useApi} from "../../Api/useApi";
@@ -71,7 +71,7 @@ const MacrosWirelessDashboard: React.FC = () => {
         });
     };
 
-    if (macros === null) return <CircularProgress/>;
+    if (macros === null) return <FRC mt={3}><CircularProgress/></FRC>;
 
     return (
         <FC mt={4}>
