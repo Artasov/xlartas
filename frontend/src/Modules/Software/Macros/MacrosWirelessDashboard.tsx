@@ -21,19 +21,14 @@ import {buildWSUrl} from "Utils/ws";
 
 const WS_URL = buildWSUrl('/ws/macro-control/');
 
-export function executeMacroWS(macro: string) {
-    try {
-        const ws = new WebSocket(WS_URL);
-        ws.onopen = () => {
-            ws.send(JSON.stringify({macro}));
-            ws.close();
-        };
-        ws.onerror = () => Message.error('Ошибка WebSocket-соединения');
-    } catch (e) {
-        console.error(e);
-        Message.error('Не удалось отправить команду');
-    }
-}
+const executeMacroWS = (macro: string) => {
+    const ws = new WebSocket(buildWSUrl('/ws/macro-control/'));
+    ws.onopen = () => {
+        ws.send(JSON.stringify({macro}));
+        ws.close();
+    };
+    ws.onerror = () => Message.error('Ошибка WebSocket-соединения');
+};
 
 const MacrosWirelessDashboard: React.FC = () => {
     const {plt} = useTheme();

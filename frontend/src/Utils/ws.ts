@@ -7,18 +7,9 @@
  *
  * @param path «хвост» (/ws/…/) – со слешом в начале или без разницы.
  */
-export function buildWSUrl(path: string): string {
-    /* 1. .env имеет приоритет — удобно на CI/стендовых. */
-    const env = process.env.REACT_APP_WS_URL;
-    if (env) {
-        return `${env.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-    }
-
-    /* 2. Собираем из window.location. */
-    const isHttps = window.location.protocol === 'https:';
-    const proto = isHttps ? 'wss' : 'ws';
-    const host = window.location.hostname;
-    const port = !isHttps ? ':8000' : '';         // http ⇒ dev-порт, https ⇒ 443
-
-    return `${proto}://${host}${port}/${path.replace(/^\//, '')}`;
-}
+export const buildWSUrl = (path: string): string => {
+    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = window.location.host;             // keeps :<port> if any
+    const token = localStorage.getItem('access');   // simple-jwt access
+    return `${proto}://${host}${path}${token ? `?token=${token}` : ''}`;
+};

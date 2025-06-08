@@ -1,45 +1,76 @@
-"""
-Query-string JWT auth-middleware for Django Channels.
+# apps/core/auth/jwt_channels.py
+# ---------------------------------------------------------
+# Auth-middleware for **Channels 4** that turns a JWT (query
+# string ?token=… or header “Authorization: Bearer …”)
+# into scope['user'] exactly like Django-session auth does.
+# ---------------------------------------------------------
+from __future__ import annotations
 
-Клиент (браузер или Qt- приложение) подключается к
-    ws(s)://host/ws/macro-control/?token=<JWT>
-Middleware извлекает токен, валидирует его через SimpleJWT
-и проставляет scope['user'].
-Если токена нет или он невалидный – пользователь остаётся Anonymous.
-"""
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
-from channels.middleware import BaseMiddleware
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.backends import TokenBackend
 from rest_framework_simplejwt.tokens import UntypedToken
 
 
-class QueryJWTAuthMiddleware(BaseMiddleware):
-    """
-    Дополняет стандартную AuthMiddleware, извлекая JWT из query-param «token».
-    """
+@database_sync_to_async
+def _get_user(user_id: int | str | None):
+    if not user_id:
+        return AnonymousUser()
+    User = get_user_model()
+    try:
+        return User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return AnonymousUser()
 
-    async def __call__(self, scope, receive, send):
-        # по-умолчанию аноним
-        scope["user"] = AnonymousUser()
 
-        query_string = scope.get("query_string", b"").decode()
-        token = parse_qs(query_string).get("token", [None])[0]
+class JWTAuthMiddleware:  # ← ASGI-spec
+    def __init__(self, inner):
+        self.inner = inner
 
-        if token:
-            try:
-                payload = UntypedToken(token)  # проверяем подпись / срок действия
-                user_id = payload.get("user_id")
-                if user_id:
-                    user = await database_sync_to_async(
-                        get_user_model().objects.get
-                    )(id=user_id)
-                    scope["user"] = user
-            except (TokenError, InvalidToken, get_user_model().DoesNotExist):
-                # остаёмся анонимом
-                pass
+    def __call__(self, scope):
+        return JWTAuthMiddlewareInst(scope, self)
 
-        return await super().__call__(scope, receive, send)
+
+class JWTAuthMiddlewareInst:  # ← scope wrapper
+    def __init__(self, scope, middleware):
+        self.scope = dict(scope)
+        self.middleware = middleware
+
+    async def __call__(self, receive, send):
+        token = self._extract_token(self.scope)
+        user = await self._authenticate(token)
+        self.scope["user"] = user
+        inner = self.middleware.inner(self.scope)
+        return await inner(receive, send)
+
+    # ---------- helpers --------------------------------------------------
+
+    @staticmethod
+    def _extract_token(scope) -> str | None:
+        # 1)  Authorization: Bearer <jwt>
+        for name, value in scope.get("headers", []):
+            if name == b"authorization" and value.lower().startswith(b"bearer "):
+                return value.split()[1].decode()
+
+        # 2)  ?token=<jwt>  |  ?access=<jwt>
+        qs = parse_qs(scope.get("query_string", b"").decode())
+        for key in ("token", "access"):
+            if key in qs:
+                return qs[key][0]
+
+        return None
+
+    @staticmethod
+    async def _authenticate(token: str | None):
+        if not token:
+            return AnonymousUser()
+        try:
+            # signature / exp validation
+            UntypedToken(token)
+            data = TokenBackend(algorithm="HS256").decode(token, verify=True)
+            return await _get_user(data.get("user_id"))
+        except Exception:  # noqa
+            return AnonymousUser()
