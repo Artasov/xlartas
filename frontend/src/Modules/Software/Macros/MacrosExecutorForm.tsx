@@ -6,8 +6,36 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FR} from 'WideLayout/Layouts';
 import {useTheme} from 'Theme/ThemeContext';
 import TextField from '@mui/material/TextField';
-import {DOMAIN} from "../../Api/axiosConfig";
 import {buildWSUrl} from "Utils/ws";
+
+export function serializeWsEvent(ev: Event): string {
+    /* ───────── CloseEvent ───────── */
+    if (typeof CloseEvent !== 'undefined' && ev instanceof CloseEvent) {
+        const {code, reason, wasClean} = ev;
+        return `close - code: ${code}, reason: «${reason || 'нет'}», clean: ${wasClean}`;
+    }
+
+    /* ───────── ErrorEvent ───────── */
+    if (typeof ErrorEvent !== 'undefined' && ev instanceof ErrorEvent) {
+        return `error - ${ev.message || ev.type}`;
+    }
+
+    /* ───────── что-то другое ─────── */
+    /*  Перебираем собственные поля, чтобы не упасть на circular-link. */
+    const plain: Record<string, unknown> = {};
+    Object.getOwnPropertyNames(ev).forEach(k => { // enumerable не всё, берём ВСЁ
+        // @ts-ignore – run-time проверим
+        const v = ev[k];
+        if (typeof v !== 'object' && typeof v !== 'function')
+            plain[k] = v;
+    });
+
+    try {
+        return JSON.stringify(plain);
+    } catch {
+        return ev.type || ev.toString();
+    }
+}
 
 /**
  * Форма-однострочник для отправки имени макроса на сервер.
@@ -76,7 +104,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
             /* Ошибки соединения. */
             wsRef.current.onerror = ev => {
                 console.error('WebSocket error:', ev);
-                Message.error(`WebSocket error: ${ev}`);
+                Message.error(`WebSocket error: ${serializeWsEvent(ev)}`);
                 Message.error('Не удалось установить WebSocket-соединение');
                 setLoading(false);
             };
