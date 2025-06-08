@@ -8,6 +8,25 @@ import {useTheme} from 'Theme/ThemeContext';
 import TextField from '@mui/material/TextField';
 import {buildWSUrl} from "Utils/ws";
 
+export function wsCloseText(code: number): string {
+    const dict: Record<number, string> = {
+        1000: 'Normal closure',
+        1001: 'Going away',
+        1002: 'Protocol error',
+        1003: 'Unsupported data',
+        1005: 'No status rcvd',
+        1006: 'Abnormal closure',
+        1007: 'Invalid frame payload data',
+        1008: 'Policy violation',
+        1009: 'Message too big',
+        1010: 'Mandatory ext missing',
+        1011: 'Internal server error',
+        4002: 'Creds-not-provided (см. consumer)',
+        4003: 'Creds invalid',
+    };
+    return dict[code] ?? 'Unknown';
+}
+
 export function serializeWsEvent(ev: Event): string {
     /* ───────── CloseEvent ───────── */
     if (typeof CloseEvent !== 'undefined' && ev instanceof CloseEvent) {
@@ -110,7 +129,17 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
             };
 
             /* Гарантируем, что индикатор спрячется, даже если onopen не вызовется. */
-            wsRef.current.onclose = () => setLoading(false);
+            wsRef.current.onclose = (ev: CloseEvent) => {
+                setLoading(false);
+
+                /* если закрытие НЕ «чистое» – показываем причину */
+                if (!ev.wasClean) {
+                    Message.error(
+                        `WS closed: code ${ev.code} (${wsCloseText(ev.code)}), `
+                        + `reason: «${ev.reason || 'нет'}»`
+                    );
+                }
+            };
         } catch (err) {
             console.error(err);
             Message.error('Произошла ошибка при отправке команды');
