@@ -8,13 +8,13 @@ import TextField from '@mui/material/TextField';
 const WS_URL = buildWSUrl('/ws/macro-control/');   // тот же канал, что и для тачпада
 
 /**
- * Поле-однострочник: каждый нажатый символ/клавиша отправляется
- * через WebSocket и мгновенно удаляется из TextField.
+ * Однострочное поле: каждый введённый символ / спец-клавиша
+ * отправляется через WebSocket и тут же убирается из поля.
  */
 const RemoteKeyboardField: React.FC = () => {
     const {plt} = useTheme();
     const wsRef = useRef<WebSocket | null>(null);
-    const [value, set] = useState('');            // «мнимое» значение поля
+    const [value, set] = useState('');        // всегда держим строку пустой
 
     /* ---------- создаём сокет один раз ---------- */
     useEffect(() => {
@@ -24,22 +24,30 @@ const RemoteKeyboardField: React.FC = () => {
 
     /* ---------- отправка клавиши ---------- */
     const sendKey = (key: string) => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-        wsRef.current.send(JSON.stringify({type: 'key_press', key}));
+        const ws = wsRef.current;
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(JSON.stringify({type: 'key_press', key}));
     };
 
-    /* ---------- обработчик ↓ ---------- */
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        e.stopPropagation();      // чтобы не «улетал» фокус и т.д.
-        sendKey(e.key);           // «а», «Д», «Enter», «Backspace» …
-
-        e.preventDefault();       // блокируем дефолт-ввод
-        set('');                  // очищаем поле (визуально)
-    };
-
-    /* onChange нужен, чтобы TextField не ругался на read-only */
+    /* ---------- printable symbols (onChange) ---------- */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        set(e.target.value);
+        const text = e.target.value;
+        if (!text) return;
+        // отправляем каждый символ отдельно
+        [...text].forEach(ch => sendKey(ch));
+        set('');                       // очищаем поле
+    };
+
+    /* ---------- special keys (onKeyDown) ---------- */
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation();
+
+        const key = e.key;             // 'a', 'Enter', 'Backspace', ' '
+        if (key.length === 1) return;  // printable → обработаем в onChange
+
+        e.preventDefault();            // блокируем дефолт-ввод
+        sendKey(key === ' ' ? 'Space' : key);
+        set('');
     };
 
     return (
@@ -59,7 +67,7 @@ const RemoteKeyboardField: React.FC = () => {
                 fontSize: '.85rem',
                 textAlign: 'center'
             }}>
-                Каждый символ отправляется сразу&nbsp;же и&nbsp;не&nbsp;сохраняется&nbsp;в&nbsp;поле.
+                Каждый символ сразу отправляется на&nbsp;ПК и&nbsp;не&nbsp;остаётся в&nbsp;поле.
             </span>
         </FCCC>
     );
