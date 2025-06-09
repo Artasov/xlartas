@@ -1,107 +1,139 @@
+# xl/backend/apps/software/consumers/macros.py
+import asyncio
 from urllib.parse import parse_qs
 
 from asgiref.sync import sync_to_async
+from channels.exceptions import ChannelFull
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+FLUSH_DELAY = 1 / 60  # ≈60 кадров/с
+
 
 class MacroControlConsumer(AsyncJsonWebsocketConsumer):
     """
-    Авторизация выполняется сразу при попытке handshake, через query-string:
+    Авторизация — через query-string:
         ws://<host>/ws/macro-control/?username=<login>&secret_key=<key>
-
-    После успешного подключения клиент посылает только
-        {"macro": "<name>"}
-    а сервер ретранслирует это сообщение всем десктоп-клиентам
-    того же пользователя (группа «user_<id>»).
+    После подключения клиент шлёт:
+        {"type": "mouse_move", "dx": …, "dy": …}
+        {"type": "key_press",  "key": …}
+        {"macro": "<old-style-macro-name>"}
+    Сервер ретранслирует события всем десктоп-клиентам группы «user_<id>».
     """
 
+    # ---------- connect / disconnect ----------
+
     async def connect(self):
-        print('!1')
         if self.scope["user"].is_anonymous:
-            print('!2')
-            # --- разбираем query-string ---------------------------------------
             qs = parse_qs(self.scope["query_string"].decode())
             username = qs.get("username", [None])[0]
             secret_key = qs.get("secret_key", [None])[0]
-
-            print('!3')
             if not username or not secret_key:
-                await self.close(code=4002)  # креды не передали
+                await self.close(code=4002);
                 return
-
-            print('!4')
             user = await self._get_user(username, secret_key)
             if user is None:
-                await self.close(code=4003)  # неверные креды
+                await self.close(code=4003);
                 return
-            print('!5')
         else:
-            print('!6')
             user = self.scope["user"]
+
         self.user = user
         await self.channel_layer.group_add(f"user_{user.id}", self.channel_name)
         await self.accept()
 
-    @sync_to_async
-    def _get_user(self, username: str, secret_key: str):
-        try:
-            return User.objects.get(username=username, secret_key=secret_key)
-        except User.DoesNotExist:
-            return None
+        # буфер для коалессации мыши
+        self._mouse_acc = {"dx": 0, "dy": 0}
+        self._flush_task = None
 
     async def disconnect(self, code):
         if hasattr(self, "user"):
             await self.channel_layer.group_discard(
                 f"user_{self.user.id}", self.channel_name
             )
+        if self._flush_task:
+            self._flush_task.cancel()
+
+    @sync_to_async
+    def _get_user(self, username, secret_key):
+        try:
+            return User.objects.get(username=username, secret_key=secret_key)
+        except User.DoesNotExist:
+            return None
+
+    # ---------- receive ----------
 
     async def receive_json(self, content, **kwargs):
         msg_type = content.get("type")
 
-        # ---------- мышь -----------
+        # ----- мышь -----
         if msg_type == "mouse_move":
-            await self.channel_layer.group_send(
-                f"user_{self.user.id}",
-                {"type": "mouse.move",
-                 "dx": content.get("dx", 0),
-                 "dy": content.get("dy", 0)}
-            )
+            self._mouse_acc["dx"] += int(content.get("dx", 0))
+            self._mouse_acc["dy"] += int(content.get("dy", 0))
+            if not self._flush_task:
+                # запускаем флашер — он сам завершится, когда движения прекратятся.
+                self._flush_task = asyncio.create_task(self._flush_mouse())
             return
 
-        # ---------- клавиатура ------
+        # ----- клавиатура -----
         if msg_type == "key_press":
-            await self.channel_layer.group_send(
-                f"user_{self.user.id}",
-                {"type": "key.press",
-                 "key": content.get("key", "")}
-            )
+            await self._safe_group_send({
+                "type": "key.press",
+                "key": content.get("key", "")
+            })
             return
 
-        # ---------- старые макросы --
+        # ----- старые макросы -----
         macro_name = content.get("macro")
         if macro_name:
-            await self.channel_layer.group_send(
-                f"user_{self.user.id}",
-                {"type": "macro.command", "macro": macro_name},
-            )
+            await self._safe_group_send({
+                "type": "macro.command",
+                "macro": macro_name
+            })
 
-        # -------- пересылка на десктоп ----------
+    # ---------- helpers ----------
+
+    async def _flush_mouse(self):
+        """
+        Раз в FLUSH_DELAY отправляем накопленную дельту.
+        Если движений нет — выходим и обнуляем task-ссылку.
+        """
+        try:
+            while True:
+                dx, dy = self._mouse_acc["dx"], self._mouse_acc["dy"]
+                if dx or dy:
+                    await self._safe_group_send({
+                        "type": "mouse.move",
+                        "dx": dx,
+                        "dy": dy,
+                    })
+                    self._mouse_acc = {"dx": 0, "dy": 0}
+                else:
+                    break
+                await asyncio.sleep(FLUSH_DELAY)
+        finally:
+            self._flush_task = None
+
+    async def _safe_group_send(self, message: dict):
+        """
+        Обертка над group_send: если канал переполнен — просто опускаем сообщение.
+        """
+        try:
+            await self.channel_layer.group_send(f"user_{self.user.id}", message)
+        except ChannelFull:
+            # Можно залогировать, если нужно:
+            # logger.debug("group full → drop message %s", message)
+            pass
+
+    # ---------- handlers для десктоп-клиента ----------
 
     async def mouse_move(self, event):
-        await self.send_json({"type": "mouse_move",
-                              "dx": event["dx"],
-                              "dy": event["dy"]})
+        await self.send_json({"type": "mouse_move", "dx": event["dx"], "dy": event["dy"]})
 
     async def key_press(self, event):
-        await self.send_json({"type": "key_press",
-                              "key": event["key"]})
+        await self.send_json({"type": "key_press", "key": event["key"]})
 
     async def macro_command(self, event):
-        """
-        Отправка в десктоп-клиент:
-            {"macro": "<name>"}
-        """
         await self.send_json({"macro": event["macro"]})
