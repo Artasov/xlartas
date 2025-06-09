@@ -55,8 +55,7 @@ const RemoteKeyboardField: React.FC = () => {
     };
 
     return (
-        <FCCC w="100%" maxW={450} rounded={3} p={2} g={1}
-              bg={plt.text.primary + '22'}>
+        <FCCC w="100%" maxW={450}>
             <TextField
                 fullWidth
                 variant="filled"
@@ -70,16 +69,9 @@ const RemoteKeyboardField: React.FC = () => {
                     autoCorrect: 'off',
                     autoComplete: 'off',
                     spellCheck: 'false',
-                    inputMode: 'text'
+                    inputMode: 'text',
                 }}
             />
-            <span style={{
-                color: plt.text.primary,
-                fontSize: '.85rem',
-                textAlign: 'center'
-            }}>
-        Every symbol is sent immediately and not kept in the field.
-      </span>
         </FCCC>
     );
 };

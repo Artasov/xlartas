@@ -47,7 +47,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
 
     return (
         <form onSubmit={handleSubmit} className={className}>
-            <FC g={1} maxW={400}>
+            <FC g={1.3} maxW={400}>
                 <TextField
                     label="Имя макроса"
                     value={macro}
@@ -56,8 +56,10 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
                     variant="filled"
                 />
                 <FR g={1}>
-                    <Button type="submit" variant="contained" disabled={loading}>
-                        {loading ? <CircularProgress size="1.6rem"/> : 'Выполнить'}
+                    <Button type="submit" variant="contained" disabled={loading} sx={{
+                        fontSize: '1rem', fontWeight: 600,
+                    }}>
+                        {loading ? <CircularProgress size="1.6rem"/> : 'Execute'}
                     </Button>
                 </FR>
             </FC>

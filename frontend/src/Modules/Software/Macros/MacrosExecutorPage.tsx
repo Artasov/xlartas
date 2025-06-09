@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Tab, Tabs, Typography, useMediaQuery} from '@mui/material';
+import {Tab, Tabs, useMediaQuery} from '@mui/material';
 import {FC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {MacroControlProvider} from './MacroControlProvider';
@@ -8,6 +8,8 @@ import RemoteTouchpad from './RemoteTouchpad';
 import RemoteKeyboardField from './RemoteKeyboardField';
 import RemoteMouse from './RemoteMouse';
 import MacrosExecutorForm from './MacrosExecutorForm';
+import LanguageSwitcher from "../../../UI/LanguageSwitcher";
+import MacrosInfo from "./MacrosInfo";
 
 const MacrosExecutorPage: React.FC = () => {
     const {plt} = useTheme();
@@ -15,6 +17,7 @@ const MacrosExecutorPage: React.FC = () => {
     const [controlTab, setControlTab] =
         useState<'panel' | 'io' | 'byname'>('panel');
     const isGtSm = useMediaQuery('(min-width: 576px)');
+    const [lang, setLang] = useState<'en' | 'ru'>('en')
 
     return (
         <MacroControlProvider>
@@ -58,9 +61,9 @@ const MacrosExecutorPage: React.FC = () => {
 
                         {controlTab === 'byname' && (
                             <FC>
-                                <p style={{color: plt.text.primary, marginBottom: '.6rem'}}>
-                                    Введите имя макроса (как в приложении) и нажмите
-                                    «Выполнить».
+                                <p style={{color: plt.text.primary + 'aa', marginBottom: '.3rem'}}>
+                                    Enter the name of the macros (as in the application) and click
+                                    "Execute"
                                 </p>
                                 <MacrosExecutorForm/>
                             </FC>
@@ -68,11 +71,10 @@ const MacrosExecutorPage: React.FC = () => {
                     </>
                 )}
 
-                {mainTab === 'info' && (
-                    <Typography sx={{color: plt.text.primary, mt: 2}}>
-                        Здесь может быть справка или описание возможностей.
-                    </Typography>
-                )}
+                {mainTab === 'info' && (<>
+                    <LanguageSwitcher lang={lang} onChange={setLang}/>
+                    <MacrosInfo lang={lang}/>
+                </>)}
             </FC>
         </MacroControlProvider>
     );

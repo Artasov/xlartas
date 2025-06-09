@@ -42,22 +42,23 @@ const RemoteTouchpad: React.FC = () => {
               bg={plt.text.primary + '22'}
               sx={{
                   userSelect: 'none',
+                  border: '9px dashed ' + plt.background.default ,
                   touchAction: 'none',
-                  aspectRatio: '1 / .7',
+                  aspectRatio: '1 / .4',
                   cursor: 'pointer',
               }}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={() => (lastPosRef.current = null)}>
-            <span style={{color: plt.text.primary, fontSize: '1rem'}}>
+            <span style={{color: plt.text.primary + '88', fontSize: '1rem'}}>
                 Remote touchpad
             </span>
             <span style={{
-                color: plt.text.primary,
+                color: plt.text.primary + '55',
                 fontSize: '.9rem',
                 textAlign: 'center',
             }}>
-                Включите функцию Remote&nbsp;Touchpad в xlmacros чтобы использовать это.
+                Включите функцию Remote Touchpad в xlmacros чтобы использовать это.
             </span>
         </FCCC>
     );

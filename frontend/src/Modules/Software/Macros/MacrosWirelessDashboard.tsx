@@ -76,7 +76,7 @@ const MacrosWirelessDashboard: React.FC = () => {
             <List dense sx={{width: '100%'}}>
                 {macros.map(m => (
                     <ListItem key={m.id} divider onClick={() => sendMacro(m.name)}>
-                        <ListItemText primary={m.name}/>
+                        <ListItemText sx={{opacity: '80%'}} primary={m.name}/>
                         <ListItemSecondaryAction sx={{opacity: '60%'}}>
                             <Tooltip title="Редактировать">
                                 <IconButton size="small" onClick={e => {
