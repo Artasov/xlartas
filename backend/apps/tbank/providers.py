@@ -40,7 +40,7 @@ class TBankPaymentProvider(_TBankBaseProvider):
         redirect_url = build_full_url('tbank:notification') + SUCCESS_FAILURE_GET_PARAMS_TEMPLATE
 
         items = [ItemFFD105(
-            Name=self.order.product.name,
+            Name=self.order.product.name,  # noqa
             Price=price_cents,
             Quantity=1,
             Amount=price_cents,
@@ -99,7 +99,7 @@ class TBankInstallmentProvider(_TBankBaseProvider):
 
         # Параметры для create_installment:
         items = [{
-            'name': self.order.product.name,
+            'name': self.order.product.name,  # noqa
             'quantity': 1,
             'price': int(amount),
             'category': 'service',

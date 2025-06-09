@@ -69,7 +69,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                     : <CircularProgress/>
             }
             <Link className={'tdn'} style={{
-                color: plt.text.primary60
+                color: plt.text.primary
             }} to={room && roomName === 'Избранное'
                 ? '/profile' : profileLink}>
                 <h4 className={'m-0 ps-1'}>

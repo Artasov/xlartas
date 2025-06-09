@@ -67,18 +67,18 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     <div className={'frbc flex-wrap'}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={plt.bg.contrast10}
-                                color={plt.text.primary80}>
+                                bg={plt.text.primary + '22'}
+                                color={plt.text.primary + '99'}>
                                 {order.product.polymorphic_ctype.name}
                             </FR>
-                            <FR cls={`fs-5 text-nowrap`} color={plt.text.primary80}>
+                            <FR cls={`fs-5 text-nowrap`} color={plt.text.primary + '99'}>
                                 {order.product.name}
                             </FR>
                         </FRSC>
                         <span
                             className={`fs-5 fw-3 mt-2`}
                             style={{
-                                color: plt.text.primary80,
+                                color: plt.text.primary + '99',
                                 lineHeight: '1rem'
                             }}>
                             {order.payment?.amount !== undefined

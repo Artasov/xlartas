@@ -15,7 +15,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({size, sx, color}) =>
     return (
         <div className={'h-100 w-100 fccc'}>
             <CP size={size}
-                style={{...sx, color: color ? color : plt.text.primary40,}}/>
+                style={{...sx, color: color ? color : plt.text.primary,}}/>
         </div>
     );
 };

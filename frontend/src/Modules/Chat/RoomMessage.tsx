@@ -76,7 +76,7 @@ const RoomMessage: React.FC<RoomMessageProps> = ({message, room_capacity}) => {
                         </span>
                         <div
                             className={`w-min frcc gap-2 ps-3 fs-7 align-self-end`}
-                            style={{color: plt.text.primary40}}
+                            style={{color: plt.text.primary}}
                         >
                             {formattedDate}
                             {user?.id === message.user.id && getStatusIcon()}

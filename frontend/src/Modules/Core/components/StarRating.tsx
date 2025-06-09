@@ -33,10 +33,10 @@ const StarRating: React.FC<StarRatingProps> = (
     return (
         <div className={`frc ${ratingWrapperClassName}`}>
             <div className={`frcc ${ratingContentClassName}`} style={{
-                backgroundColor: plt.bg.contrast20,
+                backgroundColor: plt.text.primary + '33',
             }}>
                 <span className={`${ratingValueClassName}`} style={{
-                    color: plt.text.contrast, ...ratingValueStyle
+                   ...ratingValueStyle
                 }}>
                     {rating?.toFixed(1) || 0}
                 </span>

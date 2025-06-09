@@ -28,10 +28,8 @@ const DateLabel: React.FC<DateLabelProps> = ({date}) => {
             <FC
                 rounded={5}
                 px={1}
-                bg={plt.bg.contrast05}
-                boxShadow={plt.shadows ? plt.shadows.MO005C : ''}
             >
-                <FC cls={`date-label text-nowrap`} color={plt.text.primary40}>
+                <FC cls={`date-label text-nowrap`} color={plt.text.primary}>
                     {formatDateLabel()}
                 </FC>
             </FC>

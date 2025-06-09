@@ -3,7 +3,7 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
 import {Message} from 'Core/components/Message';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import PaymentTypePicker from "Order/PaymentTypePicker";
 import {FC, FCCC, FR, FRCC} from "wide-containers";
 import {IPromocode} from "types/commerce/promocode";
@@ -12,7 +12,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {debounce} from 'lodash';
 import {isEmail} from 'Utils/validator/base';
 import {useTheme} from "Theme/ThemeContext";
-import TextField from "Core/components/elements/TextField/TextField";
+import TextField from "@mui/material/TextField";
 import installmentTBankLogo from '../../Static/img/icon/tbank/by_parts.svg'
 import CircularProgress from "Core/components/elements/CircularProgress";
 import pprint from "Utils/pprint";

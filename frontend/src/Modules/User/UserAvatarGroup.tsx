@@ -29,7 +29,7 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = (
                             zIndex={2 + users.length - index}/>
                 {users.length === 1 && (
                     <span style={{
-                        color: plt.text.primary65,
+                        color: plt.text.primary,
                     }} className="fs-5">
                                     {`${user.first_name} ${user.last_name}`}
                                 </span>

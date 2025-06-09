@@ -20,7 +20,7 @@ const AdminLink: React.FC = () => {
         <Link to={adminUrl} target="_blank" rel="noopener noreferrer">
             <AdminPanelSettingsRoundedIcon
                 style={{
-                    color: plt.text.primary60,
+                    color: plt.text.primary,
                     fontSize: '2rem',
                 }}
             />

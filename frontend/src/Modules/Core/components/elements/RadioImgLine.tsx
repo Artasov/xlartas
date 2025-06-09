@@ -52,7 +52,7 @@ const RadioImgLine: React.FC<RadioImgLineProps> = (
                             width: 'min-content',
                             boxShadow: '0 0 15px ' + isSelected
                                 ? theme.colors.primary.main
-                                : plt.bg.contrast10,
+                                : plt.text.primary + '22',
                             cursor: 'pointer',
                         }}
                         onClick={() => handleClick(option.value)}

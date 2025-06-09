@@ -31,19 +31,19 @@ const OrderItem: React.FC<OrderItemProps> = (
     return (
         <FRBC p={2} g={1} rounded={3} wrap flexGrow={1}
               cls={`hover-scale-1 ftrans-200-eio`} pos={'relative'}
-              boxShadow={`0.06rem 0.06rem 0.37rem -0.1rem ${plt.bg.contrast20}`}>
+              boxShadow={`0.06rem 0.06rem 0.37rem -0.1rem ${plt.text.primary + '22'}`}>
             <FC g={1} w={'100%'} color={plt.text.primary70}>
                 <FC onClick={onClick}>
-                    <span className={`fs-7`} style={{color: plt.text.primary40}}>
+                    <span className={`fs-7`} style={{color: plt.text.primary + '55'}}>
                         # {order.id}
                     </span>
                     <FRBC wrap mb={1}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={plt.bg.contrast10} color={plt.text.primary80}>
+                                bg={plt.text.primary + '22'} color={plt.text.primary + '99'}>
                                 {order.product.polymorphic_ctype.name}
                             </FR>
-                            <FR cls={`fs-5`} color={plt.text.primary80}>
+                            <FR cls={`fs-5`} color={plt.text.primary + '99'}>
                                 {order.product.name}
                             </FR>
                         </FRSC>

@@ -78,7 +78,7 @@ export const RoomsProvider: React.FC<{ children: React.ReactNode }> = ({children
 
     useEffect(() => {
         if (rooms.length === 0 && !isLoadingRef.current) {
-            loadInitialRooms();
+            loadInitialRooms().then();
         }
     }, [loadInitialRooms]);
 

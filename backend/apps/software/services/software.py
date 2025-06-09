@@ -56,7 +56,7 @@ class SoftwareService:
                 })
             return False
 
-        price_exists = await self.prices.filter(currency=order.currency).aexists()
+        price_exists = await self.prices.filter(currency=order.currency).aexists()  # noqa
         if not price_exists:
             if raise_exceptions:
                 raise ValidationError({'detail': 'Price for currency not found'})

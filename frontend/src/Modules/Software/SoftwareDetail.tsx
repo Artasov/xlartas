@@ -5,7 +5,7 @@ import CircularProgress from "Core/components/elements/CircularProgress";
 import {IconButton} from "@mui/material";
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import {FC, FCCC, FR, FRCC, FRSE} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import SoftwareOrder from './SoftwareOrder';
@@ -110,7 +110,7 @@ const SoftwareDetailComponent: React.FC = () => {
                             margin: 0,
                         }}>{software.name}</h1>
                         {software.file && <span style={{
-                            color: plt.text.primary30,
+                            color: plt.text.primary,
                             fontSize: '.8rem',
                             lineHeight: '.9rem',
                             marginTop: 'auto',
@@ -119,21 +119,21 @@ const SoftwareDetailComponent: React.FC = () => {
                     <FR g={'.1rem'} ml={'auto'}>
                         {software.log_changes && (
                             <IconButton sx={{mr: .44}} onClick={() => setIsLogModalOpen(true)}>
-                                <HistoryRoundedIcon sx={{color: plt.text.primary80}}/>
+                                <HistoryRoundedIcon sx={{color: plt.text.primary}}/>
                             </IconButton>
                         )}
                         {software.guide_url && (
                             <IconButton onClick={() => window.open(software.guide_url, '_blank')}>
-                                <FeedRoundedIcon sx={{color: plt.text.primary80}}/>
+                                <FeedRoundedIcon sx={{color: plt.text.primary}}/>
                             </IconButton>
                         )}
                         {software.file?.file && (
                             <IconButton onClick={() => window.open(software.file?.file, '_blank')}>
-                                <DownloadRoundedIcon sx={{color: plt.text.primary80}}/>
+                                <DownloadRoundedIcon sx={{color: plt.text.primary}}/>
                             </IconButton>
                         )}
                         {software.review_url &&
-                            <a style={{color: plt.text.primary70, marginLeft: '.3rem'}}
+                            <a style={{color: plt.text.primary, marginLeft: '.3rem'}}
                                href={software.review_url}
                                className={'tdn'}
                                target="_blank" rel="noreferrer">
@@ -164,7 +164,7 @@ const SoftwareDetailComponent: React.FC = () => {
                 sxContent={{maxWidth: 500}}>
                 <FCCC pos={'relative'}>
                     <div style={{
-                        textShadow: '0 0 5px ' + plt.bg.primary + '88'
+                        textShadow: '0 0 5px ' + plt.background.primary + '88'
                     }} dangerouslySetInnerHTML={{__html: software.log_changes}}/>
                 </FCCC>
             </Modal>

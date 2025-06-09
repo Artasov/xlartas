@@ -39,7 +39,7 @@ const RemoteTouchpad: React.FC = () => {
 
     return (
         <FCCC w="100%" maxW={450} rounded={3} p={2}
-              bg={plt.bg.contrast10}
+              bg={plt.text.primary + '22'}
               sx={{
                   userSelect: 'none',
                   touchAction: 'none',
@@ -49,11 +49,11 @@ const RemoteTouchpad: React.FC = () => {
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={() => (lastPosRef.current = null)}>
-            <span style={{color: plt.text.primary40, fontSize: '1rem'}}>
+            <span style={{color: plt.text.primary, fontSize: '1rem'}}>
                 Remote touchpad
             </span>
             <span style={{
-                color: plt.text.primary30,
+                color: plt.text.primary,
                 fontSize: '.9rem',
                 textAlign: 'center',
             }}>

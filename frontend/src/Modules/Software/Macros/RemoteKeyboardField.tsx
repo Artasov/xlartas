@@ -44,7 +44,7 @@ const RemoteKeyboardField: React.FC = () => {
 
     return (
         <FCCC w={'100%'} maxW={450} rounded={3} p={2} g={1}
-              bg={plt.bg.contrast10}>
+              bg={plt.text.primary + '22'}>
             <TextField
                 fullWidth
                 variant="filled"
@@ -55,7 +55,7 @@ const RemoteKeyboardField: React.FC = () => {
                 inputProps={{style: {textAlign: 'center', paddingTop: '10px'}}}
             />
             <span style={{
-                color: plt.text.primary30,
+                color: plt.text.primary,
                 fontSize: '.85rem',
                 textAlign: 'center'
             }}>

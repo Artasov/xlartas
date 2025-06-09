@@ -23,6 +23,8 @@ MULTI_ACCOUNT_PROHIBITED = 'Multi account usage with the same HWID is prohibited
 HWID_NOT_EQUAL = 'Your HWID does not match the HWID saved for this account.'
 PRODUCT_NOT_EXISTS = 'Requested software product does not exist.'
 LICENSE_TIMEOUT = 'Your license has expired. Visit {} to renew.'
+
+
 # Для примера ссылку на страницу продукта генерируем динамически
 def get_shop_url(software_id: int) -> str:
     """Return relative URL to the software detail page."""

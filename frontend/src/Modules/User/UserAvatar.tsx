@@ -98,7 +98,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (
                 }}>
                     <PersonRoundedIcon className={'ftrans-300-eio'} style={{
                         width: `100%`, height: `100%`,
-                        color: plt.text.primary80
+                        color: plt.text.primary
                     }}/>
                 </Avatar>
                 <Avatar className={'ftrans-300-eio'} sx={{
@@ -116,7 +116,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (
                 }}>
                     <PersonRoundedIcon className={'ftrans-300-eio'} style={{
                         width: `100%`, height: `100%`,
-                        color: plt.text.primary80
+                        color: plt.text.primary
                     }}/>
                 </Avatar>
             </FC>

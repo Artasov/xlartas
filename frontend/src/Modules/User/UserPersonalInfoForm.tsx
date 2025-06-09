@@ -5,12 +5,11 @@ import {format} from 'date-fns';
 import {Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import TextField from "Core/components/elements/TextField/TextField";
 import {Message} from "Core/components/Message";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
 import Modal from "Core/components/elements/Modal/Modal";
@@ -23,6 +22,7 @@ import copyToClipboard from "Utils/clipboard";
 import {useApi} from "../Api/useApi";
 import SkinCapeSetter from "../xLMine/SkinCape/SkinCapeSetter";
 import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
+import TextField from "@mui/material/TextField";
 
 interface FormData {
     username: string;
@@ -211,13 +211,13 @@ const UserPersonalInfoForm: React.FC = () => {
                         margin="none"/>
                     {user?.is_email_confirmed
                         ? <EditIcon onClick={() => setIsEmailModalOpen(true)}
-                                    style={{cursor: 'pointer', color: plt.text.primary60}}/>
+                                    style={{cursor: 'pointer', color: plt.text.primary}}/>
                         : <Button onClick={() => setIsEmailModalOpen(true)}
                                   sx={{
                                       fontWeight: 500, minWidth: 130
                                   }}>{user?.email ? 'ПОДТВЕРДИТЬ' : 'ДОБАВИТЬ'}</Button>
                     }
-                    <Modal isOpen={isEmailModalOpen} bg={plt.bg.primary}
+                    <Modal isOpen={isEmailModalOpen}
                            onClose={() => setIsEmailModalOpen(false)}>
                         <NewEmailForm onSuccess={() => setIsEmailModalOpen(false)}/>
                     </Modal>
@@ -293,7 +293,7 @@ const UserPersonalInfoForm: React.FC = () => {
                 {/*    value={formData.username}*/}
                 {/*    onChange={handleChange}/>*/}
 
-                <Button color={'#888'} onClick={() => setIsPasswordModalOpen(true)}
+                <Button onClick={() => setIsPasswordModalOpen(true)}
                         style={{
                             fontWeight: 600,
                             color: plt.text.contrast70,
@@ -303,7 +303,7 @@ const UserPersonalInfoForm: React.FC = () => {
             </FR>
 
             <FC mt={1}>
-                <Typography fontSize={'.8rem'} color={plt.text.primary30}>
+                <Typography fontSize={'.8rem'} color={plt.text.primary}>
                     Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
                 </Typography>
             </FC>

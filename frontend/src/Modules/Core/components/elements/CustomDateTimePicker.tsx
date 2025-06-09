@@ -3,12 +3,12 @@ import React, {useState} from 'react';
 import {Box, Button, IconButton, Popover} from '@mui/material';
 import {CalendarToday} from '@mui/icons-material';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFnsV3';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DateCalendar} from '@mui/x-date-pickers/DateCalendar';
 import {TimeClock} from '@mui/x-date-pickers/TimeClock';
 import {format} from 'date-fns';
 import {ru} from 'date-fns/locale';
-import TextField from "Core/components/elements/TextField/TextField";
+import TextField from "@mui/material/TextField";
 
 interface CustomDateTimePickerProps {
     label: string;
@@ -73,9 +73,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
                     label={label}
                     variant="outlined"
                     size="small"
-                    baseSx={{
-                        paddingRight: '0px',
-                    }}
                     style={{
                         width: 'min-content',
                         minWidth: value ? '200px' : '225px',

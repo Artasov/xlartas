@@ -64,7 +64,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
                         : <FCCC p={2} textAlign={'center'} mx={'auto'} rounded={4}
                                 fontWeight={'bold'} fontSize={22}
                                 bg={theme.colors.secondary.lighter}
-                                color={plt.text.primary30}>
+                                color={plt.text.primary}>
                             Начните писать первым
                         </FCCC>
                     }

@@ -1,57 +1,74 @@
 // Modules/User/Profile.tsx
-
 import React from 'react';
-import {NavLink, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
-import {useTheme} from "Theme/ThemeContext";
-import TabButton from "Core/components/elements/Tabs/TabButton";
-import {FC, FRS} from "wide-containers";
-import UserPersonalInfoForm from "User/UserPersonalInfoForm";
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {useTheme} from 'Theme/ThemeContext';
+import {FC, FRS} from 'wide-containers';
+import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
+import {Tab, Tabs} from '@mui/material';
 
 interface ProfileProps {
     selectedProfile: 'client' | 'employee';
 }
 
 const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
-    const {plt} = useTheme();
+    const {plt} = useTheme();                             // не удаляем ваш контекст
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Определяем активные маршруты для вкладок
+    /* ---------- список вкладок ---------- */
     const basePath = '/profile';
-    const currentPath = location.pathname;
+    const tabs = React.useMemo(
+        () =>
+            selectedProfile === 'client'
+                ? [
+                    {label: 'Пользователь', path: `${basePath}/user`},
+                    // { label: 'Клиент', path: `${basePath}/client` }, // будет видео-профиль клиента
+                ]
+                : [
+                    {label: 'Пользователь', path: `${basePath}/user`},
+                    {label: 'Сотрудник', path: `${basePath}/employee`},
+                ],
+        [selectedProfile],
+    );
 
-    // Определяем вкладки в зависимости от выбранного профиля
-    const tabs = selectedProfile === 'client' ? [
-        {label: 'Пользователь', path: `${basePath}/user`},
-        // {label: 'Клиент', path: `${basePath}/client`}, // Будет видео профиль клиента
-    ] : [
-        {label: 'Пользователь', path: `${basePath}/user`},
-        {label: 'Сотрудник', path: `${basePath}/employee`},
-    ];
-
-    // Если пользователь находится на /profile, перенаправляем на первую вкладку
+    /* ---------- авто-redirect на первую вкладку ---------- */
     React.useEffect(() => {
-        if (currentPath === basePath || currentPath === `${basePath}/`) {
-            navigate(tabs[0].path);
+        if (location.pathname === basePath || location.pathname === `${basePath}/`) {
+            navigate(tabs[0].path, {replace: true});
         }
-    }, [currentPath, navigate, tabs]);
+    }, [location.pathname, navigate, tabs, basePath]);
+
+    /* ---------- активная вкладка ---------- */
+    const activePath =
+        tabs.find((t) => location.pathname.startsWith(t.path))?.path ?? false;
 
     return (
-        <FC h={'100%'}>
-            <FRS g={2} px={3} pt={2}>
-                {tabs.map((tab) => (
-                    <NavLink key={tab.path} to={tab.path} style={{textDecoration: 'none'}}>
-                        {({isActive}) => (
-                            <TabButton textSx={{padding: '0 .7rem', fontSize: '1.3rem'}} active={isActive}>
-                                {tab.label}
-                            </TabButton>
-                        )}
-                    </NavLink>
-                ))}
+        <FC h="100%">
+            {/* Вкладки */}
+            <FRS g={2} px={3} pt={1}>
+                <Tabs
+                    value={activePath}                         // значение-ключ — path
+                    onChange={(_, newValue) => navigate(newValue)}
+                    textColor="inherit"
+                    indicatorColor="primary"
+                    sx={{minHeight: 0}}
+                >
+                    {tabs.map((tab) => (
+                        <Tab
+                            key={tab.path}
+                            value={tab.path}
+                            label={tab.label}
+                        />
+                    ))}
+                </Tabs>
             </FRS>
-            <FC flexGrow={1} scroll={'y-auto'} px={2} py={1}>
+
+            {/* Контент выбранной вкладки */}
+            <FC flexGrow={1} scroll="y-auto" px={2} py={1}>
                 <Routes>
                     <Route path="user" element={<UserPersonalInfoForm/>}/>
+                    {/* <Route path="client" element={<ClientProfile />} /> */}
+                    {/* <Route path="employee" element={<EmployeeProfile />} /> */}
                 </Routes>
             </FC>
         </FC>

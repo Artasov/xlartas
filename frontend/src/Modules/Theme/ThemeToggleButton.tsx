@@ -10,9 +10,9 @@ interface ThemeToggleButtonProps {
 const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = ({className}) => {
     const {plt, toggleTheme} = useTheme();
     return (plt.mode === 'dark'
-        ? <Brightness5RoundedIcon className={className} style={{fontSize:'1.7rem',color: plt.text.primary60}}
+        ? <Brightness5RoundedIcon className={className} style={{fontSize:'1.7rem',color: plt.text.primary}}
                                   onClick={toggleTheme}/>
-        : <Brightness5RoundedIcon className={className} style={{fontSize:'1.7rem',color: plt.text.primary60}}
+        : <Brightness5RoundedIcon className={className} style={{fontSize:'1.7rem',color: plt.text.primary}}
                                   onClick={toggleTheme}/>);
 };
 

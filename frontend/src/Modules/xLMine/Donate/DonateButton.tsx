@@ -1,7 +1,7 @@
 // Modules/xLMine/Donate/DonateButton.tsx
 import React, {useState} from "react";
 import DonateModal from "./DonateModal";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 
 const DonateButton: React.FC = () => {
     const [open, setOpen] = useState(false);
@@ -11,9 +11,7 @@ const DonateButton: React.FC = () => {
 
     return (
         <>
-            <Button classNameOverride={' '}
-                    color={'#fff1'}
-                    sx={{
+            <Button sx={{
                         fontSize: '1rem',
                         fontWeight: 'bold',
                         backdropFilter: 'blur(5px) saturate(2) brightness(4) hue-rotate(30deg)',

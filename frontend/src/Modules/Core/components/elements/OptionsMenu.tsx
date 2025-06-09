@@ -18,11 +18,15 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({className, iconClassName, chil
     // Клонирование дочерних элементов и добавление обработчика onClick
     const enhancedChildren = React.Children.map(children, child => {
         if (React.isValidElement(child)) {
-            const originalOnClick = child.props.onClick;
-            return React.cloneElement(child, {
-                // @ts-ignore
+            // Приводим элемент к ReactElement с пропсом onClick
+            const childElement = child as React.ReactElement<{
+                onClick?: (event: MouseEvent<HTMLElement>) => void;
+            }>;
+            const originalOnClick = childElement.props.onClick;
+
+            return React.cloneElement(childElement, {
                 onClick: (event: MouseEvent<HTMLElement>) => {
-                    if (originalOnClick) originalOnClick(event);
+                    originalOnClick?.(event);
                     handleClose();
                 }
             });

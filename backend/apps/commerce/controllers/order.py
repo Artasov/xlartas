@@ -61,7 +61,7 @@ async def create_order(request):
     # Создание заказа
     product: Product = await s.validated_data['product'].aget_real_instance()
     async with AsyncAtomicContextManager():
-        order = await product.new_order(request=request)
+        order = await product.new_order(request=request)  # noqa
         if settings.DEBUG and not settings.DEBUG_INIT_PAYMENT:
             return Response('/something-go-wrong', status=HTTP_201_CREATED)
         if not order.payment:
@@ -98,7 +98,7 @@ async def order_detail(request, id):
 async def order_execute(_request, id):
     order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.execute()
+        await order.execute()  # noqa
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -118,7 +118,7 @@ async def order_delete(_request, id):
 async def order_init(request, id, init_payment):
     order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.init(request, init_payment=bool(init_payment))
+        await order.init(request, init_payment=bool(init_payment))  # noqa
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 

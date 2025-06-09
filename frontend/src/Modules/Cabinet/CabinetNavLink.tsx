@@ -41,23 +41,21 @@ const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark,
                           ? () => navigate(to)
                           : undefined
               }
-              bg={isActive ? plt.bg.contrast10 : ''}
-              boxShadow={isActive ? plt.shadow.MO005C : ''}
+              bg={isActive ? plt.text.primary + '33' : ''}
               sx={{
-                  textShadow: isActive ? plt.shadow.XXSO02 : '',
               }}>
             {Icon && (
                 <Icon
                     className={`fs-4`}
                     style={{
-                        color: plt.text.primary70,
+                        color: plt.text.primary,
                         ...iconSx
                     }}
                 />
             )}
             <span
                 className={`fs-5 text-nowrap`}
-                style={{color: plt.text.primary70}}
+                style={{color: plt.text.primary}}
             >
                 {text}
             </span>

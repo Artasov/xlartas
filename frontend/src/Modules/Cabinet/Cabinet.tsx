@@ -166,7 +166,8 @@ const Cabinet: React.FC = () => {
                                 icon={DeveloperBoardRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
                             <CabinetNavLink
-                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'} icon={SettingsRemoteRoundedIcon}
+                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'}
+                                icon={SettingsRemoteRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/wireless')}/>
                             <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
@@ -178,10 +179,10 @@ const Cabinet: React.FC = () => {
                         maxH={`calc(100vh - ${headerNavHeight}px)`}
                         bg={isGtSm
                             ? plt.mode === 'dark'
-                                ? plt.bg.contrast + '05'
+                                ? plt.text.primary + '05'
                                 : ''
                             : ''
-                        } boxShadow={plt.shadow.XLO005}
+                        }
                         ref={cabinetContainerRef}>
                         <Routes>
                             <Route path="profile/*" element={

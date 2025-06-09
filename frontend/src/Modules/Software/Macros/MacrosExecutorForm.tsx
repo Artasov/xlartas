@@ -2,7 +2,7 @@
 import React, {useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {Message} from 'Core/components/Message';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import TextField from '@mui/material/TextField';
 import {FC, FR} from 'wide-containers';

@@ -17,7 +17,7 @@ const Divider: React.FC<DividerProps> = ({height = '1px', width = '100%', classN
             style={{
                 width: width,
                 height: height,
-                backgroundColor: plt.bg.contrast30
+                backgroundColor: plt.text.primary + '33'
             }}
         ></div>
     );

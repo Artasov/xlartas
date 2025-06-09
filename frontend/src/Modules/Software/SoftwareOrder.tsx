@@ -8,7 +8,7 @@ import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';
 import PromoCodeField from 'Order/PromoCodeField';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';

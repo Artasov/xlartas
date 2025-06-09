@@ -69,8 +69,8 @@ class JWTAuthMiddlewareInst:  # ← scope wrapper
             return AnonymousUser()
         try:
             # signature / exp validation
-            UntypedToken(token)
-            data = TokenBackend(algorithm="HS256").decode(token, verify=True)
+            UntypedToken(token)  # noqa
+            data = TokenBackend(algorithm="HS256").decode(token, verify=True)  # noqa
             return await _get_user(data.get("user_id"))
         except Exception:  # noqa
             return AnonymousUser()

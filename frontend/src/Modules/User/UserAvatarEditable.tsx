@@ -64,8 +64,7 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
                 {isLoading && <CircularProgress size={size}/>}
                 <FCCC
                     cls={`user-avatar-editable-overlay ftrans-200-eio ${isLoading ? 'visible' : ''}`}
-                    color={plt.text.contrast90}
-                    bg={plt.bg.contrast40}
+                    bg={plt.text.primary + '33'}
                     w={size}
                     h={size}
                     pos={'absolute'}

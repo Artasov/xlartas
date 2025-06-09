@@ -35,7 +35,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = (
     const nextFromUrl = new URLSearchParams(window.location.search).get('next');
     const {plt} = useTheme();
     const oauthUrl = `${redirectUri}?response_type=code&client_id=${clientId}&redirect_uri=${DOMAIN_URL_ENCODED}%2Foauth%2F${provider}%2Fcallback%2F&scope=${scope}&state=${nextParam}&next=${nextFromUrl}`;
-    const iconStyle = {color: plt.text.primary80, height: `${pxIconSize}px`};
+    const iconStyle = {color: plt.text.primary, height: `${pxIconSize}px`};
 
     useEffect(() => {
         pprint(`Provider ${provider}`)

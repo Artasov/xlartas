@@ -69,7 +69,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
             );
             setThemeLoading(false); // Добавлено
         } else {
-            processTheme();
+            processTheme().then();
         }
     }, []);
 

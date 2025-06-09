@@ -1,7 +1,7 @@
 // Modules/xLMine/SkinCape/SkinCapeView.tsx
-import React, { useEffect, useRef, useState } from 'react';
-import ReactSkinview3d from 'react-skinview3d';
-import { FunctionAnimation, SkinViewer } from 'skinview3d';
+import React, {useEffect, useRef, useState} from 'react';
+// import ReactSkinview3d from 'react-skinview3d';
+// import {FunctionAnimation, SkinViewer} from 'skinview3d';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 
 interface SkinCapeViewProps {
@@ -12,12 +12,12 @@ interface SkinCapeViewProps {
 }
 
 const SkinCapeView: React.FC<SkinCapeViewProps> = ({
-    skinUrl,
-    capeUrl,
-    width = 201,
-    height = 360,
-}) => {
-    const viewerRef = useRef<SkinViewer | null>(null);
+                                                       skinUrl,
+                                                       capeUrl,
+                                                       width = 201,
+                                                       height = 360,
+                                                   }) => {
+    // const viewerRef = useRef<SkinViewer | null>(null);
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -62,27 +62,8 @@ const SkinCapeView: React.FC<SkinCapeViewProps> = ({
             }}
         >
             {!loaded ? (
-                <CircularProgress size="40px" />
-            ) : (
-                <ReactSkinview3d
-                    skinUrl={skinUrl || ''}
-                    capeUrl={capeUrl || undefined}
-                    width={width}
-                    height={height}
-                    onReady={({ viewer }) => {
-                        viewerRef.current = viewer;
-                        viewer.playerObject.rotation.y = Math.PI / 10;
-                        viewer.playerObject.rotation.x = -Math.PI / 20;
-                    }}
-                    options={{
-                        zoom: 0.95,
-                        fov: 10,
-                        animation: new FunctionAnimation((player, progress, delta) => {
-                            player.rotation.y += delta * 0.0001;
-                        }),
-                    }}
-                />
-            )}
+                <CircularProgress size="40px"/>
+            ) : null}
         </div>
     );
 };

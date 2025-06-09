@@ -1,15 +1,7 @@
 // Modules/Core/components/Header/HeaderProvider.tsx
-import React, {
-    createContext,
-    ReactNode,
-    RefObject,
-    useContext,
-    useRef,
-    useState,
-} from 'react';
-import Logo from "Core/Logo";
-import {useTheme} from "@mui/material/styles";
-import {useNavigate} from "react-router-dom";
+import React, {createContext, ReactNode, RefObject, useContext, useRef, useState,} from 'react';
+import Logo from 'Core/Logo';
+import {useNavigate} from 'react-router-dom';
 
 interface HeaderContextType {
     mobileNavigationContent: ReactNode | null;
@@ -26,7 +18,7 @@ interface HeaderContextType {
     disableMobileMenu: () => void;
     enableDesktopMenu: () => void;
     disableDesktopMenu: () => void;
-    headerNavRef: RefObject<HTMLDivElement>;
+    headerNavRef: RefObject<HTMLElement>;
     headerRef: RefObject<HTMLDivElement>;
     headerNavHeight: number;
     setHeaderNavHeight: (height: number) => void;
@@ -58,13 +50,10 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
     const [desktopMenuEnabled, setDesktopMenuEnabled] = useState<boolean>(true);
 
     const headerRef = useRef<HTMLDivElement>(null);
-    const headerNavRef = useRef<HTMLDivElement>(null);
+    const headerNavRef = useRef<HTMLElement>(null);
+    const mainRef = useRef<HTMLDivElement>(null);
     const [headerNavHeight, setHeaderNavHeight] = useState<number>(70);
     const [profileBtnVisible, setProfileBtnVisible] = useState<boolean>(true);
-
-    const mainRef = useRef<HTMLDivElement>(null);
-
-    const theme = useTheme();
     const navigate = useNavigate();
 
     const defaultLogoContent = (

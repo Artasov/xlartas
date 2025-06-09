@@ -1,6 +1,6 @@
 // Modules/Software/SoftwareTestPeriodButton.tsx
 import React, {useContext, useState} from 'react';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import Modal from "Core/components/elements/Modal/Modal";
 import {FCC, FRCC} from "wide-containers";
 import {useApi} from "../Api/useApi";

@@ -3,8 +3,8 @@ import React, {ChangeEvent, FormEvent, useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
-import TextField from "Core/components/elements/TextField/TextField";
-import Button from "Core/components/elements/Button/Button";
+import TextField from "@mui/material/TextField";
+import {Button} from "@mui/material";
 import {useApi} from "../Api/useApi";
 
 interface FormData {

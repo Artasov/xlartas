@@ -42,7 +42,7 @@ async def success(request):
 
         order: Order = await Order.objects.select_for_update().aget(pk=invoice_id)
         order.payment = await order.arelated('payment')  # CloudPaymentPayment
-        payment: CloudPaymentPayment = order.payment
+        payment: CloudPaymentPayment = order.payment  # noqa
 
         # --- проверяем статус транзакции у CloudPayments ---
         is_confirmed: bool = await CloudPaymentService.actual_status(invoice_id)
@@ -62,7 +62,7 @@ async def success(request):
 
         # --- выполняем сам заказ ---
         try:
-            await order.execute()
+            await order.execute()  # noqa
         except OrderException.AlreadyExecuted:
             # уже был выполнен, ничего страшного
             pass

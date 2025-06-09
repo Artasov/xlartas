@@ -2,7 +2,7 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import 'react-phone-input-2/lib/material.css';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";

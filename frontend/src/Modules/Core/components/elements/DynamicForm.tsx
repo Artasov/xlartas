@@ -1,10 +1,9 @@
 // Modules/Core/components/elements/DynamicForm.tsx
-
 import React, {ReactNode, useState} from 'react';
 import pprint from 'Utils/pprint';
-import {Message} from "Core/components/Message";
+import {Message} from 'Core/components/Message';
 import {FormControl, TextField} from '@mui/material';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from '@mui/material';
 
 interface DynamicFormProps {
     children: ReactNode;
@@ -15,16 +14,14 @@ interface DynamicFormProps {
     submitDisabled?: boolean;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = (
-    {
-        children,
-        className = '',
-        requestFunc,
-        submitBtnText,
-        submitBtnClassName = '',
-        submitDisabled = false,
-    }
-) => {
+const DynamicForm: React.FC<DynamicFormProps> = ({
+                                                     children,
+                                                     className = '',
+                                                     requestFunc,
+                                                     submitBtnText,
+                                                     submitBtnClassName = '',
+                                                     submitDisabled = false,
+                                                 }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,14 +40,22 @@ const DynamicForm: React.FC<DynamicFormProps> = (
     };
 
     const clonedChildren = React.Children.map(children, child => {
-        if (!React.isValidElement<any>(child)) return child;
+        if (!React.isValidElement(child)) {
+            return child;
+        }
+
+        // Если это MUI TextField, приводим его к корректному типу, чтобы получить доступ к helperText и disabled
         if (child.type === TextField) {
-            return React.cloneElement(child, {
+            const textField = child as React.ReactElement<React.ComponentProps<typeof TextField>>;
+            return React.cloneElement(textField, {
                 disabled: loading,
-                helperText: child.props.helperText,
+                helperText: textField.props.helperText,
             });
         }
-        return React.cloneElement(child, {
+
+        // Для любых других компонентов с пропсом `disabled`
+        const generic = child as React.ReactElement<{ disabled?: boolean }>;
+        return React.cloneElement(generic, {
             disabled: loading,
         });
     });

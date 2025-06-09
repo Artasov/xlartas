@@ -21,7 +21,7 @@ import {
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import {FC, FCCC, FCS, FR, FRC, FRSC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";

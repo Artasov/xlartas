@@ -57,7 +57,7 @@ const MacrosWirelessDashboard: React.FC = () => {
 
     return (
         <FC>
-            <FREC pos={'absolute'} bottom={'1rem'} right={'1rem'} component="h2" color={plt.text.primary80} g={.8}
+            <FREC pos={'absolute'} bottom={'1rem'} right={'1rem'} component="h2" color={plt.text.primary} g={.8}
                   fontSize="1rem">
                 <IconButton
                     sx={{width: 42, height: 42, background: plt.primary.main + '11'}}
@@ -70,7 +70,7 @@ const MacrosWirelessDashboard: React.FC = () => {
             </FREC>
 
             {macros.length === 0 && (
-                <p style={{color: plt.text.primary50}}>Пока ничего не сохранено. Нажмите «+», чтобы добавить.</p>
+                <p style={{color: plt.text.primary}}>Пока ничего не сохранено. Нажмите «+», чтобы добавить.</p>
             )}
 
             <List dense sx={{width: '100%'}}>

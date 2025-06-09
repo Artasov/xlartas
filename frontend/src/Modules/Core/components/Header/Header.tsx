@@ -50,7 +50,7 @@ const Header: React.FC = () => {
                 }} sx={{width: 30, height: 30, opacity: '50%', transform: 'scale(1.3)'}}>
                     <ArrowBackIosNewRoundedIcon/>
                 </IconButton>
-                <FRCC onClick={hideMobileMenu} color={plt.text.primary60}>
+                <FRCC onClick={hideMobileMenu} color={plt.text.primary}>
                     {logoContent}
                 </FRCC>
             </FRCC>
@@ -68,9 +68,9 @@ const Header: React.FC = () => {
                         <FRCC cls={'header-tools'}>
                             <div ref={btnToggleMenuRef} className="btn-toggle-header-mobile-menu"
                                  onClick={toggleMobileMenu}>
-                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
-                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
-                                <span style={{backgroundColor: plt.bg.contrast60}}></span>
+                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
+                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
+                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
                             </div>
                         </FRCC>
                     </>
@@ -91,7 +91,7 @@ const Header: React.FC = () => {
                     {/*<ThemeToggleButton/>*/}
                     {isAuthenticated && <LogoutRoundedIcon
                         style={{
-                            color: plt.text.primary60,
+                            color: plt.text.primary,
                             fontSize: '1.8rem'
                         }}
                         onClick={logout}

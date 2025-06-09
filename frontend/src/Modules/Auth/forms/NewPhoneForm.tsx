@@ -1,7 +1,7 @@
 // Modules/Auth/forms/NewPhoneForm.tsx
 import React, {useContext, useState} from 'react';
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import ConfirmationCode from 'Confirmation/ConfirmationCode';
 import {Message} from "Core/components/Message";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";

@@ -21,7 +21,7 @@ const LogsLink: React.FC = () => {
         <Link to={logsUrl} target="_blank" rel="noopener noreferrer">
             <SortRoundedIcon
                 className={`fs-1 ps-3px`}
-                style={{color: plt.text.primary60}}
+                style={{color: plt.text.primary}}
             />
         </Link>
     );

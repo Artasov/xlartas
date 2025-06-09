@@ -8,7 +8,7 @@ import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import TextField from "@mui/material/TextField";
 import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import {FC, FCC} from "wide-containers";
 import {Message} from "Core/components/Message";
@@ -68,7 +68,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && isValidCredential) {
-            handleNextStep(e);
+            handleNextStep(e).then();
         }
     };
 

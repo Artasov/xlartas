@@ -71,7 +71,7 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
             g={1}
             pos={'relative'}
             className={`room-item ${isActive ? 'active-room' : ''}`}
-            bg={isActive ? `${plt.bg.contrast}09` : `${plt.bg.contrast}05`}
+            bg={isActive ? `${plt.text.primary}09` : `${plt.text.primary}11`}
             onClick={!isActive ? onClick : undefined}
             sx={{
                 cursor: isActive ? 'default' : 'pointer',
@@ -82,8 +82,8 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
             <FCS g={1} pl={1} flexGrow={1} h={'100%'} className={'room-info'}>
                 <FRSC g={1} cls={'fs-5 lh-1'} style={{
                     color: isActive
-                        ? plt.text.primary70
-                        : plt.text.primary50
+                        ? plt.text.primary
+                        : plt.text.primary
                 }}>
                     <span>{roomName}</span>
                     {otherParticipants.length > 0

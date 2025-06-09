@@ -1,11 +1,13 @@
-import pytest
-from django.utils import timezone
 from datetime import timedelta
 
+import pytest
+from django.utils import timezone
+
+from apps.commerce.models.payment import Currency, PaymentSystem
+from apps.commerce.models.product import ProductPrice
 from apps.core.models import User
 from apps.software.models import Software, SoftwareOrder, SoftwareLicense
-from apps.commerce.models.product import ProductPrice
-from apps.commerce.models.payment import Currency, PaymentSystem
+
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
@@ -38,6 +40,7 @@ async def test_postgive_creates_license_and_extends():
     await software.postgive(order2)
     await license_obj.arefresh_from_db()
     assert abs((license_obj.license_ends_at - prev_end) - timedelta(hours=3)) < timedelta(seconds=5)
+
 
 @pytest.mark.django_db
 @pytest.mark.asyncio

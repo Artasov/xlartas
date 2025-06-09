@@ -31,7 +31,7 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({software, onClick}) => {
                         </h2>
                         {software.file && (
                             <span style={{
-                                color: plt.text.primary30,
+                                color: plt.text.primary,
                                 fontSize: '.8rem',
                                 lineHeight: '.8rem'
                             }}>

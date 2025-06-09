@@ -75,7 +75,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
                 sx={{
                     // Пример использования темы
                     '& .MuiSelect-select': {
-                        color: plt.text.primary70,
+                        color: plt.text.primary,
                     },
                     ...sx, // Позволяет переопределить стили через пропс sx
                 }}>
@@ -89,7 +89,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
                     const offsetString = `UTC ${offsetInHoursNum >= 0 ? '+' : ''}${Number(offsetInHours)}`;
                     return (
                         <MenuItem key={tz.name} value={tz.name}>
-                            <span style={{color: plt.text.primary70}}>
+                            <span style={{color: plt.text.primary}}>
                                 {cityName} {offsetString}
                             </span>
                         </MenuItem>

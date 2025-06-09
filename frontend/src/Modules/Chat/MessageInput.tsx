@@ -46,7 +46,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSendMessage();
+            handleSendMessage().then();
         }
     };
 
@@ -108,7 +108,6 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
             p={1}
             w={'100%'}
             color={plt.text.primary}
-            bg={plt.bg.primary}
         >
             <FRSC>
                 <label htmlFor="file-input" style={{cursor: 'pointer'}}>
@@ -125,7 +124,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                 />
                 <FCCC pos={'relative'} mr={1}>
                     <span style={{
-                        color: plt.text.primary40,
+                        color: plt.text.primary,
                         fontSize: '.8rem',
                         position: 'absolute',
                         top: -2,
@@ -149,9 +148,8 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                         flexGrow: 1,
                         padding: '0.5rem',
                         borderRadius: '8px',
-                        border: `2px solid ${plt.text.primary20}`,
-                        backgroundColor: plt.bg.primary,
-                        color: plt.text.primary90,
+                        border: `2px solid ${plt.text.primary + '33'}`,
+                        color: plt.text.primary + 'dd',
                         resize: 'none',
                         overflow: 'auto',
                         outline: 'none',

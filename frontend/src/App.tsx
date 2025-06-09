@@ -67,8 +67,8 @@ const App: React.FC = () => {
             <div
                 className={`App h-100 fc disable-tap-select`}
                 style={{
-                    color: plt.text.primary70,
-                    backgroundColor: plt.bg.primary
+                    color: plt.text.primary,
+                    backgroundColor: plt.primary.contrastText
                 }}
             >
                 <div className="bg-image-wrapper">

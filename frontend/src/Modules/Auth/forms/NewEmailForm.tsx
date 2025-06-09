@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Message} from "Core/components/Message";
 import {FC} from "wide-containers";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 
 interface NewEmailFormProps {

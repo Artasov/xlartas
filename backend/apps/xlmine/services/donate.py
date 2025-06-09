@@ -33,7 +33,7 @@ class DonateService:
         await s.ais_valid(raise_exception=True)
         order: 'DonateOrder' = await s.asave()
         # Инициализация оплаты
-        await order.init(request)
+        await order.init(request)  # noqa
         return order
 
     async def can_pregive(
@@ -49,7 +49,7 @@ class DonateService:
             return False
         return True
 
-    async def pregive(self: 'Donate', order: 'DonateOrder'):
+    async def pregive(self: 'Donate', order: 'DonateOrder'):  # noqa
         """Create XLMine user record if needed before payment."""
         from apps.xlmine.models.user import UserXLMine
 
@@ -66,7 +66,7 @@ class DonateService:
         from apps.xlmine.models.user import UserXLMine
         xlmine_user = await UserXLMine.objects.aget_or_create(user=user)
         # Считаем стоимость заказа (финальная сумма, учтя промокод и т.д.)
-        order_price = await order.receipt_price
+        order_price = await order.receipt_price  # noqa
         if not order_price:
             order_price = Decimal('0.00')
 

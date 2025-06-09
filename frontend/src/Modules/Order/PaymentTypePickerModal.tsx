@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Modal from 'Core/components/elements/Modal/Modal';
 import PaymentTypePicker from './PaymentTypePicker';
 import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from '../Api/useApi';

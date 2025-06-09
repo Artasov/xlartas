@@ -1,6 +1,6 @@
 // UI/FileUpload.tsx
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 
 interface FileUploadProps {
     onFileSelect: (file: File | null) => void;

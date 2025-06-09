@@ -9,7 +9,7 @@ import {ProviderConfig} from "Auth/Social/types";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import {FR} from "wide-containers";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
@@ -108,8 +108,8 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                 </Alert>
             </Snackbar>
             <Dialog open={showTermsModal} onClose={handleModalCancel}>
-                <DialogTitle sx={{background: plt.bg.primary}}>Подтвердите условия</DialogTitle>
-                <DialogContent sx={{background: plt.bg.primary}}>
+                <DialogTitle>Подтвердите условия</DialogTitle>
+                <DialogContent>
                     <TermsCheckboxes
                         firstChecked={modalFirstChecked}
                         secondChecked={modalSecondChecked}
@@ -120,7 +120,7 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
                         onSecondCheckedChange={setModalSecondChecked}
                     />
                 </DialogContent>
-                <DialogActions sx={{background: plt.bg.primary}}>
+                <DialogActions>
                     <MuiButton onClick={handleModalCancel}>Отмена</MuiButton>
                     <Button onClick={handleModalConfirm} disabled={!modalFirstChecked} variant="contained"
                             color="primary">

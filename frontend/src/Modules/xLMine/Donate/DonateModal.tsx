@@ -11,7 +11,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import {FC, FCSC, FR, FRBC, FRSC} from "wide-containers";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IDonate} from "./types";

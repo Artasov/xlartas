@@ -6,7 +6,7 @@ import {YANDEX_RECAPTCHA_SITE_KEY} from '../Api/axiosConfig';
 import {Message} from 'Core/components/Message';
 import DynamicForm from 'Core/components/elements/DynamicForm';
 import {SmartCaptcha} from '@yandex/smart-captcha';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
 import CircularProgress from 'Core/components/elements/CircularProgress';
@@ -226,7 +226,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                         {resendTimeout > 0 ? (
                             <p
                                 className="fs-7 mt-1 text-right"
-                                style={{color: plt.text.primary55}}
+                                style={{color: plt.text.primary}}
                             >
                                 {`Отправить код повторно можно через ${resendTimeout} секунд`}
                             </p>
@@ -235,7 +235,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                                 onClick={handleResend}
                                 className="fs-6 text-right"
                                 style={{
-                                    color: plt.text.primary80,
+                                    color: plt.text.primary,
                                     cursor: 'pointer',
                                 }}
                             >

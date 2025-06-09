@@ -41,8 +41,7 @@ const PhoneField: React.FC<PhoneFieldProps> = (
             {showLabel && <FR
                 pos={'absolute'} top={-9} left={15}
                 zIndex={1} fontSize={'.85rem'}
-                sx={{lineHeight: '1rem'}} px={'5px'}
-                bg={plt.bg.primary}>
+                sx={{lineHeight: '1rem'}} px={'5px'}>
                 Номер телефона
             </FR>}
             <PhoneInput
@@ -67,17 +66,17 @@ const PhoneField: React.FC<PhoneFieldProps> = (
                 autoFormat={true}
                 containerClass={`${disabled ? 'opacity-50' : ''} ${error ? 'error' : ''}`}
                 dropdownStyle={{
-                    color: plt.text.primary80,
-                    backgroundColor: plt.bg.primary,
+                    color: plt.text.primary + '33',
+                    backgroundColor: plt.background.default + '33'
                 }}
                 searchClass={`p-2`}
                 searchStyle={{
-                    color: plt.text.primary80,
-                    backgroundColor: plt.bg.primary,
+                    color: plt.text.primary + '33',
+                    backgroundColor: plt.background.default + '33'
                 }}
                 inputClass={`w-100`}
                 inputStyle={{
-                    color: plt.text.primary80,
+                    color: plt.text.primary + 'aa',
                 }}
             />
             {error &&

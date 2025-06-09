@@ -5,10 +5,9 @@ import {FC, FCA, FCC, FCCC, FCSC, FR, FRSC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import CircularProgress from "Core/components/elements/CircularProgress";
-import XaeroMapModalButton from "./Xaero/XaeroMapModalButton";
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -73,17 +72,17 @@ const XLMineLanding: React.FC = () => {
         <FCC pos={'relative'} w="100%"
              h={`calc(100vh - ${headerNavHeight}px)`}
              maxH={`calc(100vh - ${headerNavHeight}px)`}
-             bg={plt.bg.primary} color={plt.text.primary70}>
+             color={plt.text.primary + '88'}>
             <FRSC cls={'gradient'} w={'100%'} h={'100%'}
                   pos={'fixed'} pEvents={false} zIndex={22}
                   top={`${headerNavHeight}px`} left={0} sx={{
                 background: 'linear-gradient(' +
                     '0deg, ' +
-                    `${plt.bg.primary} 0%, ` +
-                    `${plt.bg.primary + '99'} 30%, ` +
+                    `${plt.background.default} 0%, ` +
+                    `${plt.background.default + '99'} 30%, ` +
                     'rgba(0, 0, 0, 0) 40%, ' +
                     'rgba(0, 0, 0, 0) 85%, ' +
-                    `${plt.bg.primary} 100%` +
+                    `${plt.background.default} 100%` +
                     ')',
             }}></FRSC>
             <FCA ref={containerRef} h={'100%'} sx={{
@@ -131,8 +130,7 @@ const XLMineLanding: React.FC = () => {
                             }}>java21</span> или выше</span>
                         </FR>
                         <Button onClick={handleDownload} variant="contained"
-                                className="fw-bold gap-1 hover-scale-5 ftrans-200-eio" classNameOverride={' '}
-                                color={'#fff1'}
+                                className="fw-bold gap-1 hover-scale-5 ftrans-200-eio"
                                 sx={{
                                     fontSize: '1.5rem',
                                     backdropFilter: 'blur(5px) saturate(2) brightness(4)',

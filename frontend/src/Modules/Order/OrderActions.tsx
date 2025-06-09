@@ -4,7 +4,7 @@ import {useNavigate, useSearchParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {MenuItem} from "@mui/material";
 import OptionsMenu from "Core/components/elements/OptionsMenu";
-import Button from "Core/components/elements/Button/Button";
+import {Button} from "@mui/material";
 import {useTheme} from "Theme/ThemeContext";
 import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
@@ -104,12 +104,12 @@ const OrderActions: React.FC<OrderActionsProps> = (
             actions.push({
                 label: 'Execute',
                 onClick: handleExecuteOrder,
-                style: {backgroundColor: plt.bg.contrast10},
+                style: {backgroundColor: plt.text.primary + '22'},
             });
             actions.push({
                 label: 'Notification',
                 onClick: handleResendNotificationOrder,
-                style: {backgroundColor: plt.bg.contrast10},
+                style: {backgroundColor: plt.text.primary + '22'},
             });
             actions.push({
                 label: 'Delete',
@@ -123,7 +123,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
             actions.push({
                 label: 'Request a refund',
                 onClick: handleRedirectToRefund,
-                style: {backgroundColor: plt.bg.contrast10},
+                style: {backgroundColor: plt.text.primary + '22'},
             });
         }
 
@@ -132,7 +132,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
             actions.push({
                 label: 'Cancel',
                 onClick: handleCancelOrder,
-                style: {backgroundColor: plt.bg.contrast10},
+                style: {backgroundColor: plt.text.primary + '22'},
             });
         }
 
@@ -165,7 +165,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
                             : <Button
                                 key={index}
                                 className="h-min px-2 pt-6px"
-                                style={{color: plt.text.primary70, ...action.style}}
+                                style={{color: plt.text.primary, ...action.style}}
                                 onClick={action.onClick}
                                 size="small">
                                 {action.label}

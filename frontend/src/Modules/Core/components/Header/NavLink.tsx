@@ -35,7 +35,7 @@ const NavLink: React.FC<NavLinkProps> = ({to, icon, sx, cls, onClick, children})
             to={to}
             onClick={handleClick}
             onMouseDown={handleMouseDown}
-            style={{color: plt.text.primary60, ...sx, cursor: 'pointer'}}
+            style={{color: plt.text.primary, ...sx, cursor: 'pointer'}}
             className={`tdn gap-1 frcc ${cls || ''}`}
         >
             {icon}

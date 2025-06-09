@@ -1,9 +1,9 @@
 // Modules/Core/ParallaxLogo.tsx
-import React, {useCallback, useContext} from 'react';
+import React, {RefObject, useCallback, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
 import {FCCC, FR} from 'wide-containers';
@@ -21,7 +21,7 @@ type StyledH1Props = {
 };
 
 const StyledH1 = styled('h1')<StyledH1Props>(({theme, fontSize}) => ({
-    color: theme.palette.text.primary85,
+    color: theme.palette.text.primary,
     fontFamily: '"Roboto Mono", serif',
     fontWeight: 300,
     margin: 0,
@@ -71,7 +71,7 @@ const ParallaxLogo: React.FC = () => {
     }, [navigate]);
 
     return (
-        <ParallaxContainer parallaxRef={mainRef} factor={0.05}>
+        <ParallaxContainer parallaxRef={mainRef as RefObject<HTMLElement>} factor={0.05}>
             <FCCC w="min-content" pos="relative" mt={-10} maxW="100%">
                 <Logo width="100%" cls="w-100 ms-3 maxw-700"/>
                 <StyledH1 fontSize={fontSize}>XLARTAS</StyledH1>

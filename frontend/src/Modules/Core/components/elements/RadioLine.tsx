@@ -42,10 +42,10 @@ const RadioLine: React.FC<RadioLineProps> = (
                     style={{
                         color: selectedValue === option.value
                             ? '#fff'
-                            : plt.text.primary70,
+                            : plt.text.primary,
                         backgroundColor: selectedValue === option.value
                             ? theme.colors.secondary.main
-                            : plt.bg.contrast10,
+                            : plt.text.primary + '22',
                     }}
                     onClick={() => {
                         handleClick(option.value)

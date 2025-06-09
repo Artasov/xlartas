@@ -58,7 +58,7 @@ class IOrderService:
         """
         from apps.software.services.license import SoftwareLicenseService
         from apps.software.models import SoftwareOrder
-        price_row = await self.product.prices.agetorn(currency=self.currency)
+        price_row = await self.product.prices.agetorn(currency=self.currency)  # noqa
         if not price_row:
             # Если нет строки цены, 0
             return Decimal('0')
@@ -94,7 +94,7 @@ class IOrderService:
             reason: str
     ):
         if not any((self.is_inited, self.is_executed, self.is_paid, self.is_cancelled, self.is_refunded)):
-            await self.cancel(request=request, reason=reason)
+            await self.cancel(request=request, reason=reason)  # noqa
         elif self.is_cancelled:
             raise OrderException.AlreadyCanceled()
         elif self.is_paid:
@@ -102,7 +102,7 @@ class IOrderService:
         elif self.is_refunded:
             raise OrderException.CannotCancelRefunded()
         elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
-            await self.cancel(request=request, reason=reason)
+            await self.cancel(request=request, reason=reason)  # noqa
 
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ЗАКАЗА
@@ -139,13 +139,13 @@ class IOrderService:
                 await payment.asave()
             if ((payment.status == TBankPayment.Status.CONFIRMED or payment.status == TBankPayment.Status.AUTHORIZED)
                     and not self.is_executed and not self.is_refunded):
-                await self.execute()
+                await self.execute()  # noqa
             tbank_log.info(f'TBank Payment {payment.id} synchronization successfully.')
         elif isinstance(payment, CloudPaymentPayment):
-            status = await CloudPaymentAPI.actual_status(payment)
+            status = await CloudPaymentAPI.actual_status(payment)  # noqa
             if (status == CloudPaymentPayment.Status.COMPLETED
                     and not self.is_executed and not self.is_refunded):
-                await self.execute()
+                await self.execute()  # noqa
         elif isinstance(self.payment, HandMadePayment):
             pass  # Ручная оплата, и тут ничего не надо
         else:

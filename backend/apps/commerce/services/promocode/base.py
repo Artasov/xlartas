@@ -104,15 +104,15 @@ class PromoCodeService:
         """
         Рассчитывает итоговую цену для заказа с учётом данного промокода.
         """
-        product = order.product
+        product = order.product  # noqa
 
         # Ищем скидку для продукта
         discount = await self.discounts.filter(product=product).afirst()
         if not discount:
             # Если нет скидки для продукта, возвращаем исходную цену
-            return await order.product.aget_price(currency=order.currency)
+            return await order.product.aget_price(currency=order.currency)  # noqa
 
-        original_price = await order.product.aget_price(currency=order.currency)
+        original_price = await order.product.aget_price(currency=order.currency)  # noqa
         if original_price is None:
             # Нет цены или ошибка
             return Decimal('0.00')

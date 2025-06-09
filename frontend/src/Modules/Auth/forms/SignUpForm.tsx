@@ -5,7 +5,7 @@ import {Message} from 'Core/components/Message';
 import PhoneField from 'Core/components/elements/PhoneField/PhoneField';
 import TextField from '@mui/material/TextField';
 import {SmartCaptcha} from '@yandex/smart-captcha';
-import Button from 'Core/components/elements/Button/Button';
+import {Button} from '@mui/material';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import {FC, FCCC} from 'wide-containers';
 import CircularProgress from 'Core/components/elements/CircularProgress';

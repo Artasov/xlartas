@@ -53,13 +53,13 @@ const MacrosExecutorPage: React.FC = () => {
 
                         {controlTab === 'panel' && <FC scroll={'y-auto'}><MacrosWirelessDashboard/></FC>}
                         {controlTab === 'io' && (
-                            <FC g={1}>
+                            <FC g={1} mx={'auto'}>
                                 <RemoteTouchpad/>
                                 <RemoteKeyboardField/>
                             </FC>
                         )}
                         {controlTab === 'byname' && <FC>
-                            <p style={{color: plt.text.primary50, marginBottom: '.6rem'}}>
+                            <p style={{color: plt.text.primary, marginBottom: '.6rem'}}>
                                 Введите имя макроса (как в приложении) и нажмите
                                 «Выполнить». PC, на котором запущен xLMACROS
                                 с включённой опцией «Wireless control»,
@@ -71,7 +71,7 @@ const MacrosExecutorPage: React.FC = () => {
                 )}
 
                 {mainTab === 'info' && (
-                    <Typography sx={{color: plt.text.primary60, mt: 2}}>
+                    <Typography sx={{color: plt.text.primary, mt: 2}}>
                         Здесь может быть справка или описание возможностей. Заполните по необходимости.
                     </Typography>
                 )}

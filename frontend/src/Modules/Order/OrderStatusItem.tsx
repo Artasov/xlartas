@@ -19,7 +19,6 @@ const OrderStatusItem: React.FC<StatusItemProps> = ({label, isActive, color, sho
             component="span"
             sx={{
                 color: color,
-                textShadow: plt.shadow.XXSO02C, // Убедитесь, что такая тень определена в вашей теме
             }}
         >
             {isActive ? label : (showNegative ? `Not ${label.toLowerCase()}` : null)}

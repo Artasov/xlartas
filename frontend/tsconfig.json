@@ -14,9 +14,6 @@
       "Redux/*": [
         "Redux/*"
       ],
-      "WideLayout/*": [
-        "WideLayout/*"
-      ],
       "Company/*": [
         "Modules/Company/*"
       ],

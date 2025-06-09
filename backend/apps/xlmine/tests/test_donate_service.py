@@ -1,9 +1,12 @@
-import pytest
 from decimal import Decimal
 
-from apps.core.models import User
-from apps.xlmine.models import Donate, DonateOrder, UserXLMine
+import pytest
+
 from apps.commerce.models.payment import Currency, PaymentSystem
+from apps.core.models import User
+from apps.xlmine.models import Donate, DonateOrder
+from apps.xlmine.models.user import UserXLMine
+
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
