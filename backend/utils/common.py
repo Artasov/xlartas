@@ -8,7 +8,6 @@ import urllib
 from typing import Any, Generator
 
 import aiohttp
-from PIL import ExifTags
 from django.apps import apps
 from django.conf import settings
 
@@ -19,30 +18,6 @@ def get_models_list() -> Generator[str, Any, None]:
     """
     models = apps.get_models()
     return (f"{model._meta.app_label}.{model.__name__}" for model in models)  # noqa
-
-
-class CorrectOrientation:
-    @staticmethod
-    def process(image):
-        # Получаем EXIF-данные
-        exif = image.getexif()
-        if exif:
-            for tag, value in exif.items():
-                tag_name = ExifTags.TAGS.get(tag, tag)
-                if tag_name == 'Orientation':
-                    orientation = value
-                    break
-            else:
-                orientation = None
-
-            # Корректируем ориентацию изображения
-            if orientation == 3:
-                image = image.rotate(180, expand=True)
-            elif orientation == 6:
-                image = image.rotate(270, expand=True)
-            elif orientation == 8:
-                image = image.rotate(90, expand=True)
-        return image
 
 
 def google_captcha_validation(request):

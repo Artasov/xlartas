@@ -7,38 +7,6 @@ ALPHABETS = {
 }
 
 
-def ReadFile(path, printing=False, encoding='utf-8'):
-    if printing:
-        print(open(path, 'r', encoding=encoding).read())
-    return open(path, 'r', encoding=encoding).read()
-
-
-def OpenWrite(path, text, printing=False, encoding='utf-8'):
-    open(path, 'w', encoding=encoding).write(text)
-    if printing:
-        print(open(path, 'r', encoding=encoding).read())
-
-
-def OpenAppend(path, text, printing=False, encoding='utf-8'):
-    open(path, 'a', encoding=encoding).write(text)
-    if printing:
-        print(open(path, 'r', encoding=encoding).read())
-
-
-def OpenPrepend(path, text, printing=False, encoding='utf-8'):
-    text_ = text + open(path, 'r', encoding=encoding).read()
-    open(path, 'w', encoding=encoding).write(text_)
-    if printing:
-        print(open(path, 'r', encoding=encoding).read())
-
-
-def OpenAndReplace(path, what, to, printing=False, encoding='utf-8'):
-    text = open(path, 'r', encoding=encoding).read().replace(what, to)
-    open(path, 'w', encoding=encoding).write(text)
-    if printing:
-        print(open(path, 'r', encoding=encoding).read())
-
-
 def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool = True, upper: bool = True,
                digits: bool = True):  # ru #digits
     import random
