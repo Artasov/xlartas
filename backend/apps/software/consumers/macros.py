@@ -1,4 +1,3 @@
-# xl/backend/apps/software/consumers/macros.py
 import asyncio
 from urllib.parse import parse_qs
 
@@ -9,17 +8,19 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-FLUSH_DELAY = 1 / 60  # ≈60 кадров/с
+FLUSH_DELAY = 1 / 60  # ≈60 fps
 
 
 class MacroControlConsumer(AsyncJsonWebsocketConsumer):
     """
-    Авторизация — через query-string:
-        ws://<host>/ws/macro-control/?username=<login>&secret_key=<key>
-    После подключения клиент шлёт:
-        {"type": "mouse_move", "dx": …, "dy": …}
-        {"type": "key_press",  "key": …}
-        {"macro": "<old-style-macro-name>"}
+    ws://<host>/ws/macro-control/?username=<login>&secret_key=<key>
+
+    Клиент → сервер
+      {"type": "mouse_move",  "dx": …, "dy": …}
+      {"type": "mouse_click", "button": "left" | "middle" | "right"}
+      {"type": "key_press",   "key": …}
+      {"macro": "<old-style-macro-name>"}
+
     Сервер ретранслирует события всем десктоп-клиентам группы «user_<id>».
     """
 
@@ -31,11 +32,11 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             username = qs.get("username", [None])[0]
             secret_key = qs.get("secret_key", [None])[0]
             if not username or not secret_key:
-                await self.close(code=4002);
+                await self.close(code=4002)
                 return
             user = await self._get_user(username, secret_key)
             if user is None:
-                await self.close(code=4003);
+                await self.close(code=4003)
                 return
         else:
             user = self.scope["user"]
@@ -50,9 +51,7 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         if hasattr(self, "user"):
-            await self.channel_layer.group_discard(
-                f"user_{self.user.id}", self.channel_name
-            )
+            await self.channel_layer.group_discard(f"user_{self.user.id}", self.channel_name)
         if self._flush_task:
             self._flush_task.cancel()
 
@@ -68,13 +67,20 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
     async def receive_json(self, content, **kwargs):
         msg_type = content.get("type")
 
-        # ----- мышь -----
+        # ----- мышь: движение -----
         if msg_type == "mouse_move":
             self._mouse_acc["dx"] += int(content.get("dx", 0))
             self._mouse_acc["dy"] += int(content.get("dy", 0))
             if not self._flush_task:
-                # запускаем флашер — он сам завершится, когда движения прекратятся.
                 self._flush_task = asyncio.create_task(self._flush_mouse())
+            return
+
+        # ----- мышь: клик -----
+        if msg_type == "mouse_click":
+            await self._safe_group_send({
+                "type": "mouse.click",
+                "button": content.get("button", "left")
+            })
             return
 
         # ----- клавиатура -----
@@ -96,10 +102,6 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
     # ---------- helpers ----------
 
     async def _flush_mouse(self):
-        """
-        Раз в FLUSH_DELAY отправляем накопленную дельту.
-        Если движений нет — выходим и обнуляем task-ссылку.
-        """
         try:
             while True:
                 dx, dy = self._mouse_acc["dx"], self._mouse_acc["dy"]
@@ -117,20 +119,18 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             self._flush_task = None
 
     async def _safe_group_send(self, message: dict):
-        """
-        Обертка над group_send: если канал переполнен — просто опускаем сообщение.
-        """
         try:
             await self.channel_layer.group_send(f"user_{self.user.id}", message)
         except ChannelFull:
-            # Можно залогировать, если нужно:
-            # logger.debug("group full → drop message %s", message)
             pass
 
     # ---------- handlers для десктоп-клиента ----------
 
     async def mouse_move(self, event):
         await self.send_json({"type": "mouse_move", "dx": event["dx"], "dy": event["dy"]})
+
+    async def mouse_click(self, event):
+        await self.send_json({"type": "mouse_click", "button": event["button"]})
 
     async def key_press(self, event):
         await self.send_json({"type": "key_press", "key": event["key"]})

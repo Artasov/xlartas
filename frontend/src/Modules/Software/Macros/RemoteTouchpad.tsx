@@ -43,7 +43,7 @@ const RemoteTouchpad: React.FC = () => {
               sx={{
                   userSelect: 'none',
                   touchAction: 'none',
-                  aspectRatio: '1 / .5',
+                  aspectRatio: '1 / .7',
                   cursor: 'pointer',
               }}
               onPointerDown={handlePointerDown}

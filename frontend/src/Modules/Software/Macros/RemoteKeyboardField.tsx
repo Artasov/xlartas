@@ -1,11 +1,10 @@
-// src/Modules/Software/Macros/RemoteKeyboardField.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {buildWSUrl} from 'Utils/ws';
 import {useTheme} from 'Theme/ThemeContext';
 import {FCCC} from 'wide-containers';
 import TextField from '@mui/material/TextField';
 
-const WS_URL = buildWSUrl('/ws/macro-control/');   // тот же канал, что и для тачпада
+const WS_URL = buildWSUrl('/ws/macro-control/');
 
 /**
  * Однострочное поле: каждый введённый символ / спец-клавиша
@@ -14,7 +13,10 @@ const WS_URL = buildWSUrl('/ws/macro-control/');   // тот же канал, ч
 const RemoteKeyboardField: React.FC = () => {
     const {plt} = useTheme();
     const wsRef = useRef<WebSocket | null>(null);
-    const [value, set] = useState('');        // всегда держим строку пустой
+    const [value, setValue] = useState('');
+
+    /* anti-duplicate */
+    const lastSentRef = useRef<{ ch: string; ts: number }>({ch: '', ts: 0});
 
     /* ---------- создаём сокет один раз ---------- */
     useEffect(() => {
@@ -26,6 +28,11 @@ const RemoteKeyboardField: React.FC = () => {
     const sendKey = (key: string) => {
         const ws = wsRef.current;
         if (!ws || ws.readyState !== WebSocket.OPEN) return;
+
+        const now = Date.now();
+        if (key === lastSentRef.current.ch && now - lastSentRef.current.ts < 80) return;
+        lastSentRef.current = {ch: key, ts: now};
+
         ws.send(JSON.stringify({type: 'key_press', key}));
     };
 
@@ -33,42 +40,46 @@ const RemoteKeyboardField: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const text = e.target.value;
         if (!text) return;
-        // отправляем каждый символ отдельно
         [...text].forEach(ch => sendKey(ch));
-        set('');                       // очищаем поле
+        setValue(''); // очищаем поле
     };
 
     /* ---------- special keys (onKeyDown) ---------- */
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         e.stopPropagation();
-
-        const key = e.key;             // 'a', 'Enter', 'Backspace', ' '
-        if (key.length === 1) return;  // printable → обработаем в onChange
-
-        e.preventDefault();            // блокируем дефолт-ввод
+        const key = e.key;                    // 'a', 'Enter', 'Backspace', …
+        if (key.length === 1) return;         // printable → onChange
+        e.preventDefault();                   // блокируем дефолт-ввод
         sendKey(key === ' ' ? 'Space' : key);
-        set('');
+        setValue('');
     };
 
     return (
-        <FCCC w={'100%'} maxW={450} rounded={3} p={2} g={1}
+        <FCCC w="100%" maxW={450} rounded={3} p={2} g={1}
               bg={plt.text.primary + '22'}>
             <TextField
                 fullWidth
                 variant="filled"
-                placeholder="Кликните и печатайте…"
+                placeholder="Tap here and type…"
                 value={value}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
-                inputProps={{style: {textAlign: 'center', paddingTop: '10px'}}}
+                inputProps={{
+                    style: {textAlign: 'center', paddingTop: '10px'},
+                    autoCapitalize: 'none',
+                    autoCorrect: 'off',
+                    autoComplete: 'off',
+                    spellCheck: 'false',
+                    inputMode: 'text'
+                }}
             />
             <span style={{
                 color: plt.text.primary,
                 fontSize: '.85rem',
                 textAlign: 'center'
             }}>
-                Каждый символ сразу отправляется на&nbsp;ПК и&nbsp;не&nbsp;остаётся в&nbsp;поле.
-            </span>
+        Every symbol is sent immediately and not kept in the field.
+      </span>
         </FCCC>
     );
 };
