@@ -6,7 +6,7 @@ import RadioLine from "Core/components/elements/RadioLine";
 import logoTBank from '../../Static/img/icon/tbank/logo.svg'
 import logoCloudPayments from '../../Static/img/icon/cloudpayments/logo.svg'
 import RadioCustomLine from "Core/components/elements/RadioCustomLine";
-import {FC, FR, FRCC} from "WideLayout/Layouts";
+import {FC, FR, FRCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "../Api/useApi";
 import CircularProgress from "Core/components/elements/CircularProgress";

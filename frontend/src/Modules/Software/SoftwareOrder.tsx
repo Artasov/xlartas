@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {IconButton, Slider, useMediaQuery} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FC, FCC, FRE, FRSC} from 'WideLayout/Layouts';
+import {FC, FCC, FRE, FRSC} from 'wide-containers';
 import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';

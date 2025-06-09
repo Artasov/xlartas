@@ -3,7 +3,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import Modal from "Core/components/elements/Modal/Modal";
 import pprint from "Utils/pprint";
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import {FC, FCCC, FCSC} from "WideLayout/Layouts";
+import {FC, FCCC, FCSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
@@ -57,16 +57,15 @@ const SettingsTool: React.FC = () => {
             pEvents={false}>
             <FCCC
                 bg={theme.colors.secondary.main}
-                color={'#fffe'}
-                rounded={3}
-                onClick={openModal}
-                cls={'pe-4px ps-3px'}
-                py={2}
+                color={'#fffe'} opacity={50}
+                rounded={3} fontSize={'.7rem'} letterSpacing={'.1rem'} lineHeight={'.8rem'}
+                onClick={openModal} fontWeight={600}
+                cls={'pe-1px'}
+                py={1}
                 style={{
                     writingMode: 'vertical-lr', /* Текст будет вертикальным, справа налево */
                     transform: 'scale(-1)',
                     margin: 'auto',
-                    lineHeight: '1rem',
                     pointerEvents: "all",
                     zIndex: 200,
                     position: 'absolute',

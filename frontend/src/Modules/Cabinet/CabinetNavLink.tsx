@@ -3,7 +3,7 @@ import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {SvgIconComponent} from '@mui/icons-material';
 import {useTheme} from "Theme/ThemeContext";
-import {FRSC} from "WideLayout/Layouts";
+import {FRSC} from "wide-containers";
 
 interface CabinetNavLinkProps {
     text: string;

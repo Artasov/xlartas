@@ -1,7 +1,7 @@
 // Modules/xLMine/XLMineLanding.tsx
 
 import React, {useEffect, useRef, useState} from 'react';
-import {FC, FCA, FCC, FCCC, FCSC, FR, FRSC} from 'WideLayout/Layouts';
+import {FC, FCA, FCC, FCCC, FCSC, FR, FRSC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";

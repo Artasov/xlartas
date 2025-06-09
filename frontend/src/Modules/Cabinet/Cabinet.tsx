@@ -5,7 +5,7 @@ import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
-import {FC, FCCC, FCSC, FCSS, FRC} from "WideLayout/Layouts";
+import {FC, FCCC, FCSC, FCSS, FRC} from "wide-containers";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -174,7 +174,7 @@ const Cabinet: React.FC = () => {
                         </FC>
                     </FCSC>
 
-                    <FC cls={'profile-section'} rounded={3} h={'100%'} pos={'relative'}
+                    <FC cls={'profile-section'} rounded={3} h={'100%'} w={'100%'} pos={'relative'}
                         maxH={`calc(100vh - ${headerNavHeight}px)`}
                         bg={isGtSm
                             ? plt.mode === 'dark'

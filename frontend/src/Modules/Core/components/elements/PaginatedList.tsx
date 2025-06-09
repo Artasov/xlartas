@@ -1,7 +1,7 @@
 // Modules/Core/components/elements/PaginatedList.tsx
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FC, FCCC} from "WideLayout/Layouts";
+import {FC, FCCC} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 
 interface PaginatedListProps<T> {

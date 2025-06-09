@@ -1,7 +1,7 @@
 // Modules/Order/PromoCodeField.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import debounce from 'lodash.debounce';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {TextField} from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';

@@ -1,6 +1,6 @@
 // Modules/Docs/ContractOffer.tsx
 import React from "react";
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 // @ts-ignore
 
 const ContractOffer: React.FC = () => {

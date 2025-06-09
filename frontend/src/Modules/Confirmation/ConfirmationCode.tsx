@@ -8,7 +8,7 @@ import DynamicForm from 'Core/components/elements/DynamicForm';
 import {SmartCaptcha} from '@yandex/smart-captcha';
 import Button from 'Core/components/elements/Button/Button';
 import {useTheme} from 'Theme/ThemeContext';
-import {FC, FCCC} from 'WideLayout/Layouts';
+import {FC, FCCC} from 'wide-containers';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import pprint from 'Utils/pprint';

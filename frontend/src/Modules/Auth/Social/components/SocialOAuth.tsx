@@ -10,7 +10,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import Button from "Core/components/elements/Button/Button";
-import {FR} from "WideLayout/Layouts";
+import {FR} from "wide-containers";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

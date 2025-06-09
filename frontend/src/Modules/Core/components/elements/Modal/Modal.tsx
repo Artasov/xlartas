@@ -3,7 +3,7 @@ import React, {MouseEvent, ReactNode, useEffect, useRef, useState} from 'react';
 import './Modal.sass';
 import IconButton from "@mui/material/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import {FC, FRBC, FRC} from "WideLayout/Layouts";
+import {FC, FRBC, FRC} from "wide-containers";
 import {SxProps} from "@mui/material";
 
 interface ModalProps {

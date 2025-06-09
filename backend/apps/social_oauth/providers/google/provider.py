@@ -20,7 +20,7 @@ class GoogleOAuthProvider(OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         google_id = user_data['sub']
-        existing_link = await GoogleUser.objects.filter(google_id=google_id).afirst()
+        existing_link = await GoogleUser.objects.select_related('user').filter(google_id=google_id).afirst()
         if existing_link and existing_link.user != user:
             raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
         google_user, _ = await GoogleUser.objects.aget_or_create(user=user)

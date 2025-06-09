@@ -7,7 +7,7 @@ import Button from 'Core/components/elements/Button/Button';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from '../Api/useApi';
-import {FC, FRE} from "WideLayout/Layouts";
+import {FC, FRE} from "wide-containers";
 
 interface Props {
     open: boolean;

@@ -1,7 +1,7 @@
 // Modules/Landing/Landing.tsx
 import React, {useEffect} from 'react';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {FCCC} from 'WideLayout/Layouts';
+import {FCCC} from 'wide-containers';
 import ParallaxLogo from 'Core/ParallaxLogo';
 
 const Landing: React.FC = () => {

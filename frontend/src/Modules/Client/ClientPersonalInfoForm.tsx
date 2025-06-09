@@ -1,7 +1,7 @@
 // Modules/Client/ClientPersonalInfoForm.tsx
 import React, {ChangeEvent, FormEvent, useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import TextField from "Core/components/elements/TextField/TextField";
 import Button from "Core/components/elements/Button/Button";

@@ -7,7 +7,7 @@ import {format, isThisYear, isToday, parseISO} from 'date-fns';
 import {useTheme} from "Theme/ThemeContext";
 import {useParams} from 'react-router-dom';
 import {IRoom} from "types/chat/models";
-import {FCS, FR, FRBC, FRSC} from "WideLayout/Layouts";
+import {FCS, FR, FRBC, FRSC} from "wide-containers";
 
 interface RoomItemProps {
     room: IRoom;

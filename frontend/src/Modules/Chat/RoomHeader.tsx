@@ -8,7 +8,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
-import {FRSC} from "WideLayout/Layouts";
+import {FRSC} from "wide-containers";
 import {useProfile} from "User/ProfileContext";
 
 interface RoomHeaderProps {

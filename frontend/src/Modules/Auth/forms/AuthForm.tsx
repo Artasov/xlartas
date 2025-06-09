@@ -10,7 +10,7 @@ import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";
 import Button from "Core/components/elements/Button/Button";
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
-import {FC, FCC} from "WideLayout/Layouts";
+import {FC, FCC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import {isEmail, isPhone} from "Utils/validator/base";
 import SignUpForm from "Auth/forms/SignUpForm";

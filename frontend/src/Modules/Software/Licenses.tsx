@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FCC, FCCC, FR} from 'WideLayout/Layouts';
+import {FCC, FCCC, FR} from 'wide-containers';
 import LicenseCard from './LicenseCard';
 import {Message} from 'Core/components/Message';
 

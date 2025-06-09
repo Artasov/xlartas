@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FCC, FRCC} from "WideLayout/Layouts";
+import {FC, FCC, FRCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import {Message} from 'Core/components/Message';
 

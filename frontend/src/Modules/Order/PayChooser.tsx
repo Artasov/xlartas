@@ -4,7 +4,7 @@
 // import PaymentTBank from './providers/PaymentTBank';
 // import PaymentCloud from './providers/PaymentCloud';
 // import PaymentTBankInstallment from './providers/PaymentTBankInstallment';
-// import {FC} from "WideLayout/Layouts";
+// import {FC} from "wide-containers";
 //
 // interface Props {
 //     orderId: string;

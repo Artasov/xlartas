@@ -4,7 +4,7 @@ import React from 'react';
 import {FormControlLabel, Typography} from '@mui/material';
 import Checkbox from "Core/components/elements/CheckBox"
 import {useTheme} from "Theme/ThemeContext";
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 
 interface TermsCheckboxesProps {
     onFirstCheckedChange: (checked: boolean) => void;

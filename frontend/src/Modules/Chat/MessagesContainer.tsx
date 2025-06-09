@@ -2,7 +2,7 @@
 
 import React, {useContext} from 'react';
 import {CircularProgress} from '@mui/material';
-import {FC, FCCC, FCE} from "WideLayout/Layouts";
+import {FC, FCCC, FCE} from "wide-containers";
 import RoomMessage from "Chat/RoomMessage";
 import {IMessage, IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";

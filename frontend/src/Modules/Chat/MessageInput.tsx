@@ -6,7 +6,7 @@ import {Checkbox, IconButton} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {Message as ToastMessage} from "Core/components/Message";
-import {FC, FCCC, FRSC} from "WideLayout/Layouts";
+import {FC, FCCC, FRSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import AttachedFilesList from './AttachedFilesList'; // Импортируем обновлённый компонент
 

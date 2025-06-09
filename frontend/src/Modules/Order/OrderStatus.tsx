@@ -1,7 +1,7 @@
 // Modules/Order/OrderStatus.tsx
 import React from 'react';
 import {IOrder} from "types/commerce/shop";
-import {FR} from "WideLayout/Layouts";
+import {FR} from "wide-containers";
 import StatusItem from './OrderStatusItem';
 import {useTheme} from "Theme/ThemeContext";
 

@@ -1,7 +1,7 @@
 // Modules/Chat/DateLabel.tsx
 
 import React from 'react';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import {format, isThisYear, isToday, parseISO} from 'date-fns';
 import {useTheme} from "Theme/ThemeContext";
 

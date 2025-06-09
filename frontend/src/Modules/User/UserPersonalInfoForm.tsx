@@ -17,7 +17,7 @@ import Modal from "Core/components/elements/Modal/Modal";
 import NewEmailForm from "Auth/forms/NewEmailForm";
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import {useTheme} from "Theme/ThemeContext";
-import {FC, FR, FRC, FRSC} from "WideLayout/Layouts";
+import {FC, FR, FRC, FRSC} from "wide-containers";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import copyToClipboard from "Utils/clipboard";
 import {useApi} from "../Api/useApi";

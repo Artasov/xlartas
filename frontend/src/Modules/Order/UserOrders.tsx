@@ -5,7 +5,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {IOrder} from "types/commerce/shop";
 import OrderItem from "Order/OrderItem";
-import {FC as FCC, FCCC, FR} from "WideLayout/Layouts";
+import {FC as FCC, FCCC, FR} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
 

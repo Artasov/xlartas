@@ -22,7 +22,7 @@ import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
 import Button from "Core/components/elements/Button/Button";
-import {FC, FCCC, FCS, FR, FRC, FRSC} from "WideLayout/Layouts";
+import {FC, FCCC, FCS, FR, FRC, FRSC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";
 import {v4 as uuidv4} from 'uuid';

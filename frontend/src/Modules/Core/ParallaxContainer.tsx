@@ -1,6 +1,6 @@
 // Modules/Core/ParallaxContainer.tsx
 import React, {useEffect, useRef} from 'react';
-import {FC as FCLayout, FCCC} from 'WideLayout/Layouts';
+import {FC as FCLayout, FCCC} from 'wide-containers';
 
 type Rotation = { rx: number; ry: number };
 

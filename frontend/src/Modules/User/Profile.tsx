@@ -4,7 +4,7 @@ import React from 'react';
 import {NavLink, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useTheme} from "Theme/ThemeContext";
 import TabButton from "Core/components/elements/Tabs/TabButton";
-import {FC, FRS} from "WideLayout/Layouts";
+import {FC, FRS} from "wide-containers";
 import UserPersonalInfoForm from "User/UserPersonalInfoForm";
 
 interface ProfileProps {
@@ -42,7 +42,7 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
                 {tabs.map((tab) => (
                     <NavLink key={tab.path} to={tab.path} style={{textDecoration: 'none'}}>
                         {({isActive}) => (
-                            <TabButton fontSize={'1.3rem'} textSx={{padding: '0 .7rem'}} active={isActive}>
+                            <TabButton textSx={{padding: '0 .7rem', fontSize: '1.3rem'}} active={isActive}>
                                 {tab.label}
                             </TabButton>
                         )}

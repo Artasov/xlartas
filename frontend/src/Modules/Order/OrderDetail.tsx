@@ -11,7 +11,7 @@ import {IOrder} from "types/commerce/shop";
 import OrderActions from "Order/OrderActions";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
-import {FCCC, FR, FRSC} from "WideLayout/Layouts";
+import {FCCC, FR, FRSC} from "wide-containers";
 import {useApi} from "../Api/useApi";
 import {Alert, AlertTitle} from "@mui/material";
 

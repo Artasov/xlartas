@@ -5,7 +5,7 @@ import e2 from '../../../Static/img/emoji/rating/2.png';
 import e3 from '../../../Static/img/emoji/rating/3.png';
 import e4 from '../../../Static/img/emoji/rating/4.png';
 import e5 from '../../../Static/img/emoji/rating/5.png';
-import {FC, FR} from "WideLayout/Layouts";
+import {FC, FR} from "wide-containers";
 
 interface EmojiRatingPickerProps {
     value: number | null;

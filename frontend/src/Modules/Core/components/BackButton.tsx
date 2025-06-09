@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import {FRSC} from "WideLayout/Layouts";
+import {FRSC} from "wide-containers";
 import {useNavigate} from "react-router-dom";
 
 interface BackButtonProps {

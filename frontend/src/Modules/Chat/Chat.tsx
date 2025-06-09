@@ -8,7 +8,7 @@ import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useRooms} from './RoomsContext';
 import {IRoom} from "types/chat/models";
 import CircularProgress from "Core/components/elements/CircularProgress";
-import {FC, FCSC} from "WideLayout/Layouts";
+import {FC, FCSC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 
 const Chat: React.FC = () => {

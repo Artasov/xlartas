@@ -5,7 +5,7 @@ import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop'
 import {Message} from 'Core/components/Message';
 import Button from 'Core/components/elements/Button/Button';
 import PaymentTypePicker from "Order/PaymentTypePicker";
-import {FC, FCCC, FR, FRCC} from "WideLayout/Layouts";
+import {FC, FCCC, FR, FRCC} from "wide-containers";
 import {IPromocode} from "types/commerce/promocode";
 import PromoCodeField from "Order/PromoCodeField";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";

@@ -2,7 +2,7 @@
 import React from 'react';
 import Modal from "Core/components/elements/Modal/Modal";
 import AuthForm from "Auth/forms/AuthForm";
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import {closeAuthModal} from 'Redux/modalsSlice';
 import {useDispatch, useSelector} from "react-redux";
 

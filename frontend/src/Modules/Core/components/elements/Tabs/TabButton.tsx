@@ -1,8 +1,8 @@
 // Modules/Core/components/elements/Tabs/TabButton.tsx
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
-import {ContainerProps} from "WideLayout/Container";
-import {FC, FRC} from "WideLayout/Layouts";
+import {ContainerProps} from "wide-containers/src/Modules/Container";
+import {FC, FRC} from "wide-containers";
 
 interface TabButtonProps extends ContainerProps {
     active: boolean;

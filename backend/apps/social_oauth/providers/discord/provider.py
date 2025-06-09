@@ -20,7 +20,7 @@ class DiscordOAuthProvider(OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         discord_id = user_data['id']
-        existing_link = await DiscordUser.objects.filter(discord_id=discord_id).afirst()
+        existing_link = await DiscordUser.objects.select_related('user').filter(discord_id=discord_id).afirst()
         if existing_link and existing_link.user != user:
             raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
         discord_user, _ = await DiscordUser.objects.aget_or_create(user=user)

@@ -8,7 +8,7 @@ import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 import {Message} from "Core/components/Message";
 import {useNavigate} from "react-router-dom";
-import {FC} from 'WideLayout/Layouts';
+import {FC} from 'wide-containers';
 import {IconButton, InputAdornment} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';

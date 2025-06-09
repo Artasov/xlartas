@@ -59,17 +59,45 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             )
 
     async def receive_json(self, content, **kwargs):
-        """
-        Клиент шлёт: {"macro": "<name>"}
-        """
-        macro_name = content.get("macro")
-        if not macro_name:
+        msg_type = content.get("type")
+
+        # ---------- мышь -----------
+        if msg_type == "mouse_move":
+            await self.channel_layer.group_send(
+                f"user_{self.user.id}",
+                {"type": "mouse.move",
+                 "dx": content.get("dx", 0),
+                 "dy": content.get("dy", 0)}
+            )
             return
 
-        await self.channel_layer.group_send(
-            f"user_{self.user.id}",
-            {"type": "macro.command", "macro": macro_name},
-        )
+        # ---------- клавиатура ------
+        if msg_type == "key_press":
+            await self.channel_layer.group_send(
+                f"user_{self.user.id}",
+                {"type": "key.press",
+                 "key": content.get("key", "")}
+            )
+            return
+
+        # ---------- старые макросы --
+        macro_name = content.get("macro")
+        if macro_name:
+            await self.channel_layer.group_send(
+                f"user_{self.user.id}",
+                {"type": "macro.command", "macro": macro_name},
+            )
+
+        # -------- пересылка на десктоп ----------
+
+    async def mouse_move(self, event):
+        await self.send_json({"type": "mouse_move",
+                              "dx": event["dx"],
+                              "dy": event["dy"]})
+
+    async def key_press(self, event):
+        await self.send_json({"type": "key_press",
+                              "key": event["key"]})
 
     async def macro_command(self, event):
         """

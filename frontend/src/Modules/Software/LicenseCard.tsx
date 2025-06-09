@@ -3,7 +3,7 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Card, CardContent, CardMedia, Typography} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 
 interface LicenseCardProps {
     license: any;

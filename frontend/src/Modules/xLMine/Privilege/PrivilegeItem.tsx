@@ -2,7 +2,7 @@
 import React from "react";
 import {useTheme} from "Theme/ThemeContext";
 import Tooltip from "@mui/material/Tooltip";
-import {FC, FRBC, FRC, FRSC} from "WideLayout/Layouts";
+import {FC, FRBC, FRC, FRSC} from "wide-containers";
 
 interface IPrivilegeExtended {
     id: string;

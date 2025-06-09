@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import {FC, FCCC} from "WideLayout/Layouts";
+import {FC, FCCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 
 interface UserAvatarProps {

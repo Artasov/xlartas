@@ -6,7 +6,7 @@ import moment from "moment";
 import OrderActions from "Order/OrderActions";
 import {IOrder} from "types/commerce/shop";
 import OrderStatus from "Order/OrderStatus";
-import {FC, FCCC, FR, FRBC, FRSC} from "WideLayout/Layouts";
+import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgress from "Core/components/elements/CircularProgress";
 

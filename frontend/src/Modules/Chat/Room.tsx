@@ -38,7 +38,7 @@ import {parseISO} from 'date-fns';
 import {Message as ToastMessage} from 'Core/components/Message';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {IMessage, IRoom} from 'types/chat/models';
-import {FC} from 'WideLayout/Layouts';
+import {FC} from 'wide-containers';
 import MessageInput from 'Chat/MessageInput';
 import {useRooms} from './RoomsContext';
 import RoomHeader from './RoomHeader';

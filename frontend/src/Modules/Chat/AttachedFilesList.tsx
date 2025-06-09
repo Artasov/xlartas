@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Box, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {FRCC} from "WideLayout/Layouts";
+import {FRCC} from "wide-containers";
 import Modal from 'Core/components/elements/Modal/Modal'; // Импортируем ваш компонент Modal
 
 interface AttachedFilesListProps {

@@ -3,7 +3,7 @@
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 import {ISoftware} from "./Types/Software";
-import {FC, FRSE} from 'WideLayout/Layouts';
+import {FC, FRSE} from 'wide-containers';
 import {Card, CardContent, CardMedia} from "@mui/material";
 
 interface SoftwareCardProps {

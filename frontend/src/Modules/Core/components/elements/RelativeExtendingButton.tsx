@@ -1,7 +1,7 @@
 // Modules/Core/components/elements/RelativeExtendingButton.tsx
 
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import {FC, FCCC} from 'WideLayout/Layouts';
+import {FC, FCCC} from 'wide-containers';
 
 interface RelativeExtendingButtonProps {
     text: string;

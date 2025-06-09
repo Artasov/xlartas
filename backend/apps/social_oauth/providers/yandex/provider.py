@@ -20,7 +20,7 @@ class YandexOAuthProvider(OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         yandex_id = user_data['id']
-        existing_link = await YandexUser.objects.filter(yandex_id=yandex_id).afirst()
+        existing_link = await YandexUser.objects.select_related('user').filter(yandex_id=yandex_id).afirst()
         if existing_link and existing_link.user != user:
             raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
         yandex_user, _ = await YandexUser.objects.aget_or_create(user=user)

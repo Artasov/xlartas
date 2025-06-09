@@ -1,31 +1,82 @@
-import React from 'react';
-import MacrosExecutorForm from './MacrosExecutorForm';
-import MacrosWirelessDashboard from './MacrosWirelessDashboard';
-import {FC} from 'WideLayout/Layouts';
+// src/Modules/Software/Macros/MacrosExecutorPage.tsx
+import React, {useState} from 'react';
+import {Tab, Tabs, Typography, useMediaQuery} from '@mui/material';
+import {FC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
-import {Typography} from "@mui/material";
+import {MacroControlProvider} from './MacroControlProvider';
+import MacrosWirelessDashboard from './MacrosWirelessDashboard';
+import RemoteTouchpad from './RemoteTouchpad';
+import RemoteKeyboardField from './RemoteKeyboardField';
+import MacrosExecutorForm from './MacrosExecutorForm';
 
 const MacrosExecutorPage: React.FC = () => {
     const {plt} = useTheme();
 
+    const [mainTab, setMainTab] = useState<'control' | 'info'>('control');
+    const [controlTab, setControlTab] = useState<'panel' | 'io' | 'byname'>('panel');
+    const isGtSm = useMediaQuery('(min-width: 576px)');
     return (
-        <FC mx="auto" maxW={600} scroll={'y-hidden'}>
-            <FC p={2} scroll={'auto'}>
-                <Typography variant={'h1'} fontSize={'2rem'} textAlign={'left'} sx={{color: plt.text.primary80}}>
-                    Выполнить макрос удалённо
-                </Typography>
+        <MacroControlProvider>
+            <FC w={'100%'} scroll="y-hidden" px={2} pt={isGtSm ? 2 : 0} g={1}>
+                <Tabs value={mainTab} sx={{
+                    minHeight: 30
+                }}
+                      onChange={(_, v) => setMainTab(v)} centered>
+                    <Tab sx={{
+                        py: 0, minHeight: 30
+                    }} label="Control" value="control"/>
+                    <Tab sx={{
+                        py: 0, minHeight: 30
+                    }} label="Info" value="info"/>
+                </Tabs>
 
-                <p style={{color: plt.text.primary50, marginTop: '.5rem', marginBottom: '.6rem'}}>
-                    Введите точное имя макроса (как в настольном приложении) и нажмите
-                    «Выполнить». Компьютер, на котором запущен xLMACROS
-                    с включённой опцией «Управление по сети», немедленно
-                    запустит указанный макрос.
-                </p>
+                {mainTab === 'control' && (
+                    <>
+                        <Tabs
+                            value={controlTab}
+                            onChange={(_, v) => setControlTab(v)}
+                            centered
+                            textColor="secondary"
+                            indicatorColor="secondary" sx={{
+                            minHeight: 30
+                        }}>
+                            <Tab sx={{
+                                py: 0, minHeight: 30
+                            }} label="Panel" value="panel"/>
+                            <Tab sx={{
+                                py: 0, minHeight: 30
+                            }} label="M & K" value="io"/>
+                            <Tab sx={{
+                                py: 0, minHeight: 30
+                            }} label="By Name" value="byname"/>
+                        </Tabs>
 
-                <MacrosExecutorForm/>
-                <MacrosWirelessDashboard/>
+                        {controlTab === 'panel' && <FC scroll={'y-auto'}><MacrosWirelessDashboard/></FC>}
+                        {controlTab === 'io' && (
+                            <FC g={1}>
+                                <RemoteTouchpad/>
+                                <RemoteKeyboardField/>
+                            </FC>
+                        )}
+                        {controlTab === 'byname' && <FC>
+                            <p style={{color: plt.text.primary50, marginBottom: '.6rem'}}>
+                                Введите имя макроса (как в приложении) и нажмите
+                                «Выполнить». PC, на котором запущен xLMACROS
+                                с включённой опцией «Wireless control»,
+                                запустит указанный макрос.
+                            </p>
+                            <MacrosExecutorForm/>
+                        </FC>}
+                    </>
+                )}
+
+                {mainTab === 'info' && (
+                    <Typography sx={{color: plt.text.primary60, mt: 2}}>
+                        Здесь может быть справка или описание возможностей. Заполните по необходимости.
+                    </Typography>
+                )}
             </FC>
-        </FC>
+        </MacroControlProvider>
     );
 };
 

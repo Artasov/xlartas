@@ -5,7 +5,7 @@ import {Message} from "Core/components/Message";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useTheme} from "Theme/ThemeContext";
 import {IPrivilege} from "../types/base";
-import {FC, FCCC, FRSC} from "WideLayout/Layouts";
+import {FC, FCCC, FRSC} from "wide-containers";
 import PrivilegeItem from "./PrivilegeItem";
 
 interface ICurrentPrivilegeResponse {

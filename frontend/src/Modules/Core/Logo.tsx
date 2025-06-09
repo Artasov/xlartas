@@ -1,7 +1,7 @@
 // Modules/Core/Logo.tsx
 import React from 'react';
 import logo from '../../Static/img/icon/logo.png';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 
 interface LogoProps {

@@ -6,7 +6,7 @@ import {IconButton} from "@mui/material";
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Button from "Core/components/elements/Button/Button";
-import {FC, FCCC, FR, FRCC, FRSE} from "WideLayout/Layouts";
+import {FC, FCCC, FR, FRCC, FRSE} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import SoftwareOrder from './SoftwareOrder';
 import {ISoftware} from "./Types/Software";

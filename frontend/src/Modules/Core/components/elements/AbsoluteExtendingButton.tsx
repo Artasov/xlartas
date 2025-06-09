@@ -1,7 +1,7 @@
 // Modules/Core/components/elements/AbsoluteExtendingButton.tsx
 
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import {FC, FCCC} from 'WideLayout/Layouts';
+import {FC, FCCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 
 interface AbsoluteExtendingButtonProps {

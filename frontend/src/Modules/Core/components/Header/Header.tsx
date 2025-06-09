@@ -11,7 +11,7 @@ import MobileNavigationMenu from "Core/components/Header/MobileNavigationMenu";
 import AdminLink from "Core/components/AdminLink";
 import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
-import {FR, FRBC, FRCC} from "WideLayout/Layouts";
+import {FRBC, FRCC} from "wide-containers";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {IconButton} from "@mui/material";
@@ -45,10 +45,10 @@ const Header: React.FC = () => {
         <FRBC w={'100%'} mx={'auto'} maxW={750} g={3} pl={1} pr={2} ref={headerRef}
               sx={{height: headerNavHeight}} component={'header'}>
             <FRCC>
-                <IconButton sx={{width: 30, height: 30, opacity: '50%', transform: 'scale(1.3)'}}>
-                    <ArrowBackIosNewRoundedIcon onClick={()=> {
-                        navigate(-1);
-                    }}/>
+                <IconButton onClick={() => {
+                    navigate(-1);
+                }} sx={{width: 30, height: 30, opacity: '50%', transform: 'scale(1.3)'}}>
+                    <ArrowBackIosNewRoundedIcon/>
                 </IconButton>
                 <FRCC onClick={hideMobileMenu} color={plt.text.primary60}>
                     {logoContent}

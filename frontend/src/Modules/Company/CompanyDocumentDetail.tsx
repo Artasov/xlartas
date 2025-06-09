@@ -5,7 +5,7 @@ import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import ReactMarkdown from 'react-markdown';
 import {Link, Typography} from '@mui/material';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import {CompanyDocument} from "Company/Types";
 import {useApi} from "../Api/useApi";
 

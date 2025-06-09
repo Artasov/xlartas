@@ -2,7 +2,7 @@
 import React, {useContext, useState} from 'react';
 import Button from "Core/components/elements/Button/Button";
 import Modal from "Core/components/elements/Modal/Modal";
-import {FCC, FRCC} from "WideLayout/Layouts";
+import {FCC, FRCC} from "wide-containers";
 import {useApi} from "../Api/useApi";
 import {Message} from "Core/components/Message";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';

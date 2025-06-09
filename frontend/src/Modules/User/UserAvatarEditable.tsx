@@ -7,7 +7,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 
 import './UserAvatarEditable.sass';
 import {useTheme} from "Theme/ThemeContext";
-import {FC, FCCC} from "WideLayout/Layouts";
+import {FC, FCCC} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
 

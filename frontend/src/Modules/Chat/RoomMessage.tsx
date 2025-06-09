@@ -11,7 +11,7 @@ import {IMessage} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
 import Modal from 'Core/components/elements/Modal/Modal';
 import {Box} from '@mui/material';
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 
 interface RoomMessageProps {
     message: IMessage;

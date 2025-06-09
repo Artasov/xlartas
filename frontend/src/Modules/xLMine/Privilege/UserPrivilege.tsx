@@ -1,7 +1,7 @@
 // Modules/xLMine/Privilege/UserPrivilege.tsx
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../../Api/useApi';
-import {FC, FR, FRCC} from 'WideLayout/Layouts';
+import {FC, FR, FRCC} from 'wide-containers';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {Message} from 'Core/components/Message';
 import Tooltip from '@mui/material/Tooltip';

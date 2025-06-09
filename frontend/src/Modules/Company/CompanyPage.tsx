@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FC, FCSS, FR} from "WideLayout/Layouts";
+import {FC, FCSS, FR} from "wide-containers";
 import {Company} from "Company/Types";
 import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "../Api/useApi";

@@ -29,7 +29,7 @@ import Header from "Core/components/Header/Header";
 import GlobalAuthModal from "Auth/GlobalAuthModal";
 import CompanyPage from "Company/CompanyPage";
 import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
-import {FC} from "WideLayout/Layouts";
+import {FC} from "wide-containers";
 import Softwares from "./Modules/Software/Softwares";
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";

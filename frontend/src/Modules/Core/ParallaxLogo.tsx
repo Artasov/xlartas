@@ -6,7 +6,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Button from 'Core/components/elements/Button/Button';
 import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
-import {FCCC, FR} from 'WideLayout/Layouts';
+import {FCCC, FR} from 'wide-containers';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import ParallaxContainer from './ParallaxContainer';

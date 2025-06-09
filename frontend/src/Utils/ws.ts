@@ -11,5 +11,5 @@ export const buildWSUrl = (path: string): string => {
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const host = window.location.host;             // keeps :<port> if any
     const token = localStorage.getItem('access');   // simple-jwt access
-    return `${proto}://${host}${path}${token ? `?token=${token}` : ''}`;
+    return `${proto}://${host}${path}${token ? `?token=${token}` : ''}`.replace(':3000', ':8000');
 };
