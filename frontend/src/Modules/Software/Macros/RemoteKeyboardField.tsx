@@ -55,7 +55,7 @@ const RemoteKeyboardField: React.FC = () => {
     };
 
     return (
-        <FCCC w="100%" maxW={450}>
+        <FCCC w="100%">
             <TextField
                 fullWidth
                 variant="filled"

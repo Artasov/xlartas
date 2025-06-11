@@ -38,7 +38,7 @@ const RemoteTouchpad: React.FC = () => {
     };
 
     return (
-        <FCCC w="100%" maxW={450} rounded={3} p={2}
+        <FCCC w="100%" rounded={3} p={2}
               bg={plt.text.primary + '22'}
               sx={{
                   userSelect: 'none',

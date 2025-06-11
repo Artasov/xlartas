@@ -1,5 +1,5 @@
 import React from 'react'
-import {Divider, List, ListItem, Typography} from '@mui/material'
+import {Divider, Typography} from '@mui/material'
 import {FC} from 'wide-containers'
 import {useTheme} from 'Theme/ThemeContext'
 

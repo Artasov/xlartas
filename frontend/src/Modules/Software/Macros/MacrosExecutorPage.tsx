@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Tab, Tabs, useMediaQuery} from '@mui/material';
-import {FC} from 'wide-containers';
+import {FC, FCCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {MacroControlProvider} from './MacroControlProvider';
 import MacrosWirelessDashboard from './MacrosWirelessDashboard';
@@ -10,6 +10,8 @@ import RemoteMouse from './RemoteMouse';
 import MacrosExecutorForm from './MacrosExecutorForm';
 import LanguageSwitcher from "../../../UI/LanguageSwitcher";
 import MacrosInfo from "./MacrosInfo";
+import { ScreenViewerProvider } from './ScreenViewerProvider';
+import ScreenViewer from "./ScreenViewer";
 
 const MacrosExecutorPage: React.FC = () => {
     const {plt} = useTheme();
@@ -53,6 +55,9 @@ const MacrosExecutorPage: React.FC = () => {
 
                         {controlTab === 'io' && (
                             <FC scroll="y-auto" pb={1.7} g={1} mx="auto">
+                                <ScreenViewerProvider>
+                                    <FCCC><ScreenViewer style={{width: '100%'}}/></FCCC>
+                                </ScreenViewerProvider>
                                 <RemoteTouchpad/>
                                 <RemoteMouse/>
                                 <RemoteKeyboardField/>

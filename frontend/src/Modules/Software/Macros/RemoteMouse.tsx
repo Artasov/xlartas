@@ -23,7 +23,7 @@ const RemoteMouse: React.FC = () => {
         () => readyState === WebSocket.OPEN && sendMouseClick(btn);
 
     return (
-        <FCCC w="100%" maxW={450}>
+        <FCCC w="100%">
             <FRCC g={1} w="100%">
                 <button style={btnCss} onClick={mkClick('left')}>LMB</button>
                 <button style={btnCss} onClick={mkClick('middle')}>MMB</button>
