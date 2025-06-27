@@ -6,6 +6,14 @@ import {
     List,
     ListItem,
     ListItemSecondaryAction,
+    // TODO: export default const ListItemSecondaryAction: ((props: ListItemSecondaryActionProps) => React.JSX.Element) & {     muiName: string }
+    // Must be used as the last child of ListItem to function properly.
+    // Demos:
+    // Lists
+    // API:
+    // ListItemSecondaryAction API
+    // Deprecated:
+    // Use the secondaryAction prop in the ListItem component instead. This component will be removed in a future major release. See Migrating from deprecated APIs  for more details.
     ListItemText,
     Tooltip,
 } from '@mui/material';
@@ -37,7 +45,7 @@ const MacrosWirelessDashboard: React.FC = () => {
         }
     };
     useEffect(() => {
-        load();
+        load().then();
     }, []);
 
     const handleDelete = async (id: number) => {
@@ -78,6 +86,14 @@ const MacrosWirelessDashboard: React.FC = () => {
                     <ListItem key={m.id} divider onClick={() => sendMacro(m.name)}>
                         <ListItemText sx={{opacity: '80%'}} primary={m.name}/>
                         <ListItemSecondaryAction sx={{opacity: '60%'}}>
+                            {/* TODO: export default const ListItemSecondaryAction: ((props: ListItemSecondaryActionProps) => React.JSX.Element) & {     muiName: string }
+Must be used as the last child of ListItem to function properly.
+Demos:
+Lists
+API:
+ListItemSecondaryAction API
+Deprecated:
+Use the secondaryAction prop in the ListItem component instead. This component will be removed in a future major release. See Migrating from deprecated APIs  for more details.*/}
                             <Tooltip title="Редактировать">
                                 <IconButton size="small" onClick={e => {
                                     e.stopPropagation();
@@ -90,7 +106,7 @@ const MacrosWirelessDashboard: React.FC = () => {
                             <Tooltip title="Удалить">
                                 <IconButton size="small" onClick={e => {
                                     e.stopPropagation();
-                                    handleDelete(m.id);
+                                    handleDelete(m.id).then();
                                 }}>
                                     <DeleteIcon fontSize="small"/>
                                 </IconButton>

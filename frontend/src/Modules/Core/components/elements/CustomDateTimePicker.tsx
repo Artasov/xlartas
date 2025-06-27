@@ -80,8 +80,12 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
                     onClick={handleOpen}
                     value={value ? format(value, 'yyyy-MM-dd HH:mm') : ''}
                     onChange={() => {
-                    }} // Disable direct text change
-                    inputProps={{readOnly: true}} // Make field read-only
+                    }}
+                    inputProps={{readOnly: true}}
+                    // TODO: OutlinedTextFieldProps. InputProps?: Partial<FilledInputProps> | Partial<OutlinedInputProps> | Partial<InputProps> | undefined
+                    // Props applied to the Input element. It will be a FilledInput, OutlinedInput or Input component depending on the variant prop value.
+                    // Deprecated:
+                    // Use slotProps. input instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
                     InputProps={{
                         endAdornment: (
                             <IconButton onClick={handleOpen}>

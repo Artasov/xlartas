@@ -64,6 +64,10 @@ const RemoteKeyboardField: React.FC = () => {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 inputProps={{
+                    // TODO: BaseTextFieldProps. inputProps?: InputBaseComponentProps | undefined
+                    // Attributes  applied to the input element.
+                    // Deprecated:
+                    // Use slotProps. htmlInput instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
                     style: {textAlign: 'center', paddingTop: '10px'},
                     autoCapitalize: 'none',
                     autoCorrect: 'off',

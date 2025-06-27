@@ -113,7 +113,7 @@
 
                     console.log(response)
                     console.log(response.status)
-                    if (response.status === 'success') {
+                    if (response.status === 'success') { // TODO: Condition is always false since types 'number' and 'string' have no overlap
                         // Удаляем строку после успешного ответа
                         row.remove();
                     } else {

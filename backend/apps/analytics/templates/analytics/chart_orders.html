@@ -33,7 +33,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const ctx = document.getElementById('ordersChart').getContext('2d');
-        const ordersChart = new Chart(ctx, {
+        const ordersChart = new Chart(ctx, {// TODO: Unresolved type Chart
             type: 'line',
             data: {
                 labels: {{ labels|safe }},

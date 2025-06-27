@@ -47,8 +47,12 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({label, value, onChan
                     onClick={handleOpen}
                     value={value ? format(value, 'yyyy-MM-dd') : ''}
                     onChange={() => {
-                    }} // Отключаем прямое изменение текста
-                    inputProps={{readOnly: true}} // Делаем поле только для чтения
+                    }}
+                    inputProps={{readOnly: true}}
+                    // TODO: OutlinedTextFieldProps. InputProps?: Partial<FilledInputProps> | Partial<OutlinedInputProps> | Partial<InputProps> | undefined
+                    // Props applied to the Input element. It will be a FilledInput, OutlinedInput or Input component depending on the variant prop value.
+                    // Deprecated:
+                    // Use slotProps. input instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
                     InputProps={{
                         endAdornment: (
                             <IconButton onClick={handleOpen}>

@@ -8,7 +8,7 @@ import {useTheme} from "Theme/ThemeContext";
 interface TimeZonePickerProps {
     label?: string;
     value: string;
-    onChange: (event: SelectChangeEvent<string>) => void;
+    onChange: (event: SelectChangeEvent) => void;
     name?: string;
     size?: 'small' | 'medium';
     className?: string;
@@ -53,7 +53,7 @@ const TimeZonePicker: React.FC<TimeZonePickerProps> = (
         return allTimeZones.filter((tz: TimeZone) => popularTimezones.includes(tz.name));
     }, [popularTimezones]);
 
-    const handleChange = (event: SelectChangeEvent<string>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         onChange(event);
     }
     return (

@@ -45,13 +45,13 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
         else:
             user = self.scope["user"]
 
-        self.user = user
+        self.user = user  # TODO: Instance attribute user defined outside __init__
         await self.channel_layer.group_add(f"screen_{user.id}", self.channel_name)
         await self.accept()
 
         # буфер последнего кадра
-        self._latest_frame: bytes | None = None
-        self._flush_task = None
+        self._latest_frame: bytes | None = None  # TODO: Instance attribute _latest_frame defined outside __init__
+        self._flush_task = None  # TODO: Instance attribute _flush_task defined outside __init__
 
     async def disconnect(self, code):
         if hasattr(self, "user"):
@@ -68,12 +68,14 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
 
     # ---------- receive (desktop → server) ----------
 
-    async def receive(self, text_data=None, bytes_data=None):
+    async def receive(
+            self, text_data=None, bytes_data=None
+    ):  # TODO: Signature of method 'ScreenStreamConsumer.receive()' does not match signature of the base method in class 'AsyncJsonWebsocketConsumer'
         # ----- пришёл бинарный JPEG-кадр -----
         if bytes_data:
-            self._latest_frame = bytes_data
+            self._latest_frame = bytes_data  # TODO: Instance attribute _latest_frame defined outside __init__
             if not self._flush_task:
-                self._flush_task = asyncio.create_task(self._flush_frame())
+                self._flush_task = asyncio.create_task(self._flush_frame()) # TODO: Instance attribute _flush_task defined outside __init__
             return
 
         # ----- текстовые meta-сообщения (пока не используем) -----

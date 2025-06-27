@@ -1,6 +1,6 @@
 # core/management/commands/dumpdata_to_dir.py
-import os
 import logging
+import os
 
 from django.apps import apps
 from django.core.management import call_command
@@ -31,4 +31,4 @@ class Command(BaseCommand):
                             stdout=output_file
                         )
                 except Exception:  # noqa
-                    logging.getLogger(__name__).error('%s Not Loaded', model._meta.model_name)
+                    logging.getLogger(__name__).error('%s Not Loaded', model._meta.model_name)  # noqa

@@ -73,7 +73,7 @@ const useWebSocket = ({roomId, isAuthenticated, userId, onMessage}: UseWebSocket
             ws.current.onerror = handleError;
         };
 
-        connectWebSocket();
+        connectWebSocket().then();
 
         // Очистка при размонтировании или изменении зависимостей
         return () => {
@@ -85,15 +85,13 @@ const useWebSocket = ({roomId, isAuthenticated, userId, onMessage}: UseWebSocket
     }, [roomId, isAuthenticated, byResponse, onMessage]);
 
     // Функция для отправки сообщений через WebSocket
-    const sendMessage = useCallback((message: string) => {
+    return useCallback((message: string) => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(message);
         } else {
             pprint('WebSocket не открыт. Текущее состояние:', ws.current?.readyState);
         }
     }, []);
-
-    return sendMessage;
 };
 
 export default useWebSocket;

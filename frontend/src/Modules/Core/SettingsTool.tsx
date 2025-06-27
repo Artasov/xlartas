@@ -43,7 +43,7 @@ const SettingsTool: React.FC = () => {
     useEffect(() => {
         if (isOpen) {
             // При открытии модалки запрашиваем данные
-            fetchConfig();
+            fetchConfig().then();
         }
     }, [isOpen, fetchConfig]);
 

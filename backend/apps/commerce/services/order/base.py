@@ -110,16 +110,19 @@ class IOrderService:
     async def init(self: 'Order', request, init_payment: bool = True):
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()  # noqa
-        price = await self.receipt_price
+        price = await self.receipt_price  # TODO: Unresolved attribute reference 'receipt_price' for class 'Order'
         self.amount = price  # noqa
         await self.asave()
 
         # pregive
-        await self.product.can_pregive(self, raise_exceptions=True)
-        await self.product.pregive(self)
+        await self.product.can_pregive(self,
+                                       raise_exceptions=True)  # TODO: Unresolved attribute reference 'product' for class 'Order'
+        await self.product.pregive(self)  # TODO: Unresolved attribute reference 'product' for class 'Order'
 
         if self.payment_system and init_payment and price > 0:
-            await self.init_payment(request, price)
+            await self.init_payment(
+                request, price
+            )  # TODO: Unresolved attribute reference 'init_payment' for class 'Order'
 
         self.is_inited = True  # noqa
         await self.asave()
@@ -162,7 +165,7 @@ class IOrderService:
         if self.is_executed: raise OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()  # noqa
-        await self.product.postgive(self)
+        await self.product.postgive(self)  # TODO: Unresolved attribute reference 'product' for class 'Order'
         if self.promocode_id:
             await PromocodeUsage.objects.acreate(
                 user_id=self.user_id, promocode_id=self.promocode_id,

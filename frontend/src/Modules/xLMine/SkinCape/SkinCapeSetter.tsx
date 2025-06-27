@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";
 import {Button} from "@mui/material";
-import {FC, FCC, FRCC} from "wide-containers";
+import {FCC, FRCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import {Message} from 'Core/components/Message';
 
@@ -41,7 +41,7 @@ const SkinCapeSetter: React.FC = () => {
             }
         }
 
-        checkSkin();
+        checkSkin().then();
     }, [skinUrl]);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const SkinCapeSetter: React.FC = () => {
             }
         }
 
-        checkCape();
+        checkCape().then();
     }, [capeUrl]);
 
     const uploadFile = async (file: File, type: 'skin' | 'cape') => {

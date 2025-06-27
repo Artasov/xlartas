@@ -18,6 +18,7 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
     Клиент → сервер
       {"type": "mouse_move",  "dx": …, "dy": …}
       {"type": "mouse_click", "button": "left" | "middle" | "right"}
+      {"type": "mouse_scroll","dy": …}
       {"type": "key_press",   "key": …}
       {"macro": "<old-style-macro-name>"}
 
@@ -41,13 +42,13 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
         else:
             user = self.scope["user"]
 
-        self.user = user
+        self.user = user  # TODO: Instance attribute user defined outside __init__
         await self.channel_layer.group_add(f"user_{user.id}", self.channel_name)
         await self.accept()
 
         # буфер для коалессации мыши
-        self._mouse_acc = {"dx": 0, "dy": 0}
-        self._flush_task = None
+        self._mouse_acc = {"dx": 0, "dy": 0}  # TODO: Instance attribute _mouse_acc defined outside __init__
+        self._flush_task = None  # TODO: Instance attribute _flush_task defined outside __init__
 
     async def disconnect(self, code):
         if hasattr(self, "user"):
@@ -73,6 +74,7 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             self._mouse_acc["dy"] += int(content.get("dy", 0))
             if not self._flush_task:
                 self._flush_task = asyncio.create_task(self._flush_mouse())
+                # TODO: Instance attribute _flush_task defined outside __init__
             return
 
         # ----- мышь: клик -----
@@ -80,6 +82,14 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             await self._safe_group_send({
                 "type": "mouse.click",
                 "button": content.get("button", "left")
+            })
+            return
+
+        # ----- мышь: скролл -----
+        if msg_type == "mouse_scroll":
+            await self._safe_group_send({
+                "type": "mouse.scroll",
+                "dy": int(content.get("dy", 0))
             })
             return
 
@@ -131,6 +141,9 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
 
     async def mouse_click(self, event):
         await self.send_json({"type": "mouse_click", "button": event["button"]})
+
+    async def mouse_scroll(self, event):
+        await self.send_json({"type": "mouse_scroll", "dy": event["dy"]})
 
     async def key_press(self, event):
         await self.send_json({"type": "key_press", "key": event["key"]})

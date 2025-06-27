@@ -33,7 +33,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const ctx = document.getElementById('visitsChart').getContext('2d');
-        const visitsChart = new Chart(ctx, {
+        const visitsChart = new Chart(ctx, { // TODO: Unresolved type Chart
             type: 'line',
             data: {
                 labels: {{ labels|safe }},

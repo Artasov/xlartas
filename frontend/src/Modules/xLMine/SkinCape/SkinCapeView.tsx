@@ -1,5 +1,5 @@
 // Modules/xLMine/SkinCape/SkinCapeView.tsx
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 // import ReactSkinview3d from 'react-skinview3d';
 // import {FunctionAnimation, SkinViewer} from 'skinview3d';
 import CircularProgress from 'Core/components/elements/CircularProgress';

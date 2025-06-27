@@ -95,6 +95,10 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
                             disabled={useConfirmation}
                             inputRef={inputRef}
                             InputProps={{
+                                // TODO: OutlinedTextFieldProps. InputProps?: Partial<FilledInputProps> | Partial<OutlinedInputProps> | Partial<InputProps> | undefined
+                                // Props applied to the Input element. It will be a FilledInput, OutlinedInput or Input component depending on the variant prop value.
+                                // Deprecated:
+                                // Use slotProps. input instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
                                 endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton

@@ -61,7 +61,7 @@ const LauncherManager: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchVersions();
+        fetchVersions().then();
         // eslint-disable-next-line
     }, []);
 
@@ -271,7 +271,7 @@ const ReleaseManager: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchVersions();
+        fetchVersions().then();
     }, []);
 
     const handleFileChange = (picked: File | null) => {

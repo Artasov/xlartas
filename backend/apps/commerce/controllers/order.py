@@ -145,7 +145,7 @@ async def resend_payment_notification(_request, id):
     async with AsyncAtomicContextManager():
         payment = await order.arelated('payment')
         if isinstance(payment, TBankPayment):
-            await payment.resend()
+            await payment.resend()  # TODO: Unresolved attribute reference 'resend' for class 'TBankPayment'
         else:
             PaymentException.PaymentSystemNotFound()
     return Response(status=HTTP_200_OK)
