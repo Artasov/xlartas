@@ -27,6 +27,12 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
 
     # ---------- connect / disconnect ----------
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = None
+        self._mouse_acc = {"dx": 0, "dy": 0}
+        self._flush_task = None
+
     async def connect(self):
         if self.scope["user"].is_anonymous:
             qs = parse_qs(self.scope["query_string"].decode())
@@ -42,13 +48,13 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
         else:
             user = self.scope["user"]
 
-        self.user = user  # TODO: Instance attribute user defined outside __init__
+        self.user = user
         await self.channel_layer.group_add(f"user_{user.id}", self.channel_name)
         await self.accept()
 
         # буфер для коалессации мыши
-        self._mouse_acc = {"dx": 0, "dy": 0}  # TODO: Instance attribute _mouse_acc defined outside __init__
-        self._flush_task = None  # TODO: Instance attribute _flush_task defined outside __init__
+        self._mouse_acc = {"dx": 0, "dy": 0}
+        self._flush_task = None
 
     async def disconnect(self, code):
         if hasattr(self, "user"):
@@ -74,7 +80,6 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
             self._mouse_acc["dy"] += int(content.get("dy", 0))
             if not self._flush_task:
                 self._flush_task = asyncio.create_task(self._flush_mouse())
-                # TODO: Instance attribute _flush_task defined outside __init__
             return
 
         # ----- мышь: клик -----
