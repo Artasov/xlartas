@@ -12,8 +12,8 @@ from apps.software.models import Software, SoftwareOrder, SoftwareLicense
 @pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_postgive_creates_license_and_extends():
-    user = await User.objects.acreate(username="u1")
-    software = await Software.objects.acreate(name="Soft", min_license_order_hours=1)
+    user = await User.objects.acreate(username='u1')
+    software = await Software.objects.acreate(name='Soft', min_license_order_hours=1)
     await ProductPrice.objects.acreate(product=software, amount=10, currency=Currency.RUB)
 
     order = await SoftwareOrder.objects.acreate(
@@ -45,8 +45,8 @@ async def test_postgive_creates_license_and_extends():
 @pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_can_pregive_checks():
-    user = await User.objects.acreate(username="u2")
-    software = await Software.objects.acreate(name="Soft2", min_license_order_hours=5)
+    user = await User.objects.acreate(username='u2')
+    software = await Software.objects.acreate(name='Soft2', min_license_order_hours=5)
     await ProductPrice.objects.acreate(product=software, amount=10, currency=Currency.RUB)
     order = await SoftwareOrder.objects.acreate(
         user=user,

@@ -31,4 +31,4 @@ class DonateOrder(Order, DonateOrderService):
         verbose_name_plural = _('Donate orders')
 
     def __str__(self):
-        return f"DonateOrder:{self.id} [user={self.user_id}]"
+        return f'DonateOrder:{self.id} [user={self.user_id}]'

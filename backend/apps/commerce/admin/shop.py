@@ -37,13 +37,13 @@ class ProductAdmin(ImportExportModelAdmin):
     def make_installment_available(self, request, queryset):
         """Устанавливает is_installment_available=True для выбранных продуктов"""
         updated_count = queryset.update(is_installment_available=True)
-        self.message_user(request, f"Успешно обновлено {updated_count} записей: рассрочка теперь доступна.")
+        self.message_user(request, f'Успешно обновлено {updated_count} записей: рассрочка теперь доступна.')
 
     @admin.action(description=_('Set installments unavailable'))
     def make_installment_unavailable(self, request, queryset):
         """Устанавливает is_installment_available=False для выбранных продуктов"""
         updated_count = queryset.update(is_installment_available=False)
-        self.message_user(request, f"Успешно обновлено {updated_count} записей: рассрочка теперь недоступна.")
+        self.message_user(request, f'Успешно обновлено {updated_count} записей: рассрочка теперь недоступна.')
 
 
 @admin.register(ProductPrice)

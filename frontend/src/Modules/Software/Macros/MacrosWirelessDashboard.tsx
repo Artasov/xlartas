@@ -1,22 +1,6 @@
 // src/Modules/Software/Macros/MacrosWirelessDashboard.tsx
 import React, {useEffect, useState} from 'react';
-import {
-    CircularProgress,
-    IconButton,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    // TODO: export default const ListItemSecondaryAction: ((props: ListItemSecondaryActionProps) => React.JSX.Element) & {     muiName: string }
-    // Must be used as the last child of ListItem to function properly.
-    // Demos:
-    // Lists
-    // API:
-    // ListItemSecondaryAction API
-    // Deprecated:
-    // Use the secondaryAction prop in the ListItem component instead. This component will be removed in a future major release. See Migrating from deprecated APIs  for more details.
-    ListItemText,
-    Tooltip,
-} from '@mui/material';
+import {Box, CircularProgress, IconButton, List, ListItem, ListItemText, Tooltip,} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/AddRounded';
@@ -83,35 +67,33 @@ const MacrosWirelessDashboard: React.FC = () => {
 
             <List dense sx={{width: '100%'}}>
                 {macros.map(m => (
-                    <ListItem key={m.id} divider onClick={() => sendMacro(m.name)}>
+                    <ListItem
+                        key={m.id}
+                        divider
+                        onClick={() => sendMacro(m.name)}
+                        secondaryAction={(
+                            <Box sx={{opacity: '60%'}}>
+                                <Tooltip title="Редактировать">
+                                    <IconButton size="small" onClick={e => {
+                                        e.stopPropagation();
+                                        setEditing(m);
+                                        setFormOpen(true);
+                                    }}>
+                                        <EditIcon fontSize="small"/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Удалить">
+                                    <IconButton size="small" onClick={e => {
+                                        e.stopPropagation();
+                                        handleDelete(m.id).then();
+                                    }}>
+                                        <DeleteIcon fontSize="small"/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
+                        )}
+                    >
                         <ListItemText sx={{opacity: '80%'}} primary={m.name}/>
-                        <ListItemSecondaryAction sx={{opacity: '60%'}}>
-                            {/* TODO: export default const ListItemSecondaryAction: ((props: ListItemSecondaryActionProps) => React.JSX.Element) & {     muiName: string }
-Must be used as the last child of ListItem to function properly.
-Demos:
-Lists
-API:
-ListItemSecondaryAction API
-Deprecated:
-Use the secondaryAction prop in the ListItem component instead. This component will be removed in a future major release. See Migrating from deprecated APIs  for more details.*/}
-                            <Tooltip title="Редактировать">
-                                <IconButton size="small" onClick={e => {
-                                    e.stopPropagation();
-                                    setEditing(m);
-                                    setFormOpen(true);
-                                }}>
-                                    <EditIcon fontSize="small"/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Удалить">
-                                <IconButton size="small" onClick={e => {
-                                    e.stopPropagation();
-                                    handleDelete(m.id).then();
-                                }}>
-                                    <DeleteIcon fontSize="small"/>
-                                </IconButton>
-                            </Tooltip>
-                        </ListItemSecondaryAction>
                     </ListItem>
                 ))}
             </List>

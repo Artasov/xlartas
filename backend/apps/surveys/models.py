@@ -76,7 +76,7 @@ class SurveyAccess(AModel):
         unique_together = ('survey', 'user')
 
     def __str__(self):
-        return f"{self.user.username} - {self.survey.title}"
+        return f'{self.user.username} - {self.survey.title}'
 
 
 class SurveyAttempt(AModel):
@@ -86,7 +86,7 @@ class SurveyAttempt(AModel):
     end_time = DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.survey.title} - Attempt {self.id}"
+        return f'{self.user.username} - {self.survey.title} - Attempt {self.id}'
 
 
 class QuestionAttempt(AModel):
@@ -101,4 +101,4 @@ class QuestionAttempt(AModel):
         unique_together = ('attempt', 'question')
 
     def __str__(self):
-        return f"{self.attempt.user.username} - {self.question.text} - Attempt {self.attempt.id}"
+        return f'{self.attempt.user.username} - {self.question.text} - Attempt {self.attempt.id}'

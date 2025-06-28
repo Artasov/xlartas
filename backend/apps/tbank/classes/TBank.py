@@ -66,7 +66,7 @@ class ItemFFD105(TypedDict, total=False):
     Amount: Union[int, float]
     PaymentMethod: PaymentMethod | None
     PaymentObject: PaymentObject | None
-    Tax: Literal["none", "vat0", "vat10", "vat20", "vat110", "vat120"]
+    Tax: Literal['none', 'vat0', 'vat10', 'vat20', 'vat110', 'vat120']
     AgentData: AgentData | None
     SupplierInfo: SupplierInfo | None
     Ean13: str | None
@@ -95,7 +95,7 @@ class ReceiptFFD105(TypedDict, total=False):
     Email: str | None
     Phone: str | None
     Taxation: Literal[
-        "osn", "usn_income", "usn_income_outcome", "envd", "esn", "patent"
+        'osn', 'usn_income', 'usn_income_outcome', 'envd', 'esn', 'patent'
     ]
     Payments: Payments | None
     Shops: list[Shops] | None
@@ -140,11 +140,11 @@ class InitResponse(TypedDict):
 
 
 class OperationInitiatorType(Enum):
-    CIT_CNC = "0"
-    CIT_CC = "1"
-    CIT_COF = "2"
-    CIT_COF_R = "R"
-    CIT_COF_I = "I"
+    CIT_CNC = '0'
+    CIT_CC = '1'
+    CIT_COF = '2'
+    CIT_COF_R = 'R'
+    CIT_COF_I = 'I'
 
 
 class DeviceOs(Enum):
@@ -218,7 +218,7 @@ def replace_none_with_string(data):
     elif isinstance(data, list):
         return [replace_none_with_string(v) for v in data]
     elif data is None:
-        return "None"
+        return 'None'
     else:
         return data
 
@@ -253,11 +253,11 @@ class TBank:
                  password: str = None):
         self.terminal_key = settings.TBANK_TERMINAL_KEY if not terminal_key else terminal_key
         self.password = settings.TBANK_PASSWORD if not password else password
-        # self.base_url = "https://rest-api-test.tinkoff.ru/v2/"
-        self.base_url = "https://securepay.tinkoff.ru/v2/"
+        # self.base_url = 'https://rest-api-test.tinkoff.ru/v2/'
+        self.base_url = 'https://securepay.tinkoff.ru/v2/'
 
     async def _post(self, endpoint: str, data: dict) -> dict:
-        data = replace_none_with_string(data)  # Заменяем все None на "None"
+        data = replace_none_with_string(data)  # Заменяем все None на 'None'
         async with aiohttp.ClientSession() as session:
             serialized_data = json.dumps(data, cls=CustomTBankJsonEncoder)
             headers = {'Content-Type': 'application/json'}

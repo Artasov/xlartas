@@ -61,23 +61,23 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
 
     def _handle_exception_message(self, request, order, e: Exception):
         # Логируем исключение
-        log.error(f"Ошибка при обработке заказа {order.id}: {traceback_str(e)}")
+        log.error(f'Ошибка при обработке заказа {order.id}: {traceback_str(e)}')
         # Проверяем, есть ли в исключении detail и message
         if isinstance(e, APIException):
             detail = getattr(e, 'detail', None)
             if detail and isinstance(detail, dict) and 'message' in detail:
                 # Если есть detail и в нем есть message, используем его
-                self.message_user(request, f"Ошибка при обработке заказа {order.id}: {detail['message']}",
+                self.message_user(request, f'Ошибка при обработке заказа {order.id}: {detail['message']}',
                                   level=messages.ERROR)
                 return
         # Если нет detail или message - используем текст исключения
-        self.message_user(request, f"Ошибка при обработке заказа {order.id}: {str(e)}", level=messages.ERROR)
+        self.message_user(request, f'Ошибка при обработке заказа {order.id}: {str(e)}', level=messages.ERROR)
 
     @admin_description(_('Init без оплаты'))
     def init_without_payment(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
-                log.info(f"Инициализация заказа {order.id} без оплаты")
+                log.info(f'Инициализация заказа {order.id} без оплаты')
                 try:
                     async_to_sync(order.get_real_instance().init)(request, init_payment=False)
                 except Exception as e:
@@ -88,7 +88,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     def init_with_payment(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
-                log.info(f"Инициализация заказа {order.id} с оплатой")
+                log.info(f'Инициализация заказа {order.id} с оплатой')
                 try:
                     async_to_sync(order.get_real_instance().init)(request)
                 except Exception as e:
@@ -99,7 +99,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     def execute(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
-                log.info(f"Исполнение заказа {order.id}")
+                log.info(f'Исполнение заказа {order.id}')
                 try:
                     async_to_sync(order.get_real_instance().execute)()
                 except Exception as e:
@@ -110,7 +110,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     def cancel(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
-                log.info(f"Отмена заказа {order.id}")
+                log.info(f'Отмена заказа {order.id}')
                 try:
                     async_to_sync(order.get_real_instance().safe_cancel)(request, '')
                 except Exception as e:

@@ -40,10 +40,10 @@ class VKOAuthProvider(OAuthProvider):
             async with session.get(
                     url='https://oauth.vk.com/access_token',
                     params={
-                        "user_id": settings.VK_AUTH_CLIENT_ID,
-                        "client_secret": settings.VK_AUTH_CLIENT_SECRET,
-                        "redirect_uri": settings.VK_REDIRECT_URI,
-                        "code": code,
+                        'user_id': settings.VK_AUTH_CLIENT_ID,
+                        'client_secret': settings.VK_AUTH_CLIENT_SECRET,
+                        'redirect_uri': settings.VK_REDIRECT_URI,
+                        'code': code,
                     }
             ) as resp:
                 resp.raise_for_status()

@@ -41,17 +41,17 @@ async def authenticate_view(request):
     Yggdrasil: POST /authenticate
     Ожидает json, содержащий:
     {
-      "username": "<launcher_username>",  # иногда "agent", "password" и т.д.
-      "password": "<some_password_or_token>",
-      "clientToken": "<client_id>",
-      "requestUser": true|false
+      'username': '<launcher_username>',  # иногда 'agent', 'password' и т.д.
+      'password': '<some_password_or_token>',
+      'clientToken': '<client_id>',
+      'requestUser': true|false
     }
     Возвращаем:
     {
-      "accessToken": "<token>",
-      "clientToken": "<client_id>",
-      "availableProfiles": [...],
-      "selectedProfile": {...}
+      'accessToken': '<token>',
+      'clientToken': '<client_id>',
+      'availableProfiles': [...],
+      'selectedProfile': {...}
     }
     """
     data = request.data
@@ -67,12 +67,12 @@ async def authenticate_view(request):
         else:
             user = await User.objects.aget(username=username_or_email)
     except User.DoesNotExist:
-        return Response({"error": "Нет пользователя с таким credential"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Нет пользователя с таким credential'}, status=status.HTTP_403_FORBIDDEN)
 
     # Проверяем пароль (либо делаем свою custom-логику)
     # if not user.check_password(password):
     if user.secret_key != password:
-        return Response({"error": "Неверный ключ"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Неверный ключ'}, status=status.HTTP_403_FORBIDDEN)
 
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
@@ -81,10 +81,10 @@ async def authenticate_view(request):
         skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
     else:
         skin_url = None
-    # Генерируем "accessToken" (в реальности можно делать полноценный JWT, но для примера - UUID)
+    # Генерируем 'accessToken' (в реальности можно делать полноценный JWT, но для примера - UUID)
     access_token = str(uuid.uuid4())
 
-    # Допустим, храним в своей модели "MinecraftSession"
+    # Допустим, храним в своей модели 'MinecraftSession'
     # чтобы потом по accessToken проверять
     session_obj = MinecraftSession(
         user=user,
@@ -94,30 +94,30 @@ async def authenticate_view(request):
     )
     await session_obj.asave()
 
-    # Профиль (в Yggdrasil: "availableProfiles" и "selectedProfile")
+    # Профиль (в Yggdrasil: 'availableProfiles' и 'selectedProfile')
     # Тут, как правило, uuid = <какой-то_уникальный_uuid> от вашего пользователя
     # Можно хранить в user.profile_id или user.id, но Mojang-стиль - это версия-4 UUID
     # Если у вас user.pk - int, сгенерируйте uuid отдельно
     user_uuid = await user.xlmine_uuid()
 
     selected_profile = {
-        "id": user_uuid.replace("-", ""),  # без тире
-        "name": user.username
+        'id': user_uuid.replace('-', ''),  # без тире
+        'name': user.username
     }
 
     # Можно вообще отдавать одну availableProfile
     resp = {
-        "accessToken": access_token,
-        "clientToken": client_token,
-        "availableProfiles": [selected_profile],
-        "selectedProfile": selected_profile,
-        "user": {
-            "id": user_uuid,
-            "username": user.username,
-            "properties": [
+        'accessToken': access_token,
+        'clientToken': client_token,
+        'availableProfiles': [selected_profile],
+        'selectedProfile': selected_profile,
+        'user': {
+            'id': user_uuid,
+            'username': user.username,
+            'properties': [
                 {
-                    "name": "preferredLanguage",
-                    "value": "ru"
+                    'name': 'preferredLanguage',
+                    'value': 'ru'
                 }
             ],
             'skin': skin_url,
@@ -134,15 +134,15 @@ async def refresh_view(request):
     """
     Yggdrasil: POST /authserver/refresh
     {
-      "accessToken": "...",
-      "clientToken": "...",
-      "requestUser": true|false
+      'accessToken': '...',
+      'clientToken': '...',
+      'requestUser': true|false
     }
     Возвращаем (аналог authenticate):
     {
-      "accessToken": "<new>",
-      "clientToken": "...",
-      "selectedProfile": {...}
+      'accessToken': '<new>',
+      'clientToken': '...',
+      'selectedProfile': {...}
     }
     """
     data = request.data
@@ -157,7 +157,7 @@ async def refresh_view(request):
             client_token=client_token
         )
     except MinecraftSession.DoesNotExist:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
     # Генерируем новый токен
     new_access = str(uuid.uuid4())
@@ -168,8 +168,8 @@ async def refresh_view(request):
     user = session_obj.user
     user_uuid = await user.xlmine_uuid()
     selected_profile = {
-        "id": user_uuid.replace("-", ""),
-        "name": user.username
+        'id': user_uuid.replace('-', ''),
+        'name': user.username
     }
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
@@ -179,16 +179,16 @@ async def refresh_view(request):
     else:
         skin_url = None
     resp = {
-        "accessToken": new_access,
-        "clientToken": client_token,
-        "selectedProfile": selected_profile,
-        "user": {
-            "id": user_uuid,
-            "username": user.username,
-            "properties": [
+        'accessToken': new_access,
+        'clientToken': client_token,
+        'selectedProfile': selected_profile,
+        'user': {
+            'id': user_uuid,
+            'username': user.username,
+            'properties': [
                 {
-                    "name": "preferredLanguage",
-                    "value": "ru"
+                    'name': 'preferredLanguage',
+                    'value': 'ru'
                 }
             ],
             'skin': skin_url,
@@ -203,8 +203,8 @@ async def validate_view(request):
     """
     Yggdrasil: POST /authserver/validate
     {
-      "accessToken": "...",
-      "clientToken": "...",
+      'accessToken': '...',
+      'clientToken': '...',
     }
     Возвращаем 200, если всё валидно
     Иначе 403
@@ -235,19 +235,19 @@ async def validate_view(request):
         else:
             skin_url = None
         resp = {
-            "accessToken": access_token,
-            "clientToken": client_token,
-            "selectedProfile": {
-                "id": xlmine_user.uuid.replace("-", ""),
-                "name": session.user.username
+            'accessToken': access_token,
+            'clientToken': client_token,
+            'selectedProfile': {
+                'id': xlmine_user.uuid.replace('-', ''),
+                'name': session.user.username
             },
-            "user": {
-                "id": xlmine_user.uuid,
-                "username": session.user.username,
-                "properties": [
+            'user': {
+                'id': xlmine_user.uuid,
+                'username': session.user.username,
+                'properties': [
                     {
-                        "name": "preferredLanguage",
-                        "value": "ru"
+                        'name': 'preferredLanguage',
+                        'value': 'ru'
                     }
                 ],
                 'skin': skin_url,
@@ -255,7 +255,7 @@ async def validate_view(request):
         }
         return Response(resp)
     else:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['POST'])
@@ -264,8 +264,8 @@ async def invalidate_view(request):
     """
     Yggdrasil: POST /authserver/invalidate
     {
-      "accessToken": "...",
-      "clientToken": "...",
+      'accessToken': '...',
+      'clientToken': '...',
     }
     Считается, что мы удаляем эту сессию
     Возвращаем 204 или 403
@@ -283,7 +283,7 @@ async def invalidate_view(request):
         await session_obj.adelete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except MinecraftSession.DoesNotExist:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['POST'])
@@ -292,8 +292,8 @@ async def signout_view(request):
     """
     Yggdrasil: POST /authserver/signout
     {
-      "username": "...",
-      "password": "..."
+      'username': '...',
+      'password': '...'
     }
     Логически тоже самое, что invalidate, но без accessToken: мы «разлогиниваем все сессии»?
     """
@@ -309,10 +309,10 @@ async def signout_view(request):
         else:
             user = await User.objects.aget(username=username_or_email)
     except User.DoesNotExist:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
     if not user.check_password(password):
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
     # Удаляем все сессии этого юзера
     await MinecraftSession.objects.filter(user=user).adelete()
@@ -330,12 +330,12 @@ async def join_server_view(request):
     """
     Yggdrasil: POST /session/minecraft/join
     {
-      "accessToken": "...",
-      "selectedProfile": "...", # UUID без тире
-      "serverId": "...",
-      # "serverIP": "...", # необязательно
+      'accessToken': '...',
+      'selectedProfile': '...', # UUID без тире
+      'serverId': '...',
+      # 'serverIP': '...', # необязательно
     }
-    Сервер MC вызывает при входе игрока. Мы должны проверить токен и сохранить "serverId" за этим пользователем
+    Сервер MC вызывает при входе игрока. Мы должны проверить токен и сохранить 'serverId' за этим пользователем
     """
     data = request.data
     log.debug('join payload %s', data)
@@ -349,7 +349,7 @@ async def join_server_view(request):
             access_token=access_token
         )
     except MinecraftSession.DoesNotExist:
-        return Response({"error": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
     user = session_obj.user
     _xlmine_user = UserXLMine.objects.aget_or_create(
         user=user,
@@ -361,16 +361,16 @@ async def join_server_view(request):
     await session_obj.asave()
 
     return Response({
-        "accessToken": access_token,
-        "clientToken": session_obj.client_token,
-        "selectedProfile": profile_id,
-        "user": {
-            "id": profile_id,
-            "username": user.username,
-            "properties": [
+        'accessToken': access_token,
+        'clientToken': session_obj.client_token,
+        'selectedProfile': profile_id,
+        'user': {
+            'id': profile_id,
+            'username': user.username,
+            'properties': [
                 {
-                    "name": "preferredLanguage",
-                    "value": "ru"
+                    'name': 'preferredLanguage',
+                    'value': 'ru'
                 }
             ]
         }
@@ -384,13 +384,13 @@ async def has_joined_view(request):
     Yggdrasil: GET /session/minecraft/hasJoined?username=Notch&serverId=xxxx
     Сервер MC пингует, когда к нему пытается зайти игрок. Если у нас есть сессия, мы отдаем:
     {
-      "id": "<UUID без тире>",
-      "name": "Notch",
-      "properties": [
+      'id': '<UUID без тире>',
+      'name': 'Notch',
+      'properties': [
         {
-          "name": "textures",
-          "value": "<base64>",
-          "signature": "<если надо>"
+          'name': 'textures',
+          'value': '<base64>',
+          'signature': '<если надо>'
         }
       ]
     }
@@ -415,12 +415,12 @@ async def has_joined_view(request):
     except MinecraftSession.DoesNotExist:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # Если нашли, значит "он действительно зашёл"
+    # Если нашли, значит 'он действительно зашёл'
     user_uuid = await user.xlmine_uuid()
     resp = {
-        "id": user_uuid.replace("-", ""),
-        "name": user.username,
-        "properties": []
+        'id': user_uuid.replace('-', ''),
+        'name': user.username,
+        'properties': []
     }
     return Response(resp, status=status.HTTP_200_OK)
 
@@ -447,11 +447,11 @@ async def profile_view(request, player_uuid):
     try:
         xlmine_user = await UserXLMine.objects.select_related('user').aget(uuid=full_uuid)
     except UserXLMine.DoesNotExist:
-        return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
     user = xlmine_user.user
     resp = {
-        "id": full_uuid.replace("-", ""),
-        "name": user.username,
-        "properties": []
+        'id': full_uuid.replace('-', ''),
+        'name': user.username,
+        'properties': []
     }
     return Response(resp, status=status.HTTP_200_OK)

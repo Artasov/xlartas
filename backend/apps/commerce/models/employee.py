@@ -63,7 +63,7 @@ class EmployeeAvailabilityInterval(AModel):
         verbose_name_plural = _('Employee availability Intervals')
 
     def __str__(self):
-        return f"User:{self.user_id} - ({self.start} - {self.end})"
+        return f'User:{self.user_id} - ({self.start} - {self.end})'
 
 
 class EmployeeLeave(AModel):
@@ -83,4 +83,4 @@ class EmployeeLeave(AModel):
         verbose_name_plural = _('Leaves')
 
     def __str__(self):
-        return f"{self.get_leave_type_display()} ({self.start} - {self.end})"
+        return f'{self.get_leave_type_display()} ({self.start} - {self.end})'

@@ -42,21 +42,21 @@ class GoogleOAuthProvider(OAuthProvider):
                     url='https://oauth2.googleapis.com/token',
                     headers={'Content-Type': 'application/x-www-form-urlencoded'},
                     data={
-                        "client_id": settings.GOOGLE_CLIENT_ID,
-                        "client_secret": settings.GOOGLE_CLIENT_SECRET,
-                        "grant_type": 'authorization_code',
-                        "code": code,
-                        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+                        'client_id': settings.GOOGLE_CLIENT_ID,
+                        'client_secret': settings.GOOGLE_CLIENT_SECRET,
+                        'grant_type': 'authorization_code',
+                        'code': code,
+                        'redirect_uri': settings.GOOGLE_REDIRECT_URI,
                     }
             ) as resp:
                 response_data = await resp.json()
                 log.info('OAuth Google request:')
                 log.info({
-                    "client_id": settings.GOOGLE_CLIENT_ID,
-                    "client_secret": settings.GOOGLE_CLIENT_SECRET,
-                    "grant_type": 'authorization_code',
-                    "code": code,
-                    "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+                    'client_id': settings.GOOGLE_CLIENT_ID,
+                    'client_secret': settings.GOOGLE_CLIENT_SECRET,
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'redirect_uri': settings.GOOGLE_REDIRECT_URI,
                 })
                 log.info('OAuth Google response:')
                 log.info(response_data)

@@ -49,7 +49,7 @@ class DateRange:
         self.start = start
         if end is not None:
             if start >= end:
-                raise ValueError("Start date must be before end date.")
+                raise ValueError('Start date must be before end date.')
             self.end = end
         else:
             self.end = start + timedelta(minutes=minutes, hours=hours, days=days)

@@ -16,7 +16,7 @@ class Command(BaseCommand):
                 secret_key=settings.MINIO_SECRET_KEY,
                 secure=settings.MINIO_USE_HTTPS
             )
-            bucket_name = "media"
+            bucket_name = 'media'
 
             # Проверяем существование бакета, если нет - создаем
             if not minio_client.bucket_exists(bucket_name):
@@ -25,12 +25,12 @@ class Command(BaseCommand):
 
             try:
                 policy = '''{
-                    "Version": "2012-10-17",
-                    "Statement": [{
-                        "Effect": "Allow",
-                        "Principal": {"AWS": "*"},
-                        "Action": "s3:GetObject",
-                        "Resource": "arn:aws:s3:::%s/*"
+                    'Version': '2012-10-17',
+                    'Statement': [{
+                        'Effect': 'Allow',
+                        'Principal': {'AWS': '*'},
+                        'Action': 's3:GetObject',
+                        'Resource': 'arn:aws:s3:::%s/*'
                     }]
                 }''' % bucket_name
                 minio_client.set_bucket_policy(bucket_name, policy)

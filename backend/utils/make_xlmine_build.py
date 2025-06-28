@@ -6,36 +6,36 @@ import shutil
 import zipfile
 from pathlib import Path
 
-SOURCE_DIR = Path(r"C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client")
-RELEASE_DIR = SOURCE_DIR.parent / "xlartas-xlmine-release"
-SECURITY_PATH = SOURCE_DIR.parent / "security.json"
+SOURCE_DIR = Path(r'C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client')
+RELEASE_DIR = SOURCE_DIR.parent / 'xlartas-xlmine-release'
+SECURITY_PATH = SOURCE_DIR.parent / 'security.json'
 
 FILES_TO_COPY = [
-    "version.txt",
-    "servers.dat",
-    "options.txt",
-    "authlib-injector-1.2.5.jar",
+    'version.txt',
+    'servers.dat',
+    'options.txt',
+    'authlib-injector-1.2.5.jar',
 ]
 
 DIRS_TO_COPY = [
-    "assets",
-    "data",
-    "defaultconfigs",
-    "versions",
-    "resourcepacks",
-    "shaderpacks",
-    "mods",
-    "libraries",
-    "config",
+    'assets',
+    'data',
+    'defaultconfigs',
+    'versions',
+    'resourcepacks',
+    'shaderpacks',
+    'mods',
+    'libraries',
+    'config',
 ]
 
 EDITABLE_FILES = [
     # директории, которые пользователь может править
-    "resourcepacks/",
-    "shaderpacks/",
+    'resourcepacks/',
+    'shaderpacks/',
     # файлы‑конфиги, которые можно менять
-    "options.txt",
-    "servers.dat",
+    'options.txt',
+    'servers.dat',
     'config/betterfpsdist.json',
     'config/bettergrass.json5',
     'config/blur.json',
@@ -107,22 +107,22 @@ EDITABLE_FILES = [
 ]
 
 # ───────────────── запрос версии релиза ──────────────────────────────────────
-version = input("Enter release version: ").strip()
-ARCHIVE_PATH = SOURCE_DIR.parent / f"xlartas-xlmine-release-{version}.zip"
+version = input('Enter release version: ').strip()
+ARCHIVE_PATH = SOURCE_DIR.parent / f'xlartas-xlmine-release-{version}.zip'
 
 
 # ───────────────── helpers ────────────────────────────────────────────────────
 def sha256(path: Path) -> str:
     h = hashlib.sha256()
-    with open(path, "rb") as f:  # noqa
-        for chunk in iter(lambda: f.read(8192), b""):
+    with open(path, 'rb') as f:  # noqa
+        for chunk in iter(lambda: f.read(8192), b''):
             h.update(chunk)
     return h.hexdigest()
 
 
 def is_editable(rel: str) -> bool:
     for entry in EDITABLE_FILES:
-        if entry.endswith("/"):
+        if entry.endswith('/'):
             if rel.startswith(entry):
                 return True
         elif rel == entry:
@@ -131,14 +131,14 @@ def is_editable(rel: str) -> bool:
 
 
 def log(msg: str) -> None:
-    print(f"[BUILD] {msg}")
+    print(f'[BUILD] {msg}')
 
 
 # ───────────────── подготовка директории релиза ──────────────────────────────
 if RELEASE_DIR.exists():
     shutil.rmtree(RELEASE_DIR)
 RELEASE_DIR.mkdir(parents=True, exist_ok=True)
-log("Temporary release directory prepared")
+log('Temporary release directory prepared')
 
 # ───────────────── копирование файлов ────────────────────────────────────────
 for fname in FILES_TO_COPY:
@@ -147,13 +147,13 @@ for fname in FILES_TO_COPY:
     if src.exists():
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
-        log(f"Copied file: {fname}")
+        log(f'Copied file: {fname}')
 
 # ───────────────── запись версии в version.txt в папке релиза ────────────────
-version_file = RELEASE_DIR / "version.txt"
-with open(version_file, "w", encoding="utf-8") as f:
-    f.write(version + "\n")
-log(f"Release version {version} written to version.txt")
+version_file = RELEASE_DIR / 'version.txt'
+with open(version_file, 'w', encoding='utf-8') as f:
+    f.write(version + '\n')
+log(f'Release version {version} written to version.txt')
 
 for dname in DIRS_TO_COPY:
     src = SOURCE_DIR / dname
@@ -162,44 +162,44 @@ for dname in DIRS_TO_COPY:
         if dst.exists():
             shutil.rmtree(dst)
         shutil.copytree(src, dst, dirs_exist_ok=True)
-        copied_files = sum(1 for _ in dst.rglob("*") if _.is_file())
-        log(f"Copied directory: {dname} ({copied_files} files)")
+        copied_files = sum(1 for _ in dst.rglob('*') if _.is_file())
+        log(f'Copied directory: {dname} ({copied_files} files)')
 
 # ───────────────── формирование security.json ───────────────────────────────
 security: dict[str, dict] = {
-    "dirs_files_count": {},
-    "editable_files": EDITABLE_FILES,
-    "protected_files": {},
+    'dirs_files_count': {},
+    'editable_files': EDITABLE_FILES,
+    'protected_files': {},
 }
 
-for dirname in ["mods", "config"]:
+for dirname in ['mods', 'config']:
     full_dir = RELEASE_DIR / dirname
-    security["dirs_files_count"][dirname] = (
-        sum(1 for p in full_dir.rglob("*") if p.is_file()) if full_dir.exists() else 0
+    security['dirs_files_count'][dirname] = (
+        sum(1 for p in full_dir.rglob('*') if p.is_file()) if full_dir.exists() else 0
     )
 
 for root, _, files in os.walk(RELEASE_DIR):
     for file in files:
-        rel_path = os.path.relpath(os.path.join(root, file), RELEASE_DIR).replace("\\", "/")
+        rel_path = os.path.relpath(os.path.join(root, file), RELEASE_DIR).replace('\\', '/')
         if is_editable(rel_path):
             continue
-        security["protected_files"][rel_path] = sha256(Path(root) / file)
+        security['protected_files'][rel_path] = sha256(Path(root) / file)
 
-SECURITY_PATH.write_text(json.dumps(security, ensure_ascii=False, indent=2), encoding="utf-8")
-log(f"security.json written to {SECURITY_PATH}")
+SECURITY_PATH.write_text(json.dumps(security, ensure_ascii=False, indent=2), encoding='utf-8')
+log(f'security.json written to {SECURITY_PATH}')
 
 # ───────────────── создание архива ───────────────────────────────────────────
 if ARCHIVE_PATH.exists():
     ARCHIVE_PATH.unlink()
-with zipfile.ZipFile(ARCHIVE_PATH, "w", zipfile.ZIP_DEFLATED) as zipf:
+with zipfile.ZipFile(ARCHIVE_PATH, 'w', zipfile.ZIP_DEFLATED) as zipf:
     for root, _, files in os.walk(RELEASE_DIR):
         for file in files:
             fp = Path(root) / file
             zipf.write(fp, fp.relative_to(RELEASE_DIR))
-log(f"Archive created at {ARCHIVE_PATH}")
+log(f'Archive created at {ARCHIVE_PATH}')
 
 # ───────────────── очистка ───────────────────────────────────────────────────
 shutil.rmtree(RELEASE_DIR, ignore_errors=True)
-log("Temporary release directory cleaned up")
+log('Temporary release directory cleaned up')
 
-print("[BUILD] Done")
+print('[BUILD] Done')

@@ -17,12 +17,13 @@ interface CustomDateTimePickerProps {
     onChange: (date: Date | null) => void;
 }
 
-const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
-                                                                       label,
-                                                                       value,
-                                                                       onChange,
-                                                                       className,
-                                                                   }) => {
+const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = (
+    {
+        label,
+        value,
+        onChange,
+        className,
+    }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [tempDate, setTempDate] = useState<Date | null>(value || new Date());
     const [step, setStep] = useState<'date' | 'time'>('date');
@@ -81,17 +82,15 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
                     value={value ? format(value, 'yyyy-MM-dd HH:mm') : ''}
                     onChange={() => {
                     }}
-                    inputProps={{readOnly: true}}
-                    // TODO: OutlinedTextFieldProps. InputProps?: Partial<FilledInputProps> | Partial<OutlinedInputProps> | Partial<InputProps> | undefined
-                    // Props applied to the Input element. It will be a FilledInput, OutlinedInput or Input component depending on the variant prop value.
-                    // Deprecated:
-                    // Use slotProps. input instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
-                    InputProps={{
-                        endAdornment: (
-                            <IconButton onClick={handleOpen}>
-                                <CalendarToday/>
-                            </IconButton>
-                        ),
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                            endAdornment: (
+                                <IconButton onClick={handleOpen}>
+                                    <CalendarToday/>
+                                </IconButton>
+                            ),
+                        },
                     }}
                 />
                 <Popover

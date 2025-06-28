@@ -14,7 +14,7 @@ def copy_mods(source_path: str, client_mods: list) -> None:  # noqa
     # Определяем родительскую папку для source_path
     parent_dir = os.path.dirname(source_path.rstrip(os.sep))
     # Формируем путь к соседней папке mods_server
-    dest_dir = os.path.join(parent_dir, "mods_server")
+    dest_dir = os.path.join(parent_dir, 'mods_server')
 
     shutil.rmtree(dest_dir, ignore_errors=True)
     # Если папка назначения не существует, создаём её
@@ -23,19 +23,19 @@ def copy_mods(source_path: str, client_mods: list) -> None:  # noqa
     # Проходим по всем файлам в папке source_path
     for filename in os.listdir(source_path):
         # Проверяем, что файл заканчивается на .jar
-        if filename.endswith(".jar"):
+        if filename.endswith('.jar'):
             # Если ни одна из подстрок из client_mods не содержится в имени файла, копируем его
             if not any(client_mod in filename for client_mod in client_mods):
                 src_file = os.path.join(source_path, filename)
                 dst_file = os.path.join(dest_dir, filename)
                 try:
                     shutil.copy2(src_file, dst_file)
-                    # print(f"Скопирован мод: {filename}")
+                    # print(f'Скопирован мод: {filename}')
                 except Exception as e:
-                    print(f"Ошибка при копировании {filename}: {e}")
+                    print(f'Ошибка при копировании {filename}: {e}')
             else:
                 # Если имя файла содержит одну из исключающих подстрок, пропускаем копирование
-                print(f"Пропущен мод (client): {filename}")
+                print(f'Пропущен мод (client): {filename}')
 
 
 if __name__ == '__main__':

@@ -61,4 +61,4 @@ class ProductPrice(ACurrencyAmountMixin):
         unique_together = ('product', 'currency')
 
     def __str__(self):
-        return f"{self.product.name} - {self.amount} {self.currency}"
+        return f'{self.product.name} - {self.amount} {self.currency}'

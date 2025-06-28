@@ -87,4 +87,4 @@ class PromocodeUsage(ACreatedAtIndexedMixin):
         indexes = [Index(fields=['user', 'promocode']), ]
 
     def __str__(self):
-        return f"{self.promocode.code} used by {self.user.username} on {self.created_at}"
+        return f'{self.promocode.code} used by {self.user.username} on {self.created_at}'

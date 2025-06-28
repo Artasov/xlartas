@@ -23,8 +23,8 @@ class Company(ACreatedUpdatedAtMixin, CompanyException):
         return self.name
 
     class Meta:
-        verbose_name = _("Company")
-        verbose_name_plural = _("Company")
+        verbose_name = _('Company')
+        verbose_name_plural = _('Company')
 
 
 class CompanyDocument(ACreatedUpdatedAtMixin, CompanyDocumentException):
@@ -35,7 +35,7 @@ class CompanyDocument(ACreatedUpdatedAtMixin, CompanyDocumentException):
     is_public = BooleanField(_('Is public'), default=False)
 
     def __str__(self):
-        return f"{self.company.name} - {self.title}"
+        return f'{self.company.name} - {self.title}'
 
     class Meta:
         verbose_name = 'Company document'

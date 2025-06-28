@@ -19,7 +19,7 @@ class RoomService:
         log.info('@@@@@@@@')
         log.info('get_or_create_private')
         if len(participants) != 2:
-            raise ValueError("Private room must have exactly two participants.")
+            raise ValueError('Private room must have exactly two participants.')
         log.info(f'{participants[0].id=}')
         log.info(f'{participants[1].id=}')
         user1, user2 = participants

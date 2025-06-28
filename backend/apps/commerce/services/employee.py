@@ -29,12 +29,12 @@ class EmployeeService:
 
         # Проверка: если автопродление выключено — выходим
         if not self.auto_schedule_renewal:
-            log.info(f"[auto_renewal_schedule] Автопродление выключено для сотрудника {self.id}")
+            log.info(f'[auto_renewal_schedule] Автопродление выключено для сотрудника {self.id}')
             return
 
         from apps.commerce.models import EmployeeAvailabilityInterval
 
-        log.info(f"[auto_renewal_schedule] Запуск для сотрудника {self.id}, weeks_ahead={weeks_ahead}")
+        log.info(f'[auto_renewal_schedule] Запуск для сотрудника {self.id}, weeks_ahead={weeks_ahead}')
 
         # 1) Определяем границы текущей недели (локальное время)
         now_local = timezone.localtime()
@@ -50,7 +50,7 @@ class EmployeeService:
         ).order_by('start', 'end')
 
         if not current_week_intervals.exists():
-            log.info(f"[auto_renewal_schedule] Нет интервалов на текущую неделю. Выходим.")
+            log.info(f'[auto_renewal_schedule] Нет интервалов на текущую неделю. Выходим.')
             return
 
         # 3) Смотрим, сколько уже покрыто недель от current_monday вплоть до самого дальнего future_end
@@ -67,14 +67,14 @@ class EmployeeService:
             # Вычисляем, сколько полных недель покрыто от current_monday до max_end
             # Пример: если max_end на 2.5 недели вперёд, значит покрыто 3 недели (округляем вверх)
             delta_days = (max_end - current_monday).days
-            covered_weeks = (delta_days // 7) + 1  # +1, т.к. считаем "частично покрытую" неделю
+            covered_weeks = (delta_days // 7) + 1  # +1, т.к. считаем 'частично покрытую' неделю
 
         log.info(
-            f"[auto_renewal_schedule] У сотрудника {self.id} уже покрыто {covered_weeks} нед. Нужно {weeks_ahead}.")
+            f'[auto_renewal_schedule] У сотрудника {self.id} уже покрыто {covered_weeks} нед. Нужно {weeks_ahead}.')
 
         # 4) Если уже покрыто достаточно недель, ничего не добавляем
         if covered_weeks >= weeks_ahead:
-            log.info(f"[auto_renewal_schedule] Уже покрыто {covered_weeks} недель, нужно {weeks_ahead}. Выходим.")
+            log.info(f'[auto_renewal_schedule] Уже покрыто {covered_weeks} недель, нужно {weeks_ahead}. Выходим.')
             return
 
         # 5) Копируем недостающие недели (шаблоном служит ТОЛЬКО текущая неделя)
@@ -116,6 +116,6 @@ class EmployeeService:
                 with transaction.atomic():
                     EmployeeAvailabilityInterval.objects.bulk_create(intervals_to_create)
 
-            log.info(f"[auto_renewal_schedule] Добавили неделю {target_week_start.date()} -> {target_week_end.date()}.")
+            log.info(f'[auto_renewal_schedule] Добавили неделю {target_week_start.date()} -> {target_week_end.date()}.')
 
-        log.info(f"[auto_renewal_schedule] Сотрудник {self.id} теперь покрыт на {weeks_ahead} недель вперёд.")
+        log.info(f'[auto_renewal_schedule] Сотрудник {self.id} теперь покрыт на {weeks_ahead} недель вперёд.')

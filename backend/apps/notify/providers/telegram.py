@@ -19,6 +19,6 @@ class TelegramProvider(INotifyProvider):
     ) -> None:
         # Реализация отправки сообщения в Telegram
         # Пример:
-        # message_text = f"{config['subject']}\n{context.get('message')}"
+        # message_text = f'{config['subject']}\n{context.get('message')}'
         # send_telegram_message(recipient.telegram_id, message_text)
         pass  # Пока не реализовано

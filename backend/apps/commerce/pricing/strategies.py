@@ -6,7 +6,7 @@ from apps.commerce.pricing.base import PriceContext, PricingStrategy
 
 class DirectPrice(PricingStrategy):
     """
-    Стратегия «прямой цены» — просто возвращает ctx["amount"].
+    Стратегия «прямой цены» — просто возвращает ctx['amount'].
     """
 
     def calculate(self, ctx: PriceContext) -> Decimal:

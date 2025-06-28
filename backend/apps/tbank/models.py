@@ -107,7 +107,7 @@ class TBankInstallmentException:
 class TBankInstallment(Payment, TBankInstallmentService, TBankInstallmentException):
     """
     Модель «Payment» для рассрочки в Tinkoff Forma
-    (аналог TBankPayment, но для "Forma"-рассрочки).
+    (аналог TBankPayment, но для 'Forma'-рассрочки).
     """
     # Аналогично TBankPayment: order_id = UUIDv6Field
     order_id = UUIDv6Field(_('Installment Order ID'), unique=True)

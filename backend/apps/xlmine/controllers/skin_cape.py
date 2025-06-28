@@ -14,14 +14,14 @@ from apps.xlmine.models.user import UserXLMine
 async def upload_skin(request):
     skin_file = request.FILES.get('skin')
     if not skin_file:
-        return Response({"detail": "skin file is required"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'skin file is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         await request.user.set_skin(skin_file)
         xlm = await UserXLMine.objects.aget(user=request.user)
-        return Response({"skin": settings.DOMAIN_URL + xlm.skin.url}, status=status.HTTP_200_OK)
+        return Response({'skin': settings.DOMAIN_URL + xlm.skin.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:
-        return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Update error'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -29,14 +29,14 @@ async def upload_skin(request):
 async def upload_cape(request):
     cape_file = request.FILES.get('cape')
     if not cape_file:
-        return Response({"detail": "cape file is required"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'cape file is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         await request.user.set_cape(cape_file)
         xlm = await UserXLMine.objects.aget(user=request.user)
-        return Response({"cape": settings.DOMAIN_URL + xlm.cape.url}, status=status.HTTP_200_OK)
+        return Response({'cape': settings.DOMAIN_URL + xlm.cape.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:
-        return Response({"detail": "Update error"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Update error'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

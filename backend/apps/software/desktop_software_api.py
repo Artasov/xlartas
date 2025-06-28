@@ -48,7 +48,7 @@ async def software_auth(request) -> Response:
 
     # Проверяем обязательные поля
     if not all((hw_id, software_name, str(is_first_license_checking))):
-        log.info("[software_auth] Missing fields.")
+        log.info('[software_auth] Missing fields.')
         return Response(
             {'accept': False, 'error': SOMETHING_WRONG},
             status=status.HTTP_200_OK,
@@ -59,7 +59,7 @@ async def software_auth(request) -> Response:
     try:
         user_ = await User.objects.aget(username=username, secret_key=secret_key)
     except User.DoesNotExist:
-        log.info(f"[software_auth] User does not exist or secret_key mismatch: {username}")
+        log.info(f'[software_auth] User does not exist or secret_key mismatch: {username}')
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
@@ -70,7 +70,7 @@ async def software_auth(request) -> Response:
     # (исключаем самого user_, чтобы не учитывать его собственную запись)
     other_hwid_count = await User.objects.filter(hw_id=hw_id).exclude(pk=user_.pk).acount()
     if other_hwid_count > 0:
-        log.info(f"[software_auth] Multi account prohibited. user_id={user_.id}, hw_id={hw_id}")
+        log.info(f'[software_auth] Multi account prohibited. user_id={user_.id}, hw_id={hw_id}')
         return Response(
             {'accept': False, 'error': MULTI_ACCOUNT_PROHIBITED},
             status=status.HTTP_200_OK,
@@ -84,11 +84,11 @@ async def software_auth(request) -> Response:
         user_.hw_id = hw_id
         await user_.asave()
         is_first_start = True
-        log.info(f"[software_auth] First time setting hw_id for user {user_.id}.")
+        log.info(f'[software_auth] First time setting hw_id for user {user_.id}.')
     else:
         # Если hw_id у юзера есть, но он отличается
         if hw_id != user_.hw_id:
-            log.info(f"[software_auth] HWID mismatch user:{user_.id}")
+            log.info(f'[software_auth] HWID mismatch user:{user_.id}')
             return Response(
                 {'accept': False, 'error': HWID_NOT_EQUAL, 'error_type': 'hw_id'},
                 status=status.HTTP_200_OK,
@@ -99,7 +99,7 @@ async def software_auth(request) -> Response:
     try:
         software_ = await Software.objects.aget(name=software_name)
     except Software.DoesNotExist:
-        log.info(f"[software_auth] Software not found: {software_name}")
+        log.info(f'[software_auth] Software not found: {software_name}')
         return Response(
             {'accept': False, 'error': PRODUCT_NOT_EXISTS},
             status=status.HTTP_200_OK,
@@ -115,7 +115,7 @@ async def software_auth(request) -> Response:
     now = timezone.now()
     # Проверяем, активна ли лицензия
     if not license_obj.license_ends_at or license_obj.license_ends_at <= now:
-        # Например, разрешаем частичную активацию для "xLUMRA"
+        # Например, разрешаем частичную активацию для 'xLUMRA'
         if software_name == 'xLUMRA':
             # Если пользователь только что запустил и is_first_license_checking
             # возможно хотим обновить какие-то поля (например, счётчик запусков).
@@ -182,7 +182,7 @@ async def set_user_hw_id(request) -> Response:
     hw_id = data.get('hw_id')
 
     if not all((username, secret_key, hw_id)):
-        log.info("[set_user_hw_id] Missing fields or invalid request.")
+        log.info('[set_user_hw_id] Missing fields or invalid request.')
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
@@ -192,7 +192,7 @@ async def set_user_hw_id(request) -> Response:
     try:
         user_ = await User.objects.aget(username=username, secret_key=secret_key)
     except User.DoesNotExist:
-        log.info(f"[set_user_hw_id] User not found or secret key mismatch: {username}")
+        log.info(f'[set_user_hw_id] User not found or secret key mismatch: {username}')
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
@@ -203,7 +203,7 @@ async def set_user_hw_id(request) -> Response:
     await user_.asave()
 
     # По старой логике все лицензии юзера обнуляем (устанавливаем license_ends_at=now)
-    # тем самым "блокируя" дальше использование без новой покупки/продления
+    # тем самым 'блокируя' дальше использование без новой покупки/продления
     now = timezone.now()
     await SoftwareLicense.objects.filter(user=user_).aupdate(license_ends_at=now)
 
@@ -221,8 +221,8 @@ async def get_software_version(request, software_name: str) -> Response:
         if not software_.file:
             return Response(
                 {
-                    "version": None,
-                    "url": None
+                    'version': None,
+                    'url': None
                 },
                 status=status.HTTP_200_OK
             )
@@ -232,13 +232,13 @@ async def get_software_version(request, software_name: str) -> Response:
 
         return Response(
             {
-                "version": software_.file.version,
-                "url": absolute_url
+                'version': software_.file.version,
+                'url': absolute_url
             },
             status=status.HTTP_200_OK
         )
     except Software.DoesNotExist:
         return Response(
-            {"detail": "Software does not exist."},
+            {'detail': 'Software does not exist.'},
             status=status.HTTP_404_NOT_FOUND
         )

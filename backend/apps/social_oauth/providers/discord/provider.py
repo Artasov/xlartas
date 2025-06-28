@@ -41,9 +41,9 @@ class DiscordOAuthProvider(OAuthProvider):
                     url='https://discord.com/api/v10/oauth2/token',
                     headers={'Content-Type': 'application/x-www-form-urlencoded'},
                     data={
-                        "grant_type": 'authorization_code',
-                        "code": code,
-                        "redirect_uri": settings.DISCORD_REDIRECT_URI
+                        'grant_type': 'authorization_code',
+                        'code': code,
+                        'redirect_uri': settings.DISCORD_REDIRECT_URI
                     },
                     auth=aiohttp.BasicAuth(settings.DISCORD_CLIENT_ID, settings.DISCORD_CLIENT_SECRET)
             ) as resp:
@@ -75,7 +75,7 @@ class DiscordOAuthProvider(OAuthProvider):
                 email = user_data.get('email', '')
                 username = user_data.get('username', '') or f'discord_{discord_id}'
                 discriminator = user_data.get('discriminator', '')
-                full_username = f"{username}#{discriminator}" if discriminator else username
+                full_username = f'{username}#{discriminator}' if discriminator else username
                 user = await User.objects.acreate(
                     email=email,
                     username=full_username,
@@ -84,7 +84,7 @@ class DiscordOAuthProvider(OAuthProvider):
                 avatar_hash = user_data.get('avatar')
                 # TODO: сделать правильное получение фото
                 if avatar_hash:
-                    avatar_url = f"https://cdn.discordapp.com/avatars/{discord_id}/{avatar_hash}.png"
+                    avatar_url = f'https://cdn.discordapp.com/avatars/{discord_id}/{avatar_hash}.png'
                     await set_image_by_url(user, 'avatar', avatar_url)
             await DiscordUser.objects.acreate(user=user, discord_id=discord_id, email=user_data.get('email'))
         return user

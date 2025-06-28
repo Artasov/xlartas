@@ -37,7 +37,7 @@ def load_confirmation_actions():
                             log.info(f'Imported action: {app} : {action_key}')
         except Exception as e:
             # Логируем ошибки импорта для приложений без папки confirmations или файла actions.py
-            if settings.MAIN_PROCESS: log.error(f"Error importing actions from {app}:\n{traceback_str(e)}")
+            if settings.MAIN_PROCESS: log.error(f'Error importing actions from {app}:\n{traceback_str(e)}')
 
 
 # Загружаем все actions при запуске

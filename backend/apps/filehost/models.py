@@ -64,4 +64,4 @@ class Access(AModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Access to {"folder" if self.folder else "file"} by {self.user if self.user else self.user.email}'
+        return f'Access to {'folder' if self.folder else 'file'} by {self.user if self.user else self.user.email}'

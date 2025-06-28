@@ -30,8 +30,8 @@ def pay(request):
     Передаёт монеты от текущего пользователя к целевому (username).
     Параметры в body:
       {
-        "to_username": "someNick",
-        "amount": 123.45
+        'to_username': 'someNick',
+        'amount': 123.45
       }
     """
     from_user: User = request.user

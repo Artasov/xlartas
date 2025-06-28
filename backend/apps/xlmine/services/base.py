@@ -9,9 +9,9 @@ def increment_version(version_str: str) -> str:
             parts += ['0'] * (3 - len(parts))
         major, minor, patch = map(int, parts[:3])
         minor += 1
-        return f"{major}.{minor}.{patch}"
+        return f'{major}.{minor}.{patch}'
     except Exception:  # noqa
-        return "1.0.0"
+        return '1.0.0'
 
 
 def calculate_sha256(file):

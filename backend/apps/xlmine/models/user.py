@@ -33,7 +33,7 @@ class UserXLMine(AModel):
     )
 
     def __str__(self):
-        return f"UserXLMine {self.user_id}=>{self.coins} coins"
+        return f'UserXLMine {self.user_id}=>{self.coins} coins'
 
 
 class MinecraftSession(ACreatedAtMixin):
@@ -43,4 +43,4 @@ class MinecraftSession(ACreatedAtMixin):
     last_server_id = CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"MC-Session for {self.user} with token {self.access_token}"
+        return f'MC-Session for {self.user} with token {self.access_token}'

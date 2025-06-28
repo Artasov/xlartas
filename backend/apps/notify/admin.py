@@ -36,7 +36,7 @@ class NotifyAdmin(admin.ModelAdmin):
     def recipient_link(self, obj):
         recipient = obj.recipient
         url = reverse('admin:core_user_change', args=[recipient.id])
-        name = f"{recipient.get_full_name()} (ID: {recipient.id})"
+        name = f'{recipient.get_full_name()} (ID: {recipient.id})'
         return format_html('<a href="{}">{}</a>', url, name)
 
     recipient_link.short_description = _('Recipient')
@@ -45,7 +45,7 @@ class NotifyAdmin(admin.ModelAdmin):
         from .registry import Notifies
         try:
             notify_type_label = Notifies(obj.notify_type).label
-            return f"{notify_type_label} ({obj.notify_type})"
+            return f'{notify_type_label} ({obj.notify_type})'
         except ValueError:
             return obj.notify_type
 

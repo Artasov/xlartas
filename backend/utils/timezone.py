@@ -8,16 +8,16 @@ from django.conf import settings
 logger = logging.getLogger('global')
 
 TIMEZONES_ABBREVIATIONS = {
-    "Europe/London": "GMT",  # GMT или BST в зависимости от времени года
-    "Europe/Moscow": "MSK",
-    "Europe/Paris": "CET",  # CET или CEST
-    "America/New_York": "EST",  # EST или EDT
-    "America/Los_Angeles": "PST",  # PST или PDT
-    "Asia/Tokyo": "JST",
-    "Asia/Shanghai": "CST",
-    "Europe/Berlin": "CET",  # CET или CEST
-    "Europe/Kiev": "EET",  # EET или EEST
-    "Australia/Sydney": "AEST",
+    'Europe/London': 'GMT',  # GMT или BST в зависимости от времени года
+    'Europe/Moscow': 'MSK',
+    'Europe/Paris': 'CET',  # CET или CEST
+    'America/New_York': 'EST',  # EST или EDT
+    'America/Los_Angeles': 'PST',  # PST или PDT
+    'Asia/Tokyo': 'JST',
+    'Asia/Shanghai': 'CST',
+    'Europe/Berlin': 'CET',  # CET или CEST
+    'Europe/Kiev': 'EET',  # EET или EEST
+    'Australia/Sydney': 'AEST',
 }
 
 
@@ -25,8 +25,8 @@ def get_timezone_abbreviation(timezone_name: str) -> str | None:
     """
     Возвращает трехбуквенное сокращение таймзоны по ее полному названию.
 
-    :param timezone_name: Полное название таймзоны, например, "Europe/Moscow"
-    :return: Трехбуквенное сокращение, например, "MSK" или None, если таймзона не найдена
+    :param timezone_name: Полное название таймзоны, например, 'Europe/Moscow'
+    :return: Трехбуквенное сокращение, например, 'MSK' или None, если таймзона не найдена
     """
     # Попытка найти сокращение в заранее определенном словаре
 
@@ -73,5 +73,5 @@ def parse_and_convert(date_str, user_timezone):
         dt = dt.astimezone(user_tz)
         return dt
     except Exception as exc:  # noqa
-        logger.warning("Failed to convert timezone: %s", exc)
+        logger.warning('Failed to convert timezone: %s', exc)
         return None

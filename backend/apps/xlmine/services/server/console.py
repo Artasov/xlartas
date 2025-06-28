@@ -55,5 +55,5 @@ class RconServerConsole:
                     pass
                 return response
         except Exception as e:
-            log.error("Ошибка при выполнении команды: %s", traceback_str(e))
-            return f"Ошибка при выполнении команды: {str(e)}"
+            log.error('Ошибка при выполнении команды: %s', traceback_str(e))
+            return f'Ошибка при выполнении команды: {str(e)}'

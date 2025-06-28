@@ -31,7 +31,7 @@ def teleport_world_scan() -> None:
     LEFT_TOP_X = -SIDE_LENGTH // 2
     LEFT_TOP_Z = -SIDE_LENGTH // 2
     log.info(
-        "Celery-task teleport_world_scan started — (%s, %s) side=%s player=%s",
+        'Celery-task teleport_world_scan started — (%s, %s) side=%s player=%s',
         LEFT_TOP_X,
         LEFT_TOP_Z,
         SIDE_LENGTH,

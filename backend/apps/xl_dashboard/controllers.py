@@ -16,7 +16,7 @@ async def action_view(request, action_name):
     """
     Ищет функцию (или корутину) в XL_DASHBOARD['xl-actions'] и вызывает её.
     """
-    log.debug("action_view called with action_name=%s", action_name)
+    log.debug('action_view called with action_name=%s', action_name)
     user = request.user
     if not (user and user.is_staff):
         return HttpResponseForbidden('Access denied')

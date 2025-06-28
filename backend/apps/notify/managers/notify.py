@@ -32,9 +32,9 @@ class NotifyManager(AManager):
             context=context,
         )
         log.info(
-            f"Создано{' отложенное' if not send_immediately else ''} "
-            f"уведомление id={notify.id} для пользователя {recipient.id} "
-            f"| {context=}"
+            f'Создано{' отложенное' if not send_immediately else ''} '
+            f'уведомление id={notify.id} для пользователя {recipient.id} '
+            f'| {context=}'
         )
 
         if send_immediately or scheduled_time <= timezone.now():

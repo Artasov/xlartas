@@ -32,19 +32,19 @@ def async_tbank_installment_notification(view_func):
             #     if request.ip not in TBANK_NOTIFICATION_ALLOWED_URLS:
             #         raise TBankException.Notification.IpNotAllowed(f'{request.ip} ip is not allowed')
 
-            # Из Тинькофф Формы приходит "id" — это их внутренний ID,
+            # Из Тинькофф Формы приходит 'id' — это их внутренний ID,
             # но у нас order_id = ваш UUID.
-            # Либо в docs: "id" = orderNumber, "external_order_number" = ...
+            # Либо в docs: 'id' = orderNumber, 'external_order_number' = ...
             tin_id = request.data.get('id')
             if not tin_id:
                 raise TBankException.Notification.WrongParams("No 'id' in payload")
 
             # Пытаемся найти TBankInstallment по order_id=...
-            # Если в Forma "id" == наш order_id, то ищем .aget(order_id=tin_id).
-            # Если наоборот — "external_order_number" = ваш order_id,
+            # Если в Forma 'id' == наш order_id, то ищем .aget(order_id=tin_id).
+            # Если наоборот — 'external_order_number' = ваш order_id,
             # тогда ищем в data['external_order_number'] =>
             # (зависит от того, как вы настраивали orderNumber).
-            # Ниже предполагаем, что "id" == .order_id:
+            # Ниже предполагаем, что 'id' == .order_id:
             try:
                 request.payment = await TBankInstallment.objects.select_for_update().aget(
                     order_id=tin_id
@@ -106,7 +106,7 @@ def async_tbank_installment_notification(view_func):
                 )
                 request.order = await order.aget_real_instance()
             except Order.DoesNotExist:
-                log.critical(f"[TBankInstallment] Payment {request.payment.id} found, but no Order linked!")
+                log.critical(f'[TBankInstallment] Payment {request.payment.id} found, but no Order linked!')
                 raise TBankException.Payment.DoesNotExist()
 
             log.info('[TBankInstallment] Stage #2 - decorator success')

@@ -26,9 +26,9 @@ class FolderAdmin(admin.ModelAdmin):
     inlines = [FolderTagInline]
 
     def tag_list(self, obj):
-        return ", ".join([t.name for t in obj.tags.all()])
+        return ', '.join([t.name for t in obj.tags.all()])
 
-    tag_list.short_description = "Tags"
+    tag_list.short_description = 'Tags'
 
 
 @admin.register(File)
@@ -42,12 +42,12 @@ class FileAdmin(admin.ModelAdmin):
     def file_size(self, obj):
         return obj.file.size
 
-    file_size.short_description = "File Size (bytes)"
+    file_size.short_description = 'File Size (bytes)'
 
     def tag_list(self, obj):
-        return ", ".join([t.name for t in obj.tags.all()])
+        return ', '.join([t.name for t in obj.tags.all()])
 
-    tag_list.short_description = "Tags"
+    tag_list.short_description = 'Tags'
 
 
 @admin.register(Tag)
@@ -60,7 +60,7 @@ class TagAdmin(admin.ModelAdmin):
         return format_html('<span style="background-color: {}; padding: 2px 6px; border-radius: 3px;">{}</span>',
                            obj.color, obj.color)
 
-    color_display.short_description = "Color"
+    color_display.short_description = 'Color'
 
 
 @admin.register(FileTag)

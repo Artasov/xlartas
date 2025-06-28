@@ -42,7 +42,7 @@ class JWTAuthMiddlewareInst:  # ← scope wrapper
     async def __call__(self, receive, send):
         token = self._extract_token(self.scope)
         user = await self._authenticate(token)
-        self.scope["user"] = user
+        self.scope['user'] = user
         inner = self.middleware.inner(self.scope)
         return await inner(receive, send)
 
@@ -51,13 +51,13 @@ class JWTAuthMiddlewareInst:  # ← scope wrapper
     @staticmethod
     def _extract_token(scope) -> str | None:
         # 1)  Authorization: Bearer <jwt>
-        for name, value in scope.get("headers", []):
-            if name == b"authorization" and value.lower().startswith(b"bearer "):
+        for name, value in scope.get('headers', []):
+            if name == b'authorization' and value.lower().startswith(b'bearer '):
                 return value.split()[1].decode()
 
         # 2)  ?token=<jwt>  |  ?access=<jwt>
-        qs = parse_qs(scope.get("query_string", b"").decode())
-        for key in ("token", "access"):
+        qs = parse_qs(scope.get('query_string', b'').decode())
+        for key in ('token', 'access'):
             if key in qs:
                 return qs[key][0]
 
@@ -70,7 +70,7 @@ class JWTAuthMiddlewareInst:  # ← scope wrapper
         try:
             # signature / exp validation
             UntypedToken(token)  # noqa
-            data = TokenBackend(algorithm="HS256").decode(token, verify=True)  # noqa
-            return await _get_user(data.get("user_id"))
+            data = TokenBackend(algorithm='HS256').decode(token, verify=True)  # noqa
+            return await _get_user(data.get('user_id'))
         except Exception:  # noqa
             return AnonymousUser()

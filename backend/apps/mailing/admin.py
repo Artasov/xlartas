@@ -27,8 +27,8 @@ class MailingAdmin(ModelAdmin):
     filter_horizontal = ('users',)
     actions = ['send_selected_mailings']
 
-    @action(description="Отправить выбранные рассылки")
+    @action(description='Отправить выбранные рассылки')
     def send_selected_mailings(self, request, queryset):
         for mailing in queryset:
             if not mailing.sent: send_mailing.delay(mailing.id)
-        self.message_user(request, "Выбранные рассылки отправлены.")
+        self.message_user(request, 'Выбранные рассылки отправлены.')

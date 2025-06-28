@@ -14,29 +14,29 @@ class RconCommandForm(forms.Form):
             'rows': 4, 'cols': 60,
             'class': 'form-control'
         }),
-        label="RCON Команда"
+        label='RCON Команда'
     )
 
 
 # View для отображения страницы RCON-консоли.
 def rcon_console_view(request):
     output = None
-    if request.method == "POST":
+    if request.method == 'POST':
         form = RconCommandForm(request.POST)
         if form.is_valid():
-            command = form.cleaned_data["command"]
+            command = form.cleaned_data['command']
             # Используем наш класс для отправки команды RCON.
             output = RconServerConsole().send_command(command)
     else:
         form = RconCommandForm()
     context = {
-        "title": "RCON Консоль",
-        "form": form,
-        "output": output,
-        "site_title": admin.site.site_title,
-        "site_header": admin.site.site_header,
+        'title': 'RCON Консоль',
+        'form': form,
+        'output': output,
+        'site_title': admin.site.site_title,
+        'site_header': admin.site.site_header,
     }
-    return TemplateResponse(request, "admin/rcon_console.html", context)
+    return TemplateResponse(request, 'admin/rcon_console.html', context)
 
 
 # Добавляем новый URL в админку.

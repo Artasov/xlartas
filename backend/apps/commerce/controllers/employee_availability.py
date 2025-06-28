@@ -30,7 +30,7 @@ class EmployeeAvailabilityViewSet(ViewSet):
         )
 
         if overlapping_intervals:
-            return Response({"detail": "Interval overlaps with existing interval"}, status=400)
+            return Response({'detail': 'Interval overlaps with existing interval'}, status=400)
 
         serializer = AvailabilityIntervalSerializer(data=data)
         if await serializer.ais_valid():
@@ -42,7 +42,7 @@ class EmployeeAvailabilityViewSet(ViewSet):
     async def update(request, pk=None):
         interval = await EmployeeAvailabilityInterval.objects.agetorn(pk=pk, user=request.user)
         if not interval:
-            return Response({"detail": "Interval not found"}, status=404)
+            return Response({'detail': 'Interval not found'}, status=404)
 
         data = request.data
         serializer = AvailabilityIntervalSerializer(interval, data=data, partial=True)
@@ -54,6 +54,6 @@ class EmployeeAvailabilityViewSet(ViewSet):
     @staticmethod
     async def destroy(request, pk=None):
         interval = await EmployeeAvailabilityInterval.objects.agetorn(pk=pk, user=request.user)
-        if not interval: return Response({"detail": "Interval not found"}, status=404)
+        if not interval: return Response({'detail': 'Interval not found'}, status=404)
         await interval.adelete()
         return Response(status=204)

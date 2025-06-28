@@ -52,7 +52,7 @@ def get_redis_value(redis_client, key):
     elif key_type == 'zset':
         return redis_client.zrange(key, 0, -1, withscores=True)  # Получение всех элементов отсортированного множества
     else:
-        return f"Unsupported type: {key_type}"
+        return f'Unsupported type: {key_type}'
 
 
 def list_redis_keys(request, redis_client):

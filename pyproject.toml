@@ -19,7 +19,7 @@ daphne = "4.2.0"
 channels = "4.2.2"
 
 # Tier 2
-django-redis = "5.4.0"
+django-redis = "6.0.0"
 django-cors-headers = "4.7.0"
 django-logui = "0.1.2"
 django-endpoints = "0.0.3"
@@ -35,9 +35,9 @@ django-csp = "4.0"
 django-user-agents = "0.4.0"
 django-object-actions = "5.0.0"
 django-phonenumber-field = { extras = ["phonenumbers"], version = "^8.0.0" }
-phonenumbers = "9.0.7"
+phonenumbers = "9.0.8"
 django-jazzmin = "3.0.1"
-django-import-export = { version = "4.3.7", extras = ["all"] }
+django-import-export = { version = "4.3.8", extras = ["all"] }
 
 pytest-asyncio = "0.26.0"
 pytest-django = "4.11.1"
@@ -45,16 +45,16 @@ flower = "2.0.1"
 drf-yasg = "1.21.10"
 redis = "6.2.0"
 channels-redis = "4.2.1"
-twisted = { version = "24.11.0", extras = ["http2", "tls"] }
+twisted = { version = "25.5.0", extras = ["http2", "tls"] }
 httpx = "1.0.0b0"
-uuid6 = "2024.7.10"
+uuid6 = "2025.0.0"
 mcrcon = "0.7.0"
 
 aiohttp = "3.11.18"
 chardet = "5.2.0"
-python-dotenv = "1.1.0"
+python-dotenv = "1.1.1"
 celery-singleton = "0.3.1"
-django-ckeditor = "6.7.2"
+django-ckeditor = "6.7.3"
 
 Pillow = "11.0.0"
 psycopg2-binary = "2.9.10"

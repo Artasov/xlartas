@@ -17,6 +17,6 @@ class ThemeAdmin(ImportExportModelAdmin):
                 '<img src="{}" width="150" height="auto" />',
                 obj.bg_image.url
             )
-        return "Нет изображения"
+        return 'Нет изображения'
 
-    image_preview.short_description = "Предпросмотр изображения"
+    image_preview.short_description = 'Предпросмотр изображения'

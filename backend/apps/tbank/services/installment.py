@@ -42,18 +42,18 @@ class TBankInstallmentService:
 
     @property
     def base_url(self) -> str:
-        return "https://forma.tinkoff.ru/api/partners/v2/orders"
+        return 'https://forma.tinkoff.ru/api/partners/v2/orders'
 
     def _basic_auth_headers(self: 'TBankInstallment') -> dict:
-        # Если демо => login = f"demo-{self.showcase_id}"
+        # Если демо => login = f'demo-{self.showcase_id}'
         login = self.showcase_id
         if self.is_demo:
-            login = f"demo-{login}"
-        auth_str = f"{login}:{self.api_password}"
-        encoded = base64.b64encode(auth_str.encode("utf-8")).decode("utf-8")
+            login = f'demo-{login}'
+        auth_str = f'{login}:{self.api_password}'
+        encoded = base64.b64encode(auth_str.encode('utf-8')).decode('utf-8')
         return {
-            "Authorization": f"Basic {encoded}",
-            "Content-Type": "application/json"
+            'Authorization': f'Basic {encoded}',
+            'Content-Type': 'application/json'
         }
 
     @staticmethod
@@ -63,7 +63,7 @@ class TBankInstallmentService:
             async with session.post(url, json=data, headers=headers) as resp:
                 resp_data = await resp.json()
                 if resp.status != 200:
-                    raise ValueError(f"Request error {resp.status}: {resp_data}")
+                    raise ValueError(f'Request error {resp.status}: {resp_data}')
                 return resp_data
 
     @staticmethod
@@ -72,7 +72,7 @@ class TBankInstallmentService:
             async with session.get(url, headers=headers) as resp:
                 resp_data = await resp.json()
                 if resp.status != 200:
-                    raise ValueError(f"Request error {resp.status}: {resp_data}")
+                    raise ValueError(f'Request error {resp.status}: {resp_data}')
                 return resp_data
 
     # ---------------------------
@@ -95,35 +95,35 @@ class TBankInstallmentService:
         items     — [{name, price, quantity, ...}, ...]
         """
         from apps.tbank.models import TBankInstallmentStatus
-        create_url = f"{self.base_url}/create"
+        create_url = f'{self.base_url}/create'
         data = {
-            "shopId": self.shop_id,
-            "showcaseId": self.showcase_id,
-            "sum": total_sum,
-            "items": items,
+            'shopId': self.shop_id,
+            'showcaseId': self.showcase_id,
+            'sum': total_sum,
+            'items': items,
             # orderNumber должен быть, т.к. у вас commit/cancel/info
-            "orderNumber": str(self.order_id),
-            "promoCode": promo_code,
+            'orderNumber': str(self.order_id),
+            'promoCode': promo_code,
         }
-        if webhook_url:  data["webhookURL"] = webhook_url
-        if success_url:  data["successURL"] = success_url
-        if fail_url:     data["failURL"] = fail_url
-        if return_url:   data["returnURL"] = return_url
+        if webhook_url:  data['webhookURL'] = webhook_url
+        if success_url:  data['successURL'] = success_url
+        if fail_url:     data['failURL'] = fail_url
+        if return_url:   data['returnURL'] = return_url
         # Если нужно передавать demoFlow => self.is_demo
         if self.is_demo:
-            data["demoFlow"] = "sms"
+            data['demoFlow'] = 'sms'
         if contact_values:
-            data["values"] = {"contact": contact_values}
+            data['values'] = {'contact': contact_values}
         log.info(f'TBankInstallment create request {data}')
         response_data = await self._post_json(create_url, data, headers=None)
 
         """
-          Ожидаем, что вернётся {"id": "...", "link": "..."}
-          "id" = ID заявки в TCB
-          "link" = ссылка на форму
+          Ожидаем, что вернётся {'id': '...', 'link': '...'}
+          'id' = ID заявки в TCB
+          'link' = ссылка на форму
         """
         self.status = TBankInstallmentStatus.NEW  # noqa
-        self.payment_url = response_data.get("link")  # noqa
+        self.payment_url = response_data.get('link')  # noqa
         await self.asave()
         return response_data  # может пригодиться
 
@@ -134,13 +134,13 @@ class TBankInstallmentService:
         """
         Подтверждение заявки (POST /{orderNumber}/commit).
         """
-        url = f"{self.base_url}/{self.order_id}/commit"
+        url = f'{self.base_url}/{self.order_id}/commit'
         headers = self._basic_auth_headers()
         resp = await self._post_json(url, data={}, headers=headers)
 
-        # resp содержит {"status": "...", "committed": ..., ...}
-        self.status = resp.get("status", self.status)  # noqa
-        self.committed = bool(resp.get("committed", False))  # noqa
+        # resp содержит {'status': '...', 'committed': ..., ...}
+        self.status = resp.get('status', self.status)  # noqa
+        self.committed = bool(resp.get('committed', False))  # noqa
         await self.asave()
         return resp
 
@@ -151,12 +151,12 @@ class TBankInstallmentService:
         """
         Отмена заявки (POST /{orderNumber}/cancel).
         """
-        url = f"{self.base_url}/{self.order_id}/cancel"
+        url = f'{self.base_url}/{self.order_id}/cancel'
         headers = self._basic_auth_headers()
         resp = await self._post_json(url, data={}, headers=headers)
 
-        self.status = resp.get("status", self.status)  # noqa
-        self.committed = bool(resp.get("committed", False))  # noqa
+        self.status = resp.get('status', self.status)  # noqa
+        self.committed = bool(resp.get('committed', False))  # noqa
         await self.asave()
         return resp
 
@@ -167,11 +167,11 @@ class TBankInstallmentService:
         """
         Текущее состояние заявки (GET /{orderNumber}/info).
         """
-        url = f"{self.base_url}/{self.order_id}/info"
+        url = f'{self.base_url}/{self.order_id}/info'
         headers = self._basic_auth_headers()
         resp = await self._get_json(url, headers=headers)
 
-        self.status = resp.get("status", self.status)  # noqa
-        self.committed = bool(resp.get("committed", False))  # noqa
+        self.status = resp.get('status', self.status)  # noqa
+        self.committed = bool(resp.get('committed', False))  # noqa
         await self.asave()
         return resp

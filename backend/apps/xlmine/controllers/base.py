@@ -62,59 +62,59 @@ class ChunkedReleaseUploadView(APIView):
         chunk_file = request.FILES.get('file')
 
         if not upload_id or chunk_index is None or not total_chunks or not filename or not chunk_file:
-            log.error("Неполные данные для загрузки чанка")
-            return Response({"error": "Неполные данные"}, status=status.HTTP_400_BAD_REQUEST)
+            log.error('Неполные данные для загрузки чанка')
+            return Response({'error': 'Неполные данные'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             chunk_index = int(chunk_index)
             total_chunks = int(total_chunks)
         except ValueError:
             log.error(
-                "Неверные значения chunk_index или total_chunks: %s, %s",
+                'Неверные значения chunk_index или total_chunks: %s, %s',
                 request.data.get('chunk_index'),
                 request.data.get('total_chunks')
             )
-            return Response({"error": "Неверные значения chunk_index или total_chunks"},
+            return Response({'error': 'Неверные значения chunk_index или total_chunks'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         temp_dir = os.path.join(settings.FILE_UPLOAD_TEMP_DIR, 'chunk_uploads')
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
-            log.info("Создана директория для чанков: %s", temp_dir)
+            log.info('Создана директория для чанков: %s', temp_dir)
 
         # сохраняем JSON безопасности на первой порции
-        security_meta_path = os.path.join(temp_dir, f"{upload_id}_security.json")
+        security_meta_path = os.path.join(temp_dir, f'{upload_id}_security.json')
         if chunk_index == 0 and security_json_str:
             with open(security_meta_path, 'w') as sm:
                 sm.write(security_json_str)
 
         # сохраняем сам чанк
-        chunk_path = os.path.join(temp_dir, f"{upload_id}_{chunk_index}")
+        chunk_path = os.path.join(temp_dir, f'{upload_id}_{chunk_index}')
         with open(chunk_path, 'wb') as f:
             for data in chunk_file.chunks():
                 f.write(data)
         log.info(
-            "Сохранён чанк %s из %s для upload_id %s",
+            'Сохранён чанк %s из %s для upload_id %s',
             chunk_index + 1, total_chunks, upload_id
         )
 
         # если последний чанк — склеиваем и создаём объект Release
         if chunk_index == total_chunks - 1:
-            final_path = os.path.join(temp_dir, f"{upload_id}_{filename}")
+            final_path = os.path.join(temp_dir, f'{upload_id}_{filename}')
             with open(final_path, 'wb') as final_file:
                 for i in range(total_chunks):
-                    part = os.path.join(temp_dir, f"{upload_id}_{i}")
+                    part = os.path.join(temp_dir, f'{upload_id}_{i}')
                     if not os.path.exists(part):
-                        log.error("Отсутствует чанк %s для upload_id %s", i, upload_id)
+                        log.error('Отсутствует чанк %s для upload_id %s', i, upload_id)
                         return Response(
-                            {"error": f"Отсутствует чанк {i}"},
+                            {'error': f'Отсутствует чанк {i}'},
                             status=status.HTTP_400_BAD_REQUEST
                         )
                     with open(part, 'rb') as cf:
                         final_file.write(cf.read())
                     os.remove(part)
                     log.info(
-                        "Чанк %s удалён после сборки для upload_id %s",
+                        'Чанк %s удалён после сборки для upload_id %s',
                         i + 1, upload_id
                     )
 
@@ -127,7 +127,7 @@ class ChunkedReleaseUploadView(APIView):
             if os.path.exists(security_meta_path):
                 os.remove(security_meta_path)
 
-            log.info("Собран файл: %s. Создаём объект Release.", final_path)
+            log.info('Собран файл: %s. Создаём объект Release.', final_path)
             with open(final_path, 'rb') as final_file_obj:
                 django_file = File(final_file_obj, name=filename)
                 release = Release.objects.create(
@@ -138,13 +138,13 @@ class ChunkedReleaseUploadView(APIView):
                 release.sha256_hash = calculate_sha256(release.file)
                 release.save()
             os.remove(final_path)
-            log.info("Финальный файл %s удалён после создания объекта Release", final_path)
+            log.info('Финальный файл %s удалён после создания объекта Release', final_path)
 
             serializer = ReleaseSerializer(release)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(
-                {"status": f"Получен чанк {chunk_index + 1} из {total_chunks}"},
+                {'status': f'Получен чанк {chunk_index + 1} из {total_chunks}'},
                 status=status.HTTP_200_OK
             )
 

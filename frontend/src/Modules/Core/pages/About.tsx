@@ -17,13 +17,7 @@ const About = () => {
             <Typography variant="h4" component="h1" gutterBottom>
                 About Us
             </Typography>
-            <Typography paragraph>
-                {/* TODO: TypographyOwnProps. paragraph?: boolean | undefined
-If true, the element will be a paragraph element.
-Default:
-false
-Deprecated:
-Use the component prop instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details. */}
+            <Typography component="p" sx={{mb: 2}}>
                 We specialize in backend development and WinAPI software solutions, crafting advanced systems with high
                 performance and reliability.
             </Typography>

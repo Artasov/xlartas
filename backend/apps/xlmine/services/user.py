@@ -56,7 +56,7 @@ class UserXLMineService:
             await sync_to_async(xlm.asave)()
 
         rcon = RconServerConsole()
-        return rcon.send_command(f"skin player {self.username} clear")
+        return rcon.send_command(f'skin player {self.username} clear')
 
     async def set_cape(self: 'User', cape_file: UploadedFile) -> str:
         """
@@ -77,7 +77,7 @@ class UserXLMineService:
 
         rcon = RconServerConsole()
         return rcon.send_command(
-            f"cape player {self.username} set {cape_url}"
+            f'cape player {self.username} set {cape_url}'
         )
 
     async def clear_cape(self: 'User') -> str:
@@ -94,4 +94,4 @@ class UserXLMineService:
             await sync_to_async(xlm.asave)()
 
         rcon = RconServerConsole()
-        return rcon.send_command(f"cape player {self.username} clear")
+        return rcon.send_command(f'cape player {self.username} clear')

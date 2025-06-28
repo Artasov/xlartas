@@ -24,4 +24,4 @@ class Command(BaseCommand):
                 try:
                     call_command('loaddata', os.path.join(directory, filename))
                 except Exception as e:
-                    logging.getLogger(__name__).error("%s Not Loaded: %s", filename, e)
+                    logging.getLogger(__name__).error('%s Not Loaded: %s', filename, e)

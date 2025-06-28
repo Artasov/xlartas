@@ -47,4 +47,4 @@
 #     user = await UserFactory.acreate()
 #     order = await OrderFactory.acreate(user=user)
 #     await order.cancel_payment()
-#     assert order.payment.status == "CANCELLED"
+#     assert order.payment.status == 'CANCELLED'

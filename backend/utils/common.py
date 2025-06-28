@@ -17,7 +17,7 @@ def get_models_list() -> Generator[str, Any, None]:
     Функция возвращает список строк вида 'app.Model' для всех зарегистрированных моделей.
     """
     models = apps.get_models()
-    return (f"{model._meta.app_label}.{model.__name__}" for model in models)  # noqa
+    return (f'{model._meta.app_label}.{model.__name__}' for model in models)  # noqa
 
 
 def google_captcha_validation(request):

@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {buildWSUrl} from 'Utils/ws';
-import {useTheme} from 'Theme/ThemeContext';
 import {FCCC} from 'wide-containers';
 import TextField from '@mui/material/TextField';
 
@@ -11,7 +10,6 @@ const WS_URL = buildWSUrl('/ws/macro-control/');
  * отправляется через WebSocket и тут же убирается из поля.
  */
 const RemoteKeyboardField: React.FC = () => {
-    const {plt} = useTheme();
     const wsRef = useRef<WebSocket | null>(null);
     const [value, setValue] = useState('');
 
@@ -63,17 +61,15 @@ const RemoteKeyboardField: React.FC = () => {
                 value={value}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
-                inputProps={{
-                    // TODO: BaseTextFieldProps. inputProps?: InputBaseComponentProps | undefined
-                    // Attributes  applied to the input element.
-                    // Deprecated:
-                    // Use slotProps. htmlInput instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
-                    style: {textAlign: 'center', paddingTop: '10px'},
-                    autoCapitalize: 'none',
-                    autoCorrect: 'off',
-                    autoComplete: 'off',
-                    spellCheck: 'false',
-                    inputMode: 'text',
+                slotProps={{
+                    input: {
+                        style: {textAlign: 'center', paddingTop: '10px'},
+                        autoCapitalize: 'none',
+                        autoCorrect: 'off',
+                        autoComplete: 'off',
+                        spellCheck: 'false',
+                        inputMode: 'text',
+                    },
                 }}
             />
         </FCCC>

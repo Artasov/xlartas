@@ -58,7 +58,7 @@ async def signup(request) -> Response:
         ).aexists(): raise UserException.AlreadyExistsWithThisPhone()
 
         if email:
-            username = f'{email.split("@")[0]}{randint(1000, 9999)}'
+            username = f'{email.split('@')[0]}{randint(1000, 9999)}'
         else:
             username = f'{phone}_{randint(1000, 9999)}'
         if email:

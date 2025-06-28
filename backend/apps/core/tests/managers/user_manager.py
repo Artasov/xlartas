@@ -8,9 +8,9 @@ from apps.core.models import User
 @pytest.mark.asyncio
 async def test_user_by_creds():
     user = await User.objects.acreate(
-        username="testuser",
-        email="test@example.com",
-        phone="+71234567890",
+        username='testuser',
+        email='test@example.com',
+        phone='+71234567890',
     )
 
     email_user = await User.objects.by_creds(credential=user.email)

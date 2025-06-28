@@ -51,7 +51,7 @@ def show_xl_dashboard(context):
                     )
                     items.append((item_name, admin_link))
                 except Exception as e:  # noqa
-                    # print(f"Ошибка для модели {model_path}: {e}")  # Лог ошибки
+                    # print(f'Ошибка для модели {model_path}: {e}')  # Лог ошибки
                     items.append((item_name, '#invalid-model-path'))
             else:
                 items.append((item_name, '#unknown-type'))

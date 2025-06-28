@@ -22,4 +22,4 @@ def send_confirmation_code_to_email_task(email: str, action: 'ConfirmationAction
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 20})
 def send_confirmation_code_to_phone_task(phone: str, action: 'ConfirmationAction', code: str) -> None:
     # Subject не учитывается для SMS
-    send_sms(phone=phone, message=f'{code}\n{action["text"]}')
+    send_sms(phone=phone, message=f'{code}\n{action['text']}')

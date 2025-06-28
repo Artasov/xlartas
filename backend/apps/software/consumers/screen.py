@@ -18,11 +18,11 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
     **Desktop-клиент (xlmacros) ➜ сервер**
 
         • бинарные WebSocket-сообщения —   один JPEG-кадр.
-        • text-сообщения JSON: {"type": "settings", "width": …, "height": …}
+        • text-сообщения JSON: {'type': 'settings', 'width': …, 'height': …}
 
     **Сервер ➜ браузеры**
 
-        • text-сообщение: {"type": "screen.frame", "data": "<base64-jpeg>"}
+        • text-сообщение: {'type': 'screen.frame', 'data': '<base64-jpeg>'}
 
     Авторизация — та же, что и у `MacroControlConsumer`:
         ws://<host>/ws/screen-stream/?username=<login>&secret_key=<key>
@@ -37,10 +37,10 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
         self._flush_task: asyncio.Task | None = None
 
     async def connect(self):
-        if self.scope["user"].is_anonymous:
-            qs = parse_qs(self.scope["query_string"].decode())
-            username = qs.get("username", [None])[0]
-            secret_key = qs.get("secret_key", [None])[0]
+        if self.scope['user'].is_anonymous:
+            qs = parse_qs(self.scope['query_string'].decode())
+            username = qs.get('username', [None])[0]
+            secret_key = qs.get('secret_key', [None])[0]
             if not username or not secret_key:
                 await self.close(code=4002)
                 return
@@ -49,10 +49,10 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
                 await self.close(code=4003)
                 return
         else:
-            user = self.scope["user"]
+            user = self.scope['user']
 
         self.user = user
-        await self.channel_layer.group_add(f"screen_{user.id}", self.channel_name)
+        await self.channel_layer.group_add(f'screen_{user.id}', self.channel_name)
         await self.accept()
 
         # буфер последнего кадра
@@ -60,8 +60,8 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
         self._flush_task = None
 
     async def disconnect(self, code):
-        if hasattr(self, "user"):
-            await self.channel_layer.group_discard(f"screen_{self.user.id}", self.channel_name)
+        if hasattr(self, 'user'):
+            await self.channel_layer.group_discard(f'screen_{self.user.id}', self.channel_name)
         if self._flush_task:
             self._flush_task.cancel()
 
@@ -101,8 +101,8 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
                     break
                 b64 = base64.b64encode(self._latest_frame).decode()
                 await self._safe_group_send({
-                    "type": "screen.frame",
-                    "data": b64,
+                    'type': 'screen.frame',
+                    'data': b64,
                 })
                 self._latest_frame = None
                 await asyncio.sleep(FLUSH_DELAY)
@@ -111,7 +111,7 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
 
     async def _safe_group_send(self, message: dict):
         try:
-            await self.channel_layer.group_send(f"screen_{self.user.id}", message)
+            await self.channel_layer.group_send(f'screen_{self.user.id}', message)
         except ChannelFull:
             # канал переполнен — просто отбросим кадр
             pass

@@ -53,7 +53,7 @@ class SocialOAuthException:
 
     class DiscordUsernameWasNotProvided(APIException):
         status_code = HTTP_400_BAD_REQUEST
-        default_detail = {'message': _("Failed to retrieve discord username.")}
+        default_detail = {'message': _('Failed to retrieve discord username.')}
         default_code = 'discord_username_was_not_provided'
 
     class DiscordUserIdWasNotProvided(APIException):

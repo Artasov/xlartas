@@ -17,5 +17,5 @@ class OAuthFactory:
     @staticmethod
     def get_provider(provider_name: str) -> OAuthProvider:
         if provider_name not in OAuthFactory.providers:
-            raise ValueError(f"Unknown OAuth provider: {provider_name}")
+            raise ValueError(f'Unknown OAuth provider: {provider_name}')
         return OAuthFactory.providers[provider_name]

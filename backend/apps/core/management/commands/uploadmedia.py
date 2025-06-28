@@ -25,7 +25,7 @@ class Command(BaseCommand):
         #     secret_key=settings.MINIO_SECRET_KEY,
         #     secure=settings.MINIO_USE_HTTPS  # Используйте False, если ваш MinIO работает без SSL
         # )
-        # bucket_name = "media"
+        # bucket_name = 'media'
         default_storage = MinioBackend()
 
         for root, dirs, files in os.walk(media_path):

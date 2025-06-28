@@ -4,7 +4,6 @@ import {useApi} from 'Modules/Api/useApi';
 import SkinCapeView from "./SkinCapeView";
 import {Button} from "@mui/material";
 import {FCC, FRCC} from "wide-containers";
-import {useTheme} from "Theme/ThemeContext";
 import {Message} from 'Core/components/Message';
 
 const SkinCapeSetter: React.FC = () => {
@@ -13,7 +12,6 @@ const SkinCapeSetter: React.FC = () => {
     const [capeUrl, setCapeUrl] = useState<string | null>(null);
     const [validSkin, setValidSkin] = useState<boolean>(false);
     const [validCape, setValidCape] = useState<boolean>(false);
-    const {plt} = useTheme();
 
     const fetchCurrent = useCallback(async () => {
         const data = await api.get('/api/v1/xlmine/current/skin-cape/');
@@ -101,7 +99,7 @@ const SkinCapeSetter: React.FC = () => {
                         type="file"
                         onChange={e => {
                             const f = e.target.files?.[0];
-                            if (f) uploadFile(f, 'skin');
+                            if (f) uploadFile(f, 'skin').then();
                         }}
                     />
                 </Button>
@@ -118,7 +116,7 @@ const SkinCapeSetter: React.FC = () => {
                         type="file"
                         onChange={e => {
                             const f = e.target.files?.[0];
-                            if (f) uploadFile(f, 'cape');
+                            if (f) uploadFile(f, 'cape').then();
                         }}
                     />
                 </Button>

@@ -2,14 +2,13 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import {Button} from "@mui/material";
+import {Button, IconButton, InputAdornment} from "@mui/material";
 import 'react-phone-input-2/lib/material.css';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 import {Message} from "Core/components/Message";
 import {useNavigate} from "react-router-dom";
 import {FC} from 'wide-containers';
-import {IconButton, InputAdornment} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -76,7 +75,7 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
                         confirmationMethod={confirmationMethod || 'email'}
                         action={'new_password'}
                         autoFocus={true}
-                        onConfirm={(action_result: any) => {
+                        onConfirm={(_action_result: any) => {
                             Message.success('Пароль успешно изменен.')
                             onSuccess()
                         }}
@@ -94,23 +93,21 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
                             className={`${useConfirmation ? 'opacity-50 pointer-events-none' : ''}`}
                             disabled={useConfirmation}
                             inputRef={inputRef}
-                            InputProps={{
-                                // TODO: OutlinedTextFieldProps. InputProps?: Partial<FilledInputProps> | Partial<OutlinedInputProps> | Partial<InputProps> | undefined
-                                // Props applied to the Input element. It will be a FilledInput, OutlinedInput or Input component depending on the variant prop value.
-                                // Deprecated:
-                                // Use slotProps. input instead. This prop will be removed in a future major release. See Migrating from deprecated APIs  for more details.
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                edge="end"
+                                            >
+                                                {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                },
                             }}
                         />
                         {newPassword && (

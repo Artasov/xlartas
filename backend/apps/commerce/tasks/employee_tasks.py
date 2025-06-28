@@ -15,4 +15,4 @@ def auto_renewal_employees_schedules():
         try:
             emp.auto_renewal_schedule()
         except Exception as e:
-            log.critical(f"Ошибка при обработке сотрудника {emp.id}: {traceback_str(e)}")
+            log.critical(f'Ошибка при обработке сотрудника {emp.id}: {traceback_str(e)}')

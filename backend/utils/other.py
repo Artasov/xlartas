@@ -25,7 +25,7 @@ def random_str(length: int = 10, alphabet: str = ALPHABETS['en'], repete: bool =
         try:
             rand_str = ''.join(random.sample(alphabet, length))
         except ValueError:
-            return "The alphabet is less than the length of the string. Generation without repetition is impossible."
+            return 'The alphabet is less than the length of the string. Generation without repetition is impossible.'
     if upper:
         return rand_str.upper()
     else:

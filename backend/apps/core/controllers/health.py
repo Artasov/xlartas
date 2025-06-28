@@ -46,7 +46,7 @@ def health(_request) -> Response:
 
     # # Cache
     # if settings.INTENSIVE_HEALTH_TEST:
-    #     pprint(f"Cache working: {cache('health_test_cache', randint(1000, 10000))[0]}")
+    #     pprint(f'Cache working: {cache('health_test_cache', randint(1000, 10000))[0]}')
 
     # Database
     try:
@@ -92,7 +92,7 @@ async def backend_config(_):
                             # 'modified_date': datetime.fromtimestamp(stat.st_mtime).isoformat(),
                         })
                     except Exception as e2:
-                        log.critical(f"Error accessing file {f.name}: {traceback_str(e2)}")
+                        log.critical(f'Error accessing file {f.name}: {traceback_str(e2)}')
         return files_info
 
     css_files = await get_files_with_dates(css_path)
@@ -145,7 +145,7 @@ async def clear_redis(request, key=None):
     if not request.user or not request.user.is_authenticated or not request.user.is_staff:
         return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
     try:
-        redis_conn = get_redis_connection("default")  # Используйте нужное имя соединения, если оно отличается
+        redis_conn = get_redis_connection('default')  # Используйте нужное имя соединения, если оно отличается
 
         if key:
             # Удаляем только указанный ключ

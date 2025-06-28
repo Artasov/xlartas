@@ -46,7 +46,7 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
     async def receive_json(self, content, **kwargs):
         """
         Если хотим принимать сообщения от клиента,
-        например, content = {"action": "ping"} => ответ "pong".
+        например, content = {'action': 'ping'} => ответ 'pong'.
         """
         action = content.get('action')
         if action == 'ping':
@@ -55,7 +55,7 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
 
     async def balance_update(self, event):
         """
-        Вызывается, когда кто-то сделает group_send с типом "balance_update".
+        Вызывается, когда кто-то сделает group_send с типом 'balance_update'.
         """
         coins = event.get('coins')
         await self.send_json({

@@ -11,8 +11,8 @@ from apps.xlmine.models.user import UserXLMine
 @pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_postgive_adds_coins_and_profile_created():
-    user = await User.objects.acreate(username="don")
-    donate = await Donate.objects.acreate(name="Donate", is_available=True)
+    user = await User.objects.acreate(username='don')
+    donate = await Donate.objects.acreate(name='Donate', is_available=True)
 
     order = await DonateOrder.objects.acreate(
         user=user,
@@ -25,8 +25,8 @@ async def test_postgive_adds_coins_and_profile_created():
     await donate.postgive(order)
 
     xlm_user = await UserXLMine.objects.aget(user=user)
-    assert xlm_user.coins == Decimal("0")
+    assert xlm_user.coins == Decimal('0')
 
     await donate.postgive(order)
     await xlm_user.arefresh_from_db()
-    assert xlm_user.coins >= Decimal("0")
+    assert xlm_user.coins >= Decimal('0')

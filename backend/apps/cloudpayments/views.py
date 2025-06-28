@@ -21,34 +21,34 @@ def pay(request, order_id):
 
     # Формируем чек (CustomerReceipt)
     receipt = {
-        "Items": [
+        'Items': [
             {
-                "label": f"Оплата заказа #{order.id}",
-                "price": amount,
-                "quantity": 1,
-                "amount": amount,
-                "vat": 0,
-                "method": 0,
-                "object": 4,  # payment
-                "measurementUnit": "шт",
+                'label': f'Оплата заказа #{order.id}',
+                'price': amount,
+                'quantity': 1,
+                'amount': amount,
+                'vat': 0,
+                'method': 0,
+                'object': 4,  # payment
+                'measurementUnit': 'шт',
             }
         ],
-        "calculationPlace": request.get_host(),
-        "taxationSystem": 0,
-        "email": order.user.email or "",
-        "phone": str(getattr(order.user, "phone", "")),
+        'calculationPlace': request.get_host(),
+        'taxationSystem': 0,
+        'email': order.user.email or '',
+        'phone': str(getattr(order.user, 'phone', '')),
     }
 
     ctx = {
-        "public_id": settings.CLOUD_PAYMENT_PUBLIC_ID,
-        "order_id": str(order.id),
-        "amount": amount,
-        "currency": order.currency,
-        "description": f"Оплата заказа #{order.id}",
+        'public_id': settings.CLOUD_PAYMENT_PUBLIC_ID,
+        'order_id': str(order.id),
+        'amount': amount,
+        'currency': order.currency,
+        'description': f'Оплата заказа #{order.id}',
         # JSON для вставки в JS
-        "receipt_json": json.dumps(receipt),
+        'receipt_json': json.dumps(receipt),
     }
-    response = render(request, "cloudpayments/pay.html", ctx)
+    response = render(request, 'cloudpayments/pay.html', ctx)
     # Отдаём минимальную CSP, чтобы только наш скрипт и widget могли грузиться
     response["Content-Security-Policy"] = (
         "default-src 'self'; "

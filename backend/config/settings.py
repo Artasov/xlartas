@@ -45,7 +45,7 @@ ROOT_URLCONF = 'apps.core.routes.root'
 HTTPS = bool(int(env('HTTPS')))
 SITE_ID = int(env('SITE_ID'))
 MAIN_DOMAIN = env('MAIN_DOMAIN', 'localhost')
-DOMAIN_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}{":8000" if DEV else ""}'
+DOMAIN_URL = f'http{'s' if HTTPS else ''}://{MAIN_DOMAIN}{':8000' if DEV else ''}'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 ALLOWED_HOSTS = [
     'localhost',
@@ -317,7 +317,7 @@ MIDDLEWARE = [
     'logui.middleware.RequestResponseLoggerMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # "csp.middleware.CSPMiddleware",
+    # 'csp.middleware.CSPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -333,55 +333,55 @@ MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 # MEDIA_SUBSTITUTION_URL = 'http://localhost:8000'
 
 CONTENT_SECURITY_POLICY = {
-    "DIRECTIVES": {
-        "default-src": [SELF],
+    'DIRECTIVES': {
+        'default-src': [SELF],
 
-        "script-src": [
+        'script-src': [
             SELF,
-            "https://widget.cloudpayments.ru",
-            "https://forma.tinkoff.ru",
-            "https://pay.google.com",
-            "https://pay.yandex.ru",
+            'https://widget.cloudpayments.ru',
+            'https://forma.tinkoff.ru',
+            'https://pay.google.com',
+            'https://pay.yandex.ru',
             UNSAFE_INLINE,
             UNSAFE_EVAL,
             UNSAFE_HASHES,
         ],
 
-        "style-src": [
+        'style-src': [
             SELF,
-            "https://fonts.googleapis.com",
+            'https://fonts.googleapis.com',
             UNSAFE_INLINE,
         ],
 
-        "font-src": [
+        'font-src': [
             SELF,
-            "https://fonts.gstatic.com",
+            'https://fonts.gstatic.com',
         ],
 
-        "img-src": [
+        'img-src': [
             SELF,
-            "data:",
-            "https://fonts.googleapis.com",
-            "https://fonts.gstatic.com",
-            "https://xlartas.ru",
+            'data:',
+            'https://fonts.googleapis.com',
+            'https://fonts.gstatic.com',
+            'https://xlartas.ru',
         ],
 
         # ← Add this!
-        "frame-src": [
+        'frame-src': [
             SELF,
-            "https://widget.cloudpayments.ru",
-            "https://pay.google.com",
-            "https://pay.yandex.ru",
-            "https://forma.tinkoff.ru",
+            'https://widget.cloudpayments.ru',
+            'https://pay.google.com',
+            'https://pay.yandex.ru',
+            'https://forma.tinkoff.ru',
         ],
 
         # optional, for older browsers that don’t support frame-src
-        "child-src": [
+        'child-src': [
             SELF,
-            "https://widget.cloudpayments.ru",
-            "https://pay.google.com",
-            "https://pay.yandex.ru",
-            "https://forma.tinkoff.ru",
+            'https://widget.cloudpayments.ru',
+            'https://pay.google.com',
+            'https://pay.yandex.ru',
+            'https://forma.tinkoff.ru',
         ],
     },
 }

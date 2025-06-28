@@ -41,11 +41,11 @@ class YandexOAuthProvider(OAuthProvider):
                     url='https://oauth.yandex.ru/token',
                     headers={'Content-Type': 'application/x-www-form-urlencoded'},
                     data={
-                        "grant_type": "authorization_code",
-                        "code": code,
-                        "client_id": settings.YANDEX_CLIENT_ID,
-                        "client_secret": settings.YANDEX_CLIENT_SECRET,
-                        "redirect_uri": settings.YANDEX_REDIRECT_URI,
+                        'grant_type': 'authorization_code',
+                        'code': code,
+                        'client_id': settings.YANDEX_CLIENT_ID,
+                        'client_secret': settings.YANDEX_CLIENT_SECRET,
+                        'redirect_uri': settings.YANDEX_REDIRECT_URI,
                     }
             ) as resp:
                 response_data = await resp.json()

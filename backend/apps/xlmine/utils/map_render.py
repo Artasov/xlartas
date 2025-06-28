@@ -40,7 +40,7 @@ def teleport_player_grid(
             x = left_top_x + dx
             z = left_top_z + dz
             log.info('[%s] Teleport %s to coordinates (%s, %s)', current_square + 1, player, x, z)
-            command = f"execute as {player} run tp {x} 120 {z}"
+            command = f'execute as {player} run tp {x} 120 {z}'
             console.send_command(command)
             for i in range(wait_seconds):
                 log.info('Waiting %s/%s sec', i + 1, wait_seconds)
