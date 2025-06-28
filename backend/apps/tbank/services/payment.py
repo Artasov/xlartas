@@ -26,3 +26,8 @@ class TBankPaymentService(BasePaymentService):
         self.status = self.Status.CANCELED  # noqa
         await self.asave()
         log.info('[TBank] Payment %s canceled', self.id)
+
+    @staticmethod
+    async def resend() -> None:
+        """Resend unpaid notifications for the terminal."""
+        await TBank().Resend()
