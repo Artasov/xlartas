@@ -5,6 +5,7 @@ export const visibilitySlice = createSlice({
     name: 'visibility',
     initialState: {
         isHeaderVisible: true,
+        isBackgroundFlickerEnabled: true,
     },
     reducers: {
         toggleHeader: (state) => {
@@ -16,9 +17,25 @@ export const visibilitySlice = createSlice({
         hideHeader: (state) => {
             state.isHeaderVisible = false;
         },
+        toggleBackgroundFlicker: (state) => {
+            state.isBackgroundFlickerEnabled = !state.isBackgroundFlickerEnabled;
+        },
+        showBackgroundFlicker: (state) => {
+            state.isBackgroundFlickerEnabled = true;
+        },
+        hideBackgroundFlicker: (state) => {
+            state.isBackgroundFlickerEnabled = false;
+        },
     },
 });
 
-export const {toggleHeader, showHeader, hideHeader} = visibilitySlice.actions;
+export const {
+    toggleHeader,
+    showHeader,
+    hideHeader,
+    toggleBackgroundFlicker,
+    showBackgroundFlicker,
+    hideBackgroundFlicker,
+} = visibilitySlice.actions;
 
 export default visibilitySlice.reducer;

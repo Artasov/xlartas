@@ -1,10 +1,13 @@
 // Modules/User/Profile.tsx
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
 import {Tab, Tabs} from '@mui/material';
+import {useDispatch} from "react-redux";
+import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {openAuthModal} from 'Redux/modalsSlice';
 
 interface ProfileProps {
     selectedProfile: 'client' | 'employee';
@@ -14,6 +17,8 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
     const {plt} = useTheme();                             // не удаляем ваш контекст
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
 
     /* ---------- список вкладок ---------- */
     const basePath = '/profile';
@@ -30,6 +35,13 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
                 ],
         [selectedProfile],
     );
+
+    useEffect(() => {
+        if (location.pathname.startsWith('/profile') &&
+            (!localStorage.getItem('access') || isAuthenticated === false)) {
+            dispatch(openAuthModal());
+        }
+    }, [location.pathname, isAuthenticated, dispatch]);
 
     /* ---------- авто-redirect на первую вкладку ---------- */
     useEffect(() => {

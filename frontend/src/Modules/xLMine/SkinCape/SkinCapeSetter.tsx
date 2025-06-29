@@ -87,7 +87,6 @@ const SkinCapeSetter: React.FC = () => {
             )}
             <FRCC wrap g={1}>
                 <Button
-                    variant="contained"
                     size="small"
                     sx={{fontWeight: 'bold'}}
                     component="label"
@@ -104,7 +103,6 @@ const SkinCapeSetter: React.FC = () => {
                     />
                 </Button>
                 <Button
-                    variant="contained"
                     size="small"
                     sx={{fontWeight: 'bold'}}
                     component="label"

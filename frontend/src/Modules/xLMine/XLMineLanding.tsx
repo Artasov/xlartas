@@ -1,7 +1,7 @@
 // Modules/xLMine/XLMineLanding.tsx
 
 import React, {useEffect, useRef, useState} from 'react';
-import {FC, FCA, FCC, FCCC, FCSC, FR, FRSC} from 'wide-containers';
+import {FC, FCA, FCC, FCCC, FCSC, FR, FRCC, FRSC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -129,16 +129,24 @@ const XLMineLanding: React.FC = () => {
                                 color: plt.error.main,
                             }}>java21</span> или выше</span>
                         </FR>
-                        <Button onClick={handleDownload} variant="contained"
+                        <Button onClick={handleDownload}
                                 className="fw-bold gap-1 hover-scale-5 ftrans-200-eio"
                                 sx={{
                                     fontSize: '1.5rem',
                                     backdropFilter: 'blur(5px) saturate(2) brightness(4)',
+                                    backgroundColor: 'transparent',
+                                    '&:hover': {
+                                        color: '#fff',
+                                        backdropFilter: 'blur(5px) saturate(2) brightness(4) hue-rotate(30deg)',
+                                        backgroundColor: 'transparent',
+                                    },
                                 }}>
-                            {loading
-                                ? <FR mr={1}><CircularProgress color={plt.text.contrast + 'aa'} size="2.1rem"/></FR>
-                                : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}
-                            Скачать лаунчер
+                            <FRCC opacity={70}>
+                                {loading
+                                    ? <FR mr={1}><CircularProgress size="2.1rem"/></FR>
+                                    : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}
+                                <span>Скачать лаунчер</span>
+                            </FRCC>
                         </Button>
                         <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
                             <p style={{maxWidth: 400, fontSize: '1.1rem'}}>
