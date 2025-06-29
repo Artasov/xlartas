@@ -1,4 +1,4 @@
-# shop/desktop_software_api.py
+# software/desktop_software_api.py
 
 import json
 import logging

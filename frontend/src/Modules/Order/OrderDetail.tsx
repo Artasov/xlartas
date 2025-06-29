@@ -57,7 +57,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     </div>
                     <Alert severity="info" variant="outlined">
                         <AlertTitle>Внимание</AlertTitle>
-                        CloudPayments скоро будет подключен, но пока оплата через личку{' '}
+                        Пока оплата через личку{' '}
                         <a href="https://t.me/artasov"
                            target="_blank" className={'tdn'}
                            rel="noopener noreferrer"

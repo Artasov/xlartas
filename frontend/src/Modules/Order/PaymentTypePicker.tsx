@@ -90,9 +90,10 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (filteredPaymentTypes.length > 0) {
             // либо ничего не выбрано, либо выбранной уже нет в списке
             if (!selectedPaymentType || !filteredPaymentTypes.includes(selectedPaymentType)) {
-                const firstPayment = filteredPaymentTypes[0];
-                setSelectedPaymentType(firstPayment);
-                setPaymentSystem(firstPayment);
+                const preferHandmade = filteredPaymentTypes.find(pt => pt === 'handmade');
+                const paymentToSelect = preferHandmade ?? filteredPaymentTypes[0];
+                setSelectedPaymentType(paymentToSelect);
+                setPaymentSystem(paymentToSelect);
             }
         } else {
             // Если нет платёжных систем, то сбрасываем
@@ -105,7 +106,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     return (
         <FC g={1} px={1}>
             <FC>
-                <span>Выберите валюту</span>
+                <span>Select the currency</span>
                 <RadioLine
                     options={prices.map(price => ({value: price.currency, label: price.currency}))}
                     selectedValue={selectedCurrency}

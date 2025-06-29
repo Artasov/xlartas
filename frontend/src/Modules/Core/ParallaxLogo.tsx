@@ -78,7 +78,7 @@ const ParallaxLogo: React.FC = () => {
                 {/* Кнопка "Sign in" / "Profile" */}
                 <FCCC pos="absolute" zIndex={22} right="6.6%" bottom="32%">
                     <Button
-                        className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : 'fs-6 px-3'}`}
+                        className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
                         onClick={handleAuthClick}>
                         {isAuthenticated ? 'Profile' : 'Sign in'}
                     </Button>
@@ -94,7 +94,12 @@ const ParallaxLogo: React.FC = () => {
                 {/* Кнопка "xlmine" */}
                 <FCCC pos="absolute" zIndex={22} right="6.6%" top="35%">
                     <FR cls="hover-scale-5" onClick={handleXlMineClick}>
-                        <FR pos="relative">
+                        <FR pos="relative" sx={{
+                            transition: 'all 300ms ease-in-out',
+                            '&:hover': {
+                                filter: 'hue-rotate(50deg)'
+                            }
+                        }}>
                             <img src={logoText} style={{
                                 height: isGt1200 ? 30 : 23,
                             }} alt="xlmine"/>

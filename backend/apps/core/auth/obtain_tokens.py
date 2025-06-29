@@ -1,4 +1,4 @@
-# core/obtain_tokens.py
+# core/auth/obtain_tokens.py
 
 from adrf.decorators import api_view
 from asgiref.sync import sync_to_async

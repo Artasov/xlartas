@@ -1,3 +1,4 @@
+// Modules/Software/Macros/FloatingKeyboard.tsx
 import React, {useRef, useState} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 import CloseIcon from '@mui/icons-material/Close';

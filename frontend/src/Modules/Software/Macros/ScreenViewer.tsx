@@ -1,4 +1,4 @@
-// frontend/src/Modules/Software/Macros/ScreenViewer.tsx
+// Modules/Software/Macros/ScreenViewer.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {useScreen} from './ScreenViewerProvider';
 import {useMacroControl} from './MacroControlProvider';

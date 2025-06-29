@@ -1,6 +1,6 @@
 // Modules/Software/SoftwareOrder.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import {IconButton, Slider, useMediaQuery} from '@mui/material';
+import {Button, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery,} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FCC, FRE, FRSC} from 'wide-containers';
@@ -8,16 +8,15 @@ import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';
 import PromoCodeField from 'Order/PromoCodeField';
-import {Button} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useNavigate} from 'react-router-dom';
 import {useApi} from '../Api/useApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import Modal from 'Core/components/elements/Modal/Modal';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 
+/* ----------  utils ---------- */
 /**
  * Возвращает целое число:
  * cost(H) = round( amount * (H^exponent) + offset )
@@ -39,6 +38,9 @@ interface SoftwareOrderProps {
 }
 
 const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
+    /* ------------------------------------------------------------------ */
+    /*  state                                                             */
+    /* ------------------------------------------------------------------ */
     const [licenseHours, setLicenseHours] = useState(
         software.min_license_order_hours || 1
     );
@@ -162,17 +164,15 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                         valueLabelDisplay="off"
                         className="w-100 ms-2 pt-2"
                     />
-
                     <IconButton
                         className="ms-3"
                         sx={{width: 36, height: 36}}
                         onClick={() => setShowPromo(prev => !prev)}
                     >
-                        {showPromo ? (
-                            <RemoveRoundedIcon sx={{fontSize: '2rem'}}/>
-                        ) : (
-                            <AddRoundedIcon sx={{fontSize: '2rem'}}/>
-                        )}
+                        {showPromo
+                            ? <RemoveRoundedIcon sx={{fontSize: '2rem'}}/>
+                            : <AddRoundedIcon sx={{fontSize: '2rem'}}/>
+                        }
                     </IconButton>
                 </FRSC>
             </FC>
@@ -193,38 +193,31 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
 
             {creatingOrder && <CircularProgress size="60px"/>}
 
-            {/* ----------  modal ---------- */}
-            <Modal
-                cls="w-100 maxw-440px"
-                isOpen={payModal}
-                title="Оплатить заказ"
-                onClose={() => setPayModal(false)}
-            >
-                <FC g={2}>
-                    <PaymentTypePicker
-                        prices={software.prices}
-                        setPaymentCurrency={setCurrency}
-                        setPaymentSystem={setSystem}
-                    />
-
-                    <FRE g={1}>
-                        <Button variant="outlined" onClick={() => setPayModal(false)}>
-                            Отмена
-                        </Button>
-                        <Button
-                            variant="contained"
-                            disabled={creatingOrder}
-                            onClick={createOrder}
-                        >
-                            {creatingOrder ? (
-                                <CircularProgress size="20px"/>
-                            ) : (
-                                'Продолжить'
-                            )}
-                        </Button>
-                    </FRE>
-                </FC>
-            </Modal>
+            <Dialog open={payModal} onClose={() => setPayModal(false)}>
+                <DialogTitle>Payment of the order</DialogTitle>
+                <DialogContent>
+                    <FC g={2}>
+                        <PaymentTypePicker
+                            prices={software.prices}
+                            setPaymentCurrency={setCurrency}
+                            setPaymentSystem={setSystem}
+                        />
+                        <FRE g={1}>
+                            <Button onClick={() => setPayModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button disabled={creatingOrder} onClick={createOrder} sx={{
+                                fontWeight: 'bold',
+                            }}>
+                                {creatingOrder
+                                    ? <CircularProgress size="20px"/>
+                                    : 'Next'
+                                }
+                            </Button>
+                        </FRE>
+                    </FC>
+                </DialogContent>
+            </Dialog>
         </FCC>
     );
 };

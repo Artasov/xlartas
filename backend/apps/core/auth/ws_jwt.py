@@ -1,4 +1,4 @@
-# apps/core/auth/jwt_channels.py
+# core/auth/ws_jwt.py
 # ---------------------------------------------------------
 # Auth-middleware for **Channels 4** that turns a JWT (query
 # string ?token=… or header “Authorization: Bearer …”)

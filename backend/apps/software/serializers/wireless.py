@@ -1,3 +1,4 @@
+# software/serializers/wireless.py
 from adjango.aserializers import AModelSerializer
 
 from apps.software.models.wireless import WirelessMacro

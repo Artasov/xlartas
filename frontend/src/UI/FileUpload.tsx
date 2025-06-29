@@ -28,7 +28,7 @@ const FileUpload: React.FC<FileUploadProps> = ({onFileSelect, reset}) => {
     };
 
     return (
-        <Button variant="contained" component="label">
+        <Button component="label">
             {selectedFile ? selectedFile.name : "Выбрать файл"}
             <input type="file" hidden onChange={handleFileChange}/>
         </Button>

@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {FCCC} from 'wide-containers';
 import ParallaxLogo from 'Core/ParallaxLogo';
-import BackgroundFlicker from "Core/BackgroundFlicker";
+import Footer from "Landing/Footer";
 
 const Landing: React.FC = () => {
     const {
@@ -35,8 +35,9 @@ const Landing: React.FC = () => {
     ]);
 
     return (
-        <FCCC w={'100%'} h={'100%'}>
+        <FCCC pos={'relative'} w={'100%'} h={'100%'}>
             <ParallaxLogo/>
+            <Footer/>
         </FCCC>
     );
 };

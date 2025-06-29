@@ -1,4 +1,4 @@
-// src/Modules/Software/Macros/MacrosExecutorForm.tsx
+// Modules/Software/Macros/MacrosExecutorForm.tsx
 import React, {useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {Message} from 'Core/components/Message';
@@ -56,7 +56,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
                     variant="filled"
                 />
                 <FR g={1}>
-                    <Button type="submit" variant="contained" disabled={loading} sx={{
+                    <Button type="submit" disabled={loading} sx={{
                         fontSize: '1rem', fontWeight: 600,
                     }}>
                         {loading ? <CircularProgress size="1.6rem"/> : 'Execute'}

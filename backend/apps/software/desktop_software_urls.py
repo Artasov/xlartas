@@ -1,4 +1,4 @@
-# shop/desktop_software_urls.py
+# software/desktop_software_urls.py
 from django.urls import path
 
 from apps.software.desktop_software_api import software_auth, set_user_hw_id, get_software_version

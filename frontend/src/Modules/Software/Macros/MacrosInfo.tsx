@@ -1,3 +1,4 @@
+// Modules/Software/Macros/MacrosInfo.tsx
 import React from 'react'
 import {Divider, Typography} from '@mui/material'
 import {FC} from 'wide-containers'

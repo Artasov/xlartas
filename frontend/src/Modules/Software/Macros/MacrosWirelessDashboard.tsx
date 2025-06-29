@@ -1,4 +1,4 @@
-// src/Modules/Software/Macros/MacrosWirelessDashboard.tsx
+// Modules/Software/Macros/MacrosWirelessDashboard.tsx
 import React, {useEffect, useState} from 'react';
 import {Box, CircularProgress, IconButton, List, ListItem, ListItemText, Tooltip,} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';

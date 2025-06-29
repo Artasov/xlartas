@@ -1,3 +1,4 @@
+// Modules/Core/BackgroundFlicker.tsx
 import React, {CSSProperties, useEffect, useMemo} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 
@@ -128,12 +129,10 @@ const BackgroundFlicker: React.FC<BackgroundFlickerProps> = ({
                                                                  glowSizeJitter = 0.5,
                                                                  glowFraction = 0.3,
                                                              }) => {
-    const {plt} = useTheme();
+    const {theme} = useTheme();
 
-    const primaryMain =
-        (plt as any)?.colors?.primary?.main ?? '#fe586b';
-    const secondaryMain =
-        (plt as any)?.colors?.secondary?.main ?? '#4f50ab';
+    const primaryMain = theme.colors.primary.main;
+    const secondaryMain = theme.colors.secondary.main;
 
     const stars = useMemo(() => {
         const rand = (min = 0, max = 1) => Math.random() * (max - min) + min;

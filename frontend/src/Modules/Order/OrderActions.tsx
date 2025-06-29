@@ -2,9 +2,8 @@
 import React, {useContext, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {MenuItem} from "@mui/material";
+import {Button, MenuItem} from "@mui/material";
 import OptionsMenu from "Core/components/elements/OptionsMenu";
-import {Button} from "@mui/material";
 import {useTheme} from "Theme/ThemeContext";
 import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
@@ -78,7 +77,10 @@ const OrderActions: React.FC<OrderActionsProps> = (
 
     const handleRedirectToPayment = () => {
         if (order.payment?.payment_url) window.location.href = order.payment.payment_url;
-        else Message.error('No link for payment was found');
+        else {
+            if (order.payment_system === 'handmade') Message.info('For pay order contact me @artasov tg.');
+            else Message.error('No link for payment was found');
+        }
     };
 
     const handleRedirectToRefund = () => navigate(`/refund/${order.id}`);

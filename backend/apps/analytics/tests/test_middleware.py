@@ -1,3 +1,4 @@
+# analytics/tests/test_middleware.py
 import pytest
 from django.test import RequestFactory
 

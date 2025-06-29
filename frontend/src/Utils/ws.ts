@@ -1,4 +1,4 @@
-// src/Utils/ws.ts
+// Utils/ws.ts
 /**
  * Собрать WebSocket-URL c учётом:
  *   • REACT_APP_WS_URL – если задан, используем его (dev-proxy, Docker и т.п.);

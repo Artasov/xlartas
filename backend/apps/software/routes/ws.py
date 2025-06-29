@@ -1,3 +1,4 @@
+# software/routes/ws.py
 from django.urls import re_path
 
 from apps.software.consumers.macros import MacroControlConsumer

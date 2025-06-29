@@ -1,3 +1,4 @@
+// Modules/Software/Macros/FloatingToolbar.tsx
 import React, {useRef, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';

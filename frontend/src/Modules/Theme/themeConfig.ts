@@ -1,5 +1,6 @@
-// Modules/Theme/Theme.tsx
+// Modules/Theme/themeConfig.ts
 import {createTheme} from '@mui/material/styles';
+import {Grow} from "@mui/material";
 
 export const lightTheme = createTheme({});
 
@@ -40,6 +41,14 @@ export const darkTheme = createTheme({
         },
     },
     components: {
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    backgroundImage: 'none',
+                    backgroundColor: '#ffffff08',
+                },
+            },
+        },
         MuiSvgIcon: {
             styleOverrides: {
                 root: {
@@ -135,26 +144,60 @@ export const darkTheme = createTheme({
                     '&:hover': {
                         color: '#000',
                         backgroundColor: '#ffffff',
-                    }
+                    },
+                    '&:focus-visible': {
+                        backgroundColor: '#ffffff0b',
+                    },
+                    '&.Mui-focusVisible': {backgroundColor: 'inherit'},
+
+                    '&.Mui-disabled': {
+                        color: '#888',
+                        backgroundColor: '#ffffff0b',
+                    },
                 },
-                // contained: {
-                //     transition:
-                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
-                // },
-                // outlined: {
-                //     transition:
-                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
-                // },
-                // text: {
-                //     transition:
-                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
-                // },
+                contained: {
+                    transition:
+                        'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                },
+                outlined: {
+                    transition:
+                        'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                },
+                text: {
+                    transition:
+                        'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                },
+            },
+        },
+        MuiDialog: {
+            styleOverrides: {
+                paper: {
+                    width: '100%',
+                    borderRadius: '1.2rem',
+                    margin: '0.5rem',
+                    padding: 0,
+                },
+            },
+            defaultProps: {
+                fullWidth: true,
+                maxWidth: 'sm',
+                slots: {transition: Grow},
+                slotProps: {transition: {timeout: 350}}
+            },
+        },
+        MuiModal: {
+            styleOverrides: {
+                root: {
+                    color: '#ffffff',
+                },
             },
         },
         MuiBackdrop: {
             styleOverrides: {
                 root: {
+                    /* сразу нужный blur + плавный уход по opacity */
                     backdropFilter: 'blur(15px)',
+                    transition: 'backdrop-filter .35s ease, opacity .35s ease',
                 },
             },
         },

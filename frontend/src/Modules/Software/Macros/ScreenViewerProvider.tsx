@@ -1,3 +1,4 @@
+// Modules/Software/Macros/ScreenViewerProvider.tsx
 import React, {createContext, PropsWithChildren, useContext, useEffect, useRef, useState,} from 'react';
 import {buildWSUrl} from 'Utils/ws';
 

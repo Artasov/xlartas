@@ -73,7 +73,7 @@ const App: React.FC = () => {
             >
                 {isBackgroundFlickerEnabled && (
                     <BackgroundFlicker
-                        count={isGt1000 ? 160 : 60}
+                        count={isGt1000 ? 130 : 45}
                         stickThickness={0.3}
                         stickLength={1.5}
                         stickLengthJitter={0.5}

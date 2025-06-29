@@ -8,6 +8,8 @@ import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Button} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import {useDispatch} from 'react-redux';
+import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -18,6 +20,7 @@ const screenshot3 = 'https://via.placeholder.com/400x250?text=Screenshot+3';
 const XLMineLanding: React.FC = () => {
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
+    const dispatch = useDispatch();
     const containerRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number | null>(null);
     const angleRef = useRef(0);
@@ -43,6 +46,13 @@ const XLMineLanding: React.FC = () => {
         const yNorm = (e.clientY / window.innerHeight - 0.5) * 2;
         mouseOffsetRef.current = {x: xNorm, y: yNorm};
     };
+
+    useEffect(() => {
+        dispatch(hideBackgroundFlicker());
+        return () => {
+            dispatch(showBackgroundFlicker());
+        };
+    }, [dispatch]);
 
     useEffect(() => {
         const animate = () => {
@@ -130,7 +140,7 @@ const XLMineLanding: React.FC = () => {
                             }}>java21</span> или выше</span>
                         </FR>
                         <Button onClick={handleDownload}
-                                className="fw-bold gap-1 hover-scale-5 ftrans-200-eio"
+                                className="hover-scale-5 ftrans-200-eio"
                                 sx={{
                                     fontSize: '1.5rem',
                                     backdropFilter: 'blur(5px) saturate(2) brightness(4)',
@@ -141,7 +151,7 @@ const XLMineLanding: React.FC = () => {
                                         backgroundColor: 'transparent',
                                     },
                                 }}>
-                            <FRCC opacity={70}>
+                            <FRCC fontWeight={'bold'} g={1} opacity={70}>
                                 {loading
                                     ? <FR mr={1}><CircularProgress size="2.1rem"/></FR>
                                     : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}

@@ -1,4 +1,4 @@
-// src/Modules/Software/Macros/RemoteTouchpad.tsx
+// Modules/Software/Macros/RemoteTouchpad.tsx
 import React, {useRef} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 import {FCCC} from 'wide-containers';

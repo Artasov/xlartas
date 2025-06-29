@@ -1,3 +1,4 @@
+# xlmine/admin.py
 from django.contrib.admin import register, ModelAdmin
 
 from apps.xlmine.models.user import UserXLMine, MinecraftSession

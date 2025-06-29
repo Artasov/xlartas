@@ -27,6 +27,7 @@ async def payment_types(_request):
     exclude_systems = (
         PaymentSystem.TBank,
         PaymentSystem.TBankInstallment,
+        PaymentSystem.CloudPayment,
     )
     currencies = Currency.choices
     payment_systems = {currency: tuple(

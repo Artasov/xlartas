@@ -142,7 +142,6 @@ const LauncherManager: React.FC = () => {
                             fullWidth
                         />
                         <Button
-                            variant="contained"
                             onClick={handleUpload}
                             disabled={!file}
                             sx={{fontWeight: file ? 'bold' : ''}}
@@ -395,7 +394,6 @@ const ReleaseManager: React.FC = () => {
                         )}
                         <FR>
                             <Button
-                                variant="contained"
                                 sx={{fontWeight: file ? 'bold' : '', px: 3}}
                                 onClick={handleUpload}
                                 disabled={!file || !securityValid || isUploading}

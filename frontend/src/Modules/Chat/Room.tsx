@@ -1,3 +1,4 @@
+// Modules/Chat/Room.tsx
 import React, {RefObject, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState,} from 'react';
 import {useParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
