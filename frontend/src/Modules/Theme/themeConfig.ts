@@ -42,9 +42,6 @@ export const darkTheme = createTheme({
     components: {
         MuiSvgIcon: {
             styleOverrides: {
-                /* Все иконки по умолчанию белые;
-                   если в компоненте указан prop color="primary|error|…",
-                   он естественно перекроет это значение. */
                 root: {
                     color: '#ffffff',
                 },
@@ -132,8 +129,27 @@ export const darkTheme = createTheme({
                 root: {
                     lineHeight: '1em',
                     padding: '.6em 1em .5em 1em',
-                }
-            }
+                    backgroundColor: '#ffffff0b',
+                    backdropFilter: 'blur(5px) saturate(180%)',
+                    transition: 'transform 220ms ease-in-out, color 340ms ease, background-color 340ms ease',
+                    '&:hover': {
+                        color: '#000',
+                        backgroundColor: '#ffffff',
+                    }
+                },
+                // contained: {
+                //     transition:
+                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                // },
+                // outlined: {
+                //     transition:
+                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                // },
+                // text: {
+                //     transition:
+                //         'background-color 120ms ease, box-shadow 120ms ease, border-color 120ms ease, transform 200 ease-in-out',
+                // },
+            },
         },
         MuiBackdrop: {
             styleOverrides: {

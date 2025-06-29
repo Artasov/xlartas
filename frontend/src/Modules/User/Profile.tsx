@@ -1,5 +1,5 @@
 // Modules/User/Profile.tsx
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FRS} from 'wide-containers';
@@ -32,7 +32,7 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
     );
 
     /* ---------- авто-redirect на первую вкладку ---------- */
-    React.useEffect(() => {
+    useEffect(() => {
         if (location.pathname === basePath || location.pathname === `${basePath}/`) {
             navigate(tabs[0].path, {replace: true});
         }

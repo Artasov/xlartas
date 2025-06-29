@@ -1,7 +1,7 @@
 // Modules/Cabinet/Cabinet.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useTheme} from "Theme/ThemeContext";
-import {useMediaQuery} from "@mui/material";
+import {Button, useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
@@ -126,7 +126,7 @@ const Cabinet: React.FC = () => {
         <CircularProgress size={'100px'}/>
     </FCCC>;
     if (!isAuthenticated) return <FCCC h={'80%'}>
-        You haven't entered the account yet
+        <span>You haven't entered the account yet</span>
     </FCCC>;
 
     return (

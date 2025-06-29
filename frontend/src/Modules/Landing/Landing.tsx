@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {FCCC} from 'wide-containers';
 import ParallaxLogo from 'Core/ParallaxLogo';
+import BackgroundFlicker from "Core/BackgroundFlicker";
 
 const Landing: React.FC = () => {
     const {

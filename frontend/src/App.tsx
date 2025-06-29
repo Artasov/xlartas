@@ -33,6 +33,7 @@ import {FC} from "wide-containers";
 import Softwares from "./Modules/Software/Softwares";
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";
+import BackgroundFlicker from "Core/BackgroundFlicker";
 
 function CompanyPublicDocuments(props: { companyName: "xlartas" }) {
     return null;
@@ -43,6 +44,7 @@ const App: React.FC = () => {
     const {plt} = useTheme();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {headerNavHeight, mainRef} = useNavigation();
+    const isGt1000 = window.innerWidth > 1000;
 
     useEffect(() => {
         moment.locale('en');
@@ -71,6 +73,17 @@ const App: React.FC = () => {
                     backgroundColor: plt.primary.contrastText
                 }}
             >
+                <BackgroundFlicker
+                    count={isGt1000 ? 160 : 60}
+                    stickThickness={0.3}
+                    stickLength={1.5}
+                    stickLengthJitter={0.5}
+                    baseSize={3.2}
+                    sizeJitter={0.8}
+                    glowSize={2}
+                    glowSizeJitter={0.4}
+                    glowFraction={0.4}
+                />
                 <div className="bg-image-wrapper">
                     <img src="" className="bg-image" alt="Background"/>
                 </div>
