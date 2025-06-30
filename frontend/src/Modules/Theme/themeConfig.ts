@@ -176,6 +176,7 @@ export const darkTheme = createTheme({
                     borderRadius: '1.2rem',
                     margin: '0.5rem',
                     padding: 0,
+                    transition: 'width .3s, height .3s',
                 },
             },
             defaultProps: {
