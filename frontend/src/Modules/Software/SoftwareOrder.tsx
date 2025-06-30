@@ -196,12 +196,13 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
             <Dialog open={payModal} onClose={() => setPayModal(false)}>
                 <DialogTitle><FR opacity={70}>Payment of the order</FR></DialogTitle>
                 <DialogContent>
-                    <FC g={2}>
+                    <FC g={2} maxW={400}>
                         <PaymentTypePicker
                             prices={software.prices}
                             setPaymentCurrency={setCurrency}
                             setPaymentSystem={setSystem}
                         />
+                        {system === 'freekassa' && <FR>При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.</FR>}
                         <FRC g={1}>
                             {/*<Button onClick={() => setPayModal(false)}>*/}
                             {/*    Cancel*/}
