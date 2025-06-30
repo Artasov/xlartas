@@ -31,7 +31,6 @@ const OrderItem: React.FC<OrderItemProps> = (
     return (
         <FRBC p={2} g={1} rounded={3} wrap flexGrow={1} sx={{
             background: `linear-gradient(45deg, #00000000, ${plt.text.primary + '07'})`
-            // background: `linear-gradient(45deg, black, #fff1)`
         }}
               cls={`hover-scale-1 ftrans-200-eio`} pos={'relative'}
               boxShadow={`0.06rem 0.06rem 0.37rem -0.1rem ${plt.text.primary + '07'}`}>
@@ -44,10 +43,16 @@ const OrderItem: React.FC<OrderItemProps> = (
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
                                 bg={plt.text.primary + '22'} color={plt.text.primary + '99'}>
-                                {order.product.polymorphic_ctype.name}
+                                {order.product.polymorphic_ctype.name === 'Balance product'
+                                    ? 'Balance'
+                                    : order.product.polymorphic_ctype.name
+                                }
                             </FR>
                             <FR cls={`fs-5`} color={plt.text.primary + '99'}>
-                                {order.product.name}
+                                {order.product.name === 'Balance Product'
+                                    ? ''
+                                    : order.product.name
+                                }
                             </FR>
                         </FRSC>
                         <span className={`fs-5 fw-3 mt-2`}

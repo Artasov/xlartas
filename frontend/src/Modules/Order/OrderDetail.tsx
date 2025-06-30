@@ -11,7 +11,7 @@ import {IOrder} from "types/commerce/shop";
 import OrderActions from "Order/OrderActions";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
-import {FCCC, FR, FRSC} from "wide-containers";
+import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useApi} from "../Api/useApi";
 
 interface OrderDetailProps {
@@ -39,49 +39,56 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
         api.get(`/api/v1/orders/${id}/`).then(data => {
             setOrder(data);
             if (!data) setOrderNotFound(true);
-        }).catch(_=>null).finally(() => setLoading(false));
+        }).catch(_ => null).finally(() => setLoading(false));
     }, [id, isAuthenticated]);
 
     if (loading) return <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>;
     if (orderNotFound || !order) return <div className={'p-3 text-center mt-2'}>Заказ не найден.</div>;
 
     return (
-        <div className={`${className} py-3 overflow-y-auto no-scrollbar position-relative`}>
-            <div className={'fc gap-2'}>
-                <div className={'fc gap-1'}>
-                    <div className={'frsc gap-2'} onClick={() => copyToClipboard(String(order.id))}>
+        <FC p={2} h={'100%'} scroll={'y-auto'} pos={'relative'} cls={'no-scrollbar'} sx={{
+            background: `linear-gradient(45deg, #00000000, ${plt.text.primary + '07'})`
+        }}>
+            <FC g={1}>
+                <FC g={1}>
+                    <FRSC g={1} onClick={() => copyToClipboard(String(order.id))}>
                         <span className={`fs-6`} style={{color: plt.text.primary50}}>
                             # {order.id}
                         </span>
                         <ContentCopyIcon className={'fs-5'}/>
-                    </div>
-                    <div className={'frbc flex-wrap'}>
-                        <FRSC wrap pr={1} g={1} mt={1}>
+                    </FRSC>
+                    <FRBC wrap>
+                        <FRSC wrap pr={1} g={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
-                                bg={plt.text.primary + '22'}
-                                color={plt.text.primary + '99'}>
-                                {order.product.polymorphic_ctype.name}
+                                bg={plt.text.primary + '22'} color={plt.text.primary + '99'}>
+                                {order.product.polymorphic_ctype.name === 'Balance product'
+                                    ? 'Balance'
+                                    : order.product.polymorphic_ctype.name
+                                }
                             </FR>
-                            <FR cls={`fs-5 text-nowrap`} color={plt.text.primary + '99'}>
-                                {order.product.name}
+                            <FR cls={`fs-5`} color={plt.text.primary + '99'}>
+                                {order.product.name === 'Balance Product'
+                                    ? ''
+                                    : order.product.name
+                                }
                             </FR>
                         </FRSC>
                         <span
-                            className={`fs-5 fw-3 mt-2`}
+                            className={`fs-5 fw-3`}
                             style={{
                                 color: plt.text.primary + '99',
                                 lineHeight: '1rem'
                             }}>
                             {order.payment?.amount !== undefined
-                                   ? `${parseFloat(String(order.payment.amount)) % 1 === 0
-                                       ? parseInt(String(order.payment.amount))
-                                       : parseFloat(String(order.payment.amount)).toFixed(2)
-                                     } ${order.currency}`
-                                   : ''}
+                                ? `${parseFloat(String(order.payment.amount)) % 1 === 0
+                                    ? parseInt(String(order.payment.amount))
+                                    : parseFloat(String(order.payment.amount)).toFixed(2)
+                                } ${order.currency}`
+                                : ''}
                         </span>
 
-                    </div>
-                </div>
+                    </FRBC>
+                </FC>
                 <div className={'fc'}>
                     <OrderStatus order={order}/>
                     <span>Payment system: {order.payment_system}</span>
@@ -99,7 +106,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     onSomeUpdatingOrderAction={setOrder}
                     onOrderDeleted={() => navigate('/orders')}
                     setLoading={setIsActionLoading}/>
-            </div>
+            </FC>
             {isActionLoading && (
                 <FCCC
                     pos="absolute"
@@ -114,7 +121,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     <CircularProgress size="3rem"/>
                 </FCCC>
             )}
-        </div>
+        </FC>
     );
 };
 
