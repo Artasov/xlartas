@@ -12,13 +12,17 @@ const GlobalAuthModal: React.FC = () => {
     const authModalOpen = useSelector((state: any) => state.modals.authModalOpen);
 
     return (
-        <Dialog
-            open={authModalOpen}
-            onClose={() => dispatch(closeAuthModal())}
-            className="w-100 maxw-380px"
-        >
+        <Dialog slotProps={{
+            paper: {
+                sx: {
+                    width: '100%',
+                    maxWidth: 350,
+                    m: 1,                // небольшой отступ от краёв экрана
+                },
+            },
+        }} open={authModalOpen} onClose={() => dispatch(closeAuthModal())}>
             <DialogContent sx={{px: 2}}>
-                <FC mb={20}>
+                <FC>
                     <AuthForm ways={['social', 'password', 'email']}/>
                 </FC>
             </DialogContent>

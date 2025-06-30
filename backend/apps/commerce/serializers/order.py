@@ -7,6 +7,8 @@ from apps.cloudpayments.serializers import CloudPaymentSmallPublicSerializer
 from apps.commerce.models import Order, HandMadePayment
 from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.commerce.serializers.promocode import PromocodeSerializer
+from apps.freekassa.models import FreeKassaPayment
+from apps.freekassa.serializers import FreeKassaPaymentSmallPublicSerializer
 from apps.tbank.models import TBankPayment, TBankInstallment
 from apps.tbank.serializers import TBankPaymentSerializer, TBankInstallmentSmallPublicSerializer
 
@@ -49,6 +51,8 @@ class BaseOrderSerializer(AModelSerializer):
                 return CloudPaymentSmallPublicSerializer(payment).data
             if isinstance(payment, HandMadePayment):
                 return HandMadePaymentSmallPublicSerializer(payment).data
+            if isinstance(payment, FreeKassaPayment):
+                return FreeKassaPaymentSmallPublicSerializer(payment).data
             else:
                 raise TypeError('Unknown payment type')
         return None

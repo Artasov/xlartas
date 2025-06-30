@@ -27,8 +27,9 @@ configurations = {
             # 'apps.shop': '__copy__',
             # 'apps.mailing': '__copy__',
             # 'apps.analytics': '__copy__',
-            # 'apps.tbank': '__copy__',
-            # 'apps.cloudpayments': '__copy__',
+            'apps.freekassa': '__copy__',
+            'apps.tbank': '__copy__',
+            'apps.cloudpayments': '__copy__',
             'apps.core': {
                 'routes.root': '__copy__',
                 'routes.api': '__copy__',
@@ -36,13 +37,13 @@ configurations = {
             },
             'apps.commerce': {
                 # 'admin': '__copy__',
-                # 'routes.api': '__copy__',
+                'routes.api': '__copy__',
                 'controllers': {
 
                 },
-                # 'models': '__copy__',
-                # 'services': '__copy__',
-                # 'serializers': '__copy__',
+                'models': '__copy__',
+                'services': '__copy__',
+                'serializers': '__copy__',
             },
             'apps.software': {
                 # 'admin': '__copy__',
@@ -57,8 +58,8 @@ configurations = {
                     'software': '__copy__',
                 },
                 'services': {
-                    'license': '__copy__',
-                    # 'order': '__copy__',
+                    # 'license': '__copy__',
+                    'order': '__copy__',
                     'software': '__copy__',
                 },
                 'serializers': {
