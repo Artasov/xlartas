@@ -10,6 +10,7 @@ export interface ICurrencyPaymentSystemMapping {
 
 export type IPaymentSystem =
     'handmade'
+    | 'freekassa'
     | 'cloud_payment'
     | 'tbank'
     | 'stripe'

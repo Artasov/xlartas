@@ -5,6 +5,7 @@ import RadioLine from "Core/components/elements/RadioLine";
 
 import logoTBank from '../../Static/img/icon/tbank/logo.svg'
 import logoCloudPayments from '../../Static/img/icon/cloudpayments/logo.svg'
+import logoFreeKassa from '../../Static/img/icon/freekassa/logo.svg'
 import RadioCustomLine from "Core/components/elements/RadioCustomLine";
 import {FC, FR, FRCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
@@ -158,7 +159,24 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                     fontSize: '1.035rem',
                                 }}>Cloud Payments</span>
                                 </FRCC>
-                                : paymentType.includes('handmade')
+                                : paymentType.includes('freekassa')
+                                    ? <FRCC
+                                        cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                        boxShadow={paymentType === selectedPaymentType
+                                            ? '0 0 3px 1px' + theme.colors.secondary.main
+                                            : ''}>
+                                        <img
+                                            src={logoFreeKassa}
+                                            alt={`Иконка ${paymentType}`}
+                                            style={{maxHeight: 25,}}
+                                        />
+                                        <span style={{
+                                            whiteSpace: 'nowrap',
+                                            fontWeight: 800,
+                                            fontSize: '1.035rem',
+                                        }}>FreeKassa</span>
+                                    </FRCC>
+                                    : paymentType.includes('handmade')
                                     ? <FRCC
                                         cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
                                         boxShadow={paymentType === selectedPaymentType

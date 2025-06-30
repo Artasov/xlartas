@@ -18,6 +18,7 @@ class PaymentSystem(TextChoices):
     TBank = 'tbank', 'TBank'
     TBankInstallment = 'tbank_installment', 'Tinkoff (Installment)'
     CloudPayment = 'cloud_payment', 'CloudPayments'
+    FreeKassa = 'freekassa', 'FreeKassa'
 
 
 class ACurrencyMixin(AModel):
@@ -44,6 +45,7 @@ class CurrencyPaymentSystemMapping:
             PaymentSystem.TBankInstallment,
             PaymentSystem.CloudPayment,
             PaymentSystem.HandMade,
+            PaymentSystem.FreeKassa,
         ),
     }
 
