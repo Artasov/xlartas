@@ -12,7 +12,9 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Button} from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
-import Modal from "Core/components/elements/Modal/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import NewEmailForm from "Auth/forms/NewEmailForm";
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import {useTheme} from "Theme/ThemeContext";
@@ -217,10 +219,11 @@ const UserPersonalInfoForm: React.FC = () => {
                                       fontWeight: 500, minWidth: 130
                                   }}>{user?.email ? 'ПОДТВЕРДИТЬ' : 'ДОБАВИТЬ'}</Button>
                     }
-                    <Modal isOpen={isEmailModalOpen}
-                           onClose={() => setIsEmailModalOpen(false)}>
-                        <NewEmailForm onSuccess={() => setIsEmailModalOpen(false)}/>
-                    </Modal>
+                    <Dialog open={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)}>
+                        <DialogContent>
+                            <NewEmailForm onSuccess={() => setIsEmailModalOpen(false)}/>
+                        </DialogContent>
+                    </Dialog>
                 </FRSC>
                 {/*<FRSC g={1} maxW={'400px'}>*/}
                 {/*    <TextField*/}
@@ -322,11 +325,12 @@ const UserPersonalInfoForm: React.FC = () => {
                 </FRC>
             )}
 
-            <Modal closeOnOutsideClick={false} title={'Смена пароля'}
-                   isOpen={isPasswordModalOpen} cls={'px-3'}
-                   onClose={() => setIsPasswordModalOpen(false)}>
-                <NewPasswordForm onSuccess={() => setIsPasswordModalOpen(false)}/>
-            </Modal>
+            <Dialog open={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)}>
+                <DialogTitle>Смена пароля</DialogTitle>
+                <DialogContent className={'px-3'}>
+                    <NewPasswordForm onSuccess={() => setIsPasswordModalOpen(false)}/>
+                </DialogContent>
+            </Dialog>
         </FC>
     );
 };

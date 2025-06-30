@@ -9,7 +9,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import {IMessage} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
-import Modal from 'Core/components/elements/Modal/Modal';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import {Box} from '@mui/material';
 import {FC} from "wide-containers";
 
@@ -107,21 +109,18 @@ const RoomMessage: React.FC<RoomMessageProps> = ({message, room_capacity}) => {
             </div>
 
             {/* Modal for image preview */}
-            <Modal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                title=""
-                closeBtn={true}
-                closeOnOutsideClick={true}
-            >
-                <Box display="flex" justifyContent="center" alignItems="center">
-                    <img
-                        src={selectedImage ? selectedImage : ''}
-                        alt="Preview"
-                        style={{maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px'}}
-                    />
-                </Box>
-            </Modal>
+            <Dialog open={isModalOpen} onClose={handleCloseModal}>
+                <DialogTitle></DialogTitle>
+                <DialogContent>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <img
+                            src={selectedImage ? selectedImage : ''}
+                            alt="Preview"
+                            style={{maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px'}}
+                        />
+                    </Box>
+                </DialogContent>
+            </Dialog>
 
         </>
     );
