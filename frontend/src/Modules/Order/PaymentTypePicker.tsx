@@ -14,7 +14,7 @@ import CircularProgress from "Core/components/elements/CircularProgress";
 import pprint from 'Utils/pprint';
 
 interface PaymentTypePickerProps {
-    prices: IProductPrice[];
+    prices?: IProductPrice[];
     setPaymentCurrency: (currency: ICurrencyWithPrice | null) => void;
     setPaymentSystem: (system: IPaymentSystem | null) => void;
     excluded_payment_systems?: IPaymentSystem[];
@@ -22,7 +22,7 @@ interface PaymentTypePickerProps {
 
 const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     {
-        prices,
+        prices = [],
         setPaymentCurrency,
         setPaymentSystem,
         excluded_payment_systems = []
@@ -60,18 +60,38 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             }
             return;
         }
-        const rubPrice = prices.find(price => price.currency === 'RUB');
-        if (rubPrice) {
-            const initialCurrency: ICurrencyWithPrice = {currency: 'RUB', priceObject: rubPrice};
-            setSelectedCurrency('RUB');
-            setPaymentCurrency(initialCurrency);
-            const availablePaymentTypes = paymentTypes['RUB'];
-            if (availablePaymentTypes?.length === 1) {
-                setSelectedPaymentType(availablePaymentTypes[0]);
-                setPaymentSystem(availablePaymentTypes[0]);
-            } else {
-                setSelectedPaymentType(null);
-                setPaymentSystem(null);
+        if (prices.length > 1) {
+            const rubPrice = prices.find(price => price.currency === 'RUB');
+            if (rubPrice) {
+                const initialCurrency: ICurrencyWithPrice = {currency: 'RUB', priceObject: rubPrice};
+                setSelectedCurrency('RUB');
+                setPaymentCurrency(initialCurrency);
+                const availablePaymentTypes = paymentTypes['RUB'];
+                if (availablePaymentTypes?.length === 1) {
+                    setSelectedPaymentType(availablePaymentTypes[0]);
+                    setPaymentSystem(availablePaymentTypes[0]);
+                } else {
+                    setSelectedPaymentType(null);
+                    setPaymentSystem(null);
+                }
+                return;
+            }
+        }
+        if (prices.length === 0) {
+            const currencies = Object.keys(paymentTypes);
+            const cur = currencies.includes('RUB') ? 'RUB' : currencies[0];
+            if (cur) {
+                const currencyWithPrice: ICurrencyWithPrice = {currency: cur as ICurrency, priceObject: undefined};
+                setSelectedCurrency(cur);
+                setPaymentCurrency(currencyWithPrice);
+                const availablePaymentTypes = paymentTypes[cur];
+                if (availablePaymentTypes?.length === 1) {
+                    setSelectedPaymentType(availablePaymentTypes[0]);
+                    setPaymentSystem(availablePaymentTypes[0]);
+                } else {
+                    setSelectedPaymentType(null);
+                    setPaymentSystem(null);
+                }
             }
         }
     }, [prices, paymentTypes, setPaymentCurrency, setPaymentSystem]);
@@ -119,13 +139,18 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     }, [filteredPaymentTypes, selectedPaymentType, setPaymentSystem]);
 
 
+    const currencyOptions =
+        prices.length > 0
+            ? prices.map(price => ({value: price.currency, label: price.currency}))
+            : Object.keys(paymentTypes).map(c => ({value: c, label: c}));
+
     return (
         <FC g={1}>
-            {prices.length > 1 && (
+            {currencyOptions.length > 1 && (
                 <FC>
                     <span>Select the currency</span>
                     <RadioLine
-                        options={prices.map(price => ({value: price.currency, label: price.currency}))}
+                        options={currencyOptions}
                         selectedValue={selectedCurrency}
                         onChange={handleCurrencyChange}
                         className="w-100"
