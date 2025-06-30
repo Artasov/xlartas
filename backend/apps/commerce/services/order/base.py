@@ -32,9 +32,7 @@ class IOrderService:
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
     # ---------------------------------------------------------------- #
     async def init_payment(
-            self: 'Order',
-            request: AsyncRequest,
-            price: Decimal,
+            self: 'Order', request: AsyncRequest, price: Decimal,
     ):
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
         available = PaymentSystemRegistry.available_systems(self.currency)
@@ -45,6 +43,7 @@ class IOrderService:
         provider_cls: type[BasePaymentProvider] = (
             PaymentSystemRegistry.provider_cls(self.payment_system)
         )
+        commerce_log.info(f'Using {provider_cls} provider')
         payment = await provider_cls.create(order=self, request=request, amount=price)
         self.payment = payment  # noqa
         await self.asave()
@@ -110,20 +109,15 @@ class IOrderService:
     async def init(self: 'Order', request, init_payment: bool = True):
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()  # noqa
-        price = await self.receipt_price  # TODO: Unresolved attribute reference 'receipt_price' for class 'Order'
+        price = await self.receipt_price  # noqa
         self.amount = price  # noqa
         await self.asave()
-
-        # pregive
-        await self.product.can_pregive(self,
-                                       raise_exceptions=True)  # TODO: Unresolved attribute reference 'product' for class 'Order'
-        await self.product.pregive(self)  # TODO: Unresolved attribute reference 'product' for class 'Order'
-
+        await self.product.can_pregive(self, raise_exceptions=True)  # noqa
+        await self.product.pregive(self)  # noqa
         if self.payment_system and init_payment and price > 0:
-            await self.init_payment(
+            await self.init_payment(  # noqa
                 request, price
             )  # TODO: Unresolved attribute reference 'init_payment' for class 'Order'
-
         self.is_inited = True  # noqa
         await self.asave()
 
@@ -165,7 +159,7 @@ class IOrderService:
         if self.is_executed: raise OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()  # noqa
-        await self.product.postgive(self)  # TODO: Unresolved attribute reference 'product' for class 'Order'
+        await self.product.postgive(self)  # noqa
         if self.promocode_id:
             await PromocodeUsage.objects.acreate(
                 user_id=self.user_id, promocode_id=self.promocode_id,

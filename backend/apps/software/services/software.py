@@ -15,6 +15,7 @@ class SoftwareService:
         s = SoftwareOrderCreateSerializer(
             data=request.data, context={'request': request}
         )
+        print(1)
         await s.ais_valid(raise_exception=True)
         data = s.validated_data
         promocode = data.get('promocode', None)
@@ -25,6 +26,7 @@ class SoftwareService:
                 currency=data['currency'],
                 raise_exception=True
             )
+        print(2)
         order = SoftwareOrder(
             user=request.user,
             currency=request.data['currency'],
@@ -34,7 +36,9 @@ class SoftwareService:
             promocode=promocode
         )
         await order.asave()
+        print(3)
         await order.init(request)
+        print(8)
         return order
 
     async def can_pregive(

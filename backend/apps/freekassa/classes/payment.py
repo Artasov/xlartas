@@ -1,14 +1,15 @@
-import hmac
 import hashlib
+import hmac
 import time
 from decimal import Decimal
 from typing import Any, Dict
 
 import httpx
+from adjango.utils.base import apprint
 from django.conf import settings
 
-from apps.freekassa.models import FreeKassaPayment
 from apps.commerce.models.payment import Currency
+from apps.freekassa.models import FreeKassaPayment
 
 
 class FreeKassaAPI:
@@ -43,10 +44,15 @@ class FreeKassaAPI:
             'currency': currency,
         }
         data['signature'] = cls._signature(data)
+        await apprint('FK order create request data')
+        await apprint(data)
         async with httpx.AsyncClient(base_url=cls.base_url, timeout=10) as client:
             resp = await client.post('orders/create', json=data)
             resp.raise_for_status()
             j = resp.json()
+
+        await apprint('FK order create response data')
+        await apprint(j)
         order_id = j.get('orderId')
         order_hash = j.get('orderHash')
         location = j.get('location')
