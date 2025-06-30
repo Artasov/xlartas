@@ -13,7 +13,6 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
 import {FCCC, FR, FRSC} from "wide-containers";
 import {useApi} from "../Api/useApi";
-import {Alert, AlertTitle} from "@mui/material";
 
 interface OrderDetailProps {
     className?: string;
@@ -56,15 +55,6 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                         </span>
                         <ContentCopyIcon className={'fs-5'}/>
                     </div>
-                    <Alert severity="info" variant="outlined">
-                        <AlertTitle>Внимание</AlertTitle>
-                        Пока оплата через личку{' '}
-                        <a href="https://t.me/artasov"
-                           target="_blank" className={'tdn'}
-                           rel="noopener noreferrer"
-                           style={{color: plt.info.main}}
-                        >@artasov</a>. Пишите id заказа. Кликните на него, чтобы скопировать.
-                    </Alert>
                     <div className={'frbc flex-wrap'}>
                         <FRSC wrap pr={1} g={1} mt={1}>
                             <FR cls={`fs-5 text-nowrap`} px={1} rounded={3}
