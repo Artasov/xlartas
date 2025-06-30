@@ -4,3 +4,4 @@ from .gift_certificate import *
 from .order import *
 from .promocode import *
 from .shop import *
+from .balance import *

@@ -5,8 +5,10 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin
 
-from apps.commerce.models import Payment, Currency, Product, HandMadePayment
+from apps.cloudpayments.models import CloudPaymentPayment
+from apps.commerce.models import Payment, Currency, Product, HandMadePayment, BalancePayment
 from apps.commerce.models.product import ProductPrice
+from apps.freekassa.models import FreeKassaPayment
 from apps.tbank.models import TBankPayment
 
 
@@ -60,7 +62,13 @@ class PaymentChildAdmin(PolymorphicChildModelAdmin):
 @admin.register(Payment)
 class PaymentParentAdmin(PolymorphicParentModelAdmin):
     base_model = Payment
-    child_models = (TBankPayment, HandMadePayment)
+    child_models = (
+        TBankPayment,
+        HandMadePayment,
+        BalancePayment,
+        CloudPaymentPayment,
+        FreeKassaPayment
+    )
     list_display = (
         'id', 'user',
         'amount', 'currency',

@@ -12,10 +12,12 @@ from import_export.admin import ImportExportModelAdmin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 from rest_framework.exceptions import APIException
 
+from apps.commerce.models import BalanceProductOrder
 from apps.commerce.models.order import (
     Order,
 )
 from apps.software.models import SoftwareOrder
+from apps.xlmine.models import DonateOrder
 
 log = logging.getLogger('commerce')
 
@@ -25,6 +27,8 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     base_model = Order
     child_models = (
         SoftwareOrder,
+        BalanceProductOrder,
+        DonateOrder,
     )
 
     list_display = (
