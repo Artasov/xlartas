@@ -1,11 +1,6 @@
 // Modules/Api/useApi.ts
-import axios, {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    InternalAxiosRequestConfig,
-} from 'axios';
-import {useContext, useEffect, useMemo, useRef} from 'react';
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
+import {useContext, useEffect, useRef} from 'react';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {DOMAIN_URL} from './axiosConfig';
@@ -29,14 +24,13 @@ const clearTokens = () => {
 const getAccess = () => localStorage.getItem(LS_ACCESS);
 const getRefresh = () => localStorage.getItem(LS_REFRESH);
 
-/* -------- stringify helper (for logs) -------- */
-const fmt = (x: any) => {
-    try {
-        const s = JSON.stringify(x);
-        return s.length > 500 ? s.slice(0, 497) + '...' : s;
-    } catch {
-        return '<unstringifiable>';
+/* -------- stringify / preview helper (для логов) -------- */
+const fmt = (x: unknown) => {
+    // для строк — аккуратно обрезаем, для всего остального возвращаем как есть
+    if (typeof x === 'string') {
+        return x.length > 500 ? `${x.slice(0, 497)}...` : x;
     }
+    return x; // объект/массив/ошибка попадут в консоль «живыми»
 };
 
 export const useApi = () => {
@@ -47,9 +41,11 @@ export const useApi = () => {
     }, [byResponse]);
 
     const authCtx = useContext(AuthContext) as AuthContextType | undefined;
-    const frontendLogoutRef = useRef<() => void>(() => {});
+    const frontendLogoutRef = useRef<() => void>(() => {
+    });
     useEffect(() => {
-        frontendLogoutRef.current = authCtx?.frontendLogout ?? (() => {});
+        frontendLogoutRef.current = authCtx?.frontendLogout ?? (() => {
+        });
     }, [authCtx]);
 
     const axiosRef = useRef<AxiosInstance>();
@@ -70,6 +66,7 @@ export const useApi = () => {
         /* ---- helpers: log ---- */
         const logReq = (m?: string, u?: string, d?: unknown) =>
             console.info(`API ${m?.toUpperCase()} ➜ ${u}`, fmt(d));
+
         const logRes = (m?: string, u?: string, s?: number, ms?: number, d?: unknown) =>
             console.info(`API ${m?.toUpperCase()} ⇠ ${u} [${s}] ${ms?.toFixed(0)} ms`, fmt(d));
 
@@ -115,7 +112,7 @@ export const useApi = () => {
                     }
 
                     refreshPromise = inst
-                        .post('/api/v1/token/refresh/', { refresh })
+                        .post('/api/v1/token/refresh/', {refresh})
                         .then((r: AxiosResponse<{ access: string; refresh?: string }>) =>
                             saveTokens(r.data.access, r.data.refresh ?? refresh))
                         .catch((e) => {
@@ -157,6 +154,5 @@ export const useApi = () => {
             runner<T>(axiosRef.current!.delete(u, c)),
     });
 
-    return { api: apiRef.current };
+    return {api: apiRef.current};
 };
-
