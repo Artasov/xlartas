@@ -172,7 +172,7 @@ export const darkTheme = createTheme({
         MuiDialog: {
             styleOverrides: {
                 paper: {
-                    width: '100%',
+                    width: 'fit-content',
                     borderRadius: '1.2rem',
                     margin: '0.5rem',
                     padding: 0,
@@ -183,6 +183,12 @@ export const darkTheme = createTheme({
                 maxWidth: 'sm',
                 slots: {transition: Grow},
                 slotProps: {transition: {timeout: 350}}
+            },
+        },
+        MuiDialogContent: {
+            styleOverrides: {
+                root: {
+                },
             },
         },
         MuiModal: {

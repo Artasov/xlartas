@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery,} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FC, FCC, FRE, FRSC} from 'wide-containers';
+import {FC, FCC, FR, FRC, FRSC} from 'wide-containers';
 import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';
@@ -194,7 +194,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
             {creatingOrder && <CircularProgress size="60px"/>}
 
             <Dialog open={payModal} onClose={() => setPayModal(false)}>
-                <DialogTitle>Payment of the order</DialogTitle>
+                <DialogTitle><FR opacity={70}>Payment of the order</FR></DialogTitle>
                 <DialogContent>
                     <FC g={2}>
                         <PaymentTypePicker
@@ -202,19 +202,19 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                             setPaymentCurrency={setCurrency}
                             setPaymentSystem={setSystem}
                         />
-                        <FRE g={1}>
-                            <Button onClick={() => setPayModal(false)}>
-                                Cancel
-                            </Button>
+                        <FRC g={1}>
+                            {/*<Button onClick={() => setPayModal(false)}>*/}
+                            {/*    Cancel*/}
+                            {/*</Button>*/}
                             <Button disabled={creatingOrder} onClick={createOrder} sx={{
-                                fontWeight: 'bold',
+                                fontWeight: 'bold', width: '100%',
                             }}>
                                 {creatingOrder
                                     ? <CircularProgress size="20px"/>
                                     : 'Next'
                                 }
                             </Button>
-                        </FRE>
+                        </FRC>
                     </FC>
                 </DialogContent>
             </Dialog>

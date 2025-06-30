@@ -83,20 +83,19 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
             <Dialog
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                className="w-100 maxw-380px"
             >
-                <DialogTitle>Активация тестового периода</DialogTitle>
                 <DialogContent>
-                    <FCC g={1}>
-                        <p>Вы можете активировать тестовый период продолжительностью {testPeriodDays} дней.</p>
-                        <p>Хотите активировать тестовый период?</p>
+                    <FCC maxW={300} g={1}>
+                        <p style={{textAlign: 'center', margin: 0}}>Вы можете активировать тестовый период
+                            продолжительностью {testPeriodDays} дней.</p>
+                        <p style={{textAlign: 'center', margin: 0}}>Активировать тестовый период?</p>
                         <FRCC g={1}>
-                            <Button onClick={handleActivate} variant="contained" disabled={isLoading}>
+                            <Button onClick={handleActivate} disabled={isLoading} sx={{width: '100%', fontWeight: 700}}>
                                 {isLoading ? 'Активируется...' : 'Подтвердить'}
                             </Button>
-                            <Button onClick={() => setIsModalOpen(false)} variant="outlined">
-                                Отмена
-                            </Button>
+                            {/*<Button onClick={() => setIsModalOpen(false)}>*/}
+                            {/*    Отмена*/}
+                            {/*</Button>*/}
                         </FRCC>
                     </FCC>
                 </DialogContent>

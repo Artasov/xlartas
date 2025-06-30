@@ -21,10 +21,11 @@ const Footer: React.FC = () => {
     return (
         <FC component={'footer'}
             pos={'absolute'}
-            bottom={3}
+            bottom={2}
             left={0}
             w={'100%'}
             px={1}
+            opacity={10}
             style={{
                 background: plt.background.default + 'aa',
                 color: plt.text.primary,
@@ -34,10 +35,8 @@ const Footer: React.FC = () => {
             }}>
             {company ? (
                 <span style={{
-                    maxWidth: 1400,
                     margin: '0 auto',
-                    opacity: '25%',
-                    lineHeight: '.6rem', fontSize: '.6rem'
+                    lineHeight: '.45rem', fontSize: '.5rem'
                 }}>
                     <span>
                         <span>
@@ -66,7 +65,7 @@ const Footer: React.FC = () => {
                     </span>
                 </span>
             ) : (
-                <span>ООО "XLartas"</span>
+                <span>xlartas</span>
             )}
         </FC>
     );

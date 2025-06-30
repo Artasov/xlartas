@@ -4,12 +4,12 @@ from typing import Any, Dict
 
 from adjango.adecorators import acontroller, aatomic
 from adrf.decorators import api_view
+from django.conf import settings
+from django.shortcuts import redirect
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
-
-from django.conf import settings
 
 from apps.commerce.models import Order
 from apps.freekassa.models import FreeKassaPayment
@@ -24,11 +24,14 @@ log = logging.getLogger('freekassa')
 async def notification(request):
     data: Dict[str, Any] = request.query_params if request.method == 'GET' else request.data
     log.debug('FreeKassa payload: %s', data)
-
     merchant_id = data.get('MERCHANT_ID')
     amount = data.get('AMOUNT')
     order_id = data.get('MERCHANT_ORDER_ID')
     sign = data.get('SIGN')
+    if request.method == 'GET':
+        if not order_id:
+            return Response({'detail': 'missing order id'}, status=HTTP_400_BAD_REQUEST)
+        return redirect(f'/orders/{order_id}/')
 
     if not all((merchant_id, amount, order_id, sign)):
         return Response({'detail': 'wrong payload'}, status=HTTP_400_BAD_REQUEST)

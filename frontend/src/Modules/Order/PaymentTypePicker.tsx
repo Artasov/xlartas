@@ -45,6 +45,21 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
 
     useEffect(() => {
         if (Object.keys(paymentTypes).length === 0) return; // Wait until paymentTypes are loaded
+        if (prices.length === 1) {
+            const only = prices[0];
+            const initialCurrency: ICurrencyWithPrice = {currency: only.currency as ICurrency, priceObject: only};
+            setSelectedCurrency(only.currency);
+            setPaymentCurrency(initialCurrency);
+            const availablePaymentTypes = paymentTypes[only.currency];
+            if (availablePaymentTypes?.length === 1) {
+                setSelectedPaymentType(availablePaymentTypes[0]);
+                setPaymentSystem(availablePaymentTypes[0]);
+            } else {
+                setSelectedPaymentType(null);
+                setPaymentSystem(null);
+            }
+            return;
+        }
         const rubPrice = prices.find(price => price.currency === 'RUB');
         if (rubPrice) {
             const initialCurrency: ICurrencyWithPrice = {currency: 'RUB', priceObject: rubPrice};
@@ -91,8 +106,8 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (filteredPaymentTypes.length > 0) {
             // либо ничего не выбрано, либо выбранной уже нет в списке
             if (!selectedPaymentType || !filteredPaymentTypes.includes(selectedPaymentType)) {
-                const preferHandmade = filteredPaymentTypes.find(pt => pt === 'handmade');
-                const paymentToSelect = preferHandmade ?? filteredPaymentTypes[0];
+                const prefer = filteredPaymentTypes.find(pt => pt === 'freekassa');
+                const paymentToSelect = prefer ?? filteredPaymentTypes[0];
                 setSelectedPaymentType(paymentToSelect);
                 setPaymentSystem(paymentToSelect);
             }
@@ -105,25 +120,28 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
 
 
     return (
-        <FC g={1} px={1}>
-            <FC>
-                <span>Select the currency</span>
-                <RadioLine
-                    options={prices.map(price => ({value: price.currency, label: price.currency}))}
-                    selectedValue={selectedCurrency}
-                    onChange={handleCurrencyChange}
-                    className="w-100"
-                    itemClass={'px-3'}
-                />
-            </FC>
+        <FC g={1}>
+            {prices.length > 1 && (
+                <FC>
+                    <span>Select the currency</span>
+                    <RadioLine
+                        options={prices.map(price => ({value: price.currency, label: price.currency}))}
+                        selectedValue={selectedCurrency}
+                        onChange={handleCurrencyChange}
+                        className="w-100"
+                        itemClass={'px-3'}
+                    />
+                </FC>
+            )}
             {loading && <FR mt={1}><CircularProgress size={'40px'}/></FR>}
             {selectedCurrency && filteredPaymentTypes?.length > 0 && (
                 <RadioCustomLine
-                    options={filteredPaymentTypes.map(paymentType => ({
+                    options={filteredPaymentTypes.reverse().map(paymentType => ({
                         value: paymentType,
                         content: paymentType.includes('tbank')
                             ? <FRCC
                                 cls={'ftrans-300-eio'} px={1.2} pt={'.3rem'} pb={'.2rem'} rounded={3} g={'.4rem'}
+                                bg={plt.text.primary + '07'}
                                 boxShadow={paymentType === selectedPaymentType
                                     ? '0 0 3px 1px' + theme.colors.secondary.main
                                     : ''}>
@@ -146,6 +164,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                             : paymentType.includes('cloud_payment')
                                 ? <FRCC
                                     cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                    bg={plt.text.primary + '07'}
                                     boxShadow={paymentType === selectedPaymentType
                                         ? '0 0 3px 1px' + theme.colors.secondary.main
                                         : ''}>
@@ -162,6 +181,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                 : paymentType.includes('freekassa')
                                     ? <FRCC
                                         cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                        bg={plt.text.primary + '07'}
                                         boxShadow={paymentType === selectedPaymentType
                                             ? '0 0 3px 1px' + theme.colors.secondary.main
                                             : ''}>
@@ -174,6 +194,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                     : paymentType.includes('handmade')
                                         ? <FRCC
                                             cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                            bg={plt.text.primary + '07'}
                                             boxShadow={paymentType === selectedPaymentType
                                                 ? '0 0 3px 1px' + theme.colors.secondary.main
                                                 : ''}>
@@ -183,8 +204,9 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                             {/*    style={{maxHeight: 25,}}*/}
                                             {/*/>*/}
                                             <span style={{
+                                                opacity: '60%',
                                                 whiteSpace: 'nowrap',
-                                                fontWeight: 800,
+                                                fontWeight: 300,
                                                 fontSize: '1.035rem',
                                             }}>Через ЛС</span>
                                         </FRCC>
@@ -193,7 +215,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                     maxWidth={300}
                     selectedValue={selectedPaymentType}
                     onChange={(val) => handlePaymentTypeChange(String(val))}
-                    className="w-100 gap-2 flex-wrap mt-1"
+                    className="w-100 frc gap-2 flex-wrap mt-1"
                     itemClass={''}
                 />
             )}
