@@ -1,28 +1,28 @@
 // Modules/Auth/GlobalAuthModal.tsx
 import React from 'react';
-import Modal from "Core/components/elements/Modal/Modal";
-import AuthForm from "Auth/forms/AuthForm";
-import {FC} from "wide-containers";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import AuthForm from 'Auth/forms/AuthForm';
+import {FC} from 'wide-containers';
 import {closeAuthModal} from 'Redux/modalsSlice';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from 'react-redux';
 
 const GlobalAuthModal: React.FC = () => {
     const dispatch = useDispatch();
     const authModalOpen = useSelector((state: any) => state.modals.authModalOpen);
 
     return (
-        <Modal
-            closeBtn={false}
-            title=""
-            sxContent={{px: 2}}
-            isOpen={authModalOpen}
-            cls="w-100 maxw-380px"
+        <Dialog
+            open={authModalOpen}
             onClose={() => dispatch(closeAuthModal())}
+            className="w-100 maxw-380px"
         >
-            <FC mb={20}>
-                <AuthForm ways={['social', 'password', 'email']}/>
-            </FC>
-        </Modal>
+            <DialogContent sx={{px: 2}}>
+                <FC mb={20}>
+                    <AuthForm ways={['social', 'password', 'email']}/>
+                </FC>
+            </DialogContent>
+        </Dialog>
     );
 };
 

@@ -29,15 +29,11 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             setIsLoading(true);
             const formData = new FormData();
             formData.append('avatar', file);
-
-            api
-                .patch('/api/v1/user/update/avatar/', formData, {
-                    headers: {'Content-Type': 'multipart/form-data'},
-                })
-                .then(() => {
-                    updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
-                })
-                .catch(() => Message.error('Не удалось обновить аватар.'))
+            api.patch('/api/v1/user/update/avatar/', formData, {
+                headers: {'Content-Type': 'multipart/form-data'},
+            }).then(() => {
+                updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
+            }).catch(() => Message.error('Не удалось обновить аватар.'))
                 .finally(() => {
                     setIsLoading(false);
                     uploadIconRef?.current?.blur();
@@ -46,52 +42,29 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
     };
 
     return (
-        <FC cls={className ?? ''} w="min-content">
-            {/* скрытый input для загрузки файла */}
+        <FC cls={className ?? ''} w={'min-content'}>
             <input
-                className="d-none"
-                accept="image/*"
-                id="avatar-upload"
-                type="file"
-                onChange={handleAvatarChange}
+                className={'d-none'} accept="image/*" id="avatar-upload"
+                type="file" onChange={handleAvatarChange}
             />
-
-            {/* кликабельная область */}
             <label htmlFor="avatar-upload" className="user-avatar-editable position-relative">
-                {/* аватар или кружок-лоадер */}
-                {isLoading ? (
-                    <CircularProgress size={size}/>
-                ) : (
-                    <UserAvatar avatar={user?.avatar} size={size} sx={sx} className={className}/>
-                )}
-
-                {/* semi-transparent blur + иконка загрузки (появляются только на hover) */}
+                {isLoading
+                    ? <CircularProgress size={size}/>
+                    : <UserAvatar avatar={user?.avatar} size={size} sx={sx} className={className}/>
+                }
                 <FCCC
                     cls="user-avatar-editable-overlay ftrans-200-eio"
-                    bg={`${plt.text.primary}17`}
-                    w={size}
-                    h={size}
-                    pos="absolute"
-                    top={0}
-                    left={0}
-                    rounded={6}
-                    zIndex={10}
+                    bg={`${plt.text.primary}17`} rounded={6} w={size} h={size}
+                    pos="absolute" top={0} left={0} zIndex={10}
+                    pEvents={false} opacity={isLoading ? 0 : 37}
                     sx={{
-                        pointerEvents: 'none',
-                        // во время загрузки прячем оверлей, иначе управляет CSS :hover
-                        opacity: isLoading ? '0' : '37%',
                         backdropFilter: 'blur(5px)',
                         transition: 'opacity 0.3s ease',
                     }}
                 >
-                    <FC
-                        ref={uploadIconRef}
+                    <FC ref={uploadIconRef} opacity={isLoading ? 0 : 37}
                         className="user-avatar-editable-upload-icon ftrans-200-eio"
-                        sx={{
-                            // та же логика: прячем иконку во время загрузки
-                            opacity: isLoading ? '0' : '37%',
-                            transition: 'opacity 0.3s ease',
-                        }}
+                        sx={{transition: 'opacity 0.3s ease',}}
                     >
                         <UploadRoundedIcon style={{fontSize: `calc(${size} / 1.6)`}}/>
                     </FC>

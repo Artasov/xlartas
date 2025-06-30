@@ -96,9 +96,7 @@ const ParallaxLogo: React.FC = () => {
                     <FR cls="hover-scale-5" onClick={handleXlMineClick}>
                         <FR pos="relative" sx={{
                             transition: 'all 300ms ease-in-out',
-                            '&:hover': {
-                                filter: 'hue-rotate(50deg)'
-                            }
+                            '&:hover': {filter: 'hue-rotate(50deg)'}
                         }}>
                             <img src={logoText} style={{
                                 height: isGt1200 ? 30 : 23,
