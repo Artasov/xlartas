@@ -24,33 +24,28 @@ class FreeKassaProvider(BasePaymentProvider):
         try:
             merchant_id: int = int(settings.FK_SHOP_ID)
             order_id: str = str(self.order.id)
-
             # 1. Сумма ― одна строка для всех мест (без лишних нулей)
             amount_str: str = format(amount.normalize(), 'f')
-
             # 2. Валюта в верхнем регистре
             currency: str = self.order.currency.upper()
-
             # 3. Подпись
-            sign_string = f"{merchant_id}:{amount_str}:{settings.FK_SECRET_WORD1}:{currency}:{order_id}"
-            sign = hashlib.md5(sign_string.encode("utf-8")).hexdigest()
-
+            sign_string = f'{merchant_id}:{amount_str}:{settings.FK_SECRET_WORD1}:{currency}:{order_id}'
+            sign = hashlib.md5(sign_string.encode('utf-8')).hexdigest()
             # 4. Параметры формы
             params = {
-                "m": merchant_id,
-                "oa": amount_str,
-                "currency": currency,
-                "o": order_id,
-                "s": sign,
-                # необязательные, но часто используемые
+                'm': merchant_id,
+                'oa': amount_str,
+                'currency': currency,
+                'o': order_id,
+                's': sign,
+                # необязательные
                 # "i": 1,
-                "lang": "ru",
-                "pay": "PAY",
-                "em": getattr(self.order.user, "email", "") or "",
-                "phone": getattr(self.order.user, "phone", "") or "",
+                'lang': 'ru',
+                'pay': 'PAY',
+                'em': getattr(self.order.user, 'email', '') or '',
+                'phone': getattr(self.order.user, 'phone', '') or '',
             }
-            payment_url = "https://pay.fk.money/?" + urllib.parse.urlencode(params)
-
+            payment_url = 'https://pay.fk.money/?' + urllib.parse.urlencode(params)
             # 5. Создаём запись в БД
             payment = await FreeKassaPayment.objects.acreate(
                 user=self.order.user,
@@ -59,6 +54,5 @@ class FreeKassaProvider(BasePaymentProvider):
                 payment_url=payment_url,
             )
         except Exception as exc:
-            raise PaymentException.InitError(f"FreeKassa init error: {exc}") from exc
-
+            raise PaymentException.InitError(f'FreeKassa init error: {exc}') from exc
         return payment
