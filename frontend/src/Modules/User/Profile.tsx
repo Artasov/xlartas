@@ -4,6 +4,7 @@ import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
+import XLMineProfileInfoForm from '../xLMine/xLMineProfileInfoForm';
 import {Tab, Tabs} from '@mui/material';
 import {useDispatch} from "react-redux";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
@@ -27,10 +28,11 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
             selectedProfile === 'client'
                 ? [
                     {label: 'Пользователь', path: `${basePath}/user`},
-                    // { label: 'Клиент', path: `${basePath}/client` }, // будет видео-профиль клиента
+                    {label: 'Minecraft', path: `${basePath}/minecraft`},
                 ]
                 : [
                     {label: 'Пользователь', path: `${basePath}/user`},
+                    {label: 'Minecraft', path: `${basePath}/minecraft`},
                     {label: 'Сотрудник', path: `${basePath}/employee`},
                 ],
         [selectedProfile],
@@ -79,6 +81,7 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
             <FC flexGrow={1} scroll="y-auto" px={2} py={1}>
                 <Routes>
                     <Route path="user" element={<UserPersonalInfoForm/>}/>
+                    <Route path="minecraft" element={<XLMineProfileInfoForm/>}/>
                     {/* <Route path="client" element={<ClientProfile />} /> */}
                     {/* <Route path="employee" element={<EmployeeProfile />} /> */}
                 </Routes>

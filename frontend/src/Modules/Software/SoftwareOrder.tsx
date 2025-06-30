@@ -1,6 +1,6 @@
 // Modules/Software/SoftwareOrder.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery,} from '@mui/material';
+import {Button, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery, Collapse} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FCC, FR, FRC, FRSC} from 'wide-containers';
@@ -193,7 +193,10 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
 
             {creatingOrder && <CircularProgress size="60px"/>}
 
-            <Dialog open={payModal} onClose={() => setPayModal(false)}>
+            <Dialog
+                open={payModal}
+                onClose={() => setPayModal(false)}
+            >
                 <DialogTitle><FR opacity={70}>Payment of the order</FR></DialogTitle>
                 <DialogContent>
                     <FC g={2} maxW={400}>
@@ -202,7 +205,11 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                             setPaymentCurrency={setCurrency}
                             setPaymentSystem={setSystem}
                         />
-                        {system === 'freekassa' && <FR>При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.</FR>}
+                        <Collapse in={system === 'freekassa'}>
+                            <FR>
+                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.
+                            </FR>
+                        </Collapse>
                         <FRC g={1}>
                             {/*<Button onClick={() => setPayModal(false)}>*/}
                             {/*    Cancel*/}

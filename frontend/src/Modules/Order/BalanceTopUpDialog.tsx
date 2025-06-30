@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';
+import {Button, Dialog, DialogContent, DialogTitle, TextField, Collapse} from '@mui/material';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {FC} from 'wide-containers';
+import {FC, FR} from 'wide-containers';
 import {useApi} from '../Api/useApi';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
@@ -31,6 +31,14 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
         }
     }, [open, api]);
 
+    useEffect(() => {
+        if (open) {
+            setCurrency(null);
+            setSystem(null);
+            setAmount(100);
+        }
+    }, [open]);
+
     const handleCreate = async () => {
         if (!isAuthenticated) {
             notAuthentication();
@@ -55,7 +63,10 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
     };
 
     return (
-        <Dialog open={open} onClose={() => !loading && onClose()}>
+        <Dialog
+            open={open}
+            onClose={() => !loading && onClose()}
+        >
             <DialogTitle sx={{pb: 1.5}}>Пополнить баланс</DialogTitle>
             <DialogContent>
                 {!product ? (
@@ -77,6 +88,11 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                             setPaymentSystem={setSystem}
                             excluded_payment_systems={["balance"]}
                         />
+                        <Collapse in={system === 'freekassa'}>
+                            <FR>
+                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.
+                            </FR>
+                        </Collapse>
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
                             {loading ? <CircularProgress size="20px"/> : 'Далее'}
                         </Button>
