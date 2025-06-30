@@ -1,7 +1,6 @@
 // Modules/xLMine/SkinCape/SkinCapeSetter.tsx
 import React, {useCallback, useEffect, useState} from 'react';
 import {useApi} from 'Modules/Api/useApi';
-import SkinCapeView from "./SkinCapeView";
 import {Button} from "@mui/material";
 import {FCC, FRCC} from "wide-containers";
 import {Message} from 'Core/components/Message';
@@ -78,7 +77,7 @@ const SkinCapeSetter: React.FC = () => {
     };
 
     return (
-        <FCC w={'fit-content'} pb={2} rounded={3}>
+        <FCC w={'fit-content'} rounded={3}>
             {/*{validSkin && (*/}
             {/*    <SkinCapeView*/}
             {/*        skinUrl={skinUrl!}*/}

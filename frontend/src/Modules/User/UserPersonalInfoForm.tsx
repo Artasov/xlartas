@@ -2,14 +2,13 @@
 
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
 import {format} from 'date-fns';
-import {Typography, useMediaQuery} from '@mui/material';
+import {Button, Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Message} from "Core/components/Message";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import {Button} from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
 import Dialog from '@mui/material/Dialog';
@@ -22,7 +21,6 @@ import {FC, FR, FRC, FRSC} from "wide-containers";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import copyToClipboard from "Utils/clipboard";
 import {useApi} from "../Api/useApi";
-import SkinCapeSetter from "../xLMine/SkinCape/SkinCapeSetter";
 import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 import TextField from "@mui/material/TextField";
 import UserBalance from "Order/UserBalance";
@@ -105,7 +103,7 @@ const UserPersonalInfoForm: React.FC = () => {
 
     return (
         <FC component={'form'} pb={'5rem'} pos={'relative'} mt={1} onSubmit={handleSubmit} maxW={400}>
-            <FR wrap g={1} mb={2}>
+            <FR wrap g={1} mb={1}>
                 <SocialOAuth className={'pe-2'}/>
                 <FC>
                     {user?.is_email_confirmed
@@ -143,25 +141,21 @@ const UserPersonalInfoForm: React.FC = () => {
                 </FC>
 
             </FR>
-            <FR>
-                <FR minW={160}><SkinCapeSetter/></FR>
-                <FC g={1}>
-                    <FRSC wrap g={1}>
-                        <FR color={plt.text.primary} fontWeight={'bold'}
-                            fontSize={isGtSm ? '2.2rem' : '1.7rem'}
-                            lineHeight={'1.8rem'} sx={{
-                            userSelect: 'all'
-                        }}>
-                            {user?.username}
-                        </FR>
-                        <FR mt={.57} lineHeight={'1.5rem'}
-                            fontSize={isGtSm ? '1.7rem' : '1.5rem'}
-                            fontWeight={'bold'}><UserPrivilege/></FR>
-                    </FRSC>
-                    <UserBalance/>
-                    <FR>{user.coins} монет</FR>
-                </FC>
-            </FR>
+            <FC mb={1}>
+                <FRSC wrap g={1}>
+                    <FR color={plt.text.primary} fontWeight={'bold'}
+                        fontSize={isGtSm ? '2.2rem' : '1.7rem'}
+                        lineHeight={'1.8rem'} sx={{
+                        userSelect: 'all'
+                    }}>
+                        {user?.username}
+                    </FR>
+                    <FR mt={.57} lineHeight={'1.5rem'}
+                        fontSize={isGtSm ? '1.7rem' : '1.5rem'}
+                        fontWeight={'bold'}><UserPrivilege/></FR>
+                </FRSC>
+                <UserBalance/>
+            </FC>
             <FC mt={1} g={2} cls={'user-form'}>
                 {user.secret_key &&
                     <FC pEvents={true} onClick={() => {
@@ -178,31 +172,6 @@ const UserPersonalInfoForm: React.FC = () => {
                                 value={user.secret_key}/>
                         </FC>
                     </FC>}
-                {/*<TextField*/}
-                {/*    fullWidth*/}
-                {/*    variant="outlined"*/}
-                {/*    margin="none"*/}
-                {/*    label="Имя"*/}
-                {/*    name="first_name"*/}
-                {/*    value={formData.first_name}*/}
-                {/*    onChange={handleChange}/>*/}
-                {/*<TextField*/}
-                {/*    fullWidth*/}
-                {/*    variant="outlined"*/}
-                {/*    margin="none"*/}
-                {/*    label="Фамилия"*/}
-                {/*    name="last_name"*/}
-                {/*    value={formData.last_name}*/}
-                {/*    onChange={handleChange}/>*/}
-                {/*<TextField*/}
-                {/*    fullWidth*/}
-                {/*    variant="outlined"*/}
-                {/*    margin="none"*/}
-                {/*    label="Отчество"*/}
-                {/*    name="middle_name"*/}
-                {/*    value={formData.middle_name}*/}
-                {/*    onChange={handleChange}/>*/}
-
                 <FRSC g={1} maxW={'400px'}>
                     <TextField
                         variant="outlined"
@@ -227,77 +196,8 @@ const UserPersonalInfoForm: React.FC = () => {
                         </DialogContent>
                     </Dialog>
                 </FRSC>
-                {/*<FRSC g={1} maxW={'400px'}>*/}
-                {/*    <TextField*/}
-                {/*        variant="outlined"*/}
-                {/*        label="Номер телефона"*/}
-                {/*        name="phone"*/}
-                {/*        value={user?.phone ? `${user?.phone}` : ''}*/}
-                {/*        onChange={handleChange}*/}
-                {/*        className={'flex-grow-1'}*/}
-                {/*        disabled={true}*/}
-                {/*        margin="none"/>*/}
-                {/*    {user?.is_phone_confirmed*/}
-                {/*        ? <EditIcon onClick={() => setIsPhoneModalOpen(true)}*/}
-                {/*                    style={{cursor: 'pointer', color: plt.text.primary60}}/>*/}
-                {/*        : <Button onClick={() => setIsPhoneModalOpen(true)}*/}
-                {/*                  classNameOverride={`px-2 opacity-75 pb-0 pt-3px h-100 text-nowrap minw-150px`} sx={{*/}
-                {/*            color: plt.text.contrast70,*/}
-                {/*            fontWeight: 600, minWidth: 130*/}
-                {/*        }}>ПОДТВЕРДИТЬ</Button>*/}
-                {/*    }*/}
-                {/*    <Modal cls={'px-3'} bg={plt.bg.primary} closeOnOutsideClick={false}*/}
-                {/*           isOpen={isPhoneModalOpen}*/}
-                {/*           onClose={() => setIsPhoneModalOpen(false)}>*/}
-                {/*        <NewPhoneForm onSuccess={() => setIsPhoneModalOpen(false)}/>*/}
-                {/*    </Modal>*/}
-                {/*</FRSC>*/}
             </FC>
-            {/*<RadioGroup*/}
-            {/*    className={'my-2 gap-2'}*/}
-            {/*    row aria-label="gender"*/}
-            {/*    name="gender"*/}
-            {/*    value={formData.gender}*/}
-            {/*    onChange={handleChange}>*/}
-            {/*    <FormControlLabel*/}
-            {/*        className={'m-0 gap-1'}*/}
-            {/*        labelPlacement="start"*/}
-            {/*        value="male"*/}
-            {/*        control={<Radio/>}*/}
-            {/*        label="Мужской"/>*/}
-            {/*    <FormControlLabel*/}
-            {/*        className={'m-0 gap-1'}*/}
-            {/*        value="female"*/}
-            {/*        control={<Radio/>}*/}
-            {/*        label="Женский"/>*/}
-            {/*</RadioGroup>*/}
-            {/*<FR wrap g={2}>*/}
-            {/*    <CustomDatePicker*/}
-            {/*        label={'Дата рождения'}*/}
-            {/*        value={formData.birth_date ? new Date(formData.birth_date) : null}*/}
-            {/*        onChange={(date) => {*/}
-            {/*            const formattedDate = date ? format(date, 'yyyy-MM-dd') : null;*/}
-            {/*            setFormData({...formData, birth_date: formattedDate});*/}
-            {/*            setShowSaveButton(true);*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*    <TimeZonePicker*/}
-            {/*        className={'maxw-180px'}*/}
-            {/*        value={formData.timezone || ''}*/}
-            {/*        onChange={handleChange}*/}
-            {/*    />*/}
-            {/*</FR>*/}
-
             <FR g={1} mt={1}>
-                {/*<TextField*/}
-                {/*    variant="outlined"*/}
-                {/*    margin="none"*/}
-                {/*    className={'flex-grow-1'}*/}
-                {/*    label="Имя пользователя"*/}
-                {/*    name="username"*/}
-                {/*    value={formData.username}*/}
-                {/*    onChange={handleChange}/>*/}
-
                 <Button onClick={() => setIsPasswordModalOpen(true)}
                         style={{
                             fontWeight: 600,
@@ -306,14 +206,11 @@ const UserPersonalInfoForm: React.FC = () => {
                     Сменить пароль
                 </Button>
             </FR>
-
             <FC mt={1}>
                 <Typography fontSize={'.8rem'} color={plt.text.primary}>
                     Дата регистрации {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
                 </Typography>
             </FC>
-
-
             {showSaveButton && (
                 <FRC pos={'absolute'} w={'100%'} bottom={'1rem'} left={0}>
                     <Button
@@ -326,7 +223,6 @@ const UserPersonalInfoForm: React.FC = () => {
                     </Button>
                 </FRC>
             )}
-
             <Dialog open={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)}>
                 <DialogTitle>Смена пароля</DialogTitle>
                 <DialogContent className={'px-3'}>

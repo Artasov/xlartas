@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import BalanceTopUpDialog from './BalanceTopUpDialog';
 import {useApi} from '../Api/useApi';
-import {FR} from "wide-containers";
+import {FR, FRSC} from "wide-containers";
 import {Button} from "@mui/material";
 
 const UserBalance: React.FC = () => {
@@ -20,14 +20,14 @@ const UserBalance: React.FC = () => {
     }, []);
 
     return (
-        <FR g={1} wrap>
-            <span>Баланс: {balance} ₽</span>
+        <FRSC g={1} wrap>
+            <FR fontWeight={'bold'} fontSize={'1.2rem'}>Баланс: {balance}₽</FR>
             <Button size="small" onClick={() => setOpen(true)}>Пополнить баланс</Button>
             <BalanceTopUpDialog open={open} onClose={() => {
                 setOpen(false);
                 fetchBalance();
             }}/>
-        </FR>
+        </FRSC>
     );
 };
 
