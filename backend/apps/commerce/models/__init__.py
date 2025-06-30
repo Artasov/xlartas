@@ -5,3 +5,4 @@ from .order import *
 from .payment import *
 from .product import *
 from .promocode import *
+from .balance import *

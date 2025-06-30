@@ -1,6 +1,9 @@
 # commerce/routes/api.py
 from django.urls import path
 
+from apps.commerce.controllers.balance import (
+    get_latest_balance_product, user_balance
+)
 from apps.commerce.controllers.employee_availability import EmployeeAvailabilityViewSet
 from apps.commerce.controllers.gift_certificate import apply_gift_certificate
 from apps.commerce.controllers.order import (
@@ -27,6 +30,7 @@ urlpatterns = [
     path('orders/create/', create_order),
     path('orders/<str:id>/init/<int:init_payment>/', order_init),
     path('user/orders/', user_orders),
+    path('user/balance/', user_balance),
     path('orders/<str:id>/', order_detail),
     path('orders/<str:id>/cancel/', order_cancel),
     path('orders/<str:id>/execute/', order_execute),
@@ -36,6 +40,8 @@ urlpatterns = [
     path('employee/availability/', employee_availability_list),
     path('employee/availability/<int:pk>/', employee_availability_detail),
     path('payment/types/', payment_types),
+
+    path('balance/product/latest/', get_latest_balance_product),
 
     path('promocode/applicable/', is_promocode_applicable),
 

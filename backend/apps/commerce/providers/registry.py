@@ -2,6 +2,7 @@
 from typing import Type, Dict
 
 from apps.cloudpayments.providers import CloudPaymentsProvider
+from apps.commerce.providers.balance import BalanceProvider
 from apps.commerce.providers.base import BasePaymentProvider
 from apps.commerce.providers.handmade import HandMadeProvider
 from apps.tbank.providers import TBankPaymentProvider
@@ -14,6 +15,7 @@ _REGISTRY: Dict[str, Type[BasePaymentProvider]] = {
         CloudPaymentsProvider,
         HandMadeProvider,
         FreeKassaProvider,
+        BalanceProvider,
     )
 }
 

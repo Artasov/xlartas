@@ -25,6 +25,7 @@ import {useApi} from "../Api/useApi";
 import SkinCapeSetter from "../xLMine/SkinCape/SkinCapeSetter";
 import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 import TextField from "@mui/material/TextField";
+import UserBalance from "Order/UserBalance";
 
 interface FormData {
     username: string;
@@ -157,6 +158,7 @@ const UserPersonalInfoForm: React.FC = () => {
                             fontSize={isGtSm ? '1.7rem' : '1.5rem'}
                             fontWeight={'bold'}><UserPrivilege/></FR>
                     </FRSC>
+                    <UserBalance/>
                     <FR>{user.coins} монет</FR>
                 </FC>
             </FR>

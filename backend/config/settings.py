@@ -101,6 +101,7 @@ XL_DASHBOARD = {
     },
     'Products': {
         'All': 'commerce.Product',
+        'Balance': 'commerce.BalanceProduct',
         'Donate': 'xlmine.Donate',
         'Softwares': 'software.Software',
         'Software Licenses': 'software.SoftwareLicense',
@@ -109,6 +110,7 @@ XL_DASHBOARD = {
     },
     'Orders': {
         'All': 'commerce.Order',
+        'Balance': 'commerce.BalanceProductOrder',
         'Software': 'software.SoftwareOrder',
         'Donate': 'software.DonateOrder',
     },

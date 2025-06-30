@@ -16,7 +16,8 @@ export type IPaymentSystem =
     | 'stripe'
     | 'shopozz'
     | 'prodamus'
-    | 'tbank_installment';
+    | 'tbank_installment'
+    | 'balance';
 
 export type ICurrency = 'USD' | 'RUB' | 'EUR';
 

@@ -19,6 +19,7 @@ class PaymentSystem(TextChoices):
     TBankInstallment = 'tbank_installment', 'Tinkoff (Installment)'
     CloudPayment = 'cloud_payment', 'CloudPayments'
     FreeKassa = 'freekassa', 'FreeKassa'
+    Balance = 'balance', 'Balance'
 
 
 class ACurrencyMixin(AModel):
@@ -46,6 +47,7 @@ class CurrencyPaymentSystemMapping:
             PaymentSystem.CloudPayment,
             PaymentSystem.HandMade,
             PaymentSystem.FreeKassa,
+            PaymentSystem.Balance,
         ),
     }
 
@@ -75,6 +77,12 @@ class Payment(
     class Meta:
         verbose_name = _('Payment')
         verbose_name_plural = _('Payments')
+
+
+class BalancePayment(Payment):
+    class Meta:
+        verbose_name = _('Balance payment')
+        verbose_name_plural = _('Balance payments')
 
 
 class HandMadePayment(Payment):
