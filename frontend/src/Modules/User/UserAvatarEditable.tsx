@@ -74,7 +74,7 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
                     zIndex={10}
                     sx={{
                         pointerEvents: 'none',
-                        opacity: isLoading ? '100%' : '0%',
+                        opacity: isLoading ? '0%' : '100%',
                         backdropFilter: 'blur(5px)',
                         transition: 'opacity 0.3s ease',
                     }}
@@ -82,11 +82,11 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
                     <FC
                         className={'user-avatar-editable-upload-icon ftrans-200-eio'}
                         sx={{
-                            opacity: isLoading ? '100%' : '0%',
+                            opacity: isLoading ? '0%' : '50%',
                             transition: 'opacity 0.3s ease',
                         }}
                     >
-                        <UploadRoundedIcon style={{fontSize: `calc(${size} / 2)`}}/>
+                        <UploadRoundedIcon style={{fontSize: `calc(${size} / 1.6)`}}/>
                     </FC>
                 </FCCC>
             </label>
