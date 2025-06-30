@@ -252,6 +252,7 @@ INSTALLED_APPS = [
     'apps.software',
     'apps.tbank',
     'apps.cloudpayments',
+    'apps.freekassa',
     'apps.theme',
     'apps.surveys',
     'apps.filehost',

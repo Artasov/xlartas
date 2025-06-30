@@ -21,12 +21,13 @@ interface SoftwareTestPeriodButtonProps {
     refreshLicense: () => void;
 }
 
-const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
-                                                                               softwareId,
-                                                                               testPeriodDays,
-                                                                               isTested,
-                                                                               refreshLicense
-                                                                           }) => {
+const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
+    {
+        softwareId,
+        testPeriodDays,
+        isTested,
+        refreshLicense
+    }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
@@ -86,18 +87,18 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
             >
                 <DialogTitle>Активация тестового периода</DialogTitle>
                 <DialogContent>
-                <FCC g={1}>
-                    <p>Вы можете активировать тестовый период продолжительностью {testPeriodDays} дней.</p>
-                    <p>Хотите активировать тестовый период?</p>
-                    <FRCC g={1}>
-                        <Button onClick={handleActivate} variant="contained" disabled={isLoading}>
-                            {isLoading ? 'Активируется...' : 'Подтвердить'}
-                        </Button>
-                        <Button onClick={() => setIsModalOpen(false)} variant="outlined">
-                            Отмена
-                        </Button>
-                    </FRCC>
-                </FCC>
+                    <FCC g={1}>
+                        <p>Вы можете активировать тестовый период продолжительностью {testPeriodDays} дней.</p>
+                        <p>Хотите активировать тестовый период?</p>
+                        <FRCC g={1}>
+                            <Button onClick={handleActivate} variant="contained" disabled={isLoading}>
+                                {isLoading ? 'Активируется...' : 'Подтвердить'}
+                            </Button>
+                            <Button onClick={() => setIsModalOpen(false)} variant="outlined">
+                                Отмена
+                            </Button>
+                        </FRCC>
+                    </FCC>
                 </DialogContent>
             </Dialog>
         </>
