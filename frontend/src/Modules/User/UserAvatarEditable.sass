@@ -1,8 +1,25 @@
+// базовые стили
 .user-avatar-editable
+  position: relative
+
+  // оверлей и иконка по умолчанию скрыты
+  .user-avatar-editable-overlay
+    opacity: 0
+    transition: opacity 0.3s ease
+
+  .user-avatar-editable-upload-icon
+    opacity: 0
+    transition: opacity 0.3s ease
+
+  // эффекты при наведении (мышки с поддержкой hover)
   &:hover
+    .user-avatar-editable-overlay
+      opacity: 100% !important
+
     .user-avatar-editable-upload-icon
       opacity: 50% !important
 
+// дополнительная страховка для устройств с hover & fine pointer
 @media (hover: hover) and (pointer: fine)
   .user-avatar-editable:hover .user-avatar-editable-overlay
     opacity: 100% !important

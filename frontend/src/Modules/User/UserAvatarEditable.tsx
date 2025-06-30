@@ -1,15 +1,14 @@
-// Modules/User/UserAvatarEditable.tsx
 import React, {ChangeEvent, useContext, useRef, useState} from 'react';
 import UserAvatar from 'User/UserAvatar';
-import {Message} from "Core/components/Message";
+import {Message} from 'Core/components/Message';
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 
 import './UserAvatarEditable.sass';
-import {useTheme} from "Theme/ThemeContext";
-import {FC, FCCC} from "wide-containers";
-import CircularProgress from "Core/components/elements/CircularProgress";
-import {useApi} from "../Api/useApi";
+import {useTheme} from 'Theme/ThemeContext';
+import {FC, FCCC} from 'wide-containers';
+import CircularProgress from 'Core/components/elements/CircularProgress';
+import {useApi} from '../Api/useApi';
 
 interface UserAvatarEditableProps {
     size: string;
@@ -30,59 +29,67 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             setIsLoading(true);
             const formData = new FormData();
             formData.append('avatar', file);
-            api.patch('/api/v1/user/update/avatar/', formData, {
-                headers: {'Content-Type': 'multipart/form-data'},
-            }).then(_ => {
-                updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
-            }).catch(_ =>
-                Message.error('Не удалось обновить аватар.')
-            ).finally(() => {
-                setIsLoading(false);
-                uploadIconRef?.current?.blur();
-            })
+
+            api
+                .patch('/api/v1/user/update/avatar/', formData, {
+                    headers: {'Content-Type': 'multipart/form-data'},
+                })
+                .then(() => {
+                    updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
+                })
+                .catch(() => Message.error('Не удалось обновить аватар.'))
+                .finally(() => {
+                    setIsLoading(false);
+                    uploadIconRef?.current?.blur();
+                });
         }
     };
 
     return (
-        <FC cls={`${className}`} w={'min-content'}>
+        <FC cls={className ?? ''} w="min-content">
+            {/* скрытый input для загрузки файла */}
             <input
-                className={'d-none'}
+                className="d-none"
                 accept="image/*"
                 id="avatar-upload"
                 type="file"
                 onChange={handleAvatarChange}
             />
-            <label htmlFor="avatar-upload" className={'user-avatar-editable position-relative'}>
-                {!isLoading && (
-                    <UserAvatar
-                        avatar={user?.avatar}
-                        size={size}
-                        sx={sx}
-                        className={className}
-                    />
+
+            {/* кликабельная область */}
+            <label htmlFor="avatar-upload" className="user-avatar-editable position-relative">
+                {/* аватар или кружок-лоадер */}
+                {isLoading ? (
+                    <CircularProgress size={size}/>
+                ) : (
+                    <UserAvatar avatar={user?.avatar} size={size} sx={sx} className={className}/>
                 )}
-                {isLoading && <CircularProgress size={size}/>}
+
+                {/* semi-transparent blur + иконка загрузки (появляются только на hover) */}
                 <FCCC
-                    cls={`user-avatar-editable-overlay ftrans-200-eio ${isLoading ? 'visible' : ''}`}
-                    bg={plt.text.primary + '33'}
+                    cls="user-avatar-editable-overlay ftrans-200-eio"
+                    bg={`${plt.text.primary}17`}
                     w={size}
                     h={size}
-                    pos={'absolute'}
+                    pos="absolute"
                     top={0}
                     left={0}
                     rounded={6}
                     zIndex={10}
                     sx={{
                         pointerEvents: 'none',
-                        opacity: isLoading ? '0%' : '100%',
+                        // во время загрузки прячем оверлей, иначе управляет CSS :hover
+                        opacity: isLoading ? '0' : '37%',
                         backdropFilter: 'blur(5px)',
                         transition: 'opacity 0.3s ease',
                     }}
                 >
                     <FC
-                        className={'user-avatar-editable-upload-icon ftrans-200-eio'}
+                        ref={uploadIconRef}
+                        className="user-avatar-editable-upload-icon ftrans-200-eio"
                         sx={{
-                            opacity: isLoading ? '0%' : '50%',
+                            // та же логика: прячем иконку во время загрузки
+                            opacity: isLoading ? '0' : '37%',
                             transition: 'opacity 0.3s ease',
                         }}
                     >
