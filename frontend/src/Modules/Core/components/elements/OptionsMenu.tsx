@@ -47,7 +47,17 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({className, iconClassName, chil
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
+                sx={{
+                    '& .MuiPaper-root': {
+                        backdropFilter: 'blur(10px)'
+                    },
+                }}
                 keepMounted
+                slotProps={{
+                    backdrop: {
+                        sx: {backdropFilter: 'none !important'},
+                    },
+                }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >

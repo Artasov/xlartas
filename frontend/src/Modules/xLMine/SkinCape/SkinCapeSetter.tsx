@@ -79,12 +79,12 @@ const SkinCapeSetter: React.FC = () => {
 
     return (
         <FCC w={'fit-content'} pb={2} rounded={3}>
-            {validSkin && (
-                <SkinCapeView
-                    skinUrl={skinUrl!}
-                    capeUrl={validCape ? capeUrl! : null}
-                />
-            )}
+            {/*{validSkin && (*/}
+            {/*    <SkinCapeView*/}
+            {/*        skinUrl={skinUrl!}*/}
+            {/*        capeUrl={validCape ? capeUrl! : null}*/}
+            {/*    />*/}
+            {/*)}*/}
             <FRCC wrap g={1}>
                 <Button
                     size="small"

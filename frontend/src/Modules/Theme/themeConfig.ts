@@ -8,14 +8,14 @@ export const darkTheme = createTheme({
     // @ts-ignore
     colors: {
         primary: {
-            dark: '#e65a6a',
-            main: '#fe586b',
-            light: '#ff808e',
+            dark: '#a81f2e',
+            main: '#ff2e46',
+            light: '#ff7484',
             lighter: '#fff3f2',
         },
         secondary: {
             dark: '#303189',
-            main: '#4f50ab',
+            main: '#4e4fdb',
             light: '#8485c4',
             lighter: '#f0f0fa',
         },

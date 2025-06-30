@@ -56,16 +56,18 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
 
     return (
         <Dialog open={open} onClose={() => !loading && onClose()}>
-            <DialogTitle>Пополнить баланс</DialogTitle>
+            <DialogTitle sx={{pb: 1.5}}>Пополнить баланс</DialogTitle>
             <DialogContent>
                 {!product ? (
                     <CircularProgress size="40px"/>
                 ) : (
-                    <FC g={2} maxW={400}>
+                    <FC g={.7} maxW={400}>
                         <TextField
                             type="number"
                             label="Сумма"
+                            size={'small'}
                             fullWidth
+                            sx={{mt: .7}}
                             value={amount}
                             onChange={e => setAmount(Number(e.target.value))}
                         />

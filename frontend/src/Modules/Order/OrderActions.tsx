@@ -79,6 +79,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         if (order.payment?.payment_url) window.location.href = order.payment.payment_url;
         else {
             if (order.payment_system === 'handmade') Message.info('For pay order contact me @artasov tg.');
+            else if (order.payment_system === 'balance') Message.success('Заказ успешно выполнен.');
             else Message.error('No link for payment was found');
         }
     };

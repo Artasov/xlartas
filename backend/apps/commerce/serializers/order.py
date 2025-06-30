@@ -4,7 +4,7 @@ from rest_framework.fields import SerializerMethodField
 
 from apps.cloudpayments.models import CloudPaymentPayment
 from apps.cloudpayments.serializers import CloudPaymentSmallPublicSerializer
-from apps.commerce.models import Order, HandMadePayment
+from apps.commerce.models import Order, HandMadePayment, BalancePayment
 from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.commerce.serializers.promocode import PromocodeSerializer
 from apps.freekassa.models import FreeKassaPayment
@@ -16,6 +16,12 @@ from apps.tbank.serializers import TBankPaymentSerializer, TBankInstallmentSmall
 class HandMadePaymentSmallPublicSerializer(BasePaymentSerializer):
     class Meta(BasePaymentSerializer.Meta):
         model = HandMadePayment
+        fields = BasePaymentSerializer.Meta.fields
+
+
+class BalancePaymentSmallPublicSerializer(BasePaymentSerializer):
+    class Meta(BasePaymentSerializer.Meta):
+        model = BalancePayment
         fields = BasePaymentSerializer.Meta.fields
 
 
@@ -53,6 +59,8 @@ class BaseOrderSerializer(AModelSerializer):
                 return HandMadePaymentSmallPublicSerializer(payment).data
             if isinstance(payment, FreeKassaPayment):
                 return FreeKassaPaymentSmallPublicSerializer(payment).data
+            if isinstance(payment, BalancePayment):
+                return BalancePaymentSmallPublicSerializer(payment).data
             else:
                 raise TypeError('Unknown payment type')
         return None

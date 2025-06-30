@@ -29,9 +29,12 @@ const OrderItem: React.FC<OrderItemProps> = (
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     return (
-        <FRBC p={2} g={1} rounded={3} wrap flexGrow={1}
+        <FRBC p={2} g={1} rounded={3} wrap flexGrow={1} sx={{
+            background: `linear-gradient(45deg, #00000000, ${plt.text.primary + '07'})`
+            // background: `linear-gradient(45deg, black, #fff1)`
+        }}
               cls={`hover-scale-1 ftrans-200-eio`} pos={'relative'}
-              boxShadow={`0.06rem 0.06rem 0.37rem -0.1rem ${plt.text.primary + '22'}`}>
+              boxShadow={`0.06rem 0.06rem 0.37rem -0.1rem ${plt.text.primary + '07'}`}>
             <FC g={1} w={'100%'} color={plt.text.primary70}>
                 <FC onClick={onClick}>
                     <span className={`fs-7`} style={{color: plt.text.primary + '55'}}>
