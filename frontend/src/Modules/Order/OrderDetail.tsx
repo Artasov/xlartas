@@ -1,6 +1,6 @@
 // Modules/Order/OrderDetail.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -27,6 +27,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const [orderNotFound, setOrderNotFound] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
     const {plt} = useTheme();
     const {api} = useApi();
 
@@ -106,6 +107,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     extended={true}
                     order={order}
                     onSomeUpdatingOrderAction={setOrder}
+                    onOrderDeleted={() => navigate('/orders')}
                     setLoading={setIsActionLoading}/>
             </div>
             {isActionLoading && (
