@@ -87,6 +87,11 @@ def _bootstrap_registry():
         provider_path='apps.commerce.providers.handmade.HandMadeProvider',
         currencies=('RUB',),
     ))
+    PaymentSystemRegistry.register(PaymentProviderInfo(
+        system=PaymentSystem.FreeKassa,
+        provider_path='apps.freekassa.providers.FreeKassaProvider',
+        currencies=('RUB',),
+    ))
 
 
 _bootstrap_registry()
