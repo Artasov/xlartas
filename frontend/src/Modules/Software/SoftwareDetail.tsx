@@ -16,7 +16,9 @@ import {Message} from "Core/components/Message";
 import SoftwareTestPeriodButton from "./SoftwareTestPeriodButton";
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
-import Modal from "Core/components/elements/Modal/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SoftwareDetailComponent: React.FC = () => {
@@ -157,17 +159,20 @@ const SoftwareDetailComponent: React.FC = () => {
                 }
             </FC>
             {/* Модальное окно для отображения логов изменений */}
-            <Modal
-                isOpen={isLogModalOpen}
+            <Dialog
+                open={isLogModalOpen}
                 onClose={() => setIsLogModalOpen(false)}
-                title="Лог изменений"
-                sxContent={{maxWidth: 500}}>
-                <FCCC pos={'relative'}>
-                    <div style={{
-                        textShadow: '0 0 5px ' + plt.background.primary + '88'
-                    }} dangerouslySetInnerHTML={{__html: software.log_changes}}/>
-                </FCCC>
-            </Modal>
+                className="w-100 maxw-500px"
+            >
+                <DialogTitle>Лог изменений</DialogTitle>
+                <DialogContent sx={{maxWidth: 500}}>
+                    <FCCC pos={'relative'}>
+                        <div style={{
+                            textShadow: '0 0 5px ' + plt.background.primary + '88'
+                        }} dangerouslySetInnerHTML={{__html: software.log_changes}}/>
+                    </FCCC>
+                </DialogContent>
+            </Dialog>
         </FC>
     );
 };

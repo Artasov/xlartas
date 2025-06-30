@@ -1,6 +1,8 @@
 // Modules/Order/PaymentTypePickerModal.tsx
 import React, {useState} from 'react';
-import Modal from 'Core/components/elements/Modal/Modal';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
 import PaymentTypePicker from './PaymentTypePicker';
 import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
 import {Button} from '@mui/material';
@@ -46,7 +48,9 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
     };
 
     return (
-        <Modal cls={'w-100 maxw-440px'} isOpen={open} onClose={onClose} title="Оплатить заказ">
+        <Dialog open={open} onClose={onClose} className={'w-100 maxw-440px'}>
+            <DialogTitle>Оплатить заказ</DialogTitle>
+            <DialogContent>
             <FC g={2}>
                 <PaymentTypePicker
                     prices={order.product.prices}
@@ -60,7 +64,8 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
                     </Button>
                 </FRE>
             </FC>
-        </Modal>
+            </DialogContent>
+        </Dialog>
     );
 };
 

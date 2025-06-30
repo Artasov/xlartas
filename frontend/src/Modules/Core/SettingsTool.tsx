@@ -1,6 +1,10 @@
 // Modules/Core/SettingsTool.tsx
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import Modal from "Core/components/elements/Modal/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import pprint from "Utils/pprint";
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "wide-containers";
@@ -76,38 +80,41 @@ const SettingsTool: React.FC = () => {
                 SETTINGS
             </FCCC>
 
-            <Modal
-                isOpen={isOpen}
-                onClose={closeModal}
-                title="Конфигурация"
-                cls="w-100 maxw-500px"
-                titleCls="fs-3 fw-bold"
-                closeBtn={true}
-                closeOnOutsideClick={false}
-                sxContent={{px: 1}}
-                zIndex={201}
-                animDuration={200}
+            <Dialog
+                open={isOpen}
+                onClose={(_e, reason) => {
+                    if (reason !== 'backdropClick') closeModal();
+                }}
+                className="w-100 maxw-500px"
             >
-                {data ? (
-                    <FCSC pEvents={true} cls={'no-scrollbar'}
-                          scroll={'y-auto'} g={2}>
-                        <FC g={1} w={'100%'}>
-                            <pre className={'no-scrollbar'}
-                                 style={{width: '100%', overflow: 'auto', maxHeight: '300px'}}>
-                                {JSON.stringify(data.config, null, 2)}
-                            </pre>
-                            <pre className={'no-scrollbar'}
-                                 style={{width: '100%', overflow: 'auto', maxHeight: '300px'}}>
-                                {JSON.stringify(data.server_info, null, 2)}
-                            </pre>
-                        </FC>
-                    </FCSC>
-                ) : (
-                    <FCCC>
-                        <CircularProgress size={'120px'}/>
-                    </FCCC>
-                )}
-            </Modal>
+                <DialogTitle className="fs-3 fw-bold" sx={{pr: 2, pl: 2}}>
+                    Конфигурация
+                    <IconButton onClick={closeModal} sx={{ml: 'auto'}} size="small">
+                        <CloseRoundedIcon/>
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent sx={{px: 1}}>
+                    {data ? (
+                        <FCSC pEvents={true} cls={'no-scrollbar'}
+                              scroll={'y-auto'} g={2}>
+                            <FC g={1} w={'100%'}>
+                                <pre className={'no-scrollbar'}
+                                     style={{width: '100%', overflow: 'auto', maxHeight: '300px'}}>
+                                    {JSON.stringify(data.config, null, 2)}
+                                </pre>
+                                <pre className={'no-scrollbar'}
+                                     style={{width: '100%', overflow: 'auto', maxHeight: '300px'}}>
+                                    {JSON.stringify(data.server_info, null, 2)}
+                                </pre>
+                            </FC>
+                        </FCSC>
+                    ) : (
+                        <FCCC>
+                            <CircularProgress size={'120px'}/>
+                        </FCCC>
+                    )}
+                </DialogContent>
+            </Dialog>
         </FCCC>
     );
 };

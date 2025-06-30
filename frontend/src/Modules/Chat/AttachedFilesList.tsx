@@ -3,7 +3,9 @@ import React, {useEffect, useState} from 'react';
 import {Avatar, Box, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {FRCC} from "wide-containers";
-import Modal from 'Core/components/elements/Modal/Modal'; // Импортируем ваш компонент Modal
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 interface AttachedFilesListProps {
     files: File[];
@@ -89,21 +91,18 @@ const AttachedFilesList: React.FC<AttachedFilesListProps> = ({files, onRemove}) 
             ))}
 
             {/* Модальное окно для отображения изображения */}
-            <Modal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                title=""
-                closeBtn={true}
-                closeOnOutsideClick={true}
-            >
-                <Box display="flex" justifyContent="center" alignItems="center">
-                    <img
-                        src={selectedImage ? selectedImage : ''}
-                        alt="Preview"
-                        style={{maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px'}}
-                    />
-                </Box>
-            </Modal>
+            <Dialog open={isModalOpen} onClose={handleCloseModal}>
+                <DialogTitle></DialogTitle>
+                <DialogContent>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <img
+                            src={selectedImage ? selectedImage : ''}
+                            alt="Preview"
+                            style={{maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px'}}
+                        />
+                    </Box>
+                </DialogContent>
+            </Dialog>
         </Box>
     );
 };

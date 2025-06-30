@@ -1,7 +1,9 @@
 // Modules/Software/SoftwareTestPeriodButton.tsx
 import React, {useContext, useState} from 'react';
 import {Button} from "@mui/material";
-import Modal from "Core/components/elements/Modal/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import {FCC, FRCC} from "wide-containers";
 import {useApi} from "../Api/useApi";
 import {Message} from "Core/components/Message";
@@ -77,11 +79,13 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
             >
                 Free {testPeriodDays} days
             </FRCC>
-            <Modal
-                isOpen={isModalOpen}
+            <Dialog
+                open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title="Активация тестового периода"
+                className="w-100 maxw-380px"
             >
+                <DialogTitle>Активация тестового периода</DialogTitle>
+                <DialogContent>
                 <FCC g={1}>
                     <p>Вы можете активировать тестовый период продолжительностью {testPeriodDays} дней.</p>
                     <p>Хотите активировать тестовый период?</p>
@@ -94,7 +98,8 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = ({
                         </Button>
                     </FRCC>
                 </FCC>
-            </Modal>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
