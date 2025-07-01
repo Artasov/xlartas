@@ -8,6 +8,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {ISoftware} from "./Types/Software";
 import {useApi} from "../Api/useApi";
 import SoftwareCard from "./SoftwareCard";
+import {useTranslation} from 'react-i18next';
 
 
 const Softwares: React.FC = () => {
@@ -16,6 +17,7 @@ const Softwares: React.FC = () => {
     const navigate = useNavigate();
     const {plt} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
 
     useEffect(() => {
         setLoading(true);
@@ -34,7 +36,7 @@ const Softwares: React.FC = () => {
                     software={software}
                     onClick={() => navigate(`/softwares/${software.id}`)}
                 />)
-                : <FRCC>Нет доступных программ</FRCC>
+                : <FRCC>{t('no_softwares')}</FRCC>
             }
         </FRCC>
     );

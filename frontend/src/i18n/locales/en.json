@@ -30,5 +30,12 @@
   "step_use": "After that, you can use the functions on this page.",
   "step_if_not": "If something doesn’t work, try refreshing the page or contact us.",
   "step_note": "<strong>Note:&nbsp;</strong> we are not responsible for safeguarding your password, cookies, or browser data.",
-  "step_tested": "Tested on the latest <strong>Chrome</strong> (Desktop/Mobile)."
+  "step_tested": "Tested on the latest <strong>Chrome</strong> (Desktop/Mobile).",
+  "no_softwares": "No available softwares",
+  "copy_success": "Copied",
+  "copy_error": "Text copying error",
+  "password_changed": "Password changed successfully",
+  "new_password": "New Password",
+  "privilege_load_error": "Failed to load privilege",
+  "privileges_load_error": "Failed to load privileges"
 }

@@ -8,6 +8,7 @@ import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 import {Message} from "Core/components/Message";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from 'react-i18next';
 import {FC} from 'wide-containers';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -26,6 +27,7 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
     const [useConfirmation, setUseConfirmation] = useState<boolean>(false);
     const [confirmationMethod, setConfirmationMethod] = useState<'email' | 'phone' | null>(null);
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -76,14 +78,14 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
                         action={'new_password'}
                         autoFocus={true}
                         onConfirm={(_action_result: any) => {
-                            Message.success('Пароль успешно изменен.')
+                            Message.success(t('password_changed'))
                             onSuccess()
                         }}
                         additional_params={{new_password: newPassword}}
                     />
                     : <>
                         <TextField
-                            label="Новый пароль"
+                            label={t('new_password')}
                             variant="outlined"
                             type={showPassword ? 'text' : 'password'}
                             value={newPassword}
