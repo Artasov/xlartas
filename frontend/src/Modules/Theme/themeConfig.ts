@@ -188,8 +188,7 @@ export const darkTheme = createTheme({
         },
         MuiDialogContent: {
             styleOverrides: {
-                root: {
-                },
+                root: {},
             },
         },
         MuiModal: {
@@ -228,7 +227,7 @@ export const darkTheme = createTheme({
                     minWidth: 100,
                     padding: '0.6rem 1.2rem',
                     textTransform: 'none',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     fontSize: '1rem',
                     color: '#ffffff',
                     opacity: 0.7,
@@ -236,7 +235,6 @@ export const darkTheme = createTheme({
                     '&.Mui-selected': {
                         color: '#fe586b',
                         opacity: 1,
-                        fontWeight: 600,
                     },
                     '&.Mui-disabled': {
                         opacity: 0.3,

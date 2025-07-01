@@ -22,7 +22,7 @@ const UserBalance: React.FC = () => {
     return (
         <FRSC g={1} wrap>
             <FR fontWeight={'bold'} fontSize={'1.2rem'}>Баланс: {balance}₽</FR>
-            <Button size="small" onClick={() => setOpen(true)}>Пополнить баланс</Button>
+            <Button size="small" onClick={() => setOpen(true)} sx={{fontWeight: 'bold'}}>Пополнить баланс</Button>
             <BalanceTopUpDialog open={open} onClose={() => {
                 setOpen(false);
                 fetchBalance();

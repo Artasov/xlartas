@@ -28,6 +28,7 @@ import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
 import MacrosExecutorPage from "../Software/Macros/MacrosExecutorPage";
 import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
 
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -75,10 +76,6 @@ const Cabinet: React.FC = () => {
                          to="/profile" icon={<PersonOutlineRoundedIcon/>}>
                     Profile
                 </NavLink>
-                <NavLink onClick={() => handleMenuLinkClick('/xlmine', true)}
-                         to="/xlmine" icon={<WebhookIcon/>}>
-                    Minecraft
-                </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/softwares', true)}
                          to="/software" icon={<WebhookIcon/>}>
                     Software
@@ -98,6 +95,10 @@ const Cabinet: React.FC = () => {
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
                          to="/orders" icon={<CreditScoreRoundedIcon/>}>
                     Orders
+                </NavLink>
+                <NavLink onClick={() => handleMenuLinkClick('/xlmine', true)}
+                         to="/xlmine" icon={<ViewInArIcon/>}>
+                    Minecraft
                 </NavLink>
             </>);
         } else {
@@ -149,10 +150,6 @@ const Cabinet: React.FC = () => {
                                 icon={PersonOutlineRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/profile')}/>
                             <CabinetNavLink
-                                text={'Minecraft'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
-                                urlActiveMark={'xlmine'}
-                                icon={WebhookIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
-                            <CabinetNavLink
                                 text={'Software'} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
                                 urlActiveMark={'software'}
                                 icon={WebhookIcon} onClick={() => handleMenuLinkClick('/softwares')}/>
@@ -172,6 +169,10 @@ const Cabinet: React.FC = () => {
                             <CabinetNavLink
                                 text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
+                            <CabinetNavLink
+                                text={'Minecraft'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
+                                urlActiveMark={'xlmine'}
+                                icon={ViewInArIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
                         </FC>
                     </FCSC>
 

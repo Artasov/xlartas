@@ -168,6 +168,7 @@ const UserPersonalInfoForm: React.FC = () => {
                                 variant="outlined"
                                 margin="none"
                                 disabled={true}
+                                size={'small'}
                                 label="Secret key"
                                 value={user.secret_key}/>
                         </FC>
@@ -177,6 +178,7 @@ const UserPersonalInfoForm: React.FC = () => {
                         variant="outlined"
                         label="Почта"
                         name="email"
+                        size={'small'}
                         value={user?.email}
                         onChange={handleChange}
                         className={'flex-grow-1'}
@@ -200,7 +202,9 @@ const UserPersonalInfoForm: React.FC = () => {
             <FR g={1} mt={1}>
                 <Button onClick={() => setIsPasswordModalOpen(true)}
                         style={{
+                            fontSize: '.7rem',
                             fontWeight: 600,
+                            opacity: '70%',
                             color: plt.text.contrast70,
                         }}>
                     Сменить пароль
