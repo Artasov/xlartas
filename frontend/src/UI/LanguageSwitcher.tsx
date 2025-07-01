@@ -1,20 +1,31 @@
-import {MenuItem, Select} from '@mui/material';
 import React, {useContext} from 'react';
+import {MenuItem} from '@mui/material';
+import PublicIcon from '@mui/icons-material/Public';
 import {LangCtx} from 'Core/LanguageContext';
+import OptionsMenu from 'Modules/Core/components/elements/OptionsMenu';
 
 const LanguageSwitcher: React.FC = () => {
     const {lang, setLang} = useContext(LangCtx);
+
     return (
-        <Select
-            size="small"
-            variant="standard"
-            value={lang}
-            onChange={e => setLang(e.target.value as any)}
-            sx={{minWidth: 70}}
+        <OptionsMenu
+            icon={<PublicIcon/>}
+            iconClassName="p-1"
         >
-            <MenuItem value="ru">RU</MenuItem>
-            <MenuItem value="en">EN</MenuItem>
-        </Select>
+            <MenuItem
+                selected={lang === 'ru'}
+                onClick={() => setLang('ru')}
+            >
+                RU
+            </MenuItem>
+            <MenuItem
+                selected={lang === 'en'}
+                onClick={() => setLang('en')}
+            >
+                EN
+            </MenuItem>
+        </OptionsMenu>
     );
 };
+
 export default LanguageSwitcher;

@@ -1,6 +1,6 @@
 import React, {createContext, PropsWithChildren, useEffect, useState} from 'react';
 import axios from 'axios';
-import i18n from "i18next";
+import i18n from "../../i18n";
 
 type Lang = 'ru' | 'en';
 
@@ -15,7 +15,7 @@ export const LangCtx = createContext<{
 export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
     const [lang, setLangState] = useState<Lang>(() =>
         (localStorage.getItem('lang') as Lang) || 'ru',
-    ); 
+    );
 
     const setLang = (l: Lang) => {
         i18n.changeLanguage(l).then();

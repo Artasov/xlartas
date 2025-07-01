@@ -6,7 +6,7 @@ from adjango.models.base import AAbstractUser, AModel
 from adjango.models.choices import ATextChoices
 from django.db.models import (
     CharField, BooleanField,
-    DecimalField, EmailField, DateField
+    DecimalField, EmailField, DateField, TextChoices
 )
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField
@@ -50,6 +50,10 @@ class User(
     UserPrivilegeService,
     CommerceUserService
 ):
+    class PreferredLang(TextChoices):
+        RU = 'ru', _('Русский')
+        EN = 'en', _('English')
+
     objects = UserManager()
 
     password = CharField(_('Password'), max_length=128, blank=True)
@@ -64,10 +68,8 @@ class User(
         format='JPEG', options={'quality': 70}, null=True, blank=True
     )
     preferred_lang = CharField(
-        _('Preferred language'),
-        max_length=5,
-        choices=(('ru', 'Русский'), ('en', 'English')),
-        default='ru'
+        _('Preferred language'), max_length=2,
+        choices=PreferredLang.choices, default=PreferredLang.RU,
     )
     roles = AManyToManyField('Role', related_name='users', blank=True)
     timezone = TimeZoneField(default='UTC')
