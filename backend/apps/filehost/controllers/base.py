@@ -14,8 +14,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.filehost.exceptions.base import IdWasNotProvided
+from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
 from apps.filehost.models import Folder, File
+from apps.filehost.controllers.files import STORAGE_LIMIT
 from apps.filehost.serializers import FileSerializer, FolderSerializer
 from apps.filehost.services.base import create_archive, get_tags, get_folders, get_files
 
@@ -86,7 +87,9 @@ async def add_folder_to_zip(folder, zip_file):
 @permission_classes((IsAuthenticated,))
 async def get_full_tree(request) -> Response:
     user = request.user
-    root_folder, _ = await Folder.objects.aget_or_create(user=user, parent=None)
+    root_folder, _ = await Folder.objects.aget_or_create(
+        name='root', user=user, parent=None
+    )
     root_folder_data = await sync_to_async(lambda: FolderSerializer(root_folder).data)()
     root_folder_data['tags'] = await get_tags(root_folder)
     tree = [{
@@ -106,7 +109,15 @@ async def upload_files(request) -> Response:
     if parent_id:
         parent = await Folder.objects.aget(id=parent_id, user=request.user)
     else:
-        parent = await Folder.objects.aget(name='root', user=request.user)
+        parent, _ = await Folder.objects.aget_or_create(name='root', user=request.user, parent=None)
+
+    total = 0
+    async for f in File.objects.filter(user=request.user):
+        if f.file:
+            total += f.file.size
+    incoming = sum(f.size for f in files)
+    if total + incoming > STORAGE_LIMIT:
+        raise StorageLimitExceeded()
     uploaded_files = []
     for file in files:
         uploaded_file = await File.objects.acreate(
