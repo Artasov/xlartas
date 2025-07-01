@@ -1,5 +1,6 @@
 import React from 'react';
-import {NavLink, Route, Routes} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Tabs, Tab} from '@mui/material';
 import Master from './Master';
 import AllFiles from './AllFiles';
 import FavoriteFiles from './FavoriteFiles';
@@ -10,14 +11,23 @@ import {useTranslation} from 'react-i18next';
 
 const Storage: React.FC = () => {
     const {t} = useTranslation();
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const current = location.pathname.startsWith('/storage/files/favorite/')
+        ? '/storage/files/favorite/'
+        : location.pathname.startsWith('/storage/files/all/')
+            ? '/storage/files/all/'
+            : '/storage/master/';
+
     return (
         <FC g={1} h={'100%'}>
             <StorageUsageBar/>
-            <FRSE g={1} px={2}>
-                <NavLink to="/storage/master/">{t('storage')}</NavLink>
-                <NavLink to="/storage/files/all/">{t('all_files')}</NavLink>
-                <NavLink to="/storage/files/favorite/">{t('favorites')}</NavLink>
-            </FRSE>
+            <Tabs value={current} onChange={(_, v) => navigate(v)} sx={{px:2}}>
+                <Tab value="/storage/master/" label={t('storage')} />
+                <Tab value="/storage/files/all/" label={t('all_files')} />
+                <Tab value="/storage/files/favorite/" label={t('favorites')} />
+            </Tabs>
             <Routes>
                 <Route path="master/" element={<Master/>}/>
                 <Route path="files/all/" element={<AllFiles/>}/>
