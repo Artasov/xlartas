@@ -161,8 +161,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                               centered variant={'fullWidth'}
                               className={'mb-2'}
                               aria-label="auth method tabs">
-                            <Tab label="Телефон"/>
-                            <Tab label="Почта"/>
+                            <Tab label={t('phone')}/>
+                            <Tab label={t('email')}/>
                         </Tabs>
                     </div>
                     : ''
@@ -186,7 +186,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                     )}
                     {hasEmail && selectedTab === 1 && (
                         <TextField
-                            label="Почта"
+                            label={t('email')}
                             variant="outlined"
                             type="email"
                             autoFocus={true}
@@ -201,7 +201,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                         // color={'primary'}
                         disabled={!isValidCredential || loading}
                         loading={loading}>
-                        Далее
+                        {t('next')}
                     </Button>
                 </form>
             )}
@@ -219,7 +219,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                     )}
                     {(hasEmail && selectedTab === 1) && (
                         <TextField
-                            label="Почта"
+                            label={t('email')}
                             variant="outlined"
                             type="email"
                             value={credential}
@@ -243,7 +243,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                         {hasPasswordWay && isPasswordExists && <>
                             <TextField
                                 autoFocus={true}
-                                label="Пароль"
+                                label={t('password')}
                                 variant="outlined"
                                 type="password"
                                 value={password}
@@ -260,7 +260,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                                 // color={'primary'}
                                 onClick={handlePasswordLogin}
                                 loading={loading}>
-                                Войти по паролю
+                                {t('login_by_password')}
                             </Button>
                         </>}
                         {hasPhone && isPhoneConfirmed && (
@@ -269,7 +269,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                                 autoFocus={!(!hasPasswordWay || !isPasswordExists)}
                                 onClick={() => handleConfirmWithCode('phone')}
                                 loading={loading}>
-                                Код на телефон
+                                {t('code_to_phone')}
                             </Button>
                         )}
                         {hasEmail && isEmailConfirmed && (
@@ -277,7 +277,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
                                 // color={'primary'}
                                 onClick={() => handleConfirmWithCode('email')}
                                 loading={loading}>
-                                Код на почту
+                                {t('code_to_email')}
                             </Button>
                         )}
                     </>
