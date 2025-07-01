@@ -323,6 +323,7 @@ MIDDLEWARE = [
     # 'csp.middleware.CSPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'apps.core.middleware.UserPreferredLocale',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -596,11 +597,7 @@ RCON_HOST = env('RCON_HOST', '127.0.0.1')
 RCON_PORT = int(env('RCON_PORT', '25575'))
 RCON_PASSWORD = env('RCON_PASSWORD', 'test123')
 
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-USE_I18N = True
-USE_TZ = True
-
+# Google captcha
 GOOGLE_RECAPTCHA_SECRET_KEY = env('GOOGLE_RECAPTCHA_SECRET_KEY')
 GOOGLE_RECAPTCHA_SITE_KEY = env('GOOGLE_RECAPTCHA_SITE_KEY')
 
@@ -670,6 +667,9 @@ TEMPLATES = [
 ]
 
 # Locale
+LANGUAGE_CODE = 'en-us'
+USE_I18N = True
+USE_TZ = True
 LANGUAGES = (
     ('en', _('English')),
     ('ru', _('Russian')),

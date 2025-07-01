@@ -2,13 +2,14 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
+from apps.core.auth.obtain_tokens import custom_token_obtain_pair_view
 from apps.core.controllers.auth.common import signup, logout
 from apps.core.controllers.user.base import (
     update_user, current_user, rename_current_user,
     update_client, update_avatar, user_auth_methods,
     check_phone_exists, check_email_exists
 )
-from apps.core.auth.obtain_tokens import custom_token_obtain_pair_view
+from apps.core.controllers.user.lang import set_lang
 
 app_name = 'core'
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path('user/update/', update_user),
     path('user/update/avatar/', update_avatar),
     path('user/auth_methods/', user_auth_methods),
+    path('user/set-lang/', set_lang),
     path('check-phone-exists/', check_phone_exists),
     path('check-email-exists/', check_email_exists),
     path('client/update/', update_client),

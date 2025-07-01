@@ -34,6 +34,7 @@ import Softwares from "./Modules/Software/Softwares";
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";
 import BackgroundFlicker from "Core/BackgroundFlicker";
+import {LangProvider} from "Core/LanguageContext";
 
 
 const App: React.FC = () => {
@@ -145,15 +146,17 @@ const RootApp: React.FC = () => (
         <Router>
             <HeaderProvider>
                 <AuthProvider>
-                    <ProfileProvider>
-                        <ErrorProvider>
-                            <ThemeProvider>
-                                <HelmetProvider>
-                                    <App/>
-                                </HelmetProvider>
-                            </ThemeProvider>
-                        </ErrorProvider>
-                    </ProfileProvider>
+                    <LangProvider>
+                        <ProfileProvider>
+                            <ErrorProvider>
+                                <ThemeProvider>
+                                    <HelmetProvider>
+                                        <App/>
+                                    </HelmetProvider>
+                                </ThemeProvider>
+                            </ErrorProvider>
+                        </ProfileProvider>
+                    </LangProvider>
                 </AuthProvider>
             </HeaderProvider>
         </Router>

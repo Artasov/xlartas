@@ -63,6 +63,12 @@ class User(
         processors=(ResizeToFit(500, 500), CorrectOrientation()),
         format='JPEG', options={'quality': 70}, null=True, blank=True
     )
+    preferred_lang = CharField(
+        _('Preferred language'),
+        max_length=5,
+        choices=(('ru', 'Русский'), ('en', 'English')),
+        default='ru'
+    )
     roles = AManyToManyField('Role', related_name='users', blank=True)
     timezone = TimeZoneField(default='UTC')
     is_email_confirmed = BooleanField(_('Is email confirmed'), default=False)

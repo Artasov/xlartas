@@ -1,50 +1,20 @@
-// UI/LanguageSwitcher.tsx
-import React from 'react'
-import {useTheme} from 'Theme/ThemeContext'
+import {MenuItem, Select} from '@mui/material';
+import React, {useContext} from 'react';
+import {LangCtx} from 'Core/LanguageContext';
 
-interface LanguageSwitcherProps {
-    lang: 'en' | 'ru'
-    onChange: (lang: 'en' | 'ru') => void
-}
-
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({lang, onChange}) => {
-    const {plt} = useTheme()
-
-    const btnStyle: React.CSSProperties = {
-        width: 32,
-        height: 32,
-        padding: 0,
-        fontSize: 24,
-        lineHeight: 1,
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-    }
-
+const LanguageSwitcher: React.FC = () => {
+    const {lang, setLang} = useContext(LangCtx);
     return (
-        <div style={{display: 'flex', gap: 8}}>
-            <button
-                style={{
-                    ...btnStyle,
-                    opacity: lang === 'en' ? 1 : 0.4,
-                    fontWeight: 800,
-                }}
-                onClick={() => onChange('en')}
-            >
-                EU
-            </button>
-            <button
-                style={{
-                    ...btnStyle,
-                    opacity: lang === 'ru' ? 1 : 0.4,
-                    fontWeight: 800,
-                }}
-                onClick={() => onChange('ru')}
-            >
-                RU
-            </button>
-        </div>
-    )
-}
-
-export default LanguageSwitcher
+        <Select
+            size="small"
+            variant="standard"
+            value={lang}
+            onChange={e => setLang(e.target.value as any)}
+            sx={{minWidth: 70}}
+        >
+            <MenuItem value="ru">RU</MenuItem>
+            <MenuItem value="en">EN</MenuItem>
+        </Select>
+    );
+};
+export default LanguageSwitcher;

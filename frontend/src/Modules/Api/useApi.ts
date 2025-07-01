@@ -52,6 +52,7 @@ export const useApi = () => {
 
     if (!axiosRef.current) {
         const inst = axios.create({baseURL: `${DOMAIN_URL}/`});
+        inst.defaults.headers.common['Accept-Language'] = localStorage.getItem('lang') || 'ru';
 
         const getCookie = (name: string): string | null => {
             if (!document.cookie) return null;
