@@ -4,6 +4,7 @@ import Master from './Master';
 import AllFiles from './AllFiles';
 import FavoriteFiles from './FavoriteFiles';
 import StorageUsageBar from './StorageUsageBar';
+import FileDetail from './FileDetail';
 import {FC, FRSE} from 'wide-containers';
 import {useTranslation} from 'react-i18next';
 
@@ -21,6 +22,7 @@ const Storage: React.FC = () => {
                 <Route path="master/" element={<Master/>}/>
                 <Route path="files/all/" element={<AllFiles/>}/>
                 <Route path="files/favorite/" element={<FavoriteFiles/>}/>
+                <Route path="files/:id/" element={<FileDetail/>}/>
             </Routes>
         </FC>
     );

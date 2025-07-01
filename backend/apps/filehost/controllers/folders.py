@@ -38,8 +38,11 @@ async def get_all_folders(request) -> Response:
 async def get_folder_content(request) -> Response:
     folder_id = request.data.get('id')
     if not folder_id:
-        raise IdWasNotProvided()
-    folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
+        folder, _ = await Folder.objects.aget_or_create(
+            name='root', user=request.user, parent=None
+        )
+    else:
+        folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
     subfolders = await Folder.objects.afilter(parent=folder)
     files = await File.objects.afilter(folder=folder)
     subfolders_serializer = AFolderSerializer(subfolders, many=True)
@@ -63,7 +66,7 @@ async def add_folder(request) -> Response:
     if parent_id:
         parent = await aget_object_or_404(Folder, id=parent_id, user=request.user)
     else:
-        parent = await aget_object_or_404(Folder, name='root', user=request.user)
+        parent, _ = await Folder.objects.aget_or_create(name='root', user=request.user, parent=None)
     folder = await Folder.objects.acreate(name=name, parent=parent, user=request.user)
 
     return Response(
