@@ -31,11 +31,14 @@ async def get_file_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_files(request) -> Response:
-    return Response(await FileSerializer(
-        await File.objects.afilter(
-            user=request.user
-        ), many=True
-    ).adata, status=status.HTTP_200_OK)
+    page = int(request.query_params.get('page', 1))
+    page_size = int(request.query_params.get('page_size', 10))
+    offset = (page - 1) * page_size
+    files_qs = File.objects.filter(user=request.user).order_by('-created_at')[offset:offset + page_size]
+    files = []
+    async for f in files_qs:
+        files.append(FileSerializer(f).data)
+    return Response(files, status=status.HTTP_200_OK)
 
 
 @acontroller('Add File')
@@ -52,3 +55,43 @@ async def add_file(request) -> Response:
     await serializer.ais_valid(raise_exception=True)
     file = await serializer.asave()
     return Response(FileSerializer(file).data, status=status.HTTP_201_CREATED)
+
+@acontroller('Get Favorite Files')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_favorite_files(request) -> Response:
+    page = int(request.query_params.get('page', 1))
+    page_size = int(request.query_params.get('page_size', 10))
+    offset = (page - 1) * page_size
+    files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[offset:offset + page_size]
+    files = []
+    async for f in files_qs:
+        files.append(FileSerializer(f).data)
+    return Response(files, status=status.HTTP_200_OK)
+
+
+@acontroller('Toggle Favorite File')
+@api_view(('POST',))
+@permission_classes((IsAuthenticated,))
+async def toggle_favorite(request) -> Response:
+    file_id = request.data.get('file_id')
+    if not file_id:
+        raise IdWasNotProvided()
+    file = await aget_object_or_404(File, id=file_id, user=request.user)
+    if 'value' in request.data:
+        file.is_favorite = bool(request.data.get('value'))
+    else:
+        file.is_favorite = not file.is_favorite
+    await file.asave()
+    return Response(FileSerializer(file).data, status=status.HTTP_200_OK)
+
+
+@acontroller('Get Storage Usage')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_storage_usage(request) -> Response:
+    total = 0
+    async for f in File.objects.filter(user=request.user):
+        if f.file:
+            total += f.file.size
+    return Response({'used': total, 'limit': 300 * 1024 * 1024}, status=status.HTTP_200_OK)

@@ -10,7 +10,8 @@ from apps.filehost.controllers.base import (
     download_archive,
 )
 from apps.filehost.controllers.files import (
-    get_file_by_id, get_all_files, add_file
+    get_file_by_id, get_all_files, add_file,
+    get_favorite_files, toggle_favorite, get_storage_usage
 )
 from apps.filehost.controllers.folders import (
     get_folder_by_id, get_all_folders,
@@ -33,6 +34,10 @@ urlpatterns = [
     path('folder/add/', add_folder, name='add_folder'),
     path('folder/content/', get_folder_content, name='get_folder_content'),
     path('files/upload/', upload_files, name='upload_files'),
+
+    path('files/favorite/', get_favorite_files, name='get_favorite_files'),
+    path('files/toggle_favorite/', toggle_favorite, name='toggle_favorite'),
+    path('storage/usage/', get_storage_usage, name='get_storage_usage'),
 
     path('download/file/', download_file, name='download_file'),
     path('download/archive/', download_archive, name='download_archive'),
