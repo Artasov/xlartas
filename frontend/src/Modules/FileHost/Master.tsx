@@ -22,6 +22,7 @@ const Master: React.FC = () => {
     const [showCreate, setShowCreate] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [uploads, setUploads] = useState<UploadItem[]>([]);
+    const [confirmOpen, setConfirmOpen] = useState(false);
 
     const load = () => {
         api.post('/api/v1/filehost/folder/content/', {id: null}).then(data => {
@@ -37,9 +38,15 @@ const Master: React.FC = () => {
 
     useEffect(()=>{if(selected.length===0) setSelectMode(false);},[selected]);
 
-    const handleDeleteSelected = async () => {
+    const deleteSelected = async () => {
         await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s=>s.id)});
-        setSelected([]); load();
+        setSelected([]);
+        load();
+    };
+
+    const handleDeleteSelected = () => {
+        if (selected.length === 0) return;
+        setConfirmOpen(true);
     };
 
     const handleUpload = async (file: File | null) => {
@@ -81,13 +88,21 @@ const Master: React.FC = () => {
                 <FileItem key={f.id} file={f} selectMode={selectMode} selected={!!selected.find(s=>s.id===f.id)}
                           onToggleSelect={toggleSelect}
                           onSelectMode={()=>{setSelectMode(true); toggleSelect(f);}}
-                          onDelete={()=>{setSelected([f]); handleDeleteSelected();}}
+                          onDelete={()=>{setSelected([f]); setConfirmOpen(true);}}
                           onShare={()=>setShowShare(f)}
                           onDownload={file=>window.open(file.file)}/>
             ))}
 
             <MoveDialog files={selected} open={showMove} onClose={()=>{setShowMove(false); setSelected([]); load();}}/>
             <ShareDialog file={showShare} open={!!showShare} onClose={()=>setShowShare(null)}/>
+
+            <Dialog open={confirmOpen} onClose={()=>setConfirmOpen(false)}>
+                <DialogTitle>{t('delete')}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={()=>setConfirmOpen(false)}>{t('cancel')}</Button>
+                    <Button color="error" onClick={async()=>{await deleteSelected(); setConfirmOpen(false);}}>{t('delete')}</Button>
+                </DialogActions>
+            </Dialog>
 
             <Dialog open={showCreate} onClose={()=>setShowCreate(false)}>
                 <DialogTitle>{t('create_folder')}</DialogTitle>
