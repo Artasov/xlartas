@@ -92,13 +92,11 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                         />
                         <Collapse in={system === 'freekassa'}>
                             <FR>
-                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet
-                                и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП /
-                                Картой и всеми удобными способами. Это ограничения FreeKassa.
+                                {t('freekassa_help_desc')}
                             </FR>
                         </Collapse>
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
-                            {loading ? <CircularProgress size="20px"/> : 'Далее'}
+                            {loading ? <CircularProgress size="20px"/> : t('next')}
                         </Button>
                     </FC>
                 )}

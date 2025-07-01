@@ -12,6 +12,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "../Api/useApi";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import pprint from 'Utils/pprint';
+import {useTranslation} from "react-i18next";
 
 interface PaymentTypePickerProps {
     prices?: IProductPrice[];
@@ -33,6 +34,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     const [selectedPaymentType, setSelectedPaymentType] = useState<IPaymentSystem | null>(null);
     const {plt, theme} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
 
     useEffect(() => {
         setLoading(true);
@@ -233,7 +235,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                                 whiteSpace: 'nowrap',
                                                 fontWeight: 300,
                                                 fontSize: '1.035rem',
-                                            }}>Через ЛС</span>
+                                            }}>{t('by_private_message')}</span>
                                         </FRCC>
                                         : <FRCC
                                             cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}

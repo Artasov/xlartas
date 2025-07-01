@@ -90,7 +90,7 @@ const ParallaxLogo: React.FC = () => {
                     <Button
                         className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
                         onClick={handleSoftwareClick}>
-                        {t('software')}
+                        {t('softwares')}
                     </Button>
                 </FCCC>
                 {/* Кнопка "xlmine" */}

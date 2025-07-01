@@ -136,31 +136,33 @@
   "terms_and_conditions": "Условия использования",
   "privacy_policy": "Политика конфиденциальности",
   "our_software": "Наши программы",
-  "payment_system": "ПЛАТЕЖНАЯ СИСТЕМА"
-  ,"user_tab": "Пользователь"
-  ,"minecraft_tab": "Minecraft"
-  ,"balance": "Баланс"
-  ,"top_up_balance": "Пополнить баланс"
-  ,"registration_date": "Дата регистрации"
-  ,"skin": "Скин"
-  ,"cape": "Плащ"
-  ,"coins_count": "{{count}} монет"
-  ,"review": "Обзор"
-  ,"hours_left": "осталось {{hours}} ч."
-  ,"installer": "Установщик"
-  ,"upload": "Загрузить"
-  ,"version": "Версия"
-  ,"creation_date": "Дата создания"
-  ,"actions": "Действия"
-  ,"enable_remote_touchpad": "Включите функцию Remote Touchpad в xlmacros чтобы использовать это."
-  ,"remote_touchpad": "Remote touchpad"
-  ,"tap_here_and_type": "Коснитесь и введите…"
-  ,"status_paid": "Оплачен"
-  ,"status_inited": "Инициализирован"
-  ,"status_executed": "Выполнен"
-  ,"order_created": "Создан"
-  ,"xlmine_java_required": "Требуется Java21 или выше"
-  ,"download_launcher": "Скачать лаунчер"
-  ,"xlmine_description": "Просто мой личный сервер для игры с кем-то без большого пинга, с Radmin, Realms, множеством модов и неплохими шейдерами и текстурами. На телефоне будет мало fps из-за их количества."
-  ,"xlmine_footer": "xlmine © 2025 xlartas. Все права защищены."
+  "payment_system": "ПЛАТЕЖНАЯ СИСТЕМА",
+  "user_tab": "Пользователь",
+  "minecraft_tab": "Minecraft",
+  "balance": "Баланс",
+  "top_up_balance": "Пополнить баланс",
+  "registration_date": "Дата регистрации",
+  "skin": "Скин",
+  "cape": "Плащ",
+  "coins_count": "{{count}} монет",
+  "review": "Обзор",
+  "hours_left": "осталось {{hours}} ч.",
+  "installer": "Установщик",
+  "upload": "Загрузить",
+  "version": "Версия",
+  "creation_date": "Дата создания",
+  "actions": "Действия",
+  "enable_remote_touchpad": "Включите функцию Remote Touchpad в xlmacros чтобы использовать это.",
+  "remote_touchpad": "Remote touchpad",
+  "tap_here_and_type": "Коснитесь и введите…",
+  "status_paid": "Оплачен",
+  "status_inited": "Инициализирован",
+  "status_executed": "Выполнен",
+  "order_created": "Создан",
+  "xlmine_java_required": "Требуется Java21 или выше",
+  "download_launcher": "Скачать лаунчер",
+  "xlmine_description": "Просто мой личный сервер для игры с кем-то без большого пинга, с Radmin, Realms, множеством модов и неплохими шейдерами и текстурами. На телефоне будет мало fps из-за их количества.",
+  "xlmine_footer": "xlmine © 2025 xlartas. Все права защищены.",
+  "by_private_message": "Через личку",
+  "freekassa_help_desc": "При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa."
 }
