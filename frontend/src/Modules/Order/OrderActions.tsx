@@ -107,17 +107,17 @@ const OrderActions: React.FC<OrderActionsProps> = (
         // Добавляем действия только для staff и если заказ не отменен, не исполнен и не возвращен
         if (user?.is_staff && !order.is_cancelled && !order.is_executed && !order.is_refunded) {
             actions.push({
-                label: 'Execute',
+                label: t('execute'),
                 onClick: handleExecuteOrder,
                 style: {backgroundColor: plt.text.primary + '22'},
             });
             actions.push({
-                label: 'Notification',
+                label: t('notification'),
                 onClick: handleResendNotificationOrder,
                 style: {backgroundColor: plt.text.primary + '22'},
             });
             actions.push({
-                label: 'Delete',
+                label: t('delete'),
                 onClick: handleDeleteOrder,
                 style: {backgroundColor: theme.colors.error.main},
             });
@@ -126,7 +126,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         // Добавляем действие для запроса возврата, если заказ не инициализирован, не отменен и не возвращен
         if (!order.is_inited && !order.is_cancelled && !order.is_refunded) {
             actions.push({
-                label: 'Request a refund',
+                label: t('request_refund'),
                 onClick: handleRedirectToRefund,
                 style: {backgroundColor: plt.text.primary + '22'},
             });
@@ -135,7 +135,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         // Добавляем действие для отмены заказа, если заказ инициализирован, не отменен, не исполнен и не возвращен
         if (order.is_inited && !order.is_cancelled && !order.is_executed && !order.is_refunded) {
             actions.push({
-                label: 'Cancel',
+                label: t('cancel_order'),
                 onClick: handleCancelOrder,
                 style: {backgroundColor: plt.text.primary + '22'},
             });
@@ -149,7 +149,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
             //     style: {backgroundColor: plt.info.main},
             // });
             actions.push({
-                label: 'Pay',
+                label: t('pay'),
                 onClick: handlePay,
                 style: {backgroundColor: plt.info.main},
             });

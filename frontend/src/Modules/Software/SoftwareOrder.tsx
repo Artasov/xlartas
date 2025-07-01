@@ -83,7 +83,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     if (!software.prices || software.prices.length === 0) {
         return (
             <FCC w="100%" g=".2rem">
-                Товар сейчас не продается.
+                {t('product_not_for_sale')}
             </FCC>
         );
     }
@@ -100,7 +100,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const createOrder = async () => {
         if (licenseHours < software.min_license_order_hours) {
             Message.error(
-                `Минимальное количество часов: ${software.min_license_order_hours}`
+                t('min_hours_message', {hours: software.min_license_order_hours})
             );
             return;
         }
@@ -153,7 +153,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                     className="minw-250px fw-bold"
                     onClick={openPayModal}
                 >
-                    Buy {licenseHours} hours for {totalPrice} RUB
+                    {t('buy_hours_for_price', {hours: licenseHours, price: totalPrice})}
                 </Button>
 
                 <FRSC>
@@ -199,7 +199,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                 open={payModal}
                 onClose={() => setPayModal(false)}
             >
-                <DialogTitle sx={{pb: 1.3}}><FRC opacity={70}>Payment of the order</FRC></DialogTitle>
+                <DialogTitle sx={{pb: 1.3}}><FRC opacity={70}>{t('payment_of_the_order')}</FRC></DialogTitle>
                 <DialogContent>
                     <FC maxW={360}>
                         <FC mb={1}>
@@ -211,9 +211,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                         </FC>
                         <Collapse in={system === 'freekassa'}>
                             <FR opacity={80} mb={1} fontSize={'.88rem'} sx={{lineHeight: '1.2rem'}}>
-                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet
-                                и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП /
-                                Картой и всеми удобными способами. Это ограничения FreeKassa.
+                                {t('freekassa_note')}
                             </FR>
                         </Collapse>
                         <FRC g={1} mt={1}>
@@ -222,7 +220,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                             }}>
                                 {creatingOrder
                                     ? <CircularProgress size="20px"/>
-                                    : 'Next'
+                                    : t('next')
                                 }
                             </Button>
                         </FRC>

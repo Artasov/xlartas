@@ -51,7 +51,7 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
 
     return (
         <Dialog open={open} onClose={onClose} className={'w-100 maxw-440px'}>
-            <DialogTitle>Оплатить заказ</DialogTitle>
+            <DialogTitle>{t('payment_of_the_order')}</DialogTitle>
             <DialogContent>
                 <FC g={2}>
                     <PaymentTypePicker
@@ -60,9 +60,9 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
                         setPaymentSystem={setSystem}
                     />
                     <FRE g={1}>
-                        <Button variant="outlined" onClick={onClose}>Cancel</Button>
+                        <Button variant="outlined" onClick={onClose}>{t('cancel')}</Button>
                         <Button variant="contained" disabled={loading} onClick={confirm}>
-                            {loading ? <CircularProgress size="20px"/> : 'Next'}
+                            {loading ? <CircularProgress size="20px"/> : t('next')}
                         </Button>
                     </FRE>
                 </FC>
