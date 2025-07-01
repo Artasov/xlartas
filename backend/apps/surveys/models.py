@@ -6,6 +6,7 @@ from django.db.models import (
     CASCADE, TextChoices, ImageField, DateTimeField,
     ManyToManyField, SmallIntegerField
 )
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.user import User
 from apps.theme.models import Theme
@@ -14,7 +15,7 @@ from apps.theme.models import Theme
 class Survey(AModel):
     title = CharField(max_length=255)
     slug = SlugField(max_length=255, unique=True, blank=True, null=True)
-    description = TextField(help_text='Use Markdown for formatting', blank=True, null=True)
+    description = TextField(help_text=_('Use Markdown for formatting'), blank=True, null=True)
     is_test = BooleanField(default=False)
     is_public = BooleanField(default=False)
     author = ForeignKey(User, related_name='surveys', on_delete=CASCADE)
@@ -38,13 +39,13 @@ class Survey(AModel):
 
 class Question(AModel):
     class QuestionType(TextChoices):
-        CHOICES = 'choices', 'Multiple Choice'
-        TEXT = 'text', 'Text'
+        CHOICES = 'choices', _('Multiple Choice')
+        TEXT = 'text', _('Text')
 
     survey = ForeignKey(Survey, related_name='questions', on_delete=CASCADE)
     title = CharField(max_length=255, null=True, blank=True)
     order = PositiveSmallIntegerField()
-    text = TextField(help_text='Use Markdown for formatting')
+    text = TextField(help_text=_('Use Markdown for formatting'))
     points_for_text = PositiveSmallIntegerField(default=1)
     time_limit_minutes = PositiveSmallIntegerField(null=True, blank=True)
     question_type = CharField(max_length=20, choices=QuestionType.choices)
@@ -59,7 +60,7 @@ class Choice(AModel):
     title = CharField(max_length=255, null=True, blank=True)
     points = SmallIntegerField(default=0)
     question = ForeignKey(Question, related_name='choices', on_delete=CASCADE)
-    text = TextField(help_text='Use Markdown for formatting')
+    text = TextField(help_text=_('Use Markdown for formatting'))
     is_correct = BooleanField(default=False)
 
     def __str__(self):
