@@ -125,22 +125,22 @@ async def bulk_delete_items(request) -> Response:
     folder_ids = request.data.get('folder_ids', [])
 
     if not file_ids and not folder_ids:
-        return Response({'error': 'No item ids provided'},
+        return Response({'error': _('No item ids provided')},
                         status=status.HTTP_400_BAD_REQUEST)
     files = File.objects.filter(id__in=file_ids, user=request.user).select_related('user')
     async for file in files:
         if file.user != request.user:
-            return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': _('Permission denied')}, status=status.HTTP_403_FORBIDDEN)
     folders = Folder.objects.filter(id__in=folder_ids, user=request.user).select_related('user')
     async for folder in folders:
         if folder.user != request.user:
-            return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': _('Permission denied')}, status=status.HTTP_403_FORBIDDEN)
 
     # Удаляем файлы и папки
     await File.objects.filter(id__in=[file.id for file in files]).adelete()
     await Folder.objects.filter(id__in=[folder.id for folder in folders]).adelete()
 
-    return Response({'status': 'Items deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    return Response({'status': _('Items deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
 
 
 @acontroller('Bulk Update Items')
@@ -150,7 +150,7 @@ async def bulk_update_items(request) -> Response:
     items_data = request.data.get('items_data', {})
 
     if not items_data:
-        return Response({'error': 'No update data provided'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': _('No update data provided')}, status=status.HTTP_400_BAD_REQUEST)
 
     file_ids = [key for key in items_data.keys() if items_data[key].get('type') == 'file']
     folder_ids = [key for key in items_data.keys() if items_data[key].get('type') == 'folder']
@@ -172,7 +172,7 @@ async def bulk_update_items(request) -> Response:
                 setattr(folder, key, value)
         await folder.asave()
 
-    return Response({'status': 'Items updated successfully'}, status=status.HTTP_200_OK)
+    return Response({'status': _('Items updated successfully')}, status=status.HTTP_200_OK)
 
 
 @acontroller('Make Public Access')

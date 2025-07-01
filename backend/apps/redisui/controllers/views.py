@@ -5,6 +5,7 @@ import redis
 from adjango.decorators import controller
 from django.conf import settings
 from django.http import JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render
 
 # Подключение к Redis без автоматического декодирования
@@ -81,15 +82,15 @@ def delete_redis_key(request):
         client_type = request.POST.get('client_type')
 
         if not key or not client_type:
-            return JsonResponse({'status': 'error', 'message': 'Key or client_type is missing'}, status=400)
+            return JsonResponse({'status': 'error', 'message': _('Key or client_type is missing')}, status=400)
 
         if client_type == 'cache' and redis_cache:
             redis_cache.delete(key)
         elif client_type == 'broker' and redis_broker:
             redis_broker.delete(key)
         else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid client type'}, status=400)
+            return JsonResponse({'status': 'error', 'message': _('Invalid client type')}, status=400)
 
         return JsonResponse({'status': 'success'})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return JsonResponse({'status': 'error', 'message': _('Invalid request method')}, status=400)
