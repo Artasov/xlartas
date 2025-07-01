@@ -2,8 +2,6 @@
 import {IClient} from "types/commerce/client";
 
 
-
-
 export interface IUser {
     id: number;
     username?: string;

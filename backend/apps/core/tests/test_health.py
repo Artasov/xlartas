@@ -15,4 +15,3 @@ class ChangeUserIdViewTest(TestCase):
         url = f'/change_user_id/{self.user.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-

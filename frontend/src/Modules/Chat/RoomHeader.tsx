@@ -10,6 +10,7 @@ import {IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
 import {FRSC} from "wide-containers";
 import {useProfile} from "User/ProfileContext";
+import {useTranslation} from "react-i18next";
 
 interface RoomHeaderProps {
     room: IRoom | null;
@@ -21,6 +22,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
     const {user} = useContext(AuthContext) as AuthContextType;
     const {plt} = useTheme();
     const isMdOrLarger = useMediaQuery('(min-width: 992px)');
+    const {t} = useTranslation();
 
     const otherParticipant = useMemo(() => {
         if (!room || room.max_participants !== 2) return null;

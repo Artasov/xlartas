@@ -9,6 +9,7 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {redirectWithNextBack} from 'Utils/redirectNext';
+import {useTranslation} from "react-i18next";
 
 const OrderTemplate: React.FC = () => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
@@ -16,6 +17,7 @@ const OrderTemplate: React.FC = () => {
     const location = useLocation();
     const {headerNavHeight} = useNavigation();
     const {plt} = useTheme();
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

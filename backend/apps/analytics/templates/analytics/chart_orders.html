@@ -9,7 +9,8 @@
             <select name="period" id="period">
                 <option value="day" {% if selected_period == 'day' %}selected{% endif %}>{% trans 'Day' %}</option>
                 <option value="week" {% if selected_period == 'week' %}selected{% endif %}>{% trans 'Week' %}</option>
-                <option value="month" {% if selected_period == 'month' %}selected{% endif %}>{% trans 'Month' %}</option>
+                <option value="month"
+                        {% if selected_period == 'month' %}selected{% endif %}>{% trans 'Month' %}</option>
                 <option value="year" {% if selected_period == 'year' %}selected{% endif %}>{% trans 'Year' %}</option>
             </select>
 

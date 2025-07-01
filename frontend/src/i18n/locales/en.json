@@ -37,85 +37,85 @@
   "password_changed": "Password changed successfully",
   "new_password": "New Password",
   "privilege_load_error": "Failed to load privilege",
-  "privileges_load_error": "Failed to load privileges"
-  ,"avatar_update_success": "Avatar updated successfully"
-  ,"avatar_update_error": "Failed to update avatar"
-  ,"user_update_success": "User updated successfully"
-  ,"enter_message_or_file": "Write a message or attach a file..."
-  ,"send_message_error": "Error sending message"
-  ,"not_authorized": "You are not authorized!"
-  ,"websocket_not_connected": "WebSocket not connected"
-  ,"donate_not_loaded": "Donate not loaded"
-  ,"update_success": "Updated successfully"
-  ,"update_error": "Update failed"
-  ,"launcher_version_uploaded": "New launcher version uploaded"
-  ,"version_deleted": "Version deleted"
-  ,"launcher_versions_load_error": "Failed to load launcher versions"
-  ,"select_installer_file": "Select installer file"
-  ,"file_upload_error": "File upload error"
-  ,"version_delete_error": "Version deletion error"
-  ,"release_version_uploaded": "New release version uploaded"
-  ,"release_versions_load_error": "Failed to load release versions"
-  ,"select_file_and_json": "Select file and insert valid JSON"
-  ,"login_success": "Welcome! You have successfully logged in."
-  ,"logout_success": "Logged out successfully."
-  ,"logout_error": "Logout error."
-  ,"invalid_credentials": "Invalid username or password."
-  ,"account_confirmed": "Your account has been successfully confirmed!"
-  ,"select_confirmation_method": "Please choose a confirmation method"
-  ,"phone_confirmed": "Phone confirmed successfully"
-  ,"invalid_phone_number": "Enter a valid phone number"
-  ,"email_confirmed": "Email confirmed successfully"
-  ,"invalid_email_address": "Enter a valid email address"
-  ,"order_deleted_success": "Order deleted successfully"
-  ,"order_completed_success": "Order completed successfully."
-  ,"contact_admin_for_payment": "For pay order contact me @artasov tg."
-  ,"payment_link_not_found": "No link for payment was found"
-  ,"balance_topup_created": "Top-up order created"
-  ,"promo_code_success": "Great, your promo code is valid!"
-  ,"select_currency_payment": "Select currency and payment method"
-  ,"licenses_load_error": "Failed to load licenses"
-  ,"software_id_not_provided": "Software ID not specified"
-  ,"software_load_error": "Failed to load software"
-  ,"test_activation_error": "Failed to activate trial period"
-  ,"captcha_required": "Please complete the captcha"
-  ,"order_created_success": "Order created successfully."
-  ,"client_update_success": "Client updated successfully."
-  ,"form_processing_error": "Form processing error"
-  ,"document_id_not_specified": "Document ID not specified."
-  ,"company_name_not_specified": "Company name not specified."
-  ,"order_canceled_success": "Order canceled successfully."
-  ,"order_notification_resent_success": "Order notification resent successfully."
-  ,"donate_coins_created_success": "Coin purchase order created successfully."
-  ,"remember_login_register": "We saved your choice, sign in or register to continue."
-  ,"start_writing_first": "Start writing first"
-  ,"favorites": "Favorites"
-  ,"write_message_placeholder": "Write a message..."
-  ,"important": "important"
-  ,"saving": "Saving..."
-  ,"change_password": "Change Password"
-  ,"email_confirmed_short": "Email confirmed"
-  ,"email_not_confirmed": "Email not confirmed"
-  ,"phone_confirmed_short": "Phone confirmed"
-  ,"phone_not_confirmed": "Phone not confirmed"
-  ,"no_chats": "No chats"
-  ,"choose_file": "Choose file"
-  ,"you_colon": "You: "
-  ,"notes": "Notes"
-  ,"product_not_for_sale": "This product is currently not for sale."
-  ,"min_hours_message": "Minimum hours: {{hours}}"
-  ,"buy_hours_for_price": "Buy {{hours}} hours for {{price}} RUB"
-  ,"payment_of_the_order": "Payment of the order"
-  ,"freekassa_note": "When paying via FreeKassa less than 1001 RUB you must have or register an FK Wallet and top it up, or pay with crypto. Over 1000 RUB you can pay via SBP / card and other available methods. These are FreeKassa restrictions."
-  ,"next": "Next"
-  ,"phone": "Phone"
-  ,"email": "Email"
-  ,"password": "Password"
-  ,"login_by_password": "Login by password"
-  ,"code_to_phone": "Code to phone"
-  ,"code_to_email": "Code to email"
-  ,"request_refund": "Request a refund"
-  ,"cancel_order": "Cancel"
-  ,"pay": "Pay"
-  ,"notification": "Notification"
+  "privileges_load_error": "Failed to load privileges",
+  "avatar_update_success": "Avatar updated successfully",
+  "avatar_update_error": "Failed to update avatar",
+  "user_update_success": "User updated successfully",
+  "enter_message_or_file": "Write a message or attach a file...",
+  "send_message_error": "Error sending message",
+  "not_authorized": "You are not authorized!",
+  "websocket_not_connected": "WebSocket not connected",
+  "donate_not_loaded": "Donate not loaded",
+  "update_success": "Updated successfully",
+  "update_error": "Update failed",
+  "launcher_version_uploaded": "New launcher version uploaded",
+  "version_deleted": "Version deleted",
+  "launcher_versions_load_error": "Failed to load launcher versions",
+  "select_installer_file": "Select installer file",
+  "file_upload_error": "File upload error",
+  "version_delete_error": "Version deletion error",
+  "release_version_uploaded": "New release version uploaded",
+  "release_versions_load_error": "Failed to load release versions",
+  "select_file_and_json": "Select file and insert valid JSON",
+  "login_success": "Welcome! You have successfully logged in.",
+  "logout_success": "Logged out successfully.",
+  "logout_error": "Logout error.",
+  "invalid_credentials": "Invalid username or password.",
+  "account_confirmed": "Your account has been successfully confirmed!",
+  "select_confirmation_method": "Please choose a confirmation method",
+  "phone_confirmed": "Phone confirmed successfully",
+  "invalid_phone_number": "Enter a valid phone number",
+  "email_confirmed": "Email confirmed successfully",
+  "invalid_email_address": "Enter a valid email address",
+  "order_deleted_success": "Order deleted successfully",
+  "order_completed_success": "Order completed successfully.",
+  "contact_admin_for_payment": "For pay order contact me @artasov tg.",
+  "payment_link_not_found": "No link for payment was found",
+  "balance_topup_created": "Top-up order created",
+  "promo_code_success": "Great, your promo code is valid!",
+  "select_currency_payment": "Select currency and payment method",
+  "licenses_load_error": "Failed to load licenses",
+  "software_id_not_provided": "Software ID not specified",
+  "software_load_error": "Failed to load software",
+  "test_activation_error": "Failed to activate trial period",
+  "captcha_required": "Please complete the captcha",
+  "order_created_success": "Order created successfully.",
+  "client_update_success": "Client updated successfully.",
+  "form_processing_error": "Form processing error",
+  "document_id_not_specified": "Document ID not specified.",
+  "company_name_not_specified": "Company name not specified.",
+  "order_canceled_success": "Order canceled successfully.",
+  "order_notification_resent_success": "Order notification resent successfully.",
+  "donate_coins_created_success": "Coin purchase order created successfully.",
+  "remember_login_register": "We saved your choice, sign in or register to continue.",
+  "start_writing_first": "Start writing first",
+  "favorites": "Favorites",
+  "write_message_placeholder": "Write a message...",
+  "important": "important",
+  "saving": "Saving...",
+  "change_password": "Change Password",
+  "email_confirmed_short": "Email confirmed",
+  "email_not_confirmed": "Email not confirmed",
+  "phone_confirmed_short": "Phone confirmed",
+  "phone_not_confirmed": "Phone not confirmed",
+  "no_chats": "No chats",
+  "choose_file": "Choose file",
+  "you_colon": "You: ",
+  "notes": "Notes",
+  "product_not_for_sale": "This product is currently not for sale.",
+  "min_hours_message": "Minimum hours: {{hours}}",
+  "buy_hours_for_price": "Buy {{hours}} hours for {{price}} RUB",
+  "payment_of_the_order": "Payment of the order",
+  "freekassa_note": "When paying via FreeKassa less than 1001 RUB you must have or register an FK Wallet and top it up, or pay with crypto. Over 1000 RUB you can pay via SBP / card and other available methods. These are FreeKassa restrictions.",
+  "next": "Next",
+  "phone": "Phone",
+  "email": "Email",
+  "password": "Password",
+  "login_by_password": "Login by password",
+  "code_to_phone": "Code to phone",
+  "code_to_email": "Code to email",
+  "request_refund": "Request a refund",
+  "cancel_order": "Cancel",
+  "pay": "Pay",
+  "notification": "Notification"
 }

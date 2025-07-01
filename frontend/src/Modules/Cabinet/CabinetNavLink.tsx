@@ -42,8 +42,7 @@ const CabinetNavLink: React.FC<CabinetNavLinkProps> = ({text, to, urlActiveMark,
                           : undefined
               }
               bg={isActive ? plt.text.primary + '33' : ''}
-              sx={{
-              }}>
+              sx={{}}>
             {Icon && (
                 <Icon
                     className={`fs-4`}

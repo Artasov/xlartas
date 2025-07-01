@@ -7,6 +7,7 @@ import RoomMessage from "Chat/RoomMessage";
 import {IMessage, IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useTranslation} from "react-i18next";
 
 interface MessagesContainerProps {
     messages: IMessage[];
@@ -27,6 +28,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
         messagesContainerRef
     }) => {
     const {user} = useContext(AuthContext) as AuthContextType;
+    const {t} = useTranslation();
 
     const {plt, theme} = useTheme();
     const isSelfDialog = (room: IRoom | null): boolean => {

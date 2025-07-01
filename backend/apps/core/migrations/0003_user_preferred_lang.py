@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0002_role_user_roles'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='preferred_lang',
-            field=models.CharField(choices=[('ru', 'Русский'), ('en', 'English')], default='ru', max_length=2, verbose_name='Preferred language'),
+            field=models.CharField(choices=[('ru', 'Русский'), ('en', 'English')], default='ru', max_length=2,
+                                   verbose_name='Preferred language'),
         ),
     ]

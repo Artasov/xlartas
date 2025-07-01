@@ -44,7 +44,7 @@ const PrivilegeItem: React.FC<{ priv: IPrivilegeExtended }> = ({priv}) => {
                     </Tooltip>
                 ) : (
                     <FRC rounded={1} px={2} py={0.5} color={'#fff'}
-                             bg={priv.color || plt.text.accent}>
+                         bg={priv.color || plt.text.accent}>
                         {priv.name}
                     </FRC>
                 )}

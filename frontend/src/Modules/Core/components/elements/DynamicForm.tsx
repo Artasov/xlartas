@@ -3,8 +3,7 @@ import React, {ReactNode, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import pprint from 'Utils/pprint';
 import {Message} from 'Core/components/Message';
-import {FormControl, TextField} from '@mui/material';
-import {Button} from '@mui/material';
+import {Button, FormControl, TextField} from '@mui/material';
 
 interface DynamicFormProps {
     children: ReactNode;

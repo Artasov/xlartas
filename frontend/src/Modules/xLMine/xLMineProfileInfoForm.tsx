@@ -15,7 +15,7 @@ const XLMineProfileInfoForm: React.FC = () => {
 
     return (
         <FR wrap g={1} mb={2}>
-            <FC >
+            <FC>
                 <FRSC wrap g={1}>
                     <FR
                         color={plt.text.primary}

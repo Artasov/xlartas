@@ -1,7 +1,8 @@
 # xlmine/tasks.py
+import logging
+
 from adjango.decorators import task
 from celery import shared_task
-import logging
 
 from apps.xlmine.utils.map_render import teleport_player_grid
 

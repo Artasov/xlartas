@@ -36,7 +36,7 @@ const StarRating: React.FC<StarRatingProps> = (
                 backgroundColor: plt.text.primary + '33',
             }}>
                 <span className={`${ratingValueClassName}`} style={{
-                   ...ratingValueStyle
+                    ...ratingValueStyle
                 }}>
                     {rating?.toFixed(1) || 0}
                 </span>

@@ -1,5 +1,6 @@
 # xlmine/admin/base.py
 import logging
+
 from django.contrib.admin import register, ModelAdmin, display
 from django.forms import ModelForm, TextInput
 from django.utils.html import escape, format_html

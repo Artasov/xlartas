@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
     Box,
+    Button,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -22,7 +23,6 @@ import {
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
-import {Button} from "@mui/material";
 import {FC, FCCC, FCS, FR, FRC, FRSC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";

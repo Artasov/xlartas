@@ -9,7 +9,6 @@ import RemoteTouchpad from './RemoteTouchpad';
 import RemoteKeyboardField from './RemoteKeyboardField';
 import RemoteMouse from './RemoteMouse';
 import MacrosExecutorForm from './MacrosExecutorForm';
-import LanguageSwitcher from "../../../UI/LanguageSwitcher";
 import MacrosInfo from "./MacrosInfo";
 import {ScreenViewerProvider} from './ScreenViewerProvider';
 import ScreenViewer from "./ScreenViewer";

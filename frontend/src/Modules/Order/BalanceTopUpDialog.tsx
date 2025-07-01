@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Button, Dialog, DialogContent, DialogTitle, TextField, Collapse} from '@mui/material';
+import {Button, Collapse, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FR} from 'wide-containers';
 import {useApi} from '../Api/useApi';
@@ -92,7 +92,9 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                         />
                         <Collapse in={system === 'freekassa'}>
                             <FR>
-                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.
+                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet
+                                и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП /
+                                Картой и всеми удобными способами. Это ограничения FreeKassa.
                             </FR>
                         </Collapse>
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>

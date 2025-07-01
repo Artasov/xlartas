@@ -8,15 +8,15 @@ import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import TextField from "@mui/material/TextField";
 import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";
-import {Button} from "@mui/material";
+import {Button, Tab, Tabs} from "@mui/material";
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import {FC, FCC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import {isEmail, isPhone} from "Utils/validator/base";
 import SignUpForm from "Auth/forms/SignUpForm";
 import BackButton from "Core/components/BackButton";
-import {Tab, Tabs} from "@mui/material";
 import {useApi} from "../../Api/useApi";
+import {useTranslation} from "react-i18next";
 
 type AuthFormProps = {
     ways?: string[];
@@ -27,6 +27,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const hasEmail = ways.includes('email');
     const hasSocial = ways.includes('social');
     const hasPasswordWay = ways.includes('password');
+    const {t} = useTranslation();
 
     const {isAuthenticated, login, handleAuthResponse} = useContext(AuthContext) as AuthContextType;
     const [credential, setCredential] = useState<string>('');

@@ -1,6 +1,6 @@
 // Modules/Auth/Social/components/SocialOAuth.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Button as MuiButton, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar} from '@mui/material';
+import {Button as MuiButton, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar} from '@mui/material';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {faGoogle, faYandex} from '@fortawesome/free-brands-svg-icons';
 import {axios, GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from '../../../Api/axiosConfig';
@@ -9,7 +9,6 @@ import {ProviderConfig} from "Auth/Social/types";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
-import {Button} from "@mui/material";
 import {FR} from "wide-containers";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {

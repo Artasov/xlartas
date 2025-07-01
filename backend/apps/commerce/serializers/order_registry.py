@@ -6,7 +6,6 @@ from apps.commerce.models import BalanceProductOrder
 from apps.commerce.serializers.balance import BalanceProductOrderSerializer
 from apps.software.models import SoftwareOrder
 from apps.software.serializers import SoftwareOrderSerializer
-from apps.xlmine.models import DonateOrder
 
 ORDER_SERIALIZERS = OrderedDict([
     (SoftwareOrder, {

@@ -1,7 +1,7 @@
 // Modules/Cabinet/Cabinet.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useTheme} from "Theme/ThemeContext";
-import {Button, useMediaQuery} from "@mui/material";
+import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
 import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";

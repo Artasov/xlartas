@@ -69,9 +69,9 @@ const Header: React.FC = () => {
                         <FRCC cls={'header-tools'}>
                             <div ref={btnToggleMenuRef} className="btn-toggle-header-mobile-menu"
                                  onClick={toggleMobileMenu}>
-                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
-                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
-                                <span style={{backgroundColor: plt.text.primary+'77'}}></span>
+                                <span style={{backgroundColor: plt.text.primary + '77'}}></span>
+                                <span style={{backgroundColor: plt.text.primary + '77'}}></span>
+                                <span style={{backgroundColor: plt.text.primary + '77'}}></span>
                             </div>
                         </FRCC>
                     </>

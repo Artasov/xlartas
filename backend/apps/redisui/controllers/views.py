@@ -5,8 +5,8 @@ import redis
 from adjango.decorators import controller
 from django.conf import settings
 from django.http import JsonResponse
-from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 # Подключение к Redis без автоматического декодирования
 redis_cache = redis.StrictRedis.from_url(settings.REDIS_CACHE_URL, decode_responses=False)

@@ -83,39 +83,39 @@
   "client_update_success": "Клиент успешно обновлен.",
   "form_processing_error": "Ошибка обработки формы",
   "document_id_not_specified": "ID документа не указан.",
-  "company_name_not_specified": "Название компании не указано."
-  ,"order_canceled_success": "Заказ успешно отменён."
-  ,"order_notification_resent_success": "Уведомление о заказе успешно отправлено заново."
-  ,"donate_coins_created_success": "Заказ на покупку коинов успешно создан"
-  ,"remember_login_register": "Мы сохранили ваш выбор, войдите или зарегистрируйтесь для продолжения."
-  ,"start_writing_first": "Начните писать первым"
-  ,"favorites": "Избранное"
-  ,"write_message_placeholder": "Написать сообщение..."
-  ,"important": "важно"
-  ,"saving": "Сохранение..."
-  ,"change_password": "Смена пароля"
-  ,"email_confirmed_short": "Почта подтверждена"
-  ,"email_not_confirmed": "Почта не подтверждена"
-  ,"phone_confirmed_short": "Телефон подтвержден"
-  ,"phone_not_confirmed": "Телефон не подтвержден"
-  ,"no_chats": "Ни одного чата"
-  ,"choose_file": "Выбрать файл"
-  ,"you_colon": "Вы: "
-  ,"notes": "Заметки"
-  ,"product_not_for_sale": "Товар сейчас не продается."
-  ,"min_hours_message": "Минимальное количество часов: {{hours}}"
-  ,"buy_hours_for_price": "Купить {{hours}} ч. за {{price}} RUB"
-  ,"payment_of_the_order": "Оплата заказа"
-  ,"freekassa_note": "При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелёк FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa."
-  ,"next": "Далее"
-  ,"phone": "Телефон"
-  ,"email": "Почта"
-  ,"password": "Пароль"
-  ,"login_by_password": "Войти по паролю"
-  ,"code_to_phone": "Код на телефон"
-  ,"code_to_email": "Код на почту"
-  ,"request_refund": "Запросить возврат"
-  ,"cancel_order": "Отменить"
-  ,"pay": "Оплатить"
-  ,"notification": "Уведомление"
+  "company_name_not_specified": "Название компании не указано.",
+  "order_canceled_success": "Заказ успешно отменён.",
+  "order_notification_resent_success": "Уведомление о заказе успешно отправлено заново.",
+  "donate_coins_created_success": "Заказ на покупку коинов успешно создан",
+  "remember_login_register": "Мы сохранили ваш выбор, войдите или зарегистрируйтесь для продолжения.",
+  "start_writing_first": "Начните писать первым",
+  "favorites": "Избранное",
+  "write_message_placeholder": "Написать сообщение...",
+  "important": "важно",
+  "saving": "Сохранение...",
+  "change_password": "Смена пароля",
+  "email_confirmed_short": "Почта подтверждена",
+  "email_not_confirmed": "Почта не подтверждена",
+  "phone_confirmed_short": "Телефон подтвержден",
+  "phone_not_confirmed": "Телефон не подтвержден",
+  "no_chats": "Ни одного чата",
+  "choose_file": "Выбрать файл",
+  "you_colon": "Вы: ",
+  "notes": "Заметки",
+  "product_not_for_sale": "Товар сейчас не продается.",
+  "min_hours_message": "Минимальное количество часов: {{hours}}",
+  "buy_hours_for_price": "Купить {{hours}} ч. за {{price}} RUB",
+  "payment_of_the_order": "Оплата заказа",
+  "freekassa_note": "При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелёк FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.",
+  "next": "Далее",
+  "phone": "Телефон",
+  "email": "Почта",
+  "password": "Пароль",
+  "login_by_password": "Войти по паролю",
+  "code_to_phone": "Код на телефон",
+  "code_to_email": "Код на почту",
+  "request_refund": "Запросить возврат",
+  "cancel_order": "Отменить",
+  "pay": "Оплатить",
+  "notification": "Уведомление"
 }

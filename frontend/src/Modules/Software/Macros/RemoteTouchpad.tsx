@@ -42,7 +42,7 @@ const RemoteTouchpad: React.FC = () => {
               bg={plt.text.primary + '22'}
               sx={{
                   userSelect: 'none',
-                  border: '9px dashed ' + plt.background.default ,
+                  border: '9px dashed ' + plt.background.default,
                   touchAction: 'none',
                   aspectRatio: '1 / .4',
                   cursor: 'pointer',

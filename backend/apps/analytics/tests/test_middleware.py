@@ -17,4 +17,3 @@ def test_get_client_ip_remote_addr():
     request = RequestFactory().get('/some-path', REMOTE_ADDR='5.6.7.8')
     middleware = VisitLoggingMiddleware(lambda r: r)
     assert middleware.get_client_ip(request) == '5.6.7.8'
-
