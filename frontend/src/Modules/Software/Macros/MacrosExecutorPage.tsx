@@ -11,8 +11,9 @@ import RemoteMouse from './RemoteMouse';
 import MacrosExecutorForm from './MacrosExecutorForm';
 import LanguageSwitcher from "../../../UI/LanguageSwitcher";
 import MacrosInfo from "./MacrosInfo";
-import { ScreenViewerProvider } from './ScreenViewerProvider';
+import {ScreenViewerProvider} from './ScreenViewerProvider';
 import ScreenViewer from "./ScreenViewer";
+import {useTranslation} from "react-i18next";
 
 const MacrosExecutorPage: React.FC = () => {
     const {plt} = useTheme();
@@ -20,7 +21,7 @@ const MacrosExecutorPage: React.FC = () => {
     const [controlTab, setControlTab] =
         useState<'panel' | 'io' | 'byname'>('panel');
     const isGtSm = useMediaQuery('(min-width: 576px)');
-    const [lang, setLang] = useState<'en' | 'ru'>('en')
+    const {t} = useTranslation();
 
     return (
         <MacroControlProvider>
@@ -31,8 +32,8 @@ const MacrosExecutorPage: React.FC = () => {
                     centered
                     sx={{minHeight: 30}}
                 >
-                    <Tab sx={{py: 0, minHeight: 30}} label="Control" value="control"/>
-                    <Tab sx={{py: 0, minHeight: 30}} label="Info" value="info"/>
+                    <Tab sx={{py: 0, minHeight: 30}} label={t('control')} value="control"/>
+                    <Tab sx={{py: 0, minHeight: 30}} label={t('info')} value="info"/>
                 </Tabs>
 
                 {mainTab === 'control' && (
@@ -45,9 +46,9 @@ const MacrosExecutorPage: React.FC = () => {
                             indicatorColor="secondary"
                             sx={{minHeight: 30}}
                         >
-                            <Tab sx={{py: 0, minHeight: 30}} label="Panel" value="panel"/>
-                            <Tab sx={{py: 0, minHeight: 30}} label="I/O" value="io"/>
-                            <Tab sx={{py: 0, minHeight: 30}} label="By Name" value="byname"/>
+                            <Tab sx={{py: 0, minHeight: 30}} label={t('panel')} value="panel"/>
+                            <Tab sx={{py: 0, minHeight: 30}} label={t('io')} value="io"/>
+                            <Tab sx={{py: 0, minHeight: 30}} label={t('by_name')} value="byname"/>
                         </Tabs>
 
                         {controlTab === 'panel' && (
@@ -68,8 +69,7 @@ const MacrosExecutorPage: React.FC = () => {
                         {controlTab === 'byname' && (
                             <FC>
                                 <p style={{color: plt.text.primary + 'aa', marginBottom: '.3rem'}}>
-                                    Enter the name of the macros (as in the application) and click
-                                    "Execute"
+                                    {t('enter_macro_hint')}
                                 </p>
                                 <MacrosExecutorForm/>
                             </FC>
@@ -77,10 +77,9 @@ const MacrosExecutorPage: React.FC = () => {
                     </>
                 )}
 
-                {mainTab === 'info' && (<>
-                    <LanguageSwitcher lang={lang} onChange={setLang}/>
-                    <MacrosInfo lang={lang}/>
-                </>)}
+                {mainTab === 'info' && (
+                    <MacrosInfo/>
+                )}
             </FC>
         </MacroControlProvider>
     );

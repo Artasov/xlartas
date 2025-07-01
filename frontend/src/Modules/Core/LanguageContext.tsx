@@ -1,6 +1,6 @@
 import React, {createContext, PropsWithChildren, useEffect, useState} from 'react';
-import i18n from '../i18n';
 import axios from 'axios';
+import i18n from "i18next";
 
 type Lang = 'ru' | 'en';
 
@@ -15,10 +15,10 @@ export const LangCtx = createContext<{
 export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
     const [lang, setLangState] = useState<Lang>(() =>
         (localStorage.getItem('lang') as Lang) || 'ru',
-    );
+    ); 
 
     const setLang = (l: Lang) => {
-        i18n.changeLanguage(l);
+        i18n.changeLanguage(l).then();
         localStorage.setItem('lang', l);
         setLangState(l);
         axios.defaults.headers.common['Accept-Language'] = l;
@@ -27,7 +27,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     /* init once */
     useEffect(() => {
-        i18n.changeLanguage(lang);
+        i18n.changeLanguage(lang).then();
         axios.defaults.headers.common['Accept-Language'] = lang;
     }, []);
 

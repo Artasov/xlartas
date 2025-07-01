@@ -7,6 +7,7 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import TextField from '@mui/material/TextField';
 import {FC, FR} from 'wide-containers';
 import {useMacroControl} from './MacroControlProvider';
+import {useTranslation} from "react-i18next";
 
 interface Props {
     onExecuted?: (macroName: string) => void;
@@ -19,28 +20,29 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
 
     const [macro, setMacro] = useState('');
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
 
     const handleSubmit = (e?: React.FormEvent) => {
         e?.preventDefault();
         if (!isAuthenticated || !user) {
-            Message.error('Необходимо войти в аккаунт');
+            Message.error(t('need_login'));
             return;
         }
         const name = macro.trim();
         if (!name) {
-            Message.error('Введите имя макроса');
+            Message.error(t('enter_macro_name'));
             return;
         }
 
         setLoading(true);
         if (readyState === WebSocket.OPEN) {
             sendMacro(name);
-            Message.success(`Команда «${name}» отправлена`);
+            Message.success(t('command_sent', {name}));
             onExecuted?.(name);
             setMacro('');
             setLoading(false);
         } else {
-            Message.error('WebSocket ещё не установлен — попробуйте через секунду');
+            Message.error(t('websocket_not_ready'));
             setLoading(false);
         }
     };
@@ -49,7 +51,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
         <form onSubmit={handleSubmit} className={className}>
             <FC g={1.3} maxW={400}>
                 <TextField
-                    label="Имя макроса"
+                    label={t('macro_name')}
                     value={macro}
                     onChange={e => setMacro(e.target.value)}
                     fullWidth
@@ -59,7 +61,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
                     <Button type="submit" disabled={loading} sx={{
                         fontSize: '1rem', fontWeight: 600,
                     }}>
-                        {loading ? <CircularProgress size="1.6rem"/> : 'Execute'}
+                        {loading ? <CircularProgress size="1.6rem"/> : t('execute')}
                     </Button>
                 </FR>
             </FC>

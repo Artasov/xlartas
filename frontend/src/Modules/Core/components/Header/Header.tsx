@@ -16,6 +16,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {IconButton} from "@mui/material";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import LanguageSwitcher from "../../../../UI/LanguageSwitcher";
 
 const Header: React.FC = () => {
     const {
@@ -76,6 +77,7 @@ const Header: React.FC = () => {
                     </>
                 )}
                 <FRCC g={1}>
+                    <LanguageSwitcher/>
                     {isAuthenticated === null && <CircularProgress size={'35px'}/>}
                     {profileBtnVisible && !location.pathname.includes('/profile') && (
                         <Link to={'/profile'}> <UserAvatar

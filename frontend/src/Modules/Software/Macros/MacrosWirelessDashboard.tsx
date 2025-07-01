@@ -11,6 +11,7 @@ import MacroFormDialog from './MacroFormDialog';
 import {useApi} from '../../Api/useApi';
 import {WirelessMacro} from '../Types/Software';
 import {useMacroControl} from './MacroControlProvider';
+import {useTranslation} from 'react-i18next';
 
 const MacrosWirelessDashboard: React.FC = () => {
     const {plt} = useTheme();
@@ -20,12 +21,13 @@ const MacrosWirelessDashboard: React.FC = () => {
     const [macros, setMacros] = useState<WirelessMacro[] | null>(null);
     const [formOpen, setFormOpen] = useState(false);
     const [editing, setEditing] = useState<WirelessMacro>();
+    const {t} = useTranslation();
 
     const load = async () => {
         try {
             setMacros((await api.get('/api/v1/wireless-macros/')).results);
         } catch {
-            Message.error('Не удалось загрузить список макросов');
+            Message.error(t('load_macros_error'));
         }
     };
     useEffect(() => {
@@ -37,7 +39,7 @@ const MacrosWirelessDashboard: React.FC = () => {
             await api.delete(`/api/v1/wireless-macros/${id}/`);
             setMacros(prev => prev!.filter(m => m.id !== id));
         } catch {
-            Message.error('Не удалось удалить макрос');
+            Message.error(t('delete_macro_error'));
         }
     };
 
@@ -62,7 +64,7 @@ const MacrosWirelessDashboard: React.FC = () => {
             </FREC>
 
             {macros.length === 0 && (
-                <p style={{color: plt.text.primary}}>Пока ничего не сохранено. Нажмите «+», чтобы добавить.</p>
+                <p style={{color: plt.text.primary}}>{t('nothing_saved')}</p>
             )}
 
             <List dense sx={{width: '100%'}}>
@@ -73,7 +75,7 @@ const MacrosWirelessDashboard: React.FC = () => {
                         onClick={() => sendMacro(m.name)}
                         secondaryAction={(
                             <Box sx={{opacity: '60%'}}>
-                                <Tooltip title="Редактировать">
+                                <Tooltip title={t('edit')}>
                                     <IconButton size="small" onClick={e => {
                                         e.stopPropagation();
                                         setEditing(m);
@@ -82,7 +84,7 @@ const MacrosWirelessDashboard: React.FC = () => {
                                         <EditIcon fontSize="small"/>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Удалить">
+                                <Tooltip title={t('delete')}>
                                     <IconButton size="small" onClick={e => {
                                         e.stopPropagation();
                                         handleDelete(m.id).then();

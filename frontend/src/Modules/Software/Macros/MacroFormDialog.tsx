@@ -4,6 +4,7 @@ import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTi
 import {Message} from 'Core/components/Message';
 import {useApi} from "../../Api/useApi";
 import {WirelessMacro} from "../Types/Software";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     /** Открыто ли окно */
@@ -22,6 +23,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
     const [priority, setPriority] = useState(macro?.priority ?? 0);
     const [saving, setSaving] = useState(false);
     const {api} = useApi();
+    const {t} = useTranslation();
 
     /* Подтягиваем данные при повторных открытиях диалога */
     useEffect(() => {
@@ -36,7 +38,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
 
     const handleSave = async () => {
         if (!name.trim()) {
-            Message.error('Имя не может быть пустым');
+            Message.error(t('macro_name_empty'));
             return;
         }
         setSaving(true);
@@ -57,7 +59,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
             onClose();
         } catch (e) {
             console.error(e);
-            Message.error('Не удалось сохранить макрос');
+            Message.error(t('macro_saved_error'));
         } finally {
             setSaving(false);
         }
@@ -65,11 +67,11 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-            <DialogTitle>{isEdit ? 'Редактировать макрос' : 'Новый макрос'}</DialogTitle>
+            <DialogTitle>{isEdit ? t('edit_macro') : t('new_macro')}</DialogTitle>
 
             <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                 <TextField
-                    label="Имя"
+                    label={t('macro_name')}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     fullWidth
@@ -77,7 +79,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
                     sx={{mt: 1}}
                 />
                 <TextField
-                    label="Приоритет (меньше — выше)"
+                    label={t('priority')}
                     type="number"
                     value={priority}
                     onChange={e => setPriority(parseInt(e.target.value, 10) || 0)}
@@ -86,9 +88,9 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={onClose} disabled={saving}>Отмена</Button>
+                <Button onClick={onClose} disabled={saving}>{t('cancel')}</Button>
                 <Button onClick={handleSave} variant="contained" disabled={saving}>
-                    {saving ? <CircularProgress size="1.2rem"/> : 'Сохранить'}
+                    {saving ? <CircularProgress size="1.2rem"/> : t('save')}
                 </Button>
             </DialogActions>
         </Dialog>
