@@ -5,7 +5,7 @@ import {FC, FCA, FCC, FCCC, FCSC, FR, FRCC, FRSC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {Button} from "@mui/material";
+import {Button, useMediaQuery} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useDispatch} from 'react-redux';
@@ -19,7 +19,7 @@ const screenshot2 = 'https://via.placeholder.com/400x250?text=Screenshot+2';
 const screenshot3 = 'https://via.placeholder.com/400x250?text=Screenshot+3';
 
 const XLMineLanding: React.FC = () => {
-    const {plt} = useTheme();
+    const {plt, theme} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -28,6 +28,7 @@ const XLMineLanding: React.FC = () => {
     const angleRef = useRef(0);
     const mouseOffsetRef = useRef({x: 0, y: 0});
     const [loading, setLoading] = useState(false);
+    const isGtSm = useMediaQuery('(min-width: 576px)');
 
     // Настройки параллакса
     const MOVE_PERCENT = 25;   // усиление движения мышью
@@ -105,7 +106,7 @@ const XLMineLanding: React.FC = () => {
                 transition: 'background-position 0.2s ease-out',
             }} onMouseMove={handleMouseMove}>
                 <FCCC w="100%">
-                    <FCSC g={1} maxW={850} style={{textAlign: 'center'}}>
+                    <FCSC px={2} g={1} maxW={850} style={{textAlign: 'center'}}>
                         <h1 style={{
                             fontSize: '5rem', margin: 0, lineHeight: '4rem',
                             position: 'relative', width: 'fit-content',
@@ -133,7 +134,8 @@ const XLMineLanding: React.FC = () => {
                                 position: 'absolute',
                             }}>xlmine</span>
                         </h1>
-                        <FR cls={'hover-scale-4'} cursorPointer onClick={_ => {
+                        <FR cls={'hover-scale-4'} color={theme.colors.primary.main} sx={{filter: 'brightness(2)'}}
+                            fontWeight={'bold'} cursorPointer onClick={_ => {
                             window.open('https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html', '_blank');
                         }}>
                             <span>{t('xlmine_java_required')}</span>
@@ -141,7 +143,7 @@ const XLMineLanding: React.FC = () => {
                         <Button onClick={handleDownload}
                                 className="hover-scale-5 ftrans-200-eio"
                                 sx={{
-                                    fontSize: '1.5rem',
+                                    fontSize: isGtSm ? '1.5rem' : '1.2rem',
                                     backdropFilter: 'blur(5px) saturate(2) brightness(4)',
                                     backgroundColor: 'transparent',
                                     '&:hover': {

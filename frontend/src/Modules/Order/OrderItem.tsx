@@ -9,6 +9,7 @@ import OrderStatus from "Order/OrderStatus";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgress from "Core/components/elements/CircularProgress";
+import {useTranslation} from "react-i18next";
 
 interface OrderItemProps {
     order: IOrder;
@@ -27,6 +28,7 @@ const OrderItem: React.FC<OrderItemProps> = (
     const navigate = useNavigate();
     const {plt} = useTheme();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {t} = useTranslation();
 
     return (
         <FRBC p={2} g={1} rounded={3} wrap flexGrow={1} sx={{
@@ -73,7 +75,7 @@ const OrderItem: React.FC<OrderItemProps> = (
                 </FC>
                 <FRBC>
                     <span>
-                        <span>Создан </span>
+                        <span>{t('order_created_at')}&nbsp;</span>
                         <span className={'fw-6'}>
                             {moment(order.created_at).calendar().charAt(0).toLowerCase() +
                                 moment(order.created_at).calendar().slice(1)}

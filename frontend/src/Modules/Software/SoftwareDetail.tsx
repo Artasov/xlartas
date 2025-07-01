@@ -57,6 +57,7 @@ const SoftwareDetailComponent: React.FC = () => {
             setLicenseLoading(true);
             api.get(`/api/v1/license/${software.id}/`).then(data => {
                 if (data.no_one) {
+                    setLicenseHours(0);
                     setIsTested(false);
                     return;
                 }

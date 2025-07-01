@@ -170,5 +170,13 @@
   "xlmine_description": "Just my personal server for playing with someone without high ping, Radmin, Realms, with lots of mods and decent shaders and textures. Mobile devices may have low fps due to many mods.",
   "xlmine_footer": "xlmine © 2025 xlartas. All rights reserved.",
   "by_private_message": "In Chat",
-  "freekassa_help_desc": "When paying through Freekassa, less than 1001 RUB you need to have/register the FK Wallet wallet and replenish it, or pay with crypto. You can pay for more than 1000 RUB through SBP / card and in all convenient ways. These are Freekassa restrictions."
+  "order_created_at": "Created",
+  "freekassa_help_desc": "When paying through Freekassa, less than 1001 RUB you need to have/register the FK Wallet wallet and replenish it, or pay with crypto. You can pay for more than 1000 RUB through SBP / card and in all convenient ways. These are Freekassa restrictions.",
+  "free_days": "Free {{days}} days",
+  "test_activation_success": "Test period activated",
+  "test_period_completed": "Test period completed",
+  "you_can_activate_test_period": "You can activate a {{days}}-day test period.",
+  "activate_test_period_question": "Activate test period?",
+  "activating": "Activating...",
+  "confirm": "Confirm"
 }

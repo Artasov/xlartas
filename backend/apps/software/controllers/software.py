@@ -5,6 +5,7 @@ from datetime import timedelta
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -73,6 +74,6 @@ async def activate_test_period(request, software_id: int):
         )
 
     return Response(
-        {'detail': 'Тестовый период активирован', 'license_ends_at': license_obj.license_ends_at},
+        {'detail': _('The test period is activated'), 'license_ends_at': license_obj.license_ends_at},
         status=HTTP_200_OK
     )

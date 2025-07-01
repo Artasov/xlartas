@@ -78,9 +78,9 @@ const ParallaxLogo: React.FC = () => {
                 <Logo width="100%" cls="w-100 ms-3 maxw-700"/>
                 <StyledH1 fontSize={fontSize}>XLARTAS</StyledH1>
                 {/* Кнопка "Sign in" / "Profile" */}
-                <FCCC pos="absolute" zIndex={22} right="6.6%" bottom="32%">
+                <FCCC pos="absolute" zIndex={22} right="6.7%" bottom="32%">
                     <Button
-                        className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
+                        className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-3' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
                         onClick={handleAuthClick}>
                         {isAuthenticated ? t('profile') : t('sign_in')}
                     </Button>

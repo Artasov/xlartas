@@ -1504,6 +1504,9 @@ msgstr "Последние действия"
 msgid "None available"
 msgstr "Нет данных"
 
+msgid "The test period is activated"
+msgstr "Тестовый период активирован"
+
 #, python-format
 msgid ""
 "\n"

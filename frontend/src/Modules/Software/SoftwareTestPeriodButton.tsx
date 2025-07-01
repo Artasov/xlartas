@@ -46,7 +46,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
         setIsLoading(true);
         try {
             const response = await api.post(`/api/v1/software/${softwareId}/activate-test-period/`);
-            Message.success(response.detail || 'Тестовый период активирован');
+            Message.success(response.detail || t('test_activation_success'));
             refreshLicense();
             setIsModalOpen(false);
         } catch (error) {
@@ -60,7 +60,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
         return (
             <FCC g={1}>
                 <CheckCircleOutlineIcon style={{color: theme.colors.success.main}}/>
-                <span>Тестовый период пройден</span>
+                <span>{t('test_period_completed')}</span>
             </FCC>
         );
     }
@@ -79,7 +79,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
                     px: 0.9,
                 }}
             >
-                Free {testPeriodDays} days
+                {t('free_days', {days: testPeriodDays})}
             </FRCC>
             <Dialog
                 open={isModalOpen}
@@ -87,16 +87,16 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
             >
                 <DialogContent>
                     <FCC maxW={300} g={1}>
-                        <p style={{textAlign: 'center', margin: 0}}>Вы можете активировать тестовый период
-                            продолжительностью {testPeriodDays} дней.</p>
-                        <p style={{textAlign: 'center', margin: 0}}>Активировать тестовый период?</p>
+                        <p style={{textAlign: 'center', margin: 0}}>
+                            {t('you_can_activate_test_period', {days: testPeriodDays})}
+                        </p>
+                        <p style={{textAlign: 'center', margin: 0}}>
+                            {t('activate_test_period_question')}
+                        </p>
                         <FRCC g={1}>
                             <Button onClick={handleActivate} disabled={isLoading} sx={{width: '100%', fontWeight: 700}}>
-                                {isLoading ? 'Активируется...' : 'Подтвердить'}
+                                {isLoading ? t('activating') : t('confirm')}
                             </Button>
-                            {/*<Button onClick={() => setIsModalOpen(false)}>*/}
-                            {/*    Отмена*/}
-                            {/*</Button>*/}
                         </FRCC>
                     </FCC>
                 </DialogContent>
