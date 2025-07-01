@@ -71,7 +71,10 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
             {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>} 
             <span style={{flexGrow:1}}>{file.name}</span>
             <FRSE g={0.5}>
-                {file.is_favorite ? <StarIcon fontSize="small"/> : <StarBorderIcon fontSize="small"/>}
+                <IconButton size="small" onClick={(e)=>{e.stopPropagation();toggleFav();}}
+                            sx={{color:file.is_favorite? '#fbc02d': 'inherit'}}>
+                    {file.is_favorite ? <StarIcon fontSize="small"/> : <StarBorderIcon fontSize="small"/>}
+                </IconButton>
                 <IconButton size="small" onClick={(e) => {e.stopPropagation();setAnchorEl(e.currentTarget);}}>
                     <MoreVertIcon fontSize="small"/>
                 </IconButton>
