@@ -13,6 +13,7 @@ import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useApi} from "../Api/useApi";
+import {useTranslation} from 'react-i18next';
 
 interface OrderDetailProps {
     className?: string;
@@ -29,6 +30,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const navigate = useNavigate();
     const {plt} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -93,7 +95,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                     <OrderStatus order={order}/>
                     <span>Payment system: {order.payment_system}</span>
                     <span>
-                        <span>Created </span>
+                        <span>{t('order_created')} </span>
                         <span>
                             {moment(order.created_at).calendar().charAt(0).toLowerCase() +
                                 moment(order.created_at).calendar().slice(1)}

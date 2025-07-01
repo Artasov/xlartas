@@ -69,7 +69,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
             open={open}
             onClose={() => !loading && onClose()}
         >
-            <DialogTitle sx={{pb: 1.5}}>Пополнить баланс</DialogTitle>
+            <DialogTitle sx={{pb: 1.5}}>{t('top_up_balance')}</DialogTitle>
             <DialogContent>
                 {!product ? (
                     <CircularProgress size="40px"/>

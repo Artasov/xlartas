@@ -92,7 +92,7 @@ const SkinCapeSetter: React.FC = () => {
                     sx={{fontWeight: 'bold'}}
                     component="label"
                 >
-                    Скин
+                    {t('skin')}
                     <input
                         hidden
                         accept=".png"
@@ -108,7 +108,7 @@ const SkinCapeSetter: React.FC = () => {
                     sx={{fontWeight: 'bold'}}
                     component="label"
                 >
-                    Плащ
+                    {t('cape')}
                     <input
                         hidden
                         accept=".png"

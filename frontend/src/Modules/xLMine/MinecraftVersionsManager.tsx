@@ -132,13 +132,13 @@ const LauncherManager: React.FC = () => {
                 <FC g={1}>
                     <FC g={1}>
                         <FRSC g={1}>
-                            <span>Установщик</span>
+                            <span>{t('installer')}</span>
                             <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
                         </FRSC>
                         <TextField
                             sx={{width: 'fit-content'}}
                             size={'small'}
-                            label="Версия"
+                            label={t('version')}
                             value={version}
                             onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
                             fullWidth
@@ -148,7 +148,7 @@ const LauncherManager: React.FC = () => {
                             disabled={!file}
                             sx={{fontWeight: file ? 'bold' : ''}}
                         >
-                            Загрузить
+                            {t('upload')}
                         </Button>
                         {isUploading && <FCCC><CircularProgress size={32}/></FCCC>}
                     </FC>
@@ -165,10 +165,10 @@ const LauncherManager: React.FC = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                <TableCell>Версия</TableCell>
+                                <TableCell>{t('version')}</TableCell>
                                 <TableCell>SHA256</TableCell>
-                                <TableCell>Дата создания</TableCell>
-                                <TableCell>Действия</TableCell>
+                                <TableCell>{t('creation_date')}</TableCell>
+                                <TableCell>{t('actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -401,7 +401,7 @@ const ReleaseManager: React.FC = () => {
                                 onClick={handleUpload}
                                 disabled={!file || !securityValid || isUploading}
                             >
-                                Загрузить
+                                {t('upload')}
                             </Button>
                         </FR>
                         {isUploading && (
@@ -430,10 +430,10 @@ const ReleaseManager: React.FC = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                <TableCell>Версия</TableCell>
+                                <TableCell>{t('version')}</TableCell>
                                 <TableCell>SHA256</TableCell>
-                                <TableCell>Дата создания</TableCell>
-                                <TableCell>Действия</TableCell>
+                                <TableCell>{t('creation_date')}</TableCell>
+                                <TableCell>{t('actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

@@ -4,6 +4,7 @@ import {IOrder} from "types/commerce/shop";
 import {FR} from "wide-containers";
 import StatusItem from './OrderStatusItem';
 import {useTheme} from "Theme/ThemeContext";
+import {useTranslation} from 'react-i18next';
 
 interface OrderStatusProps {
     order: IOrder;
@@ -11,22 +12,23 @@ interface OrderStatusProps {
 
 const OrderStatus: React.FC<OrderStatusProps> = ({order}) => {
     const {theme} = useTheme();
+    const {t} = useTranslation();
 
     const statusList = [
         {
-            label: 'Paid',
+            label: t('status_paid'),
             isActive: order.is_paid,
             color: order.is_paid ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не оплачен"
         },
         {
-            label: 'Inited',
+            label: t('status_inited'),
             isActive: order.is_inited,
             color: order.is_inited ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не инициализирован"
         },
         {
-            label: 'Executed',
+            label: t('status_executed'),
             isActive: order.is_executed,
             color: order.is_executed ? theme.colors.secondary.main : theme.colors.error.main,
             showNegative: true, // Показывать "Не выполнен"
