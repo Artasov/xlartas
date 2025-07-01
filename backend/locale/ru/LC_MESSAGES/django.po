@@ -1,2057 +1,1512 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 13:15+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2025-07-01 15:30+0300\n"
+"Last-Translator: xlartas <EMAIL@ADDRESS>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
-#: .\apps\analytics\controllers\graphics.py:35
-#: .\apps\analytics\controllers\graphics.py:103
+
 msgid "Invalid start_date"
-msgstr ""
+msgstr "Неверная дата начала"
 
-#: .\apps\analytics\controllers\graphics.py:42
-#: .\apps\analytics\controllers\graphics.py:110
 msgid "Invalid end_date"
-msgstr ""
+msgstr "Неверная дата окончания"
 
-#: .\apps\analytics\models.py:9
 msgid "IP address"
-msgstr ""
+msgstr "IP-адрес"
 
-#: .\apps\analytics\models.py:10 .\apps\chat\models.py:25
-#: .\apps\commerce\models\client.py:23 .\apps\commerce\models\employee.py:57
-#: .\apps\commerce\models\employee.py:75
-#: .\apps\commerce\models\gift_certificate.py:40
-#: .\apps\commerce\models\order.py:18 .\apps\commerce\models\payment.py:70
-#: .\apps\confirmation\models\base.py:26
-#: .\apps\social_oauth\providers\discord\model.py:8
-#: .\apps\social_oauth\providers\google\model.py:8
-#: .\apps\social_oauth\providers\vk\model.py:8
-#: .\apps\social_oauth\providers\yandex\model.py:8
-#: .\apps\software\models\software.py:67 .\apps\tbank\models.py:22
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 msgid "Flexible orders chart"
-msgstr ""
+msgstr "Гибкий график заказов"
 
 msgid "Period:"
-msgstr ""
+msgstr "Период:"
 
 msgid "Day"
-msgstr ""
+msgstr "День"
 
 msgid "Week"
-msgstr ""
+msgstr "Неделя"
 
 msgid "Month"
-msgstr ""
+msgstr "Месяц"
 
 msgid "Year"
-msgstr ""
+msgstr "Год"
 
 msgid "Group by:"
-msgstr ""
+msgstr "Группировать по:"
 
 msgid "Default"
-msgstr ""
+msgstr "По умолчанию"
 
 msgid "Hour"
-msgstr ""
+msgstr "Час"
 
-#: .\apps\analytics\templates\analytics\chart_visits.html:4
 msgid "Flexible visits chart"
-msgstr ""
+msgstr "Гибкий график посещений"
 
-#: .\apps\chat\apps.py:10
 msgid "Chat"
-msgstr ""
+msgstr "Чат"
 
-#: .\apps\chat\models.py:15
 msgid "Room name"
-msgstr ""
+msgstr "Название комнаты"
 
-#: .\apps\chat\models.py:16
 msgid "Participants"
-msgstr ""
+msgstr "Участники"
 
-#: .\apps\chat\models.py:17
 msgid "Max participants"
-msgstr ""
+msgstr "Максимум участников"
 
-#: .\apps\chat\models.py:20 .\apps\chat\models.py:26
 msgid "Room"
-msgstr ""
+msgstr "Комната"
 
-#: .\apps\chat\models.py:21
 msgid "Rooms"
-msgstr ""
+msgstr "Комнаты"
 
-#: .\apps\chat\models.py:27 .\apps\surveys\models.py:43
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
-#: .\apps\chat\models.py:28
 msgid "Is read"
-msgstr ""
+msgstr "Прочитано"
 
-#: .\apps\chat\models.py:29 .\apps\chat\models.py:42
 msgid "Files"
-msgstr ""
+msgstr "Файлы"
 
-#: .\apps\chat\models.py:30
 msgid "Is important"
-msgstr ""
+msgstr "Важно"
 
-#: .\apps\chat\models.py:33
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
-#: .\apps\chat\models.py:34
 msgid "Messages"
-msgstr ""
+msgstr "Сообщения"
 
-#: .\apps\chat\models.py:38 .\apps\chat\models.py:41
-#: .\apps\company\models.py:33 .\apps\software\models\software.py:24
-#: .\apps\software\models\software.py:38 .\apps\xlmine\models.py:32
-#: .\apps\xlmine\models.py:38 .\apps\xlmine\models\base.py:12
-#: .\apps\xlmine\models\base.py:24
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
-#: .\apps\cloudpayments\exceptions\base.py:11
-#: .\apps\tbank\exceptions\base.py:11
 msgid "TBank payment does not exist."
-msgstr ""
+msgstr "Платёж TBank не существует."
 
-#: .\apps\cloudpayments\exceptions\base.py:16
-#: .\apps\tbank\exceptions\base.py:16
 msgid "TBank payment failed to initialize."
-msgstr ""
+msgstr "Не удалось инициализировать платёж TBank."
 
-#: .\apps\cloudpayments\exceptions\base.py:22
-#: .\apps\tbank\exceptions\base.py:22
 msgid "The real status and notification status did not match."
-msgstr ""
+msgstr "Реальный статус и статус уведомления не совпадают."
 
-#: .\apps\cloudpayments\exceptions\base.py:28
-#: .\apps\tbank\exceptions\base.py:28
 msgid "The ip address is not allowed for notification."
-msgstr ""
+msgstr "IP-адрес не разрешён для уведомлений."
 
-#: .\apps\cloudpayments\exceptions\base.py:33
-#: .\apps\tbank\exceptions\base.py:33
 msgid "Invalid notification parameters."
-msgstr ""
+msgstr "Недопустимые параметры уведомления."
 
-#: .\apps\cloudpayments\models.py:17
 msgid "Created"
-msgstr ""
+msgstr "Создано"
 
-#: .\apps\cloudpayments\models.py:18
 msgid "Authorized"
-msgstr ""
+msgstr "Авторизовано"
 
-#: .\apps\cloudpayments\models.py:19
 msgid "Completed"
-msgstr ""
+msgstr "Завершено"
 
-#: .\apps\cloudpayments\models.py:20
 msgid "Declined"
-msgstr ""
+msgstr "Отклонено"
 
-#: .\apps\cloudpayments\models.py:21
 msgid "Refunded"
-msgstr ""
+msgstr "Возвращено"
 
-#: .\apps\cloudpayments\models.py:23
 msgid "CloudPayments transaction id"
-msgstr ""
+msgstr "ID транзакции CloudPayments"
 
-#: .\apps\cloudpayments\models.py:24 .\apps\commerce\models\client.py:24
-#: .\apps\commerce\models\employee.py:42 .\apps\freekassa\models.py:18
-#: .\apps\notify\models.py:26 .\apps\tbank\models.py:60
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
-#: .\apps\cloudpayments\models.py:27
 msgid "CloudPaymentAPI"
-msgstr ""
+msgstr "CloudPaymentAPI"
 
-#: .\apps\cloudpayments\models.py:28 .\apps\commerce\models\payment.py:20
 msgid "CloudPayments"
-msgstr ""
+msgstr "CloudPayments"
 
-#: .\apps\cloudpayments\templates\cloudpayments\pay.html:78
 msgid "Order successfully paid!"
-msgstr ""
+msgstr "Заказ успешно оплачен!"
 
-#: .\apps\cloudpayments\templates\cloudpayments\pay.html:82
 msgid "Payment succeeded but order confirmation failed. We are investigating."
-msgstr ""
+msgstr "Оплата прошла, но подтверждение заказа не удалось. Мы разбираемся."
 
-#: .\apps\cloudpayments\templates\cloudpayments\pay.html:96
 msgid "Payment error:"
-msgstr ""
+msgstr "Ошибка оплаты:"
 
-#: .\apps\commerce\admin\order.py:61 .\apps\commerce\admin\shop.py:81
-#: .\utils\admin_mixins.py:12
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
-#: .\apps\commerce\admin\order.py:80
 msgid "Init без оплаты"
-msgstr ""
+msgstr "Инициализация без оплаты"
 
-#: .\apps\commerce\admin\order.py:91
 msgid "Init с оплатой"
-msgstr ""
+msgstr "Инициализация с оплатой"
 
-#: .\apps\commerce\admin\order.py:102
 msgid "Execute"
-msgstr ""
+msgstr "Исполнить"
 
-#: .\apps\commerce\admin\order.py:113
 msgid "Отменить без оплаты"
-msgstr ""
+msgstr "Отменить без оплаты"
 
-#: .\apps\commerce\admin\shop.py:32
 msgid "Default Price"
-msgstr ""
+msgstr "Цена по умолчанию"
 
-#: .\apps\commerce\admin\shop.py:38
 msgid "Set installments available"
-msgstr ""
+msgstr "Включить рассрочку"
 
-#: .\apps\commerce\admin\shop.py:44
 msgid "Set installments unavailable"
-msgstr ""
+msgstr "Отключить рассрочку"
 
-#: .\apps\commerce\apps.py:9
 msgid "Commerce"
-msgstr ""
+msgstr "Коммерция"
 
-#: .\apps\commerce\exceptions\client.py:10
 msgid "Client not found."
-msgstr ""
+msgstr "Клиент не найден."
 
-#: .\apps\commerce\exceptions\client.py:15
 msgid "You do not have permission to access this client."
-msgstr ""
+msgstr "У вас нет прав доступа к этому клиенту."
 
-#: .\apps\commerce\exceptions\order.py:13
 msgid "Unknown order instance"
-msgstr ""
+msgstr "Неизвестный экземпляр заказа"
 
-#: .\apps\commerce\exceptions\order.py:18
 msgid "The order cannot be processed because it has already been returned."
-msgstr ""
+msgstr "Заказ не может быть обработан, так как уже возвращён."
 
-#: .\apps\commerce\exceptions\order.py:23
 msgid "Order not found"
-msgstr ""
+msgstr "Заказ не найден"
 
-#: .\apps\commerce\exceptions\order.py:29
 msgid "To cancel a paid order and get a refund, please contact us."
-msgstr ""
+msgstr "Чтобы отменить оплаченный заказ и получить возврат, свяжитесь с нами."
 
-#: .\apps\commerce\exceptions\order.py:34
 msgid "The order cannot be canceled because it refunded."
-msgstr ""
+msgstr "Заказ нельзя отменить, по нему уже произведён возврат."
 
-#: .\apps\commerce\exceptions\order.py:39
 msgid "The order has already been completed."
-msgstr ""
+msgstr "Заказ уже выполнен."
 
-#: .\apps\commerce\exceptions\order.py:44
 msgid "The order has already been paid."
-msgstr ""
+msgstr "Заказ уже оплачен."
 
-#: .\apps\commerce\exceptions\order.py:49
 msgid "The order has already been cancelled."
-msgstr ""
+msgstr "Заказ уже отменён."
 
-#: .\apps\commerce\exceptions\order.py:54
 msgid "The order has not yet been completed."
-msgstr ""
+msgstr "Заказ ещё не выполнен."
 
-#: .\apps\commerce\exceptions\payment.py:12
 msgid "Currency not supported."
-msgstr ""
+msgstr "Валюта не поддерживается."
 
-#: .\apps\commerce\exceptions\payment.py:17
 msgid "The payment system is not supported for currencies."
-msgstr ""
+msgstr "Платёжная система не поддерживается для этой валюты."
 
-#: .\apps\commerce\exceptions\payment.py:22
 msgid "Payment system not found."
-msgstr ""
+msgstr "Платёжная система не найдена."
 
-#: .\apps\commerce\exceptions\payment.py:27
 msgid "Init error."
-msgstr ""
+msgstr "Ошибка инициализации."
 
-#: .\apps\commerce\exceptions\product.py:12
 msgid "Product not found."
-msgstr ""
+msgstr "Товар не найден."
 
-#: .\apps\commerce\exceptions\product.py:17
 msgid "Unknown product type."
-msgstr ""
+msgstr "Неизвестный тип продукта."
 
-#: .\apps\commerce\exceptions\promocode.py:14
 msgid "Promocode not found."
-msgstr ""
+msgstr "Промокод не найден."
 
-#: .\apps\commerce\exceptions\promocode.py:19
 msgid "Promocode not applicable for this currency."
-msgstr ""
+msgstr "Промокод не применим к этой валюте."
 
-#: .\apps\commerce\exceptions\promocode.py:24
 msgid "Promocode not applicable for this client."
-msgstr ""
+msgstr "Промокод не применим к этому клиенту."
 
-#: .\apps\commerce\exceptions\promocode.py:29
 msgid "Promocode not applicable for this product."
-msgstr ""
+msgstr "Промокод не применим к этому продукту."
 
-#: .\apps\commerce\exceptions\promocode.py:34
 msgid "Promocode not started yet."
-msgstr ""
+msgstr "Промокод ещё не активен."
 
-#: .\apps\commerce\exceptions\promocode.py:39
 msgid "Promocode has expired."
-msgstr ""
+msgstr "Срок действия промокода истёк."
 
-#: .\apps\commerce\exceptions\promocode.py:44
 msgid "Maximum usage for this promocode exceeded."
-msgstr ""
+msgstr "Достигнут лимит использования промокода."
 
-#: .\apps\commerce\exceptions\promocode.py:49
 msgid "Maximum usage per client exceeded."
-msgstr ""
+msgstr "Превышен лимит использования промокода на клиента."
 
-#: .\apps\commerce\exceptions\promocode.py:54
 msgid "Usage too frequent for this promocode."
-msgstr ""
+msgstr "Слишком частое использование промокода."
 
-#: .\apps\commerce\models\balance.py:11
 msgid "Balance product"
-msgstr ""
+msgstr "Пополнение баланса"
 
-#: .\apps\commerce\models\balance.py:12
 msgid "Balance products"
-msgstr ""
+msgstr "Продукты пополнения баланса"
 
-#: .\apps\commerce\models\balance.py:19
-#: .\apps\commerce\models\gift_certificate.py:28
-#: .\apps\commerce\models\product.py:30 .\apps\commerce\models\product.py:48
-#: .\apps\commerce\models\promocode.py:35
 msgid "Product"
-msgstr ""
+msgstr "Продукт"
 
-#: .\apps\commerce\models\balance.py:20
 msgid "Requested amount"
-msgstr ""
+msgstr "Запрошенная сумма"
 
-#: .\apps\commerce\models\balance.py:23
 msgid "Balance product order"
-msgstr ""
+msgstr "Заказ пополнения баланса"
 
-#: .\apps\commerce\models\balance.py:24
 msgid "Balance product orders"
-msgstr ""
+msgstr "Заказы пополнения баланса"
 
-#: .\apps\commerce\models\client.py:17 .\apps\commerce\models\employee.py:38
-#: .\apps\freekassa\models.py:10
 msgid "New"
-msgstr ""
+msgstr "Новый"
 
-#: .\apps\commerce\models\client.py:18
 msgid "Active"
-msgstr ""
+msgstr "Активный"
 
-#: .\apps\commerce\models\client.py:19
 msgid "Flickering"
-msgstr ""
+msgstr "Мерцающий"
 
-#: .\apps\commerce\models\client.py:20
 msgid "Rejection"
-msgstr ""
+msgstr "Отклонение"
 
-#: .\apps\commerce\models\client.py:22
 msgid "About Me"
-msgstr ""
+msgstr "О себе"
 
-#: .\apps\commerce\models\client.py:27
 msgid "Client"
-msgstr ""
+msgstr "Клиент"
 
-#: .\apps\commerce\models\client.py:28
 msgid "Clients"
-msgstr ""
+msgstr "Клиенты"
 
-#: .\apps\commerce\models\employee.py:15
 msgid "Self employed"
-msgstr ""
+msgstr "Самозанятый"
 
-#: .\apps\commerce\models\employee.py:16
 msgid "Individual entrepreneur"
-msgstr ""
+msgstr "Индивидуальный предприниматель"
 
-#: .\apps\commerce\models\employee.py:18
 msgid "Legal document"
-msgstr ""
+msgstr "Юридический документ"
 
-#: .\apps\commerce\models\employee.py:20
 msgid "Legal type"
-msgstr ""
+msgstr "Юридический тип"
 
-#: .\apps\commerce\models\employee.py:22
 msgid "Bank BIK"
-msgstr ""
+msgstr "БИК банка"
 
-#: .\apps\commerce\models\employee.py:23
 msgid "Bank name"
-msgstr ""
+msgstr "Название банка"
 
-#: .\apps\commerce\models\employee.py:24
 msgid "Correspondent account"
-msgstr ""
+msgstr "Корреспондентский счёт"
 
-#: .\apps\commerce\models\employee.py:25
 msgid "Settlement account"
-msgstr ""
+msgstr "Расчётный счёт"
 
-#: .\apps\commerce\models\employee.py:26 .\apps\company\models.py:14
 msgid "Address"
-msgstr ""
+msgstr "Адрес"
 
-#: .\apps\commerce\models\employee.py:27
 msgid "Legal address"
-msgstr ""
+msgstr "Юридический адрес"
 
-#: .\apps\commerce\models\employee.py:28
 msgid "INN"
-msgstr ""
+msgstr "ИНН"
 
-#: .\apps\commerce\models\employee.py:30
 msgid "OGRN"
-msgstr ""
+msgstr "ОГРН"
 
-#: .\apps\commerce\models\employee.py:39
 msgid "Working"
-msgstr ""
+msgstr "Работает"
 
-#: .\apps\commerce\models\employee.py:40
 msgid "Not Working"
-msgstr ""
+msgstr "Не работает"
 
-#: .\apps\commerce\models\employee.py:44
 msgid "Education"
-msgstr ""
+msgstr "Образование"
 
-#: .\apps\commerce\models\employee.py:45
 msgid "About me"
-msgstr ""
+msgstr "О себе"
 
-#: .\apps\commerce\models\employee.py:46
 msgid "Experience"
-msgstr ""
+msgstr "Опыт"
 
-#: .\apps\commerce\models\employee.py:47
 msgid "Is employed"
-msgstr ""
+msgstr "Трудоустроен"
 
-#: .\apps\commerce\models\employee.py:48
 msgid "Experience start date"
-msgstr ""
+msgstr "Дата начала опыта"
 
-#: .\apps\commerce\models\employee.py:49
 msgid "Automatic schedule renewal"
-msgstr ""
+msgstr "Автоматическое продление расписания"
 
-#: .\apps\commerce\models\employee.py:52
 msgid "Employee"
-msgstr ""
+msgstr "Сотрудник"
 
-#: .\apps\commerce\models\employee.py:53
 msgid "Employees"
-msgstr ""
+msgstr "Сотрудники"
 
-#: .\apps\commerce\models\employee.py:58
 msgid "Start"
-msgstr ""
+msgstr "Начало"
 
-#: .\apps\commerce\models\employee.py:59
 msgid "End"
-msgstr ""
+msgstr "Конец"
 
-#: .\apps\commerce\models\employee.py:62
 msgid "Employee availability Interval"
-msgstr ""
+msgstr "Интервал доступности сотрудника"
 
-#: .\apps\commerce\models\employee.py:63
 msgid "Employee availability Intervals"
-msgstr ""
+msgstr "Интервалы доступности сотрудника"
 
-#: .\apps\commerce\models\employee.py:71
 msgid "Sick Leave"
-msgstr ""
+msgstr "Больничный"
 
-#: .\apps\commerce\models\employee.py:72
 msgid "Maternity Leave"
-msgstr ""
+msgstr "Декрет"
 
-#: .\apps\commerce\models\employee.py:73
 msgid "Unpaid Leave"
-msgstr ""
+msgstr "Отпуск без оплаты"
 
-#: .\apps\commerce\models\employee.py:76
 msgid "Leave type"
-msgstr ""
+msgstr "Тип отпуска"
 
-#: .\apps\commerce\models\employee.py:77
-#: .\apps\commerce\models\promocode.py:68 .\apps\mailing\models.py:16
 msgid "Start date"
-msgstr ""
+msgstr "Дата начала"
 
-#: .\apps\commerce\models\employee.py:78
-#: .\apps\commerce\models\promocode.py:70
 msgid "End date"
-msgstr ""
+msgstr "Дата окончания"
 
-#: .\apps\commerce\models\employee.py:79
 msgid "Reason"
-msgstr ""
+msgstr "Причина"
 
-#: .\apps\commerce\models\employee.py:82
 msgid "Leave"
-msgstr ""
+msgstr "Отпуск"
 
-#: .\apps\commerce\models\employee.py:83
 msgid "Leaves"
-msgstr ""
+msgstr "Отпуска"
 
-#: .\apps\commerce\models\gift_certificate.py:19
 msgid "Gift certificate"
-msgstr ""
+msgstr "Подарочный сертификат"
 
-#: .\apps\commerce\models\gift_certificate.py:20
 msgid "Gift certificates"
-msgstr ""
+msgstr "Подарочные сертификаты"
 
-#: .\apps\commerce\models\gift_certificate.py:31
 msgid "Gift certificate order"
-msgstr ""
+msgstr "Заказ подарочного сертификата"
 
-#: .\apps\commerce\models\gift_certificate.py:32
 msgid "Gift certificate orders"
-msgstr ""
+msgstr "Заказы подарочных сертификатов"
 
-#: .\apps\commerce\models\gift_certificate.py:37
-#: .\apps\commerce\models\order.py:43
 msgid "Order"
-msgstr ""
+msgstr "Заказ"
 
-#: .\apps\commerce\models\gift_certificate.py:45
 msgid "Gift certificate usage"
-msgstr ""
+msgstr "Использование подарочного сертификата"
 
-#: .\apps\commerce\models\gift_certificate.py:46
 msgid "Gift certificate usages"
-msgstr ""
+msgstr "Использования подарочного сертификата"
 
-#: .\apps\commerce\models\order.py:19 .\apps\commerce\models\payment.py:33
 msgid "Amount"
-msgstr ""
+msgstr "Сумма"
 
-#: .\apps\commerce\models\order.py:20 .\apps\commerce\models\payment.py:78
-#: .\apps\tbank\models.py:80
 msgid "Payment"
-msgstr ""
+msgstr "Платёж"
 
-#: .\apps\commerce\models\order.py:25 .\apps\commerce\models\payment.py:26
-#: .\apps\commerce\models\payment.py:34 .\apps\commerce\models\promocode.py:33
 msgid "Currency"
-msgstr ""
+msgstr "Валюта"
 
-#: .\apps\commerce\models\order.py:27
 msgid "Payment System"
-msgstr ""
+msgstr "Платёжная система"
 
-#: .\apps\commerce\models\order.py:33 .\apps\commerce\models\promocode.py:73
 msgid "Promocode"
-msgstr ""
+msgstr "Промокод"
 
-#: .\apps\commerce\models\order.py:36
 msgid "Is inited"
-msgstr ""
+msgstr "Инициализировано"
 
-#: .\apps\commerce\models\order.py:37
 msgid "Is executed"
-msgstr ""
+msgstr "Выполнено"
 
-#: .\apps\commerce\models\order.py:38 .\apps\commerce\models\payment.py:72
 msgid "Is paid"
-msgstr ""
+msgstr "Оплачено"
 
-#: .\apps\commerce\models\order.py:39
 msgid "Is cancelled"
-msgstr ""
+msgstr "Отменено"
 
-#: .\apps\commerce\models\order.py:40
 msgid "Is refunded"
-msgstr ""
+msgstr "Возврат произведён"
 
-#: .\apps\commerce\models\order.py:44
 msgid "Orders"
-msgstr ""
+msgstr "Заказы"
 
-#: .\apps\commerce\models\payment.py:11
 msgid "US Dollar"
-msgstr ""
+msgstr "Доллар США"
 
-#: .\apps\commerce\models\payment.py:12
 msgid "Russian Ruble"
-msgstr ""
+msgstr "Российский рубль"
 
-#: .\apps\commerce\models\payment.py:13
 msgid "Euro"
-msgstr ""
+msgstr "Евро"
 
-#: .\apps\commerce\models\payment.py:17
 msgid "HandMade"
-msgstr ""
+msgstr "Вручную"
 
-#: .\apps\commerce\models\payment.py:18
 msgid "TBank"
-msgstr ""
+msgstr "TBank"
 
-#: .\apps\commerce\models\payment.py:19
 msgid "Tinkoff (Installment)"
-msgstr ""
+msgstr "Тинькофф (рассрочка)"
 
-#: .\apps\commerce\models\payment.py:21
 msgid "FreeKassa"
-msgstr ""
+msgstr "FreeKassa"
 
-#: .\apps\commerce\models\payment.py:22
 msgid "Balance"
-msgstr ""
+msgstr "Баланс"
 
-#: .\apps\commerce\models\payment.py:71
 msgid "Payment URL"
-msgstr ""
+msgstr "URL оплаты"
 
-#: .\apps\commerce\models\payment.py:79
 msgid "Payments"
-msgstr ""
+msgstr "Платежи"
 
-#: .\apps\commerce\models\payment.py:84
 msgid "Balance payment"
-msgstr ""
+msgstr "Оплата с баланса"
 
-#: .\apps\commerce\models\payment.py:85
 msgid "Balance payments"
-msgstr ""
+msgstr "Оплаты с баланса"
 
-#: .\apps\commerce\models\payment.py:90
 msgid "Hand made payment"
-msgstr ""
+msgstr "Платёж вручную"
 
-#: .\apps\commerce\models\payment.py:91
 msgid "Hand made payments"
-msgstr ""
+msgstr "Платежи вручную"
 
-#: .\apps\commerce\models\product.py:16 .\apps\commerce\models\promocode.py:59
-#: .\apps\company\models.py:12 .\apps\theme\models.py:14
-#: .\apps\xlmine\models\base.py:44
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
-#: .\apps\commerce\models\product.py:18
 msgid "Picture"
-msgstr ""
+msgstr "Изображение"
 
-#: .\apps\commerce\models\product.py:24 .\apps\commerce\models\promocode.py:61
-#: .\apps\xlmine\models\base.py:52
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
-#: .\apps\commerce\models\product.py:25
 msgid "Short description"
-msgstr ""
+msgstr "Краткое описание"
 
-#: .\apps\commerce\models\product.py:26
 msgid "Is available"
-msgstr ""
+msgstr "Доступно"
 
-#: .\apps\commerce\models\product.py:27
 msgid "Is installment available"
-msgstr ""
+msgstr "Доступна рассрочка"
 
-#: .\apps\commerce\models\product.py:31
 msgid "Products"
-msgstr ""
+msgstr "Продукты"
 
-#: .\apps\commerce\models\product.py:50
 msgid "Exponent"
-msgstr ""
+msgstr "Показатель степени"
 
-#: .\apps\commerce\models\product.py:54
 msgid "Offset"
-msgstr ""
+msgstr "Смещение"
 
-#: .\apps\commerce\models\product.py:59
 msgid "Product Price"
-msgstr ""
+msgstr "Цена продукта"
 
-#: .\apps\commerce\models\product.py:60
 msgid "Product Prices"
-msgstr ""
+msgstr "Цены продуктов"
 
-#: .\apps\commerce\models\promocode.py:31
 msgid "Discount amount"
-msgstr ""
+msgstr "Сумма скидки"
 
-#: .\apps\commerce\models\promocode.py:37
 msgid "Max usage"
-msgstr ""
+msgstr "Максимальное использование"
 
-#: .\apps\commerce\models\promocode.py:39
 msgid "Max usage per user"
-msgstr ""
+msgstr "Максимум на пользователя"
 
-#: .\apps\commerce\models\promocode.py:41 .\apps\tbank\models.py:83
 msgid "Interval days"
-msgstr ""
+msgstr "Интервал (дней)"
 
-#: .\apps\commerce\models\promocode.py:44
 msgid "Specific users"
-msgstr ""
+msgstr "Определённые пользователи"
 
-#: .\apps\commerce\models\promocode.py:47
 msgid "Promocode product discount"
-msgstr ""
+msgstr "Скидка на продукт (промокод)"
 
-#: .\apps\commerce\models\promocode.py:48
 msgid "Promocode product discounts"
-msgstr ""
+msgstr "Скидки на продукт (промокод)"
 
-#: .\apps\commerce\models\promocode.py:56
 msgid "Percentage"
-msgstr ""
+msgstr "Процент"
 
-#: .\apps\commerce\models\promocode.py:57
 msgid "Fixed amount"
-msgstr ""
+msgstr "Фиксированная сумма"
 
-#: .\apps\commerce\models\promocode.py:60
-#: .\apps\confirmation\models\base.py:27 .\apps\xlmine\models\base.py:45
 msgid "Code"
-msgstr ""
+msgstr "Код"
 
-#: .\apps\commerce\models\promocode.py:65
 msgid "Products discounts"
-msgstr ""
+msgstr "Скидки продуктов"
 
-#: .\apps\commerce\models\promocode.py:66
 msgid "Discount type"
-msgstr ""
+msgstr "Тип скидки"
 
-#: .\apps\commerce\models\promocode.py:74
 msgid "Promocodes"
-msgstr ""
+msgstr "Промокоды"
 
-#: .\apps\commerce\models\promocode.py:85
 msgid "Promocode usage"
-msgstr ""
+msgstr "Использование промокода"
 
-#: .\apps\commerce\models\promocode.py:86
 msgid "Promocode usages"
-msgstr ""
+msgstr "Использования промокода"
 
-#: .\apps\company\exceptions.py:10
 msgid "Company not found"
-msgstr ""
+msgstr "Компания не найдена"
 
-#: .\apps\company\exceptions.py:17
 msgid "Company document not found"
-msgstr ""
+msgstr "Документ компании не найден"
 
-#: .\apps\company\models.py:13
 msgid "Person Name"
-msgstr ""
+msgstr "ФИО"
 
-#: .\apps\company\models.py:15
 msgid "Resource url"
-msgstr ""
+msgstr "URL ресурса"
 
-#: .\apps\company\models.py:16
 msgid "ОГРН"
-msgstr ""
+msgstr "ОГРН"
 
-#: .\apps\company\models.py:17
 msgid "ИНН"
-msgstr ""
+msgstr "ИНН"
 
-#: .\apps\company\models.py:18
 msgid "БИК банка"
-msgstr ""
+msgstr "БИК банка"
 
-#: .\apps\company\models.py:19
 msgid "Корреспондентский счет"
-msgstr ""
+msgstr "Корреспондентский счёт"
 
-#: .\apps\company\models.py:20
 msgid "Расчетный счет"
-msgstr ""
+msgstr "Расчётный счёт"
 
-#: .\apps\company\models.py:26 .\apps\company\models.py:27
-#: .\apps\company\models.py:31
 msgid "Company"
-msgstr ""
+msgstr "Компания"
 
-#: .\apps\company\models.py:32
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
-#: .\apps\company\models.py:34
 msgid "Content (Markdown)"
-msgstr ""
+msgstr "Контент (Markdown)"
 
-#: .\apps\company\models.py:35
 msgid "Is public"
-msgstr ""
+msgstr "Публично"
 
-#: .\apps\company\models.py:41
 msgid "Company document"
-msgstr ""
+msgstr "Документ компании"
 
-#: .\apps\company\models.py:42
 msgid "Company documents"
-msgstr ""
+msgstr "Документы компании"
 
-#: .\apps\confirmation\apps.py:10
 msgid "Confirmation"
-msgstr ""
+msgstr "Подтверждение"
 
-#: .\apps\confirmation\exceptions\base.py:11
 msgid "Invalid confirmation code."
-msgstr ""
+msgstr "Некорректный код подтверждения."
 
-#: .\apps\confirmation\exceptions\base.py:16
 msgid "Confirmation code not found."
-msgstr ""
+msgstr "Код подтверждения не найден."
 
-#: .\apps\confirmation\exceptions\base.py:21
 msgid "Confirmation code already used."
-msgstr ""
+msgstr "Код подтверждения уже использован."
 
-#: .\apps\confirmation\exceptions\base.py:26
 msgid "Outdated confirmation code."
-msgstr ""
+msgstr "Просроченный код подтверждения."
 
-#: .\apps\confirmation\exceptions\base.py:31
 msgid "Failed to obtain the latest verification code for the current user."
-msgstr ""
+msgstr "Не удалось получить последний код подтверждения для текущего пользователя."
 
-#: .\apps\confirmation\exceptions\base.py:36
 msgid "The code you provided is not the last one made for you."
-msgstr ""
+msgstr "Предоставленный код не является последним, сгенерированным для вас."
 
-#: .\apps\confirmation\exceptions\base.py:41
 msgid "Confirmation code is expired, you can send a new one."
-msgstr ""
+msgstr "Срок действия кода подтверждения истёк, вы можете отправить новый."
 
-#: .\apps\confirmation\exceptions\base.py:46
 msgid "Confirmation code sent too often."
-msgstr ""
+msgstr "Код подтверждения отправляется слишком часто."
 
-#: .\apps\confirmation\exceptions\base.py:52
 msgid "Unknown confirmation method."
-msgstr ""
+msgstr "Неизвестный метод подтверждения."
 
-#: .\apps\confirmation\exceptions\base.py:58
 msgid "Unknown confirmation  action."
-msgstr ""
+msgstr "Неизвестное действие подтверждения."
 
-#: .\apps\confirmation\exceptions\base.py:63
 msgid "Action does not exists."
-msgstr ""
+msgstr "Действие не существует."
 
-#: .\apps\confirmation\exceptions\base.py:68
 msgid "Action not specified."
-msgstr ""
+msgstr "Действие не указано."
 
-#: .\apps\confirmation\messages\success.py:6
 msgid "Confirmation code has been successfully sent."
-msgstr ""
+msgstr "Код подтверждения успешно отправлен."
 
-#: .\apps\confirmation\models\base.py:28
 msgid "Can be Confirmed by Link"
-msgstr ""
+msgstr "Можно подтвердить по ссылке"
 
-#: .\apps\confirmation\models\base.py:29
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
-#: .\apps\confirmation\models\base.py:30
 msgid "Is Used"
-msgstr ""
+msgstr "Использован"
 
-#: .\apps\confirmation\models\base.py:31
 msgid "Expiration Date"
-msgstr ""
+msgstr "Дата истечения"
 
-#: .\apps\confirmation\models\base.py:34
 msgid "Confirmation Code"
-msgstr ""
+msgstr "Код подтверждения"
 
-#: .\apps\confirmation\models\base.py:35
 msgid "Confirmation Codes"
-msgstr ""
+msgstr "Коды подтверждения"
 
-#: .\apps\confirmation\models\base.py:43
 msgid "Email Confirmation Code"
-msgstr ""
+msgstr "Код подтверждения email"
 
-#: .\apps\confirmation\models\base.py:44
 msgid "Email Confirmation Codes"
-msgstr ""
+msgstr "Коды подтверждения email"
 
-#: .\apps\confirmation\models\base.py:52
 msgid "Phone Confirmation Code"
-msgstr ""
+msgstr "Код подтверждения телефона"
 
-#: .\apps\confirmation\models\base.py:53
 msgid "Phone Confirmation Codes"
-msgstr ""
+msgstr "Коды подтверждения телефона"
 
-#: .\apps\core\admin\user.py:65
 msgid "General info"
-msgstr ""
+msgstr "Общая информация"
 
-#: .\apps\core\admin\user.py:80
 msgid "Permissions"
-msgstr ""
+msgstr "Права"
 
-#: .\apps\core\admin\user.py:83
 msgid "Dates"
-msgstr ""
+msgstr "Даты"
 
-#: .\apps\core\admin\user.py:131 .\apps\xlmine\models\base.py:59
 msgid "Privilege"
-msgstr ""
+msgstr "Привилегия"
 
-#: .\apps\core\admin\user.py:156
 msgid "Upgrade privilege"
-msgstr ""
+msgstr "Повысить привилегию"
 
-#: .\apps\core\admin\user.py:161
 msgid "Downgrade privilege"
-msgstr ""
+msgstr "Понизить привилегию"
 
-#: .\apps\core\admin\user.py:166
 msgid "RCON privilege sync"
-msgstr ""
+msgstr "Синхронизация RCON-привилегии"
 
-#: .\apps\core\admin\user.py:171
 msgid "Calc and set current privilege"
-msgstr ""
+msgstr "Вычислить и установить текущую привилегию"
 
-#: .\apps\core\admin\user.py:176 .\apps\core\models\user.py:66
 msgid "Avatar"
-msgstr ""
+msgstr "Аватар"
 
-#: .\apps\core\controllers\auth\common.py:87
 msgid "Your account has been created, please confirm your phone number"
-msgstr ""
+msgstr "Ваш аккаунт создан, подтвердите номер телефона"
 
-#: .\apps\core\controllers\user\base.py:48
 msgid "Great! You have successfully changed your username"
-msgstr ""
+msgstr "Отлично! Вы успешно изменили имя пользователя"
 
-#: .\apps\core\exceptions\base.py:11
 msgid ""
 "Sorry, something went wrong. We are already working to resolve the problem."
-msgstr ""
+msgstr "Извините, что-то пошло не так. Мы уже работаем над решением проблемы."
 
-#: .\apps\core\exceptions\base.py:16
 msgid "Correct the mistakes."
-msgstr ""
+msgstr "Исправьте ошибки."
 
-#: .\apps\core\exceptions\base.py:21
 msgid "Access denied."
-msgstr ""
+msgstr "Доступ запрещён."
 
-#: .\apps\core\exceptions\base.py:26
 msgid "Looks like there was a captcha error. Please try again."
-msgstr ""
+msgstr "Похоже, произошла ошибка капчи. Попробуйте ещё раз."
 
-#: .\apps\core\exceptions\user.py:10
 msgid "The user does not have an email address."
-msgstr ""
+msgstr "У пользователя нет email."
 
-#: .\apps\core\exceptions\user.py:15
 msgid "The user is not a client."
-msgstr ""
+msgstr "Пользователь не является клиентом."
 
-#: .\apps\core\exceptions\user.py:20
 msgid "The user does not have a phone number."
-msgstr ""
+msgstr "У пользователя нет номера телефона."
 
-#: .\apps\core\exceptions\user.py:25
 msgid "The credentials provided are not correct."
-msgstr ""
+msgstr "Указанные учетные данные неверны."
 
-#: .\apps\core\exceptions\user.py:30
 msgid "You must be signed in or create an account to perform this action."
-msgstr ""
+msgstr "Вы должны войти или создать аккаунт, чтобы выполнить это действие."
 
-#: .\apps\core\exceptions\user.py:35
 msgid "A user with that username already exists."
-msgstr ""
+msgstr "Пользователь с таким именем уже существует."
 
-#: .\apps\core\exceptions\user.py:40
 msgid "A user with that email already exists."
-msgstr ""
+msgstr "Пользователь с таким email уже существует."
 
-#: .\apps\core\exceptions\user.py:45
 msgid "A user with that phone already exists."
-msgstr ""
+msgstr "Пользователь с таким телефоном уже существует."
 
-#: .\apps\core\exceptions\user.py:50
 msgid "You already have this username installed."
-msgstr ""
+msgstr "У вас уже установлено такое имя пользователя."
 
-#: .\apps\core\exceptions\user.py:55
 msgid "User with this email not found."
-msgstr ""
+msgstr "Пользователь с этим email не найден."
 
-#: .\apps\core\exceptions\user.py:60
 msgid "User not found."
-msgstr ""
+msgstr "Пользователь не найден."
 
-#: .\apps\core\exceptions\user.py:65
 msgid "Email is required."
-msgstr ""
+msgstr "Требуется email."
 
-#: .\apps\core\exceptions\user.py:70
 msgid "User id was not provided."
-msgstr ""
+msgstr "ID пользователя не предоставлен."
 
-#: .\apps\core\models\choices.py:8
 msgid "Monday"
-msgstr ""
+msgstr "Понедельник"
 
-#: .\apps\core\models\choices.py:9
 msgid "Tuesday"
-msgstr ""
+msgstr "Вторник"
 
-#: .\apps\core\models\choices.py:10
 msgid "Wednesday"
-msgstr ""
+msgstr "Среда"
 
-#: .\apps\core\models\choices.py:11
 msgid "Thursday"
-msgstr ""
+msgstr "Четверг"
 
-#: .\apps\core\models\choices.py:12
 msgid "Friday"
-msgstr ""
+msgstr "Пятница"
 
-#: .\apps\core\models\choices.py:13
 msgid "Saturday"
-msgstr ""
+msgstr "Суббота"
 
-#: .\apps\core\models\choices.py:14
 msgid "Sunday"
-msgstr ""
+msgstr "Воскресенье"
 
-#: .\apps\core\models\choices.py:18 .\config\settings.py:675
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
-#: .\apps\core\models\choices.py:19 .\apps\core\models\user.py:55
-#: .\config\settings.py:674
 msgid "English"
-msgstr ""
+msgstr "Английский"
 
-#: .\apps\core\models\choices.py:23
 msgid "UTC-12"
-msgstr ""
+msgstr "UTC-12"
 
-#: .\apps\core\models\choices.py:24
 msgid "UTC-11"
-msgstr ""
+msgstr "UTC-11"
 
-#: .\apps\core\models\choices.py:25
 msgid "UTC-10"
-msgstr ""
+msgstr "UTC-10"
 
-#: .\apps\core\models\choices.py:26
 msgid "UTC-9"
-msgstr ""
+msgstr "UTC-9"
 
-#: .\apps\core\models\choices.py:27
 msgid "UTC-8"
-msgstr ""
+msgstr "UTC-8"
 
-#: .\apps\core\models\choices.py:28
 msgid "UTC-7"
-msgstr ""
+msgstr "UTC-7"
 
-#: .\apps\core\models\choices.py:29
 msgid "UTC-6"
-msgstr ""
+msgstr "UTC-6"
 
-#: .\apps\core\models\choices.py:30
 msgid "UTC-5"
-msgstr ""
+msgstr "UTC-5"
 
-#: .\apps\core\models\choices.py:31
 msgid "UTC-4"
-msgstr ""
+msgstr "UTC-4"
 
-#: .\apps\core\models\choices.py:32
 msgid "UTC-3"
-msgstr ""
+msgstr "UTC-3"
 
-#: .\apps\core\models\choices.py:33
 msgid "UTC-2"
-msgstr ""
+msgstr "UTC-2"
 
-#: .\apps\core\models\choices.py:34
 msgid "UTC-1"
-msgstr ""
+msgstr "UTC-1"
 
-#: .\apps\core\models\choices.py:35
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
-#: .\apps\core\models\choices.py:36
 msgid "UTC+1"
-msgstr ""
+msgstr "UTC+1"
 
-#: .\apps\core\models\choices.py:37
 msgid "UTC+2"
-msgstr ""
+msgstr "UTC+2"
 
-#: .\apps\core\models\choices.py:38
 msgid "UTC+3"
-msgstr ""
+msgstr "UTC+3"
 
-#: .\apps\core\models\choices.py:39
 msgid "UTC+4"
-msgstr ""
+msgstr "UTC+4"
 
-#: .\apps\core\models\choices.py:40
 msgid "UTC+5"
-msgstr ""
+msgstr "UTC+5"
 
-#: .\apps\core\models\choices.py:41
 msgid "UTC+6"
-msgstr ""
+msgstr "UTC+6"
 
-#: .\apps\core\models\choices.py:42
 msgid "UTC+7"
-msgstr ""
+msgstr "UTC+7"
 
-#: .\apps\core\models\choices.py:43
 msgid "UTC+8"
-msgstr ""
+msgstr "UTC+8"
 
-#: .\apps\core\models\choices.py:44
 msgid "UTC+9"
-msgstr ""
+msgstr "UTC+9"
 
-#: .\apps\core\models\choices.py:45
 msgid "UTC+10"
-msgstr ""
+msgstr "UTC+10"
 
-#: .\apps\core\models\choices.py:46
 msgid "UTC+11"
-msgstr ""
+msgstr "UTC+11"
 
-#: .\apps\core\models\choices.py:47
 msgid "UTC+12"
-msgstr ""
+msgstr "UTC+12"
 
-#: .\apps\core\models\choices.py:48
 msgid "UTC+13"
-msgstr ""
+msgstr "UTC+13"
 
-#: .\apps\core\models\choices.py:49
 msgid "UTC+14"
-msgstr ""
+msgstr "UTC+14"
 
-#: .\apps\core\models\choices.py:53
 msgid "Male"
-msgstr ""
+msgstr "Мужчина"
 
-#: .\apps\core\models\choices.py:54
 msgid "Female"
-msgstr ""
+msgstr "Женщина"
 
-#: .\apps\core\models\user.py:37
 msgid "Minecraft Developer"
-msgstr ""
+msgstr "Разработчик Minecraft"
 
-#: .\apps\core\models\user.py:54
 msgid "Русский"
-msgstr ""
+msgstr "Русский"
 
-#: .\apps\core\models\user.py:59
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
-#: .\apps\core\models\user.py:60
-#: .\apps\social_oauth\providers\discord\model.py:10
-#: .\apps\social_oauth\providers\google\model.py:10
-#: .\apps\social_oauth\providers\vk\model.py:10
-#: .\apps\social_oauth\providers\yandex\model.py:10
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
-#: .\apps\core\models\user.py:62
 msgid "Middle name"
-msgstr ""
+msgstr "Отчество"
 
-#: .\apps\core\models\user.py:63
 msgid "Birth date"
-msgstr ""
+msgstr "Дата рождения"
 
-#: .\apps\core\models\user.py:64
 msgid "Gender"
-msgstr ""
+msgstr "Пол"
 
-#: .\apps\core\models\user.py:71
 msgid "Preferred language"
-msgstr ""
+msgstr "Предпочитаемый язык"
 
-#: .\apps\core\models\user.py:76
 msgid "Is email confirmed"
-msgstr ""
+msgstr "Email подтверждён"
 
-#: .\apps\core\models\user.py:77
 msgid "Is phone confirmed"
-msgstr ""
+msgstr "Телефон подтверждён"
 
-#: .\apps\core\models\user.py:78
 msgid "Is test"
-msgstr ""
+msgstr "Тестовый"
 
-#: .\apps\filehost\controllers\base.py:38
 msgid "File not found"
-msgstr ""
+msgstr "Файл не найден"
 
-#: .\apps\filehost\controllers\base.py:54
 msgid "No valid files or folders selected"
-msgstr ""
+msgstr "Не выбраны допустимые файлы или папки"
 
-#: .\apps\filehost\controllers\base.py:128
 msgid "No item ids provided"
-msgstr ""
+msgstr "ID элементов не предоставлены"
 
-#: .\apps\filehost\controllers\base.py:133
-#: .\apps\filehost\controllers\base.py:137
 msgid "Permission denied"
-msgstr ""
+msgstr "Доступ запрещён"
 
-#: .\apps\filehost\controllers\base.py:143
 msgid "Items deleted successfully"
-msgstr ""
+msgstr "Элементы успешно удалены"
 
-#: .\apps\filehost\controllers\base.py:153
 msgid "No update data provided"
-msgstr ""
+msgstr "Данные для обновления не предоставлены"
 
-#: .\apps\filehost\controllers\base.py:175
 msgid "Items updated successfully"
-msgstr ""
+msgstr "Элементы успешно обновлены"
 
-#: .\apps\filehost\exceptions\base.py:9
 msgid "Storage limit exceeded."
-msgstr ""
+msgstr "Превышен лимит хранилища."
 
-#: .\apps\filehost\exceptions\base.py:15
 msgid "Id was not provided."
-msgstr ""
+msgstr "ID не предоставлен."
 
-#: .\apps\freekassa\models.py:11
 msgid "Paid"
-msgstr ""
+msgstr "Оплачен"
 
-#: .\apps\freekassa\models.py:12
 msgid "Refund"
-msgstr ""
+msgstr "Возврат"
 
-#: .\apps\freekassa\models.py:13
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:32
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
-#: .\apps\freekassa\models.py:14
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
-#: .\apps\freekassa\models.py:16
 msgid "FreeKassa order ID"
-msgstr ""
+msgstr "ID заказа FreeKassa"
 
-#: .\apps\freekassa\models.py:17
 msgid "Order hash"
-msgstr ""
+msgstr "Хэш заказа"
 
-#: .\apps\freekassa\models.py:21
 msgid "FreeKassa payment"
-msgstr ""
+msgstr "Платёж FreeKassa"
 
-#: .\apps\freekassa\models.py:22
 msgid "FreeKassa payments"
-msgstr ""
+msgstr "Платежи FreeKassa"
 
-#: .\apps\mailing\models.py:10
 msgid "Тема"
-msgstr ""
+msgstr "Тема"
 
-#: .\apps\mailing\models.py:12
 msgid "HTML content"
-msgstr ""
+msgstr "HTML-контент"
 
-#: .\apps\mailing\models.py:13
 msgid ""
 "Используйте HTML для форматирования (цветной, жирный текст, картинки и пр.)"
-msgstr ""
+msgstr "Используйте HTML для форматирования (цветной, жирный текст, картинки и др.)"
 
-#: .\apps\mailing\models.py:18
 msgid "Дата и время, когда рассылка должна быть отправлена"
-msgstr ""
+msgstr "Дата и время отправки рассылки"
 
-#: .\apps\mailing\models.py:22
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
-#: .\apps\mailing\models.py:23
 msgid "Выберите пользователей, которым будет отправлена рассылка"
-msgstr ""
+msgstr "Выберите пользователей, которым будет отправлена рассылка"
 
-#: .\apps\mailing\models.py:29
 msgid "Отправленные пользователи"
-msgstr ""
+msgstr "Отправленные пользователи"
 
-#: .\apps\mailing\models.py:30
 msgid "Пользователи, которым уже было отправлено письмо"
-msgstr ""
+msgstr "Пользователи, которым уже было отправлено письмо"
 
-#: .\apps\mailing\models.py:32 .\apps\notify\models.py:19
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:30
 msgid "Sent"
-msgstr ""
+msgstr "Отправлено"
 
-#: .\apps\mailing\models.py:35
 msgid "Mailing"
-msgstr ""
+msgstr "Рассылка"
 
-#: .\apps\mailing\models.py:36
 msgid "Mailings"
-msgstr ""
+msgstr "Рассылки"
 
-#: .\apps\notify\admin.py:42 .\apps\notify\models.py:23
 msgid "Recipient"
-msgstr ""
+msgstr "Получатель"
 
-#: .\apps\notify\admin.py:52
 msgid "Notification Type"
-msgstr ""
+msgstr "Тип уведомления"
 
-#: .\apps\notify\admin.py:58 .\apps\notify\models.py:29
 msgid "Context"
-msgstr ""
+msgstr "Контекст"
 
-#: .\apps\notify\apps.py:9
 msgid "Notification"
-msgstr ""
+msgstr "Уведомление"
 
-#: .\apps\notify\models.py:18
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:34
 msgid "Pending"
-msgstr ""
+msgstr "Ожидает"
 
-#: .\apps\notify\models.py:20
 msgid "Send error"
-msgstr ""
+msgstr "Ошибка отправки"
 
-#: .\apps\notify\models.py:24
 msgid "Notify type"
-msgstr ""
+msgstr "Тип уведомления"
 
-#: .\apps\notify\models.py:27
 msgid "Scheduled sent time"
-msgstr ""
+msgstr "Запланированное время отправки"
 
-#: .\apps\notify\models.py:28
 msgid "Sent time"
-msgstr ""
+msgstr "Время отправки"
 
-#: .\apps\notify\models.py:32
 msgid "Notify"
-msgstr ""
+msgstr "Уведомление"
 
-#: .\apps\notify\models.py:33
 msgid "Notifies"
-msgstr ""
+msgstr "Уведомления"
 
-#: .\apps\notify\registry.py:20
 msgid "Successful order gift certificate"
-msgstr ""
+msgstr "Успешный заказ подарочного сертификата"
 
-#: .\apps\notify\registry.py:21
 msgid "New chat message"
-msgstr ""
+msgstr "Новое сообщение чата"
 
-#: .\apps\notify\registry.py:22
 msgid "Important chat message"
-msgstr ""
+msgstr "Важное сообщение чата"
 
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:36
-#: .\utils\admin_mixins.py:10
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:41
 msgid "Type:"
-msgstr ""
+msgstr "Тип:"
 
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:43
 msgid "Sent at"
-msgstr ""
+msgstr "Отправлено"
 
-#: .\apps\notify\templates\notify\admin\consultation_notify_item.html:45
 msgid "Scheduled for"
-msgstr ""
+msgstr "Запланировано на"
 
-#: .\apps\redisui\apps.py:9
 msgid "RedisUi"
-msgstr ""
+msgstr "RedisUi"
 
-#: .\apps\redisui\controllers\views.py:85
 msgid "Key or client_type is missing"
-msgstr ""
+msgstr "Отсутствует key или client_type"
 
-#: .\apps\redisui\controllers\views.py:92
 msgid "Invalid client type"
-msgstr ""
+msgstr "Недопустимый тип клиента"
 
-#: .\apps\redisui\controllers\views.py:96
 msgid "Invalid request method"
-msgstr ""
+msgstr "Недопустимый метод запроса"
 
-#: .\apps\seordj\apps.py:10
 msgid "SeoRDJ"
-msgstr ""
+msgstr "SeoRDJ"
 
-#: .\apps\social_oauth\apps.py:10
 msgid "Social OAuth"
-msgstr ""
+msgstr "Социальный OAuth"
 
-#: .\apps\social_oauth\exceptions\base.py:11
 msgid "This account is already linked to another user."
-msgstr ""
+msgstr "Этот аккаунт уже связан с другим пользователем."
 
-#: .\apps\social_oauth\exceptions\base.py:16
 msgid "Google ID not provided."
-msgstr ""
+msgstr "Google ID не предоставлен."
 
-#: .\apps\social_oauth\exceptions\base.py:21
 msgid "VK ID not provided."
-msgstr ""
+msgstr "VK ID не предоставлен."
 
-#: .\apps\social_oauth\exceptions\base.py:26
 msgid "Yandex ID not provided."
-msgstr ""
+msgstr "Yandex ID не предоставлен."
 
-#: .\apps\social_oauth\exceptions\base.py:31
 msgid "Discord ID not provided."
-msgstr ""
+msgstr "Discord ID не предоставлен."
 
-#: .\apps\social_oauth\exceptions\base.py:36
 msgid "The email was not provided by Google."
-msgstr ""
+msgstr "Google не предоставил email."
 
-#: .\apps\social_oauth\exceptions\base.py:41
 msgid "Email was not provided to VK."
-msgstr ""
+msgstr "VK не предоставил email."
 
-#: .\apps\social_oauth\exceptions\base.py:46
 msgid "The email was not provided by Yandex."
-msgstr ""
+msgstr "Яндекс не предоставил email."
 
-#: .\apps\social_oauth\exceptions\base.py:51
 msgid "The email was not provided to Discord."
-msgstr ""
+msgstr "Discord не предоставил email."
 
-#: .\apps\social_oauth\exceptions\base.py:56
 msgid "Failed to retrieve discord username."
-msgstr ""
+msgstr "Не удалось получить имя пользователя Discord."
 
-#: .\apps\social_oauth\exceptions\base.py:61
 msgid "Failed to obtain discord user id in social service."
-msgstr ""
+msgstr "Не удалось получить ID пользователя Discord в сервисе."
 
-#: .\apps\social_oauth\providers\discord\model.py:9
 msgid "Discord ID"
-msgstr ""
+msgstr "ID Discord"
 
-#: .\apps\social_oauth\providers\discord\model.py:13
 msgid "Discord User"
-msgstr ""
+msgstr "Пользователь Discord"
 
-#: .\apps\social_oauth\providers\discord\model.py:14
 msgid "Discord Users"
-msgstr ""
+msgstr "Пользователи Discord"
 
-#: .\apps\social_oauth\providers\google\model.py:9
 msgid "Google ID"
-msgstr ""
+msgstr "ID Google"
 
-#: .\apps\social_oauth\providers\google\model.py:13
 msgid "Google User"
-msgstr ""
+msgstr "Пользователь Google"
 
-#: .\apps\social_oauth\providers\google\model.py:14
 msgid "Google Users"
-msgstr ""
+msgstr "Пользователи Google"
 
-#: .\apps\social_oauth\providers\vk\model.py:9
 msgid "VK ID"
-msgstr ""
+msgstr "ID VK"
 
-#: .\apps\social_oauth\providers\vk\model.py:13
 msgid "VK User"
-msgstr ""
+msgstr "Пользователь VK"
 
-#: .\apps\social_oauth\providers\vk\model.py:14
 msgid "VK Users"
-msgstr ""
+msgstr "Пользователи VK"
 
-#: .\apps\social_oauth\providers\yandex\model.py:9
 msgid "Yandex ID"
-msgstr ""
+msgstr "ID Яндекс"
 
-#: .\apps\social_oauth\providers\yandex\model.py:13
 msgid "Yandex User"
-msgstr ""
+msgstr "Пользователь Яндекс"
 
-#: .\apps\social_oauth\providers\yandex\model.py:14
 msgid "Yandex Users"
-msgstr ""
+msgstr "Пользователи Яндекс"
 
-#: .\apps\software\admin\software.py:23
 msgid "Price"
-msgstr ""
+msgstr "Цена"
 
-#: .\apps\software\admin\software.py:24
 msgid "Prices"
-msgstr ""
+msgstr "Цены"
 
-#: .\apps\software\apps.py:10 .\apps\software\models\software.py:47
-#: .\apps\software\models\software.py:68
 msgid "Software"
-msgstr ""
+msgstr "Софт"
 
-#: .\apps\software\exceptions\license.py:12
 msgid "Test period already used"
-msgstr ""
+msgstr "Пробный период уже использован"
 
-#: .\apps\software\models\software.py:28
 msgid "Software file"
-msgstr ""
+msgstr "Файл ПО"
 
-#: .\apps\software\models\software.py:29
 msgid "Software files"
-msgstr ""
+msgstr "Файлы ПО"
 
-#: .\apps\software\models\software.py:40
 msgid "Review URL"
-msgstr ""
+msgstr "URL обзора"
 
-#: .\apps\software\models\software.py:41
 msgid "Guide URL"
-msgstr ""
+msgstr "URL руководства"
 
-#: .\apps\software\models\software.py:48
 msgid "Softwares"
-msgstr ""
+msgstr "Софт"
 
-#: .\apps\software\models\software.py:55
 msgid "Software Product"
-msgstr ""
+msgstr "Продукт ПО"
 
-#: .\apps\software\models\software.py:57
 msgid "License Hours"
-msgstr ""
+msgstr "Часы лицензии"
 
-#: .\apps\software\models\software.py:62
 msgid "Software Order"
-msgstr ""
+msgstr "Заказ ПО"
 
-#: .\apps\software\models\software.py:63
 msgid "Software Orders"
-msgstr ""
+msgstr "Заказы ПО"
 
-#: .\apps\software\models\software.py:69
 msgid "License ends at"
-msgstr ""
+msgstr "Лицензия заканчивается"
 
-#: .\apps\software\models\software.py:70
 msgid "Is tested"
-msgstr ""
+msgstr "Проверено"
 
-#: .\apps\software\models\software.py:73
 msgid "Software License"
-msgstr ""
+msgstr "Лицензия ПО"
 
-#: .\apps\software\models\software.py:74
 msgid "Software Licenses"
-msgstr ""
+msgstr "Лицензии ПО"
 
-#: .\apps\surveys\exceptions\base.py:9
 msgid "You are not the author of the survey."
-msgstr ""
+msgstr "Вы не автор опроса."
 
-#: .\apps\surveys\exceptions\base.py:15
 msgid "Survey id was not provided."
-msgstr ""
+msgstr "ID опроса не предоставлен."
 
-#: .\apps\surveys\exceptions\base.py:21
 msgid "Нельзя изменять уже законченную попытку."
-msgstr ""
+msgstr "Нельзя изменять уже законченную попытку."
 
-#: .\apps\surveys\exceptions\base.py:27
 msgid "У вас не осталось попыток для прохождения."
-msgstr ""
+msgstr "У вас не осталось попыток для прохождения."
 
-#: .\apps\surveys\models.py:18 .\apps\surveys\models.py:48
-#: .\apps\surveys\models.py:63
 msgid "Use Markdown for formatting"
-msgstr ""
+msgstr "Используйте Markdown для форматирования"
 
-#: .\apps\surveys\models.py:42
 msgid "Multiple Choice"
-msgstr ""
+msgstr "Множественный выбор"
 
-#: .\apps\tbank\models.py:23
 msgid "Customer key"
-msgstr ""
+msgstr "Ключ клиента"
 
-#: .\apps\tbank\models.py:26
 msgid "TBank customer"
-msgstr ""
+msgstr "Клиент TBank"
 
-#: .\apps\tbank\models.py:27
 msgid "TBank customers"
-msgstr ""
+msgstr "Клиенты TBank"
 
-#: .\apps\tbank\models.py:58 .\apps\tbank\models.py:79
 msgid "Customer"
-msgstr ""
+msgstr "Клиент"
 
-#: .\apps\tbank\models.py:59
 msgid "Order ID"
-msgstr ""
+msgstr "ID заказа"
 
-#: .\apps\tbank\models.py:61
 msgid "Source"
-msgstr ""
+msgstr "Источник"
 
-#: .\apps\tbank\models.py:62
 msgid "Commission"
-msgstr ""
+msgstr "Комиссия"
 
-#: .\apps\tbank\models.py:63
 msgid "Card ID"
-msgstr ""
+msgstr "ID карты"
 
-#: .\apps\tbank\models.py:64
 msgid "User agent"
-msgstr ""
+msgstr "User-Agent"
 
-#: .\apps\tbank\models.py:65
 msgid "Real timezone"
-msgstr ""
+msgstr "Реальный часовой пояс"
 
-#: .\apps\tbank\models.py:66
 msgid "Device"
-msgstr ""
+msgstr "Устройство"
 
-#: .\apps\tbank\models.py:67
 msgid "Device OS"
-msgstr ""
+msgstr "ОС устройства"
 
-#: .\apps\tbank\models.py:68
 msgid "Device browser"
-msgstr ""
+msgstr "Браузер устройства"
 
-#: .\apps\tbank\models.py:71
 msgid "TBank payment"
-msgstr ""
+msgstr "Платёж TBank"
 
-#: .\apps\tbank\models.py:72
 msgid "TBank payments"
-msgstr ""
+msgstr "Платежи TBank"
 
-#: .\apps\tbank\models.py:81
 msgid "Rebill ID"
-msgstr ""
+msgstr "ID повторного платежа"
 
-#: .\apps\tbank\models.py:82
 msgid "Next payment date"
-msgstr ""
+msgstr "Дата следующего платежа"
 
-#: .\apps\tbank\models.py:90
 msgid "TBank recurring payment"
-msgstr ""
+msgstr "Регулярный платёж TBank"
 
-#: .\apps\tbank\models.py:91
 msgid "TBank recurring payments"
-msgstr ""
+msgstr "Регулярные платежи TBank"
 
-#: .\apps\tbank\models.py:113
 msgid "Installment Order ID"
-msgstr ""
+msgstr "ID заказа рассрочки"
 
-#: .\apps\tbank\models.py:118
 msgid "Installment Status"
-msgstr ""
+msgstr "Статус рассрочки"
 
-#: .\apps\tbank\models.py:120
 msgid "Chosen Bank"
-msgstr ""
+msgstr "Выбранный банк"
 
-#: .\apps\tbank\models.py:121
 msgid "Committed"
-msgstr ""
+msgstr "Зафиксировано"
 
-#: .\apps\tbank\models.py:122
 msgid "Is demo installment available"
-msgstr ""
+msgstr "Доступна демо-рассрочка"
 
-#: .\apps\tbank\models.py:124
 msgid "Tinkoff Form ID"
-msgstr ""
+msgstr "ID формы Тинькофф"
 
-#: .\apps\tbank\models.py:128
 msgid "External order number"
-msgstr ""
+msgstr "Внешний номер заказа"
 
-#: .\apps\tbank\models.py:132
 msgid "Tinkoff created_at"
-msgstr ""
+msgstr "Создано в Тинькофф"
 
-#: .\apps\tbank\models.py:135
 msgid "Product type from Tinkoff"
-msgstr ""
+msgstr "Тип продукта Тинькофф"
 
-#: .\apps\tbank\models.py:137
 msgid "Credit term (months)"
-msgstr ""
+msgstr "Срок кредита (мес.)"
 
-#: .\apps\tbank\models.py:139
 msgid "Monthly payment"
-msgstr ""
+msgstr "Ежемесячный платёж"
 
-#: .\apps\tbank\models.py:142
 msgid "Client first name"
-msgstr ""
+msgstr "Имя клиента"
 
-#: .\apps\tbank\models.py:143
 msgid "Client last name"
-msgstr ""
+msgstr "Фамилия клиента"
 
-#: .\apps\tbank\models.py:144
 msgid "Client middle name"
-msgstr ""
+msgstr "Отчество клиента"
 
-#: .\apps\tbank\models.py:145
 msgid "Client phone"
-msgstr ""
+msgstr "Телефон клиента"
 
-#: .\apps\tbank\models.py:146
 msgid "Client email"
-msgstr ""
+msgstr "Email клиента"
 
-#: .\apps\tbank\models.py:147
 msgid "Loan number"
-msgstr ""
+msgstr "Номер кредита"
 
-#: .\apps\tbank\models.py:148
 msgid "Signing type"
-msgstr ""
+msgstr "Тип подписания"
 
-#: .\apps\tbank\models.py:149
 msgid "Expected overdue at"
-msgstr ""
+msgstr "Ожидаемая просрочка"
 
-#: .\apps\tbank\models.py:152
 msgid "Order amount"
-msgstr ""
+msgstr "Сумма заказа"
 
-#: .\apps\tbank\models.py:156
 msgid "Credit amount"
-msgstr ""
+msgstr "Сумма кредита"
 
-#: .\apps\tbank\models.py:160
 msgid "Transfer amount"
-msgstr ""
+msgstr "Сумма перевода"
 
-#: .\apps\tbank\models.py:164
 msgid "First payment"
-msgstr ""
+msgstr "Первый платёж"
 
-#: .\apps\tbank\models.py:169
 msgid "TBank installment payment"
-msgstr ""
+msgstr "Платёж рассрочки TBank"
 
-#: .\apps\tbank\models.py:170
 msgid "TBank installment payments"
-msgstr ""
+msgstr "Платежи рассрочки TBank"
 
-#: .\apps\theme\admin.py:21
 msgid "No image"
-msgstr ""
+msgstr "Нет изображения"
 
-#: .\apps\theme\admin.py:23
 msgid "Image preview"
-msgstr ""
+msgstr "Предпросмотр изображения"
 
-#: .\apps\theme\apps.py:9 .\apps\theme\models.py:22
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
-#: .\apps\theme\models.py:11
 msgid "Light"
-msgstr ""
+msgstr "Светлая"
 
-#: .\apps\theme\models.py:12
 msgid "Dark"
-msgstr ""
+msgstr "Тёмная"
 
-#: .\apps\theme\models.py:15
 msgid "Mode"
-msgstr ""
+msgstr "Режим"
 
-#: .\apps\theme\models.py:18
 msgid "Background Image"
-msgstr ""
+msgstr "Фоновое изображение"
 
-#: .\apps\theme\models.py:19
 msgid "Is Default"
-msgstr ""
+msgstr "По умолчанию"
 
-#: .\apps\theme\models.py:23
 msgid "Themes"
-msgstr ""
+msgstr "Темы"
 
-#: .\apps\xl_dashboard\controllers.py:23
 msgid "Access denied"
-msgstr ""
+msgstr "Доступ запрещён"
 
-#: .\apps\xl_dashboard\controllers.py:28
 msgid "Action not found or not callable"
-msgstr ""
+msgstr "Действие не найдено или не вызываемо"
 
-#: .\apps\xlmine\admin\base.py:84
 msgid "Sync remote"
-msgstr ""
+msgstr "Синхронизировать удалённо"
 
-#: .\apps\xlmine\admin\base.py:90
 msgid "Colored Prefix"
-msgstr ""
+msgstr "Цветной префикс"
 
-#: .\apps\xlmine\models.py:33 .\apps\xlmine\models.py:39
-#: .\apps\xlmine\models\base.py:13 .\apps\xlmine\models\base.py:25
 msgid "Version"
-msgstr ""
+msgstr "Версия"
 
-#: .\apps\xlmine\models.py:34 .\apps\xlmine\models.py:40
-#: .\apps\xlmine\models\base.py:14 .\apps\xlmine\models\base.py:26
 msgid "SHA256 Hash"
-msgstr ""
+msgstr "SHA256 хеш"
 
-#: .\apps\xlmine\models\base.py:27
 msgid "Security manifest"
-msgstr ""
+msgstr "Манифест безопасности"
 
-#: .\apps\xlmine\models\base.py:46
 msgid "Prefix"
-msgstr ""
+msgstr "Префикс"
 
-#: .\apps\xlmine\models\base.py:47
 msgid "Weight"
-msgstr ""
+msgstr "Вес"
 
-#: .\apps\xlmine\models\base.py:49
 msgid "Donation threshold"
-msgstr ""
+msgstr "Порог доната"
 
-#: .\apps\xlmine\models\base.py:50
 msgid "Суммарная сумма донатов, начиная с которой эта привилегия доступна"
-msgstr ""
+msgstr "Суммарная сумма донатов, с которой доступна эта привилегия"
 
-#: .\apps\xlmine\models\base.py:53
 msgid "Gradient start"
-msgstr ""
+msgstr "Начало градиента"
 
-#: .\apps\xlmine\models\base.py:54
 msgid "HEX, например \"#FF0000\""
-msgstr ""
+msgstr "HEX, например «#FF0000»"
 
-#: .\apps\xlmine\models\base.py:55
 msgid "Gradient end"
-msgstr ""
+msgstr "Конец градиента"
 
-#: .\apps\xlmine\models\base.py:56
 msgid "HEX, например \"#00FF00\""
-msgstr ""
+msgstr "HEX, например «#00FF00»"
 
-#: .\apps\xlmine\models\base.py:60
 msgid "Privileges"
-msgstr ""
+msgstr "Привилегии"
 
-#: .\apps\xlmine\models\product.py:17
 msgid "Donate"
-msgstr ""
+msgstr "Донат"
 
-#: .\apps\xlmine\models\product.py:18
 msgid "Donates"
-msgstr ""
+msgstr "Донаты"
 
-#: .\apps\xlmine\models\product.py:27
 msgid "Donate product"
-msgstr ""
+msgstr "Донат-продукт"
 
-#: .\apps\xlmine\models\product.py:30
 msgid "Donate order"
-msgstr ""
+msgstr "Донат-заказ"
 
-#: .\apps\xlmine\models\product.py:31
 msgid "Donate orders"
-msgstr ""
+msgstr "Донат-заказы"
 
-#: .\apps\xlmine\models\user.py:20
 msgid "Skin"
-msgstr ""
+msgstr "Скин"
 
-#: .\apps\xlmine\models\user.py:25
 msgid "Cape"
-msgstr ""
+msgstr "Плащ"
 
-#: .\apps\xlmine\models\user.py:29
 msgid "Coins"
-msgstr ""
+msgstr "Монеты"
 
-#: .\apps\xlmine\templates\admin\rcon_console.html:8
 msgid "Send"
-msgstr ""
+msgstr "Отправить"
 
-#: .\apps\xlmine\templates\admin\rcon_console.html:12
 msgid "Command output:"
-msgstr ""
+msgstr "Вывод команды:"
 
-#: .\templates\admin\base.html:105 .\templates\admin\base.html:106
 msgid "Search"
-msgstr ""
+msgstr "Поиск"
 
-#: .\templates\admin\base.html:168
 msgid "Account"
-msgstr ""
+msgstr "Аккаунт"
 
-#: .\templates\admin\base.html:171
 msgid "Change password"
-msgstr ""
+msgstr "Изменить пароль"
 
-#: .\templates\admin\base.html:177
 msgid "Log out"
-msgstr ""
+msgstr "Выйти"
 
-#: .\templates\admin\base.html:190
 msgid "See Profile"
-msgstr ""
+msgstr "Показать профиль"
 
-#: .\templates\admin\base.html:234 .\templates\admin\index.html:5
-#: .\templates\admin\index.html:11
 msgid "Dashboard"
-msgstr ""
+msgstr "Панель"
 
-#: .\templates\admin\base.html:368
 msgid "Jazzmin version"
-msgstr ""
+msgstr "Версия Jazzmin"
 
-#: .\templates\admin\base.html:371
 msgid "Copyright"
-msgstr ""
+msgstr "Авторские права"
 
-#: .\templates\admin\base.html:372
 msgid "All rights reserved."
-msgstr ""
+msgstr "Все права защищены."
 
-#: .\templates\admin\base.html:388
 msgid "UI Configuration"
-msgstr ""
+msgstr "Настройка интерфейса"
 
-#: .\templates\admin\base.html:392
 msgid "Copy this info your settings file to persist these UI changes"
-msgstr ""
+msgstr "Скопируйте эти данные в settings.py, чтобы сохранить изменения интерфейса"
 
-#: .\templates\admin\base.html:397
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
-#: .\templates\admin\change_form.html:23 .\templates\admin\index.html:10
 msgid "Home"
-msgstr ""
+msgstr "Главная"
 
-#: .\templates\admin\change_form.html:36
-#, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Добавить %(name)s"
 
-#: .\templates\admin\change_form.html:58
 msgid "Please correct the error below."
-msgstr ""
+msgstr "Исправьте указанную ошибку."
 
-#: .\templates\admin\change_form.html:60
 msgid "Please correct the errors below."
-msgstr ""
+msgstr "Исправьте указанные ошибки."
 
-#: .\templates\admin\index.html:33
 msgid "Recent actions"
-msgstr ""
+msgstr "Последние действия"
 
-#: .\templates\admin\index.html:37
 msgid "None available"
-msgstr ""
+msgstr "Нет данных"
 
-#: .\templates\admin\index.html:53
-#, python-format
 msgid ""
 "\n"
 "                                            %(timesince)s ago"
 msgstr ""
+"\n"
+"                                            %(timesince)s назад"
