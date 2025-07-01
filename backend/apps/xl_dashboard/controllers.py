@@ -4,6 +4,7 @@ import logging
 
 from django.conf import settings
 from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -19,12 +20,12 @@ async def action_view(request, action_name):
     log.debug('action_view called with action_name=%s', action_name)
     user = request.user
     if not (user and user.is_staff):
-        return HttpResponseForbidden('Access denied')
+        return HttpResponseForbidden(_('Access denied'))
 
     actions = getattr(settings, 'XL_DASHBOARD', {}).get('xl-actions', {})
     action_func = actions.get(action_name)
     if not action_func or not callable(action_func):
-        return HttpResponseNotFound('Action not found or not callable')
+        return HttpResponseNotFound(_('Action not found or not callable'))
 
     # Вызываем экшен (учитывая, что он может быть async)
     if asyncio.iscoroutinefunction(action_func):

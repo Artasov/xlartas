@@ -1,5 +1,6 @@
 // Modules/xLMine/Donate/DonateModal.tsx
 import React, {useContext, useEffect, useState} from "react";
+import {useTranslation} from 'react-i18next';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -46,6 +47,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
+    const {t} = useTranslation();
 
     // При открытии модального окна — сбрасываем стейт, грузим последний Donate
     useEffect(() => {
@@ -78,7 +80,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             return;
         }
         if (!donateProduct) {
-            Message.error("Donate не загружен");
+            Message.error(t('donate_not_loaded'));
             return;
         }
         setLoading(true);

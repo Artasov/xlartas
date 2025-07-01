@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useContext, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import UserAvatar from 'User/UserAvatar';
 import {Message} from 'Core/components/Message';
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
@@ -19,6 +20,7 @@ interface UserAvatarEditableProps {
 const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, className}) => {
     const {user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
     const {plt} = useTheme();
+    const {t} = useTranslation();
     const uploadIconRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {api} = useApi();
@@ -32,8 +34,8 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             api.patch('/api/v1/user/update/avatar/', formData, {
                 headers: {'Content-Type': 'multipart/form-data'},
             }).then(() => {
-                updateCurrentUser().then(() => Message.success('Аватар успешно обновлен.'));
-            }).catch(() => Message.error('Не удалось обновить аватар.'))
+                updateCurrentUser().then(() => Message.success(t('avatar_update_success')));
+            }).catch(() => Message.error(t('avatar_update_error')))
                 .finally(() => {
                     setIsLoading(false);
                     uploadIconRef?.current?.blur();

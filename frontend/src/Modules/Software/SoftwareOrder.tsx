@@ -1,5 +1,6 @@
 // Modules/Software/SoftwareOrder.tsx
 import React, {useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Button, Collapse, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
@@ -60,6 +61,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const navigate = useNavigate();
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
+    const {t} = useTranslation();
 
     const _isGt576 = useMediaQuery('(min-width: 576px)');
     const _isGt740 = useMediaQuery('(min-width: 740px)');
@@ -115,7 +117,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
             };
             const data = await api.post('/api/v1/orders/create/', payload);
 
-            Message.success('Заказ успешно создан.', 2, 5000);
+            Message.success(t('order_created_success'), 2, 5000);
 
             /*  Если back сразу вернул ссылку — открываем её  */
             if (typeof data === 'string' && data.startsWith('http')) {

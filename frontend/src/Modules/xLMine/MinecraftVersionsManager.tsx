@@ -1,5 +1,6 @@
 // Modules/xLMine/MinecraftVersionsManager.tsx
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
     Box,
     CircularProgress,
@@ -33,6 +34,7 @@ import TextField from "@mui/material/TextField";
 
 const LauncherManager: React.FC = () => {
     const {api} = useApi();
+    const {t} = useTranslation();
 
     // ==== Состояния ====
     const [file, setFile] = useState<File | null>(null);
@@ -54,7 +56,7 @@ const LauncherManager: React.FC = () => {
             const {results} = await api.get('/api/v1/xlmine/launcher/');
             setLaunchers(results);
         } catch (error) {
-            Message.error('Ошибка загрузки версий лаунчера');
+            Message.error(t('launcher_versions_load_error'));
         } finally {
             setLoading(false);
         }
@@ -73,7 +75,7 @@ const LauncherManager: React.FC = () => {
     // ==== Загрузка файла ====
     const handleUpload = async () => {
         if (!file) {
-            Message.error('Выберите файл установщика');
+            Message.error(t('select_installer_file'));
             return;
         }
         setIsUploading(true);
@@ -93,9 +95,9 @@ const LauncherManager: React.FC = () => {
             setFileReset(true);
             setTimeout(() => setFileReset(false), 0);
 
-            Message.success('Новая версия лаунчера загружена');
+            Message.success(t('launcher_version_uploaded'));
         } catch (error) {
-            Message.error('Ошибка загрузки файла');
+            Message.error(t('file_upload_error'));
         }
         setIsUploading(false);
     };
@@ -114,10 +116,10 @@ const LauncherManager: React.FC = () => {
         setDeletingId(confirmDeleteId);
         try {
             await api.delete(`/api/v1/xlmine/launcher/${confirmDeleteId}/`);
-            Message.success('Версия удалена');
+            Message.success(t('version_deleted'));
             setLaunchers(prev => prev.filter(item => item.id !== confirmDeleteId));
         } catch (error) {
-            Message.error('Ошибка удаления версии');
+            Message.error(t('version_delete_error'));
         } finally {
             setConfirmDeleteId(null);
             setDeletingId(null);
@@ -241,6 +243,7 @@ const CHUNK_SIZE = 50 * 1024 * 1024;
 
 const ReleaseManager: React.FC = () => {
     const {api} = useApi();
+    const {t} = useTranslation();
 
     const [file, setFile] = useState<File | null>(null);
     const [fileReset, setFileReset] = useState<boolean>(false);
@@ -263,7 +266,7 @@ const ReleaseManager: React.FC = () => {
             const {results} = await api.get('/api/v1/xlmine/release/');
             setReleases(results);
         } catch {
-            Message.error('Ошибка загрузки версий релиза');
+            Message.error(t('release_versions_load_error'));
         } finally {
             setLoading(false);
         }
@@ -292,7 +295,7 @@ const ReleaseManager: React.FC = () => {
 
     const handleUpload = async () => {
         if (!file || !securityValid) {
-            Message.error('Выберите файл и вставьте корректный JSON');
+            Message.error(t('select_file_and_json'));
             return;
         }
         setIsUploading(true);
@@ -328,17 +331,17 @@ const ReleaseManager: React.FC = () => {
 
             if (response && response.id) {
                 setReleases(prev => [...prev, response]);
-                Message.success('Новая версия релиза загружена');
+                Message.success(t('release_version_uploaded'));
                 setFile(null);
                 setFileReset(true);
                 setTimeout(() => setFileReset(false), 0);
                 setSecurityJson('');
                 setSecurityValid(false);
             } else {
-                Message.error('Ошибка загрузки файла');
+                Message.error(t('file_upload_error'));
             }
         } catch {
-            Message.error('Ошибка загрузки файла');
+            Message.error(t('file_upload_error'));
         }
 
         setIsUploading(false);
@@ -354,9 +357,9 @@ const ReleaseManager: React.FC = () => {
         try {
             await api.delete(`/api/v1/xlmine/release/${confirmDeleteId}/`);
             setReleases(prev => prev.filter(r => r.id !== confirmDeleteId));
-            Message.success('Версия удалена');
+            Message.success(t('version_deleted'));
         } catch {
-            Message.error('Ошибка удаления версии');
+            Message.error(t('version_delete_error'));
         } finally {
             setConfirmDeleteId(null);
             setDeletingId(null);
@@ -470,6 +473,7 @@ const ReleaseManager: React.FC = () => {
 
 const MinecraftVersionsManager: React.FC = () => {
     const [tabIndex, setTabIndex] = useState<number>(0);
+    const {t} = useTranslation();
 
     const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabIndex(newValue);

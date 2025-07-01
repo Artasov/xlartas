@@ -1,6 +1,7 @@
 // Modules/Confirmation/ConfirmationCode.tsx
 
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {TextField} from '@mui/material';
 import {YANDEX_RECAPTCHA_SITE_KEY} from '../Api/axiosConfig';
 import {Message} from 'Core/components/Message';
@@ -62,6 +63,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
     const [isSending, setIsSending] = useState<boolean>(false);
     const {plt} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
 
     useEffect(() => {
         /**
@@ -113,7 +115,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
     const sendNewCode = async () => {
         if (isSending) return;
         if (!disableCaptcha && !captchaToken && !initialCodeSent) {
-            Message.error('Пожалуйста, пройдите капчу');
+            Message.error(t('captcha_required'));
             handleResetCaptcha();
             return;
         }

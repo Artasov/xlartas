@@ -1,5 +1,6 @@
 // Modules/Company/CompanyPage.tsx
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
@@ -18,6 +19,7 @@ const CompanyPage: React.FC = () => {
     const navigate = useNavigate();
     const {theme} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (!name) return
@@ -28,7 +30,7 @@ const CompanyPage: React.FC = () => {
             fetchCompany().then();
         } else {
             setLoading(false);
-            Message.error('Название компании не указано.');
+            Message.error(t('company_name_not_specified'));
         }
     }, [name, api]);
 

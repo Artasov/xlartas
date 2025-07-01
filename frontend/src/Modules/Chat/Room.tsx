@@ -1,5 +1,6 @@
 // Modules/Chat/Room.tsx
 import React, {RefObject, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState,} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import Divider from 'Core/components/elements/Divider';
@@ -45,6 +46,7 @@ const Room: React.FC<RoomProps> = (
     const {notAuthentication} = useErrorProcessing();
     const {updateRoom} = useRooms();
     const {api} = useApi();
+    const {t} = useTranslation();
     const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
     const isInitialLoad = useRef<boolean>(true);
     const prevScrollHeightRef = useRef<number>(0);
@@ -188,7 +190,7 @@ const Room: React.FC<RoomProps> = (
     const handleSendMessage = useCallback(
         async (messageText: string, attachedFiles: any[], isImportant: boolean) => {
             if (!user) {
-                ToastMessage.error('Вы не авторизованы!');
+                ToastMessage.error(t('not_authorized'));
                 return;
             }
 
@@ -236,7 +238,7 @@ const Room: React.FC<RoomProps> = (
             if (sendMessage) {
                 sendMessage(JSON.stringify(messagePayload));
             } else {
-                ToastMessage.error('WebSocket не подключен.');
+                ToastMessage.error(t('websocket_not_connected'));
             }
         },
         [roomId, user, base64ToBlob, sendMessage]

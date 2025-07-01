@@ -1,5 +1,6 @@
 // Modules/xLMine/SkinCape/SkinCapeSetter.tsx
 import React, {useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useApi} from 'Modules/Api/useApi';
 import {Button} from "@mui/material";
 import {FCC, FRCC} from "wide-containers";
@@ -7,6 +8,7 @@ import {Message} from 'Core/components/Message';
 
 const SkinCapeSetter: React.FC = () => {
     const {api} = useApi();
+    const {t} = useTranslation();
     const [skinUrl, setSkinUrl] = useState<string | null>(null);
     const [capeUrl, setCapeUrl] = useState<string | null>(null);
     const [validSkin, setValidSkin] = useState<boolean>(false);
@@ -69,9 +71,9 @@ const SkinCapeSetter: React.FC = () => {
             );
             if (type === 'skin') setSkinUrl(data.skin);
             else setCapeUrl(data.cape);
-            Message.success('Успешно обновлено');
+            Message.success(t('update_success'));
         } catch {
-            Message.error('Не удалось обновить');
+            Message.error(t('update_error'));
         }
         await fetchCurrent();
     };

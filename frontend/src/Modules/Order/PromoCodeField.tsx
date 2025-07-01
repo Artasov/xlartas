@@ -1,5 +1,6 @@
 // Modules/Order/PromoCodeField.tsx
 import React, {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import debounce from 'lodash.debounce';
 import {FC} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
@@ -32,6 +33,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
     const {api} = useApi();
     const {plt, theme} = useTheme();
     const {byResponse} = useErrorProcessing();
+    const {t} = useTranslation();
 
     const checkPromoCode = debounce(async (code: string) => {
         if (!code) {
@@ -50,7 +52,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
             setStatus('valid');
             promoCodeRef.current && promoCodeRef.current.blur();
             if (onValidChange) onValidChange(true, response.data);
-            Message.success('Отлично, ваш промокод подходит!');
+            Message.success(t('promo_code_success'));
         } catch (error) {
             byResponse(error);
             setStatus('invalid');

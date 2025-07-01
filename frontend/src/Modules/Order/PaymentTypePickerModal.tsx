@@ -1,5 +1,6 @@
 // Modules/Order/PaymentTypePickerModal.tsx
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -23,10 +24,11 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
     const [currency, setCurrency] = useState<ICurrencyWithPrice | null>(null);
     const [system, setSystem] = useState<IPaymentSystem | null>(null);
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
 
     const confirm = async () => {
         if (!currency || !system) {
-            Message.error('Выберите валюту и способ оплаты');
+            Message.error(t('select_currency_payment'));
             return;
         }
         setLoading(true);

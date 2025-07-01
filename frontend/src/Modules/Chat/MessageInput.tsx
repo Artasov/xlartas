@@ -1,6 +1,7 @@
 // Modules/Chat/MessageInput.tsx
 
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
 import {Checkbox, IconButton} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -38,6 +39,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
     const [files, setFiles] = useState<File[]>([]);
     const [isImportant, setIsImportant] = useState<boolean>(false); // New state for the checkbox
     const {plt} = useTheme();
+    const {t} = useTranslation();
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewMessage(e.target.value);
@@ -52,7 +54,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
 
     const handleSendMessage = async () => {
         if (newMessage.trim() === '' && files.length === 0) {
-            ToastMessage.error('Напишите сообщение или прикрепите файл...');
+            ToastMessage.error(t('enter_message_or_file'));
             return;
         }
 
@@ -78,7 +80,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
             setIsImportant(false); // Reset the checkbox after sending
         } catch (error) {
             console.error('Error sending message:', error);
-            ToastMessage.error('Ошибка при отправке сообщения.');
+            ToastMessage.error(t('send_message_error'));
         }
     };
 

@@ -1,5 +1,6 @@
 // Modules/Auth/forms/SignUpForm.tsx
 import React, {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import ConfirmationCode, {ConfirmationMethod} from 'Confirmation/ConfirmationCode';
 import {Message} from 'Core/components/Message';
 import PhoneField from 'Core/components/elements/PhoneField/PhoneField';
@@ -37,6 +38,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const {plt} = useTheme();
+    const {t} = useTranslation();
 
     const [firstChecked, setFirstChecked] = useState<boolean>(false);
     const [secondChecked, setSecondChecked] = useState<boolean>(false);
@@ -119,7 +121,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
         const button = submitEvent.submitter as HTMLButtonElement | undefined;
         const confirmationMethodSelected: ConfirmationMethod | undefined = button?.value as ConfirmationMethod | undefined;
         if (!confirmationMethodSelected) {
-            Message.error('Пожалуйста, выберите метод подтверждения');
+            Message.error(t('select_confirmation_method'));
             return;
         }
         setIsSubmitting(true);
@@ -159,7 +161,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                 (confirmationSent || captchaToken);
         }
     };
-    const handleConfirm = (data: any) => Message.success('Ваш аккаунт успешно подтвержден!');
+    const handleConfirm = (data: any) => Message.success(t('account_confirmed'));
     const handleResend = () => setInitialCodeSent(false);
 
     return (

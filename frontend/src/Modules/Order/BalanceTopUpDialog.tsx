@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Button, Dialog, DialogContent, DialogTitle, TextField, Collapse} from '@mui/material';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FR} from 'wide-containers';
@@ -18,6 +19,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {t} = useTranslation();
 
     const [product, setProduct] = useState<IProduct | null>(null);
     const [amount, setAmount] = useState<number>(100);
@@ -55,7 +57,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
             };
             const data = await api.post('/api/v1/orders/create/', payload);
             if (data?.payment_url) window.open(data.payment_url, '_blank');
-            Message.success('Заказ на пополнение создан');
+            Message.success(t('balance_topup_created'));
             onClose();
         } finally {
             setLoading(false);
