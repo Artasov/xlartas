@@ -6,9 +6,7 @@ from typing import Any, Dict, Optional, TypedDict
 import httpx
 from django.conf import settings
 
-from apps.cloudpayments.models import CloudPaymentPayment
 from apps.commerce.exceptions.payment import PaymentException
-from apps.commerce.models.payment import Currency
 
 log = logging.getLogger('cloud_payment')
 
@@ -79,6 +77,8 @@ class CloudPaymentAPI:
     @classmethod
     async def init_sbp(cls, *, user, amount: Decimal, order_id, ip, description, email=None):
         """Создаём QR‑ссылку SBP (`/payments/qr/sbp/link`)."""
+        from apps.commerce.models.payment import Currency
+        from apps.cloudpayments.models import CloudPaymentPayment
         data = {
             'PublicId': settings.CLOUD_PAYMENT_PUBLIC_ID,
             'Amount': float(amount),
@@ -104,7 +104,8 @@ class CloudPaymentAPI:
 
     @classmethod
     async def init(cls, *, user, amount: Decimal):
-
+        from apps.commerce.models.payment import Currency
+        from apps.cloudpayments.models import CloudPaymentPayment
         return await CloudPaymentPayment.objects.acreate(
             amount=amount,
             currency=Currency.RUB,
