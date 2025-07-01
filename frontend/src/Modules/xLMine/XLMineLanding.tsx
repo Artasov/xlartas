@@ -10,6 +10,7 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useDispatch} from 'react-redux';
 import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
+import {useTranslation} from 'react-i18next';
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -21,6 +22,7 @@ const XLMineLanding: React.FC = () => {
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
     const dispatch = useDispatch();
+    const {t} = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number | null>(null);
     const angleRef = useRef(0);
@@ -134,10 +136,7 @@ const XLMineLanding: React.FC = () => {
                         <FR cls={'hover-scale-4'} cursorPointer onClick={_ => {
                             window.open('https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html', '_blank');
                         }}>
-                            <span>Обязательна <span style={{
-                                textDecoration: 'underline',
-                                color: plt.error.main,
-                            }}>java21</span> или выше</span>
+                            <span>{t('xlmine_java_required')}</span>
                         </FR>
                         <Button onClick={handleDownload}
                                 className="hover-scale-5 ftrans-200-eio"
@@ -155,14 +154,12 @@ const XLMineLanding: React.FC = () => {
                                 {loading
                                     ? <FR mr={1}><CircularProgress size="2.1rem"/></FR>
                                     : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}
-                                <span>Скачать лаунчер</span>
+                                <span>{t('download_launcher')}</span>
                             </FRCC>
                         </Button>
                         <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
                             <p style={{maxWidth: 400, fontSize: '1.1rem'}}>
-                                Просто мой личный сервер изначально для игры с кем то без плохого пинга,
-                                Radmin, Realms, с кучей модов и базово норм шейдерами и текстурами. На домофоне
-                                будет мало fps, модов много.
+                                {t('xlmine_description')}
                             </p>
                             {/*<FRCC w={'fit-content'}><DonateButton/></FRCC>*/}
                         </FCCC>
@@ -175,7 +172,7 @@ const XLMineLanding: React.FC = () => {
                         textAlign: 'center',
                     }}>
                         <span style={{fontSize: '.9rem', opacity: '25%'}}>
-                            xlmine © 2025 xlartas. All rights reserved.
+                            {t('xlmine_footer')}
                         </span>
                     </FC>
                 </FCCC>

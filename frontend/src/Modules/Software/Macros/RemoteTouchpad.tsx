@@ -2,11 +2,13 @@
 import React, {useRef} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 import {FCCC} from 'wide-containers';
+import {useTranslation} from 'react-i18next';
 import {useMacroControl} from './MacroControlProvider';
 
 const RemoteTouchpad: React.FC = () => {
     const {plt} = useTheme();
     const {sendMouseMove} = useMacroControl();
+    const {t} = useTranslation();
 
     const lastPosRef = useRef<{ x: number; y: number } | null>(null);
     const frameRequestedRef = useRef(false);
@@ -51,14 +53,14 @@ const RemoteTouchpad: React.FC = () => {
               onPointerMove={handlePointerMove}
               onPointerUp={() => (lastPosRef.current = null)}>
             <span style={{color: plt.text.primary + '88', fontSize: '1rem'}}>
-                Remote touchpad
+                {t('remote_touchpad')}
             </span>
             <span style={{
                 color: plt.text.primary + '55',
                 fontSize: '.9rem',
                 textAlign: 'center',
             }}>
-                Включите функцию Remote Touchpad в xlmacros чтобы использовать это.
+                {t('enable_remote_touchpad')}
             </span>
         </FCCC>
     );

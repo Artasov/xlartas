@@ -3,6 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {buildWSUrl} from 'Utils/ws';
 import {FCCC} from 'wide-containers';
 import TextField from '@mui/material/TextField';
+import {useTranslation} from 'react-i18next';
 
 const WS_URL = buildWSUrl('/ws/macro-control/');
 
@@ -13,6 +14,7 @@ const WS_URL = buildWSUrl('/ws/macro-control/');
 const RemoteKeyboardField: React.FC = () => {
     const wsRef = useRef<WebSocket | null>(null);
     const [value, setValue] = useState('');
+    const {t} = useTranslation();
 
     /* anti-duplicate */
     const lastSentRef = useRef<{ ch: string; ts: number }>({ch: '', ts: 0});
@@ -58,7 +60,7 @@ const RemoteKeyboardField: React.FC = () => {
             <TextField
                 fullWidth
                 variant="filled"
-                placeholder="Tap here and type…"
+                placeholder={t('tap_here_and_type')}
                 value={value}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}

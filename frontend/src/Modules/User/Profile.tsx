@@ -9,6 +9,7 @@ import {Tab, Tabs} from '@mui/material';
 import {useDispatch} from "react-redux";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {openAuthModal} from 'Redux/modalsSlice';
+import {useTranslation} from 'react-i18next';
 
 interface ProfileProps {
     selectedProfile: 'client' | 'employee';
@@ -23,19 +24,21 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
 
     /* ---------- список вкладок ---------- */
     const basePath = '/profile';
+    const {t} = useTranslation();
+
     const tabs = React.useMemo(
         () =>
             selectedProfile === 'client'
                 ? [
-                    {label: 'Пользователь', path: `${basePath}/user`},
-                    {label: 'Minecraft', path: `${basePath}/minecraft`},
+                    {label: t('user_tab'), path: `${basePath}/user`},
+                    {label: t('minecraft_tab'), path: `${basePath}/minecraft`},
                 ]
                 : [
-                    {label: 'Пользователь', path: `${basePath}/user`},
-                    {label: 'Minecraft', path: `${basePath}/minecraft`},
+                    {label: t('user_tab'), path: `${basePath}/user`},
+                    {label: t('minecraft_tab'), path: `${basePath}/minecraft`},
                     {label: 'Сотрудник', path: `${basePath}/employee`},
                 ],
-        [selectedProfile],
+        [selectedProfile, t],
     );
 
     useEffect(() => {

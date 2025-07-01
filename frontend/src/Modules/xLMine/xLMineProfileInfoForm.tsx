@@ -5,11 +5,13 @@ import UserPrivilege from './Privilege/UserPrivilege';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useMediaQuery} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 const XLMineProfileInfoForm: React.FC = () => {
     const {user} = useContext(AuthContext) as AuthContextType;
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const {plt} = useTheme();
+    const {t} = useTranslation();
 
     if (!user) return null;
 
@@ -33,7 +35,7 @@ const XLMineProfileInfoForm: React.FC = () => {
                     </FR>
                 </FRSC>
                 <FR minW={160} mb={1}><SkinCapeSetter/></FR>
-                <FR>{user.coins} монет</FR>
+                <FR>{t('coins_count', {count: user.coins})}</FR>
             </FC>
         </FR>
     );

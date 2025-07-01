@@ -86,7 +86,7 @@ const SoftwareDetailComponent: React.FC = () => {
                     {isTested === null && licenseLoading
                         ? <CircularProgress size="20px"/>
                         : isTested
-                            ? <FR lh={'1rem'}>{licenseHours !== null ? licenseHours : 0} hours left</FR>
+                            ? <FR lh={'1rem'}>{t('hours_left', {hours: licenseHours !== null ? licenseHours : 0})}</FR>
                             : ''
                     }
                 </FR>
@@ -142,7 +142,7 @@ const SoftwareDetailComponent: React.FC = () => {
                                target="_blank" rel="noreferrer">
                                 <Button size={'small'} sx={{
                                     paddingY: '.11rem'
-                                }} className={'gap-1 fw-bold'}><YouTubeIcon/><span>Review</span></Button>
+                                }} className={'gap-1 fw-bold'}><YouTubeIcon/><span>{t('review')}</span></Button>
                             </a>
                         }</FR>
                 </FRSE>
