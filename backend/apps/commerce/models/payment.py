@@ -8,18 +8,18 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Currency(TextChoices):
-    USD = 'USD', 'US Dollar'
-    RUB = 'RUB', 'Russian Ruble'
-    EUR = 'EUR', 'Euro'
+    USD = 'USD', _('US Dollar')
+    RUB = 'RUB', _('Russian Ruble')
+    EUR = 'EUR', _('Euro')
 
 
 class PaymentSystem(TextChoices):
-    HandMade = 'handmade', 'HandMade'
-    TBank = 'tbank', 'TBank'
-    TBankInstallment = 'tbank_installment', 'Tinkoff (Installment)'
-    CloudPayment = 'cloud_payment', 'CloudPayments'
-    FreeKassa = 'freekassa', 'FreeKassa'
-    Balance = 'balance', 'Balance'
+    HandMade = 'handmade', _('HandMade')
+    TBank = 'tbank', _('TBank')
+    TBankInstallment = 'tbank_installment', _('Tinkoff (Installment)')
+    CloudPayment = 'cloud_payment', _('CloudPayments')
+    FreeKassa = 'freekassa', _('FreeKassa')
+    Balance = 'balance', _('Balance')
 
 
 class ACurrencyMixin(AModel):

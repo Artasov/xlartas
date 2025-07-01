@@ -50,5 +50,5 @@ class Timezone(IntegerChoices):
 
 
 class Gender(TextChoices):
-    MALE = 'male', 'Male'
-    FEMALE = 'female', 'Female'
+    MALE = 'male', _('Male')
+    FEMALE = 'female', _('Female')
