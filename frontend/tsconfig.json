@@ -2,29 +2,35 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "static/*": [
+      "Extra/*": [
+        "Extra/*"
+      ],
+      "i18n/*": [
+        "i18n/*"
+      ],
+      "Modules/*": [
+        "Modules/*"
+      ],
+      "Redux/*": [
+        "Redux/*"
+      ],
+      "Static/*": [
         "Static/*"
       ],
       "types/*": [
         "Types/*"
       ],
+      "UI/*": [
+        "UI/*"
+      ],
       "Utils/*": [
         "Utils/*"
       ],
-      "Redux/*": [
-        "Redux/*"
-      ],
-      "Company/*": [
-        "Modules/Company/*"
+      "Api/*": [
+        "Modules/Api/*"
       ],
       "Auth/*": [
         "Modules/Auth/*"
-      ],
-      "TBank/*": [
-        "Modules/TBank/*"
-      ],
-      "Extra/*": [
-        "Modules/Extra/*"
       ],
       "Cabinet/*": [
         "Modules/Cabinet/*"
@@ -32,11 +38,11 @@
       "Chat/*": [
         "Modules/Chat/*"
       ],
-      "Docs/*": [
-        "Modules/Docs/*"
+      "Client/*": [
+        "Modules/Client/*"
       ],
-      "Landing/*": [
-        "Modules/Landing/*"
+      "Company/*": [
+        "Modules/Company/*"
       ],
       "Confirmation/*": [
         "Modules/Confirmation/*"
@@ -44,14 +50,29 @@
       "Core/*": [
         "Modules/Core/*"
       ],
+      "Docs/*": [
+        "Modules/Docs/*"
+      ],
+      "Landing/*": [
+        "Modules/Landing/*"
+      ],
       "Order/*": [
         "Modules/Order/*"
+      ],
+      "Payment/*": [
+        "Modules/Payment/*"
+      ],
+      "TBank/*": [
+        "Modules/TBank/*"
       ],
       "Theme/*": [
         "Modules/Theme/*"
       ],
       "User/*": [
         "Modules/User/*"
+      ],
+      "xLMine/*": [
+        "Modules/xLMine/*"
       ]
     },
     "target": "es6",
