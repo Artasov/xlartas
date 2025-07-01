@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                                                     help_text='Дата и время, когда рассылка должна быть отправлена',
                                                     verbose_name='Start date')),
                 ('sent', models.BooleanField(default=False, verbose_name='Sent')),
-                ('users', models.ManyToManyField(help_text='Выберите пользователей, которым будет отправлена рассылка',
+                ('users', models.ManyToManyField(help_text='Select users who will send the newsletter',
                                                  to=settings.AUTH_USER_MODEL, verbose_name='Users')),
             ],
             options={

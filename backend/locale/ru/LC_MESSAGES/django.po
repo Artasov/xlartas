@@ -2,17 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-01 13:15+0100\n"
+"POT-Creation-Date: 2025-07-01 13:28+0100\n"
 "PO-Revision-Date: 2025-07-01 15:30+0300\n"
 "Last-Translator: xlartas <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 msgid "Invalid start_date"
 msgstr "Неверная дата начала"
@@ -719,8 +717,7 @@ msgstr "Ваш аккаунт создан, подтвердите номер т
 msgid "Great! You have successfully changed your username"
 msgstr "Отлично! Вы успешно изменили имя пользователя"
 
-msgid ""
-"Sorry, something went wrong. We are already working to resolve the problem."
+msgid "Sorry, something went wrong. We are already working to resolve the problem."
 msgstr "Извините, что-то пошло не так. Мы уже работаем над решением проблемы."
 
 msgid "Correct the mistakes."
@@ -969,14 +966,13 @@ msgstr "Платёж FreeKassa"
 msgid "FreeKassa payments"
 msgstr "Платежи FreeKassa"
 
-msgid "Тема"
+msgid "Theme"
 msgstr "Тема"
 
 msgid "HTML content"
 msgstr "HTML-контент"
 
-msgid ""
-"Используйте HTML для форматирования (цветной, жирный текст, картинки и пр.)"
+msgid "Use HTML for formatting (color, fat text, pictures, etc.)"
 msgstr "Используйте HTML для форматирования (цветной, жирный текст, картинки и др.)"
 
 msgid "Дата и время, когда рассылка должна быть отправлена"
@@ -985,13 +981,13 @@ msgstr "Дата и время отправки рассылки"
 msgid "Users"
 msgstr "Пользователи"
 
-msgid "Выберите пользователей, которым будет отправлена рассылка"
+msgid "Select users who will send the newsletter"
 msgstr "Выберите пользователей, которым будет отправлена рассылка"
 
-msgid "Отправленные пользователи"
+msgid "Sent users"
 msgstr "Отправленные пользователи"
 
-msgid "Пользователи, которым уже было отправлено письмо"
+msgid "Users who have already been sent a letter"
 msgstr "Пользователи, которым уже было отправлено письмо"
 
 msgid "Sent"
@@ -1201,7 +1197,7 @@ msgstr "Вы не автор опроса."
 msgid "Survey id was not provided."
 msgstr "ID опроса не предоставлен."
 
-msgid "Нельзя изменять уже законченную попытку."
+msgid "You cannot change the already completed attempt."
 msgstr "Нельзя изменять уже законченную попытку."
 
 msgid "У вас не осталось попыток для прохождения."
@@ -1351,9 +1347,6 @@ msgstr "Нет изображения"
 msgid "Image preview"
 msgstr "Предпросмотр изображения"
 
-msgid "Theme"
-msgstr "Тема"
-
 msgid "Light"
 msgstr "Светлая"
 
@@ -1489,6 +1482,7 @@ msgstr "Закрыть"
 msgid "Home"
 msgstr "Главная"
 
+#, python-format
 msgid "Add %(name)s"
 msgstr "Добавить %(name)s"
 
@@ -1504,6 +1498,7 @@ msgstr "Последние действия"
 msgid "None available"
 msgstr "Нет данных"
 
+#, python-format
 msgid ""
 "\n"
 "                                            %(timesince)s ago"

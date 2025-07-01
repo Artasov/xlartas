@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mailing',
             name='sent_users',
-            field=models.ManyToManyField(blank=True, help_text='Пользователи, которым уже было отправлено письмо',
+            field=models.ManyToManyField(blank=True, help_text='Users who have already been sent a letter',
                                          related_name='mailings_received', to=settings.AUTH_USER_MODEL,
                                          verbose_name='Отправленные пользователи'),
         ),

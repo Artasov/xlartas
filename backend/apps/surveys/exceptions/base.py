@@ -18,7 +18,7 @@ class SurveyIdWasNotProvided(APIException):
 
 class ChangeCompletedSurveyAttemptForbidden(APIException):
     status_code = status.HTTP_423_LOCKED
-    default_detail = {'message': _('Нельзя изменять уже законченную попытку.')}
+    default_detail = {'message': _('You cannot change the already completed attempt.')}
     default_code = 'change_completed_survey_attempt_forbidden'
 
 

@@ -7,10 +7,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Mailing(ACreatedUpdatedAtMixin):
-    subject = CharField(_('Тема'), max_length=255)
+    subject = CharField(_('Theme'), max_length=255)
     html_content = TextField(
         _('HTML content'),
-        help_text=_('Используйте HTML для форматирования (цветной, жирный текст, картинки и пр.)')
+        help_text=_('Use HTML for formatting (color, fat text, pictures, etc.)')
     )
     start_date = DateTimeField(
         _('Start date'),
@@ -20,14 +20,14 @@ class Mailing(ACreatedUpdatedAtMixin):
     users = ManyToManyField(
         settings.AUTH_USER_MODEL,
         verbose_name=_('Users'),
-        help_text=_('Выберите пользователей, которым будет отправлена рассылка')
+        help_text=_('Select users who will send the newsletter')
     )
     sent_users = ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name='mailings_received',
-        verbose_name=_('Отправленные пользователи'),
-        help_text=_('Пользователи, которым уже было отправлено письмо')
+        verbose_name=_('Sent users'),
+        help_text=_('Users who have already been sent a letter')
     )
     sent = BooleanField(_('Sent'), default=False)
 
