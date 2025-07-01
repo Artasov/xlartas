@@ -30,6 +30,8 @@ import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
 import MacrosExecutorPage from "../Software/Macros/MacrosExecutorPage";
 import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
+import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
+import Storage from '../FileHost/Storage';
 
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -97,6 +99,10 @@ const Cabinet: React.FC = () => {
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
                          to="/orders" icon={<CreditScoreRoundedIcon/>}>
                     {t('orders')}
+                </NavLink>
+                <NavLink onClick={() => handleMenuLinkClick('/storage/master/', true)}
+                         to="/storage/master" icon={<FeedRoundedIcon/>}>
+                    {t('storage')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/xlmine', true)}
                          to="/xlmine" icon={<ViewInArIcon/>}>
@@ -172,6 +178,9 @@ const Cabinet: React.FC = () => {
                                 text={t('orders')} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
                             <CabinetNavLink
+                                text={t('storage')} to="/storage/master" urlActiveMark={'storage'} icon={FeedRoundedIcon}
+                                onClick={() => handleMenuLinkClick('/storage/master')}/>
+                            <CabinetNavLink
                                 text={t('minecraft')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
                                 urlActiveMark={'xlmine'}
                                 icon={ViewInArIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
@@ -198,6 +207,7 @@ const Cabinet: React.FC = () => {
                             <Route path='/licenses' element={<Licenses/>}/>
                             <Route path='/wireless' element={<MacrosExecutorPage/>}/>
                             <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
+                            <Route path='/storage/*' element={<Storage/>}/>
 
                             <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}>
                                 <UserOrders className={'px-2'}/>

@@ -21,6 +21,7 @@ class File(AModel):
     file = FileField(upload_to='files/')
     user = ForeignKey('core.User', related_name='files', on_delete=CASCADE)
     folder = ForeignKey(Folder, null=True, blank=True, related_name='files', on_delete=CASCADE)
+    is_favorite = BooleanField(default=False)
     tags = ManyToManyField('Tag', through='FileTag')
 
     def save(self, *args, **kwargs):
