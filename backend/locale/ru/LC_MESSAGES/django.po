@@ -1147,7 +1147,7 @@ msgid "Prices"
 msgstr "Цены"
 
 msgid "Software"
-msgstr "Софт"
+msgstr "Программа"
 
 msgid "Test period already used"
 msgstr "Пробный период уже использован"
