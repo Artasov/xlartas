@@ -1,5 +1,6 @@
 // Modules/Core/ParallaxLogo.tsx
 import React, {RefObject, useCallback, useContext} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -31,6 +32,7 @@ const StyledH1 = styled('h1')<StyledH1Props>(({theme, fontSize}) => ({
 }));
 
 const ParallaxLogo: React.FC = () => {
+    const {t} = useTranslation();
     const {mainRef} = useNavigation();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const navigate = useNavigate();
@@ -80,7 +82,7 @@ const ParallaxLogo: React.FC = () => {
                     <Button
                         className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-4' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
                         onClick={handleAuthClick}>
-                        {isAuthenticated ? 'Profile' : 'Sign in'}
+                        {isAuthenticated ? t('profile') : t('sign_in')}
                     </Button>
                 </FCCC>
                 {/* Кнопка "Software" */}
@@ -88,7 +90,7 @@ const ParallaxLogo: React.FC = () => {
                     <Button
                         className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
                         onClick={handleSoftwareClick}>
-                        Software
+                        {t('software')}
                     </Button>
                 </FCCC>
                 {/* Кнопка "xlmine" */}
@@ -141,7 +143,7 @@ const ParallaxLogo: React.FC = () => {
                                     : 'fs-7 px-2 pt-2px pb-0'
                         }`}
                         onClick={handleAboutClick}>
-                        About
+                        {t('about')}
                     </Button>
                 </FCCC>
                 {/* Блок SocialOAuth */}

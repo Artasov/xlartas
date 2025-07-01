@@ -1,5 +1,6 @@
 // Modules/Cabinet/Cabinet.tsx
 import React, {useContext, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useTheme} from "Theme/ThemeContext";
 import {useMediaQuery} from "@mui/material";
 import CabinetNavLink from "./CabinetNavLink";
@@ -43,6 +44,7 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
 
 
 const Cabinet: React.FC = () => {
+    const {t} = useTranslation();
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
     const {
         setMobileNavigationContent,
@@ -74,31 +76,31 @@ const Cabinet: React.FC = () => {
             setMobileNavigationContent(<>
                 <NavLink onClick={() => handleMenuLinkClick('/profile', true)}
                          to="/profile" icon={<PersonOutlineRoundedIcon/>}>
-                    Profile
+                    {t('profile')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/softwares', true)}
                          to="/software" icon={<WebhookIcon/>}>
-                    Software
+                    {t('software')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/licenses', true)} to="/licenses"
                          icon={<EarbudsRoundedIcon/>}>
-                    Licenses
+                    {t('licenses')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/xlmine-release', true)} to="/xlmine-release"
                          icon={<DeveloperBoardRoundedIcon/>}>
-                    Releases
+                    {t('releases')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/wireless', true)} to="/wireless"
                          icon={<SettingsRemoteRoundedIcon/>}>
-                    Wireless
+                    {t('wireless')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/orders', true)}
                          to="/orders" icon={<CreditScoreRoundedIcon/>}>
-                    Orders
+                    {t('orders')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/xlmine', true)}
                          to="/xlmine" icon={<ViewInArIcon/>}>
-                    Minecraft
+                    {t('minecraft')}
                 </NavLink>
             </>);
         } else {
@@ -127,7 +129,7 @@ const Cabinet: React.FC = () => {
         <CircularProgress size={'100px'}/>
     </FCCC>;
     if (!isAuthenticated) return <FCCC h={'80%'}>
-        <span>You haven't entered the account yet</span>
+        <span>{t('need_login')}</span>
     </FCCC>;
 
     return (
@@ -145,32 +147,32 @@ const Cabinet: React.FC = () => {
                         </FCSC>
                         <FC g={1}>
                             <CabinetNavLink
-                                text={'Profile'} iconSx={{transform: 'scale(1.2)'}} to="/profile"
+                                text={t('profile')} iconSx={{transform: 'scale(1.2)'}} to="/profile"
                                 urlActiveMark={'profile'}
                                 icon={PersonOutlineRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/profile')}/>
                             <CabinetNavLink
-                                text={'Software'} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
+                                text={t('software')} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
                                 urlActiveMark={'software'}
                                 icon={WebhookIcon} onClick={() => handleMenuLinkClick('/softwares')}/>
                             <CabinetNavLink
-                                text={'Licenses'} iconSx={{transform: 'scale(1.04)'}} to="/licenses"
+                                text={t('licenses')} iconSx={{transform: 'scale(1.04)'}} to="/licenses"
                                 urlActiveMark={'license'}
                                 icon={EarbudsRoundedIcon} onClick={() => handleMenuLinkClick('/licenses')}/>
                             {user?.roles?.includes('MINE-DEV') && <CabinetNavLink
-                                text={'Releases'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
+                                text={t('releases')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
                                 urlActiveMark={'xlmine-release'}
                                 icon={DeveloperBoardRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
                             <CabinetNavLink
-                                text={'Wireless'} to="/wireless" urlActiveMark={'wireless'}
+                                text={t('wireless')} to="/wireless" urlActiveMark={'wireless'}
                                 icon={SettingsRemoteRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/wireless')}/>
                             <CabinetNavLink
-                                text={'Orders'} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
+                                text={t('orders')} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
                             <CabinetNavLink
-                                text={'Minecraft'} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
+                                text={t('minecraft')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
                                 urlActiveMark={'xlmine'}
                                 icon={ViewInArIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
                         </FC>

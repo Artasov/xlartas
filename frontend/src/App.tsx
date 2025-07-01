@@ -31,6 +31,7 @@ import CompanyPage from "Company/CompanyPage";
 import CompanyDocumentDetail from "Company/CompanyDocumentDetail";
 import {FC} from "wide-containers";
 import Softwares from "./Modules/Software/Softwares";
+import {useTranslation} from 'react-i18next';
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";
 import BackgroundFlicker from "Core/BackgroundFlicker";
@@ -41,6 +42,7 @@ const App: React.FC = () => {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const {plt} = useTheme();
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {t} = useTranslation();
     const {headerNavHeight, mainRef} = useNavigation();
     const isGt1000 = window.innerWidth > 1000;
     const isBackgroundFlickerEnabled = useSelector((state: RootState) => state.visibility.isBackgroundFlickerEnabled);
@@ -125,7 +127,7 @@ const App: React.FC = () => {
 
                         {isAuthenticated === false && <>
                             <Route path="/softwares" element={<FC g={2} p={2} mx={'auto'} maxW={800}>
-                                <h1 className={'fs-1 lh-1 text-center'}>Softwares</h1>
+                                <h1 className={'fs-1 lh-1 text-center'}>{t('softwares')}</h1>
                                 <Softwares/>
                             </FC>}/>
                             <Route path="/softwares/:id" element={<FC g={2} p={2} mx={'auto'} maxW={700}>

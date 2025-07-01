@@ -1,5 +1,6 @@
 // Modules/Core/pages/About.tsx
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
 import {Button, Container, Link, Typography} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
@@ -10,19 +11,19 @@ import Head from "Core/components/Head";
 
 const About = () => {
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     return (
         <Container maxWidth="md" style={{marginTop: '20px', maxWidth: 500, textAlign: 'center'}}>
             <Head title={'xl | About'}/>
             <Typography variant="h4" component="h1" gutterBottom>
-                About Us
+                {t('about_us_title')}
             </Typography>
             <Typography component="p" sx={{mb: 2}}>
-                We specialize in backend development and WinAPI software solutions, crafting advanced systems with high
-                performance and reliability.
+                {t('about_us_description')}
             </Typography>
             <Typography variant="h6" gutterBottom>
-                Контакты
+                {t('contacts')}
             </Typography>
             <div className={'fcs w-min mx-auto'}>
                 <Link className={'frsc gap-2 text-decoration-none'} rel={'noopener noreferrer'} target={'_blank'}
@@ -47,24 +48,24 @@ const About = () => {
                     className={'enable-tap-select-all'}>324690000014056</span></Typography>
             </div>
             <Typography variant="h6" gutterBottom style={{marginTop: '20px'}}>
-                Пользовательская информация
+                {t('user_information')}
             </Typography>
             <div className={'frcc flex-wrap gap-2'}>
                 <Button variant="outlined" onClick={() => navigate('/offer')}>
-                    Оферта
+                    {t('offer')}
                 </Button>
                 <Button variant="outlined" onClick={() => navigate('/terms-and-conditions')}>
-                    Условия использования
+                    {t('terms_and_conditions')}
                 </Button>
                 <Button variant="outlined" onClick={() => navigate('/privacy-policy')}>
-                    Политика конфиденциальности
+                    {t('privacy_policy')}
                 </Button>
                 <Button variant="outlined" onClick={() => navigate('/software')}>
-                    Our Software
+                    {t('our_software')}
                 </Button>
             </div>
             <div className={'mt-3 fs-5 frcc gap-2'}>
-                <span>PAYMENT SYSTEM</span>
+                <span>{t('payment_system')}</span>
                 <img style={{height: '1.9em'}} src={tinkoffFullEn} alt={'Tinkoff'}/>
             </div>
         </Container>
