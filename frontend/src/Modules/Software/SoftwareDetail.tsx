@@ -2,10 +2,9 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgress from "Core/components/elements/CircularProgress";
-import {IconButton} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import {Button} from "@mui/material";
 import {FC, FCCC, FR, FRCC, FRSE} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import SoftwareOrder from './SoftwareOrder';
@@ -159,13 +158,9 @@ const SoftwareDetailComponent: React.FC = () => {
                 }
             </FC>
             {/* Модальное окно для отображения логов изменений */}
-            <Dialog
-                open={isLogModalOpen}
-                onClose={() => setIsLogModalOpen(false)}
-                className="w-100 maxw-500px"
-            >
+            <Dialog open={isLogModalOpen} onClose={() => setIsLogModalOpen(false)}>
                 <DialogTitle>Лог изменений</DialogTitle>
-                <DialogContent sx={{maxWidth: 500}}>
+                <DialogContent sx={{maxWidth: 500}} className={'no-scrollbar'}>
                     <FCCC pos={'relative'}>
                         <div style={{
                             textShadow: '0 0 5px ' + plt.background.primary + '88'

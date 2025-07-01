@@ -1,6 +1,6 @@
 // Modules/Software/SoftwareOrder.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery, Collapse} from '@mui/material';
+import {Button, Collapse, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FCC, FR, FRC, FRSC} from 'wide-containers';
@@ -177,9 +177,9 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                 </FRSC>
             </FC>
 
-            {showPromo && (
+            <Collapse in={showPromo}>
                 <PromoCodeField
-                    cls="mt-1"
+                    cls="mt-1 mb-2"
                     currency="RUB"
                     productId={software.id}
                     onValidChange={(isValid: boolean | null, promocode?: IPromocode) => {
@@ -189,7 +189,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                     onPromoCodeChange={code => setPromoCode(code)}
                     revalidateKey={revalidateKey}
                 />
-            )}
+            </Collapse>
 
             {creatingOrder && <CircularProgress size="60px"/>}
 
@@ -197,23 +197,24 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                 open={payModal}
                 onClose={() => setPayModal(false)}
             >
-                <DialogTitle><FR opacity={70}>Payment of the order</FR></DialogTitle>
+                <DialogTitle sx={{pb: 1.3}}><FRC opacity={70}>Payment of the order</FRC></DialogTitle>
                 <DialogContent>
-                    <FC g={2} maxW={400}>
-                        <PaymentTypePicker
-                            prices={software.prices}
-                            setPaymentCurrency={setCurrency}
-                            setPaymentSystem={setSystem}
-                        />
+                    <FC maxW={360}>
+                        <FC mb={1}>
+                            <PaymentTypePicker
+                                prices={software.prices}
+                                setPaymentCurrency={setCurrency}
+                                setPaymentSystem={setSystem}
+                            />
+                        </FC>
                         <Collapse in={system === 'freekassa'}>
-                            <FR>
-                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП / Картой и всеми удобными способами. Это ограничения FreeKassa.
+                            <FR opacity={80} mb={1} fontSize={'.88rem'} sx={{lineHeight: '1.2rem'}}>
+                                При оплате через FreeKassa менее 1001 RUB нужно иметь/зарегистрировать кошелек FK Wallet
+                                и пополнить его, либо оплачивать криптой. Более 1000 RUB вы можете оплатить через СБП /
+                                Картой и всеми удобными способами. Это ограничения FreeKassa.
                             </FR>
                         </Collapse>
-                        <FRC g={1}>
-                            {/*<Button onClick={() => setPayModal(false)}>*/}
-                            {/*    Cancel*/}
-                            {/*</Button>*/}
+                        <FRC g={1} mt={1}>
                             <Button disabled={creatingOrder} onClick={createOrder} sx={{
                                 fontWeight: 'bold', width: '100%',
                             }}>

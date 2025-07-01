@@ -240,9 +240,14 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                             bg={plt.text.primary + '07'}
                                             boxShadow={paymentType === selectedPaymentType
                                                 ? '0 0 3px 1px' + theme.colors.secondary.main
-                                                : ''}>{paymentType}</FRCC>
+                                                : ''}>
+                                            {paymentType === 'balance'
+                                                ? <span style={{whiteSpace: 'nowrap'}}>By Balance</span>
+                                                : paymentType
+                                            }
+                                        </FRCC>
                     }))}
-                    maxWidth={300}
+                    maxWidth={330}
                     selectedValue={selectedPaymentType}
                     onChange={(val) => handlePaymentTypeChange(String(val))}
                     className="w-100 frc gap-2 flex-wrap mt-1"

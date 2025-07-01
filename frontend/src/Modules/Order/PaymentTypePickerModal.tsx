@@ -51,19 +51,19 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
         <Dialog open={open} onClose={onClose} className={'w-100 maxw-440px'}>
             <DialogTitle>Оплатить заказ</DialogTitle>
             <DialogContent>
-            <FC g={2}>
-                <PaymentTypePicker
-                    prices={order.product.prices}
-                    setPaymentCurrency={setCurrency}
-                    setPaymentSystem={setSystem}
-                />
-                <FRE g={1}>
-                    <Button variant="outlined" onClick={onClose}>Отмена</Button>
-                    <Button variant="contained" disabled={loading} onClick={confirm}>
-                        {loading ? <CircularProgress size="20px"/> : 'Продолжить'}
-                    </Button>
-                </FRE>
-            </FC>
+                <FC g={2}>
+                    <PaymentTypePicker
+                        prices={order.product.prices}
+                        setPaymentCurrency={setCurrency}
+                        setPaymentSystem={setSystem}
+                    />
+                    <FRE g={1}>
+                        <Button variant="outlined" onClick={onClose}>Cancel</Button>
+                        <Button variant="contained" disabled={loading} onClick={confirm}>
+                            {loading ? <CircularProgress size="20px"/> : 'Next'}
+                        </Button>
+                    </FRE>
+                </FC>
             </DialogContent>
         </Dialog>
     );
