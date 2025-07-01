@@ -6,10 +6,12 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import {Message} from 'Core/components/Message';
 import Tooltip from '@mui/material/Tooltip';
 import {IPrivilege} from '../types/base';
+import {useTranslation} from 'react-i18next';
 
 const UserPrivilege: React.FC = () => {
     const {api} = useApi();
     const [privilege, setPrivilege] = useState<IPrivilege | null | undefined>(undefined);
+    const {t} = useTranslation();
 
     /** превращаем "&#RRGGBBХ"‑строку в набор span‑ов */
     const renderGradient = (str: string) => {
@@ -38,7 +40,7 @@ const UserPrivilege: React.FC = () => {
         api.get('/api/v1/xlmine/privilege/current/')
             .then(data => setPrivilege(data.privilege))
             .catch(() => {
-                Message.error('Ошибка загрузки привилегии');
+                Message.error(t('privilege_load_error'));
                 setPrivilege(null);
             });
     }, [api]);

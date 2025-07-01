@@ -7,6 +7,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {IPrivilege} from "../types/base";
 import {FC, FCCC, FRSC} from "wide-containers";
 import PrivilegeItem from "./PrivilegeItem";
+import {useTranslation} from 'react-i18next';
 
 interface ICurrentPrivilegeResponse {
     privilege: IPrivilege | null;
@@ -17,6 +18,7 @@ interface ICurrentPrivilegeResponse {
 const PrivilegesView: React.FC = () => {
     const {api} = useApi();
     const {plt} = useTheme();
+    const {t} = useTranslation();
 
     // Список всех привилегий
     const [privileges, setPrivileges] = useState<IPrivilege[] | null>(null);
@@ -36,7 +38,7 @@ const PrivilegesView: React.FC = () => {
                 setTotalDonate(currentData.total_donate_amount);
             })
             .catch(() => {
-                Message.error('Ошибка загрузки привилегий');
+                Message.error(t('privileges_load_error'));
                 setPrivileges([]);
                 setTotalDonate(0);
             })
