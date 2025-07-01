@@ -30,6 +30,7 @@ const Storage: React.FC = () => {
             </Tabs>
             <Routes>
                 <Route path="master/" element={<Master/>}/>
+                <Route path="master/:id/" element={<Master/>}/>
                 <Route path="files/all/" element={<AllFiles/>}/>
                 <Route path="files/favorite/" element={<FavoriteFiles/>}/>
                 <Route path="files/:id/" element={<FileDetail/>}/>

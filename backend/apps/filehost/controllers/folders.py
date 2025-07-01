@@ -47,7 +47,9 @@ async def get_folder_content(request) -> Response:
     files = await File.objects.afilter(folder=folder)
     subfolders_serializer = AFolderSerializer(subfolders, many=True)
     files_serializer = FileSerializer(files, many=True)
+    folder_serializer = AFolderSerializer(folder)
     return Response({
+        'folder': folder_serializer.data,
         'folders': subfolders_serializer.data,
         'files': files_serializer.data
     }, status=status.HTTP_200_OK)

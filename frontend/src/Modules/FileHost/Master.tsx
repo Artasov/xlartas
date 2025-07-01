@@ -1,19 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import {IFile, IFolder} from './types';
 import FileItem from './FileItem';
+import FolderItem from './FolderItem';
 import {FC, FRSE} from 'wide-containers';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
-import UploadProgressWindow, {UploadItem} from './UploadProgressWindow';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
+import UploadProgressWindow from './UploadProgressWindow';
+import useFileUpload from './useFileUpload';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Menu, MenuItem} from '@mui/material';
 import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
+import {useParams, useNavigate} from 'react-router-dom';
 
 const Master: React.FC = () => {
     const {api} = useApi();
+    const {id} = useParams();
+    const folderId = id ? Number(id) : null;
     const {t} = useTranslation();
+    const navigate = useNavigate();
+    const {handleUpload: uploadFile, uploads} = useFileUpload(folderId);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const [folders, setFolders] = useState<IFolder[]>([]);
+    const [folder, setFolder] = useState<IFolder | null>(null);
     const [files, setFiles] = useState<IFile[]>([]);
     const [selectMode, setSelectMode] = useState(false);
     const [selected, setSelected] = useState<IFile[]>([]);
@@ -21,16 +30,17 @@ const Master: React.FC = () => {
     const [showShare, setShowShare] = useState<IFile | null>(null);
     const [showCreate, setShowCreate] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
-    const [uploads, setUploads] = useState<UploadItem[]>([]);
+    const [context, setContext] = useState<{x:number;y:number}|null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
 
     const load = () => {
-        api.post('/api/v1/filehost/folder/content/', {id: null}).then(data => {
+        api.post('/api/v1/filehost/folder/content/', {id: folderId}).then(data => {
             setFolders(data.folders);
             setFiles(data.files);
+            setFolder(data.folder);
         });
     };
-    useEffect(() => {load();}, [api]);
+    useEffect(() => {load();}, [api, folderId]);
 
     const toggleSelect = (f: IFile) => {
         setSelected(prev => prev.find(x=>x.id===f.id) ? prev.filter(x=>x.id!==f.id) : [...prev,f]);
@@ -50,29 +60,21 @@ const Master: React.FC = () => {
     };
 
     const handleUpload = async (file: File | null) => {
-        if (!file) return;
-        const item: UploadItem = {name:file.name, progress:0};
-        setUploads(prev=>[...prev,item]);
-        const formData = new FormData();
-        formData.append('files', file);
-        await api.post('/api/v1/filehost/files/upload/', formData, {
-            headers:{'Content-Type':'multipart/form-data'},
-            onUploadProgress:e=>{
-                item.progress = Math.round((e.loaded/e.total)*100);
-                setUploads(u=>[...u]);
-            }
-        });
-        setUploads(u=>u.filter(i=>i!==item));
+        await uploadFile(file);
         load();
     };
 
     const handleCreateFolder = async () => {
-        await api.post('/api/v1/filehost/folder/add/', {name:newFolderName});
+        await api.post('/api/v1/filehost/folder/add/', {name:newFolderName, parent_id: folderId});
         setShowCreate(false); setNewFolderName(''); load();
     };
 
     return (
-        <FC g={0.5} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault(); if(e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);}}>
+        <FC g={0.5}
+            ref={containerRef}
+            onContextMenu={e=>{if(e.target===containerRef.current){e.preventDefault();setContext({x:e.clientX,y:e.clientY});}}}
+            onDragOver={e=>e.preventDefault()}
+            onDrop={e=>{e.preventDefault(); if(e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);}}>
             {selectMode && (
                 <FRSE g={1}>
                     <Button onClick={()=>setShowMove(true)}>{t('move')}</Button>
@@ -80,10 +82,11 @@ const Master: React.FC = () => {
                 </FRSE>
             )}
             <FRSE g={1}>
+                {folder?.parent !== null && <Button onClick={()=>navigate(`/storage/master/${folder?.parent || ''}/`)}>{t('back')}</Button>}
                 <Button onClick={()=>setShowCreate(true)}>{t('create_folder')}</Button>
                 <FileUpload onFileSelect={handleUpload}/>
             </FRSE>
-            {folders.map(f => <div key={f.id}>{f.name}</div>)}
+            {folders.map(f => <FolderItem key={f.id} id={f.id} name={f.name}/>) }
             {files.sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime()).map(f => (
                 <FileItem key={f.id} file={f} selectMode={selectMode} selected={!!selected.find(s=>s.id===f.id)}
                           onToggleSelect={toggleSelect}
@@ -92,6 +95,17 @@ const Master: React.FC = () => {
                           onShare={()=>setShowShare(f)}
                           onDownload={file=>window.open(file.file)}/>
             ))}
+
+            <Menu open={!!context} onClose={()=>setContext(null)} anchorReference="anchorPosition"
+                  anchorPosition={context ? {top: context.y, left: context.x} : undefined}>
+                <MenuItem>
+                    <label style={{cursor:'pointer'}}>
+                        {t('upload_file')}
+                        <input type="file" hidden onChange={e=>{if(e.target.files&&e.target.files[0]){handleUpload(e.target.files[0]); setContext(null);}}}/>
+                    </label>
+                </MenuItem>
+                <MenuItem onClick={()=>{setShowCreate(true); setContext(null);}}>{t('create_folder')}</MenuItem>
+            </Menu>
 
             <MoveDialog files={selected} open={showMove} onClose={()=>{setShowMove(false); setSelected([]); load();}}/>
             <ShareDialog file={showShare} open={!!showShare} onClose={()=>setShowShare(null)}/>
