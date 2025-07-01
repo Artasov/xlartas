@@ -1,5 +1,6 @@
 // Modules/Software/SoftwareDetail.tsx
 import React, {memo, useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {Button, IconButton} from "@mui/material";
@@ -26,6 +27,7 @@ const SoftwareDetailComponent: React.FC = () => {
     const {plt} = useTheme();
     const {api} = useApi();
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const [software, setSoftware] = useState<ISoftware | null>(null);
     const [loading, setLoading] = useState(true);
@@ -38,14 +40,14 @@ const SoftwareDetailComponent: React.FC = () => {
     const isGt576 = useMediaQuery('(min-width:576px)');
     useEffect(() => {
         if (!id) {
-            Message.error('Не указан software ID');
+            Message.error(t('software_id_not_provided'));
             setLoading(false);
             return;
         }
         setLoading(true);
         api.get(`/api/v1/software/${id}/`)
             .then(data => setSoftware(data))
-            .catch(() => Message.error('Ошибка загрузки Software'))
+            .catch(() => Message.error(t('software_load_error')))
             .finally(() => setLoading(false));
     }, [id]);
 

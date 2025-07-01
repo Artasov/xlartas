@@ -8,6 +8,7 @@ from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from asgiref.sync import sync_to_async
 from django.http import HttpResponse, FileResponse, HttpResponseNotFound
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -34,7 +35,7 @@ async def download_file(request):
         response['Content-Disposition'] = f'attachment; filename="{file.name}"'
         return response
     except File.DoesNotExist:
-        return HttpResponseNotFound('File not found')
+        return HttpResponseNotFound(_('File not found'))
 
 
 @acontroller('Download Archive')
@@ -50,7 +51,7 @@ async def download_archive(request):
     files = await File.objects.afilter(id__in=file_ids, user=user)
 
     if not folders and not files:
-        return Response({'error': 'No valid files or folders selected'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': _('No valid files or folders selected')}, status=status.HTTP_400_BAD_REQUEST)
 
     temp_dir = None
     try:

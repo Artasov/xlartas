@@ -1,5 +1,6 @@
 // Modules/Auth/AuthContext.tsx
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {axios, DOMAIN_URL} from "../Api/axiosConfig";
 import {useNavigate} from "react-router-dom";
@@ -39,6 +40,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const {t} = useTranslation();
+
     const {hideMobileMenu} = useNavigation();
 
     useEffect(() => {
@@ -68,14 +71,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
         hideMobileMenu();
         dispatch(closeAuthModal());
-        Message.success('Добро пожаловать! Вы успешно вошли в свой аккаунт.');
+        Message.success(t('login_success'));
     };
     const logout = () => axios.post('/api/v1/logout/')
         .then(() => {
             frontendLogout();
-            Message.success('Успешный выход из системы.');
+            Message.success(t('logout_success'));
             navigate('/');
-        }).catch(() => Message.error('Ошибка выхода из системы.'));
+        }).catch(() => Message.error(t('logout_error')));
 
     const updateCurrentUser = async () => {
         pprint('Update current user')
@@ -98,7 +101,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             const r = await axios.post('/api/v1/token/', {username, password})
             await handleAuthResponse(r.data)
         } catch (e) {
-            Message.error('Неверный логин или пароль.')
+            Message.error(t('invalid_credentials'))
         }
     }
     const oauth2Handler = async (provider: OAuthProvider,

@@ -1,5 +1,6 @@
 // Modules/Order/OrderActions.tsx
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Button, MenuItem} from "@mui/material";
@@ -31,6 +32,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const {user} = useContext(AuthContext) as AuthContextType;
     const {theme, plt} = useTheme();
     const {api} = useApi()
+    const {t} = useTranslation();
     const [payModal, setPayModal] = useState(false);
     const [searchParams] = useSearchParams();
 
@@ -61,7 +63,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const handleDeleteOrder = () => {
         setLoading(true);
         api.post(`/api/v1/orders/${order.id}/delete/`).then(data => {
-            Message.success('Order deleted successfully')
+            Message.success(t('order_deleted_success'))
             if (onOrderDeleted) onOrderDeleted();
         }).catch(_ => null).finally(() => setLoading(false));
     };
@@ -78,9 +80,9 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const handleRedirectToPayment = () => {
         if (order.payment?.payment_url) window.location.href = order.payment.payment_url;
         else {
-            if (order.payment_system === 'handmade') Message.info('For pay order contact me @artasov tg.');
-            else if (order.payment_system === 'balance') Message.success('Заказ успешно выполнен.');
-            else Message.error('No link for payment was found');
+            if (order.payment_system === 'handmade') Message.info(t('contact_admin_for_payment'));
+            else if (order.payment_system === 'balance') Message.success(t('order_completed_success'));
+            else Message.error(t('payment_link_not_found'));
         }
     };
 

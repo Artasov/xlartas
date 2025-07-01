@@ -1,5 +1,6 @@
 // Modules/Auth/forms/NewPhoneForm.tsx
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import {Button} from '@mui/material';
 import ConfirmationCode from 'Confirmation/ConfirmationCode';
@@ -14,6 +15,7 @@ const NewPhoneForm: React.FC<NewPhoneFormProps> = ({onSuccess}) => {
     const [phone, setPhone] = useState<string>('');
     const [showConfirmationCode, setShowConfirmationCode] = useState<boolean>(false);
     const {user} = useContext(AuthContext) as AuthContextType;
+    const {t} = useTranslation();
 
     const handlePhoneChange = (value: string) => {
         setPhone(value);
@@ -21,7 +23,7 @@ const NewPhoneForm: React.FC<NewPhoneFormProps> = ({onSuccess}) => {
 
     const handleSendCode = () => {
         if (!phone || !/^\+?\d{10,15}$/.test(phone)) {
-            Message.error('Введите корректный номер телефона');
+            Message.error(t('invalid_phone_number'));
             return;
         }
         setShowConfirmationCode(true);
@@ -51,7 +53,7 @@ const NewPhoneForm: React.FC<NewPhoneFormProps> = ({onSuccess}) => {
                             user.phone = phone;
                             user.is_phone_confirmed = true;
                         }
-                        Message.success('Телефон успешно подтвержден');
+                        Message.success(t('phone_confirmed'));
                         onSuccess();
                     }}
                 />

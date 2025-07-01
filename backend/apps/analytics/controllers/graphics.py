@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 
 from django.http import HttpResponseBadRequest
+from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
@@ -31,14 +32,14 @@ def visits_chart(request):
             filters['created_at__gte'] = start_date
         except ValueError as exc:
             logger.warning('Invalid start_date %s: %s', start_date_str, exc)
-            return HttpResponseBadRequest('Invalid start_date')
+            return HttpResponseBadRequest(_('Invalid start_date'))
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
         except ValueError as exc:
             logger.warning('Invalid end_date %s: %s', end_date_str, exc)
-            return HttpResponseBadRequest('Invalid end_date')
+            return HttpResponseBadRequest(_('Invalid end_date'))
 
     # Определяем функцию группировки и формат метки
     if group_by == 'hour':
@@ -99,14 +100,14 @@ def orders_chart(request):
             filters['created_at__gte'] = start_date
         except ValueError as exc:
             logger.warning('Invalid start_date %s: %s', start_date_str, exc)
-            return HttpResponseBadRequest('Invalid start_date')
+            return HttpResponseBadRequest(_('Invalid start_date'))
     if end_date_str:
         try:
             end_date = datetime.strptime(end_date_str, date_format)
             filters['created_at__lte'] = end_date
         except ValueError as exc:
             logger.warning('Invalid end_date %s: %s', end_date_str, exc)
-            return HttpResponseBadRequest('Invalid end_date')
+            return HttpResponseBadRequest(_('Invalid end_date'))
 
     # Определяем функцию группировки и формат метки для заказов
     if group_by == 'hour':

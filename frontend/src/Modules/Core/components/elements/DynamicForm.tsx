@@ -1,5 +1,6 @@
 // Modules/Core/components/elements/DynamicForm.tsx
 import React, {ReactNode, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import pprint from 'Utils/pprint';
 import {Message} from 'Core/components/Message';
 import {FormControl, TextField} from '@mui/material';
@@ -23,6 +24,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                                                      submitDisabled = false,
                                                  }) => {
     const [loading, setLoading] = useState<boolean>(false);
+    const {t} = useTranslation();
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -33,7 +35,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         } catch (error) {
             pprint('Ошибка обработки динамической формы');
             pprint(error);
-            Message.error('Ошибка обработки формы');
+            Message.error(t('form_processing_error'));
         } finally {
             setLoading(false);
         }

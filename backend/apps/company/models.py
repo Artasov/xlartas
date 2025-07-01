@@ -38,5 +38,5 @@ class CompanyDocument(ACreatedUpdatedAtMixin, CompanyDocumentException):
         return f'{self.company.name} - {self.title}'
 
     class Meta:
-        verbose_name = 'Company document'
-        verbose_name_plural = 'Companies documents'
+        verbose_name = _('Company document')
+        verbose_name_plural = _('Company documents')

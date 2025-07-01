@@ -1,6 +1,7 @@
 # theme/admin.py
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 
 from apps.theme.models import Theme
@@ -17,6 +18,6 @@ class ThemeAdmin(ImportExportModelAdmin):
                 '<img src="{}" width="150" height="auto" />',
                 obj.bg_image.url
             )
-        return 'Нет изображения'
+        return _('No image')
 
-    image_preview.short_description = 'Предпросмотр изображения'
+    image_preview.short_description = _('Image preview')

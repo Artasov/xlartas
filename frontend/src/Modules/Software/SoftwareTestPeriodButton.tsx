@@ -1,5 +1,6 @@
 // Modules/Software/SoftwareTestPeriodButton.tsx
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Button} from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -33,6 +34,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
     const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {api} = useApi();
     const {plt, theme} = useTheme();
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -49,7 +51,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
             refreshLicense();
             setIsModalOpen(false);
         } catch (error) {
-            Message.error('Ошибка активации тестового периода');
+            Message.error(t('test_activation_error'));
         } finally {
             setIsLoading(false);
         }

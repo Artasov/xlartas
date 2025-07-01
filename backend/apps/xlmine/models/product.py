@@ -14,8 +14,8 @@ class Donate(Product, DonateService, ModelApiBaseException):
     """
 
     class Meta:
-        verbose_name = 'Donate'
-        verbose_name_plural = 'Donates'
+        verbose_name = _('Donate')
+        verbose_name_plural = _('Donates')
 
     def __str__(self): return 'Donate'
 

@@ -1,5 +1,6 @@
 // Modules/Company/CompanyDocumentDetail.tsx
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
@@ -16,6 +17,7 @@ const CompanyDocumentDetail: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const {api} = useApi();
+    const {t} = useTranslation();
     useEffect(() => {
         const fetchDocument = async () => {
             api.get(`/api/v1/docs/${id}/`).then(data => setDocument(data)).finally(() => setLoading(false));
@@ -24,7 +26,7 @@ const CompanyDocumentDetail: React.FC = () => {
             fetchDocument().then();
         } else {
             setLoading(false);
-            Message.error('ID документа не указан.');
+            Message.error(t('document_id_not_specified'));
         }
     }, [id]);
 

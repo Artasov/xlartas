@@ -1,6 +1,7 @@
 // Modules/User/UserPersonalInfoForm.tsx
 
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {format} from 'date-fns';
 import {Button, Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
@@ -42,6 +43,7 @@ const UserPersonalInfoForm: React.FC = () => {
     const {isAuthenticated, user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
     const {notAuthentication} = useErrorProcessing();
     const {plt} = useTheme();
+    const {t} = useTranslation();
     const {api} = useApi();
 
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
@@ -93,7 +95,7 @@ const UserPersonalInfoForm: React.FC = () => {
         api.patch('/api/v1/user/update/', dataToSubmit).then(() => {
             setShowSaveButton(false);
             updateCurrentUser().then(
-                () => Message.success('Пользователь успешно обновлен.')
+                () => Message.success(t('user_update_success'))
             );
         }).finally(() => setIsSubmitting(false)); // Сброс состояния отправки
     };

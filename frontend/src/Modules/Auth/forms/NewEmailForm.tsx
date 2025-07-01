@@ -1,5 +1,6 @@
 // Modules/Auth/forms/NewEmailForm.tsx
 import React, {ChangeEvent, useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {Message} from "Core/components/Message";
@@ -14,6 +15,7 @@ interface NewEmailFormProps {
 const NewEmailForm: React.FC<NewEmailFormProps> = ({onSuccess}) => {
     const [showConfirmationCode, setShowConfirmationCode] = useState<boolean>(false);
     const {user} = useContext(AuthContext) as AuthContextType;
+    const {t} = useTranslation();
     const [email, setEmail] = useState<string>(
         (user?.email && !user.is_email_confirmed) ? user.email : ''
     );
@@ -24,7 +26,7 @@ const NewEmailForm: React.FC<NewEmailFormProps> = ({onSuccess}) => {
 
     const handleSendCode = () => {
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-            Message.error('Введите корректный адрес электронной почты');
+            Message.error(t('invalid_email_address'));
             return;
         }
         setShowConfirmationCode(true);
@@ -64,7 +66,7 @@ const NewEmailForm: React.FC<NewEmailFormProps> = ({onSuccess}) => {
                             user.email = email;
                             user.is_email_confirmed = true;
                         }
-                        Message.success('Почта успешно подтверждена');
+                        Message.success(t('email_confirmed'));
                         onSuccess();
                     }}
                 />

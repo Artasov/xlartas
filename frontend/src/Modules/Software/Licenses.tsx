@@ -1,5 +1,6 @@
 // Modules/Software/Licenses.tsx
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useApi} from '../Api/useApi';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FCC, FCCC, FR} from 'wide-containers';
@@ -8,6 +9,7 @@ import {Message} from 'Core/components/Message';
 
 const Licenses: React.FC = () => {
     const {api} = useApi();
+    const {t} = useTranslation();
     const [licenses, setLicenses] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -15,7 +17,7 @@ const Licenses: React.FC = () => {
         setLoading(true);
         api.get('/api/v1/software/licenses/')
             .then(data => setLicenses(data))
-            .catch(() => Message.error('Ошибка загрузки лицензий'))
+            .catch(() => Message.error(t('licenses_load_error')))
             .finally(() => setLoading(false));
     }, [api]);
 

@@ -1,5 +1,6 @@
 // Modules/Client/ClientPersonalInfoForm.tsx
 import React, {ChangeEvent, FormEvent, useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
@@ -19,6 +20,7 @@ const ClientPersonalInfoForm: React.FC = () => {
     });
 
     const {api} = useApi();
+    const {t} = useTranslation();
     const [showSaveButton, setShowSaveButton] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,7 +37,7 @@ const ClientPersonalInfoForm: React.FC = () => {
         e.preventDefault();
         setIsSubmitting(true);
         api.patch('/api/v1/client/update/', formData).then(() => {
-            Message.success('Клиент успешно обновлен.');
+            Message.success(t('client_update_success'));
             setShowSaveButton(false);
         }).finally(() => setIsSubmitting(false));
     };
