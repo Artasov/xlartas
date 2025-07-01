@@ -48,7 +48,6 @@ const App: React.FC = () => {
     const isBackgroundFlickerEnabled = useSelector((state: RootState) => state.visibility.isBackgroundFlickerEnabled);
 
     useEffect(() => {
-        moment.locale('en');
         pprint('START');
     }, []);
 

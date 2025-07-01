@@ -1,5 +1,7 @@
 import React, {createContext, PropsWithChildren, useEffect, useState} from 'react';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/ru';
 import i18n from "../../i18n";
 
 type Lang = 'ru' | 'en';
@@ -19,6 +21,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     const setLang = (l: Lang) => {
         i18n.changeLanguage(l).then();
+        moment.locale(l);
         localStorage.setItem('lang', l);
         setLangState(l);
         axios.defaults.headers.common['Accept-Language'] = l;
@@ -28,6 +31,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
     /* init once */
     useEffect(() => {
         i18n.changeLanguage(lang).then();
+        moment.locale(lang);
         axios.defaults.headers.common['Accept-Language'] = lang;
     }, []);
 

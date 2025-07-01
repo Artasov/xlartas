@@ -5,12 +5,13 @@ import {useTheme} from "Theme/ThemeContext";
 
 interface StatusItemProps {
     label: string;
+    negativeLabel?: string;
     isActive: boolean;
     color: string;
     showNegative: boolean;
 }
 
-const OrderStatusItem: React.FC<StatusItemProps> = ({label, isActive, color, showNegative}) => {
+const OrderStatusItem: React.FC<StatusItemProps> = ({label, negativeLabel, isActive, color, showNegative}) => {
     const {plt} = useTheme();
 
     return (
@@ -21,7 +22,7 @@ const OrderStatusItem: React.FC<StatusItemProps> = ({label, isActive, color, sho
                 color: color,
             }}
         >
-            {isActive ? label : (showNegative ? `Not ${label.toLowerCase()}` : null)}
+            {isActive ? label : (showNegative ? (negativeLabel ?? label) : null)}
         </Typography>
     );
 };
