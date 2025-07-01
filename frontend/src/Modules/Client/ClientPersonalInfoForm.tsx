@@ -60,7 +60,7 @@ const ClientPersonalInfoForm: React.FC = () => {
                     color="secondary"
                     disabled={isSubmitting} // Отключаем кнопку при отправке формы
                 >
-                    {isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                    {isSubmitting ? t('saving') : t('save')}
                 </Button>
             )}
         </FC>

@@ -1,5 +1,6 @@
 // UI/FileUpload.tsx
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Button} from "@mui/material";
 
 interface FileUploadProps {
@@ -8,6 +9,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({onFileSelect, reset}) => {
+    const {t} = useTranslation();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     useEffect(() => {
@@ -29,7 +31,7 @@ const FileUpload: React.FC<FileUploadProps> = ({onFileSelect, reset}) => {
 
     return (
         <Button component="label">
-            {selectedFile ? selectedFile.name : "Выбрать файл"}
+            {selectedFile ? selectedFile.name : t('choose_file')}
             <input type="file" hidden onChange={handleFileChange}/>
         </Button>
     );

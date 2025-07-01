@@ -114,14 +114,14 @@ const UserPersonalInfoForm: React.FC = () => {
                                 color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
-                            <span>Почта подтверждена</span>
+                            <span>{t('email_confirmed_short')}</span>
                         </FR>
                         : <FR g={1}>
                             <HighlightOffIcon style={{
                                 color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
-                            <span>Почта не подтверждена</span>
+                            <span>{t('email_not_confirmed')}</span>
                         </FR>
                     }
                     {user?.is_phone_confirmed
@@ -130,14 +130,14 @@ const UserPersonalInfoForm: React.FC = () => {
                                 color: plt.success.main,
                                 width: '1.2rem',
                             }}/>
-                            <span>Телефон подтвержден</span>
+                            <span>{t('phone_confirmed_short')}</span>
                         </FR>
                         : <FR g={1}>
                             <HighlightOffIcon style={{
                                 color: plt.error.main,
                                 width: '1.2rem',
                             }}/>
-                            <span>Телефон не подтвержден</span>
+                            <span>{t('phone_not_confirmed')}</span>
                         </FR>
                     }
                 </FC>
@@ -225,12 +225,12 @@ const UserPersonalInfoForm: React.FC = () => {
                         variant="contained"
                         disabled={isSubmitting} // Отключение кнопки при отправке
                     >
-                        {isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                        {isSubmitting ? t('saving') : t('save')}
                     </Button>
                 </FRC>
             )}
             <Dialog open={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)}>
-                <DialogTitle>Смена пароля</DialogTitle>
+                <DialogTitle>{t('change_password')}</DialogTitle>
                 <DialogContent className={'px-3'}>
                     <NewPasswordForm onSuccess={() => setIsPasswordModalOpen(false)}/>
                 </DialogContent>

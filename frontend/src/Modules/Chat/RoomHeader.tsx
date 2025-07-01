@@ -32,7 +32,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
         if (room.max_participants === 2) {
             return otherParticipant
                 ? `${otherParticipant.first_name} ${otherParticipant.last_name}`
-                : 'Избранное';
+                : t('favorites');
         }
         return room.name || '';
     }, [room, otherParticipant]);
@@ -57,7 +57,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                 </IconButton>
             )}
             {room && room.max_participants === 2 && otherParticipant
-                ? <Link to={room && roomName === 'Избранное'
+                ? <Link to={room && roomName === t('favorites')
                     ? '/profile' : profileLink}>
                     <UserAvatar
                         size={'3.4rem'}
@@ -70,7 +70,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
             }
             <Link className={'tdn'} style={{
                 color: plt.text.primary
-            }} to={room && roomName === 'Избранное'
+            }} to={room && roomName === t('favorites')
                 ? '/profile' : profileLink}>
                 <h4 className={'m-0 ps-1'}>
                     {room ? roomName : <CircularProgress/>}

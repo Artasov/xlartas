@@ -21,7 +21,7 @@ const OrderTemplate: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated === false) {
             redirectWithNextBack(navigate, location, '/?auth_modal=True');
-            Message.info('Мы сохранили ваш выбор, войдите или зарегистрируйтесь для продолжения.', 1, 9000);
+            Message.info(t('remember_login_register'), 1, 9000);
         } else setLoading(false);
     }, [isAuthenticated, navigate, location]);
 
