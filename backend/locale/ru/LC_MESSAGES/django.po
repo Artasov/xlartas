@@ -1350,6 +1350,12 @@ msgstr "Предпросмотр изображения"
 msgid "Light"
 msgstr "Светлая"
 
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Timezone"
+msgstr "Тайм-зона"
+
 msgid "Dark"
 msgstr "Тёмная"
 

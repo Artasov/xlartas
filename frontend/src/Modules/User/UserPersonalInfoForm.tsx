@@ -212,7 +212,7 @@ const UserPersonalInfoForm: React.FC = () => {
                     {t('change_password')}
                 </Button>
             </FR>
-            <FC mt={1}>
+            <FC mt={1} opacity={70}>
                 <Typography fontSize={'.8rem'} color={plt.text.primary}>
                     {t('registration_date')} {format(new Date(formData.date_joined), 'dd-MM-yyyy')}
                 </Typography>

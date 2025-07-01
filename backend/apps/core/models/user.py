@@ -58,7 +58,7 @@ class User(
 
     password = CharField(_('Password'), max_length=128, blank=True)
     email = EmailField(_('Email'), blank=True, null=True, db_index=True)
-    phone = PhoneNumberField(null=True, blank=True, db_index=True)
+    phone = PhoneNumberField(verbose_name=_('Phone'), null=True, blank=True, db_index=True)
     middle_name = CharField(_('Middle name'), max_length=150, blank=True)
     birth_date = DateField(_('Birth date'), null=True, blank=True)
     gender = CharField(_('Gender'), max_length=10, choices=Gender.choices, blank=True, null=True)
@@ -72,7 +72,7 @@ class User(
         choices=PreferredLang.choices, default=PreferredLang.RU,
     )
     roles = AManyToManyField('Role', related_name='users', blank=True)
-    timezone = TimeZoneField(default='UTC')
+    timezone = TimeZoneField(verbose_name=_('Timezone'), default='UTC')
     is_email_confirmed = BooleanField(_('Is email confirmed'), default=False)
     is_phone_confirmed = BooleanField(_('Is phone confirmed'), default=False)
     is_test = BooleanField(_('Is test'), default=False)
