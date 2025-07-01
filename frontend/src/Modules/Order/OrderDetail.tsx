@@ -93,7 +93,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                 </FC>
                 <div className={'fc'}>
                     <OrderStatus order={order}/>
-                    <span>Payment system: {order.payment_system}</span>
+                    <span>{t('payment_system')}: {order.payment_system}</span>
                     <span>
                         <span>{t('order_created')} </span>
                         <span>
