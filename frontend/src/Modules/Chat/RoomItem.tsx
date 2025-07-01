@@ -1,6 +1,7 @@
 // Modules/Chat/RoomItem.tsx
 
 import React, {useContext, useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import UserAvatar from "User/UserAvatar";
 import {format, isThisYear, isToday, parseISO} from 'date-fns';
@@ -15,6 +16,7 @@ interface RoomItemProps {
 }
 
 const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
+    const {t} = useTranslation();
     const {user} = useContext(AuthContext) as AuthContextType;
     const {plt, theme} = useTheme();
     const {roomId: currentRoomId} = useParams<{ roomId: string }>();
@@ -26,8 +28,8 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
     const roomName = useMemo(() => {
         return otherParticipants.length > 0
             ? `${otherParticipants[0].first_name} ${otherParticipants[0].last_name}`
-            : 'Избранное';
-    }, [otherParticipants]);
+            : t('favorites');
+    }, [otherParticipants, t]);
 
     const avatar = useMemo(() => {
         return otherParticipants.length > 0
@@ -90,7 +92,7 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
                         ? ''
                         : <span className={'fs-7 rounded-2 px-4px pt-3px pb-4px mt-2px'} style={{
                             background: theme.colors.primary.light + '66'
-                        }}>Заметки</span>}
+                        }}>{t('notes')}</span>}
                 </FRSC>
                 {lastMessage && <>
                     <FRBC g={1} cls={`last-message fs-6`} color={plt.text.primary50}>
@@ -102,7 +104,7 @@ const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
                                 className={'me-2'}
                             />}
                             <span className="last-message-text">
-                                {lastMessage.user.id === user?.id ? 'Вы: ' : ''}
+                                {lastMessage.user.id === user?.id ? t('you_colon') : ''}
                                 {lastMessageText}
                             </span>
                         </FRSC>

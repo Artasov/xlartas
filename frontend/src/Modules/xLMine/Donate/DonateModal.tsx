@@ -95,7 +95,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
         api
             .post("/api/v1/orders/create/", payload)
             .then((_data) => {
-                Message.success("Заказ на покупку коинов успешно создан", 2, 5000);
+                Message.success(t('donate_coins_created_success'), 2, 5000);
                 onClose();
             })
             .catch((_error) => null)

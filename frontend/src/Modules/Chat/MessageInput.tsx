@@ -131,7 +131,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                         position: 'absolute',
                         top: -2,
                         right: 2,
-                    }}>важно</span>
+                    }}>{t('important')}</span>
                     <Checkbox
                         checked={isImportant}
                         onChange={handleImportantChange}
@@ -145,7 +145,7 @@ const MessageInput: React.FC<MessageInputProps> = ({onSend, onFileChange}) => {
                     value={newMessage}
                     onChange={handleChange}
                     onKeyUp={handleKeyPress}
-                    placeholder="Написать сообщение..."
+                    placeholder={t('write_message_placeholder')}
                     style={{
                         flexGrow: 1,
                         padding: '0.5rem',

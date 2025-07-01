@@ -1,5 +1,6 @@
 // Modules/Chat/Chat.tsx
 import React, {useContext, useEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import RoomItem from 'Chat/RoomItem';
 import {useMediaQuery} from '@mui/material';
@@ -12,6 +13,7 @@ import {FC, FCSC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 
 const Chat: React.FC = () => {
+    const {t} = useTranslation();
     const {rooms, loadMoreRooms, initialLoading} = useRooms();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
@@ -82,7 +84,7 @@ const Chat: React.FC = () => {
                     : showNoRoomsMessage &&
                     <FCSC g={1} p={2} scroll={'y-auto'}
                           cls={'no-scrollbar'} textAlign={'center'}>
-                        <p>Ни одного чата</p>
+                        <p>{t('no_chats')}</p>
                     </FCSC>
             }
             {!initialLoading && !isLoading && (isMdOrLarger || isRoomView) && (

@@ -49,7 +49,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         setLoading(true);
         api.post(`/api/v1/orders/${order.id}/cancel/`).then(data => {
             onSomeUpdatingOrderAction(data);
-            navigate(`?success_message=${encodeURIComponent('Order canceled successfully.')}`);
+            navigate(`?success_message=${encodeURIComponent(t('order_canceled_success'))}`);
         }).catch(_ => null).finally(() => setLoading(false));
     };
 
@@ -57,7 +57,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         setLoading(true);
         api.post(`/api/v1/orders/${order.id}/execute/`).then(data => {
             onSomeUpdatingOrderAction(data);
-            navigate(`?success_message=${encodeURIComponent('Order executed successfully.')}`);
+            navigate(`?success_message=${encodeURIComponent(t('order_completed_success'))}`);
         }).catch(_ => null).finally(() => setLoading(false));
     };
     const handleDeleteOrder = () => {
@@ -73,7 +73,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         api.post(`/api/v1/orders/${order.id}/resend_payment_notification/`).then(data => {
             pprint(`Order ID: ${order.id} notification resent`, data);
             onSomeUpdatingOrderAction(data);
-            navigate(`?success_message=${encodeURIComponent('Order notification resent successfully.')}`);
+            navigate(`?success_message=${encodeURIComponent(t('order_notification_resent_success'))}`);
         }).catch(_ => null).finally(() => setLoading(false));
     };
 

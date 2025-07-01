@@ -65,7 +65,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
                                 fontWeight={'bold'} fontSize={22}
                                 bg={theme.colors.secondary.lighter}
                                 color={plt.text.primary}>
-                            Начните писать первым
+                            {t('start_writing_first')}
                         </FCCC>
                     }
                     <div ref={messagesEndRef}></div>

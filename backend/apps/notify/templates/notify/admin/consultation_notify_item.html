@@ -1,3 +1,4 @@
+{% load i18n %}
 <li style="
 border-radius: .7rem;
 display: flex;
@@ -26,22 +27,22 @@ padding: .5rem .8rem .7rem .8rem;">
                 {% endif %}
                 ">
             {% if notify.status == 'sent' %}
-                Отправлено
+                {% trans 'Sent' %}
             {% elif 'failed' in notify.status %}
-                Ошибка
+                {% trans 'Error' %}
             {% elif 'pending' in notify.status %}
-                В ожидании
+                {% trans 'Pending' %}
             {% else %}
-                Хз что это
+                {% trans 'Unknown' %}
             {% endif %}
         </strong>
     </a>
     <strong><a href="{{ recipient_url }}">{{ recipient.first_name }} {{ recipient.last_name }}</a></strong>
-    <span>Тип: <strong>{{ notify.notify_type }}</strong></span>
+    <span>{% trans 'Type:' %} <strong>{{ notify.notify_type }}</strong></span>
     {% if sent_time != '-' %}
-        <span>Отправил в <strong>{{ sent_time }}</strong></span>
+        <span>{% trans 'Sent at' %} <strong>{{ sent_time }}</strong></span>
     {% else %}
-        <span>Планирует в <strong>{{ scheduled_time }}</strong></span>
+        <span>{% trans 'Scheduled for' %} <strong>{{ scheduled_time }}</strong></span>
     {% endif %}
     <span>{{ context_json }}</span>
 </li>

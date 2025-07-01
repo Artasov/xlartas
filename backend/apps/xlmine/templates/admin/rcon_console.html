@@ -1,14 +1,15 @@
 {% extends "admin/base_site.html" %}
+{% load i18n %}
 
 {% block content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="form-control mt-3" type="submit" value="Отправить">
+        <input class="form-control mt-3" type="submit" value="{% trans 'Send' %}">
     </form>
 
     {% if output %}
-        <h2>Вывод команды:</h2>
+        <h2>{% trans 'Command output:' %}</h2>
         <pre>{{ output }}</pre>
     {% endif %}
 {% endblock %}
