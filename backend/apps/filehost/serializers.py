@@ -5,12 +5,6 @@ from rest_framework.fields import SerializerMethodField
 from apps.filehost.models import Folder, File, Tag, FileTag, FolderTag, Access
 
 
-class AFolderSerializer(AModelSerializer):
-    class Meta:
-        model = Folder
-        fields = '__all__'
-
-
 class FolderSerializer(AModelSerializer):
     class Meta:
         model = Folder

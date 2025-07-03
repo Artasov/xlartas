@@ -14,9 +14,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.filehost.controllers.files import STORAGE_LIMIT
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
 from apps.filehost.models import Folder, File
-from apps.filehost.controllers.files import STORAGE_LIMIT
 from apps.filehost.serializers import FileSerializer, FolderSerializer
 from apps.filehost.services.base import create_archive, get_tags, get_folders, get_files
 
@@ -123,7 +123,7 @@ async def upload_files(request) -> Response:
         uploaded_file = await File.objects.acreate(
             file=file, folder=parent, user=request.user
         )
-        uploaded_files.append(FileSerializer(uploaded_file).data)
+        uploaded_files.append(await FileSerializer(uploaded_file).adata)
 
     return Response(uploaded_files, status=status.HTTP_201_CREATED)
 

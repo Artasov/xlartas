@@ -2,7 +2,6 @@
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from asgiref.sync import sync_to_async
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -10,7 +9,7 @@ from rest_framework.response import Response
 
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import Folder, File
-from apps.filehost.serializers import AFolderSerializer, FileSerializer
+from apps.filehost.serializers import FolderSerializer, FileSerializer
 
 
 @acontroller('Get Folder By ID')
@@ -20,16 +19,16 @@ async def get_folder_by_id(request) -> Response:
     folder_id = request.data.get('id')
     if not folder_id: raise IdWasNotProvided()
     folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
-    serializer = AFolderSerializer(folder)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = FolderSerializer(folder)
+    return Response(await serializer.adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Get All Folders')
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_folders(request) -> Response:
-    serializer = AFolderSerializer(await Folder.objects.afilter(user=request.user), many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = FolderSerializer(await Folder.objects.afilter(user=request.user), many=True)
+    return Response(await serializer.adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Get Folder Content')
@@ -45,13 +44,13 @@ async def get_folder_content(request) -> Response:
         folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
     subfolders = await Folder.objects.afilter(parent=folder)
     files = await File.objects.afilter(folder=folder)
-    subfolders_serializer = AFolderSerializer(subfolders, many=True)
+    subfolders_serializer = FolderSerializer(subfolders, many=True)
     files_serializer = FileSerializer(files, many=True)
-    folder_serializer = AFolderSerializer(folder)
+    folder_serializer = FolderSerializer(folder)
     return Response({
-        'folder': folder_serializer.data,
-        'folders': subfolders_serializer.data,
-        'files': files_serializer.data
+        'folder': await folder_serializer.adata,
+        'folders': await subfolders_serializer.adata,
+        'files': await files_serializer.adata
     }, status=status.HTTP_200_OK)
 
 
@@ -72,6 +71,6 @@ async def add_folder(request) -> Response:
     folder = await Folder.objects.acreate(name=name, parent=parent, user=request.user)
 
     return Response(
-        await sync_to_async(lambda: AFolderSerializer(folder).data)(),
+        await FolderSerializer(folder).adata,
         status=status.HTTP_201_CREATED
     )

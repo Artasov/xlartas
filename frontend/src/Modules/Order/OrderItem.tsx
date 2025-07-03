@@ -77,8 +77,7 @@ const OrderItem: React.FC<OrderItemProps> = (
                     <span>
                         <span>{t('order_created_at')}&nbsp;</span>
                         <span className={'fw-6'}>
-                            {moment(order.created_at).calendar().charAt(0).toLowerCase() +
-                                moment(order.created_at).calendar().slice(1)}
+                            {moment(order.created_at).calendar().charAt(0).toLowerCase() + moment(order.created_at).calendar().slice(1)}
                         </span>
                     </span>
                     <OrderActions

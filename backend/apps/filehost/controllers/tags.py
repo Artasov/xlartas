@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import File, Tag, Folder, FileTag, FolderTag
-from apps.filehost.serializers import ATagSerializer, FileSerializer, AFolderSerializer
+from apps.filehost.serializers import ATagSerializer, FileSerializer, FolderSerializer
 from apps.filehost.services.base import get_all_subfolders
 
 
@@ -151,7 +151,7 @@ async def filter_by_tag_in_folder(request) -> Response:
     files = await File.objects.filter(folder__in=all_folders, file_tags__tag=tag).all()
     folders = await Folder.objects.filter(id__in=[f.id for f in all_folders], folder_tags__tag=tag).all()
     files_serializer = FileSerializer(files, many=True)
-    folders_serializer = AFolderSerializer(folders, many=True)
+    folders_serializer = FolderSerializer(folders, many=True)
     return Response({
         'files': files_serializer.data,
         'folders': folders_serializer.data

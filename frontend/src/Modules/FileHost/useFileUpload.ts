@@ -16,8 +16,10 @@ const useFileUpload = (parentId: number | null) => {
         await api.post('/api/v1/filehost/files/upload/', formData, {
             headers: {'Content-Type': 'multipart/form-data'},
             onUploadProgress: e => {
-                item.progress = Math.round((e.loaded / e.total) * 100);
-                setUploads(u => [...u]);
+                if (e.total !== undefined) {
+                    item.progress = Math.round((e.loaded / e.total) * 100);
+                    setUploads(u => [...u]);
+                }
             }
         });
         setUploads(u => u.filter(i => i !== item));

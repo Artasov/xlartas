@@ -23,10 +23,10 @@ const Storage: React.FC = () => {
     return (
         <FC g={1} h={'100%'}>
             <StorageUsageBar/>
-            <Tabs value={current} onChange={(_, v) => navigate(v)} sx={{px:2}}>
-                <Tab value="/storage/master/" label={t('storage')} />
-                <Tab value="/storage/files/all/" label={t('all_files')} />
-                <Tab value="/storage/files/favorite/" label={t('favorites')} />
+            <Tabs value={current} onChange={(_, v) => navigate(v)} sx={{px: 2}}>
+                <Tab value="/storage/master/" label={t('storage')}/>
+                <Tab value="/storage/files/all/" label={t('all_files')}/>
+                <Tab value="/storage/files/favorite/" label={t('favorites')}/>
             </Tabs>
             <Routes>
                 <Route path="master/" element={<Master/>}/>

@@ -26,7 +26,7 @@ async def get_file_by_id(request) -> Response:
         raise IdWasNotProvided()
     file = await aget_object_or_404(File, id=file_id, user=request.user)
     serializer = FileSerializer(file)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(await serializer.adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Get All Files')
@@ -39,7 +39,7 @@ async def get_all_files(request) -> Response:
     files_qs = File.objects.filter(user=request.user).order_by('-created_at')[offset:offset + page_size]
     files = []
     async for f in files_qs:
-        files.append(FileSerializer(f).data)
+        files.append(await FileSerializer(f).adata)
     return Response(files, status=status.HTTP_200_OK)
 
 
@@ -59,7 +59,7 @@ async def add_file(request) -> Response:
     serializer = FileSerializer(data=request.data)
     await serializer.ais_valid(raise_exception=True)
     file = await serializer.asave()
-    return Response(FileSerializer(file).data, status=status.HTTP_201_CREATED)
+    return Response(await FileSerializer(file).adata, status=status.HTTP_201_CREATED)
 
 @acontroller('Get Favorite Files')
 @api_view(('GET',))
@@ -71,7 +71,7 @@ async def get_favorite_files(request) -> Response:
     files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[offset:offset + page_size]
     files = []
     async for f in files_qs:
-        files.append(FileSerializer(f).data)
+        files.append(await FileSerializer(f).adata)
     return Response(files, status=status.HTTP_200_OK)
 
 
@@ -88,7 +88,7 @@ async def toggle_favorite(request) -> Response:
     else:
         file.is_favorite = not file.is_favorite
     await file.asave()
-    return Response(FileSerializer(file).data, status=status.HTTP_200_OK)
+    return Response(await FileSerializer(file).adata, status=status.HTTP_200_OK)
 
 
 @acontroller('Get Storage Usage')

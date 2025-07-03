@@ -24,12 +24,10 @@ from apps.xlmine.services.user import UserXLMineService
 from utils.pictures import CorrectOrientation
 
 
-def generate_custom_key() -> str:
-    return uuid.uuid4().hex[:20]
+def generate_custom_key() -> str: return uuid.uuid4().hex[:20]
 
 
-def generate_referral_code() -> str:
-    return uuid.uuid4().hex[:10]
+def generate_referral_code() -> str: return uuid.uuid4().hex[:10]
 
 
 class Role(AModel):
@@ -38,8 +36,7 @@ class Role(AModel):
 
     name = CharField(max_length=20, unique=True, choices=Variant.choices)
 
-    def __str__(self):
-        return str(self.Variant.get_label(self.name))
+    def __str__(self): return str(self.Variant.get_label(self.name))
 
 
 class User(
