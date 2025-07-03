@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Checkbox, IconButton, Menu, MenuItem, Paper} from '@mui/material';
+import {Checkbox, IconButton, Paper} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -8,6 +8,8 @@ import {useApi} from '../Api/useApi';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
+import useLongPress from './useLongPress';
+import FileActions from './FileActions';
 
 interface Props {
     file: IFile;
@@ -26,6 +28,8 @@ const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
     const navigate = useNavigate();
     const {t} = useTranslation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const longPress = useLongPress(e => setAnchorEl(e.currentTarget));
 
     const toggleFav = () => {
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then(d => {
@@ -52,7 +56,10 @@ const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
     };
 
     return (
-        <Paper sx={{p:1,width:150}} onClick={handleClick} onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}>
+        <Paper sx={{p:1,width:150}}
+               onClick={handleClick}
+               onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}
+               {...longPress}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                 {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>} 
                 <IconButton size="small" onClick={e=>{e.stopPropagation();toggleFav();}} sx={{color:file.is_favorite? '#fbc02d':'inherit'}}>
@@ -64,17 +71,19 @@ const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
             </div>
             <div style={{wordBreak:'break-all',fontSize:'0.9rem'}}>{file.name}</div>
             <div style={{fontSize:'0.75rem',color:'#666'}}>{new Date(file.created_at).toLocaleDateString()} · {formatFileSize(file.size)}</div>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={()=>setAnchorEl(null)}>
-                <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
-                <MenuItem onClick={handleShare}>{t('share')}</MenuItem>
-                {selectMode ? (
-                    <MenuItem onClick={handleToggleSelect}>{t('select')}</MenuItem>
-                ) : (
-                    <MenuItem onClick={handleSelectMode}>{t('select')}</MenuItem>
-                )}
-                <MenuItem onClick={toggleFav}>{file.is_favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>
-                <MenuItem onClick={handleDelete}>{t('delete')}</MenuItem>
-            </Menu>
+            <FileActions
+                anchorEl={anchorEl}
+                file={file}
+                selectMode={selectMode}
+                selected={selected}
+                onClose={()=>setAnchorEl(null)}
+                onToggleSelect={onToggleSelect}
+                onSelectMode={onSelectMode}
+                onDelete={onDelete}
+                onDownload={onDownload}
+                onShare={onShare}
+                onToggleFavorite={() => {toggleFav();}}
+            />
         </Paper>
     );
 };
