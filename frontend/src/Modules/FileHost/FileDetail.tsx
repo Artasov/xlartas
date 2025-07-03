@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {useApi} from '../Api/useApi';
 import {IFile} from './types';
 import {FC} from 'wide-containers';
@@ -7,6 +7,7 @@ import {FC} from 'wide-containers';
 const FileDetail: React.FC = () => {
     const {id} = useParams();
     const {api} = useApi();
+    const navigate = useNavigate();
     const [file, setFile] = useState<IFile | null>(null);
     useEffect(() => {
         if (id) api.post('/api/v1/filehost/file/', {id: Number(id)}).then(setFile);
@@ -14,6 +15,9 @@ const FileDetail: React.FC = () => {
     if (!file) return null;
     return (
         <FC g={1} p={2}>
+            <div>
+                <button onClick={() => navigate(-1)}>Back</button>
+            </div>
             <h3>{file.name}</h3>
             <a href={file.file} target="_blank" rel="noreferrer">Open</a>
         </FC>

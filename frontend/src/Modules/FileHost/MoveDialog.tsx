@@ -35,7 +35,6 @@ const MoveDialog: React.FC<Props> = ({files, open, onClose}) => {
             <DialogTitle>{t('move')}</DialogTitle>
             <DialogContent>
                 <Select fullWidth value={target} onChange={e=>setTarget(Number(e.target.value))}>
-                    <MenuItem value=''>root</MenuItem>
                     {folders.map(f=>(<MenuItem key={f.id} value={f.id}>{f.name}</MenuItem>))}
                 </Select>
             </DialogContent>
