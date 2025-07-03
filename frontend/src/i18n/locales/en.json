@@ -107,6 +107,7 @@
   "share": "Share",
   "select": "Select",
   "move": "Move",
+  "rename": "Rename",
   "delete_confirm": "Delete?",
   "multi_delete_confirm": "Delete selected files?",
   "create_folder": "Create folder",

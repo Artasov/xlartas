@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import {IFile, IFolder} from './types';
-import FileItem from './FileItem';
-import FolderItem from './FolderItem';
+import FileCard from './FileCard';
+import FolderCard from './FolderCard';
 import {FC, FRSE} from 'wide-containers';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
@@ -69,6 +69,11 @@ const Master: React.FC = () => {
         setShowCreate(false); setNewFolderName(''); load();
     };
 
+    const handleDeleteFolder = async (id: number) => {
+        await api.delete('/api/v1/filehost/item/delete/', {data:{folder_id:id}});
+        load();
+    };
+
     return (
         <FC g={0.5}
             ref={containerRef}
@@ -86,15 +91,21 @@ const Master: React.FC = () => {
                 <Button onClick={()=>setShowCreate(true)}>{t('create_folder')}</Button>
                 <FileUpload onFileSelect={handleUpload}/>
             </FRSE>
-            {folders.map(f => <FolderItem key={f.id} id={f.id} name={f.name}/>) }
-            {files.sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime()).map(f => (
-                <FileItem key={f.id} file={f} selectMode={selectMode} selected={!!selected.find(s=>s.id===f.id)}
-                          onToggleSelect={toggleSelect}
-                          onSelectMode={()=>{setSelectMode(true); toggleSelect(f);}}
-                          onDelete={()=>{setSelected([f]); setConfirmOpen(true);}}
-                          onShare={()=>setShowShare(f)}
-                          onDownload={file=>window.open(file.file)}/>
-            ))}
+            <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+                {folders.map(f => (
+                    <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
+                ))}
+                {files
+                    .sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
+                    .map(f => (
+                        <FileCard key={f.id} file={f} selectMode={selectMode} selected={!!selected.find(s=>s.id===f.id)}
+                                 onToggleSelect={toggleSelect}
+                                 onSelectMode={()=>{setSelectMode(true); toggleSelect(f);}}
+                                 onDelete={()=>{setSelected([f]); setConfirmOpen(true);}}
+                                 onShare={()=>setShowShare(f)}
+                                 onDownload={file=>window.open(file.file)}/>
+                    ))}
+            </div>
 
             <Menu open={!!context} onClose={()=>setContext(null)} anchorReference="anchorPosition"
                   anchorPosition={context ? {top: context.y, left: context.x} : undefined}>
