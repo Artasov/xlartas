@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Checkbox, IconButton, Menu, MenuItem} from '@mui/material';
+import {Checkbox, IconButton} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -9,6 +9,8 @@ import {useApi} from '../Api/useApi';
 import {FRSE} from 'wide-containers';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import useLongPress from './useLongPress';
+import FileActions from './FileActions';
 
 interface Props {
     file: IFile;
@@ -27,6 +29,7 @@ const FileTableRow: React.FC<Props> = ({file, selectMode, selected, onToggleSele
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const longPress = useLongPress(e => setAnchorEl(e.currentTarget));
 
     const toggleFav = () => {
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then(d => {
@@ -53,7 +56,9 @@ const FileTableRow: React.FC<Props> = ({file, selectMode, selected, onToggleSele
     };
 
     return (
-        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={handleClick} onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}
+        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={handleClick}
+              onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}
+              {...longPress}
               sx={{gridTemplateColumns: selectMode ? '24px 1fr 160px 100px auto' : '1fr 160px 100px auto', display:'grid', alignItems:'center'}}>
             {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>}
             <span>{file.name}</span>
@@ -66,17 +71,19 @@ const FileTableRow: React.FC<Props> = ({file, selectMode, selected, onToggleSele
                 <IconButton size="small" onClick={e=>{e.stopPropagation();setAnchorEl(e.currentTarget);}}>
                     <MoreVertIcon fontSize="small"/>
                 </IconButton>
-                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={()=>setAnchorEl(null)}>
-                    <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
-                    <MenuItem onClick={handleShare}>{t('share')}</MenuItem>
-                    {selectMode ? (
-                        <MenuItem onClick={handleToggleSelect}>{t('select')}</MenuItem>
-                    ) : (
-                        <MenuItem onClick={handleSelectMode}>{t('select')}</MenuItem>
-                    )}
-                    <MenuItem onClick={toggleFav}>{file.is_favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>
-                    <MenuItem onClick={handleDelete}>{t('delete')}</MenuItem>
-                </Menu>
+                <FileActions
+                    anchorEl={anchorEl}
+                    file={file}
+                    selectMode={selectMode}
+                    selected={selected}
+                    onClose={()=>setAnchorEl(null)}
+                    onToggleSelect={onToggleSelect}
+                    onSelectMode={onSelectMode}
+                    onDelete={onDelete}
+                    onDownload={onDownload}
+                    onShare={onShare}
+                    onToggleFavorite={() => {toggleFav();}}
+                />
             </FRSE>
         </FRSE>
     );

@@ -5,3 +5,5 @@ export {default as FileCard} from './FileCard';
 export {default as FolderCard} from './FolderCard';
 export {default as useFileUpload} from './useFileUpload';
 export {default as FileTableRow} from './FileTableRow';
+export {default as FileActions} from './FileActions';
+export {default as useLongPress} from './useLongPress';
