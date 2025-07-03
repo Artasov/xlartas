@@ -12,6 +12,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Me
 import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
 import {useParams, useNavigate} from 'react-router-dom';
+import DropOverlay from './DropOverlay';
 
 const Master: React.FC = () => {
     const {api} = useApi();
@@ -75,6 +76,8 @@ const Master: React.FC = () => {
     };
 
     return (
+        <>
+        <DropOverlay onFileDrop={handleUpload}/>
         <FC g={0.5}
             ref={containerRef}
             onContextMenu={e=>{if(e.target===containerRef.current){e.preventDefault();setContext({x:e.clientX,y:e.clientY});}}}
@@ -87,7 +90,7 @@ const Master: React.FC = () => {
                 </FRSE>
             )}
             <FRSE g={1}>
-                {folder?.parent !== null && <Button onClick={()=>navigate(`/storage/master/${folder?.parent || ''}/`)}>{t('back')}</Button>}
+                {folder && folder.parent !== null && <Button onClick={()=>navigate(`/storage/master/${folder.parent || ''}/`)}>{t('back')}</Button>}
                 <Button onClick={()=>setShowCreate(true)}>{t('create_folder')}</Button>
                 <FileUpload onFileSelect={handleUpload}/>
             </FRSE>
@@ -140,8 +143,9 @@ const Master: React.FC = () => {
                 </DialogActions>
             </Dialog>
 
-            {uploads.length>0 && <UploadProgressWindow items={uploads}/>}            
+            {uploads.length>0 && <UploadProgressWindow items={uploads}/>}
         </FC>
+        </>
     );
 };
 

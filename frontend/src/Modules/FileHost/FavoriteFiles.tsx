@@ -9,6 +9,7 @@ import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import {Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import {FRSE} from 'wide-containers';
+import DropOverlay from './DropOverlay';
 import {useTranslation} from 'react-i18next';
 
 const FavoriteFiles: React.FC = () => {
@@ -40,6 +41,8 @@ const FavoriteFiles: React.FC = () => {
     };
 
     return (
+        <>
+        <DropOverlay onFileDrop={handleUpload}/>
         <div onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault(); if(e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);}}>
             {selectMode && (
                 <FRSE g={1} mb={1}>
@@ -82,6 +85,7 @@ const FavoriteFiles: React.FC = () => {
             </Dialog>
             {uploads.length>0 && <UploadProgressWindow items={uploads}/>}
         </div>
+        </>
     );
 };
 
