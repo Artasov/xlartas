@@ -55,6 +55,7 @@ class Access(ACreatedAtMixin):
     folder = ForeignKey(Folder, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     file = ForeignKey(File, related_name='accesses', on_delete=CASCADE, null=True, blank=True)
     user = ForeignKey('core.User', related_name='accesses', on_delete=CASCADE, null=True, blank=True)
+    email = CharField(max_length=255, null=True, blank=True)
     is_public = BooleanField(default=False)
     public_link = CharField(max_length=255, blank=True, null=True, unique=True)
 
@@ -64,4 +65,5 @@ class Access(ACreatedAtMixin):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Access to {'folder' if self.folder else 'file'} by {self.user if self.user else self.user.email}'
+        owner = self.user.email if self.user else self.email
+        return f"Access to {'folder' if self.folder else 'file'} by {owner}"
