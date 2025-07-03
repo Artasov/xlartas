@@ -41,6 +41,10 @@ const FileTableRow: React.FC<Props> = ({file, selectMode, selected, onToggleSele
     const handleToggleSelect = () => { onToggleSelect && onToggleSelect(file); setAnchorEl(null); };
 
     const handleClick = () => {
+        if (anchorEl) {
+            setAnchorEl(null);
+            return;
+        }
         if (selectMode) {
             onToggleSelect && onToggleSelect(file);
         } else {
