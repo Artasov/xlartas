@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
 import {useApi} from '../Api/useApi';
-import FileItem from './FileItem';
+import FileTableRow from './FileTableRow';
 import {IFile} from './types';
 import useFileUpload from './useFileUpload';
 import UploadProgressWindow from './UploadProgressWindow';
@@ -9,10 +9,12 @@ import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import {Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import {FRSE} from 'wide-containers';
+import {useTranslation} from 'react-i18next';
 
 const AllFiles: React.FC = () => {
     const {api} = useApi();
     const {handleUpload, uploads} = useFileUpload(null);
+    const {t} = useTranslation();
 
     const [selected, setSelected] = useState<IFile[]>([]);
     const [selectMode, setSelectMode] = useState(false);
@@ -45,10 +47,17 @@ const AllFiles: React.FC = () => {
                     <Button color="error" onClick={() => setConfirmOpen(true)}>Delete</Button>
                 </FRSE>
             )}
+            <FRSE p={0.5} sx={{gridTemplateColumns: selectMode ? '24px 1fr 160px 100px auto' : '1fr 160px 100px auto', display:'grid',fontWeight:600}}>
+                {selectMode && <span/>}
+                <span>{t('name')}</span>
+                <span>{t('upload_date')}</span>
+                <span>{t('size')}</span>
+                <span></span>
+            </FRSE>
             <PaginatedList
                 loadData={load}
                 renderItem={(item) => (
-                    <FileItem
+                    <FileTableRow
                         key={item.id}
                         file={item}
                         selectMode={selectMode}
