@@ -5,7 +5,7 @@ from apps.filehost.controllers.accesses import (
     grant_access, revoke_access, list_accesses, set_public
 )
 from apps.filehost.controllers.base import (
-    move_item, get_full_tree, bulk_delete_items,
+    move_item, rename_item, get_full_tree, bulk_delete_items,
     bulk_update_items, upload_files, download_file,
     download_archive,
 )
@@ -43,6 +43,7 @@ urlpatterns = [
     path('download/archive/', download_archive, name='download_archive'),
 
     path('item/move/', move_item, name='move_item'),
+    path('item/rename/', rename_item, name='rename_item'),
     path('item/delete/', delete_item, name='delete_item'),
     path('items/bulk_delete/', bulk_delete_items, name='bulk_delete_items'),
     path('items/bulk_update/', bulk_update_items, name='bulk_update_items'),

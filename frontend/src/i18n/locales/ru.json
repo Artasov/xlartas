@@ -107,6 +107,7 @@
   "share": "Поделиться",
   "select": "Выделить",
   "move": "Переместить",
+  "rename": "Переименовать",
   "delete_confirm": "Удалить?",
   "multi_delete_confirm": "Удалить выбранные файлы?",
   "create_folder": "Создать папку",

@@ -222,3 +222,24 @@ async def move_item(request) -> Response:
         item.parent = new_folder
     await item.asave()
     return Response(status=status.HTTP_200_OK)
+
+
+@acontroller('Rename Item')
+@api_view(('POST',))
+@permission_classes((IsAuthenticated,))
+async def rename_item(request) -> Response:
+    item_id = request.data.get('item_id')
+    new_name = request.data.get('new_name')
+    if not item_id or not new_name:
+        raise IdWasNotProvided()
+    try:
+        item = await File.objects.aget(id=item_id, user=request.user)
+        item.name = new_name
+        await item.asave()
+        data = await FileSerializer(item).adata
+    except File.DoesNotExist:
+        item = await aget_object_or_404(Folder, id=item_id, user=request.user)
+        item.name = new_name
+        await item.asave()
+        data = await FolderSerializer(item).adata
+    return Response(data, status=status.HTTP_200_OK)
