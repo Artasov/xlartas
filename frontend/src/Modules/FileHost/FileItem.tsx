@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Menu, MenuItem, IconButton, Checkbox} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import {IFile} from './types';
 import {useApi} from '../Api/useApi';
 import {FRSE} from 'wide-containers';
@@ -26,9 +25,13 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [favorite, setFavorite] = useState(file.is_favorite);
+
+    useEffect(() => setFavorite(file.is_favorite), [file.is_favorite]);
 
     const toggleFav = () => {
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then((d) => {
+            setFavorite(d.is_favorite);
             onFavorite && onFavorite({...file, is_favorite: d.is_favorite});
         });
     };
@@ -71,10 +74,12 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
             {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>} 
             <span style={{flexGrow:1}}>{file.name}</span>
             <FRSE g={0.5}>
-                <IconButton size="small" onClick={(e)=>{e.stopPropagation();toggleFav();}}
-                            sx={{color:file.is_favorite? '#fbc02d': 'inherit'}}>
-                    {file.is_favorite ? <StarIcon fontSize="small"/> : <StarBorderIcon fontSize="small"/>}
-                </IconButton>
+                {favorite && (
+                    <IconButton size="small" onClick={(e)=>{e.stopPropagation();toggleFav();}}
+                                sx={{color:'#fbc02d'}}>
+                        <StarIcon fontSize="small"/>
+                    </IconButton>
+                )}
                 <IconButton size="small" onClick={(e) => {e.stopPropagation();setAnchorEl(e.currentTarget);}}>
                     <MoreVertIcon fontSize="small"/>
                 </IconButton>
@@ -86,7 +91,7 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
                     ) : (
                         <MenuItem onClick={handleSelectMode}>{t('select')}</MenuItem>
                     )}
-                    <MenuItem onClick={toggleFav}>{file.is_favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>
+                    <MenuItem onClick={toggleFav}>{favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>
                     <MenuItem onClick={handleDelete}>{t('delete')}</MenuItem>
                 </Menu>
             </FRSE>
