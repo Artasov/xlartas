@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
+import {FR} from "wide-containers";
 
-interface DropOverlayProps { onFileDrop: (file: File | null) => void; }
+interface DropOverlayProps {
+    onFileDrop: (file: File | null) => void;
+}
 
 const DropOverlay: React.FC<DropOverlayProps> = ({onFileDrop}) => {
     const [active, setActive] = useState(false);
@@ -33,7 +36,10 @@ const DropOverlay: React.FC<DropOverlayProps> = ({onFileDrop}) => {
     }, [onFileDrop]);
 
     if (!active) return null;
-    return <div className="drag-overlay"/>;
+    return <FR
+        pos={'fixed'} sx={{inset: 0}}
+        bg={'rgba(0,0,0,0.3)'} pEvents={false} zIndex={2000}
+    />;
 };
 
 export default DropOverlay;
