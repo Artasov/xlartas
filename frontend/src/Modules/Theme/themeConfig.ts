@@ -201,11 +201,18 @@ export const darkTheme = createTheme({
         MuiBackdrop: {
             styleOverrides: {
                 root: {
-                    /* сразу нужный blur + плавный уход по opacity */
+
                     backdropFilter: 'blur(15px)',
-                    transition: 'backdrop-filter .35s ease, opacity .35s ease',
+                    transition: 'backdrop-filter .35s ease, opacity .35s ease', // скрываем скроллбары полностью
+                    '-ms-overflow-style': 'none',            // IE и Edge
+                    overflow: '-moz-scrollbars-none',        // Firefox
+                    '&::-webkit-scrollbar': {                // Chrome, Safari и Opera
+                        width: 0,
+                        height: 0,
+                    },
                 },
             },
+
         },
         MuiTabs: {
             styleOverrides: {

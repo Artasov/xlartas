@@ -22,7 +22,7 @@ const BackButton: React.FC<BackButtonProps> = (
     const navigate = useNavigate();
     const backToPreviousPage = () => navigate(-1);
     return (
-        <FRSC mt={1} onClick={onClick ? onClick : backToPreviousPage}>
+        <FRSC onClick={onClick ? onClick : backToPreviousPage}>
             <ArrowBackIosNewRoundedIcon fontSize={iconFontSize}/>
             <span className={textCls}>
                 {text}

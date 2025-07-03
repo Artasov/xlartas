@@ -7,8 +7,8 @@ import useFileUpload from './useFileUpload';
 import UploadProgressWindow from './UploadProgressWindow';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
-import {Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
-import {FRSE} from 'wide-containers';
+import {Button, Dialog, DialogActions, DialogTitle, useMediaQuery} from '@mui/material';
+import {FR, FRC, FRSE} from 'wide-containers';
 import DropOverlay from './DropOverlay';
 import {useTranslation} from 'react-i18next';
 
@@ -23,6 +23,7 @@ const AllFiles: React.FC = () => {
     const [showShare, setShowShare] = useState<IFile | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [trigger, setTrigger] = useState(0);
+    const isGtSm = useMediaQuery('(min-width: 576px)');
 
     const load = async (page: number): Promise<IFile[]> => {
         return api.get(`/api/v1/filehost/files/?page=${page}&page_size=20`);
@@ -52,9 +53,9 @@ const AllFiles: React.FC = () => {
             )}
             <FRSE p={0.5} sx={{gridTemplateColumns: selectMode ? '24px 1fr 160px 100px auto' : '1fr 160px 100px auto', display:'grid',fontWeight:600}}>
                 {selectMode && <span/>}
-                <span>{t('name')}</span>
-                <span>{t('upload_date')}</span>
-                <span>{t('size')}</span>
+                <FRC>{t('name')}</FRC>
+                {isGtSm && <FRC>{t('upload_date')}</FRC>}
+                <FRC>{t('size')}</FRC>
                 <span></span>
             </FRSE>
             <PaginatedList

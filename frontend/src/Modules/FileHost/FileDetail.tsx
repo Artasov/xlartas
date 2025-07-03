@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useApi} from '../Api/useApi';
 import {IFile} from './types';
-import {FC} from 'wide-containers';
+import {FC, FR} from 'wide-containers';
+import BackButton from "Core/components/BackButton";
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();
@@ -14,11 +15,9 @@ const FileDetail: React.FC = () => {
     }, [id]);
     if (!file) return null;
     return (
-        <FC g={1} p={2}>
-            <div>
-                <button onClick={() => navigate(-1)}>Back</button>
-            </div>
-            <h3>{file.name}</h3>
+        <FC g={1} px={2} mt={1}>
+            <BackButton/>
+            <FR component={'h3'}>{file.name}</FR>
             <a href={file.file} target="_blank" rel="noreferrer">Open</a>
         </FC>
     );

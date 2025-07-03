@@ -28,7 +28,9 @@ const FileActions: React.FC<Props> = ({anchorEl, file, selectMode, selected, onC
     const handleFavorite = () => { onToggleFavorite && onToggleFavorite(file); onClose(); };
 
     return (
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
+        <Menu
+                sx={{'& .MuiPaper-root': {backdropFilter: 'blur(10px)'}}}
+                slotProps={{backdrop: {sx: {backdropFilter: 'none !important'}}}} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
             <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
             <MenuItem onClick={handleShare}>{t('share')}</MenuItem>
             {selectMode ? (

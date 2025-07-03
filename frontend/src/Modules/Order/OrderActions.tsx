@@ -11,6 +11,7 @@ import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
 import {useApi} from "../Api/useApi";
 import PaymentTypePickerModal from "Order/PaymentTypePickerModal";
+import {FRSC} from "wide-containers";
 
 interface OrderActionsProps {
     order: IOrder;
@@ -161,7 +162,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const actions = getActions();
 
     return (
-        <div className={'frsc gap-2 flex-wrap'}>
+        <FRSC g={1} wrap>
             {extended ? (
                 <>
                     {actions.map((action, index) =>
@@ -197,7 +198,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
                 order={order}
                 onPaymentInited={onSomeUpdatingOrderAction}
             />
-        </div>
+        </FRSC>
     );
 };
 

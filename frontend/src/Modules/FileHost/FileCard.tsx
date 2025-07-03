@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Checkbox, IconButton, Paper} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
 import {useNavigate} from 'react-router-dom';
 import {useApi} from '../Api/useApi';
@@ -9,6 +8,7 @@ import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
 import useLongPress from './useLongPress';
 import FileActions from './FileActions';
+import {FC, FR, FRBC} from "wide-containers";
 
 interface Props {
     file: IFile;
@@ -22,7 +22,18 @@ interface Props {
     onSelectMode?: (f: IFile) => void;
 }
 
-const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, onFavorite, onDelete, onDownload, onShare, onSelectMode}) => {
+const FileCard: React.FC<Props> = (
+    {
+        file,
+        selectMode,
+        selected,
+        onToggleSelect,
+        onFavorite,
+        onDelete,
+        onDownload,
+        onShare,
+        onSelectMode
+    }) => {
     const {api} = useApi();
     const navigate = useNavigate();
     const {t} = useTranslation();
@@ -40,55 +51,81 @@ const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
         });
     };
 
-    const handleDelete = () => { onDelete && onDelete(file); setAnchorEl(null); };
-    const handleDownload = () => { onDownload && onDownload(file); setAnchorEl(null); };
-    const handleShare = () => { onShare && onShare(file); setAnchorEl(null); };
-    const handleSelectMode = () => { onSelectMode && onSelectMode(file); setAnchorEl(null); };
-    const handleToggleSelect = () => { onToggleSelect && onToggleSelect(file); setAnchorEl(null); };
+    const handleDelete = () => {
+        onDelete && onDelete(file);
+        setAnchorEl(null);
+    };
+    const handleDownload = () => {
+        onDownload && onDownload(file);
+        setAnchorEl(null);
+    };
+    const handleShare = () => {
+        onShare && onShare(file);
+        setAnchorEl(null);
+    };
+    const handleSelectMode = () => {
+        onSelectMode && onSelectMode(file);
+        setAnchorEl(null);
+    };
+    const handleToggleSelect = () => {
+        onToggleSelect && onToggleSelect(file);
+        setAnchorEl(null);
+    };
 
     const handleClick = () => {
         if (anchorEl) {
             setAnchorEl(null);
             return;
         }
-        if (selectMode) {
-            onToggleSelect && onToggleSelect(file);
-        } else {
-            navigate(`/storage/files/${file.id}/`);
-        }
+        if (selectMode) onToggleSelect && onToggleSelect(file);
+        else navigate(`/storage/files/${file.id}/`);
     };
 
     return (
-        <Paper sx={{p:1,width:150}}
-               onClick={handleClick}
-               onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}
-               {...longPress}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>} 
-                {favorite && (
-                    <IconButton size="small" onClick={e=>{e.stopPropagation();toggleFav();}} sx={{color:'#fbc02d'}}>
-                        <StarIcon fontSize="small"/>
-                    </IconButton>
-                )}
-                <IconButton size="small" onClick={e=>{e.stopPropagation();setAnchorEl(e.currentTarget);}}>
-                    <MoreVertIcon fontSize="small"/>
-                </IconButton>
-            </div>
-            <div style={{wordBreak:'break-all',fontSize:'0.9rem'}}>{file.name}</div>
-            <div style={{fontSize:'0.75rem',color:'#666'}}>{new Date(file.created_at).toLocaleDateString()} · {formatFileSize(file.size)}</div>
-            <FileActions
-                anchorEl={anchorEl}
-                file={{...file, is_favorite: favorite}}
-                selectMode={selectMode}
-                selected={selected}
-                onClose={()=>setAnchorEl(null)}
-                onToggleSelect={onToggleSelect}
-                onSelectMode={onSelectMode}
-                onDelete={onDelete}
-                onDownload={onDownload}
-                onShare={onShare}
-                onToggleFavorite={() => {toggleFav();}}
-            />
+        <Paper sx={{px: 1, pt: 1, pb: .5, width: 150}}
+               onClick={handleClick} onContextMenu={e => {
+            e.preventDefault();
+            setAnchorEl(e.currentTarget);
+        }} {...longPress}>
+            <FC h={'100%'}>
+                <FRBC>
+                    {selectMode && <Checkbox
+                        sx={{p: .4, ml: -.7, mt: -.7}}
+                        size="small"
+                        checked={selected}
+                        onChange={handleToggleSelect}
+                    />}
+                    {favorite && (
+                        <IconButton size="small" onClick={e => {
+                            e.stopPropagation();
+                            toggleFav();
+                        }} sx={{color: '#fbc02d'}}>
+                            <StarIcon fontSize="small"/>
+                        </IconButton>
+                    )}
+                </FRBC>
+                <FR fontSize={'0.9rem'} sx={{wordBreak: 'break-all'}}>
+                    {file.name}
+                </FR>
+                <FR mt={'auto'} fontSize={'0.75rem'} color={'#666'}>
+                    {new Date(file.created_at).toLocaleDateString()} · {formatFileSize(file.size)}
+                </FR>
+                <FileActions
+                    anchorEl={anchorEl}
+                    file={{...file, is_favorite: favorite}}
+                    selectMode={selectMode}
+                    selected={selected}
+                    onClose={() => setAnchorEl(null)}
+                    onToggleSelect={onToggleSelect}
+                    onSelectMode={onSelectMode}
+                    onDelete={onDelete}
+                    onDownload={onDownload}
+                    onShare={onShare}
+                    onToggleFavorite={() => {
+                        toggleFav();
+                    }}
+                />
+            </FC>
         </Paper>
     );
 };
