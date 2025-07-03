@@ -29,7 +29,7 @@ const FileCard: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
     const {t} = useTranslation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-    const longPress = useLongPress(e => setAnchorEl(e.currentTarget));
+    const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
 
     const toggleFav = () => {
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then(d => {
