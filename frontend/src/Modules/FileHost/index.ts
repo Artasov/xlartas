@@ -7,4 +7,5 @@ export {default as useFileUpload} from './useFileUpload';
 export {default as FileTableRow} from './FileTableRow';
 export {default as FolderTableRow} from './FolderTableRow';
 export {default as FileActions} from './FileActions';
+export {default as FolderActions} from './FolderActions';
 export {default as useLongPress} from './useLongPress';
