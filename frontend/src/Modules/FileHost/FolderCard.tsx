@@ -28,7 +28,7 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
         <>
             <Paper
                 sx={{p: 1, width: 150, cursor: 'pointer'}}
-                onDoubleClick={open}
+                onClick={open}
                 onContextMenu={e => {e.preventDefault(); setAnchorEl(e.currentTarget);}}
                 {...longPress}
             >
