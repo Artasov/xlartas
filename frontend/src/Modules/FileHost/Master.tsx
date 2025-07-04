@@ -265,6 +265,7 @@ const Master: React.FC = () => {
                         <TableHead>
                             <TableRow>
                                 {selectMode && <TableCell padding="checkbox"/>}
+                                <TableCell/>
                                 <TableCell>{t('name')}</TableCell>
                                 {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
                                 <TableCell>{t('size')}</TableCell>
@@ -329,14 +330,19 @@ const Master: React.FC = () => {
                     }}>{t('create_folder')}</MenuItem>
                 </Menu>
 
-                <MoveDialog files={selected} open={showMove} onClose={() => {
-                    setShowMove(false);
-                    setSelected([]);
-                    setFolderCached(folderId, undefined as any);
-                    setAllFilesCached(undefined as any);
-                    setFavoriteFilesCached(undefined as any);
-                    load();
-                }}/>
+                <MoveDialog
+                    files={selected}
+                    open={showMove}
+                    onMoved={tid => setFolderCached(tid, undefined as any)}
+                    onClose={() => {
+                        setShowMove(false);
+                        setSelected([]);
+                        setFolderCached(folderId, undefined as any);
+                        setAllFilesCached(undefined as any);
+                        setFavoriteFilesCached(undefined as any);
+                        load();
+                    }}
+                />
                 <ShareDialog file={showShare} open={!!showShare} onClose={() => setShowShare(null)}/>
 
                 <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>

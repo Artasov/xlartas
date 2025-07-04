@@ -8,9 +8,10 @@ interface Props {
     files: IFile[];
     open: boolean;
     onClose: () => void;
+    onMoved?: (folderId: number) => void;
 }
 
-const MoveDialog: React.FC<Props> = ({files, open, onClose}) => {
+const MoveDialog: React.FC<Props> = ({files, open, onClose, onMoved}) => {
     const {api} = useApi();
     const {t} = useTranslation();
     const [folders, setFolders] = useState<IFolder[]>([]);
@@ -27,6 +28,7 @@ const MoveDialog: React.FC<Props> = ({files, open, onClose}) => {
         for (const f of files) {
             await api.post('/api/v1/filehost/item/move/', {item_id: f.id, new_folder_id: target});
         }
+        onMoved && onMoved(target as number);
         onClose();
     };
 

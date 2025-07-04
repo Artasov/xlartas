@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {TableCell, TableRow} from '@mui/material';
+import {TableCell, TableRow, useMediaQuery} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import RenameDialog from './RenameDialog';
 import useLongPress from './useLongPress';
 import FolderActions from './FolderActions';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 
 interface Props {
     id: number;
@@ -18,6 +19,7 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [showRename, setShowRename] = useState(false);
     const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
+    const isGtSm = useMediaQuery('(min-width: 576px)');
 
     const open = () => {
         if (onOpen) onOpen(id);
@@ -40,9 +42,14 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}
                 }}
                 {...longPress}
             >
+                <TableCell padding="checkbox">
+                    <FolderRoundedIcon/>
+                </TableCell>
                 <TableCell component="th" scope="row">
                     {name}
                 </TableCell>
+                {isGtSm && <TableCell/>}
+                <TableCell/>
                 <TableCell/>
             </TableRow>
             <FolderActions
