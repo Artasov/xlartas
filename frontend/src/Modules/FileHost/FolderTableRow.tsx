@@ -29,7 +29,7 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
             <TableRow
                 hover
                 sx={{cursor: 'pointer'}}
-                onDoubleClick={open}
+                onClick={open}
                 onContextMenu={e => {
                     e.preventDefault();
                     setAnchorEl(e.currentTarget);
