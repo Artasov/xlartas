@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {LinearProgress, Paper, IconButton, Button} from '@mui/material';
+import {LinearProgress, Paper, IconButton, Button, Collapse, useMediaQuery} from '@mui/material';
 import {FC, FRSE} from 'wide-containers';
 import CheckIcon from '@mui/icons-material/Check';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -11,9 +11,10 @@ interface Props {items: UploadItem[]; onClose?:()=>void;}
 
 const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
     const [collapsed, setCollapsed] = useState(false);
-    const allDone = items.length>0 && items.every(it=>it.progress===100);
+    const isGtSm = useMediaQuery('(min-width: 576px)');
+    const allDone = items.length > 0 && items.every(it => it.progress === 100);
     return (
-        <Paper sx={{position:'fixed',bottom:16,right:16,p:2,width:250,zIndex:9999}}>
+        <Paper sx={{position:'fixed',bottom:16,right:isGtSm?16:'auto',left:isGtSm?'auto':'50%',transform:isGtSm?'':'translateX(-50%)',p:2,width:250,zIndex:9999}}>
             <IconButton size="small" onClick={()=>setCollapsed(o=>!o)} sx={{position:'absolute',top:4,right:4}}>
                 {collapsed ? <ExpandMoreIcon/> : <ExpandLessIcon/>}
             </IconButton>
@@ -22,7 +23,7 @@ const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
                     <CheckIcon color="success"/>
                 </IconButton>
             )}
-            {!collapsed && (
+            <Collapse in={!collapsed}>
                 <FC g={1} mt={2}>
                     {items.map(it=> (
                         <div key={it.name} style={{display:'flex',flexDirection:'column',gap:4}}>
@@ -38,7 +39,7 @@ const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
                         </div>
                     ))}
                 </FC>
-            )}
+            </Collapse>
         </Paper>
     );
 };
