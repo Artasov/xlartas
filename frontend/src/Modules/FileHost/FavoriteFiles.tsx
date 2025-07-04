@@ -11,10 +11,11 @@ import {Button, Dialog, DialogActions, DialogTitle, Table, TableHead, TableBody,
 import {FRSE} from 'wide-containers';
 import DropOverlay from './DropOverlay';
 import {useTranslation} from 'react-i18next';
+import {getFavoriteFilesCached, setFavoriteFilesCached} from './storageCache';
 
 const FavoriteFiles: React.FC = () => {
     const {api} = useApi();
-    const {handleUpload, uploads} = useFileUpload(null);
+    const {handleUpload, uploads, clearUploads} = useFileUpload(null, () => setFavoriteFilesCached(undefined as any));
     const {t} = useTranslation();
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
@@ -26,7 +27,13 @@ const FavoriteFiles: React.FC = () => {
     const [trigger, setTrigger] = useState(0);
 
     const load = async (page: number): Promise<IFile[]> => {
-        return api.get(`/api/v1/filehost/files/favorite/?page=${page}&page_size=20`);
+        if (page === 1) {
+            const cached = getFavoriteFilesCached();
+            if (cached) return cached;
+        }
+        const data = await api.get(`/api/v1/filehost/files/favorite/?page=${page}&page_size=20`);
+        if (page === 1) setFavoriteFilesCached(data);
+        return data;
     };
 
     const toggleSelect = (f: IFile) => {
@@ -38,6 +45,7 @@ const FavoriteFiles: React.FC = () => {
     const deleteSelected = async () => {
         await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
         setSelected([]);
+        setFavoriteFilesCached(undefined as any);
         setTrigger(t => t + 1);
     };
 
@@ -89,7 +97,7 @@ const FavoriteFiles: React.FC = () => {
                     <Button color="error" onClick={async()=>{await deleteSelected(); setConfirmOpen(false);}}>Delete</Button>
                 </DialogActions>
             </Dialog>
-            {uploads.length>0 && <UploadProgressWindow items={uploads}/>}
+            {uploads.length>0 && <UploadProgressWindow items={uploads} onClose={clearUploads}/>}
         </div>
         </>
     );

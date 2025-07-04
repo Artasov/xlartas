@@ -10,13 +10,14 @@ import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import UploadProgressWindow from './UploadProgressWindow';
 import useFileUpload from './useFileUpload';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Menu, MenuItem, TextField, IconButton, Table, TableHead, TableRow, TableCell, TableBody, useMediaQuery, Breadcrumbs, Link} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Menu, MenuItem, TextField, IconButton, Table, TableHead, TableRow, TableCell, TableBody, useMediaQuery, Link} from '@mui/material';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import DropOverlay from './DropOverlay';
+import {getFolderCached, setFolderCached, FolderContent} from './storageCache';
 
 const Master: React.FC = () => {
     const {api} = useApi();
@@ -25,7 +26,7 @@ const Master: React.FC = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
     const isGtSm = useMediaQuery('(min-width: 576px)');
-    const {handleUpload: uploadFile, uploads} = useFileUpload(folderId);
+    const {handleUpload: uploadFile, uploads, clearUploads} = useFileUpload(folderId);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [folder, setFolder] = useState<IFolder | null>(null);
@@ -42,10 +43,18 @@ const Master: React.FC = () => {
     const [view, setView] = useState<'cards' | 'table'>('cards');
 
     const load = () => {
-        api.post('/api/v1/filehost/folder/content/', {id: folderId}).then(data => {
+        const cached = getFolderCached(folderId);
+        if (cached) {
+            setFolders(cached.folders);
+            setFiles(cached.files);
+            setFolder(cached.folder);
+            return;
+        }
+        api.post('/api/v1/filehost/folder/content/', {id: folderId}).then((data: FolderContent) => {
             setFolders(data.folders);
             setFiles(data.files);
             setFolder(data.folder);
+            setFolderCached(folderId, data);
         });
     };
     useEffect(() => {
@@ -78,6 +87,7 @@ const Master: React.FC = () => {
     const deleteSelected = async () => {
         await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
         setSelected([]);
+        setFolderCached(folderId, undefined as any);
         load();
     };
 
@@ -88,6 +98,7 @@ const Master: React.FC = () => {
 
     const handleUpload = async (file: File | null) => {
         await uploadFile(file);
+        setFolderCached(folderId, undefined as any);
         load();
     };
 
@@ -95,27 +106,29 @@ const Master: React.FC = () => {
         await api.post('/api/v1/filehost/folder/add/', {name: newFolderName, parent_id: folderId});
         setShowCreate(false);
         setNewFolderName('');
+        setFolderCached(folderId, undefined as any);
         load();
     };
 
     const handleDeleteFolder = async (id: number) => {
         await api.delete('/api/v1/filehost/item/delete/', {data: {folder_id: id}});
+        setFolderCached(folderId, undefined as any);
         load();
     };
 
     return (
         <>
             <DropOverlay onFileDrop={handleUpload}/>
-            <Breadcrumbs sx={{px:2}}>
-                <Link underline="hover" onClick={()=>navigate('/storage/master/')} style={{cursor:'pointer'}}>
-                    root
-                </Link>
+            <FR g={0.5} px={2} flexWrap={'wrap'}>
+                <Link underline="hover" onClick={()=>navigate('/storage/master/')} style={{cursor:'pointer'}}>root</Link>
                 {path.slice(1).map(p=>(
-                    <Link underline="hover" key={p.id} onClick={()=>navigate(`/storage/master/${p.id}/`)} style={{cursor:'pointer'}}>
-                        {p.name}
-                    </Link>
+                    <React.Fragment key={p.id}>
+                        <span>/</span>
+                        <Link underline="hover" onClick={()=>navigate(`/storage/master/${p.id}/`)} style={{cursor:'pointer'}}>{p.name}</Link>
+                    </React.Fragment>
                 ))}
-            </Breadcrumbs>
+                <span>/</span>
+            </FR>
             <FC g={0.5}
                 ref={containerRef}
                 onContextMenu={e => {
@@ -262,7 +275,7 @@ const Master: React.FC = () => {
                     </DialogActions>
                 </Dialog>
 
-                {uploads.length > 0 && <UploadProgressWindow items={uploads}/>}
+                {uploads.length > 0 && <UploadProgressWindow items={uploads} onClose={clearUploads}/>}                
             </FC>
         </>
     );

@@ -39,7 +39,7 @@ const DropOverlay: React.FC<DropOverlayProps> = ({onFileDrop}) => {
     return <FR
         pos={'fixed'} sx={{inset: 0}}
         bg={'rgba(0,0,0,0.3)'} pEvents={false} zIndex={2000}
-        justC={'center'} alignI={'center'} fontSize={'2rem'} color={'white'}
+        justC={'center'} alignI={'center'} fontSize={'4rem'} color={'white'}
     >
         Drop!
     </FR>;
