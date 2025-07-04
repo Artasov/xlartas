@@ -1,7 +1,7 @@
 // Modules/Core/components/elements/PaginatedList.tsx
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FC, FCCC} from "wide-containers";
+import {FC as FCContainer, FCCC} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 
 interface PaginatedListProps<T> {
@@ -13,6 +13,7 @@ interface PaginatedListProps<T> {
     resetTrigger?: any;
     loadMoreAtTop?: boolean;
     renderEmpty?: () => React.ReactNode;
+    component?: React.ElementType;
 }
 
 const PaginatedList = <T extends unknown>(
@@ -25,6 +26,7 @@ const PaginatedList = <T extends unknown>(
         resetTrigger,
         loadMoreAtTop = false,
         renderEmpty,
+        component: Component = FCContainer,
     }: PaginatedListProps<T>) => {
     const [data, setData] = useState<T[]>([]);
     const [page, setPage] = useState<number>(1);
@@ -90,7 +92,7 @@ const PaginatedList = <T extends unknown>(
     }, [data, loadMoreAtTop]);
 
     return (
-        <FC cls={className} sx={style}>
+        <Component className={className} style={style}>
             {data.length === 0 && !loading && renderEmpty ? renderEmpty() : null}
             {loadMoreAtTop && hasMore && !loading && <div ref={targetRef}></div>}
             {data.map((item, index) => (
@@ -100,7 +102,7 @@ const PaginatedList = <T extends unknown>(
             ))}
             {!loadMoreAtTop && hasMore && <div ref={targetRef}></div>}
             {loading && <FCCC mt={4}><CircularProgress size={'120px'}/></FCCC>}
-        </FC>
+        </Component>
     );
 };
 
