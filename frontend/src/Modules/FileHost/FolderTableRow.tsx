@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {IconButton, Menu, MenuItem, TableCell, TableRow} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {Menu, MenuItem, TableCell, TableRow} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import RenameDialog from './RenameDialog';
 import {useApi} from '../Api/useApi';
+import useLongPress from './useLongPress';
 
 interface Props {
     id: number;
@@ -19,6 +19,7 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
     const {api} = useApi();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [showRename, setShowRename] = useState(false);
+    const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
 
     const open = () => navigate(`/storage/master/${id}/`);
     const handleDelete = async () => {
@@ -36,23 +37,16 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
                     e.preventDefault();
                     setAnchorEl(e.currentTarget);
                 }}
+                {...longPress}
             >
                 <TableCell component="th" scope="row">
                     {name}
                 </TableCell>
-                <TableCell align="right">
-                    <IconButton
-                        size="small"
-                        onClick={e => {
-                            e.stopPropagation();
-                            setAnchorEl(e.currentTarget);
-                        }}
-                    >
-                        <MoreVertIcon fontSize="small"/>
-                    </IconButton>
-                </TableCell>
+                <TableCell/>
             </TableRow>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+            <Menu
+                slotProps={{backdrop:{sx:{backdropFilter:'none !important'}}}}
+                anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                 <MenuItem
                     onClick={() => {
                         setShowRename(true);
