@@ -3,14 +3,12 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useApi} from '../Api/useApi';
 import {IFile} from './types';
 import {FC, FR} from 'wide-containers';
-import {Button, IconButton} from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import ShareIcon from '@mui/icons-material/Share';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
 import BackButton from "Core/components/BackButton";
 import ShareDialog from './ShareDialog';
+import FileActions from './FileActions';
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();
@@ -29,10 +27,16 @@ const FileDetail: React.FC = () => {
             <FR component={'h3'}>{file.name}</FR>
             <FR>{t('upload_date')}: {new Date(file.created_at).toLocaleString()}</FR>
             <FR>{t('size')}: {formatFileSize(file.size)}</FR>
-            <FR>
-                <IconButton onClick={() => window.open(file.file)}><DownloadIcon/></IconButton>
-                <IconButton onClick={() => setShowShare(true)}><ShareIcon/></IconButton>
-            </FR>
+            <FileActions
+                file={file}
+                variant="buttons"
+                onDownload={() => window.open(file.file)}
+                onShare={() => setShowShare(true)}
+                onDelete={async (f)=>{
+                    await api.delete('/api/v1/filehost/item/delete/', {data:{file_id:f.id}});
+                    navigate(-1);
+                }}
+            />
             <ShareDialog file={file} open={showShare} onClose={() => setShowShare(false)}/>
         </FC>
     );

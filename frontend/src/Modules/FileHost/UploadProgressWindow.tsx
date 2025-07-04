@@ -5,22 +5,20 @@ import CheckIcon from '@mui/icons-material/Check';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export interface UploadItem {name:string; progress:number;}
+export interface UploadItem {name:string; progress:number; done?:boolean; file?: any;}
 
-interface Props {items: UploadItem[];}
+interface Props {items: UploadItem[]; onClose?:()=>void;}
 
-const UploadProgressWindow: React.FC<Props> = ({items}) => {
+const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
     const [collapsed, setCollapsed] = useState(false);
-    const [closed, setClosed] = useState(false);
-    const allDone = items.every(it=>it.progress===100);
-    if (closed) return null;
+    const allDone = items.length>0 && items.every(it=>it.progress===100);
     return (
         <Paper sx={{position:'fixed',bottom:16,right:16,p:2,width:250,zIndex:9999}}>
             <IconButton size="small" onClick={()=>setCollapsed(o=>!o)} sx={{position:'absolute',top:4,right:4}}>
                 {collapsed ? <ExpandMoreIcon/> : <ExpandLessIcon/>}
             </IconButton>
             {allDone && (
-                <IconButton size="small" onClick={()=>setClosed(true)} sx={{position:'absolute',top:4,left:4}}>
+                <IconButton size="small" onClick={onClose} sx={{position:'absolute',top:4,left:4}}>
                     <CheckIcon color="success"/>
                 </IconButton>
             )}
