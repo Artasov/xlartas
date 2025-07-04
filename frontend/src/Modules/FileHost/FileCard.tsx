@@ -10,7 +10,7 @@ import useLongPress from './useLongPress';
 import FileActions from './FileActions';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 import {FC, FR, FRBC, FRC} from "wide-containers";
-import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import {getFileIcon, isImage} from './fileIcons';
 
 interface Props {
     file: IFile;
@@ -113,7 +113,11 @@ const FileCard: React.FC<Props> = (
                     )}
                 </FRBC>
                 <FRC opacity={80} mt={1}>
-                    <InsertDriveFileOutlinedIcon sx={{fontSize: '5rem'}}/>
+                    {isImage(file.name) ? (
+                        <img src={file.file} alt={file.name} style={{maxWidth: '5rem', maxHeight: '5rem'}}/>
+                    ) : (
+                        getFileIcon(file.name, {sx: {fontSize: '5rem'}})
+                    )}
                 </FRC>
                 <FRC fontSize={'0.9rem'} sx={{wordBreak: 'break-all'}}>
                     {file.name}

@@ -11,6 +11,7 @@ import {useTranslation} from 'react-i18next';
 import useLongPress from './useLongPress';
 import FileActions from './FileActions';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
+import {getFileIcon} from './fileIcons';
 
 interface Props {
     file: IFile;
@@ -85,6 +86,9 @@ const FileTableRow: React.FC<Props> = ({
                               onClick={e => e.stopPropagation()}/>
                 </TableCell>
             )}
+            <TableCell padding="checkbox">
+                {getFileIcon(file.name)}
+            </TableCell>
             <TableCell component="th" scope="row" sx={{lineHeight: '1rem'}}>
                 {file.name}
             </TableCell>

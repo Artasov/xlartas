@@ -9,6 +9,8 @@ import {useTranslation} from 'react-i18next';
 import BackButton from "Core/components/BackButton";
 import ShareDialog from './ShareDialog';
 import FileActions from './FileActions';
+import ImagePreview from './ImagePreview';
+import {isImage, isVideo} from './fileIcons';
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();
@@ -17,6 +19,7 @@ const FileDetail: React.FC = () => {
     const {t} = useTranslation();
     const [file, setFile] = useState<IFile | null>(null);
     const [showShare, setShowShare] = useState(false);
+    const [showImage, setShowImage] = useState(false);
     useEffect(() => {
         if (id) api.post('/api/v1/filehost/file/', {id: Number(id)}).then(setFile);
     }, [id]);
@@ -27,6 +30,12 @@ const FileDetail: React.FC = () => {
             <FR component={'h3'}>{file.name}</FR>
             <FR>{t('upload_date')}: {new Date(file.created_at).toLocaleString()}</FR>
             <FR>{t('size')}: {formatFileSize(file.size)}</FR>
+            {isImage(file.name) && (
+                <img src={file.file} alt={file.name} style={{maxWidth: '100%', maxHeight: '60vh', cursor: 'pointer'}} onClick={() => setShowImage(true)}/>
+            )}
+            {isVideo(file.name) && (
+                <video src={file.file} controls style={{maxWidth: '100%', maxHeight: '60vh'}}/>
+            )}
             <FileActions
                 file={file}
                 variant="buttons"
@@ -38,6 +47,9 @@ const FileDetail: React.FC = () => {
                 }}
             />
             <ShareDialog file={file} open={showShare} onClose={() => setShowShare(false)}/>
+            {isImage(file.name) && (
+                <ImagePreview src={file.file} open={showImage} onClose={() => setShowImage(false)}/>
+            )}
         </FC>
     );
 };
