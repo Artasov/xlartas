@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {IconButton, Menu, MenuItem, Paper} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {Menu, MenuItem, Paper} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import RenameDialog from './RenameDialog';
 import {useApi} from '../Api/useApi';
+import useLongPress from './useLongPress';
 
 interface Props {
     id: number;
@@ -19,6 +19,7 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
     const {api} = useApi();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [showRename, setShowRename] = useState(false);
+    const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
 
     const open = () => navigate(`/storage/master/${id}/`);
     const handleDelete = async () => {
@@ -28,15 +29,14 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
 
     return (
         <>
-            <Paper sx={{p:1,width:150,cursor:'pointer'}} onDoubleClick={open} onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                    <strong style={{wordBreak:'break-all'}}>{name}</strong>
-                    <IconButton size="small" onClick={e=>{e.stopPropagation();setAnchorEl(e.currentTarget);}}>
-                        <MoreVertIcon fontSize="small"/>
-                    </IconButton>
-                </div>
+            <Paper sx={{p:1,width:150,cursor:'pointer'}} onDoubleClick={open}
+                   onContextMenu={e=>{e.preventDefault();setAnchorEl(e.currentTarget);}}
+                   {...longPress}>
+                <strong style={{wordBreak:'break-all'}}>{name}</strong>
             </Paper>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={()=>setAnchorEl(null)}>
+            <Menu
+                slotProps={{backdrop:{sx:{backdropFilter:'none !important'}}}}
+                anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={()=>setAnchorEl(null)}>
                 <MenuItem onClick={()=>{setShowRename(true); setAnchorEl(null);}}>{t('rename')}</MenuItem>
                 <MenuItem onClick={handleDelete}>{t('delete')}</MenuItem>
             </Menu>
