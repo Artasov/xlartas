@@ -5,12 +5,31 @@ import FileCard from './FileCard';
 import FolderCard from './FolderCard';
 import FileTableRow from './FileTableRow';
 import FolderTableRow from './FolderTableRow';
-import {FC, FR, FRSE} from 'wide-containers';
+import {FC, FR, FRBC, FRSE} from 'wide-containers';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import UploadProgressWindow from './UploadProgressWindow';
 import useFileUpload from './useFileUpload';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Menu, MenuItem, TextField, IconButton, Table, TableHead, TableRow, TableCell, TableBody, useMediaQuery, Link} from '@mui/material';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Link,
+    Menu,
+    MenuItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField,
+    useMediaQuery
+} from '@mui/material';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import FileUpload from 'UI/FileUpload';
@@ -18,15 +37,18 @@ import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import DropOverlay from './DropOverlay';
 import {
+    FolderContent,
     getFolderCached,
-    setFolderCached,
     setAllFilesCached,
     setFavoriteFilesCached,
-    FolderContent
+    setFolderCached
 } from './storageCache';
+import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
+import {useTheme} from "Theme/ThemeContext";
 
 const Master: React.FC = () => {
     const {api} = useApi();
+    const {plt} = useTheme();
     const {id} = useParams();
     const folderId = id ? Number(id) : null;
     const {t} = useTranslation();
@@ -69,7 +91,10 @@ const Master: React.FC = () => {
 
     useEffect(() => {
         const build = async () => {
-            if (!folder) { setPath([]); return; }
+            if (!folder) {
+                setPath([]);
+                return;
+            }
             const p: IFolder[] = [];
             let cur: IFolder | null = folder;
             while (cur) {
@@ -139,12 +164,14 @@ const Master: React.FC = () => {
     return (
         <>
             <DropOverlay onFileDrop={handleUpload}/>
-            <FR g={0.5} px={2} flexWrap={'wrap'}>
-                <Link underline="hover" onClick={()=>navigate('/storage/master/')} style={{cursor:'pointer'}}>root</Link>
-                {path.slice(1).map(p=>(
+            <FR g={0.5} px={2} flexWrap={'wrap'} bg={plt.text.primary + '11'} rounded={2} my={.4}>
+                <Link underline="hover" onClick={() => navigate('/storage/master/')}
+                      style={{cursor: 'pointer'}}>root</Link>
+                {path.slice(1).map(p => (
                     <React.Fragment key={p.id}>
                         <span>/</span>
-                        <Link underline="hover" onClick={()=>navigate(`/storage/master/${p.id}/`)} style={{cursor:'pointer'}}>{p.name}</Link>
+                        <Link underline="hover" onClick={() => navigate(`/storage/master/${p.id}/`)}
+                              style={{cursor: 'pointer'}}>{p.name}</Link>
                     </React.Fragment>
                 ))}
                 <span>/</span>
@@ -160,30 +187,46 @@ const Master: React.FC = () => {
                 onDragOver={e => e.preventDefault()}
                 onDrop={e => {
                     e.preventDefault();
-                    if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+                    if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]).then();
                 }}>
-                {selectMode && (
-                    <FRSE g={1}>
-                        <Button onClick={() => setShowMove(true)}>{t('move')}</Button>
-                        <Button onClick={handleDeleteSelected}>{t('delete')}</Button>
+                <FRBC g={1} bg={plt.text.primary + '11'} rounded={2} p={.8}>
+                    <FRSE>
+                        {selectMode && (<>
+                            <IconButton
+                                aria-label="move"
+                                onClick={() => setShowMove(true)}
+                            >
+                                <OutboundRoundedIcon/>
+                            </IconButton>
+                            <IconButton
+                                aria-label="delete"
+                                onClick={handleDeleteSelected}
+                            >
+                                <DeleteForeverRoundedIcon/>
+                            </IconButton>
+                        </>)}
+                        <FR>
+                            <FileUpload onFileSelect={handleUpload}/>
+                            <IconButton onClick={() => setShowCreate(true)}>
+                                <CreateNewFolderRoundedIcon/>
+                            </IconButton>
+                        </FR>
                     </FRSE>
-                )}
-                <FRSE g={1}>
-                    <FR g={1}>
-                        <Button onClick={() => setShowCreate(true)}>{t('create_folder')}</Button>
-                        <FileUpload onFileSelect={handleUpload}/>
-                    </FR>
                     <FR>
-                        <IconButton onClick={() => setView('cards')} color={view === 'cards' ? 'primary' : 'default'}>
-                            <ViewModuleIcon/>
-                        </IconButton>
-                        <IconButton onClick={() => setView('table')} color={view === 'table' ? 'primary' : 'default'}>
-                            <ViewListIcon/>
-                        </IconButton>
+                        <FR>
+                            <IconButton onClick={() => setView('cards')}
+                                        color={view === 'cards' ? 'primary' : 'default'}>
+                                <ViewModuleIcon/>
+                            </IconButton>
+                            <IconButton onClick={() => setView('table')}
+                                        color={view === 'table' ? 'primary' : 'default'}>
+                                <ViewListIcon/>
+                            </IconButton>
+                        </FR>
                     </FR>
-                </FRSE>
+                </FRBC>
                 {view === 'cards' ? (
-                    <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                    <FR g={1} wrap mt={.4}>
                         {folders.map(f => (
                             <FolderCard
                                 key={f.id}
@@ -216,7 +259,7 @@ const Master: React.FC = () => {
                                           onShare={() => setShowShare(f)}
                                           onDownload={file => window.open(file.file)}/>
                             ))}
-                    </div>
+                    </FR>
                 ) : (
                     <Table size="small">
                         <TableHead>

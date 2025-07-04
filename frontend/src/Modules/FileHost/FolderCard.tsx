@@ -4,7 +4,9 @@ import {useNavigate} from 'react-router-dom';
 import RenameDialog from './RenameDialog';
 import useLongPress from './useLongPress';
 import FolderActions from './FolderActions';
-
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
+import {FC, FCCC, FR} from "wide-containers";
+import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 interface Props {
     id: number;
     name: string;
@@ -31,12 +33,18 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}) =>
     return (
         <>
             <Paper
-                sx={{p: 1, width: 150, cursor: 'pointer'}}
+                sx={{p: 1, width: 156, cursor: 'pointer'}}
                 onClick={open}
-                onContextMenu={e => {e.preventDefault(); setAnchorEl(e.currentTarget);}}
+                onContextMenu={e => {
+                    e.preventDefault();
+                    setAnchorEl(e.currentTarget);
+                }}
                 {...longPress}
             >
-                <strong style={{wordBreak: 'break-all'}}>{name}</strong>
+                <FCCC>
+                    <FR opacity={80}><FolderRoundedIcon sx={{fontSize: '6rem'}}/></FR>
+                    <strong style={{wordBreak: 'break-all'}}>{name}</strong>
+                </FCCC>
             </Paper>
             <FolderActions
                 anchorEl={anchorEl}

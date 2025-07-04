@@ -2,14 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Checkbox, IconButton, Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {useNavigate} from 'react-router-dom';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
 import useLongPress from './useLongPress';
 import FileActions from './FileActions';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
-import {FC, FR, FRBC} from "wide-containers";
+import {FC, FR, FRBC, FRC} from "wide-containers";
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 
 interface Props {
     file: IFile;
@@ -86,7 +87,7 @@ const FileCard: React.FC<Props> = (
     };
 
     return (
-        <Paper sx={{px: 1, pt: 1, pb: .5, width: 150}}
+        <Paper sx={{px: 1, pt: 1, pb: .5, width: 156, minHeight: 140}}
                onClick={handleClick} onContextMenu={e => {
             e.preventDefault();
             setAnchorEl(e.currentTarget);
@@ -111,9 +112,12 @@ const FileCard: React.FC<Props> = (
                         </IconButton>
                     )}
                 </FRBC>
-                <FR fontSize={'0.9rem'} sx={{wordBreak: 'break-all'}}>
+                <FRC opacity={80} mt={1}>
+                    <InsertDriveFileOutlinedIcon sx={{fontSize: '5rem'}}/>
+                </FRC>
+                <FRC fontSize={'0.9rem'} sx={{wordBreak: 'break-all'}}>
                     {file.name}
-                </FR>
+                </FRC>
                 <FR mt={'auto'} fontSize={'0.75rem'} color={'#666'}>
                     {new Date(file.created_at).toLocaleDateString()} · {formatFileSize(file.size)}
                 </FR>
