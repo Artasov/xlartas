@@ -290,15 +290,17 @@ const Master: React.FC = () => {
                 </Dialog>
 
                 <Dialog open={showCreate} onClose={() => setShowCreate(false)}>
-                    <DialogTitle>{t('create_folder')}</DialogTitle>
-                    <DialogContent>
+                    <DialogTitle sx={{textAlign: 'center', pb: .4, opacity: '80%'}}>{t('create_folder')}</DialogTitle>
+                    <DialogContent sx={{pb: 0, px: 1.4}}>
                         <TextField
                             value={newFolderName}
+                            size={'small'}
+                            fullWidth sx={{mt: 1}}
                             label={t('folder_name')}
                             onChange={e => setNewFolderName(e.target.value)}
                         />
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions sx={{pb: 2, px: 1.3}}>
                         <Button onClick={() => setShowCreate(false)}>{t('cancel')}</Button>
                         <Button onClick={handleCreateFolder}>{t('create_folder')}</Button>
                     </DialogActions>

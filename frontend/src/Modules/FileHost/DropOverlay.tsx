@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FR} from "wide-containers";
+import {FRCC} from "wide-containers";
 
 interface DropOverlayProps {
     onFileDrop: (file: File | null) => void;
@@ -36,13 +36,12 @@ const DropOverlay: React.FC<DropOverlayProps> = ({onFileDrop}) => {
     }, [onFileDrop]);
 
     if (!active) return null;
-    return <FR
+    return <FRCC
         pos={'fixed'} sx={{inset: 0}}
-        bg={'rgba(0,0,0,0.3)'} pEvents={false} zIndex={2000}
-        justC={'center'} alignI={'center'} fontSize={'4rem'} color={'white'}
+        bg={'rgba(0,0,0,0.3)'} pEvents={false} zIndex={2000} fontSize={'4rem'} color={'white'}
     >
         Drop!
-    </FR>;
+    </FRCC>;
 };
 
 export default DropOverlay;
