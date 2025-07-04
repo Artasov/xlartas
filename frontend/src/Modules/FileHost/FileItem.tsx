@@ -7,6 +7,7 @@ import {useApi} from '../Api/useApi';
 import {FRSE} from 'wide-containers';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 
 interface Props {
     file: IFile;
@@ -33,6 +34,9 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then((d) => {
             setFavorite(d.is_favorite);
             onFavorite && onFavorite({...file, is_favorite: d.is_favorite});
+            setFavoriteFilesCached(undefined as any);
+            setAllFilesCached(undefined as any);
+            setFolderCached(file.folder, undefined as any);
         });
     };
 

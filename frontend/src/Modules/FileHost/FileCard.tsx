@@ -8,6 +8,7 @@ import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
 import useLongPress from './useLongPress';
 import FileActions from './FileActions';
+import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 import {FC, FR, FRBC} from "wide-containers";
 
 interface Props {
@@ -48,6 +49,9 @@ const FileCard: React.FC<Props> = (
         api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then(d => {
             setFavorite(d.is_favorite);
             onFavorite && onFavorite({...file, is_favorite: d.is_favorite});
+            setFavoriteFilesCached(undefined as any);
+            setAllFilesCached(undefined as any);
+            setFolderCached(file.folder, undefined as any);
         });
     };
 

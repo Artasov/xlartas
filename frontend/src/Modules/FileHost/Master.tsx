@@ -17,7 +17,13 @@ import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import DropOverlay from './DropOverlay';
-import {getFolderCached, setFolderCached, FolderContent} from './storageCache';
+import {
+    getFolderCached,
+    setFolderCached,
+    setAllFilesCached,
+    setFavoriteFilesCached,
+    FolderContent
+} from './storageCache';
 
 const Master: React.FC = () => {
     const {api} = useApi();
@@ -88,6 +94,8 @@ const Master: React.FC = () => {
         await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
         setSelected([]);
         setFolderCached(folderId, undefined as any);
+        setAllFilesCached(undefined as any);
+        setFavoriteFilesCached(undefined as any);
         load();
     };
 
@@ -99,6 +107,8 @@ const Master: React.FC = () => {
     const handleUpload = async (file: File | null) => {
         await uploadFile(file);
         setFolderCached(folderId, undefined as any);
+        setAllFilesCached(undefined as any);
+        setFavoriteFilesCached(undefined as any);
         load();
     };
 
@@ -107,12 +117,16 @@ const Master: React.FC = () => {
         setShowCreate(false);
         setNewFolderName('');
         setFolderCached(folderId, undefined as any);
+        setAllFilesCached(undefined as any);
+        setFavoriteFilesCached(undefined as any);
         load();
     };
 
     const handleDeleteFolder = async (id: number) => {
         await api.delete('/api/v1/filehost/item/delete/', {data: {folder_id: id}});
         setFolderCached(folderId, undefined as any);
+        setAllFilesCached(undefined as any);
+        setFavoriteFilesCached(undefined as any);
         load();
     };
 
@@ -165,7 +179,13 @@ const Master: React.FC = () => {
                 {view === 'cards' ? (
                     <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
                         {folders.map(f => (
-                            <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
+                            <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder}
+                                        onRenamed={() => {
+                                            setFolderCached(folderId, undefined as any);
+                                            setAllFilesCached(undefined as any);
+                                            setFavoriteFilesCached(undefined as any);
+                                            load();
+                                        }}/>
                         ))}
                         {files
                             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -198,7 +218,13 @@ const Master: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {folders.map(f => (
-                                <FolderTableRow key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
+                                <FolderTableRow key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder}
+                                                onRenamed={() => {
+                                                    setFolderCached(folderId, undefined as any);
+                                                    setAllFilesCached(undefined as any);
+                                                    setFavoriteFilesCached(undefined as any);
+                                                    load();
+                                                }}/>
                             ))}
                             {files
                                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -245,6 +271,9 @@ const Master: React.FC = () => {
                 <MoveDialog files={selected} open={showMove} onClose={() => {
                     setShowMove(false);
                     setSelected([]);
+                    setFolderCached(folderId, undefined as any);
+                    setAllFilesCached(undefined as any);
+                    setFavoriteFilesCached(undefined as any);
                     load();
                 }}/>
                 <ShareDialog file={showShare} open={!!showShare} onClose={() => setShowShare(null)}/>
