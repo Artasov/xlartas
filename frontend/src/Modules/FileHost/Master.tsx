@@ -130,6 +130,12 @@ const Master: React.FC = () => {
         load();
     };
 
+    const openFolder = (fid: number) => {
+        setSelected([]);
+        setSelectMode(false);
+        navigate(`/storage/master/${fid}/`);
+    };
+
     return (
         <>
             <DropOverlay onFileDrop={handleUpload}/>
@@ -179,13 +185,19 @@ const Master: React.FC = () => {
                 {view === 'cards' ? (
                     <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
                         {folders.map(f => (
-                            <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder}
-                                        onRenamed={() => {
-                                            setFolderCached(folderId, undefined as any);
-                                            setAllFilesCached(undefined as any);
-                                            setFavoriteFilesCached(undefined as any);
-                                            load();
-                                        }}/>
+                            <FolderCard
+                                key={f.id}
+                                id={f.id}
+                                name={f.name}
+                                onDelete={handleDeleteFolder}
+                                onOpen={openFolder}
+                                onRenamed={() => {
+                                    setFolderCached(folderId, undefined as any);
+                                    setAllFilesCached(undefined as any);
+                                    setFavoriteFilesCached(undefined as any);
+                                    load();
+                                }}
+                            />
                         ))}
                         {files
                             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -218,13 +230,19 @@ const Master: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {folders.map(f => (
-                                <FolderTableRow key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder}
-                                                onRenamed={() => {
-                                                    setFolderCached(folderId, undefined as any);
-                                                    setAllFilesCached(undefined as any);
-                                                    setFavoriteFilesCached(undefined as any);
-                                                    load();
-                                                }}/>
+                                <FolderTableRow
+                                    key={f.id}
+                                    id={f.id}
+                                    name={f.name}
+                                    onDelete={handleDeleteFolder}
+                                    onOpen={openFolder}
+                                    onRenamed={() => {
+                                        setFolderCached(folderId, undefined as any);
+                                        setAllFilesCached(undefined as any);
+                                        setFavoriteFilesCached(undefined as any);
+                                        load();
+                                    }}
+                                />
                             ))}
                             {files
                                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -306,7 +324,13 @@ const Master: React.FC = () => {
                     </DialogActions>
                 </Dialog>
 
-                {uploads.length > 0 && <UploadProgressWindow items={uploads} onClose={clearUploads}/>}                
+                {uploads.length > 0 && (
+                    <UploadProgressWindow
+                        items={uploads}
+                        onClose={clearUploads}
+                        onShare={f => setShowShare(f)}
+                    />
+                )}
             </FC>
         </>
     );

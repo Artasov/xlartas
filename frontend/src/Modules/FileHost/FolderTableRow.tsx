@@ -10,15 +10,19 @@ interface Props {
     name: string;
     onDelete?: (id: number) => void;
     onRenamed?: () => void;
+    onOpen?: (id: number) => void;
 }
 
-const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed}) => {
+const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}) => {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [showRename, setShowRename] = useState(false);
     const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
 
-    const open = () => navigate(`/storage/master/${id}/`);
+    const open = () => {
+        if (onOpen) onOpen(id);
+        else navigate(`/storage/master/${id}/`);
+    };
     const handleDelete = async () => {
         onDelete && onDelete(id);
         setAnchorEl(null);

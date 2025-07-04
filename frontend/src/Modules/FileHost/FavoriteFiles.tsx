@@ -97,7 +97,13 @@ const FavoriteFiles: React.FC = () => {
                     <Button color="error" onClick={async()=>{await deleteSelected(); setConfirmOpen(false);}}>Delete</Button>
                 </DialogActions>
             </Dialog>
-            {uploads.length>0 && <UploadProgressWindow items={uploads} onClose={clearUploads}/>}
+            {uploads.length>0 && (
+                <UploadProgressWindow
+                    items={uploads}
+                    onClose={clearUploads}
+                    onShare={f => setShowShare(f)}
+                />
+            )}
         </div>
         </>
     );
