@@ -3,12 +3,16 @@ import {useApi} from '../Api/useApi';
 import {IFile, IFolder} from './types';
 import FileCard from './FileCard';
 import FolderCard from './FolderCard';
-import {FC, FRSE} from 'wide-containers';
+import FileTableRow from './FileTableRow';
+import FolderTableRow from './FolderTableRow';
+import {FC, FR, FRSE} from 'wide-containers';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import UploadProgressWindow from './UploadProgressWindow';
 import useFileUpload from './useFileUpload';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Menu, MenuItem, TextField} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Menu, MenuItem, TextField, IconButton, Table, TableHead, TableRow, TableCell, TableBody, useMediaQuery} from '@mui/material';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -20,6 +24,7 @@ const Master: React.FC = () => {
     const folderId = id ? Number(id) : null;
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const isGtSm = useMediaQuery('(min-width: 576px)');
     const {handleUpload: uploadFile, uploads} = useFileUpload(folderId);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [folders, setFolders] = useState<IFolder[]>([]);
@@ -33,6 +38,7 @@ const Master: React.FC = () => {
     const [newFolderName, setNewFolderName] = useState('');
     const [context, setContext] = useState<{ x: number; y: number } | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [view, setView] = useState<'cards' | 'table'>('cards');
 
     const load = () => {
         api.post('/api/v1/filehost/folder/content/', {id: folderId}).then(data => {
@@ -104,33 +110,82 @@ const Master: React.FC = () => {
                     </FRSE>
                 )}
                 <FRSE g={1}>
-                    {folder && folder.parent !== null && <Button
-                        onClick={() => navigate(`/storage/master/${folder.parent || ''}/`)}>{t('back')}</Button>}
-                    <Button onClick={() => setShowCreate(true)}>{t('create_folder')}</Button>
-                    <FileUpload onFileSelect={handleUpload}/>
+                    <FR g={1}>
+                        {folder && folder.parent !== null && (
+                            <Button onClick={() => navigate(`/storage/master/${folder.parent || ''}/`)}>{t('back')}</Button>
+                        )}
+                        <Button onClick={() => setShowCreate(true)}>{t('create_folder')}</Button>
+                        <FileUpload onFileSelect={handleUpload}/>
+                    </FR>
+                    <FR>
+                        <IconButton onClick={() => setView('cards')} color={view === 'cards' ? 'primary' : 'default'}>
+                            <ViewModuleIcon/>
+                        </IconButton>
+                        <IconButton onClick={() => setView('table')} color={view === 'table' ? 'primary' : 'default'}>
+                            <ViewListIcon/>
+                        </IconButton>
+                    </FR>
                 </FRSE>
-                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
-                    {folders.map(f => (
-                        <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
-                    ))}
-                    {files
-                        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                        .map(f => (
-                            <FileCard key={f.id} file={f} selectMode={selectMode}
-                                      selected={!!selected.find(s => s.id === f.id)}
-                                      onToggleSelect={toggleSelect}
-                                      onSelectMode={() => {
-                                          setSelectMode(true);
-                                          toggleSelect(f);
-                                      }}
-                                      onDelete={() => {
-                                          setSelected([f]);
-                                          setConfirmOpen(true);
-                                      }}
-                                      onShare={() => setShowShare(f)}
-                                      onDownload={file => window.open(file.file)}/>
+                {view === 'cards' ? (
+                    <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                        {folders.map(f => (
+                            <FolderCard key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
                         ))}
-                </div>
+                        {files
+                            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                            .map(f => (
+                                <FileCard key={f.id} file={f} selectMode={selectMode}
+                                          selected={!!selected.find(s => s.id === f.id)}
+                                          onToggleSelect={toggleSelect}
+                                          onSelectMode={() => {
+                                              setSelectMode(true);
+                                              toggleSelect(f);
+                                          }}
+                                          onDelete={() => {
+                                              setSelected([f]);
+                                              setConfirmOpen(true);
+                                          }}
+                                          onShare={() => setShowShare(f)}
+                                          onDownload={file => window.open(file.file)}/>
+                            ))}
+                    </div>
+                ) : (
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                {selectMode && <TableCell padding="checkbox"/>}
+                                <TableCell>{t('name')}</TableCell>
+                                {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
+                                <TableCell>{t('size')}</TableCell>
+                                <TableCell/>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {folders.map(f => (
+                                <FolderTableRow key={f.id} id={f.id} name={f.name} onDelete={handleDeleteFolder} onRenamed={load}/>
+                            ))}
+                            {files
+                                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                                .map(f => (
+                                    <FileTableRow key={f.id} file={f}
+                                                  selectMode={selectMode}
+                                                  selected={!!selected.find(s => s.id === f.id)}
+                                                  onToggleSelect={toggleSelect}
+                                                  onSelectMode={() => {
+                                                      setSelectMode(true);
+                                                      toggleSelect(f);
+                                                  }}
+                                                  onDelete={() => {
+                                                      setSelected([f]);
+                                                      setConfirmOpen(true);
+                                                  }}
+                                                  onShare={() => setShowShare(f)}
+                                                  onDownload={file => window.open(file.file)}
+                                    />
+                                ))}
+                        </TableBody>
+                    </Table>
+                )}
 
                 <Menu open={!!context} onClose={() => setContext(null)} anchorReference="anchorPosition"
                       anchorPosition={context ? {top: context.y, left: context.x} : undefined}>
