@@ -15,9 +15,10 @@ export interface UploadItem {
 interface Props {
     items: UploadItem[];
     onClose?: () => void;
+    onShare?: (file: any) => void;
 }
 
-const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
+const UploadProgressWindow: React.FC<Props> = ({items, onClose, onShare}) => {
     const [collapsed, setCollapsed] = useState(false);
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const allDone = items.length > 0 && items.every(it => it.progress === 100);
@@ -53,7 +54,9 @@ const UploadProgressWindow: React.FC<Props> = ({items, onClose}) => {
                             {it.progress === 100 ? (
                                 <FRSE>
                                     <CheckIcon color="success" fontSize="small"/>
-                                    <Button size="small">Share</Button>
+                                    <Button size="small" onClick={() => onShare && it.file && onShare(it.file)}>
+                                        Share
+                                    </Button>
                                 </FRSE>
                             ) : (
                                 <LinearProgress variant="determinate" value={it.progress}/>
