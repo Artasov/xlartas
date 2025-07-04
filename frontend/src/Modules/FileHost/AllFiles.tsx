@@ -7,7 +7,7 @@ import useFileUpload from './useFileUpload';
 import UploadProgressWindow from './UploadProgressWindow';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
-import {Button, Dialog, DialogActions, DialogTitle, useMediaQuery} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogTitle, Table, TableHead, TableBody, TableRow, TableCell, useMediaQuery} from '@mui/material';
 import {FR, FRC, FRSE} from 'wide-containers';
 import DropOverlay from './DropOverlay';
 import {useTranslation} from 'react-i18next';
@@ -51,30 +51,35 @@ const AllFiles: React.FC = () => {
                     <Button color="error" onClick={() => setConfirmOpen(true)}>Delete</Button>
                 </FRSE>
             )}
-            <FRSE p={0.5} sx={{gridTemplateColumns: selectMode ? '24px 1fr 160px 100px auto' : '1fr 160px 100px auto', display:'grid',fontWeight:600}}>
-                {selectMode && <span/>}
-                <FRC>{t('name')}</FRC>
-                {isGtSm && <FRC>{t('upload_date')}</FRC>}
-                <FRC>{t('size')}</FRC>
-                <span></span>
-            </FRSE>
-            <PaginatedList
-                loadData={load}
-                renderItem={(item) => (
-                    <FileTableRow
-                        key={item.id}
-                        file={item}
-                        selectMode={selectMode}
-                        selected={!!selected.find(s => s.id === item.id)}
-                        onToggleSelect={toggleSelect}
-                        onSelectMode={(f)=>{setSelectMode(true); toggleSelect(f);}}
-                        onDelete={()=>{setSelected([item]); setConfirmOpen(true);}}
-                        onDownload={f=>window.open(f.file)}
-                        onShare={()=>setShowShare(item)}
-                    />
-                )}
-                resetTrigger={trigger}
-            />
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        {selectMode && <TableCell padding="checkbox"/>}
+                        <TableCell>{t('name')}</TableCell>
+                        {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
+                        <TableCell>{t('size')}</TableCell>
+                        <TableCell/>
+                    </TableRow>
+                </TableHead>
+                <PaginatedList
+                    loadData={load}
+                    component={TableBody}
+                    renderItem={(item) => (
+                        <FileTableRow
+                            key={item.id}
+                            file={item}
+                            selectMode={selectMode}
+                            selected={!!selected.find(s => s.id === item.id)}
+                            onToggleSelect={toggleSelect}
+                            onSelectMode={(f)=>{setSelectMode(true); toggleSelect(f);}}
+                            onDelete={()=>{setSelected([item]); setConfirmOpen(true);}}
+                            onDownload={f=>window.open(f.file)}
+                            onShare={()=>setShowShare(item)}
+                        />
+                    )}
+                    resetTrigger={trigger}
+                />
+            </Table>
             <MoveDialog files={selected} open={showMove} onClose={()=>{setShowMove(false); setSelected([]); setTrigger(t=>t+1);}}/>
             <ShareDialog file={showShare} open={!!showShare} onClose={()=>setShowShare(null)}/>
             <Dialog open={confirmOpen} onClose={()=>setConfirmOpen(false)}>
