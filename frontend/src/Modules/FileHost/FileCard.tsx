@@ -89,12 +89,15 @@ const FileCard: React.FC<Props> = (
         }} {...longPress}>
             <FC h={'100%'}>
                 <FRBC>
-                    {selectMode && <Checkbox
-                        sx={{p: .4, ml: -.7, mt: -.7}}
-                        size="small"
-                        checked={selected}
-                        onChange={handleToggleSelect}
-                    />}
+                    {selectMode && (
+                        <Checkbox
+                            sx={{p: .4, ml: -.7, mt: -.7}}
+                            size="small"
+                            checked={selected}
+                            onChange={handleToggleSelect}
+                            onClick={e => e.stopPropagation()}
+                        />
+                    )}
                     {favorite && (
                         <IconButton size="small" onClick={e => {
                             e.stopPropagation();
