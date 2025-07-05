@@ -11,6 +11,7 @@ const useLongPress = (cb: (e: React.TouchEvent) => void, ms = 600): LongPressHan
     const timer = useRef<NodeJS.Timeout | null>(null);
 
     const start = (e: React.TouchEvent) => {
+        if (typeof e.persist === 'function') e.persist();
         timer.current = setTimeout(() => cb(e), ms);
     };
 

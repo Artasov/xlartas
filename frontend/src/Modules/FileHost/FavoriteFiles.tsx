@@ -62,10 +62,9 @@ const FavoriteFiles: React.FC = () => {
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        {selectMode && <TableCell padding="checkbox"/>}
                         <TableCell>{t('name')}</TableCell>
                         {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
-                        <TableCell>{t('size')}</TableCell>
+                        {isGtSm && <TableCell>{t('size')}</TableCell>}
                         <TableCell/>
                     </TableRow>
                 </TableHead>

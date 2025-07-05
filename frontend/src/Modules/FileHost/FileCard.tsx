@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Checkbox, IconButton, Paper} from '@mui/material';
+import {IconButton, Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {useNavigate} from 'react-router-dom';
 import {useApi} from 'Api/useApi';
@@ -87,22 +87,14 @@ const FileCard: React.FC<Props> = (
     };
 
     return (
-        <Paper sx={{px: 1, pt: 1, pb: .5, width: 156, minHeight: 140}}
+        <Paper sx={{px: 1, pt: 1, pb: .5, width: '100%', minHeight: 140, bgcolor: selected ? '#eef2ff' : undefined}}
                onClick={handleClick} onContextMenu={e => {
             e.preventDefault();
             setAnchorEl(e.currentTarget);
         }} {...longPress}>
             <FC h={'100%'}>
                 <FRBC>
-                    {selectMode && (
-                        <Checkbox
-                            sx={{p: .4, ml: -.7, mt: -.7}}
-                            size="small"
-                            checked={selected}
-                            onChange={handleToggleSelect}
-                            onClick={e => e.stopPropagation()}
-                        />
-                    )}
+                    {selectMode && <></>}
                     {favorite && (
                         <IconButton size="small" onClick={e => {
                             e.stopPropagation();

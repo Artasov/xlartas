@@ -28,7 +28,8 @@ import {
     TableHead,
     TableRow,
     TextField,
-    useMediaQuery
+    useMediaQuery,
+    Box
 } from '@mui/material';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
@@ -226,7 +227,7 @@ const Master: React.FC = () => {
                     </FR>
                 </FRBC>
                 {view === 'cards' ? (
-                    <FR g={1} wrap mt={.4}>
+                    <Box mt={.4} sx={{display:'grid',gap:'0.5rem',gridTemplateColumns:{xs:'repeat(2,1fr)',sm:'repeat(3,1fr)',md:'repeat(4,1fr)',lg:'repeat(5,1fr)'}}}>
                         {folders.map(f => (
                             <FolderCard
                                 key={f.id}
@@ -259,16 +260,15 @@ const Master: React.FC = () => {
                                           onShare={() => setShowShare(f)}
                                           onDownload={file => window.open(file.file)}/>
                             ))}
-                    </FR>
+                    </Box>
                 ) : (
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                {selectMode && <TableCell padding="checkbox"/>}
                                 <TableCell/>
                                 <TableCell>{t('name')}</TableCell>
                                 {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
-                                <TableCell>{t('size')}</TableCell>
+                                {isGtSm && <TableCell>{t('size')}</TableCell>}
                                 <TableCell/>
                             </TableRow>
                         </TableHead>
