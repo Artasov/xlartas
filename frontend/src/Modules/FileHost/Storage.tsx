@@ -21,8 +21,8 @@ const Storage: React.FC = () => {
             : '/storage/master/';
 
     return (
-        <FC h={'100%'}>
-            <Tabs value={current} onChange={(_, v) => navigate(v)} sx={{px: 2}}>
+        <FC h={'100%'} px={2}>
+            <Tabs value={current} onChange={(_, v) => navigate(v)}>
                 <Tab value="/storage/master/" label={t('storage')}/>
                 <Tab value="/storage/files/all/" label={t('all_files')}/>
                 <Tab value="/storage/files/favorite/" label={t('favorites')}/>
