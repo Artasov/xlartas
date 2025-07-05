@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Checkbox, IconButton, TableRow, TableCell, useMediaQuery} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {IconButton, TableRow, TableCell, useMediaQuery} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
@@ -72,6 +71,7 @@ const FileTableRow: React.FC<Props> = ({
     return (
         <TableRow
             hover
+            selected={selected}
             onClick={handleClick}
             onContextMenu={e => {
                 e.preventDefault();
@@ -80,12 +80,6 @@ const FileTableRow: React.FC<Props> = ({
             {...longPress}
             sx={{cursor: 'pointer'}}
         >
-            {selectMode && (
-                <TableCell padding="checkbox">
-                    <Checkbox size="small" checked={selected} onChange={handleToggleSelect}
-                              onClick={e => e.stopPropagation()}/>
-                </TableCell>
-            )}
             <TableCell padding="checkbox">
                 {getFileIcon(file.name)}
             </TableCell>
@@ -95,7 +89,7 @@ const FileTableRow: React.FC<Props> = ({
             {isGtSm && (
                 <TableCell>{new Date(file.created_at).toLocaleString()}</TableCell>
             )}
-            <TableCell>{formatFileSize(file.size)}</TableCell>
+            {isGtSm && <TableCell>{formatFileSize(file.size)}</TableCell>}
             <TableCell>
                 <FRSE g={0.5}>
                     {favorite && (
@@ -106,12 +100,6 @@ const FileTableRow: React.FC<Props> = ({
                             <StarIcon fontSize="small"/>
                         </IconButton>
                     )}
-                    <IconButton size="small" onClick={e => {
-                        e.stopPropagation();
-                        setAnchorEl(e.currentTarget);
-                    }}>
-                        <MoreVertIcon fontSize="small"/>
-                    </IconButton>
                     <FileActions
                         anchorEl={anchorEl}
                         file={{...file, is_favorite: favorite}}

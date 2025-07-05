@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Menu, MenuItem, IconButton, Checkbox} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {Menu, MenuItem, IconButton} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import {useApi} from '../Api/useApi';
@@ -75,7 +74,7 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
 
     return (
         <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={handleClick} onContextMenu={(e)=>{e.preventDefault();setAnchorEl(e.currentTarget);}}>
-            {selectMode && <Checkbox size="small" checked={selected} onChange={handleToggleSelect}/>} 
+            {selectMode && <></>}
             <span style={{flexGrow:1}}>{file.name}</span>
             <FRSE g={0.5}>
                 {favorite && (
@@ -84,9 +83,7 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
                         <StarIcon fontSize="small"/>
                     </IconButton>
                 )}
-                <IconButton size="small" onClick={(e) => {e.stopPropagation();setAnchorEl(e.currentTarget);}}>
-                    <MoreVertIcon fontSize="small"/>
-                </IconButton>
+                
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                     <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
                     <MenuItem onClick={handleShare}>{t('share')}</MenuItem>
