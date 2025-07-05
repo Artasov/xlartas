@@ -42,14 +42,13 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}
                 }}
                 {...longPress}
             >
-                <TableCell padding="checkbox">
+                <TableCell sx={{p: 0}}>
                     <FolderRoundedIcon/>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row"  sx={{pl: 0}}>
                     {name}
                 </TableCell>
-                {isGtSm && <TableCell/>}
-                <TableCell/>
+                {isGtSm && <><TableCell/> <TableCell/> </>}
                 <TableCell/>
             </TableRow>
             <FolderActions

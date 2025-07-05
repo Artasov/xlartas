@@ -11,6 +11,7 @@ import FileActions from './FileActions';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 import {FC, FR, FRBC, FRC} from "wide-containers";
 import {getFileIcon, isImage} from './fileIcons';
+import {useTheme} from "Theme/ThemeContext";
 
 interface Props {
     file: IFile;
@@ -41,6 +42,7 @@ const FileCard: React.FC<Props> = (
     const {t} = useTranslation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [favorite, setFavorite] = useState(file.is_favorite);
+    const {plt} = useTheme();
 
     useEffect(() => setFavorite(file.is_favorite), [file.is_favorite]);
 
@@ -87,22 +89,27 @@ const FileCard: React.FC<Props> = (
     };
 
     return (
-        <Paper sx={{px: 1, pt: 1, pb: .5, width: '100%', minHeight: 140, bgcolor: selected ? '#eef2ff' : undefined}}
-               onClick={handleClick} onContextMenu={e => {
+        <Paper sx={{
+            px: 1, pt: 1, pb: .5, position: 'relative',
+            width: '100%', minHeight: 140,
+            bgcolor: selected ? plt.text.primary + '22' : plt.text.primary + '11'
+        }} onClick={handleClick} onContextMenu={e => {
             e.preventDefault();
             setAnchorEl(e.currentTarget);
         }} {...longPress}>
             <FC h={'100%'}>
                 <FRBC>
                     {selectMode && <></>}
-                    {favorite && (
-                        <IconButton size="small" onClick={e => {
-                            e.stopPropagation();
-                            toggleFav();
-                        }} sx={{color: '#fbc02d'}}>
-                            <StarIcon fontSize="small"/>
-                        </IconButton>
-                    )}
+                    <FR pos={'absolute'} h={'fit-content'} top={2} right={2}>
+                        {favorite && (
+                            <IconButton size="small" onClick={e => {
+                                e.stopPropagation();
+                                toggleFav();
+                            }} sx={{color: '#fbc02d'}}>
+                                <StarIcon fontSize="small"/>
+                            </IconButton>
+                        )}
+                    </FR>
                 </FRBC>
                 <FRC opacity={80} mt={1}>
                     {isImage(file.name) ? (
@@ -111,7 +118,7 @@ const FileCard: React.FC<Props> = (
                         getFileIcon(file.name, {sx: {fontSize: '5rem'}})
                     )}
                 </FRC>
-                <FRC fontSize={'0.9rem'} sx={{wordBreak: 'break-all'}}>
+                <FRC fontSize={'0.9rem'} mt={1} sx={{wordBreak: 'break-all'}}>
                     {file.name}
                 </FRC>
                 <FR mt={'auto'} fontSize={'0.75rem'} color={'#666'}>

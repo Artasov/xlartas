@@ -80,10 +80,10 @@ const FileTableRow: React.FC<Props> = ({
             {...longPress}
             sx={{cursor: 'pointer'}}
         >
-            <TableCell padding="checkbox">
+            <TableCell sx={{p: 0}}>
                 {getFileIcon(file.name)}
             </TableCell>
-            <TableCell component="th" scope="row" sx={{lineHeight: '1rem'}}>
+            <TableCell component="th" scope="row" sx={{lineHeight: '1rem', pl: 0}}>
                 {file.name}
             </TableCell>
             {isGtSm && (

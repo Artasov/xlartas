@@ -46,9 +46,9 @@ const FileDetail: React.FC = () => {
                 />
             </FRBC>
             <Container pb={1} scroll={'y-auto'} cls={'no-scrollbar'}>
-                <FR component={'h3'} sx={{lineHeight: '1.3rem'}}>{file.name}</FR>
-                <FR>{t('size')}: {formatFileSize(file.size)}</FR>
-                <FR>{t('upload_date')}: {new Date(file.created_at).toLocaleString()}</FR>
+                <FR component={'h3'} sx={{lineHeight: '1.6rem'}}>{file.name}</FR>
+                <FR mt={1}>{t('size')}: {formatFileSize(file.size)}</FR>
+                <FR mb={1}>{t('upload_date')}: {new Date(file.created_at).toLocaleString()}</FR>
                 {isImage(file.name) && (
                     <img src={file.file} alt={file.name}
                          style={{maxWidth: '100%', maxHeight: '60vh', cursor: 'pointer'}}

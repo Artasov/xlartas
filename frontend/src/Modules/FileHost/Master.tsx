@@ -227,7 +227,7 @@ const Master: React.FC = () => {
                     </FR>
                 </FRBC>
                 {view === 'cards' ? (
-                    <Box mt={.4} sx={{display:'grid',gap:'0.5rem',gridTemplateColumns:{xs:'repeat(2,1fr)',sm:'repeat(3,1fr)',md:'repeat(4,1fr)',lg:'repeat(5,1fr)'}}}>
+                    <Box mt={.4} sx={{display:'grid',gap:'0.5rem',gridTemplateColumns:{xs:'repeat(2,1fr)',sm:'repeat(3,1fr)',md:'repeat(4,1fr)',lg:'repeat(4,1fr)'}}}>
                         {folders.map(f => (
                             <FolderCard
                                 key={f.id}
@@ -265,8 +265,8 @@ const Master: React.FC = () => {
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell/>
-                                <TableCell>{t('name')}</TableCell>
+                                <TableCell  sx={{p: 0}}/>
+                                <TableCell  sx={{pl: 0}}>{t('name')}</TableCell>
                                 {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
                                 {isGtSm && <TableCell>{t('size')}</TableCell>}
                                 <TableCell/>

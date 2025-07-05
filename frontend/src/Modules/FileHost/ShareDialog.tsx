@@ -9,7 +9,7 @@ import {
     DialogTitle,
     FormControlLabel,
     IconButton,
-    TextField
+    TextField, Typography
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {useApi} from '../Api/useApi';
@@ -83,8 +83,9 @@ const ShareDialog: React.FC<Props> = ({file, open, onClose}) => {
                 {t('share')}
             </DialogTitle>
             <DialogContent sx={{pb: 0}}>
+                <Typography>{file?.name}</Typography>
                 <FormControlLabel
-                    control={<Checkbox
+                    control={<Checkbox sx={{p:.6, ml: .36}}
                         checked={isPublic}
                         onChange={e => handlePublicChange(e.target.checked)}
                     />} label={'Public'}

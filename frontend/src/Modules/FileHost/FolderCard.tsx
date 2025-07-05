@@ -5,8 +5,9 @@ import RenameDialog from './RenameDialog';
 import useLongPress from './useLongPress';
 import FolderActions from './FolderActions';
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
-import {FC, FCCC, FR} from "wide-containers";
-import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import {FCCC, FR} from "wide-containers";
+import {useTheme} from "Theme/ThemeContext";
+
 interface Props {
     id: number;
     name: string;
@@ -20,6 +21,7 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}) =>
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [showRename, setShowRename] = useState(false);
     const longPress = useLongPress(e => setAnchorEl(e.currentTarget as HTMLElement));
+    const {plt} = useTheme();
 
     const open = () => {
         if (onOpen) onOpen(id);
@@ -33,7 +35,7 @@ const FolderCard: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}) =>
     return (
         <>
             <Paper
-                sx={{p: 1, width: 156, cursor: 'pointer'}}
+                sx={{p: 1, width: '100%', cursor: 'pointer', backgroundColor: plt.text.primary + '11'}}
                 onClick={open}
                 onContextMenu={e => {
                     e.preventDefault();
