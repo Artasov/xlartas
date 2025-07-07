@@ -218,6 +218,15 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                                             style={{maxHeight: 25,}}
                                         />
                                     </FRCC>
+                                    : paymentType.includes('ckassa')
+                                        ? <FRCC
+                                            cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}
+                                            bg={plt.text.primary + '07'}
+                                            boxShadow={paymentType === selectedPaymentType
+                                                ? '0 0 3px 1px' + theme.colors.secondary.main
+                                                : ''}>
+                                            CKassa
+                                        </FRCC>
                                     : paymentType.includes('handmade')
                                         ? <FRCC
                                             cls={'ftrans-300-eio'} px={1.2} py={'.3rem'} rounded={3} g={'.4rem'}

@@ -93,6 +93,11 @@ def _bootstrap_registry():
         currencies=('RUB',),
     ))
     PaymentSystemRegistry.register(PaymentProviderInfo(
+        system=PaymentSystem.CKassa,
+        provider_path='apps.ckassa.providers.CKassaProvider',
+        currencies=('RUB',),
+    ))
+    PaymentSystemRegistry.register(PaymentProviderInfo(
         system=PaymentSystem.Balance,
         provider_path='apps.commerce.providers.balance.BalanceProvider',
         currencies=('RUB',),

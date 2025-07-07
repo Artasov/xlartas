@@ -44,6 +44,7 @@ urlpatterns = [
     path('cloudpayments/', include('apps.cloudpayments.routes')),
     # FreeKassa
     path('freekassa/', include('apps.freekassa.routes')),
+    path('ckassa/', include('apps.ckassa.routes')),
 
     # Other
     path('silk/', include('silk.urls', namespace='silk')),
