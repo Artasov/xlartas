@@ -19,6 +19,7 @@ class PaymentSystem(TextChoices):
     TBankInstallment = 'tbank_installment', _('Tinkoff (Installment)')
     CloudPayment = 'cloud_payment', _('CloudPayments')
     FreeKassa = 'freekassa', _('FreeKassa')
+    CKassa = 'ckassa', _('CKassa')
     Balance = 'balance', _('Balance')
 
 
@@ -47,6 +48,7 @@ class CurrencyPaymentSystemMapping:
             PaymentSystem.CloudPayment,
             PaymentSystem.HandMade,
             PaymentSystem.FreeKassa,
+            PaymentSystem.CKassa,
             PaymentSystem.Balance,
         ),
     }

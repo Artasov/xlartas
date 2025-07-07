@@ -91,10 +91,15 @@ const OrderActions: React.FC<OrderActionsProps> = (
 
 
     const handlePay = () => {
-        if (order.payment_system !== 'cloud_payment') {
+        if (order.payment_system !== 'cloud_payment' && order.payment_system !== 'ckassa') {
             return handleRedirectToPayment();
         }
-        window.location.href = `/cloudpayments/pay/${order.id}/`;
+        if (order.payment_system === 'cloud_payment') {
+            window.location.href = `/cloudpayments/pay/${order.id}/`;
+        }
+        if (order.payment_system === 'ckassa') {
+            handleRedirectToPayment();
+        }
     };
 
     const getActions = () => {

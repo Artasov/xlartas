@@ -255,6 +255,7 @@ INSTALLED_APPS = [
     'apps.tbank',
     'apps.cloudpayments',
     'apps.freekassa',
+    'apps.ckassa',
     'apps.theme',
     'apps.surveys',
     'apps.filehost',
@@ -632,6 +633,11 @@ FK_SECRET_WORD2 = env('FK_SECRET_WORD2')
 FK_API_URL = 'https://api.freekassa.ru/v1/'
 FK_API_KEY = env('FK_API_KEY')
 FK_SHOP_ID = env('FK_MERCHANT_ID')
+
+CKASSA_LOGIN = env('CKASSA_LOGIN')
+CKASSA_TOKEN = env('CKASSA_TOKEN')
+CKASSA_API_URL = env('CKASSA_API_URL', default='https://api2.ckassa.ru/api-shop/rs/')
+CKASSA_SERV_CODE = env('CKASSA_SERV_CODE')
 
 MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50

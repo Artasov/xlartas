@@ -17,6 +17,7 @@ export type IPaymentSystem =
     | 'shopozz'
     | 'prodamus'
     | 'tbank_installment'
+    | 'ckassa'
     | 'balance';
 
 export type ICurrency = 'USD' | 'RUB' | 'EUR';

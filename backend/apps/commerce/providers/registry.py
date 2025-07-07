@@ -6,6 +6,7 @@ from apps.commerce.providers.balance import BalanceProvider
 from apps.commerce.providers.base import BasePaymentProvider
 from apps.commerce.providers.handmade import HandMadeProvider
 from apps.freekassa.providers import FreeKassaProvider
+from apps.ckassa.providers import CKassaProvider
 from apps.tbank.providers import TBankPaymentProvider
 
 _REGISTRY: Dict[str, Type[BasePaymentProvider]] = {
@@ -15,6 +16,7 @@ _REGISTRY: Dict[str, Type[BasePaymentProvider]] = {
         CloudPaymentsProvider,
         HandMadeProvider,
         FreeKassaProvider,
+        CKassaProvider,
         BalanceProvider,
     )
 }
