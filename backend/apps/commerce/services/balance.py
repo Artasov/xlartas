@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from apps.commerce.services.order.base import IOrderService
+from apps.commerce.services.order.base import OrderService
 from apps.commerce.services.product import IProductService
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -34,7 +34,7 @@ class BalanceProductService(IProductService):
         await user.asave()
 
 
-class BalanceProductOrderService(IOrderService):
+class BalanceProductOrderService(OrderService):
     @property
     async def receipt_price(self: 'BalanceProductOrder') -> Decimal:
         return self.requested_amount

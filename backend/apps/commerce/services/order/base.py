@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from apps.commerce.models import Order, HandMadePayment
 
 
-class IOrderService:
+class OrderService:
     """
     Интерфейс-сервис для работы с заказами, частично реализующий функционал.
     Этот класс должен быть унаследован конкретными сервисами заказов,
@@ -107,12 +107,16 @@ class IOrderService:
     #   ИНИЦИАЛИЗАЦИЯ ЗАКАЗА
     # ---------------------------------------------------------------- #
     async def init(self: 'Order', request, init_payment: bool = True):
+        commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()  # noqa
+        self.product: Product = await self.product.aget_real_instance()  # noqa
+        commerce_log.info(f'For product {self.product.name}')
         price = await self.receipt_price  # noqa
+        commerce_log.info(f'Price: {price}')
         self.amount = price  # noqa
         await self.asave()
         await self.product.can_pregive(self, raise_exceptions=True)  # noqa
+        commerce_log.info(f'Pregive process product {self.product.name}')
         await self.product.pregive(self)  # noqa
         if self.payment_system and init_payment and price > 0:
             await self.init_payment(  # noqa
@@ -169,7 +173,7 @@ class IOrderService:
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
 
     async def cancel(
-            self: Union['Order', 'IOrderService'],
+            self: Union['Order', 'OrderService'],
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             reason: str
     ):
@@ -180,7 +184,7 @@ class IOrderService:
         self.is_cancelled = True  # noqa
         await self.asave()
 
-    def check_available_to_init_payment(self: Union['Order', 'IOrderService']):
+    def check_available_to_init_payment(self: Union['Order', 'OrderService']):
         from apps.commerce.models import Order
         from apps.commerce.models.payment import CurrencyPaymentSystemMapping
         self: Order
@@ -194,7 +198,7 @@ class IOrderService:
                 f'Платежная система {self.payment_system} не поддерживается для валюты {self.currency}.'
             )
 
-    async def cancel_payment(self: Union['Order', 'IOrderService']):
+    async def cancel_payment(self: Union['Order', 'OrderService']):
         """Отменяет только платеж в шлюзе."""
         await self.sync_with_payment_system()
         from apps.tbank.models import TBankPayment

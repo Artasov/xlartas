@@ -17,7 +17,7 @@ from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import Order, Currency, Product
 from apps.commerce.serializers.order_registry import get_order_serializer
-from apps.commerce.services.order.base import IOrderService
+from apps.commerce.services.order.base import OrderService
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
 from apps.software.models import SoftwareOrder
@@ -127,7 +127,7 @@ async def order_init(request, id, init_payment):
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
 async def order_cancel(request, id):
-    order: Order | IOrderService = await Order.objects.agetorn(
+    order: Order | OrderService = await Order.objects.agetorn(
         OrderException.NotFound, id=id, user=request.user
     )
     async with AsyncAtomicContextManager():

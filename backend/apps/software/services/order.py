@@ -1,6 +1,6 @@
 # software/services/order.py
-from apps.commerce.services.order.base import IOrderService
+from apps.commerce.services.order.base import OrderService
 
 
-class SoftwareOrderService(IOrderService):
+class SoftwareOrderService(OrderService):
     pass
