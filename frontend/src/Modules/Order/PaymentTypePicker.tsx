@@ -3,12 +3,13 @@ import {ICurrency, ICurrencyWithPrice, IPaymentSystem, IProductPrice} from 'type
 import RadioLine from 'Core/components/elements/RadioLine';
 
 import logoTBank from '../../Static/img/icon/tbank/logo.svg';
+import logo from '../../Static/img/icon/logo.png';
 import logoCKassa from '../../Static/img/icon/ckassa/main_logo.png';
 import logoCloudPayments from '../../Static/img/icon/cloudpayments/logo.svg';
 import logoFreeKassa from '../../Static/img/icon/freekassa/logo.png';
 
 import RadioCustomLine from 'Core/components/elements/RadioCustomLine';
-import {FC, FR} from 'wide-containers';
+import {FC, FR, FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {useApi} from 'Api/useApi';
 import CircularProgress from 'Core/components/elements/CircularProgress';
@@ -193,7 +194,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
                         style={{
                             opacity: '60%',
                             whiteSpace: 'nowrap',
-                            fontWeight: 300,
+                            fontWeight: 500,
                             fontSize: '1.4rem',
                         }}
                     >
@@ -205,9 +206,12 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
 
         /* ---------- Баланс или прочее ---------- */
         return (
-            <PaymentTypeButton selected={isSelected} key={paymentType}>
+            <PaymentTypeButton selected={isSelected} key={paymentType} pl={1} pr={1.5}>
                 {paymentType === 'balance' ? (
-                    <span style={{whiteSpace: 'nowrap'}}>By Balance</span>
+                    <FRCC g={.8} fontWeight={'bold'} fontSize={'1.3rem'} sx={{whiteSpace: 'nowrap'}}>
+                        <img src={logo} alt={`Иконка ${paymentType}`} style={{maxHeight: `calc(${paymentButtonHeight} - 10px)`}}/>
+                        <span style={{opacity: '70%', letterSpacing: '.12rem'}}>{t('by_balance')}</span>
+                    </FRCC>
                 ) : (
                     paymentType
                 )}

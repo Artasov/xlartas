@@ -168,6 +168,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
 
             onSuccess?.(data);
             setPayModal(false);
+        } catch (_) {
         } finally {
             setCreatingOrder(false);
         }
@@ -240,7 +241,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
             >
                 <DialogTitle sx={{pb: 1.3}}><FRC opacity={70}>{t('payment_of_the_order')}</FRC></DialogTitle>
                 <DialogContent>
-                    <FC maxW={360}>
+                    <FC maxW={370}>
                         <FC mb={1}>
                             <PaymentTypePicker
                                 prices={software.prices}

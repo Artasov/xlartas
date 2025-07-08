@@ -18,7 +18,7 @@ import iconTon from '../../Static/img/icon/payments/toncoin.svg';
 import iconBnb from '../../Static/img/icon/payments/bnb.svg';
 import iconUnionPay from '../../Static/img/icon/payments/unionpay.svg';
 import iconSberPay from '../../Static/img/icon/payments/sberpay.svg';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
 import {Message} from 'Core/components/Message';

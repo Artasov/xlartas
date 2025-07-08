@@ -1,5 +1,5 @@
 import React from 'react';
-import {FR} from 'wide-containers';
+import {FR, FRC} from 'wide-containers';
 
 interface PaymentSystemIconsProps {
     icons: string[];
@@ -10,11 +10,11 @@ interface PaymentSystemIconsProps {
 const PaymentSystemIcons: React.FC<PaymentSystemIconsProps> = ({icons, className = '', size = 28}) => {
     const height = typeof size === 'number' ? `${size}px` : size;
     return (
-        <FR wrap g={1} className={className} mt={0.5}>
+        <FRC wrap g={1} className={className} mt={0.5}>
             {icons.map((icon, idx) => (
                 <img key={idx} src={icon} alt="icon" style={{height}}/>
             ))}
-        </FR>
+        </FRC>
     );
 };
 
