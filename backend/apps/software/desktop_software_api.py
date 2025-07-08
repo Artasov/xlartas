@@ -16,6 +16,9 @@ from apps.software.models import Software, SoftwareLicense
 
 log = logging.getLogger('global')
 
+# Default headers for JSON responses
+JSON_HEADERS = {'Content-Type': 'application/json'}
+
 # Эти константы замените своими сообщениями
 SOMETHING_WRONG = 'Something went wrong.'
 LOGIN_OR_SECRET_KEY_WRONG = 'Wrong username or secret key.'
@@ -52,7 +55,7 @@ async def software_auth(request) -> Response:
         return Response(
             {'accept': False, 'error': SOMETHING_WRONG},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     # Ищем пользователя
@@ -63,7 +66,7 @@ async def software_auth(request) -> Response:
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     # Проверяем, не используется ли один hw_id на нескольких разных аккаунтах
@@ -74,7 +77,7 @@ async def software_auth(request) -> Response:
         return Response(
             {'accept': False, 'error': MULTI_ACCOUNT_PROHIBITED},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     is_first_start = False
@@ -92,7 +95,7 @@ async def software_auth(request) -> Response:
             return Response(
                 {'accept': False, 'error': HWID_NOT_EQUAL, 'error_type': 'hw_id'},
                 status=status.HTTP_200_OK,
-                headers={'Content-Type': 'application/json'}
+                headers=JSON_HEADERS
             )
 
     # Ищем Software
@@ -103,7 +106,7 @@ async def software_auth(request) -> Response:
         return Response(
             {'accept': False, 'error': PRODUCT_NOT_EXISTS},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     # Создаем или получаем SoftwareLicense
@@ -130,7 +133,7 @@ async def software_auth(request) -> Response:
                     'hw_id': user_.hw_id,
                     'is_first_start': is_first_start
                 },
-                headers={'Content-Type': 'application/json'},
+                headers=JSON_HEADERS,
                 status=status.HTTP_200_OK
             )
         else:
@@ -144,7 +147,7 @@ async def software_auth(request) -> Response:
                     )
                 },
                 status=status.HTTP_200_OK,
-                headers={'Content-Type': 'application/json'}
+                headers=JSON_HEADERS
             )
 
     # Если лицензия активна:
@@ -163,7 +166,7 @@ async def software_auth(request) -> Response:
             'hw_id': user_.hw_id,
             'is_first_start': is_first_start
         },
-        headers={'Content-Type': 'application/json'},
+        headers=JSON_HEADERS,
         status=status.HTTP_200_OK
     )
 
@@ -186,7 +189,7 @@ async def set_user_hw_id(request) -> Response:
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     try:
@@ -196,7 +199,7 @@ async def set_user_hw_id(request) -> Response:
         return Response(
             {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
             status=status.HTTP_200_OK,
-            headers={'Content-Type': 'application/json'}
+            headers=JSON_HEADERS
         )
 
     user_.hw_id = hw_id
@@ -209,7 +212,7 @@ async def set_user_hw_id(request) -> Response:
 
     return Response(
         {'accept': True},
-        headers={'Content-Type': 'application/json'}
+        headers=JSON_HEADERS
     )
 
 
