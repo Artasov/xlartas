@@ -46,7 +46,7 @@ drf-yasg = "1.21.10"
 redis = "6.2.0"
 channels-redis = "4.2.1"
 twisted = { version = "25.5.0", extras = ["http2", "tls"] }
-httpx = "1.0.0b0"
+httpx = "0.28.1"
 uuid6 = "2025.0.0"
 mcrcon = "0.7.0"
 polib = "1.2.0"
