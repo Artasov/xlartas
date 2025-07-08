@@ -11,7 +11,7 @@ import {Button} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from 'Api/useApi';
-import {FC, FR, FRE} from "wide-containers";
+import {FC, FRE} from "wide-containers";
 
 interface Props {
     open: boolean;

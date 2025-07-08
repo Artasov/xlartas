@@ -32,6 +32,7 @@ import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 import Storage from '../FileHost/Storage';
+import Collapse from "@mui/material/Collapse";
 
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -63,7 +64,8 @@ const Cabinet: React.FC = () => {
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const [cabinetMaxWidth, setCabinetMaxWidth] = useState<string>("845px");
     const {notAuthentication} = useErrorProcessing();
-
+    const [menuOpen, setMenuOpen] = useState(false);
+    useEffect(() => setMenuOpen(true), []);
     const handleMenuLinkClick = (path: string, closeMobile?: boolean) => {
         if (closeMobile) hideMobileMenu();
         setTimeout(() => {
@@ -151,41 +153,44 @@ const Cabinet: React.FC = () => {
                                 <UserAvatarEditable size={'8em'}/>
                             </FC>
                         </FCSC>
-                        <FC g={1}>
-                            <CabinetNavLink
-                                text={t('profile')} iconSx={{transform: 'scale(1.2)'}} to="/profile"
-                                urlActiveMark={'profile'}
-                                icon={PersonOutlineRoundedIcon}
-                                onClick={() => handleMenuLinkClick('/profile')}/>
-                            <CabinetNavLink
-                                text={t('software')} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
-                                urlActiveMark={'software'}
-                                icon={WebhookIcon} onClick={() => handleMenuLinkClick('/softwares')}/>
-                            <CabinetNavLink
-                                text={t('licenses')} iconSx={{transform: 'scale(1.04)'}} to="/licenses"
-                                urlActiveMark={'license'}
-                                icon={EarbudsRoundedIcon} onClick={() => handleMenuLinkClick('/licenses')}/>
-                            {user?.roles?.includes('MINE-DEV') && <CabinetNavLink
-                                text={t('releases')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
-                                urlActiveMark={'xlmine-release'}
-                                icon={DeveloperBoardRoundedIcon}
-                                onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
-                            <CabinetNavLink
-                                text={t('wireless')} to="/wireless" urlActiveMark={'wireless'}
-                                icon={SettingsRemoteRoundedIcon}
-                                onClick={() => handleMenuLinkClick('/wireless')}/>
-                            <CabinetNavLink
-                                text={t('orders')} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
-                                onClick={() => handleMenuLinkClick('/orders')}/>
-                            <CabinetNavLink
-                                text={t('storage')} to="/storage/master" urlActiveMark={'storage'}
-                                icon={FeedRoundedIcon}
-                                onClick={() => handleMenuLinkClick('/storage/master')}/>
-                            <CabinetNavLink
-                                text={t('minecraft')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
-                                urlActiveMark={'xlmine'}
-                                icon={ViewInArIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
-                        </FC>
+                        <Collapse in={menuOpen} appear timeout={400}>
+                            <FC g={1}>
+                                <CabinetNavLink
+                                    text={t('profile')} iconSx={{transform: 'scale(1.2)'}} to="/profile"
+                                    urlActiveMark={'profile'}
+                                    icon={PersonOutlineRoundedIcon}
+                                    onClick={() => handleMenuLinkClick('/profile')}/>
+                                <CabinetNavLink
+                                    text={t('software')} iconSx={{transform: 'scale(1.04)'}} to="/softwares"
+                                    urlActiveMark={'software'}
+                                    icon={WebhookIcon} onClick={() => handleMenuLinkClick('/softwares')}/>
+                                <CabinetNavLink
+                                    text={t('licenses')} iconSx={{transform: 'scale(1.04)'}} to="/licenses"
+                                    urlActiveMark={'license'}
+                                    icon={EarbudsRoundedIcon} onClick={() => handleMenuLinkClick('/licenses')}/>
+                                {user?.roles?.includes('MINE-DEV') && <CabinetNavLink
+                                    text={t('releases')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine-release"
+                                    urlActiveMark={'xlmine-release'}
+                                    icon={DeveloperBoardRoundedIcon}
+                                    onClick={() => handleMenuLinkClick('/xlmine-release')}/>}
+                                <CabinetNavLink
+                                    text={t('wireless')} to="/wireless" urlActiveMark={'wireless'}
+                                    icon={SettingsRemoteRoundedIcon}
+                                    onClick={() => handleMenuLinkClick('/wireless')}/>
+                                <CabinetNavLink
+                                    text={t('orders')} to="/orders" urlActiveMark={'order'}
+                                    icon={CreditScoreRoundedIcon}
+                                    onClick={() => handleMenuLinkClick('/orders')}/>
+                                <CabinetNavLink
+                                    text={t('storage')} to="/storage/master" urlActiveMark={'storage'}
+                                    icon={FeedRoundedIcon}
+                                    onClick={() => handleMenuLinkClick('/storage/master')}/>
+                                <CabinetNavLink
+                                    text={t('minecraft')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"
+                                    urlActiveMark={'xlmine'}
+                                    icon={ViewInArIcon} onClick={() => handleMenuLinkClick('/xlmine')}/>
+                            </FC>
+                        </Collapse>
                     </FCSC>
 
                     <FC cls={'profile-section'} rounded={3} h={'100%'} w={'100%'} pos={'relative'}

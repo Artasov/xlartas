@@ -2,7 +2,6 @@
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
-from django.db.models import Sum
 from rest_framework import status
 
 STORAGE_LIMIT = 300 * 1024 * 1024
@@ -61,6 +60,7 @@ async def add_file(request) -> Response:
     file = await serializer.asave()
     return Response(await FileSerializer(file).adata, status=status.HTTP_201_CREATED)
 
+
 @acontroller('Get Favorite Files')
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
@@ -68,7 +68,8 @@ async def get_favorite_files(request) -> Response:
     page = int(request.query_params.get('page', 1))
     page_size = int(request.query_params.get('page_size', 10))
     offset = (page - 1) * page_size
-    files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[offset:offset + page_size]
+    files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[
+               offset:offset + page_size]
     files = []
     async for f in files_qs:
         files.append(await FileSerializer(f).adata)

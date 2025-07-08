@@ -26,21 +26,21 @@ const Storage: React.FC = () => {
 
     return (
         <Collapse in={animate} appear timeout={400}>
-        <FC h={'100%'} px={2}>
-            <Tabs value={current} onChange={(_, v) => navigate(v)}>
-                <Tab value="/storage/master/" label={t('storage')}/>
-                <Tab value="/storage/files/all/" label={t('all_files')}/>
-                <Tab value="/storage/files/favorite/" label={t('favorites')}/>
-            </Tabs>
-            <FR mt={.4} w={'100%'}><StorageUsageBar/></FR>
-            <Routes>
-                <Route path="master/" element={<Master/>}/>
-                <Route path="master/:id/" element={<Master/>}/>
-                <Route path="files/all/" element={<AllFiles/>}/>
-                <Route path="files/favorite/" element={<FavoriteFiles/>}/>
-                <Route path="files/:id/" element={<FileDetail/>}/>
-            </Routes>
-        </FC>
+            <FC h={'100%'} px={2}>
+                <Tabs value={current} onChange={(_, v) => navigate(v)}>
+                    <Tab value="/storage/master/" label={t('storage')}/>
+                    <Tab value="/storage/files/all/" label={t('all_files')}/>
+                    <Tab value="/storage/files/favorite/" label={t('favorites')}/>
+                </Tabs>
+                <FR mt={.4} w={'100%'}><StorageUsageBar/></FR>
+                <Routes>
+                    <Route path="master/" element={<Master/>}/>
+                    <Route path="master/:id/" element={<Master/>}/>
+                    <Route path="files/all/" element={<AllFiles/>}/>
+                    <Route path="files/favorite/" element={<FavoriteFiles/>}/>
+                    <Route path="files/:id/" element={<FileDetail/>}/>
+                </Routes>
+            </FC>
         </Collapse>
     );
 };

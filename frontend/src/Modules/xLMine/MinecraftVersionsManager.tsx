@@ -134,106 +134,106 @@ const LauncherManager: React.FC = () => {
 
     return (
         <Collapse in={animate} appear timeout={400}>
-        <FC g={1}>
-            <Paper sx={{p: 2}}>
-                <FC g={1}>
+            <FC g={1}>
+                <Paper sx={{p: 2}}>
                     <FC g={1}>
-                        <FRSC g={1}>
-                            <span>{t('installer')}</span>
-                            <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
-                        </FRSC>
-                        <TextField
-                            sx={{width: 'fit-content'}}
-                            size={'small'}
-                            label={t('version')}
-                            value={version}
-                            onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
-                            fullWidth
-                        />
-                        <Button
-                            onClick={handleUpload}
-                            disabled={!file}
-                            sx={{fontWeight: file ? 'bold' : ''}}
-                        >
-                            {t('upload')}
-                        </Button>
-                        {isUploading && <FCCC><CircularProgress size={32}/></FCCC>}
+                        <FC g={1}>
+                            <FRSC g={1}>
+                                <span>{t('installer')}</span>
+                                <FileUpload onFileSelect={handleFileSelect} reset={fileReset}/>
+                            </FRSC>
+                            <TextField
+                                sx={{width: 'fit-content'}}
+                                size={'small'}
+                                label={t('version')}
+                                value={version}
+                                onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
+                                fullWidth
+                            />
+                            <Button
+                                onClick={handleUpload}
+                                disabled={!file}
+                                sx={{fontWeight: file ? 'bold' : ''}}
+                            >
+                                {t('upload')}
+                            </Button>
+                            {isUploading && <FCCC><CircularProgress size={32}/></FCCC>}
+                        </FC>
                     </FC>
-                </FC>
-            </Paper>
+                </Paper>
 
-            <Paper sx={{p: 2, pt: 1}}>
-                {loading ? (
-                    <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-                        <CircularProgress/>
-                    </Box>
-                ) : (
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>{t('version')}</TableCell>
-                                <TableCell>SHA256</TableCell>
-                                <TableCell>{t('creation_date')}</TableCell>
-                                <TableCell>{t('actions')}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {launchers.map(item => (
-                                <TableRow key={item.id}>
-                                    <TableCell>{item.id}</TableCell>
-                                    <TableCell>{item.version}</TableCell>
-                                    <TableCell style={{wordBreak: 'break-all'}}>
-                                        {item.sha256_hash}
-                                    </TableCell>
-                                    <TableCell>
-                                        {formatDate(item.created_at)}
-                                    </TableCell>
-                                    <TableCell>
-                                        <IconButton
-                                            onClick={() => openConfirmDelete(item.id)}
-                                            disabled={deletingId === item.id}
-                                        >
-                                            {deletingId === item.id ? (
-                                                <CircularProgress size={24}/>
-                                            ) : (
-                                                <DeleteIcon/>
-                                            )}
-                                        </IconButton>
-                                    </TableCell>
+                <Paper sx={{p: 2, pt: 1}}>
+                    {loading ? (
+                        <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+                            <CircularProgress/>
+                        </Box>
+                    ) : (
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>{t('version')}</TableCell>
+                                    <TableCell>SHA256</TableCell>
+                                    <TableCell>{t('creation_date')}</TableCell>
+                                    <TableCell>{t('actions')}</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </Paper>
+                            </TableHead>
+                            <TableBody>
+                                {launchers.map(item => (
+                                    <TableRow key={item.id}>
+                                        <TableCell>{item.id}</TableCell>
+                                        <TableCell>{item.version}</TableCell>
+                                        <TableCell style={{wordBreak: 'break-all'}}>
+                                            {item.sha256_hash}
+                                        </TableCell>
+                                        <TableCell>
+                                            {formatDate(item.created_at)}
+                                        </TableCell>
+                                        <TableCell>
+                                            <IconButton
+                                                onClick={() => openConfirmDelete(item.id)}
+                                                disabled={deletingId === item.id}
+                                            >
+                                                {deletingId === item.id ? (
+                                                    <CircularProgress size={24}/>
+                                                ) : (
+                                                    <DeleteIcon/>
+                                                )}
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
+                </Paper>
 
-            {/* Подтверждение удаления */}
-            <Dialog
-                open={!!confirmDeleteId}
-                onClose={closeConfirmDelete}
-            >
-                <DialogTitle>Удаление версии лаунчера</DialogTitle>
-                <DialogContent>
-                    Вы уверены, что хотите удалить версию?
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeConfirmDelete}>
-                        Отмена
-                    </Button>
-                    <Button
-                        onClick={handleConfirmDelete}
-                        disabled={deletingId === confirmDeleteId}
-                    >
-                        {deletingId === confirmDeleteId ? (
-                            <CircularProgress size={24}/>
-                        ) : (
-                            'Удалить'
-                        )}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </FC>
+                {/* Подтверждение удаления */}
+                <Dialog
+                    open={!!confirmDeleteId}
+                    onClose={closeConfirmDelete}
+                >
+                    <DialogTitle>Удаление версии лаунчера</DialogTitle>
+                    <DialogContent>
+                        Вы уверены, что хотите удалить версию?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={closeConfirmDelete}>
+                            Отмена
+                        </Button>
+                        <Button
+                            onClick={handleConfirmDelete}
+                            disabled={deletingId === confirmDeleteId}
+                        >
+                            {deletingId === confirmDeleteId ? (
+                                <CircularProgress size={24}/>
+                            ) : (
+                                'Удалить'
+                            )}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </FC>
         </Collapse>
     );
 };
@@ -381,106 +381,106 @@ const ReleaseManager: React.FC = () => {
 
     return (
         <Collapse in={animate} appear timeout={400}>
-        <FC g={1}>
-            <Paper sx={{p: 2}}>
-                <FC g={1}>
-                    <FCS g={1}>
-                        <FR g={1}>
-                            <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
-                            <TextField
-                                sx={{width: 'fit-content'}}
-                                size={'small'}
-                                label="Версия"
-                                value={version}
-                                onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
-                            />
-                        </FR>
-                        {file && (
-                            <TextField
-                                label="security.json"
-                                value={securityJson}
-                                onChange={handleSecurityChange}
-                                multiline
-                                minRows={4}
-                                maxRows={10}
-                                sx={{flexGrow: 1, width: '100%', m: 0}}
-                                placeholder="Вставьте содержимое security.json"
-                                error={!!securityJson && !securityValid}
-                                helperText={!securityValid && securityJson ? 'Некорректный JSON' : null}
-                            />
-                        )}
-                        <FR>
-                            <Button
-                                sx={{fontWeight: file ? 'bold' : '', px: 3}}
-                                onClick={handleUpload}
-                                disabled={!file || !securityValid || isUploading}
-                            >
-                                {t('upload')}
-                            </Button>
-                        </FR>
-                        {isUploading && (
-                            <FC flexGrow={1} g={0.8}>
-                                <LinearProgress
-                                    sx={{height: 10, borderRadius: '4px'}}
-                                    variant="determinate"
-                                    value={uploadProgress}
+            <FC g={1}>
+                <Paper sx={{p: 2}}>
+                    <FC g={1}>
+                        <FCS g={1}>
+                            <FR g={1}>
+                                <FileUpload onFileSelect={handleFileChange} reset={fileReset}/>
+                                <TextField
+                                    sx={{width: 'fit-content'}}
+                                    size={'small'}
+                                    label="Версия"
+                                    value={version}
+                                    onChange={(e) => setVersion(e.target.value)}  // Редактируем версию
                                 />
-                                <FRC fontSize=".8rem" lineHeight=".7rem">
-                                    {uploadProgress}% загружено
-                                </FRC>
-                            </FC>
-                        )}
-                    </FCS>
-                </FC>
-            </Paper>
+                            </FR>
+                            {file && (
+                                <TextField
+                                    label="security.json"
+                                    value={securityJson}
+                                    onChange={handleSecurityChange}
+                                    multiline
+                                    minRows={4}
+                                    maxRows={10}
+                                    sx={{flexGrow: 1, width: '100%', m: 0}}
+                                    placeholder="Вставьте содержимое security.json"
+                                    error={!!securityJson && !securityValid}
+                                    helperText={!securityValid && securityJson ? 'Некорректный JSON' : null}
+                                />
+                            )}
+                            <FR>
+                                <Button
+                                    sx={{fontWeight: file ? 'bold' : '', px: 3}}
+                                    onClick={handleUpload}
+                                    disabled={!file || !securityValid || isUploading}
+                                >
+                                    {t('upload')}
+                                </Button>
+                            </FR>
+                            {isUploading && (
+                                <FC flexGrow={1} g={0.8}>
+                                    <LinearProgress
+                                        sx={{height: 10, borderRadius: '4px'}}
+                                        variant="determinate"
+                                        value={uploadProgress}
+                                    />
+                                    <FRC fontSize=".8rem" lineHeight=".7rem">
+                                        {uploadProgress}% загружено
+                                    </FRC>
+                                </FC>
+                            )}
+                        </FCS>
+                    </FC>
+                </Paper>
 
-            <Paper sx={{p: 2, pt: 1}}>
-                {loading ? (
-                    <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-                        <CircularProgress/>
-                    </Box>
-                ) : (
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>{t('version')}</TableCell>
-                                <TableCell>SHA256</TableCell>
-                                <TableCell>{t('creation_date')}</TableCell>
-                                <TableCell>{t('actions')}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {releases.map(r => (
-                                <TableRow key={r.id}>
-                                    <TableCell>{r.id}</TableCell>
-                                    <TableCell>{r.version}</TableCell>
-                                    <TableCell style={{wordBreak: 'break-all'}}>{r.sha256_hash}</TableCell>
-                                    <TableCell>{new Date(r.created_at).toLocaleString()}</TableCell>
-                                    <TableCell>
-                                        <IconButton onClick={() => openConfirmDelete(r.id)}
-                                                    disabled={deletingId === r.id}>
-                                            {deletingId === r.id ? <CircularProgress size={24}/> : <DeleteIcon/>}
-                                        </IconButton>
-                                    </TableCell>
+                <Paper sx={{p: 2, pt: 1}}>
+                    {loading ? (
+                        <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+                            <CircularProgress/>
+                        </Box>
+                    ) : (
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>{t('version')}</TableCell>
+                                    <TableCell>SHA256</TableCell>
+                                    <TableCell>{t('creation_date')}</TableCell>
+                                    <TableCell>{t('actions')}</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </Paper>
+                            </TableHead>
+                            <TableBody>
+                                {releases.map(r => (
+                                    <TableRow key={r.id}>
+                                        <TableCell>{r.id}</TableCell>
+                                        <TableCell>{r.version}</TableCell>
+                                        <TableCell style={{wordBreak: 'break-all'}}>{r.sha256_hash}</TableCell>
+                                        <TableCell>{new Date(r.created_at).toLocaleString()}</TableCell>
+                                        <TableCell>
+                                            <IconButton onClick={() => openConfirmDelete(r.id)}
+                                                        disabled={deletingId === r.id}>
+                                                {deletingId === r.id ? <CircularProgress size={24}/> : <DeleteIcon/>}
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
+                </Paper>
 
-            <Dialog open={!!confirmDeleteId} onClose={closeConfirmDelete}>
-                <DialogTitle>Удаление релиза</DialogTitle>
-                <DialogContent>Вы уверены, что хотите удалить версию?</DialogContent>
-                <DialogActions>
-                    <Button onClick={closeConfirmDelete}>Отмена</Button>
-                    <Button onClick={handleConfirmDelete} disabled={deletingId === confirmDeleteId}>
-                        {deletingId === confirmDeleteId ? <CircularProgress size={24}/> : 'Удалить'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </FC>
+                <Dialog open={!!confirmDeleteId} onClose={closeConfirmDelete}>
+                    <DialogTitle>Удаление релиза</DialogTitle>
+                    <DialogContent>Вы уверены, что хотите удалить версию?</DialogContent>
+                    <DialogActions>
+                        <Button onClick={closeConfirmDelete}>Отмена</Button>
+                        <Button onClick={handleConfirmDelete} disabled={deletingId === confirmDeleteId}>
+                            {deletingId === confirmDeleteId ? <CircularProgress size={24}/> : 'Удалить'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </FC>
         </Collapse>
     );
 };
@@ -499,16 +499,16 @@ const MinecraftVersionsManager: React.FC = () => {
 
     return (
         <Collapse in={animate} appear timeout={400}>
-        <FC>
-            <Tabs value={tabIndex} onChange={handleTabChange}>
-                <Tab label="Launcher"/>
-                <Tab label="Release"/>
-            </Tabs>
             <FC>
-                {tabIndex === 0 && <LauncherManager/>}
-                {tabIndex === 1 && <ReleaseManager/>}
+                <Tabs value={tabIndex} onChange={handleTabChange}>
+                    <Tab label="Launcher"/>
+                    <Tab label="Release"/>
+                </Tabs>
+                <FC>
+                    {tabIndex === 0 && <LauncherManager/>}
+                    {tabIndex === 1 && <ReleaseManager/>}
+                </FC>
             </FC>
-        </FC>
         </Collapse>
     );
 };

@@ -215,7 +215,8 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                         </FC>
                         <PaymentSystemInfo
                             system={system}
-                            freekassaExtra={<FR opacity={80} mb={0.5} fontSize={'.88rem'} sx={{lineHeight: '1.2rem'}}>{t('freekassa_note')}</FR>}
+                            freekassaExtra={<FR opacity={80} mb={0.5} fontSize={'.88rem'}
+                                                sx={{lineHeight: '1.2rem'}}>{t('freekassa_note')}</FR>}
                         />
                         <FRC g={1} mt={1}>
                             <Button disabled={creatingOrder} onClick={createOrder} sx={{

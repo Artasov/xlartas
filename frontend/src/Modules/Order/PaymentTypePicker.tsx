@@ -209,7 +209,8 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             <PaymentTypeButton selected={isSelected} key={paymentType} pl={1} pr={1.5}>
                 {paymentType === 'balance' ? (
                     <FRCC g={.8} fontWeight={'bold'} fontSize={'1.3rem'} sx={{whiteSpace: 'nowrap'}}>
-                        <img src={logo} alt={`Иконка ${paymentType}`} style={{maxHeight: `calc(${paymentButtonHeight} - 10px)`}}/>
+                        <img src={logo} alt={`Иконка ${paymentType}`}
+                             style={{maxHeight: `calc(${paymentButtonHeight} - 10px)`}}/>
                         <span style={{opacity: '70%', letterSpacing: '.12rem'}}>{t('by_balance')}</span>
                     </FRCC>
                 ) : (

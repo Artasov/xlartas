@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('commerce', '0010_balancepayment_balanceproduct_and_more'),
     ]
@@ -13,6 +12,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='order',
             name='payment_system',
-            field=models.CharField(choices=[('handmade', 'HandMade'), ('tbank', 'TBank'), ('tbank_installment', 'Tinkoff (Installment)'), ('cloud_payment', 'CloudPayments'), ('freekassa', 'FreeKassa'), ('ckassa', 'CKassa'), ('balance', 'Balance')], db_index=True, max_length=50, verbose_name='Payment System'),
+            field=models.CharField(
+                choices=[('handmade', 'HandMade'), ('tbank', 'TBank'), ('tbank_installment', 'Tinkoff (Installment)'),
+                         ('cloud_payment', 'CloudPayments'), ('freekassa', 'FreeKassa'), ('ckassa', 'CKassa'),
+                         ('balance', 'Balance')], db_index=True, max_length=50, verbose_name='Payment System'),
         ),
     ]

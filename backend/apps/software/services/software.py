@@ -1,13 +1,12 @@
 # software/services/software.py
+import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
-import logging
 from django.utils import timezone
 
 if TYPE_CHECKING:
     from apps.software.models import SoftwareOrder, Software
-
 
 logger = logging.getLogger(__name__)
 

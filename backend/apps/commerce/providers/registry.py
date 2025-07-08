@@ -1,12 +1,12 @@
 # commerce/providers/registry.py
 from typing import Type, Dict
 
+from apps.ckassa.providers import CKassaProvider
 from apps.cloudpayments.providers import CloudPaymentsProvider
 from apps.commerce.providers.balance import BalanceProvider
 from apps.commerce.providers.base import BasePaymentProvider
 from apps.commerce.providers.handmade import HandMadeProvider
 from apps.freekassa.providers import FreeKassaProvider
-from apps.ckassa.providers import CKassaProvider
 from apps.tbank.providers import TBankPaymentProvider
 
 _REGISTRY: Dict[str, Type[BasePaymentProvider]] = {

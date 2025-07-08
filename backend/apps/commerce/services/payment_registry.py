@@ -102,5 +102,3 @@ def _bootstrap_registry():
         provider_path='apps.commerce.providers.balance.BalanceProvider',
         currencies=('RUB',),
     ))
-
-

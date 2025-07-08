@@ -1,11 +1,11 @@
 # build_release.py
 import hashlib
 import json
+import logging
 import os
 import shutil
 import zipfile
 from pathlib import Path
-import logging
 
 SOURCE_DIR = Path(r'C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client')
 RELEASE_DIR = SOURCE_DIR.parent / 'xlartas-xlmine-release'

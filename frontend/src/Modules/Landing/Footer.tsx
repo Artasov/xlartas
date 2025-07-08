@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
 
     return (
         <FC component={'footer'}
-            pos={'absolute'}
+            pos={'fixed'}
             bottom={2}
             left={0}
             w={'100%'}

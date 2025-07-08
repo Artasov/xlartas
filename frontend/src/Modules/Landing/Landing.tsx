@@ -1,9 +1,10 @@
 // Modules/Landing/Landing.tsx
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {FCCC} from 'wide-containers';
 import ParallaxLogo from 'Core/ParallaxLogo';
 import Footer from "Landing/Footer";
+import Zoom from '@mui/material/Zoom';
 
 const Landing: React.FC = () => {
     const {
@@ -14,14 +15,17 @@ const Landing: React.FC = () => {
         setProfileBtnVisible
     } = useNavigation();
 
+    /* ------- анимация появления ------- */
+    const [animate, setAnimate] = useState(false);
+    useEffect(() => setAnimate(true), []);
+
+    /* ------- очистка навигации ------- */
     useEffect(() => {
-        // При монтировании очищаем все нужные элементы:
         setLogoContent('');
         setDesktopNavigationContent('');
         setMobileNavigationContent('');
         setProfileBtnVisible(false);
 
-        // При размонтировании возвращаем дефолтное лого:
         return () => {
             setLogoContent(defaultLogoContent);
             setProfileBtnVisible(true);
@@ -35,10 +39,14 @@ const Landing: React.FC = () => {
     ]);
 
     return (
-        <FCCC pos={'relative'} w={'100%'} h={'100%'}>
-            <ParallaxLogo/>
+        <>
+            <Zoom in={animate} appear timeout={2000}>
+                <FCCC pos="relative" w="100%" h="100%">
+                    <ParallaxLogo/>
+                </FCCC>
+            </Zoom>
             <Footer/>
-        </FCCC>
+        </>
     );
 };
 

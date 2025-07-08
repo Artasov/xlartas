@@ -1,5 +1,5 @@
 import React from 'react';
-import {FR, FRC} from 'wide-containers';
+import {FRC} from 'wide-containers';
 
 interface PaymentSystemIconsProps {
     icons: string[];

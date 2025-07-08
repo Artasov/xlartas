@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import logging
 from decimal import Decimal
 
 import httpx
-import logging
 from adjango.utils.base import apprint
 from django.conf import settings
 

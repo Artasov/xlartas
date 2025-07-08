@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0003_user_preferred_lang'),
     ]
@@ -15,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='phone',
-            field=phonenumber_field.modelfields.PhoneNumberField(blank=True, db_index=True, max_length=128, null=True, region=None, verbose_name='Phone'),
+            field=phonenumber_field.modelfields.PhoneNumberField(blank=True, db_index=True, max_length=128, null=True,
+                                                                 region=None, verbose_name='Phone'),
         ),
         migrations.AlterField(
             model_name='user',

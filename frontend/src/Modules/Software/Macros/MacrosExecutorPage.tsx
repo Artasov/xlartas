@@ -28,64 +28,64 @@ const MacrosExecutorPage: React.FC = () => {
 
     return (
         <Collapse in={animate} appear timeout={400}>
-        <MacroControlProvider>
-            <FC w="100%" scroll="y-hidden" px={2} pt={isGtSm ? 2 : 0} g={1}>
-                <Tabs
-                    value={mainTab}
-                    onChange={(_, v) => setMainTab(v)}
-                    centered
-                    sx={{minHeight: 30}}
-                >
-                    <Tab sx={{py: 0, minHeight: 30}} label={t('control')} value="control"/>
-                    <Tab sx={{py: 0, minHeight: 30}} label={t('info')} value="info"/>
-                </Tabs>
+            <MacroControlProvider>
+                <FC w="100%" scroll="y-hidden" px={2} pt={isGtSm ? 2 : 0} g={1}>
+                    <Tabs
+                        value={mainTab}
+                        onChange={(_, v) => setMainTab(v)}
+                        centered
+                        sx={{minHeight: 30}}
+                    >
+                        <Tab sx={{py: 0, minHeight: 30}} label={t('control')} value="control"/>
+                        <Tab sx={{py: 0, minHeight: 30}} label={t('info')} value="info"/>
+                    </Tabs>
 
-                {mainTab === 'control' && (
-                    <>
-                        <Tabs
-                            value={controlTab}
-                            onChange={(_, v) => setControlTab(v)}
-                            centered
-                            textColor="secondary"
-                            indicatorColor="secondary"
-                            sx={{minHeight: 30}}
-                        >
-                            <Tab sx={{py: 0, minHeight: 30}} label={t('panel')} value="panel"/>
-                            <Tab sx={{py: 0, minHeight: 30}} label={t('io')} value="io"/>
-                            <Tab sx={{py: 0, minHeight: 30}} label={t('by_name')} value="byname"/>
-                        </Tabs>
+                    {mainTab === 'control' && (
+                        <>
+                            <Tabs
+                                value={controlTab}
+                                onChange={(_, v) => setControlTab(v)}
+                                centered
+                                textColor="secondary"
+                                indicatorColor="secondary"
+                                sx={{minHeight: 30}}
+                            >
+                                <Tab sx={{py: 0, minHeight: 30}} label={t('panel')} value="panel"/>
+                                <Tab sx={{py: 0, minHeight: 30}} label={t('io')} value="io"/>
+                                <Tab sx={{py: 0, minHeight: 30}} label={t('by_name')} value="byname"/>
+                            </Tabs>
 
-                        {controlTab === 'panel' && (
-                            <FC scroll="y-auto"><MacrosWirelessDashboard/></FC>
-                        )}
+                            {controlTab === 'panel' && (
+                                <FC scroll="y-auto"><MacrosWirelessDashboard/></FC>
+                            )}
 
-                        {controlTab === 'io' && (
-                            <FC scroll="y-auto" pb={1.7} g={1} mx="auto">
-                                <ScreenViewerProvider>
-                                    <FCCC><ScreenViewer style={{width: '100%'}}/></FCCC>
-                                </ScreenViewerProvider>
-                                <RemoteTouchpad/>
-                                <RemoteMouse/>
-                                <RemoteKeyboardField/>
-                            </FC>
-                        )}
+                            {controlTab === 'io' && (
+                                <FC scroll="y-auto" pb={1.7} g={1} mx="auto">
+                                    <ScreenViewerProvider>
+                                        <FCCC><ScreenViewer style={{width: '100%'}}/></FCCC>
+                                    </ScreenViewerProvider>
+                                    <RemoteTouchpad/>
+                                    <RemoteMouse/>
+                                    <RemoteKeyboardField/>
+                                </FC>
+                            )}
 
-                        {controlTab === 'byname' && (
-                            <FC>
-                                <p style={{color: plt.text.primary + 'aa', marginBottom: '.3rem'}}>
-                                    {t('enter_macro_hint')}
-                                </p>
-                                <MacrosExecutorForm/>
-                            </FC>
-                        )}
-                    </>
-                )}
+                            {controlTab === 'byname' && (
+                                <FC>
+                                    <p style={{color: plt.text.primary + 'aa', marginBottom: '.3rem'}}>
+                                        {t('enter_macro_hint')}
+                                    </p>
+                                    <MacrosExecutorForm/>
+                                </FC>
+                            )}
+                        </>
+                    )}
 
-                {mainTab === 'info' && (
-                    <MacrosInfo/>
-                )}
-            </FC>
-        </MacroControlProvider>
+                    {mainTab === 'info' && (
+                        <MacrosInfo/>
+                    )}
+                </FC>
+            </MacroControlProvider>
         </Collapse>
     );
 };

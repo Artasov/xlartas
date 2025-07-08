@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('filehost', '0003_access_created_at_file_created_at_filetag_created_at_and_more'),
     ]
