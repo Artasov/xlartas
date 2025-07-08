@@ -50,7 +50,8 @@ class ProductAdmin(ImportExportModelAdmin):
 
 @admin.register(ProductPrice)
 class ProductPriceAdmin(ImportExportModelAdmin):
-    list_display = ('product', 'currency', 'amount')
+    list_display = ('product', 'currency', 'amount', 'exponent', 'offset')
+    list_editable = ('amount', 'exponent', 'offset')
     search_fields = ('product__name', 'currency')
     list_filter = ('currency',)
 

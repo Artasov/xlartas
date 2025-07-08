@@ -527,6 +527,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'ckassa': {
+            'handlers': ['daily_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'commerce': {
+            'handlers': ['daily_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'global': {
             'handlers': ['daily_file', 'console'],
             'level': 'DEBUG',
@@ -636,7 +646,6 @@ FK_SHOP_ID = env('FK_MERCHANT_ID')
 
 CKASSA_LOGIN = env('CKASSA_LOGIN')
 CKASSA_TOKEN = env('CKASSA_TOKEN')
-CKASSA_SECRET_KEY = env('CKASSA_SECRET_KEY')
 CKASSA_API_URL = env('CKASSA_API_URL', default='https://api2.ckassa.ru/api-shop/rs/')
 CKASSA_SERV_CODE = env('CKASSA_SERV_CODE')
 

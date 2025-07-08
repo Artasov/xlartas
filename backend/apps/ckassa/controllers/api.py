@@ -9,10 +9,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from apps.commerce.models import Order
 from apps.ckassa.models import CKassaPayment
+from apps.commerce.models import Order
 
-log = logging.getLogger('ckassa')
+log = logging.getLogger('global')
 
 
 @acontroller('CKassa Notification')
@@ -26,7 +26,7 @@ async def notification(request):
     order_id = data.get('order_id')
     if request.method == 'GET':
         if not order_id:
-            return Response({'detail': 'missing order id'}, status=HTTP_400_BAD_REQUEST)
+            return redirect(f'/orders/')
         return redirect(f'/orders/{order_id}/')
 
     if not all((reg_pay_num, order_id)):
