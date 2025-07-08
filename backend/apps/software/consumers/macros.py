@@ -1,18 +1,12 @@
 # software/consumers/macros.py
 import asyncio
-from urllib.parse import parse_qs
 
-from asgiref.sync import sync_to_async
-from channels.exceptions import ChannelFull
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from .base import BaseSoftwareConsumer
 
 FLUSH_DELAY = 1 / 60  # ≈60 fps
 
 
-class MacroControlConsumer(AsyncJsonWebsocketConsumer):
+class MacroControlConsumer(BaseSoftwareConsumer):
     """
     ws://<host>/ws/macro-control/?username=<login>&secret_key=<key>
 
@@ -28,47 +22,25 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
 
     # ---------- connect / disconnect ----------
 
+    group_prefix = 'user'
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = None
         self._mouse_acc = {'dx': 0, 'dy': 0}
         self._flush_task = None
 
     async def connect(self):
-        if self.scope['user'].is_anonymous:
-            qs = parse_qs(self.scope['query_string'].decode())
-            username = qs.get('username', [None])[0]
-            secret_key = qs.get('secret_key', [None])[0]
-            if not username or not secret_key:
-                await self.close(code=4002)
-                return
-            user = await self._get_user(username, secret_key)
-            if user is None:
-                await self.close(code=4003)
-                return
-        else:
-            user = self.scope['user']
-
-        self.user = user
-        await self.channel_layer.group_add(f'user_{user.id}', self.channel_name)
-        await self.accept()
-
+        await super().connect()
+        if not self.user:
+            return
         # буфер для коалессации мыши
         self._mouse_acc = {'dx': 0, 'dy': 0}
         self._flush_task = None
 
     async def disconnect(self, code):
-        if hasattr(self, 'user'):
-            await self.channel_layer.group_discard(f'user_{self.user.id}', self.channel_name)
         if self._flush_task:
             self._flush_task.cancel()
-
-    @sync_to_async
-    def _get_user(self, username, secret_key):
-        try:
-            return User.objects.get(username=username, secret_key=secret_key)
-        except User.DoesNotExist:
-            return None
+        await super().disconnect(code)
 
     # ---------- receive ----------
 
@@ -133,12 +105,6 @@ class MacroControlConsumer(AsyncJsonWebsocketConsumer):
                 await asyncio.sleep(FLUSH_DELAY)
         finally:
             self._flush_task = None
-
-    async def _safe_group_send(self, message: dict):
-        try:
-            await self.channel_layer.group_send(f'user_{self.user.id}', message)
-        except ChannelFull:
-            pass
 
     # ---------- handlers для десктоп-клиента ----------
 
