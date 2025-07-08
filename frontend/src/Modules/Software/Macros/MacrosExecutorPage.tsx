@@ -1,5 +1,5 @@
 // Modules/Software/Macros/MacrosExecutorPage.tsx
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Tab, Tabs, useMediaQuery} from '@mui/material';
 import {FC, FCCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
@@ -13,6 +13,7 @@ import MacrosInfo from "./MacrosInfo";
 import {ScreenViewerProvider} from './ScreenViewerProvider';
 import ScreenViewer from "./ScreenViewer";
 import {useTranslation} from "react-i18next";
+import Collapse from '@mui/material/Collapse';
 
 const MacrosExecutorPage: React.FC = () => {
     const {plt} = useTheme();
@@ -21,8 +22,12 @@ const MacrosExecutorPage: React.FC = () => {
         useState<'panel' | 'io' | 'byname'>('panel');
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const {t} = useTranslation();
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => setAnimate(true), []);
 
     return (
+        <Collapse in={animate} appear timeout={400}>
         <MacroControlProvider>
             <FC w="100%" scroll="y-hidden" px={2} pt={isGtSm ? 2 : 0} g={1}>
                 <Tabs
@@ -81,6 +86,7 @@ const MacrosExecutorPage: React.FC = () => {
                 )}
             </FC>
         </MacroControlProvider>
+        </Collapse>
     );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {Tab, Tabs} from '@mui/material';
 import Master from './Master';
@@ -8,9 +8,11 @@ import StorageUsageBar from './StorageUsageBar';
 import FileDetail from './FileDetail';
 import {FC, FR} from 'wide-containers';
 import {useTranslation} from 'react-i18next';
+import Collapse from '@mui/material/Collapse';
 
 const Storage: React.FC = () => {
     const {t} = useTranslation();
+    const [animate, setAnimate] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -20,7 +22,10 @@ const Storage: React.FC = () => {
             ? '/storage/files/all/'
             : '/storage/master/';
 
+    useEffect(() => setAnimate(true), []);
+
     return (
+        <Collapse in={animate} appear timeout={400}>
         <FC h={'100%'} px={2}>
             <Tabs value={current} onChange={(_, v) => navigate(v)}>
                 <Tab value="/storage/master/" label={t('storage')}/>
@@ -36,6 +41,7 @@ const Storage: React.FC = () => {
                 <Route path="files/:id/" element={<FileDetail/>}/>
             </Routes>
         </FC>
+        </Collapse>
     );
 };
 
