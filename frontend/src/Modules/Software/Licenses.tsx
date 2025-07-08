@@ -6,6 +6,7 @@ import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FCC, FCCC, FR} from 'wide-containers';
 import LicenseCard from './LicenseCard';
 import {Message} from 'Core/components/Message';
+import {Collapse} from "@mui/material";
 
 const Licenses: React.FC = () => {
     const {api} = useApi();
@@ -27,7 +28,11 @@ const Licenses: React.FC = () => {
             {loading
                 ? <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>
                 : licenses && licenses.length > 0
-                    ? licenses.map(license => <LicenseCard key={license.id} license={license}/>)
+                    ? licenses.map(license => (
+                        <Collapse key={license.id} in={!loading} appear timeout={400}>
+                            <LicenseCard license={license}/>
+                        </Collapse>
+                    ))
                     : <FCC>Лицензии не найдены</FCC>
             }
         </FR>

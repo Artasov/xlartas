@@ -1,6 +1,6 @@
 // Modules/Software/Macros/MacrosWirelessDashboard.tsx
 import React, {useEffect, useState} from 'react';
-import {Box, CircularProgress, IconButton, List, ListItem, ListItemText, Tooltip,} from '@mui/material';
+import {Box, CircularProgress, IconButton, List, ListItem, ListItemText, Tooltip, Collapse} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/AddRounded';
@@ -67,13 +67,14 @@ const MacrosWirelessDashboard: React.FC = () => {
                 <p style={{color: plt.text.primary}}>{t('nothing_saved')}</p>
             )}
 
-            <List dense sx={{width: '100%'}}>
-                {macros.map(m => (
-                    <ListItem
-                        key={m.id}
-                        divider
-                        onClick={() => sendMacro(m.name)}
-                        secondaryAction={(
+            <Collapse in appear timeout={400}>
+                <List dense sx={{width: '100%'}}>
+                    {macros.map(m => (
+                        <ListItem
+                            key={m.id}
+                            divider
+                            onClick={() => sendMacro(m.name)}
+                            secondaryAction={(
                             <Box sx={{opacity: '60%'}}>
                                 <Tooltip title={t('edit')}>
                                     <IconButton size="small" onClick={e => {
@@ -93,12 +94,13 @@ const MacrosWirelessDashboard: React.FC = () => {
                                     </IconButton>
                                 </Tooltip>
                             </Box>
-                        )}
-                    >
-                        <ListItemText sx={{opacity: '80%'}} primary={m.name}/>
-                    </ListItem>
-                ))}
-            </List>
+                            )}
+                        >
+                            <ListItemText sx={{opacity: '80%'}} primary={m.name}/>
+                        </ListItem>
+                    ))}
+                </List>
+            </Collapse>
 
             <MacroFormDialog
                 open={formOpen}

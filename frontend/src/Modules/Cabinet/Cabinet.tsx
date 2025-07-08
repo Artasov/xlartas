@@ -199,56 +199,16 @@ const Cabinet: React.FC = () => {
                         }
                         ref={cabinetContainerRef}>
                         <Routes>
-                            <Route path="profile/*" element={
-                                <ExpandOnMount>
-                                    <Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path="/softwares" element={
-                                <ExpandOnMount>
-                                    <FCSS g={2} p={2}>
-                                        <Softwares/>
-                                    </FCSS>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path="/softwares/:id" element={
-                                <ExpandOnMount>
-                                    <SoftwareDetail/>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path='/licenses' element={
-                                <ExpandOnMount>
-                                    <Licenses/>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path='/wireless' element={
-                                <ExpandOnMount>
-                                    <MacrosExecutorPage/>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path='/xlmine-release' element={
-                                <ExpandOnMount>
-                                    <MinecraftVersionsManager/>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path='/storage/*' element={
-                                <ExpandOnMount>
-                                    <Storage/>
-                                </ExpandOnMount>
-                            }/>
+                            <Route path="profile/*" element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
+                            <Route path="/softwares" element={<FCSS g={2} p={2}><Softwares/></FCSS>}/>
+                            <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
+                            <Route path='/licenses' element={<Licenses/>}/>
+                            <Route path='/wireless' element={<MacrosExecutorPage/>}/>
+                            <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
+                            <Route path='/storage/*' element={<Storage/>}/>
 
-                            <Route path="/orders" element={
-                                <ExpandOnMount>
-                                    <FCSS scroll={'y-auto'} g={1} pt={2} p={1}>
-                                        <UserOrders className={'px-2'}/>
-                                    </FCSS>
-                                </ExpandOnMount>
-                            }/>
-                            <Route path="orders/:id" element={
-                                <ExpandOnMount>
-                                    <OrderDetail className={'px-3'}/>
-                                </ExpandOnMount>
-                            }/>
+                            <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}><UserOrders className={'px-2'}/></FCSS>}/>
+                            <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>
                         </Routes>
                     </FC>
                 </FRC>
