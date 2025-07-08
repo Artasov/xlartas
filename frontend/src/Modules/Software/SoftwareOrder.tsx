@@ -258,6 +258,16 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                         <Collapse in={system === 'ckassa'}>
                             <PaymentSystemIcons icons={ckassaIcons}/>
                         </Collapse>
+                        <Collapse in={system === 'handmade'}>
+                            <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
+                                {t('handmade_payment_desc')}
+                            </FR>
+                        </Collapse>
+                        <Collapse in={system === 'balance'}>
+                            <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
+                                {t('balance_payment_desc')}
+                            </FR>
+                        </Collapse>
                         <FRC g={1} mt={1}>
                             <Button disabled={creatingOrder} onClick={createOrder} sx={{
                                 fontWeight: 'bold', width: '100%',
