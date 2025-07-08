@@ -110,28 +110,27 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const totalPrice = calculatePrice(licenseHours, amount, exponent, offset);
 
     const freekassaIcons = [
+        iconSBP,
         iconVisa,
         iconMastercard,
         iconMir,
-        iconSBP,
         iconSteam,
         iconBitcoin,
         iconLitecoin,
         iconEthereum,
         iconTron,
         iconTon,
-        iconEthereum,
         iconBnb,
         iconTron,
     ];
 
     const ckassaIcons = [
+        iconSBP,
+        iconSberPay,
         iconVisa,
         iconMastercard,
         iconMir,
         iconUnionPay,
-        iconSberPay,
-        iconSBP,
     ];
 
     /* ------------------------------------------------------------------ */

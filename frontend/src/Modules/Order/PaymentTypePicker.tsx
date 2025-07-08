@@ -25,12 +25,13 @@ interface PaymentTypePickerProps {
 
 const paymentButtonHeight = '40px';
 
-const PaymentTypePicker: React.FC<PaymentTypePickerProps> = ({
-                                                                 prices = [],
-                                                                 setPaymentCurrency,
-                                                                 setPaymentSystem,
-                                                                 excluded_payment_systems = [],
-                                                             }) => {
+const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
+    {
+        prices = [],
+        setPaymentCurrency,
+        setPaymentSystem,
+        excluded_payment_systems = [],
+    }) => {
     const [selectedCurrency, setSelectedCurrency] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [paymentTypes, setPaymentTypes] = useState<{ [key: string]: IPaymentSystem[] }>({});
@@ -114,12 +115,13 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = ({
     const filteredPaymentTypes =
         paymentTypes[selectedCurrency]?.filter((pt) => !excluded_payment_systems.includes(pt)) || [];
 
-    /* -- следим за списком систем, выбираем дефолтную (freekassa приоритет) -- */
     useEffect(() => {
         pprint(filteredPaymentTypes);
         if (filteredPaymentTypes.length > 0) {
             if (!selectedPaymentType || !filteredPaymentTypes.includes(selectedPaymentType)) {
-                const prefer = filteredPaymentTypes.find((pt) => pt === 'freekassa');
+                const prefer = filteredPaymentTypes.find(
+                    (pt) => pt === 'ckassa' // ВЫБРАНО ПО УМОЛЧАНИЮ
+                );
                 const paymentToSelect = prefer ?? filteredPaymentTypes[0];
                 setSelectedPaymentType(paymentToSelect);
                 setPaymentSystem(paymentToSelect);

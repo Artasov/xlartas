@@ -43,28 +43,27 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
     const [loading, setLoading] = useState(false);
 
     const freekassaIcons = [
+        iconSBP,
         iconVisa,
         iconMastercard,
         iconMir,
-        iconSBP,
         iconSteam,
         iconBitcoin,
         iconLitecoin,
         iconEthereum,
         iconTron,
         iconTon,
-        iconEthereum,
         iconBnb,
         iconTron,
     ];
 
     const ckassaIcons = [
+        iconSBP,
+        iconSberPay,
         iconVisa,
         iconMastercard,
         iconMir,
         iconUnionPay,
-        iconSberPay,
-        iconSBP,
     ];
 
     useEffect(() => {
