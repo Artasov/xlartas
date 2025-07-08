@@ -9,6 +9,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
+from ipaddress import ip_address
 from apps.ckassa.consts import CKASSA_NOTIFICATION_ALLOWED_URLS
 from apps.ckassa.models import CKassaPayment
 from apps.commerce.models import Order
@@ -27,9 +28,12 @@ async def notification(request):
     order_id = data.get('order_id')
 
     # Check IP for POST notifications
-    if request.method == 'POST' and request.ip not in CKASSA_NOTIFICATION_ALLOWED_URLS:
-        log.warning('CKassa notification ip not allowed: %s', request.ip)
-        return Response({'detail': 'ip not allowed'}, status=HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        remote_ip = ip_address(request.ip)
+        allowed = any(remote_ip in net for net in CKASSA_NOTIFICATION_ALLOWED_URLS)
+        if not allowed:
+            log.warning('CKassa notification ip not allowed: %s', request.ip)
+            return Response({'detail': 'ip not allowed'}, status=HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
         if not order_id:
             return redirect(f'/orders/')
