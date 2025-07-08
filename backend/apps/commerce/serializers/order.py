@@ -2,6 +2,8 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
+from apps.ckassa.models import CKassaPayment
+from apps.ckassa.serializers import CKassaPaymentSmallPublicSerializer
 from apps.cloudpayments.models import CloudPaymentPayment
 from apps.cloudpayments.serializers import CloudPaymentSmallPublicSerializer
 from apps.commerce.models import Order, HandMadePayment, BalancePayment
@@ -59,6 +61,8 @@ class BaseOrderSerializer(AModelSerializer):
                 return HandMadePaymentSmallPublicSerializer(payment).data
             if isinstance(payment, FreeKassaPayment):
                 return FreeKassaPaymentSmallPublicSerializer(payment).data
+            if isinstance(payment, CKassaPayment):
+                return CKassaPaymentSmallPublicSerializer(payment).data
             if isinstance(payment, BalancePayment):
                 return BalancePaymentSmallPublicSerializer(payment).data
             else:
