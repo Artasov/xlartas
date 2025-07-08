@@ -32,6 +32,7 @@ import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 import Storage from '../FileHost/Storage';
+import ExpandOnMount from '../../UI/ExpandOnMount';
 
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
