@@ -3,12 +3,15 @@ from __future__ import annotations
 from decimal import Decimal
 
 import httpx
+import logging
 from adjango.utils.base import apprint
 from django.conf import settings
 
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.providers.base import BasePaymentProvider
 from .models import CKassaPayment
+
+logger = logging.getLogger(__name__)
 
 
 class CKassaProvider(BasePaymentProvider):
@@ -25,7 +28,7 @@ class CKassaProvider(BasePaymentProvider):
             'ApiLoginAuthorization': settings.CKASSA_LOGIN,
             'ApiAuthorization': settings.CKASSA_TOKEN,
         }
-        print(1)
+        logger.debug('Starting CKassa payment initialization')
         async with httpx.AsyncClient(base_url=settings.CKASSA_API_URL, timeout=30) as client:
             resp = await client.post('invoice/create2/', json=data, headers=headers)
 

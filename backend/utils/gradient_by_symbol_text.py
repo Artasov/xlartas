@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def hex_to_rgb(hex_color: str) -> tuple:
     """
     Преобразует HEX-строку (например, '#FF0000' или 'FF0000') в кортеж RGB.
@@ -62,4 +67,4 @@ if __name__ == '__main__':
     start_color = '#FF0000'  # Красный
     end_color = '#00FF00'  # Зеленый
     result = generate_gradient_text(text, start_color, end_color)
-    print(result)
+    logger.info(result)

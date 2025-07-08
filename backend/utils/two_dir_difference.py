@@ -1,4 +1,7 @@
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def find_unique_files(dir1, dir2):
@@ -31,4 +34,4 @@ if __name__ == '__main__':
     folder2 = r'C:\Users\xl\AppData\Roaming\xlartas-launcher\xlartas-client\mods'
     unique = find_unique_files(folder1, folder2)
     for path in unique:
-        print(path)
+        logger.info(path)

@@ -2,10 +2,14 @@
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
+import logging
 from django.utils import timezone
 
 if TYPE_CHECKING:
     from apps.software.models import SoftwareOrder, Software
+
+
+logger = logging.getLogger(__name__)
 
 
 class SoftwareService:
@@ -15,7 +19,7 @@ class SoftwareService:
         s = SoftwareOrderCreateSerializer(
             data=request.data, context={'request': request}
         )
-        print(1)
+        logger.debug('new_order: serializer validation start')
         await s.ais_valid(raise_exception=True)
         data = s.validated_data
         promocode = data.get('promocode', None)
@@ -26,7 +30,7 @@ class SoftwareService:
                 currency=data['currency'],
                 raise_exception=True
             )
-        print(2)
+        logger.debug('new_order: serializer validated')
         order = SoftwareOrder(
             user=request.user,
             currency=request.data['currency'],
@@ -36,9 +40,9 @@ class SoftwareService:
             promocode=promocode
         )
         await order.asave()
-        print(3)
+        logger.debug('new_order: order saved')
         await order.init(request)
-        print(8)
+        logger.debug('new_order: initialization complete')
         return order
 
     async def can_pregive(

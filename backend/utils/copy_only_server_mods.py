@@ -1,5 +1,8 @@
 import os
 import shutil
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def copy_mods(source_path: str, client_mods: list) -> None:  # noqa
@@ -32,10 +35,10 @@ def copy_mods(source_path: str, client_mods: list) -> None:  # noqa
                     shutil.copy2(src_file, dst_file)
                     # print(f'Скопирован мод: {filename}')
                 except Exception as e:
-                    print(f'Ошибка при копировании {filename}: {e}')
+                    logger.error('Copy failed for %s: %s', filename, e)
             else:
                 # Если имя файла содержит одну из исключающих подстрок, пропускаем копирование
-                print(f'Пропущен мод (client): {filename}')
+                logger.info('Skipped client mod: %s', filename)
 
 
 if __name__ == '__main__':

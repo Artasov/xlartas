@@ -5,10 +5,13 @@ import os
 import shutil
 import zipfile
 from pathlib import Path
+import logging
 
 SOURCE_DIR = Path(r'C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client')
 RELEASE_DIR = SOURCE_DIR.parent / 'xlartas-xlmine-release'
 SECURITY_PATH = SOURCE_DIR.parent / 'security.json'
+
+logger = logging.getLogger(__name__)
 
 FILES_TO_COPY = [
     'version.txt',
@@ -131,7 +134,7 @@ def is_editable(rel: str) -> bool:
 
 
 def log(msg: str) -> None:
-    print(f'[BUILD] {msg}')
+    logger.info('[BUILD] %s', msg)
 
 
 # ───────────────── подготовка директории релиза ──────────────────────────────
@@ -202,4 +205,4 @@ log(f'Archive created at {ARCHIVE_PATH}')
 shutil.rmtree(RELEASE_DIR, ignore_errors=True)
 log('Temporary release directory cleaned up')
 
-print('[BUILD] Done')
+logger.info('[BUILD] Done')
