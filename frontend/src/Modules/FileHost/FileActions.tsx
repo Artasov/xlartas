@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, MenuItem, IconButton, Tooltip} from '@mui/material';
+import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
 import {FRSE} from 'wide-containers';
 import DownloadIcon from '@mui/icons-material/Download';
 import ShareIcon from '@mui/icons-material/Share';
@@ -24,21 +24,54 @@ interface Props {
     onSelectMode?: (f: IFile) => void;
 }
 
-const FileActions: React.FC<Props> = ({anchorEl, file, variant = 'menu', selectMode, selected, onClose, onToggleSelect, onToggleFavorite, onDelete, onDownload, onShare, onSelectMode}) => {
+const FileActions: React.FC<Props> = ({
+                                          anchorEl,
+                                          file,
+                                          variant = 'menu',
+                                          selectMode,
+                                          selected,
+                                          onClose,
+                                          onToggleSelect,
+                                          onToggleFavorite,
+                                          onDelete,
+                                          onDownload,
+                                          onShare,
+                                          onSelectMode
+                                      }) => {
     const {t} = useTranslation();
 
-    const handleDownload = () => { onDownload && onDownload(file); onClose && onClose(); };
-    const handleShare = () => { onShare && onShare(file); onClose && onClose(); };
-    const handleDelete = () => { onDelete && onDelete(file); onClose && onClose(); };
-    const handleSelectMode = () => { onSelectMode && onSelectMode(file); onClose && onClose(); };
-    const handleToggleSelect = () => { onToggleSelect && onToggleSelect(file); onClose && onClose(); };
-    const handleFavorite = () => { onToggleFavorite && onToggleFavorite(file); onClose && onClose(); };
+    const handleDownload = () => {
+        onDownload && onDownload(file);
+        onClose && onClose();
+    };
+    const handleShare = () => {
+        onShare && onShare(file);
+        onClose && onClose();
+    };
+    const handleDelete = () => {
+        onDelete && onDelete(file);
+        onClose && onClose();
+    };
+    const handleSelectMode = () => {
+        onSelectMode && onSelectMode(file);
+        onClose && onClose();
+    };
+    const handleToggleSelect = () => {
+        onToggleSelect && onToggleSelect(file);
+        onClose && onClose();
+    };
+    const handleFavorite = () => {
+        onToggleFavorite && onToggleFavorite(file);
+        onClose && onClose();
+    };
 
     if (variant === 'buttons') {
         return (
             <FRSE g={0.5}>
-                <Tooltip title={t('download')}><IconButton size="small" onClick={handleDownload}><DownloadIcon/></IconButton></Tooltip>
-                <Tooltip title={t('share')}><IconButton size="small" onClick={handleShare}><ShareIcon/></IconButton></Tooltip>
+                <Tooltip title={t('download')}><IconButton size="small"
+                                                           onClick={handleDownload}><DownloadIcon/></IconButton></Tooltip>
+                <Tooltip title={t('share')}><IconButton size="small"
+                                                        onClick={handleShare}><ShareIcon/></IconButton></Tooltip>
                 {onToggleFavorite && (
                     <Tooltip title={file.is_favorite ? 'Unfavorite' : 'Favorite'}>
                         <IconButton size="small" onClick={handleFavorite}>
@@ -47,7 +80,8 @@ const FileActions: React.FC<Props> = ({anchorEl, file, variant = 'menu', selectM
                     </Tooltip>
                 )}
                 {onDelete && (
-                    <Tooltip title={t('delete')}><IconButton size="small" onClick={handleDelete}><DeleteIcon/></IconButton></Tooltip>
+                    <Tooltip title={t('delete')}><IconButton size="small"
+                                                             onClick={handleDelete}><DeleteIcon/></IconButton></Tooltip>
                 )}
             </FRSE>
         );
@@ -55,8 +89,9 @@ const FileActions: React.FC<Props> = ({anchorEl, file, variant = 'menu', selectM
 
     return (
         <Menu
-                sx={{'& .MuiPaper-root': {backdropFilter: 'blur(10px)'}}}
-                slotProps={{backdrop: {sx: {backdropFilter: 'none !important'}}}} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
+            sx={{'& .MuiPaper-root': {backdropFilter: 'blur(10px)'}}}
+            slotProps={{backdrop: {sx: {backdropFilter: 'none !important'}}}} anchorEl={anchorEl}
+            open={Boolean(anchorEl)} onClose={onClose}>
             <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
             <MenuItem onClick={handleShare}>{t('share')}</MenuItem>
             {selectMode ? (
@@ -64,7 +99,8 @@ const FileActions: React.FC<Props> = ({anchorEl, file, variant = 'menu', selectM
             ) : (
                 <MenuItem onClick={handleSelectMode}>{t('select')}</MenuItem>
             )}
-            {onToggleFavorite && <MenuItem onClick={handleFavorite}>{file.is_favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>}
+            {onToggleFavorite &&
+                <MenuItem onClick={handleFavorite}>{file.is_favorite ? 'Unfavorite' : 'Favorite'}</MenuItem>}
             {onDelete && <MenuItem onClick={handleDelete}>{t('delete')}</MenuItem>}
         </Menu>
     );

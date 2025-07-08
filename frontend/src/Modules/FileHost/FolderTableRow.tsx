@@ -45,7 +45,7 @@ const FolderTableRow: React.FC<Props> = ({id, name, onDelete, onRenamed, onOpen}
                 <TableCell sx={{p: 0}}>
                     <FolderRoundedIcon/>
                 </TableCell>
-                <TableCell component="th" scope="row"  sx={{pl: 0}}>
+                <TableCell component="th" scope="row" sx={{pl: 0}}>
                     {name}
                 </TableCell>
                 {isGtSm && <><TableCell/> <TableCell/> </>}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dialog, DialogTitle, DialogContent, DialogActions, Button, MenuItem, Select} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select} from '@mui/material';
 import {useApi} from '../Api/useApi';
 import {useTranslation} from 'react-i18next';
 import {IFile, IFolder} from './types';
@@ -36,8 +36,8 @@ const MoveDialog: React.FC<Props> = ({files, open, onClose, onMoved}) => {
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
             <DialogTitle>{t('move')}</DialogTitle>
             <DialogContent>
-                <Select fullWidth value={target} onChange={e=>setTarget(Number(e.target.value))}>
-                    {folders.map(f=>(<MenuItem key={f.id} value={f.id}>{f.name}</MenuItem>))}
+                <Select fullWidth value={target} onChange={e => setTarget(Number(e.target.value))}>
+                    {folders.map(f => (<MenuItem key={f.id} value={f.id}>{f.name}</MenuItem>))}
                 </Select>
             </DialogContent>
             <DialogActions>

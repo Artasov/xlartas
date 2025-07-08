@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {IconButton, TableRow, TableCell, useMediaQuery} from '@mui/material';
+import {IconButton, TableCell, TableRow, useMediaQuery} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';

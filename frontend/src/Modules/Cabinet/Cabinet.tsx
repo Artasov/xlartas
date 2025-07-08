@@ -178,7 +178,8 @@ const Cabinet: React.FC = () => {
                                 text={t('orders')} to="/orders" urlActiveMark={'order'} icon={CreditScoreRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/orders')}/>
                             <CabinetNavLink
-                                text={t('storage')} to="/storage/master" urlActiveMark={'storage'} icon={FeedRoundedIcon}
+                                text={t('storage')} to="/storage/master" urlActiveMark={'storage'}
+                                icon={FeedRoundedIcon}
                                 onClick={() => handleMenuLinkClick('/storage/master')}/>
                             <CabinetNavLink
                                 text={t('minecraft')} iconSx={{transform: 'scale(1.04)'}} to="/xlmine"

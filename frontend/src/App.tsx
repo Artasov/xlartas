@@ -1,5 +1,4 @@
 import 'moment/locale/ru';
-import moment from "moment";
 import './Static/css/base.sass';
 import pprint from "Utils/pprint";
 import './Static/css/wide-classes.css';

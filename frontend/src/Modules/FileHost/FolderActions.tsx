@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, MenuItem, IconButton, Tooltip} from '@mui/material';
+import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {FRSE} from 'wide-containers';
@@ -16,13 +16,20 @@ interface Props {
 const FolderActions: React.FC<Props> = ({anchorEl, variant = 'menu', onClose, onRename, onDelete}) => {
     const {t} = useTranslation();
 
-    const handleRename = () => { onRename && onRename(); onClose && onClose(); };
-    const handleDelete = () => { onDelete && onDelete(); onClose && onClose(); };
+    const handleRename = () => {
+        onRename && onRename();
+        onClose && onClose();
+    };
+    const handleDelete = () => {
+        onDelete && onDelete();
+        onClose && onClose();
+    };
 
     if (variant === 'buttons') {
         return (
             <FRSE g={0.5}>
-                <Tooltip title={t('rename')}><IconButton size="small" onClick={handleRename}><DriveFileRenameOutlineIcon/></IconButton></Tooltip>
+                <Tooltip title={t('rename')}><IconButton size="small"
+                                                         onClick={handleRename}><DriveFileRenameOutlineIcon/></IconButton></Tooltip>
                 <Tooltip title={t('delete')}><IconButton size="small" onClick={handleDelete}><DeleteIcon/></IconButton></Tooltip>
             </FRSE>
         );

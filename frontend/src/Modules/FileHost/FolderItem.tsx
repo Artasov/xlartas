@@ -11,7 +11,7 @@ const FolderItem: React.FC<Props> = ({id, name}) => {
     const navigate = useNavigate();
     const open = () => navigate(`/storage/master/${id}/`);
     return (
-        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={open} style={{cursor:'pointer'}}>
+        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={open} style={{cursor: 'pointer'}}>
             <strong>{name}</strong>
         </FRSE>
     );

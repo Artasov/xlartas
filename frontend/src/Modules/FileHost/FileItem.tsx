@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Menu, MenuItem, IconButton} from '@mui/material';
+import {IconButton, Menu, MenuItem} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import {useApi} from '../Api/useApi';
@@ -20,7 +20,17 @@ interface Props {
     onSelectMode?: (f: IFile) => void;
 }
 
-const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, onFavorite, onDelete, onDownload, onShare, onSelectMode}) => {
+const FileItem: React.FC<Props> = ({
+                                       file,
+                                       selectMode,
+                                       selected,
+                                       onToggleSelect,
+                                       onFavorite,
+                                       onDelete,
+                                       onDownload,
+                                       onShare,
+                                       onSelectMode
+                                   }) => {
     const {api} = useApi();
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -73,17 +83,23 @@ const FileItem: React.FC<Props> = ({file, selectMode, selected, onToggleSelect, 
     };
 
     return (
-        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={handleClick} onContextMenu={(e)=>{e.preventDefault();setAnchorEl(e.currentTarget);}}>
+        <FRSE p={0.5} borderBottom={'1px solid #ccc'} onClick={handleClick} onContextMenu={(e) => {
+            e.preventDefault();
+            setAnchorEl(e.currentTarget);
+        }}>
             {selectMode && <></>}
-            <span style={{flexGrow:1}}>{file.name}</span>
+            <span style={{flexGrow: 1}}>{file.name}</span>
             <FRSE g={0.5}>
                 {favorite && (
-                    <IconButton size="small" onClick={(e)=>{e.stopPropagation();toggleFav();}}
-                                sx={{color:'#fbc02d'}}>
+                    <IconButton size="small" onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFav();
+                    }}
+                                sx={{color: '#fbc02d'}}>
                         <StarIcon fontSize="small"/>
                     </IconButton>
                 )}
-                
+
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                     <MenuItem onClick={handleDownload}>{t('download')}</MenuItem>
                     <MenuItem onClick={handleShare}>{t('share')}</MenuItem>

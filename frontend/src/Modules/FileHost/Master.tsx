@@ -13,6 +13,7 @@ import useFileUpload from './useFileUpload';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
@@ -28,8 +29,7 @@ import {
     TableHead,
     TableRow,
     TextField,
-    useMediaQuery,
-    Box
+    useMediaQuery
 } from '@mui/material';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
@@ -227,7 +227,16 @@ const Master: React.FC = () => {
                     </FR>
                 </FRBC>
                 {view === 'cards' ? (
-                    <Box mt={.4} sx={{display:'grid',gap:'0.5rem',gridTemplateColumns:{xs:'repeat(2,1fr)',sm:'repeat(3,1fr)',md:'repeat(4,1fr)',lg:'repeat(4,1fr)'}}}>
+                    <Box mt={.4} sx={{
+                        display: 'grid',
+                        gap: '0.5rem',
+                        gridTemplateColumns: {
+                            xs: 'repeat(2,1fr)',
+                            sm: 'repeat(3,1fr)',
+                            md: 'repeat(4,1fr)',
+                            lg: 'repeat(4,1fr)'
+                        }
+                    }}>
                         {folders.map(f => (
                             <FolderCard
                                 key={f.id}
@@ -265,8 +274,8 @@ const Master: React.FC = () => {
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell  sx={{p: 0}}/>
-                                <TableCell  sx={{pl: 0}}>{t('name')}</TableCell>
+                                <TableCell sx={{p: 0}}/>
+                                <TableCell sx={{pl: 0}}>{t('name')}</TableCell>
                                 {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
                                 {isGtSm && <TableCell>{t('size')}</TableCell>}
                                 <TableCell/>

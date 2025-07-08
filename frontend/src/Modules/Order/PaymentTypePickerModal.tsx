@@ -24,7 +24,7 @@ import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
 import {Button, Collapse} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {FC, FRE} from "wide-containers";
 
 interface Props {
@@ -82,7 +82,6 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
             onClose();
             // Если пришла ссылка → редиректим
             if (resp.data?.payment_url) window.location.href = resp.data.payment_url;
-            // Для CloudPayments переадресуем на страницу виджета
             if (system === 'cloud_payment') window.location.href = `/cloudpayments/pay/${order.id}/`;
         } finally {
             setLoading(false);

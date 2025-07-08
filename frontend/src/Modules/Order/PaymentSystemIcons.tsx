@@ -7,7 +7,7 @@ interface PaymentSystemIconsProps {
     size?: number | string;
 }
 
-const PaymentSystemIcons: React.FC<PaymentSystemIconsProps> = ({icons, className='', size=28}) => {
+const PaymentSystemIcons: React.FC<PaymentSystemIconsProps> = ({icons, className = '', size = 28}) => {
     const height = typeof size === 'number' ? `${size}px` : size;
     return (
         <FR wrap g={0.4} className={className} mt={0.5}>
