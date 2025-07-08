@@ -28,6 +28,7 @@ import FileUpload from "../../UI/FileUpload";
 import {ILauncher, IRelease} from "./types/base";
 import {v4 as uuidv4} from 'uuid';
 import TextField from "@mui/material/TextField";
+import Collapse from '@mui/material/Collapse';
 
 // ==== Форматирование даты (если хочешь как есть — можно убрать toLocaleString) ====
 
@@ -45,6 +46,7 @@ const LauncherManager: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [version, setVersion] = useState<string>("1.0.0");
+    const [animate, setAnimate] = useState(false);
     // Удаление
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -66,6 +68,10 @@ const LauncherManager: React.FC = () => {
         fetchVersions().then();
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        if (!loading) setAnimate(true);
+    }, [loading]);
 
     // ==== Выбор файла ====
     const handleFileSelect = (picked: File | null) => {
@@ -127,6 +133,7 @@ const LauncherManager: React.FC = () => {
     };
 
     return (
+        <Collapse in={animate} appear timeout={400}>
         <FC g={1}>
             <Paper sx={{p: 2}}>
                 <FC g={1}>
@@ -227,6 +234,7 @@ const LauncherManager: React.FC = () => {
                 </DialogActions>
             </Dialog>
         </FC>
+        </Collapse>
     );
 };
 
@@ -256,6 +264,7 @@ const ReleaseManager: React.FC = () => {
     const [version, setVersion] = useState<string>("1.0.0");
     const [releases, setReleases] = useState<IRelease[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [animate, setAnimate] = useState(false);
 
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -275,6 +284,10 @@ const ReleaseManager: React.FC = () => {
     useEffect(() => {
         fetchVersions().then();
     }, []);
+
+    useEffect(() => {
+        if (!loading) setAnimate(true);
+    }, [loading]);
 
     const handleFileChange = (picked: File | null) => {
         setFile(picked);
@@ -367,6 +380,7 @@ const ReleaseManager: React.FC = () => {
     };
 
     return (
+        <Collapse in={animate} appear timeout={400}>
         <FC g={1}>
             <Paper sx={{p: 2}}>
                 <FC g={1}>
@@ -467,19 +481,24 @@ const ReleaseManager: React.FC = () => {
                 </DialogActions>
             </Dialog>
         </FC>
+        </Collapse>
     );
 };
 
 
 const MinecraftVersionsManager: React.FC = () => {
     const [tabIndex, setTabIndex] = useState<number>(0);
+    const [animate, setAnimate] = useState(false);
     const {t} = useTranslation();
 
     const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabIndex(newValue);
     };
 
+    useEffect(() => setAnimate(true), []);
+
     return (
+        <Collapse in={animate} appear timeout={400}>
         <FC>
             <Tabs value={tabIndex} onChange={handleTabChange}>
                 <Tab label="Launcher"/>
@@ -490,6 +509,7 @@ const MinecraftVersionsManager: React.FC = () => {
                 {tabIndex === 1 && <ReleaseManager/>}
             </FC>
         </FC>
+        </Collapse>
     );
 };
 

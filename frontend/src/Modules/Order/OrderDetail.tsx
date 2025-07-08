@@ -14,6 +14,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useApi} from "../Api/useApi";
 import {useTranslation} from 'react-i18next';
+import Collapse from '@mui/material/Collapse';
 
 interface OrderDetailProps {
     className?: string;
@@ -26,6 +27,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const [order, setOrder] = useState<IOrder | null>(null);
     const [orderNotFound, setOrderNotFound] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [animate, setAnimate] = useState(false);
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const {plt} = useTheme();
@@ -44,10 +46,15 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
         }).catch(_ => null).finally(() => setLoading(false));
     }, [id, isAuthenticated]);
 
+    useEffect(() => {
+        if (!loading) setAnimate(true);
+    }, [loading]);
+
     if (loading) return <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>;
     if (orderNotFound || !order) return <div className={'p-3 text-center mt-2'}>Заказ не найден.</div>;
 
     return (
+        <Collapse in={animate} appear timeout={400}>
         <FC p={2} h={'100%'} scroll={'y-auto'} pos={'relative'} cls={'no-scrollbar'} sx={{
             background: `linear-gradient(45deg, #00000000, ${plt.text.primary + '07'})`
         }}>
@@ -124,6 +131,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                 </FCCC>
             )}
         </FC>
+        </Collapse>
     );
 };
 
