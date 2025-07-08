@@ -137,6 +137,12 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                         <Collapse in={system === 'ckassa'}>
                             <PaymentSystemIcons icons={ckassaIcons}/>
                         </Collapse>
+                        <Collapse in={system === 'handmade'}>
+                            <FR mb={0.5}>{t('handmade_payment_desc')}</FR>
+                        </Collapse>
+                        <Collapse in={system === 'balance'}>
+                            <FR mb={0.5}>{t('balance_payment_desc')}</FR>
+                        </Collapse>
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
                             {loading ? <CircularProgress size="20px"/> : t('next')}
                         </Button>

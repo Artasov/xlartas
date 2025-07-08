@@ -25,7 +25,7 @@ import {Button, Collapse} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from 'Api/useApi';
-import {FC, FRE} from "wide-containers";
+import {FC, FR, FRE} from "wide-containers";
 
 interface Props {
     open: boolean;
@@ -103,6 +103,16 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
                     </Collapse>
                     <Collapse in={system === 'ckassa'}>
                         <PaymentSystemIcons icons={ckassaIcons}/>
+                    </Collapse>
+                    <Collapse in={system === 'handmade'}>
+                        <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
+                            {t('handmade_payment_desc')}
+                        </FR>
+                    </Collapse>
+                    <Collapse in={system === 'balance'}>
+                        <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
+                            {t('balance_payment_desc')}
+                        </FR>
                     </Collapse>
                     <FRE g={1}>
                         <Button variant="outlined" onClick={onClose}>{t('cancel')}</Button>

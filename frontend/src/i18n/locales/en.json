@@ -193,5 +193,7 @@
   "you_can_activate_test_period": "You can activate a {{days}}-day test period.",
   "activate_test_period_question": "Activate test period?",
   "activating": "Activating...",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "handmade_payment_desc": "You will pay via private messages with the seller.",
+  "balance_payment_desc": "Money will be deducted from your account balance on this site."
 }
