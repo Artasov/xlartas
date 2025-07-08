@@ -9,6 +9,21 @@ import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';
 import PromoCodeField from 'Order/PromoCodeField';
+import PaymentSystemIcons from '../Order/PaymentSystemIcons';
+
+import iconVisa from '../../Static/img/icon/payments/visa.svg';
+import iconMastercard from '../../Static/img/icon/payments/mastercard.svg';
+import iconMir from '../../Static/img/icon/payments/mir.svg';
+import iconSBP from '../../Static/img/icon/payments/sbp.svg';
+import iconSteam from '../../Static/img/icon/payments/steam.svg';
+import iconBitcoin from '../../Static/img/icon/payments/bitcoin.svg';
+import iconLitecoin from '../../Static/img/icon/payments/litecoin.svg';
+import iconEthereum from '../../Static/img/icon/payments/ethereum.svg';
+import iconTron from '../../Static/img/icon/payments/tron.svg';
+import iconTon from '../../Static/img/icon/payments/toncoin.svg';
+import iconBnb from '../../Static/img/icon/payments/bnb.svg';
+import iconUnionPay from '../../Static/img/icon/payments/unionpay.svg';
+import iconSberPay from '../../Static/img/icon/payments/sberpay.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
@@ -93,6 +108,31 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const exponent: number = parseFloat(priceRow.exponent?.toString() || '1');
     const offset: number = parseFloat(priceRow.offset?.toString() || '0');
     const totalPrice = calculatePrice(licenseHours, amount, exponent, offset);
+
+    const freekassaIcons = [
+        iconVisa,
+        iconMastercard,
+        iconMir,
+        iconSBP,
+        iconSteam,
+        iconBitcoin,
+        iconLitecoin,
+        iconEthereum,
+        iconTron,
+        iconTon,
+        iconEthereum,
+        iconBnb,
+        iconTron,
+    ];
+
+    const ckassaIcons = [
+        iconVisa,
+        iconMastercard,
+        iconMir,
+        iconUnionPay,
+        iconSberPay,
+        iconSBP,
+    ];
 
     /* ------------------------------------------------------------------ */
     /*  order create                                                      */
@@ -210,9 +250,13 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                             />
                         </FC>
                         <Collapse in={system === 'freekassa'}>
-                            <FR opacity={80} mb={1} fontSize={'.88rem'} sx={{lineHeight: '1.2rem'}}>
+                            <FR opacity={80} mb={0.5} fontSize={'.88rem'} sx={{lineHeight: '1.2rem'}}>
                                 {t('freekassa_note')}
                             </FR>
+                            <PaymentSystemIcons icons={freekassaIcons}/>
+                        </Collapse>
+                        <Collapse in={system === 'ckassa'}>
+                            <PaymentSystemIcons icons={ckassaIcons}/>
                         </Collapse>
                         <FRC g={1} mt={1}>
                             <Button disabled={creatingOrder} onClick={createOrder} sx={{
