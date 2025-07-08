@@ -3,6 +3,21 @@ import {useTranslation} from 'react-i18next';
 import {Button, Collapse, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {FC, FR} from 'wide-containers';
+import PaymentSystemIcons from './PaymentSystemIcons';
+
+import iconVisa from '../../Static/img/icon/payments/visa.svg';
+import iconMastercard from '../../Static/img/icon/payments/mastercard.svg';
+import iconMir from '../../Static/img/icon/payments/mir.svg';
+import iconSBP from '../../Static/img/icon/payments/sbp.svg';
+import iconSteam from '../../Static/img/icon/payments/steam.svg';
+import iconBitcoin from '../../Static/img/icon/payments/bitcoin.svg';
+import iconLitecoin from '../../Static/img/icon/payments/litecoin.svg';
+import iconEthereum from '../../Static/img/icon/payments/ethereum.svg';
+import iconTron from '../../Static/img/icon/payments/tron.svg';
+import iconTon from '../../Static/img/icon/payments/toncoin.svg';
+import iconBnb from '../../Static/img/icon/payments/bnb.svg';
+import iconUnionPay from '../../Static/img/icon/payments/unionpay.svg';
+import iconSberPay from '../../Static/img/icon/payments/sberpay.svg';
 import {useApi} from '../Api/useApi';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
@@ -26,6 +41,31 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
     const [currency, setCurrency] = useState<ICurrencyWithPrice | null>(null);
     const [system, setSystem] = useState<IPaymentSystem | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const freekassaIcons = [
+        iconVisa,
+        iconMastercard,
+        iconMir,
+        iconSBP,
+        iconSteam,
+        iconBitcoin,
+        iconLitecoin,
+        iconEthereum,
+        iconTron,
+        iconTon,
+        iconEthereum,
+        iconBnb,
+        iconTron,
+    ];
+
+    const ckassaIcons = [
+        iconVisa,
+        iconMastercard,
+        iconMir,
+        iconUnionPay,
+        iconSberPay,
+        iconSBP,
+    ];
 
     useEffect(() => {
         if (open) {
@@ -91,9 +131,11 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                             excluded_payment_systems={["balance"]}
                         />
                         <Collapse in={system === 'freekassa'}>
-                            <FR>
-                                {t('freekassa_help_desc')}
-                            </FR>
+                            <FR mb={0.5}>{t('freekassa_help_desc')}</FR>
+                            <PaymentSystemIcons icons={freekassaIcons}/>
+                        </Collapse>
+                        <Collapse in={system === 'ckassa'}>
+                            <PaymentSystemIcons icons={ckassaIcons}/>
                         </Collapse>
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
                             {loading ? <CircularProgress size="20px"/> : t('next')}
