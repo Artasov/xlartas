@@ -6,6 +6,7 @@ import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
 import XLMineProfileInfoForm from '../xLMine/xLMineProfileInfoForm';
 import {Tab, Tabs} from '@mui/material';
+import ExpandOnMount from '../../UI/ExpandOnMount';
 import {useDispatch} from "react-redux";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {openAuthModal} from 'Redux/modalsSlice';
@@ -83,8 +84,16 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
             {/* Контент выбранной вкладки */}
             <FC flexGrow={1} scroll="y-auto" px={2} py={1}>
                 <Routes>
-                    <Route path="user" element={<UserPersonalInfoForm/>}/>
-                    <Route path="minecraft" element={<XLMineProfileInfoForm/>}/>
+                    <Route path="user" element={
+                        <ExpandOnMount>
+                            <UserPersonalInfoForm/>
+                        </ExpandOnMount>
+                    }/>
+                    <Route path="minecraft" element={
+                        <ExpandOnMount>
+                            <XLMineProfileInfoForm/>
+                        </ExpandOnMount>
+                    }/>
                     {/* <Route path="client" element={<ClientProfile />} /> */}
                     {/* <Route path="employee" element={<EmployeeProfile />} /> */}
                 </Routes>
