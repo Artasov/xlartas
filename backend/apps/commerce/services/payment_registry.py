@@ -104,4 +104,3 @@ def _bootstrap_registry():
     ))
 
 
-_bootstrap_registry()
