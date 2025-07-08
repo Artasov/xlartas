@@ -18,8 +18,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Tabs,
-    Collapse
+    Tabs
 } from '@mui/material';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -162,9 +161,8 @@ const LauncherManager: React.FC = () => {
                         <CircularProgress/>
                     </Box>
                 ) : (
-                    <Collapse in={!loading} appear timeout={400}>
-                        <Table>
-                            <TableHead>
+                    <Table>
+                        <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>{t('version')}</TableCell>
@@ -199,8 +197,7 @@ const LauncherManager: React.FC = () => {
                                 </TableRow>
                             ))}
                         </TableBody>
-                        </Table>
-                    </Collapse>
+                    </Table>
                 )}
             </Paper>
 
@@ -429,9 +426,8 @@ const ReleaseManager: React.FC = () => {
                         <CircularProgress/>
                     </Box>
                 ) : (
-                    <Collapse in={!loading} appear timeout={400}>
-                        <Table>
-                            <TableHead>
+                    <Table>
+                        <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>{t('version')}</TableCell>
@@ -456,8 +452,7 @@ const ReleaseManager: React.FC = () => {
                                 </TableRow>
                             ))}
                         </TableBody>
-                        </Table>
-                    </Collapse>
+                    </Table>
                 )}
             </Paper>
 

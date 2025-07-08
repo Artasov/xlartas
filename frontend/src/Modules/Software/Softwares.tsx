@@ -9,7 +9,6 @@ import {ISoftware} from "./Types/Software";
 import {useApi} from "../Api/useApi";
 import SoftwareCard from "./SoftwareCard";
 import {useTranslation} from 'react-i18next';
-import {Collapse} from "@mui/material";
 
 
 const Softwares: React.FC = () => {
@@ -32,14 +31,11 @@ const Softwares: React.FC = () => {
     return (
         <FRCC g={2} wrap>
             {softwares.length
-                ? softwares.map(software => (
-                    <Collapse key={software.id} in={!loading} appear timeout={400}>
-                        <SoftwareCard
-                            software={software}
-                            onClick={() => navigate(`/softwares/${software.id}`)}
-                        />
-                    </Collapse>
-                ))
+                ? softwares.map(software => <SoftwareCard
+                    key={software.id}
+                    software={software}
+                    onClick={() => navigate(`/softwares/${software.id}`)}
+                />)
                 : <FRCC>{t('no_softwares')}</FRCC>
             }
         </FRCC>

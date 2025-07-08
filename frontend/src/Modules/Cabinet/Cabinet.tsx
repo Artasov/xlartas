@@ -32,7 +32,6 @@ import SettingsRemoteRoundedIcon from '@mui/icons-material/SettingsRemoteRounded
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
 import Storage from '../FileHost/Storage';
-import ExpandOnMount from '../../UI/ExpandOnMount';
 
 type CabinetWidthContextType = {
     cabinetMaxWidth: string;
@@ -199,15 +198,21 @@ const Cabinet: React.FC = () => {
                         }
                         ref={cabinetContainerRef}>
                         <Routes>
-                            <Route path="profile/*" element={<Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>}/>
-                            <Route path="/softwares" element={<FCSS g={2} p={2}><Softwares/></FCSS>}/>
+                            <Route path="profile/*" element={
+                                <Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>
+                            }/>
+                            <Route path="/softwares" element={<FCSS g={2} p={2}>
+                                <Softwares/>
+                            </FCSS>}/>
                             <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
                             <Route path='/licenses' element={<Licenses/>}/>
                             <Route path='/wireless' element={<MacrosExecutorPage/>}/>
                             <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
                             <Route path='/storage/*' element={<Storage/>}/>
 
-                            <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}><UserOrders className={'px-2'}/></FCSS>}/>
+                            <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}>
+                                <UserOrders className={'px-2'}/>
+                            </FCSS>}/>
                             <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>
                         </Routes>
                     </FC>

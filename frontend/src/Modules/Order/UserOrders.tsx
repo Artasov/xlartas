@@ -8,7 +8,6 @@ import OrderItem from "Order/OrderItem";
 import {FC as FCC, FCCC, FR} from "wide-containers";
 import CircularProgress from "Core/components/elements/CircularProgress";
 import {useApi} from "../Api/useApi";
-import {Collapse} from "@mui/material";
 
 interface UserOrdersProps {
     className?: string;
@@ -47,15 +46,14 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
         <FR wrap w={'100%'} g={2} py={1} cls={`${className}`}>
             {orders.length > 0 ?
                 orders.map((order) => (
-                    <Collapse key={order.id} in={!loading} appear timeout={400}>
-                        <OrderItem
-                            onClick={() => navigate(`/orders/${order.id}`)}
-                            order={order}
-                            onSomeUpdatingOrderAction={handleOrderUpdate}
-                            // передаём колбэк удаления внутрь OrderActions
-                            onOrderDeleted={() => handleOrderDelete(String(order.id))}
-                        />
-                    </Collapse>
+                    <OrderItem
+                        key={order.id}
+                        onClick={() => navigate(`/orders/${order.id}`)}
+                        order={order}
+                        onSomeUpdatingOrderAction={handleOrderUpdate}
+                        // передаём колбэк удаления внутрь OrderActions
+                        onOrderDeleted={() => handleOrderDelete(String(order.id))}
+                    />
                 ))
                 : loading
                     ? <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>
