@@ -5,23 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import PaymentTypePicker from './PaymentTypePicker';
-import PaymentSystemIcons from './PaymentSystemIcons';
-
-import iconVisa from '../../Static/img/icon/payments/visa.svg';
-import iconMastercard from '../../Static/img/icon/payments/mastercard.svg';
-import iconMir from '../../Static/img/icon/payments/mir.svg';
-import iconSBP from '../../Static/img/icon/payments/sbp.svg';
-import iconSteam from '../../Static/img/icon/payments/steam.svg';
-import iconBitcoin from '../../Static/img/icon/payments/bitcoin.svg';
-import iconLitecoin from '../../Static/img/icon/payments/litecoin.svg';
-import iconEthereum from '../../Static/img/icon/payments/ethereum.svg';
-import iconTron from '../../Static/img/icon/payments/tron.svg';
-import iconTon from '../../Static/img/icon/payments/toncoin.svg';
-import iconBnb from '../../Static/img/icon/payments/bnb.svg';
-import iconUnionPay from '../../Static/img/icon/payments/unionpay.svg';
-import iconSberPay from '../../Static/img/icon/payments/sberpay.svg';
+import PaymentSystemInfo from './PaymentSystemInfo';
 import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
-import {Button, Collapse} from '@mui/material';
+import {Button} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from 'Api/useApi';
@@ -41,29 +27,6 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
     const [loading, setLoading] = useState(false);
     const {t} = useTranslation();
 
-    const freekassaIcons = [
-        iconSBP,
-        iconVisa,
-        iconMastercard,
-        iconMir,
-        iconSteam,
-        iconBitcoin,
-        iconLitecoin,
-        iconEthereum,
-        iconTron,
-        iconTon,
-        iconBnb,
-        iconTron,
-    ];
-
-    const ckassaIcons = [
-        iconSBP,
-        iconSberPay,
-        iconVisa,
-        iconMastercard,
-        iconMir,
-        iconUnionPay,
-    ];
 
     const confirm = async () => {
         if (!currency || !system) {
@@ -97,22 +60,7 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
                         setPaymentCurrency={setCurrency}
                         setPaymentSystem={setSystem}
                     />
-                    <Collapse in={system === 'freekassa'}>
-                        <PaymentSystemIcons icons={freekassaIcons}/>
-                    </Collapse>
-                    <Collapse in={system === 'ckassa'}>
-                        <PaymentSystemIcons icons={ckassaIcons}/>
-                    </Collapse>
-                    <Collapse in={system === 'handmade'}>
-                        <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
-                            {t('handmade_payment_desc')}
-                        </FR>
-                    </Collapse>
-                    <Collapse in={system === 'balance'}>
-                        <FR opacity={80} mb={0.5} fontSize={'.88rem'}>
-                            {t('balance_payment_desc')}
-                        </FR>
-                    </Collapse>
+                    <PaymentSystemInfo system={system}/>
                     <FRE g={1}>
                         <Button variant="outlined" onClick={onClose}>{t('cancel')}</Button>
                         <Button variant="contained" disabled={loading} onClick={confirm}>
