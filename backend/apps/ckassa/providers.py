@@ -19,11 +19,11 @@ class CKassaProvider(BasePaymentProvider):
             'servCode': settings.CKASSA_SERV_CODE,
             'startPaySelect': 'false',
             'amount': str(int(amount * 100)),
-            'properties': [str(self.order.id)],
+            'properties': [str(self.order.id)[:12]],
         }
         headers = {
             'ApiLoginAuthorization': settings.CKASSA_LOGIN,
-            'ApiAuthorization': settings.CKASSA_SECRET_KEY,
+            'ApiAuthorization': settings.CKASSA_TOKEN,
         }
         print(1)
         async with httpx.AsyncClient(base_url=settings.CKASSA_API_URL, timeout=30) as client:
@@ -38,7 +38,7 @@ class CKassaProvider(BasePaymentProvider):
 
             # Пытаемся разобрать JSON, но не прерываемся, если он некорректен
             try:
-                json_ = await resp.json()
+                json_ = resp.json()
                 await apprint(f'CKassa parsed JSON: {json_}')
             except Exception as json_exc:
                 await apprint(f'CKassa JSON decode error: {json_exc}')
