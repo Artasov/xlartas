@@ -126,7 +126,8 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
         }
     }, [roomId, user, base64ToBlob, sendMessage]);
 
-    const handleFileChange = useCallback((_updatedFiles: File[]) => {}, []);
+    const handleFileChange = useCallback((_updatedFiles: File[]) => {
+    }, []);
 
     const handleMarkAsRead = useCallback((message: IMessage) => {
         if (user && user.id !== message.user.id && !message.is_read) {

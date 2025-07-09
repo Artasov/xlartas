@@ -8,7 +8,6 @@ import LauncherManager from "./LauncherManager";
 import ReleaseManager from "./ReleaseManager";
 
 
-
 const MinecraftVersionsManager: React.FC = () => {
     const [tabIndex, setTabIndex] = useState<number>(0);
     const [animate, setAnimate] = useState(false);

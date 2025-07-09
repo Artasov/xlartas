@@ -1,7 +1,7 @@
 # analytics/middleware.py
 from datetime import datetime, timedelta
-
 from ipaddress import ip_address
+
 from django.core.handlers.wsgi import WSGIRequest
 
 from .models import Visit

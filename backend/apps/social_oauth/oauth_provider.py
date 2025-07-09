@@ -25,16 +25,16 @@ class OAuthProviderMixin:
             log.warning(f'Failed to set avatar for user {user.id} from {url}: {exc}')
 
     async def _get_or_create_user_base(
-        self,
-        provider_model: type,
-        provider_id_field: str,
-        provider_id: str,
-        *,
-        email: str | None = '',
-        username: str = '',
-        first_name: str = '',
-        last_name: str = '',
-        avatar_url: str | None = None,
+            self,
+            provider_model: type,
+            provider_id_field: str,
+            provider_id: str,
+            *,
+            email: str | None = '',
+            username: str = '',
+            first_name: str = '',
+            last_name: str = '',
+            avatar_url: str | None = None,
     ) -> User:
         """Shared logic of retrieving or creating a user for OAuth providers."""
 

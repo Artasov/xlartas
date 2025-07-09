@@ -22,7 +22,8 @@ class Migration(migrations.Migration):
                                       primary_key=True, serialize=False, to='commerce.payment')),
                 ('reg_pay_num', models.CharField(blank=True, max_length=20, null=True, verbose_name='RegPayNum')),
                 (
-                'status', models.CharField(blank=True, db_index=True, max_length=20, null=True, verbose_name='Status')),
+                    'status',
+                    models.CharField(blank=True, db_index=True, max_length=20, null=True, verbose_name='Status')),
             ],
             options={
                 'verbose_name': 'CKassa payment',
