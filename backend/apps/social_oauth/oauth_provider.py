@@ -15,8 +15,7 @@ log = logging.getLogger('social_auth')
 class OAuthProviderMixin:
     """Mixin containing helper methods for OAuth providers."""
 
-    @staticmethod
-    async def _set_avatar_from_url(user: User, url: str | None) -> None:
+    async def _set_avatar_from_url(self, user: User, url: str | None) -> None:
         """Download and attach user avatar from URL if available."""
         if not url:
             return
@@ -26,31 +25,37 @@ class OAuthProviderMixin:
             log.warning(f'Failed to set avatar for user {user.id} from {url}: {exc}')
 
     async def _get_or_create_user_base(
-            self,
-            provider_model: type,
-            provider_id_field: str,
-            provider_id: str,
-            *,
-            email: str | None = '',
-            username: str = '',
-            first_name: str = '',
-            last_name: str = '',
-            avatar_url: str | None = None,
+        self,
+        provider_model: type,
+        provider_id_field: str,
+        provider_id: str,
+        *,
+        email: str | None = '',
+        username: str = '',
+        first_name: str = '',
+        last_name: str = '',
+        avatar_url: str | None = None,
     ) -> User:
         """Shared logic of retrieving or creating a user for OAuth providers."""
 
         try:
-            provider_user = await (
-                provider_model.objects.select_related('user').aget(  # noqa
-                    **{provider_id_field: provider_id}
-                )
+            provider_user = await provider_model.objects.select_related('user').aget(
+                **{provider_id_field: provider_id}
             )
-            return provider_user.user
-        except provider_model.DoesNotExist:  # noqa
+            user = provider_user.user
+            if email and not user.is_email_confirmed:
+                user.is_email_confirmed = True
+                await user.asave()
+            if avatar_url and not user.avatar:
+                await self._set_avatar_from_url(user, avatar_url)
+            return user
+        except provider_model.DoesNotExist:
             user = None
             if email:
-                user = await User.objects.aby_creds(email)
-
+                try:
+                    user = await User.objects.aget(email=email)
+                except User.DoesNotExist:
+                    user = None
             if not user:
                 if not username:
                     username = email.split('@')[0] if email else f'{provider_id_field}_{provider_id}'
@@ -69,7 +74,7 @@ class OAuthProviderMixin:
             kwargs = {'user': user, provider_id_field: provider_id}
             if hasattr(provider_model, 'email'):
                 kwargs['email'] = email or ''
-            await provider_model.objects.acreate(**kwargs)  # noqa
+            await provider_model.objects.acreate(**kwargs)
             return user
 
 
