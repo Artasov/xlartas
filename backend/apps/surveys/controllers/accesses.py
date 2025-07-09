@@ -53,9 +53,8 @@ async def survey_access_create(request) -> Response:
     if await survey.arelated('author') != request.user:
         raise CurrentUserNotSurveyAuthor()
 
-    try:
-        user = await User.objects.aget(email=email)
-    except User.DoesNotExist:
+    user = await User.objects.by_creds(email)
+    if not user:
         username = email.split('@')[0]
         password = get_random_string(length=12)
         user = User.objects.create_user(

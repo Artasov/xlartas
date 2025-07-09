@@ -74,9 +74,8 @@ class YandexOAuthProvider(OAuthProvider):
             email = user_data.get('default_email', '')
             if not email:
                 raise SocialOAuthException.YandexEmailWasNotProvided()
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
+            user = await User.objects.by_creds(user_data.get('email'))
+            if not user:
                 first_name = user_data.get('first_name', '')
                 last_name = user_data.get('last_name', '')
                 username = email.split('@')[0] if email else f'yandex_{yandex_id}'

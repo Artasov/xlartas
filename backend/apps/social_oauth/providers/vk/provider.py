@@ -80,9 +80,8 @@ class VKOAuthProvider(OAuthProvider):
             vk_user = await VKUser.objects.select_related('user').aget(vk_id=vk_id)
             user = vk_user.user
         except VKUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
+            user = await User.objects.by_creds(user_data.get('email'))
+            if not user:
                 email = user_data.get('email', '')
                 first_name = user_data.get('first_name', '')
                 last_name = user_data.get('last_name', '')

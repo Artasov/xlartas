@@ -84,9 +84,8 @@ class GoogleOAuthProvider(OAuthProvider):
             google_user = await GoogleUser.objects.select_related('user').aget(google_id=google_id)
             user = google_user.user
         except GoogleUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
+            user = await User.objects.by_creds(user_data.get('email'))
+            if not user:
                 username = email.split('@')[0] if email else f'google_{google_id}'
                 user = await User.objects.acreate(
                     email=email,

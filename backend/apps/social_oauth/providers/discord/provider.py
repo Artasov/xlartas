@@ -69,9 +69,8 @@ class DiscordOAuthProvider(OAuthProvider):
             discord_user = await DiscordUser.objects.select_related('user').aget(discord_id=discord_id)
             user = discord_user.user
         except DiscordUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
+            user = await User.objects.by_creds(user_data.get('email'))
+            if not user:
                 email = user_data.get('email', '')
                 username = user_data.get('username', '') or f'discord_{discord_id}'
                 discriminator = user_data.get('discriminator', '')

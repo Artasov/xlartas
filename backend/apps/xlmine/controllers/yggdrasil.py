@@ -61,12 +61,8 @@ async def authenticate_view(request):
     client_token = data.get('clientToken', str(uuid.uuid4()))
 
     # Ищем пользователя:
-    try:
-        if '@' in username_or_email:
-            user = await User.objects.aget(email=username_or_email)
-        else:
-            user = await User.objects.aget(username=username_or_email)
-    except User.DoesNotExist:
+    user = await User.objects.by_creds(username_or_email)
+    if not user:
         return Response({'error': 'Нет пользователя с таким credential'}, status=status.HTTP_403_FORBIDDEN)
 
     # Проверяем пароль (либо делаем свою custom-логику)
@@ -303,12 +299,8 @@ async def signout_view(request):
     password = data.get('password')
 
     # Ищем пользователя
-    try:
-        if '@' in username_or_email:
-            user = await User.objects.aget(email=username_or_email)
-        else:
-            user = await User.objects.aget(username=username_or_email)
-    except User.DoesNotExist:
+    user = await User.objects.by_creds(username_or_email)
+    if not user:
         return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
     if not user.check_password(password):
@@ -400,9 +392,8 @@ async def has_joined_view(request):
     server_id = request.GET.get('serverId')
 
     # Ищем user по имени
-    try:
-        user = await User.objects.aget(username=username)
-    except User.DoesNotExist:
+    user = await User.objects.by_creds(username)
+    if not user:
         return Response(status=status.HTTP_204_NO_CONTENT)  # user not found => пусто
 
     # Ищем сессию, где last_server_id = server_id

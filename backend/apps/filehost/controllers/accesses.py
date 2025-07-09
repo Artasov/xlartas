@@ -28,9 +28,8 @@ async def grant_access(request):
 
     user = None
     if email:
-        try:
-            user = await User.objects.aget(email=email)
-        except User.DoesNotExist:
+        user = await User.objects.by_creds(email)
+        if not user:
             raise UserException.UserWithThisEmailNotFound()
 
     access = await Access.objects.acreate(
