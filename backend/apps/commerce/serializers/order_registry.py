@@ -2,29 +2,22 @@
 from collections import OrderedDict
 
 from apps.commerce.exceptions.order import OrderException
-from apps.commerce.models import BalanceProductOrder
-from apps.commerce.serializers.balance import BalanceProductOrderSerializer
-from apps.software.models import SoftwareOrder
-from apps.software.serializers import SoftwareOrderSerializer
 
-ORDER_SERIALIZERS = OrderedDict([
-    (SoftwareOrder, {
-        'small': SoftwareOrderSerializer,
-        'full': SoftwareOrderSerializer,
-    }),
-    (BalanceProductOrder, {
-        'small': BalanceProductOrderSerializer,
-        'full': BalanceProductOrderSerializer,
-    }),
-    # (DonateOrder, {
-    #     'small': DonateOrderSerializer,
-    #     'full': DonateOrderSerializer,
-    # }),
-    # (GiftCertificateOrder, {
-    #     'small': SoftwareOrderSerializer,
-    #     'full': SoftwareOrderSerializer,
-    # }),
-])
+
+ORDER_SERIALIZERS: dict = OrderedDict()
+
+
+class RegisterOrderSerializerMeta(type):
+    """Metaclass that automatically registers order serializers."""
+
+    def __new__(mcls, name, bases, attrs):
+        cls = super().__new__(mcls, name, bases, attrs)
+        meta = attrs.get('Meta')
+        model = getattr(meta, 'model', None)
+        if model:
+            ORDER_SERIALIZERS.setdefault(model, {})['small'] = cls
+            ORDER_SERIALIZERS.setdefault(model, {})['full'] = cls
+        return cls
 
 
 def get_order_serializer(order_instance, serializer_type='small'):

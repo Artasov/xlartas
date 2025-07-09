@@ -2,6 +2,8 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
+from apps.commerce.serializers.order_registry import RegisterOrderSerializerMeta
+
 from apps.ckassa.models import CKassaPayment
 from apps.ckassa.serializers import CKassaPaymentSmallPublicSerializer
 from apps.cloudpayments.models import CloudPaymentPayment
@@ -27,7 +29,7 @@ class BalancePaymentSmallPublicSerializer(BasePaymentSerializer):
         fields = BasePaymentSerializer.Meta.fields
 
 
-class BaseOrderSerializer(AModelSerializer):
+class BaseOrderSerializer(AModelSerializer, metaclass=RegisterOrderSerializerMeta):
     payment = SerializerMethodField()
     promocode = PromocodeSerializer(read_only=True)
 
