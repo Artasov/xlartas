@@ -56,7 +56,6 @@ class OAuthProviderMixin:
                     user = await User.objects.aget(email=email)
                 except User.DoesNotExist:
                     user = None
-
             if not user:
                 if not username:
                     username = email.split('@')[0] if email else f'{provider_id_field}_{provider_id}'

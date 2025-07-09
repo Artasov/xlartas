@@ -15,22 +15,11 @@ from apps.core.models.user import User
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Get the user by email or username
-        user = None
         username_or_email = attrs.get('username', None)
         password = attrs.get('password')
 
-        if '@' in username_or_email:
-            try:
-                user = User.objects.get(email=username_or_email)
-            except User.DoesNotExist:
-                try:
-                    user = User.objects.get(username=username_or_email)
-                except User.DoesNotExist:
-                    pass
-            username = user.username
-        else:
-            username = username_or_email
+        user = User.objects.by_creds(username_or_email)
+        username = user.username if user else username_or_email
 
         if username:
             user = authenticate(username=username, password=password)

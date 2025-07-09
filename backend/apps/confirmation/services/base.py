@@ -98,7 +98,7 @@ class ConfirmationCodeService:
             else:
                 user = request.user
         else:
-            user = await User.objects.by_creds(credential)
+            user = await User.objects.aby_creds(credential)
             if not user:
                 if raise_exceptions: raise UserException.NotFound()
                 return False

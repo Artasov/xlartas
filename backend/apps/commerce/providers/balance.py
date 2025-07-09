@@ -25,5 +25,5 @@ class BalanceProvider(BasePaymentProvider):
         self.order.is_paid = True
         await self.order.asave()
         await payment.asave()
-        await self.order.execute()
+        await self.order.execute()  # noqa
         return payment

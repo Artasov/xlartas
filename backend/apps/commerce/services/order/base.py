@@ -110,13 +110,13 @@ class OrderService:
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
         self.product: Product = await self.product.aget_real_instance()  # noqa
-        commerce_log.info(f'For product {self.product.name}')
+        commerce_log.info(f'For product {self.product.name}')  # noqa
         price = await self.receipt_price  # noqa
         commerce_log.info(f'Price: {price}')
         self.amount = price  # noqa
         await self.asave()
         await self.product.can_pregive(self, raise_exceptions=True)  # noqa
-        commerce_log.info(f'Pregive process product {self.product.name}')
+        commerce_log.info(f'Pregive process product {self.product.name}')  # noqa
         await self.product.pregive(self)  # noqa
         if self.payment_system and init_payment and price > 0:
             await self.init_payment(  # noqa

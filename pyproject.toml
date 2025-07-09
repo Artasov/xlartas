@@ -10,12 +10,12 @@ package-mode = false
 python = "^3.12"
 
 # Tier 1
-Django = "5.2.2"
+Django = "5.2.4"
 adjango = "0.5.6"
 djangorestframework = "3.16.0"
 adrf = "0.1.9"
 celery = "5.5.3"
-daphne = "4.2.0"
+daphne = "4.2.1"
 channels = "4.2.2"
 
 # Tier 2
@@ -55,7 +55,7 @@ aiohttp = "3.11.18"
 chardet = "5.2.0"
 python-dotenv = "1.1.1"
 celery-singleton = "0.3.1"
-django-ckeditor = "6.7.3"
+django-tinymce = "4.1.0"
 
 Pillow = "11.0.0"
 psycopg2-binary = "2.9.10"

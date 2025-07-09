@@ -14,6 +14,7 @@ from rest_framework.response import Response
 
 from apps.core.models.user import User
 from apps.xlmine.models.user import MinecraftSession, UserXLMine
+from apps.xlmine.utils.session import build_profile, get_skin_url
 
 log = logging.getLogger('yggdrasil')
 
@@ -61,12 +62,8 @@ async def authenticate_view(request):
     client_token = data.get('clientToken', str(uuid.uuid4()))
 
     # Ищем пользователя:
-    try:
-        if '@' in username_or_email:
-            user = await User.objects.aget(email=username_or_email)
-        else:
-            user = await User.objects.aget(username=username_or_email)
-    except User.DoesNotExist:
+    user = await User.objects.aby_creds(username_or_email)
+    if not user:
         return Response({'error': 'Нет пользователя с таким credential'}, status=status.HTTP_403_FORBIDDEN)
 
     # Проверяем пароль (либо делаем свою custom-логику)
@@ -76,11 +73,7 @@ async def authenticate_view(request):
 
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
-    # Строим абсолютный URL до скина (или None)
-    if xlmine_user.skin:
-        skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
-    else:
-        skin_url = None
+    skin_url = get_skin_url(xlmine_user, request)
     # Генерируем 'accessToken' (в реальности можно делать полноценный JWT, но для примера - UUID)
     access_token = str(uuid.uuid4())
 
@@ -111,18 +104,7 @@ async def authenticate_view(request):
         'clientToken': client_token,
         'availableProfiles': [selected_profile],
         'selectedProfile': selected_profile,
-        'user': {
-            'id': user_uuid,
-            'username': user.username,
-            'properties': [
-                {
-                    'name': 'preferredLanguage',
-                    'value': 'ru'
-                }
-            ],
-            'skin': skin_url,
-
-        }
+        'user': await build_profile(user, skin_url),
     }
 
     return Response(resp, status=status.HTTP_200_OK)
@@ -173,26 +155,12 @@ async def refresh_view(request):
     }
     from apps.xlmine.models.user import UserXLMine
     xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
-    # Строим абсолютный URL до скина (или None)
-    if xlmine_user.skin:
-        skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
-    else:
-        skin_url = None
+    skin_url = get_skin_url(xlmine_user, request)
     resp = {
         'accessToken': new_access,
         'clientToken': client_token,
         'selectedProfile': selected_profile,
-        'user': {
-            'id': user_uuid,
-            'username': user.username,
-            'properties': [
-                {
-                    'name': 'preferredLanguage',
-                    'value': 'ru'
-                }
-            ],
-            'skin': skin_url,
-        }
+        'user': await build_profile(user, skin_url),
     }
     return Response(resp, status=status.HTTP_200_OK)
 
@@ -229,11 +197,7 @@ async def validate_view(request):
     if session:
         from apps.xlmine.models.user import UserXLMine
         xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=session.user)
-        # Строим абсолютный URL до скина (или None)
-        if xlmine_user.skin:
-            skin_url = request.build_absolute_uri(xlmine_user.skin.url).replace('http://', 'https://')
-        else:
-            skin_url = None
+        skin_url = get_skin_url(xlmine_user, request)
         resp = {
             'accessToken': access_token,
             'clientToken': client_token,
@@ -241,17 +205,7 @@ async def validate_view(request):
                 'id': xlmine_user.uuid.replace('-', ''),
                 'name': session.user.username
             },
-            'user': {
-                'id': xlmine_user.uuid,
-                'username': session.user.username,
-                'properties': [
-                    {
-                        'name': 'preferredLanguage',
-                        'value': 'ru'
-                    }
-                ],
-                'skin': skin_url,
-            }
+            'user': await build_profile(session.user, skin_url)
         }
         return Response(resp)
     else:
@@ -303,12 +257,8 @@ async def signout_view(request):
     password = data.get('password')
 
     # Ищем пользователя
-    try:
-        if '@' in username_or_email:
-            user = await User.objects.aget(email=username_or_email)
-        else:
-            user = await User.objects.aget(username=username_or_email)
-    except User.DoesNotExist:
+    user = await User.objects.aby_creds(username_or_email)
+    if not user:
         return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
 
     if not user.check_password(password):
@@ -400,9 +350,8 @@ async def has_joined_view(request):
     server_id = request.GET.get('serverId')
 
     # Ищем user по имени
-    try:
-        user = await User.objects.aget(username=username)
-    except User.DoesNotExist:
+    user = await User.objects.aby_creds(username)
+    if not user:
         return Response(status=status.HTTP_204_NO_CONTENT)  # user not found => пусто
 
     # Ищем сессию, где last_server_id = server_id

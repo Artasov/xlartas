@@ -1,3 +1,7 @@
+from config.base import DOMAIN_URL
+from config.modules.logging import LOGUI_URL_PREFIX
+from config.modules.redis import REDISUI_URL_PREFIX
+
 JAZZMIN_SETTINGS = {
     # Заголовки и логотипы
     'site_title': 'xlartas',
@@ -87,6 +91,18 @@ JAZZMIN_SETTINGS = {
     },
 
     'actions_sticky_top': True,
+
+    'usermenu_links': [
+        {'name': 'Site', 'url': f'{DOMAIN_URL}', 'new_window': True},
+        {'name': 'Logs', 'url': f'{DOMAIN_URL}/{LOGUI_URL_PREFIX}', 'new_window': True},
+        {'name': 'Silk', 'url': f'{DOMAIN_URL}/silk/', 'new_window': True},
+        {'name': 'Redis', 'url': f'{DOMAIN_URL}/{REDISUI_URL_PREFIX}', 'new_window': True},
+        {'name': 'Swagger', 'url': f'{DOMAIN_URL}/swagger/', 'new_window': True},
+        {'name': 'Nginx', 'url': 'http://:81/', 'new_window': True},
+        {'name': 'Minio', 'url': 'https://minio.xlartas.ru/', 'new_window': True},
+        {'name': 'Pg Admin', 'url': 'https://pgadmin.xlartas.ru/', 'new_window': True},
+        {'name': 'Flower', 'url': 'https://flower.xlartas.ru/flower/', 'new_window': True},
+    ],
 }
 
 # Дополнительные настройки для пользовательских тем, цветов и кастомизации
