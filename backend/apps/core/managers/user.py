@@ -8,7 +8,7 @@ if TYPE_CHECKING: from apps.core.models import User
 
 
 class UserManager(AUserManager):
-    async def by_creds(self, credential) -> Optional['User']:
+    async def aby_creds(self, credential) -> Optional['User']:
         """ phone / email / username """
         from apps.core.models import User
         try:
@@ -18,5 +18,18 @@ class UserManager(AUserManager):
                 return await self.aget(phone=phone_format(credential))
             else:
                 return await self.aget(username=credential)
+        except User.DoesNotExist:
+            return
+
+    def by_creds(self, credential) -> Optional['User']:
+        """ phone / email / username """
+        from apps.core.models import User
+        try:
+            if is_email(credential):
+                return self.get(email=credential)
+            elif is_phone(credential):
+                return self.get(phone=phone_format(credential))
+            else:
+                return self.get(username=credential)
         except User.DoesNotExist:
             return

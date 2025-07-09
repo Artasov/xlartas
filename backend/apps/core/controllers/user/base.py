@@ -92,7 +92,7 @@ async def user_auth_methods(request):
     credential = request.data.get('credential')
     if not any((is_email(credential), is_phone(credential))):
         raise UserException.WrongCredential()
-    user = await User.objects.by_creds(credential)
+    user = await User.objects.aby_creds(credential)
     if user:
         phone = str(user.phone)
         data = {
@@ -114,7 +114,7 @@ async def check_email_exists(request):
     email = request.data.get('email')
     if not is_email(email):
         raise UserException.WrongCredential()
-    exists = await User.objects.by_creds(email)
+    exists = await User.objects.aby_creds(email)
     return Response({'exists': bool(exists)}, status=200)
 
 
@@ -124,5 +124,5 @@ async def check_email_exists(request):
 async def check_phone_exists(request):
     phone = request.data.get('phone')
     if not is_phone(phone): raise UserException.WrongCredential()
-    exists = await User.objects.by_creds(phone)
+    exists = await User.objects.aby_creds(phone)
     return Response({'exists': bool(exists)}, status=200)

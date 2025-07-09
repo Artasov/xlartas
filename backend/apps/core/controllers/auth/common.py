@@ -50,9 +50,9 @@ async def signup(request) -> Response:
 
         if phone: phone = phone_format(phone)
 
-        if email is not None and await User.objects.by_creds(email):
+        if email is not None and await User.objects.aby_creds(email):
             raise UserException.AlreadyExistsWithThisEmail()
-        if phone is not None and await User.objects.by_creds(phone):
+        if phone is not None and await User.objects.aby_creds(phone):
             raise UserException.AlreadyExistsWithThisPhone()
 
         if email:

@@ -28,7 +28,7 @@ async def grant_access(request):
 
     user = None
     if email:
-        user = await User.objects.by_creds(email)
+        user = await User.objects.aby_creds(email)
         if not user:
             raise UserException.UserWithThisEmailNotFound()
 
