@@ -1,4 +1,4 @@
-// Modules/Chat/MessagesContainer.tsx
+// Modules/Chat/MessagesList.tsx
 
 import React, {useContext} from 'react';
 import {CircularProgress} from '@mui/material';
@@ -9,7 +9,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useTranslation} from "react-i18next";
 
-interface MessagesContainerProps {
+interface MessagesListProps {
     messages: IMessage[];
     room: IRoom | null;
     renderDateLabel: (message: IMessage, previousMessage?: IMessage) => React.ReactNode;
@@ -18,7 +18,7 @@ interface MessagesContainerProps {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
 }
 
-const MessagesContainer: React.FC<MessagesContainerProps> = (
+const MessagesList: React.FC<MessagesListProps> = (
     {
         messages,
         room,
@@ -79,4 +79,4 @@ const MessagesContainer: React.FC<MessagesContainerProps> = (
     );
 };
 
-export default React.memo(MessagesContainer);
+export default React.memo(MessagesList);
