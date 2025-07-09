@@ -3,7 +3,6 @@ import {useTranslation} from 'react-i18next';
 import {
     Box,
     Button,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -17,6 +16,7 @@ import {
     TableHead,
     TableRow,
 } from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
@@ -217,7 +217,7 @@ const ReleaseManager: React.FC = () => {
                 <Paper sx={{p: 2, pt: 1}}>
                     {loading ? (
                         <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-                            <CircularProgress/>
+                            <CircularProgressZoomify in/>
                         </Box>
                     ) : (
                         <Table>
@@ -240,7 +240,7 @@ const ReleaseManager: React.FC = () => {
                                         <TableCell>
                                             <IconButton onClick={() => openConfirmDelete(r.id)}
                                                         disabled={deletingId === r.id}>
-                                                {deletingId === r.id ? <CircularProgress size={24}/> : <DeleteIcon/>}
+                                                {deletingId === r.id ? <CircularProgressZoomify in size={24}/> : <DeleteIcon/>}
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
@@ -256,7 +256,7 @@ const ReleaseManager: React.FC = () => {
                     <DialogActions>
                         <Button onClick={closeConfirmDelete}>Отмена</Button>
                         <Button onClick={handleConfirmDelete} disabled={deletingId === confirmDeleteId}>
-                            {deletingId === confirmDeleteId ? <CircularProgress size={24}/> : 'Удалить'}
+                            {deletingId === confirmDeleteId ? <CircularProgressZoomify in size={24}/> : 'Удалить'}
                         </Button>
                     </DialogActions>
                 </Dialog>

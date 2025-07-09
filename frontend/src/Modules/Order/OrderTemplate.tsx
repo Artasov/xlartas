@@ -5,7 +5,7 @@ import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
 import {useTheme} from 'Theme/ThemeContext';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {redirectWithNextBack} from 'Utils/redirectNext';
@@ -28,7 +28,7 @@ const OrderTemplate: React.FC = () => {
     }, [isAuthenticated, navigate, location]);
 
 
-    if (loading) return <CircularProgress size={'150px'}/>;
+    if (loading) return <CircularProgressZoomify in size={'150px'}/>;
 
     return (
         <FC px={2} mx={'auto'} pos={'relative'} maxW={'800px'}

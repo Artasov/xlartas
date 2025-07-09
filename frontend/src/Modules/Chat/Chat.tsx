@@ -8,7 +8,7 @@ import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useRooms} from './RoomsContext';
 import {IRoom} from "types/chat/models";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {FC, FCSC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 
@@ -72,7 +72,7 @@ const Chat: React.FC = () => {
     return (
         <div className={`chat h-100 w-100 ${isMdOrLarger ? 'fr' : 'fc'}`}>
             {initialLoading
-                ? <CircularProgress size={'120px'}/>
+                ? <CircularProgressZoomify in size={'120px'}/>
                 : (isMdOrLarger || !isRoomView) && showRooms
                     ? <FC cls={'rooms'} g={1} minW={350} p={2} maxH={`calc(100vh - ${headerNavHeight}px)`}
                           scroll={'y-auto'} onScroll={handleScroll}>
@@ -95,5 +95,4 @@ const Chat: React.FC = () => {
         </div>
     );
 };
-
 export default Chat;

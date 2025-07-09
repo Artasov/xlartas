@@ -5,7 +5,7 @@ import {useMacroControl} from './MacroControlProvider';
 import FloatingToolbar from './FloatingToolbar';
 import FloatingKeyboard from './FloatingKeyboard';
 import {FCCC, FRCC} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {useTheme} from 'Theme/ThemeContext';
 import MonitorIcon from '@mui/icons-material/Monitor';
 
@@ -127,7 +127,7 @@ const ScreenViewer: React.FC<Props> = ({className, style}) => {
     if (state === 'pending')
         return (
             <FCCC cls={className} style={style}>
-                <CircularProgress size="90px"/>
+                <CircularProgressZoomify in size="90px"/>
             </FCCC>
         );
 

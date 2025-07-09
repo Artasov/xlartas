@@ -1,7 +1,7 @@
 // Modules/Chat/MessagesList.tsx
 
 import React, {useContext} from 'react';
-import {CircularProgress} from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC, FCCC, FCE} from "wide-containers";
 import RoomMessage from "Chat/RoomMessage";
 import {IMessage, IRoom} from "types/chat/models";
@@ -55,7 +55,7 @@ const MessagesList: React.FC<MessagesListProps> = (
                     boxShadow={plt.shadows ? plt.shadows.SO005 : ''}
                     style={{display: 'flex', flexDirection: 'column'}}
                 >
-                    {isLoadingMore && <CircularProgress/>}
+                    {isLoadingMore && <CircularProgressZoomify in/>}
                     {messages.length > 0
                         ? messages.map((message, index) => (
                             <React.Fragment key={message.id || index}>
@@ -73,7 +73,7 @@ const MessagesList: React.FC<MessagesListProps> = (
                     <div ref={messagesEndRef}></div>
                 </FCE>
             ) : (
-                <CircularProgress/>
+                <CircularProgressZoomify in/>
             )}
         </FC>
     );

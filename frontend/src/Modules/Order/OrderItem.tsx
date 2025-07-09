@@ -8,7 +8,7 @@ import {IOrder} from "types/commerce/shop";
 import OrderStatus from "Order/OrderStatus";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useTranslation} from "react-i18next";
 
 interface OrderItemProps {
@@ -91,7 +91,7 @@ const OrderItem: React.FC<OrderItemProps> = (
                 <FCCC pos={'absolute'} className={'backdrop-blur-10'}
                       top={0} left={0} zIndex={8} rounded={3}
                       w={'100%'} h={'100%'}>
-                    <CircularProgress size={'3rem'}/>
+                    <CircularProgressZoomify in size={'3rem'}/>
                 </FCCC>
             )}
         </FRBC>

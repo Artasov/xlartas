@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 // import ReactSkinview3d from 'react-skinview3d';
 // import {FunctionAnimation, SkinViewer} from 'skinview3d';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 
 interface SkinCapeViewProps {
     skinUrl?: string | null;
@@ -62,7 +62,7 @@ const SkinCapeView: React.FC<SkinCapeViewProps> = ({
             }}
         >
             {!loaded ? (
-                <CircularProgress size="40px"/>
+                <CircularProgressZoomify in size="40px"/>
             ) : null}
         </div>
     );

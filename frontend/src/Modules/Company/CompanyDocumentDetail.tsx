@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import ReactMarkdown from 'react-markdown';
 import {Link, Typography} from '@mui/material';
 import {FC} from "wide-containers";
@@ -30,7 +30,7 @@ const CompanyDocumentDetail: React.FC = () => {
         }
     }, [id]);
 
-    if (loading) return <CircularProgress size="60px"/>;
+    if (loading) return <CircularProgressZoomify in size="60px"/>;
 
     if (!document) return <Typography variant="body1">Документ не найден.</Typography>;
 

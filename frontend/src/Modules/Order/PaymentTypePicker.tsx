@@ -12,7 +12,7 @@ import RadioCustomLine from 'Core/components/elements/RadioCustomLine';
 import {FC, FR, FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {useApi} from 'Api/useApi';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import pprint from 'Utils/pprint';
 import {useTranslation} from 'react-i18next';
 import PaymentTypeButton from './PaymentTypeButton'; // ⭐️ новинка
@@ -237,7 +237,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             )}
 
             {/* ---------- Лоадер ---------- */}
-            {loading && <FR mt={1}> <CircularProgress size={'40px'}/> </FR>}
+            {loading && <FR mt={1}> <CircularProgressZoomify in size={'40px'}/> </FR>}
 
             {/* ---------- Платёжные системы ---------- */}
             {selectedCurrency && filteredPaymentTypes.length > 0 && (

@@ -7,7 +7,7 @@ import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Button, useMediaQuery} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useDispatch} from 'react-redux';
 import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
 import {useTranslation} from 'react-i18next';
@@ -154,7 +154,7 @@ const XLMineLanding: React.FC = () => {
                                 }}>
                             <FRCC fontWeight={'bold'} g={1} opacity={70}>
                                 {loading
-                                    ? <FR mr={1}><CircularProgress size="2.1rem"/></FR>
+                                    ? <FR mr={1}><CircularProgressZoomify in size="2.1rem"/></FR>
                                     : <DownloadRoundedIcon sx={{fontSize: '2.1rem'}}/>}
                                 <span>{t('download_launcher')}</span>
                             </FRCC>

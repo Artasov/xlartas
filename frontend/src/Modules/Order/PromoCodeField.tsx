@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import debounce from 'lodash.debounce';
 import {FC} from "wide-containers";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {TextField} from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -100,7 +100,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
                 inputRef={promoCodeRef}
             />
             {status === 'checking' && (
-                <CircularProgress size={'2rem'} sx={{
+                <CircularProgressZoomify in size={'2rem'} sx={{
                     color: theme.colors.secondary.main,
                     position: 'absolute',
                     top: 'calc(50% - 1rem)',

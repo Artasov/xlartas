@@ -1,7 +1,7 @@
 // Modules/Order/OrderDetail.tsx
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import copyToClipboard from "Utils/clipboard";
@@ -50,7 +50,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
         if (!loading) setAnimate(true);
     }, [loading]);
 
-    if (loading) return <FCCC w={'100%'} mt={5}><CircularProgress size="90px"/></FCCC>;
+    if (loading) return <FCCC w={'100%'} mt={5}><CircularProgressZoomify in size="90px"/></FCCC>;
     if (orderNotFound || !order) return <div className={'p-3 text-center mt-2'}>Заказ не найден.</div>;
 
     return (
@@ -127,7 +127,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
                         width="100%"
                         height="100%"
                     >
-                        <CircularProgress size="3rem"/>
+                        <CircularProgressZoomify in size="3rem"/>
                     </FCCC>
                 )}
             </FC>

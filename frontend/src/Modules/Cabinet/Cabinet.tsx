@@ -23,7 +23,7 @@ import Logo from "Core/Logo";
 import OrderDetail from "Order/OrderDetail";
 import Licenses from "../Software/Licenses";
 import EarbudsRoundedIcon from '@mui/icons-material/EarbudsRounded';
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import DeveloperBoardRoundedIcon from '@mui/icons-material/DeveloperBoardRounded';
 import MinecraftVersionsManager from "../xLMine/MinecraftVersionsManager";
@@ -134,7 +134,7 @@ const Cabinet: React.FC = () => {
     }, [isAuthenticated]);
 
     if (isAuthenticated === null) return <FCCC h={'80%'}>
-        <CircularProgress size={'100px'}/>
+        <CircularProgressZoomify in size={'100px'}/>
     </FCCC>;
     if (!isAuthenticated) return <FCCC h={'80%'}>
         <span>{t('need_login')}</span>

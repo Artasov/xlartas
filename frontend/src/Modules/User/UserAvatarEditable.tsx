@@ -8,7 +8,7 @@ import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import './UserAvatarEditable.sass';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {useApi} from '../Api/useApi';
 
 interface UserAvatarEditableProps {
@@ -51,7 +51,7 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             />
             <label htmlFor="avatar-upload" className="user-avatar-editable position-relative">
                 {isLoading
-                    ? <CircularProgress size={size}/>
+                    ? <CircularProgressZoomify in size={size}/>
                     : <UserAvatar avatar={user?.avatar} size={size} sx={sx} className={className}/>
                 }
                 <FCCC

@@ -9,7 +9,7 @@ import DynamicForm from 'Core/components/elements/DynamicForm';
 import {SmartCaptcha} from '@yandex/smart-captcha';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import pprint from 'Utils/pprint';
 import {useApi} from "../Api/useApi";
@@ -169,7 +169,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                     {!initialCodeSent && !disableCaptcha && (
                         <>
                             <FCCC w="100%" h="100%" pos="absolute" top={0} left={0}>
-                                <CircularProgress size="3rem"/>
+                                <CircularProgressZoomify in size="3rem"/>
                             </FCCC>
                             <SmartCaptcha
                                 sitekey={YANDEX_RECAPTCHA_SITE_KEY}

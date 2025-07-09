@@ -2,7 +2,7 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Button, IconButton} from '@mui/material';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -114,7 +114,7 @@ const SoftwareDetailComponent: React.FC = () => {
                     h="60%"
                     zIndex={2}
                 >
-                    <CircularProgress size="80px"/>
+                    <CircularProgressZoomify in size="80px"/>
                 </FRCC>
             </Zoom>
 
@@ -126,7 +126,7 @@ const SoftwareDetailComponent: React.FC = () => {
                         {isAuthenticated && (
                             <FRE w={'100%'} p={1} pos="absolute" top={0} left={0}>
                                 {isTested === null && licenseLoading
-                                    ? <CircularProgress size="20px"/>
+                                    ? <CircularProgressZoomify in size="20px"/>
                                     : isTested
                                         ? <FR opacity={60} bg={plt.text.primary + '0b'} rounded={2} p={1} lh="1rem">
                                             {t('hours_left', {hours: licenseHours ?? 0})}

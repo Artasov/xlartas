@@ -2,7 +2,7 @@
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FC as FCContainer, FCCC} from "wide-containers";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 
 interface PaginatedListProps<T> {
     loadData: (page: number) => Promise<T[]>;
@@ -101,7 +101,7 @@ const PaginatedList = <T extends unknown>(
                 </React.Fragment>
             ))}
             {!loadMoreAtTop && hasMore && <div ref={targetRef}></div>}
-            {loading && <FCCC mt={4}><CircularProgress size={'120px'}/></FCCC>}
+            {loading && <FCCC mt={4}><CircularProgressZoomify in size={'120px'}/></FCCC>}
         </Component>
     );
 };

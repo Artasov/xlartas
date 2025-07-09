@@ -1,6 +1,7 @@
 // Modules/Software/Macros/MacroFormDialog.tsx
 import React, {useEffect, useState} from 'react';
-import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import {useApi} from "../../Api/useApi";
 import {WirelessMacro} from "../Types/Software";
@@ -90,7 +91,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
             <DialogActions>
                 <Button onClick={onClose} disabled={saving}>{t('cancel')}</Button>
                 <Button onClick={handleSave} variant="contained" disabled={saving}>
-                    {saving ? <CircularProgress size="1.2rem"/> : t('save')}
+                    {saving ? <CircularProgressZoomify in size="1.2rem"/> : t('save')}
                 </Button>
             </DialogActions>
         </Dialog>
