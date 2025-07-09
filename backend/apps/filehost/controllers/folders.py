@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from apps.filehost.exceptions.base import IdWasNotProvided
 from apps.filehost.models import Folder, File
 from apps.filehost.serializers import FolderSerializer, FileSerializer
+from apps.filehost.services.base import get_root_folder
 
 
 @acontroller('Get Folder By ID')
@@ -37,9 +38,7 @@ async def get_all_folders(request) -> Response:
 async def get_folder_content(request) -> Response:
     folder_id = request.data.get('id')
     if not folder_id:
-        folder, _ = await Folder.objects.aget_or_create(
-            name='root', user=request.user, parent=None
-        )
+        folder, _ = await get_root_folder(request.user)
     else:
         folder = await aget_object_or_404(Folder, id=folder_id, user=request.user)
     subfolders = await Folder.objects.afilter(parent=folder)
@@ -67,7 +66,7 @@ async def add_folder(request) -> Response:
     if parent_id:
         parent = await aget_object_or_404(Folder, id=parent_id, user=request.user)
     else:
-        parent, _ = await Folder.objects.aget_or_create(name='root', user=request.user, parent=None)
+        parent, _ = await get_root_folder(request.user)
     folder = await Folder.objects.acreate(name=name, parent=parent, user=request.user)
 
     return Response(
