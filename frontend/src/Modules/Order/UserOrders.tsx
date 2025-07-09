@@ -6,10 +6,9 @@ import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {IOrder} from 'types/commerce/shop';
 import OrderItem from 'Order/OrderItem';
 import {FC as FCC, FCCC, FR} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {useApi} from 'Api/useApi';
 import Collapse from '@mui/material/Collapse';
-import Zoom from '@mui/material/Zoom'; // остаётся Zoom
 
 const UserOrders: React.FC = () => {
     const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
@@ -51,25 +50,7 @@ const UserOrders: React.FC = () => {
     return (
         <FR wrap w="100%" g={1.2} py={1} px={2} position="relative" cls={'user-orders'}>
             {/* ---------------- Лоадер ---------------- */}
-            <Zoom
-                in={loading}
-                appear
-                mountOnEnter
-                unmountOnExit
-                timeout={{enter: 300, exit: 300}}
-            >
-                <FCCC
-                    w="100%"
-                    mt={5}
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    zIndex={1}
-                >
-                    <CircularProgress size="90px"/>
-                </FCCC>
-            </Zoom>
+            <CircularProgressZoomify in={loading} size="90px"/>
 
             {/* ---------------- Список заказов ---------------- */}
             {orders.length > 0 &&
