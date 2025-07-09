@@ -3,11 +3,13 @@ from datetime import timedelta
 
 import pytest
 from django.utils import timezone
+from decimal import Decimal
 
 from apps.commerce.models.payment import Currency, PaymentSystem
 from apps.commerce.models.product import ProductPrice
 from apps.core.models import User
 from apps.software.models import Software, SoftwareOrder, SoftwareLicense
+from apps.software.services.license import SoftwareLicenseService
 
 
 @pytest.mark.django_db
@@ -62,3 +64,37 @@ async def test_can_pregive_checks():
 
     order.license_hours = 6
     assert await software.can_pregive(order) is True
+
+
+@pytest.mark.django_db
+@pytest.mark.asyncio
+async def test_receipt_price_uses_license_hours():
+    user = await User.objects.acreate(username='u3')
+    software = await Software.objects.acreate(name='Soft3', min_license_order_hours=1)
+    price = await ProductPrice.objects.acreate(
+        product=software,
+        amount=10,
+        exponent=2,
+        offset=5,
+        currency=Currency.RUB,
+    )
+    order = await SoftwareOrder.objects.acreate(
+        user=user,
+        product=software,
+        currency=Currency.RUB,
+        payment_system=PaymentSystem.HandMade,
+        license_hours=3,
+    )
+
+    expected = Decimal(
+        str(
+            SoftwareLicenseService.calculate_price(
+                hours=3,
+                amount=float(price.amount),
+                exponent=float(price.exponent or 1.0),
+                offset=float(price.offset or 0.0),
+            )
+        )
+    )
+
+    assert await order.receipt_price == expected
