@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {ISoftware} from './Types/Software';
@@ -8,7 +8,6 @@ import {useApi} from 'Api/useApi';
 import SoftwareCard from './SoftwareCard';
 import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
-import Zoom from '@mui/material/Zoom'; // ← NEW
 
 const Softwares: React.FC = () => {
     const [softwares, setSoftwares] = useState<ISoftware[]>([]);
@@ -39,25 +38,7 @@ const Softwares: React.FC = () => {
     return (
         <FRCC g={2} wrap position="relative" w="100%">
             {/* ---------------- Лоадер ---------------- */}
-            <Zoom
-                in={loading}
-                appear
-                mountOnEnter
-                unmountOnExit
-                timeout={{enter: 300, exit: 300}}
-            >
-                <FRCC
-                    mt={5}
-                    w="100%"
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    zIndex={1}
-                >
-                    <CircularProgress size="90px"/>
-                </FRCC>
-            </Zoom>
+            <CircularProgressZoomify in={loading} size="90px"/>
 
             {/* ---------------- Список ПО ---------------- */}
             {softwares.length > 0 &&

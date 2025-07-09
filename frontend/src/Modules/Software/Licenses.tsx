@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useApi} from '../Api/useApi';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FCC, FCCC, FR} from 'wide-containers';
 import LicenseCard from './LicenseCard';
 import {Message} from 'Core/components/Message';
 import Collapse from '@mui/material/Collapse';
-import Zoom from '@mui/material/Zoom'; // ← NEW
 
 const Licenses: React.FC = () => {
     const {api} = useApi();
@@ -34,25 +33,7 @@ const Licenses: React.FC = () => {
     return (
         <FR wrap g={2} p={2} position="relative" cls="licenses">
             {/* ---------------- Лоадер ---------------- */}
-            <Zoom
-                in={loading}
-                appear
-                mountOnEnter
-                unmountOnExit
-                timeout={{enter: 300, exit: 300}}
-            >
-                <FCCC
-                    w="100%"
-                    mt={5}
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    zIndex={1}
-                >
-                    <CircularProgress size="90px"/>
-                </FCCC>
-            </Zoom>
+            <CircularProgressZoomify in={loading} size="90px"/>
 
             {/* ---------------- Список лицензий ---------------- */}
             {licenses.length > 0 &&
