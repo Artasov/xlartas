@@ -50,8 +50,8 @@ async def notification(request):
     await order.asave()
 
     try:
-        await order.execute()  # noqa
-    except Exception:
+        await order.execute()
+    except Exception:  # noqa
         log.warning('FreeKassa payment for order %s failed', order_id, exc_info=True)
 
     return Response({'success': True}, status=HTTP_200_OK)

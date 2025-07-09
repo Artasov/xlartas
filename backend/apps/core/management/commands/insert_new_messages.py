@@ -67,8 +67,7 @@ class Command(BaseCommand):
         # Выбираем только те записи, которых нет в бэкапе, и у которых msgstr не заполнен
         new_untranslated_entries = [
             e for e in current_po
-            if e.msgid not in backup_msgids
-               and not e.msgstr.strip()
+            if e.msgid not in backup_msgids and not e.msgstr.strip()
         ]
 
         if not new_untranslated_entries:

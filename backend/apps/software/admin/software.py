@@ -1,11 +1,11 @@
 # software/admin/software.py
-from tinymce.widgets import TinyMCE
 from django.contrib.admin import TabularInline, display
 from django.contrib.admin import register, ModelAdmin
 from django.forms import ModelForm
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.admin import PolymorphicChildModelAdmin
+from tinymce.widgets import TinyMCE  # noqa
 
 from apps.commerce.models import ProductPrice
 from apps.software.models import Software, SoftwareOrder, SoftwareLicense, SoftwareFile

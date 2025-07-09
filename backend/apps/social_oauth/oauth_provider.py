@@ -15,7 +15,8 @@ log = logging.getLogger('social_auth')
 class OAuthProviderMixin:
     """Mixin containing helper methods for OAuth providers."""
 
-    async def _set_avatar_from_url(self, user: User, url: str | None) -> None:
+    @staticmethod
+    async def _set_avatar_from_url(user: User, url: str | None) -> None:
         """Download and attach user avatar from URL if available."""
         if not url:
             return
@@ -39,9 +40,13 @@ class OAuthProviderMixin:
         """Shared logic of retrieving or creating a user for OAuth providers."""
 
         try:
-            provider_user = await provider_model.objects.select_related('user').aget(**{provider_id_field: provider_id})
+            provider_user = await (
+                provider_model.objects.select_related('user').aget(  # noqa
+                    **{provider_id_field: provider_id}
+                )
+            )
             return provider_user.user
-        except provider_model.DoesNotExist:
+        except provider_model.DoesNotExist:  # noqa
             user = None
             if email:
                 user = await User.objects.aby_creds(email)
@@ -64,7 +69,7 @@ class OAuthProviderMixin:
             kwargs = {'user': user, provider_id_field: provider_id}
             if hasattr(provider_model, 'email'):
                 kwargs['email'] = email or ''
-            await provider_model.objects.acreate(**kwargs)
+            await provider_model.objects.acreate(**kwargs)  # noqa
             return user
 
 

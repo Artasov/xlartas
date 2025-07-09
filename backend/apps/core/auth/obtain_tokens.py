@@ -15,8 +15,6 @@ from apps.core.models.user import User
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Get the user by email or username
-        user = None
         username_or_email = attrs.get('username', None)
         password = attrs.get('password')
 

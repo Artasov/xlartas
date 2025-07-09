@@ -1,4 +1,4 @@
-from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES
+from csp.constants import SELF, UNSAFE_INLINE, UNSAFE_EVAL, UNSAFE_HASHES  # noqa
 
 from config.base import DOMAIN_URL
 from config.modules.logging import LOGUI_URL_PREFIX

@@ -1,13 +1,19 @@
 # analytics/utils.py
 import logging
 from datetime import datetime
+from typing import Any
 
 from django.db.models.functions import TruncDay, TruncHour, TruncMonth
 
 logger = logging.getLogger(__name__)
 
 
-def parse_chart_filters(request) -> tuple[dict, str, str, str]:
+def parse_chart_filters(request) -> tuple[
+    dict[str, datetime],
+    str | Any,
+    TruncMonth | TruncDay | TruncHour,
+    str
+]:
     """Parse common chart query parameters.
 
     Returns a tuple of:

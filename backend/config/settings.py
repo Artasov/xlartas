@@ -15,11 +15,10 @@ from config.modules.project import *
 from config.modules.redis import *
 from config.modules.storage import *
 from config.modules.third_party_services import *
+from config.modules.ws import *
 from config.modules.xl_dashboard import *
 from utils.handle_exceptions import handling_function
 
-
-AUTH_USER_MODEL = 'core.User'
 INSTALLED_APPS = [
     'daphne',
     'jazzmin',
@@ -97,34 +96,3 @@ MIDDLEWARE = [
 ]
 if DEV:
     MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [(REDIS_HOST, REDIS_PORT)], },
-    },
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
-    'DEFAULT_THROTTLE_CLASSES': [] if DEV else [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '600/minute',
-        'user': '600/minute',
-    }
-}
-REST_USE_JWT = True

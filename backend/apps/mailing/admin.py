@@ -1,7 +1,7 @@
 # mailing/admin.py
-from tinymce.widgets import TinyMCE  # импорт виджета TinyMCE
 from django.contrib.admin import ModelAdmin, register, action
 from django.forms import ModelForm
+from tinymce.widgets import TinyMCE  # noqa
 
 from .models import Mailing
 from .tasks import send_mailing

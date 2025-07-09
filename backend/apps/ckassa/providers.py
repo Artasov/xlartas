@@ -45,7 +45,6 @@ class CKassaProvider(BasePaymentProvider):
                 await apprint(f'CKassa parsed JSON: {json_}')
             except Exception as json_exc:
                 await apprint(f'CKassa JSON decode error: {json_exc}')
-                json_ = None
 
             # Явно проверяем код ответа и бросаем, если не 2xx
             if resp.status_code >= 400:

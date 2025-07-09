@@ -29,6 +29,8 @@ DOMAIN_URL = f'http{'s' if HTTPS else ''}://{MAIN_DOMAIN}{':8000' if DEV else ''
 
 TIME_ZONE = env('TZ', 'Europe/Moscow')
 
+AUTH_USER_MODEL = 'core.User'
+
 # MEDIA_SUBSTITUTION_URL = 'https://xlartas.ru'
 MEDIA_SUBSTITUTION_URL = 'http://localhost:8000'
 

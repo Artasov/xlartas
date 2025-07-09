@@ -7,6 +7,7 @@ from rest_framework.status import HTTP_200_OK
 
 from apps.commerce.models import BalanceProduct
 from apps.commerce.serializers.balance import BalanceProductSerializer
+from apps.core.models import User
 
 
 @acontroller('Get user balance')
