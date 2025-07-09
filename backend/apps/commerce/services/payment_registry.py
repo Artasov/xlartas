@@ -13,7 +13,8 @@ from __future__ import annotations
 import importlib
 import logging
 from collections import defaultdict
-from typing import Dict, Iterable, List, Type, TYPE_CHECKING
+from dataclasses import dataclass
+from typing import Dict, List, Type, TYPE_CHECKING
 
 from django.conf import settings
 
@@ -25,14 +26,11 @@ if TYPE_CHECKING:
     from apps.commerce.providers.base import BasePaymentProvider
 
 
+@dataclass(slots=True)
 class PaymentProviderInfo:
-    __slots__ = ('system', 'provider_path', 'currencies')
-
-    def __init__(self, *, system: PaymentSystem, provider_path: str,
-                 currencies: Iterable[str]) -> None:
-        self.system: PaymentSystem = system
-        self.provider_path: str = provider_path
-        self.currencies: tuple[str, ...] = tuple(currencies)
+    system: PaymentSystem
+    provider_path: str
+    currencies: tuple[str, ...]
 
     # Lazy‑load провайдер
     def load_provider_cls(self):
