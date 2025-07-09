@@ -173,7 +173,7 @@ const UserPersonalInfoForm: React.FC = () => {
                                     margin="none"
                                     disabled
                                     size={'small'}
-                                    label="Secret key"
+                                    label={t('secret_key')}
                                     value={user.secret_key}/>
                             </FC>
                         </FC>}
