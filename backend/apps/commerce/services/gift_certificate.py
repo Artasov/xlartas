@@ -7,12 +7,12 @@ if TYPE_CHECKING:
     from apps.commerce.models import GiftCertificate, GiftCertificateOrder
 
 
-class GiftCertificateService(IProductService):
+class GiftCertificateService(IProductService['GiftCertificateOrder']):
     @staticmethod
     async def new_order(
             request
     ) -> 'GiftCertificateOrder':
-        pass
+        raise NotImplementedError
         # from apps.serializers.gift_certificate import GiftCertificateOrderCreateSerializer
         # s = GiftCertificateOrderCreateSerializer(
         #     data=request.data, context={'request': request}
@@ -37,7 +37,8 @@ class GiftCertificateService(IProductService):
 
     async def can_pregive(self: 'GiftCertificate',
                           order: 'GiftCertificateOrder',
-                          raise_exceptions=False) -> bool: pass
+                          raise_exceptions=False) -> bool:
+        raise NotImplementedError
 
     async def pregive(self: 'GiftCertificate', order: 'GiftCertificateOrder'):
         pass

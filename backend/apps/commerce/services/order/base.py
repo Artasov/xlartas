@@ -1,7 +1,9 @@
 # commerce/services/order/base.py
+from __future__ import annotations
+
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, TypeVar, Generic
 
 from adrf.requests import AsyncRequest
 from django.core.handlers.asgi import ASGIRequest
@@ -15,10 +17,12 @@ tbank_log = logging.getLogger('tbank')
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order, HandMadePayment
+    from apps.commerce.models import Order, HandMadePayment, Product
+
+O = TypeVar('O', bound='Order')
 
 
-class OrderService:
+class OrderService(Generic[O]):
     """
     Интерфейс-сервис для работы с заказами, частично реализующий функционал.
     Этот класс должен быть унаследован конкретными сервисами заказов,
@@ -32,7 +36,7 @@ class OrderService:
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
     # ---------------------------------------------------------------- #
     async def init_payment(
-            self: 'Order', request: AsyncRequest, price: Decimal,
+            self: O, request: AsyncRequest, price: Decimal,
     ):
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
         available = PaymentSystemRegistry.available_systems(self.currency)
@@ -49,7 +53,7 @@ class OrderService:
         await self.asave()
 
     @property
-    async def receipt_price(self: 'Order'):
+    async def receipt_price(self: O):
         """
         Возвращает финальную сумму для чека.
         Для SoftwareOrder учитываем license_hours и хранимые в ProductPrice
@@ -88,7 +92,7 @@ class OrderService:
         return price
 
     async def safe_cancel(
-            self: 'Order',
+            self: O,
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             reason: str
     ):
@@ -106,10 +110,10 @@ class OrderService:
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ЗАКАЗА
     # ---------------------------------------------------------------- #
-    async def init(self: 'Order', request, init_payment: bool = True):
+    async def init(self: O, request, init_payment: bool = True):
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
-        self.product: Product = await self.product.aget_real_instance()  # noqa
+        self.product = await self.product.aget_real_instance()  # noqa
         commerce_log.info(f'For product {self.product.name}')  # noqa
         price = await self.receipt_price  # noqa
         commerce_log.info(f'Price: {price}')
@@ -125,14 +129,13 @@ class OrderService:
         self.is_inited = True  # noqa
         await self.asave()
 
-    async def sync_with_payment_system(self: 'Order'):
+    async def sync_with_payment_system(self: O):
         from apps.cloudpayments.classes.payment import CloudPaymentAPI
         from apps.tbank.models import TBankPayment
         from apps.cloudpayments.models import CloudPaymentPayment
         from apps.commerce.models.payment import HandMadePayment
         payment = await self.arelated('payment')
         if isinstance(self.payment, TBankPayment):
-            payment: TBankPayment
             tbank_log.info(f'TBank Payment synchronization......')
             actual_status = await payment.actual_status(payment_id=payment.id)
             if actual_status != payment.status:
@@ -152,7 +155,7 @@ class OrderService:
         else:
             raise PaymentException.PaymentSystemNotFound()
 
-    async def execute(self: 'Order'):
+    async def execute(self: O):
         """
         Выполнение заказа после оплаты.
         Отвечает за выполнение операций после оплаты заказа. Выдача товара в том или ином виде,
@@ -173,7 +176,7 @@ class OrderService:
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
 
     async def cancel(
-            self: Union['Order', 'OrderService'],
+            self: O,
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             reason: str
     ):
@@ -184,10 +187,9 @@ class OrderService:
         self.is_cancelled = True  # noqa
         await self.asave()
 
-    def check_available_to_init_payment(self: Union['Order', 'OrderService']):
+    def check_available_to_init_payment(self: O):
         from apps.commerce.models import Order
         from apps.commerce.models.payment import CurrencyPaymentSystemMapping
-        self: Order
         available_payment_systems = CurrencyPaymentSystemMapping.get_payment(self.currency)
         if not available_payment_systems:
             tbank_log.info(f'Валюта {self.currency} не поддерживается.')
@@ -198,7 +200,7 @@ class OrderService:
                 f'Платежная система {self.payment_system} не поддерживается для валюты {self.currency}.'
             )
 
-    async def cancel_payment(self: Union['Order', 'OrderService']):
+    async def cancel_payment(self: O):
         """Отменяет только платеж в шлюзе."""
         await self.sync_with_payment_system()
         from apps.tbank.models import TBankPayment

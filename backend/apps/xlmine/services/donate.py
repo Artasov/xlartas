@@ -2,6 +2,9 @@
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from apps.commerce.services.product import IProductService
+from apps.commerce.services.order.base import OrderService
+
 from django.db.models import Sum
 
 if TYPE_CHECKING:
@@ -15,7 +18,7 @@ class UserDonateService:
         return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)
 
 
-class DonateService:
+class DonateService(IProductService['DonateOrder']):
     """
      Логика для «донатного» продукта.
      """
@@ -84,5 +87,5 @@ class DonateService:
         pass
 
 
-class DonateOrderService:
+class DonateOrderService(OrderService['DonateOrder']):
     pass

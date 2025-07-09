@@ -3,6 +3,8 @@ import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
+from apps.commerce.services.product import IProductService
+
 from django.utils import timezone
 
 if TYPE_CHECKING:
@@ -11,7 +13,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class SoftwareService:
+class SoftwareService(IProductService['SoftwareOrder']):
     async def new_order(self: 'Software', request) -> 'SoftwareOrder':
         from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder
