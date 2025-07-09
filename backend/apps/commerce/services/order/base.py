@@ -52,34 +52,14 @@ class OrderService:
     async def receipt_price(self: 'Order'):
         """
         Возвращает финальную сумму для чека.
-        Для SoftwareOrder учитываем license_hours и хранимые в ProductPrice
-        amount + exponent + offset.
         """
-        from apps.software.services.license import SoftwareLicenseService
-        from apps.software.models import SoftwareOrder
         price_row = await self.product.prices.agetorn(currency=self.currency)  # noqa
         if not price_row:
             # Если нет строки цены, 0
             return Decimal('0')
 
-        # Вытаскиваем нужные значения
-        amount = float(price_row.amount)
-        exponent = float(price_row.exponent or 1.0)  # По умолчанию можно 1.0
-        offset = float(price_row.offset or 0.0)  # По умолчанию 0.0
-
-        if isinstance(self, SoftwareOrder):
-            hours = self.license_hours
-            final_cost_int = SoftwareLicenseService.calculate_price(
-                hours=hours,
-                amount=amount,
-                exponent=exponent,
-                offset=offset
-            )
-            price = Decimal(str(final_cost_int))
-        else:
-            # Для других типов заказа (не SoftwareOrder)
-            # просто берём amount (например, * 1 шт.)
-            price = price_row.amount
+        # Для большинства заказов используется базовая цена продукта
+        price = price_row.amount
 
         # Если есть промокод, учитываем скидку
         if self.promocode:
