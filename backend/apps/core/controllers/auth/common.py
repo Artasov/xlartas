@@ -50,12 +50,10 @@ async def signup(request) -> Response:
 
         if phone: phone = phone_format(phone)
 
-        if email is not None and await User.objects.filter(
-                email=email
-        ).aexists(): raise UserException.AlreadyExistsWithThisEmail()
-        if phone is not None and await User.objects.filter(
-                phone=phone
-        ).aexists(): raise UserException.AlreadyExistsWithThisPhone()
+        if email is not None and await User.objects.by_creds(email):
+            raise UserException.AlreadyExistsWithThisEmail()
+        if phone is not None and await User.objects.by_creds(phone):
+            raise UserException.AlreadyExistsWithThisPhone()
 
         if email:
             username = f'{email.split('@')[0]}{randint(1000, 9999)}'
