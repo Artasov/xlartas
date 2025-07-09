@@ -1,13 +1,9 @@
 from datetime import timedelta
-from os import environ, makedirs
+from os import makedirs
 from os.path import join
 
-from dotenv import load_dotenv
+from config.base import BASE_DIR, FRONTEND_DIR, MAIN_DOMAIN, env
 
-from config.base import BASE_DIR, FRONTEND_DIR, MAIN_DOMAIN
-
-env = environ.get
-load_dotenv(dotenv_path=join(BASE_DIR.parent, '.env'))
 MINIO_USE = bool(int(env('MINIO_USE')))
 
 # Internationalization defaults
@@ -24,7 +20,6 @@ FILE_UPLOAD_TEMP_DIR = join(BASE_DIR.parent, 'data', 'temp')
 makedirs(FILE_UPLOAD_TEMP_DIR, exist_ok=True)
 
 # Static | Media
-env = environ.get
 STATICFILES_DIRS = (
     join(FRONTEND_DIR, 'build', 'static'),
     join(BASE_DIR, 'static')

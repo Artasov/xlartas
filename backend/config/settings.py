@@ -1,12 +1,5 @@
-import logging
-from datetime import timedelta
-from os import environ, makedirs
-from os.path import join, exists
-from pathlib import Path
-
 from adjango.utils.common import is_celery
 from django.utils.translation import gettext_lazy as _
-from dotenv import load_dotenv
 
 from config.base import *
 from config.modules.adjango import *
@@ -25,8 +18,6 @@ from config.modules.third_party_services import *
 from config.modules.xl_dashboard import *
 from utils.handle_exceptions import handling_function
 
-env = environ.get
-load_dotenv(dotenv_path=join(BASE_DIR.parent, '.env'))
 
 AUTH_USER_MODEL = 'core.User'
 INSTALLED_APPS = [
