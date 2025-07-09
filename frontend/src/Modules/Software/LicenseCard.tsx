@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {Card, CardContent, CardMedia, Typography} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC} from "wide-containers";
+import {useTranslation} from 'react-i18next';
 
 interface LicenseCardProps {
     license: any;
@@ -12,6 +13,7 @@ interface LicenseCardProps {
 const LicenseCard: React.FC<LicenseCardProps> = ({license}) => {
     const navigate = useNavigate();
     const {plt, theme} = useTheme();
+    const {t} = useTranslation();
 
     const handleClick = () => {
         navigate(`/softwares/${license.software.id}`);
@@ -29,7 +31,7 @@ const LicenseCard: React.FC<LicenseCardProps> = ({license}) => {
                         {license.software.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {license.remaining_hours} hours
+                        {t('hours', {count: license.remaining_hours})}
                     </Typography>
                 </FC>
             </CardContent>
