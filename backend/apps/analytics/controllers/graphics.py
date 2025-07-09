@@ -1,7 +1,6 @@
 # analytics/controllers/graphics.py
 import json
 import logging
-from datetime import datetime
 
 from django.http import HttpResponseBadRequest
 from django.utils.translation import gettext_lazy as _
@@ -10,62 +9,25 @@ logger = logging.getLogger(__name__)
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Q
-from django.db.models.functions import TruncHour, TruncDay, TruncMonth
 from django.shortcuts import render
 
 from apps.analytics.models import Visit
+from apps.analytics.utils import parse_chart_filters
 from apps.commerce.models.order import Order
 
 
 @staff_member_required
 def visits_chart(request):
-    period = request.GET.get('period', 'day')
     group_by = request.GET.get('group_by', '')
     start_date_str = request.GET.get('start_date', '')
     end_date_str = request.GET.get('end_date', '')
 
-    filters = {}
-    date_format = '%Y-%m-%d'
-    if start_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, date_format)
-            filters['created_at__gte'] = start_date
-        except ValueError as exc:
-            logger.warning('Invalid start_date %s: %s', start_date_str, exc)
+    try:
+        filters, period, trunc_func, label_format = parse_chart_filters(request)
+    except ValueError as exc:  # pragma: no cover - simple branch
+        if str(exc) == 'start_date':
             return HttpResponseBadRequest(_('Invalid start_date'))
-    if end_date_str:
-        try:
-            end_date = datetime.strptime(end_date_str, date_format)
-            filters['created_at__lte'] = end_date
-        except ValueError as exc:
-            logger.warning('Invalid end_date %s: %s', end_date_str, exc)
-            return HttpResponseBadRequest(_('Invalid end_date'))
-
-    # Определяем функцию группировки и формат метки
-    if group_by == 'hour':
-        trunc_func = TruncHour('created_at')
-        label_format = '%H:%M'
-    elif group_by == 'day':
-        trunc_func = TruncDay('created_at')
-        label_format = '%Y-%m-%d'
-    elif group_by == 'month':
-        trunc_func = TruncMonth('created_at')
-        label_format = '%Y-%m'
-    else:
-        # Если явно не указано, выбираем по режиму period
-        if period == 'day':
-            trunc_func = TruncHour('created_at')
-            label_format = '%H:%M'
-        elif period in ['week', 'month']:
-            trunc_func = TruncDay('created_at')
-            label_format = '%Y-%m-%d'
-        elif period == 'year':
-            trunc_func = TruncMonth('created_at')
-            label_format = '%Y-%m'
-        else:
-            trunc_func = TruncDay('created_at')
-            label_format = '%Y-%m-%d'
-            period = 'custom'
+        return HttpResponseBadRequest(_('Invalid end_date'))
 
     qs = Visit.objects.filter(**filters).annotate(period=trunc_func).values('period').annotate(
         unique_ips=Count('ip_address', distinct=True)
@@ -87,52 +49,16 @@ def visits_chart(request):
 
 @staff_member_required
 def orders_chart(request):
-    period = request.GET.get('period', 'week')
     group_by = request.GET.get('group_by', '')
     start_date_str = request.GET.get('start_date', '')
     end_date_str = request.GET.get('end_date', '')
 
-    filters = {}
-    date_format = '%Y-%m-%d'
-    if start_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, date_format)
-            filters['created_at__gte'] = start_date
-        except ValueError as exc:
-            logger.warning('Invalid start_date %s: %s', start_date_str, exc)
+    try:
+        filters, period, trunc_func, label_format = parse_chart_filters(request)
+    except ValueError as exc:  # pragma: no cover - simple branch
+        if str(exc) == 'start_date':
             return HttpResponseBadRequest(_('Invalid start_date'))
-    if end_date_str:
-        try:
-            end_date = datetime.strptime(end_date_str, date_format)
-            filters['created_at__lte'] = end_date
-        except ValueError as exc:
-            logger.warning('Invalid end_date %s: %s', end_date_str, exc)
-            return HttpResponseBadRequest(_('Invalid end_date'))
-
-    # Определяем функцию группировки и формат метки для заказов
-    if group_by == 'hour':
-        trunc_func = TruncHour('created_at')
-        label_format = '%H:%M'
-    elif group_by == 'day':
-        trunc_func = TruncDay('created_at')
-        label_format = '%Y-%m-%d'
-    elif group_by == 'month':
-        trunc_func = TruncMonth('created_at')
-        label_format = '%Y-%m'
-    else:
-        if period == 'day':
-            trunc_func = TruncHour('created_at')
-            label_format = '%H:%M'
-        elif period in ['week', 'month']:
-            trunc_func = TruncDay('created_at')
-            label_format = '%Y-%m-%d'
-        elif period == 'year':
-            trunc_func = TruncMonth('created_at')
-            label_format = '%Y-%m'
-        else:
-            trunc_func = TruncDay('created_at')
-            label_format = '%Y-%m-%d'
-            period = 'custom'
+        return HttpResponseBadRequest(_('Invalid end_date'))
 
     qs = Order.objects.filter(**filters).annotate(period=trunc_func).values('period').annotate(
         total=Count('id'),
