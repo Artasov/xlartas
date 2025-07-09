@@ -1,6 +1,7 @@
 # analytics/middleware.py
 from datetime import datetime, timedelta
 
+from ipaddress import ip_address
 from django.core.handlers.wsgi import WSGIRequest
 
 from .models import Visit
@@ -52,8 +53,19 @@ class VisitLoggingMiddleware:
     @staticmethod
     def get_client_ip(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        ips = []
         if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0].strip()
+            ips = [ip.strip() for ip in x_forwarded_for.split(',')]
         else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
+            remote_addr = request.META.get('REMOTE_ADDR')
+            if remote_addr:
+                ips = [remote_addr]
+
+        for ip in ips:
+            try:
+                parsed = ip_address(ip)
+            except ValueError:
+                continue
+            if parsed.is_global:
+                return ip
+        return None

@@ -29,7 +29,7 @@ def visits_chart(request):
             return HttpResponseBadRequest(_('Invalid start_date'))
         return HttpResponseBadRequest(_('Invalid end_date'))
 
-    qs = Visit.objects.filter(**filters).annotate(period=trunc_func).values('period').annotate(
+    qs = Visit.objects.exclude(user_id=1).filter(**filters).annotate(period=trunc_func).values('period').annotate(
         unique_ips=Count('ip_address', distinct=True)
     ).order_by('period')
 
@@ -60,7 +60,7 @@ def orders_chart(request):
             return HttpResponseBadRequest(_('Invalid start_date'))
         return HttpResponseBadRequest(_('Invalid end_date'))
 
-    qs = Order.objects.filter(**filters).annotate(period=trunc_func).values('period').annotate(
+    qs = Order.objects.exclude(user_id=1).filter(**filters).annotate(period=trunc_func).values('period').annotate(
         total=Count('id'),
         executed=Count('id', filter=Q(is_executed=True)),
         cancelled=Count('id', filter=Q(is_cancelled=True))
