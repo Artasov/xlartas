@@ -55,7 +55,7 @@ class DonateService:
 
         await UserXLMine.objects.aget_or_create(user_id=order.user_id)
 
-    async def postgive(self: 'Donate', order: 'DonateOrder'):  # noqa TODO: разобрать
+    async def postgive(self: 'Donate', order: 'DonateOrder'):  # noqa
         """
         Действия после успешной оплаты: начисляем пользователю коины.
         Берём стоимость заказа в рублях (order.receipt_price) и добавляем к user.xlmine.coins
@@ -64,7 +64,7 @@ class DonateService:
 
         # Получаем/создаём запись UserXLMine
         from apps.xlmine.models.user import UserXLMine
-        xlmine_user = await UserXLMine.objects.aget_or_create(user=user)
+        xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
         # Считаем стоимость заказа (финальная сумма, учтя промокод и т.д.)
         order_price = await order.receipt_price  # noqa
         if not order_price:
