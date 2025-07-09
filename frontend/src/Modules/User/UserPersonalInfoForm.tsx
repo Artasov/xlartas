@@ -54,7 +54,7 @@ const UserPersonalInfoForm: React.FC = () => {
     /* ---------- анимация появления ---------- */
     const [animate, setAnimate] = useState(false);
     useEffect(() => {
-        setAnimate(true);                                    // запускаем анимацию после маунта
+        setAnimate(true);
     }, []);
 
     /* ---------- загрузка данных ---------- */
@@ -108,7 +108,7 @@ const UserPersonalInfoForm: React.FC = () => {
     if (!formData || !user) return null;
 
     return (
-        <Collapse in={animate} appear timeout={400}>
+        <Collapse in={animate} appear timeout={800}>
             <FC component={'form'} pb={'5rem'} pos={'relative'} mt={1}
                 onSubmit={handleSubmit} maxW={400}>
                 <FR wrap g={1} mb={1}>
@@ -174,7 +174,8 @@ const UserPersonalInfoForm: React.FC = () => {
                                     disabled
                                     size={'small'}
                                     label={t('secret_key')}
-                                    value={user.secret_key}/>
+                                    value={user.secret_key}
+                                />
                             </FC>
                         </FC>}
                     <FRSC g={1} maxW={'400px'}>
