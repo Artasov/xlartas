@@ -3,8 +3,7 @@ from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from rest_framework import status
-
-STORAGE_LIMIT = 300 * 1024 * 1024
+from django.conf import settings
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -52,7 +51,7 @@ async def add_file(request) -> Response:
     async for f in File.objects.filter(user=user):
         if f.file:
             total += f.file.size
-    if total + file_size > STORAGE_LIMIT:
+    if total + file_size > settings.STORAGE_LIMIT:
         raise StorageLimitExceeded()
     request.data['user'] = user.id
     serializer = FileSerializer(data=request.data)
@@ -98,4 +97,4 @@ async def get_storage_usage(request) -> Response:
     async for f in File.objects.filter(user=request.user):
         if f.file:
             total += f.file.size
-    return Response({'used': total, 'limit': STORAGE_LIMIT}, status=status.HTTP_200_OK)
+    return Response({'used': total, 'limit': settings.STORAGE_LIMIT}, status=status.HTTP_200_OK)
