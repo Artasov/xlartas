@@ -9,6 +9,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.filehost.utils import parse_pagination
+
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
 from apps.filehost.models import File
 from apps.filehost.serializers import (
@@ -32,9 +34,7 @@ async def get_file_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_files(request) -> Response:
-    page = int(request.query_params.get('page', 1))
-    page_size = int(request.query_params.get('page_size', 10))
-    offset = (page - 1) * page_size
+    page, page_size, offset = parse_pagination(request)
     files_qs = File.objects.filter(user=request.user).order_by('-created_at')[offset:offset + page_size]
     files = []
     async for f in files_qs:
@@ -65,9 +65,7 @@ async def add_file(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_favorite_files(request) -> Response:
-    page = int(request.query_params.get('page', 1))
-    page_size = int(request.query_params.get('page_size', 10))
-    offset = (page - 1) * page_size
+    page, page_size, offset = parse_pagination(request)
     files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[
                offset:offset + page_size]
     files = []
