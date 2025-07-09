@@ -297,6 +297,13 @@ class TBank:
         provided_token = token
         return expected_token == provided_token
 
+    async def _request(self, endpoint: str, params: dict) -> dict:
+        """Prepare request params with terminal key and token and send POST."""
+        params = dict(params)
+        params['TerminalKey'] = self.terminal_key
+        params['Token'] = self._generate_token(params)
+        return await self._post(endpoint, params)
+
     async def Init(
             self,
             amount: int,
@@ -333,7 +340,6 @@ class TBank:
         @return: Возвращает объект InitResponse с результатом инициализации платежа.
         """
         init_data: InitRequest = {
-            'TerminalKey': self.terminal_key,
             'Amount': amount,
             'OrderId': order_id,
             'Description': description,
@@ -353,8 +359,7 @@ class TBank:
             init_data['DATA'] = init_data.get('DATA', {})
             init_data['DATA']['OperationInitiatorType'] = operation_initiator_type.value
         init_data = remove_none_values(init_data, exclude_keys=None)
-        init_data['Token'] = self._generate_token(init_data)
-        return await self._post('Init', init_data)
+        return await self._request('Init', init_data)
 
     async def AddCustomer(
             self,
@@ -373,7 +378,6 @@ class TBank:
         """
         if email:
             data = {
-                'TerminalKey': self.terminal_key,
                 'CustomerKey': customer_key,
                 'IP': ip,
                 'Email': email,
@@ -381,14 +385,12 @@ class TBank:
             }
         else:
             data = {
-                'TerminalKey': self.terminal_key,
                 'CustomerKey': customer_key,
                 'IP': ip,
                 'Phone': phone,
             }
 
-        data['Token'] = self._generate_token(data)
-        return await self._post('AddCustomer', data)
+        return await self._request('AddCustomer', data)
 
     async def GetState(self, payment_id: int) -> dict:
         """
@@ -397,12 +399,9 @@ class TBank:
         @return: Возвращает статус платежа.
         """
         data = {
-            'TerminalKey': self.terminal_key,
             'PaymentId': payment_id,
-            'Token': ''
         }
-        data['Token'] = self._generate_token(data)
-        return await self._post('GetState', data)
+        return await self._request('GetState', data)
 
     async def Cancel(self, payment_id: str, amount: Optional[int] = None) -> dict:
         """
@@ -412,13 +411,10 @@ class TBank:
         @return: Возвращает результат отмены платежа.
         """
         data = {
-            'TerminalKey': self.terminal_key,
             'PaymentId': payment_id,
             'Amount': amount,
-            'Token': ''
         }
-        data['Token'] = self._generate_token(data)
-        return await self._post('Cancel', data)
+        return await self._request('Cancel', data)
 
     async def Charge(self, payment_id: Type[int], rebill_id: Type[int]) -> dict:
         """
@@ -428,22 +424,15 @@ class TBank:
         @return: Возвращает результат проведения рекуррентного платежа.
         """
         data = {
-            'TerminalKey': self.terminal_key,
             'PaymentId': payment_id,
             'RebillId': rebill_id,
-            'Token': ''
         }
-        data['Token'] = self._generate_token(data)
-        return await self._post('Charge', data)
+        return await self._request('Charge', data)
 
     async def Resend(self) -> dict:
         """
         Перезапрос неотправленных нотификаций.
         @return: Возвращает результат перезапроса нотификаций.
         """
-        data = {
-            'TerminalKey': self.terminal_key,
-            'Token': ''
-        }
-        data['Token'] = self._generate_token(data)
-        return await self._post('Resend', data)
+        data = {}
+        return await self._request('Resend', data)
