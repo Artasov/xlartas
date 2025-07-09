@@ -4,19 +4,18 @@ import logging
 from typing import Any
 
 import aiohttp
-from adjango.utils.funcs import set_image_by_url
 from django.conf import settings
 
 from apps.core.models import User
 from apps.core.services.auth import new_jwt_for_user, JWTPair
 from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import YandexUser
-from apps.social_oauth.oauth_provider import OAuthProvider
+from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
 
 log = logging.getLogger('social_auth')
 
 
-class YandexOAuthProvider(OAuthProvider):
+class YandexOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         yandex_id = user_data['id']
@@ -66,39 +65,29 @@ class YandexOAuthProvider(OAuthProvider):
 
     async def get_or_create_user(self, user_data: dict[str, Any]) -> User:
         yandex_id = user_data.get('id')
-        if not yandex_id: raise SocialOAuthException.YandexIDNotProvided()
-        try:
-            yandex_user = await YandexUser.objects.select_related('user').aget(yandex_id=yandex_id)
-            user = yandex_user.user
-        except YandexUser.DoesNotExist:
-            email = user_data.get('default_email', '')
-            if not email:
-                raise SocialOAuthException.YandexEmailWasNotProvided()
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
-                first_name = user_data.get('first_name', '')
-                last_name = user_data.get('last_name', '')
-                username = email.split('@')[0] if email else f'yandex_{yandex_id}'
-                log.info(f'Yandex auth: {user_data}')
-                user = await User.objects.acreate(
-                    email=email,
-                    username=username,
-                    first_name=first_name,
-                    last_name=last_name,
-                    is_email_confirmed=bool(email),
-                )
-                if not user_data.get('is_avatar_empty'):
-                    avatar_id = user_data.get('default_avatar_id')
-                    # TODO: сделать правильное получение фото
-                    if avatar_id:
-                        avatar_url = f'https://avatars.yandex.net/get-yapic/{avatar_id}/islands-200'
-                        await set_image_by_url(user, 'avatar', avatar_url)
-            if not user.is_email_confirmed:
-                user.is_email_confirmed = True
-                await user.asave()
-            await YandexUser.objects.acreate(user=user, yandex_id=yandex_id, email=email)
-        return user
+        if not yandex_id:
+            raise SocialOAuthException.YandexIDNotProvided()
+
+        email = user_data.get('default_email', '')
+        if not email:
+            raise SocialOAuthException.YandexEmailWasNotProvided()
+
+        avatar_url = None
+        if not user_data.get('is_avatar_empty'):
+            avatar_id = user_data.get('default_avatar_id')
+            if avatar_id:
+                avatar_url = f'https://avatars.yandex.net/get-yapic/{avatar_id}/islands-200'
+
+        return await self._get_or_create_user_base(
+            YandexUser,
+            'yandex_id',
+            yandex_id,
+            email=email,
+            username=email.split('@')[0] if email else f'yandex_{yandex_id}',
+            first_name=user_data.get('first_name', ''),
+            last_name=user_data.get('last_name', ''),
+            avatar_url=avatar_url,
+        )
 
     async def get_jwt_for_user(self, user_data: dict[str, Any]) -> JWTPair:
         user = await self.get_or_create_user(user_data)

@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 import aiohttp
-from adjango.utils.funcs import set_image_by_url
 from django.conf import settings
 from rest_framework.exceptions import APIException
 
@@ -12,12 +11,12 @@ from apps.core.models import User
 from apps.core.services.auth import new_jwt_for_user, JWTPair
 from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import VKUser
-from apps.social_oauth.oauth_provider import OAuthProvider
+from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
 
 log = logging.getLogger('social_auth')
 
 
-class VKOAuthProvider(OAuthProvider):
+class VKOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         vk_id = user_data['id']
@@ -75,31 +74,19 @@ class VKOAuthProvider(OAuthProvider):
 
     async def get_or_create_user(self, user_data: dict[str, Any]) -> User:
         vk_id = str(user_data.get('id'))
-        if not vk_id: raise SocialOAuthException.VKIDNotProvided()
-        try:
-            vk_user = await VKUser.objects.select_related('user').aget(vk_id=vk_id)
-            user = vk_user.user
-        except VKUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
-                email = user_data.get('email', '')
-                first_name = user_data.get('first_name', '')
-                last_name = user_data.get('last_name', '')
-                username = email.split('@')[0] if email else f'vk_{vk_id}'
+        if not vk_id:
+            raise SocialOAuthException.VKIDNotProvided()
 
-                user = await User.objects.acreate(
-                    email=email,
-                    username=username,
-                    first_name=first_name,
-                    last_name=last_name,
-                    is_email_confirmed=bool(email),
-                )
-                # TODO: сделать правильное получение фото
-                if user_data.get('photo_200'):
-                    await set_image_by_url(user, 'avatar', user_data.get('photo_200'))
-            await VKUser.objects.acreate(user=user, vk_id=vk_id, email=user_data.get('email'))
-        return user
+        return await self._get_or_create_user_base(
+            VKUser,
+            'vk_id',
+            vk_id,
+            email=user_data.get('email', ''),
+            username=(user_data.get('email', '').split('@')[0] if user_data.get('email') else f'vk_{vk_id}'),
+            first_name=user_data.get('first_name', ''),
+            last_name=user_data.get('last_name', ''),
+            avatar_url=user_data.get('photo_200'),
+        )
 
     async def get_jwt_for_user(self, user_data: dict[str, Any]) -> JWTPair:
         user = await self.get_or_create_user(user_data)

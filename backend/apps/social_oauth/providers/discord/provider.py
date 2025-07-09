@@ -4,19 +4,18 @@ import logging
 from typing import Any
 
 import aiohttp
-from adjango.utils.funcs import set_image_by_url
 from django.conf import settings
 
 from apps.core.models import User
 from apps.core.services.auth import new_jwt_for_user, JWTPair
 from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import DiscordUser
-from apps.social_oauth.oauth_provider import OAuthProvider
+from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
 
 log = logging.getLogger('social_auth')
 
 
-class DiscordOAuthProvider(OAuthProvider):
+class DiscordOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         discord_id = user_data['id']
@@ -64,30 +63,28 @@ class DiscordOAuthProvider(OAuthProvider):
 
     async def get_or_create_user(self, user_data: dict[str, Any]) -> User:
         discord_id = user_data.get('id')
-        if not discord_id: raise SocialOAuthException.DiscordIDNotProvided()
-        try:
-            discord_user = await DiscordUser.objects.select_related('user').aget(discord_id=discord_id)
-            user = discord_user.user
-        except DiscordUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
-                email = user_data.get('email', '')
-                username = user_data.get('username', '') or f'discord_{discord_id}'
-                discriminator = user_data.get('discriminator', '')
-                full_username = f'{username}#{discriminator}' if discriminator else username
-                user = await User.objects.acreate(
-                    email=email,
-                    username=full_username,
-                    is_email_confirmed=bool(email),
-                )
-                avatar_hash = user_data.get('avatar')
-                # TODO: сделать правильное получение фото
-                if avatar_hash:
-                    avatar_url = f'https://cdn.discordapp.com/avatars/{discord_id}/{avatar_hash}.png'
-                    await set_image_by_url(user, 'avatar', avatar_url)
-            await DiscordUser.objects.acreate(user=user, discord_id=discord_id, email=user_data.get('email'))
-        return user
+        if not discord_id:
+            raise SocialOAuthException.DiscordIDNotProvided()
+
+        discriminator = user_data.get('discriminator', '')
+        base_username = user_data.get('username', '') or f'discord_{discord_id}'
+        full_username = f'{base_username}#{discriminator}' if discriminator else base_username
+
+        avatar_hash = user_data.get('avatar')
+        avatar_url = (
+            f'https://cdn.discordapp.com/avatars/{discord_id}/{avatar_hash}.png'
+            if avatar_hash
+            else None
+        )
+
+        return await self._get_or_create_user_base(
+            DiscordUser,
+            'discord_id',
+            discord_id,
+            email=user_data.get('email', ''),
+            username=full_username,
+            avatar_url=avatar_url,
+        )
 
     async def get_jwt_for_user(self, user_data: dict[str, Any]) -> JWTPair:
         user = await self.get_or_create_user(user_data)

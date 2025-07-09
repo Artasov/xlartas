@@ -4,19 +4,18 @@ import logging
 from typing import Any
 
 import aiohttp
-from adjango.utils.funcs import set_image_by_url
 from django.conf import settings
 
 from apps.core.models import User
 from apps.core.services.auth import new_jwt_for_user, JWTPair
 from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import GoogleUser
-from apps.social_oauth.oauth_provider import OAuthProvider
+from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
 
 log = logging.getLogger('global')
 
 
-class GoogleOAuthProvider(OAuthProvider):
+class GoogleOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         google_id = user_data['sub']
@@ -78,33 +77,21 @@ class GoogleOAuthProvider(OAuthProvider):
         email = user_data.get('email', '')
         first_name = user_data.get('given_name', '')
         last_name = user_data.get('family_name', '')
-        if not google_id: raise SocialOAuthException.GoogleIDNotProvided()
-        if not email: raise SocialOAuthException.GoogleEmailWasNotProvided()
-        try:
-            google_user = await GoogleUser.objects.select_related('user').aget(google_id=google_id)
-            user = google_user.user
-        except GoogleUser.DoesNotExist:
-            try:
-                user = await User.objects.aget(email=user_data.get('email'))
-            except User.DoesNotExist:
-                username = email.split('@')[0] if email else f'google_{google_id}'
-                user = await User.objects.acreate(
-                    email=email,
-                    username=username,
-                    first_name=first_name,
-                    last_name=last_name,
-                    is_email_confirmed=bool(email),
-                )
-                if user_data.get('picture'):
-                    await set_image_by_url(user, 'avatar', user_data.get('picture'))
-            g_email = user_data.get('email')
-            if not user.is_email_confirmed:
-                user.is_email_confirmed = True
-                await user.asave()
-            await GoogleUser.objects.acreate(
-                user=user, google_id=google_id, email=g_email
-            )
-        return user
+        if not google_id:
+            raise SocialOAuthException.GoogleIDNotProvided()
+        if not email:
+            raise SocialOAuthException.GoogleEmailWasNotProvided()
+
+        return await self._get_or_create_user_base(
+            GoogleUser,
+            'google_id',
+            google_id,
+            email=email,
+            username=email.split('@')[0] if email else f'google_{google_id}',
+            first_name=first_name,
+            last_name=last_name,
+            avatar_url=user_data.get('picture'),
+        )
 
     async def get_jwt_for_user(self, user_data: dict[str, Any]) -> JWTPair:
         user = await self.get_or_create_user(user_data)
