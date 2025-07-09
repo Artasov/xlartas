@@ -10,6 +10,13 @@ from apps.filehost.models import File, Folder
 from apps.filehost.serializers import FileSerializer, FolderSerializer, TagSerializer
 
 
+async def get_root_folder(user):
+    """Return user's root folder, creating it if necessary."""
+    return await Folder.objects.aget_or_create(
+        name='root', user=user, parent=None
+    )
+
+
 async def get_files(*args, **kwargs):
     """
     This function asynchronously retrieves and serializes files for a given folder.
