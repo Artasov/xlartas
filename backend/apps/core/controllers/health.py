@@ -22,6 +22,8 @@ from django_minio_backend import MinioBackend
 from django_redis import get_redis_connection
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny
+
+from utils.decorators import staff_required
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_503_SERVICE_UNAVAILABLE, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR,
@@ -137,13 +139,12 @@ async def backend_config(_):
     return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
+@staff_required
 async def clear_redis(request, key=None):
     """
     - Если передан GET-параметр 'key', удаляет только указанный ключ.
     - Если параметр 'key' не передан, очищает весь Redis-кеш.
     """
-    if not request.user or not request.user.is_authenticated or not request.user.is_staff:
-        return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
     try:
         redis_conn = get_redis_connection('default')  # Используйте нужное имя соединения, если оно отличается
 
@@ -185,13 +186,12 @@ def change_user_id(request, new_id):
     return JsonResponse({'status': 'id changed'}, status=HTTP_200_OK)
 
 
+@staff_required
 async def run_collectstatic(request):
     """
     Асинхронный контроллер для выполнения команды collectstatic.
     Доступен только для пользователей с разрешениями IsAuthenticated и AdminPermission.
     """
-    if not request.user or not request.user.is_authenticated or not request.user.is_staff:
-        return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
     loop = asyncio.get_event_loop()
     try:
         # Выполнение collectstatic в отдельном потоке, чтобы не блокировать основной поток
@@ -212,8 +212,9 @@ async def run_collectstatic(request):
         )
 
 
+@staff_required
 async def run_init_test_db(request):
-    if not request.user or request.user.id != 1 or not request.user.is_authenticated or not request.user.is_staff:
+    if request.user.id != 1:
         return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
@@ -238,9 +239,8 @@ async def run_init_test_db(request):
         )
 
 
+@staff_required
 async def invalidate_cachalot_cache(request):
-    if not request.user or not request.user.is_authenticated or not request.user.is_staff:
-        return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
     loop = asyncio.get_event_loop()
