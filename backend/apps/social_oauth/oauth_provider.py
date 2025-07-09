@@ -8,6 +8,7 @@ from adjango.utils.funcs import set_image_by_url
 
 from apps.core.models import User
 from apps.core.services.auth import JWTPair
+from apps.social_oauth.exceptions.base import SocialOAuthException
 
 log = logging.getLogger('social_auth')
 
@@ -76,6 +77,28 @@ class OAuthProviderMixin:
                 kwargs['email'] = email or ''
             await provider_model.objects.acreate(**kwargs)
             return user
+
+    @staticmethod
+    async def link_user_account_model(
+        user: User,
+        provider_model: type,
+        provider_id_field: str,
+        provider_id: str,
+    ) -> None:
+        """Link given ``user`` with OAuth ``provider_model`` by ``provider_id``.
+
+        If the account with ``provider_id`` is already linked to another user,
+        :class:`SocialOAuthException.AccountAlreadyLinkedAnotherUser` is raised.
+        """
+        existing_link = await provider_model.objects.select_related("user").filter(
+            **{provider_id_field: provider_id}
+        ).afirst()
+        if existing_link and existing_link.user != user:
+            raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
+
+        provider_user, _ = await provider_model.objects.aget_or_create(user=user)
+        setattr(provider_user, provider_id_field, provider_id)
+        await provider_user.asave()
 
 
 class OAuthProvider(ABC):

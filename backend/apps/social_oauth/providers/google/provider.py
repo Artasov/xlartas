@@ -19,14 +19,12 @@ class GoogleOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         google_id = user_data['sub']
-        existing_link = await GoogleUser.objects.select_related('user').filter(google_id=google_id).afirst()
-        if existing_link and existing_link.user != user:
-            raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
-        google_user, _ = await GoogleUser.objects.aget_or_create(user=user)
-        google_user.google_id = google_id
-        # Обновляем другие поля при необходимости
-
-        await google_user.asave()
+        await OAuthProviderMixin.link_user_account_model(
+            user,
+            GoogleUser,
+            'google_id',
+            google_id,
+        )
 
     async def get_user_data(self, code: str) -> dict[str, Any]:
         """
