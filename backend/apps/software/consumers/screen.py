@@ -56,9 +56,6 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(f'screen_{user.id}', self.channel_name)
         await self.accept()
 
-        # буфер последнего кадра
-        self._latest_frame: bytes | None = None
-        self._flush_task = None
 
     async def disconnect(self, code):
         if hasattr(self, 'user'):
@@ -78,10 +75,9 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
         # ----- пришёл бинарный JPEG-кадр -----
         if bytes_data:
-            self._latest_frame = bytes_data  # TODO: Instance attribute _latest_frame defined outside __init__
+            self._latest_frame = bytes_data
             if not self._flush_task:
-                self._flush_task = asyncio.create_task(
-                    self._flush_frame())  # TODO: Instance attribute _flush_task defined outside __init__
+                self._flush_task = asyncio.create_task(self._flush_frame())
             return
 
         # ----- текстовые meta-сообщения (пока не используем) -----
