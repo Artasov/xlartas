@@ -9,7 +9,7 @@ import PaymentSystemInfo from './PaymentSystemInfo';
 import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
 import {Button} from '@mui/material';
 import {Message} from 'Core/components/Message';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {useApi} from 'Api/useApi';
 import {FC, FRE} from "wide-containers";
 
@@ -64,7 +64,7 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
                     <FRE g={1}>
                         <Button variant="outlined" onClick={onClose}>{t('cancel')}</Button>
                         <Button variant="contained" disabled={loading} onClick={confirm}>
-                            {loading ? <CircularProgress size="20px"/> : t('next')}
+                            {loading ? <CircularProgressZoomify in size="20px"/> : t('next')}
                         </Button>
                     </FRE>
                 </FC>

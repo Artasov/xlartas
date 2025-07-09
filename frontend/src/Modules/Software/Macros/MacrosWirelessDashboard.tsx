@@ -1,6 +1,7 @@
 // Modules/Software/Macros/MacrosWirelessDashboard.tsx
 import React, {useEffect, useState} from 'react';
-import {Box, CircularProgress, IconButton, List, ListItem, ListItemText, Tooltip,} from '@mui/material';
+import {Box, IconButton, List, ListItem, ListItemText, Tooltip,} from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/AddRounded';
@@ -47,7 +48,7 @@ const MacrosWirelessDashboard: React.FC = () => {
         setMacros(prev => [...prev!.filter(o => o.id !== m.id), m]
             .sort((a, b) => a.priority - b.priority || a.name.localeCompare(b.name)));
 
-    if (macros === null) return <FRC mt={3}><CircularProgress/></FRC>;
+    if (macros === null) return <FRC mt={3}><CircularProgressZoomify in/></FRC>;
 
     return (
         <FC>

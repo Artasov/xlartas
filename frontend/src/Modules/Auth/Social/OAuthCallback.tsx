@@ -3,7 +3,7 @@ import {OAUTH_PROVIDERS} from 'Auth/Social/constants';
 import {useParams} from 'react-router-dom';
 import React, {useContext, useEffect} from "react";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
-import {CircularProgress} from "@mui/material";
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import pprint from 'Utils/pprint';
 
 const OAuthCallback: React.FC = () => {
@@ -45,7 +45,7 @@ const OAuthCallback: React.FC = () => {
 
     return (
         <div className="h-70 frcc">
-            <CircularProgress size={'180px'}/>
+            <CircularProgressZoomify in size={'180px'}/>
         </div>
     );
 };

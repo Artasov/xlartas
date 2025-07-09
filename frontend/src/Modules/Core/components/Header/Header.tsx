@@ -13,7 +13,7 @@ import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
 import {FRBC, FRCC} from "wide-containers";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {IconButton} from "@mui/material";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import LanguageSwitcher from "../../../../UI/LanguageSwitcher";
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
                 )}
                 <FRCC g={1}>
                     <LanguageSwitcher/>
-                    {isAuthenticated === null && <CircularProgress size={'35px'}/>}
+                    {isAuthenticated === null && <CircularProgressZoomify in size={'35px'}/>}
                     {profileBtnVisible && !location.pathname.includes('/profile') && (
                         <Link to={'/profile'}> <UserAvatar
                             size={user?.avatar ? '37px' : '30px'}

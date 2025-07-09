@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../../Api/useApi';
 import {FC, FR, FRCC} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import Tooltip from '@mui/material/Tooltip';
 import {IPrivilege} from '../types/base';
@@ -48,7 +48,7 @@ const UserPrivilege: React.FC = () => {
     if (privilege === undefined) {
         return (
             <FRCC>
-                <CircularProgress size={22}/>
+                <CircularProgressZoomify in size={22}/>
             </FRCC>
         );
     }

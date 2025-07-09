@@ -9,7 +9,7 @@ import pprint from "Utils/pprint";
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useApi} from "../Api/useApi";
 
 interface BackendConfigResponse {
@@ -110,7 +110,7 @@ const SettingsTool: React.FC = () => {
                         </FCSC>
                     ) : (
                         <FCCC>
-                            <CircularProgress size={'120px'}/>
+                            <CircularProgressZoomify in size={'120px'}/>
                         </FCCC>
                     )}
                 </DialogContent>
@@ -118,5 +118,4 @@ const SettingsTool: React.FC = () => {
         </FCCC>
     );
 };
-
 export default SettingsTool;

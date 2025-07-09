@@ -11,7 +11,7 @@ import {Button, Slider} from "@mui/material";
 import {AuthContext, AuthContextType} from "Auth/AuthContext";
 import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {FC, FCSC, FR, FRBC, FRSC} from "wide-containers";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IDonate} from "./types";
@@ -129,7 +129,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
                 <FC g={2} px={2}>
                     <FCSC>
                         {!donateProduct ? (
-                            <CircularProgress size="40px"/>
+                            <CircularProgressZoomify in size="40px"/>
                         ) : (
                             <>
                                 <FR maxW={250} pr={3}>

@@ -1,7 +1,8 @@
 // Modules/Chat/RoomHeader.tsx
 
 import React, {useContext, useMemo} from 'react';
-import {CircularProgress, IconButton, useMediaQuery} from '@mui/material';
+import {IconButton, useMediaQuery} from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import UserAvatar from "User/UserAvatar";
 import {Link, useNavigate} from 'react-router-dom';
@@ -68,14 +69,14 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                 </Link>
                 : room ?
                     ''
-                    : <CircularProgress/>
+                    : <CircularProgressZoomify in/>
             }
             <Link className={'tdn'} style={{
                 color: plt.text.primary
             }} to={room && roomName === t('favorites')
                 ? '/profile' : profileLink}>
                 <h4 className={'m-0 ps-1'}>
-                    {room ? roomName : <CircularProgress/>}
+                    {room ? roomName : <CircularProgressZoomify in/>}
                 </h4>
             </Link>
         </FRSC>

@@ -1,7 +1,7 @@
 // Modules/User/UserAvatar.tsx
 import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import {FC, FCCC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
@@ -48,7 +48,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (
             <FC cls={`${className} ratio-1-1 ftrans-300-eio`} w={'min-content'}
                 pos={'relative'} onClick={onClick} style={avatarStyle}>
                 {loading && <FCCC pos={'absolute'} top={0} w={'100%'} h={'100%'} zIndex={zIndex + 1}>
-                    <CircularProgress size={`calc(${size} - 35%)`}/>
+                    <CircularProgressZoomify in size={`calc(${size} - 35%)`}/>
                 </FCCC>}
                 <img
                     className={`object-fit-cover ${roundedClassName ? roundedClassName : 'rounded-circle'} transition-all transition-d-300 transition-tf-l`}

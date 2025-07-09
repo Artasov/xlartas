@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC, FR} from 'wide-containers';
 import PaymentSystemInfo from './PaymentSystemInfo';
 
@@ -75,7 +75,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
             <DialogTitle sx={{pb: 1.5}}>{t('top_up_balance')}</DialogTitle>
             <DialogContent>
                 {!product ? (
-                    <CircularProgress size="40px"/>
+                    <CircularProgressZoomify in size="40px"/>
                 ) : (
                     <FC g={.7} maxW={400}>
                         <TextField
@@ -98,7 +98,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                             freekassaExtra={<FR mb={0.5}>{t('freekassa_help_desc')}</FR>}
                         />
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
-                            {loading ? <CircularProgress size="20px"/> : t('next')}
+                            {loading ? <CircularProgressZoomify in size="20px"/> : t('next')}
                         </Button>
                     </FC>
                 )}
@@ -106,5 +106,4 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
         </Dialog>
     );
 };
-
 export default BalanceTopUpDialog;

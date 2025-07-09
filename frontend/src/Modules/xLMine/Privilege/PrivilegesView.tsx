@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
-import CircularProgress from "Core/components/elements/CircularProgress";
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useTheme} from "Theme/ThemeContext";
 import {IPrivilege} from "../types/base";
 import {FC, FCCC, FRSC} from "wide-containers";
@@ -45,7 +45,7 @@ const PrivilegesView: React.FC = () => {
             .finally(() => setLoading(false));
     }, [api]);
 
-    if (loading) return <FCCC><CircularProgress size="60px"/></FCCC>;
+    if (loading) return <FCCC><CircularProgressZoomify in size="60px"/></FCCC>;
     if (!privileges || privileges.length === 0) return null; // Привилегий нет у юзера
     if (totalDonate === null) return null;
 

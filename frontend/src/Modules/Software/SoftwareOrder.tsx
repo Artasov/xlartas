@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Collapse, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery} from '@mui/material';
 import {Message} from 'Core/components/Message';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC, FCC, FR, FRC, FRSC} from 'wide-containers';
 import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
@@ -197,7 +197,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                 />
             </Collapse>
 
-            {creatingOrder && <CircularProgress size="60px"/>}
+            {creatingOrder && <CircularProgressZoomify in size="60px"/>}
 
             <Dialog
                 open={payModal}
@@ -223,7 +223,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                                 fontWeight: 'bold', width: '100%',
                             }}>
                                 {creatingOrder
-                                    ? <CircularProgress size="20px"/>
+                                    ? <CircularProgressZoomify in size="20px"/>
                                     : t('next')
                                 }
                             </Button>

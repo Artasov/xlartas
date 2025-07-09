@@ -3,7 +3,6 @@ import {useTranslation} from 'react-i18next';
 import {
     Box,
     Button,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -16,6 +15,7 @@ import {
     TableHead,
     TableRow,
 } from '@mui/material';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useApi} from "../Api/useApi";
@@ -149,7 +149,7 @@ const LauncherManager: React.FC = () => {
                             >
                                 {t('upload')}
                             </Button>
-                            {isUploading && <FCCC><CircularProgress size={32}/></FCCC>}
+                            {isUploading && <FCCC><CircularProgressZoomify in size={32}/></FCCC>}
                         </FC>
                     </FC>
                 </Paper>
@@ -157,7 +157,7 @@ const LauncherManager: React.FC = () => {
                 <Paper sx={{p: 2, pt: 1}}>
                     {loading ? (
                         <Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-                            <CircularProgress/>
+                            <CircularProgressZoomify in/>
                         </Box>
                     ) : (
                         <Table>
@@ -187,7 +187,7 @@ const LauncherManager: React.FC = () => {
                                                 disabled={deletingId === item.id}
                                             >
                                                 {deletingId === item.id ? (
-                                                    <CircularProgress size={24}/>
+                                                    <CircularProgressZoomify in size={24}/>
                                                 ) : (
                                                     <DeleteIcon/>
                                                 )}
@@ -218,7 +218,7 @@ const LauncherManager: React.FC = () => {
                             disabled={deletingId === confirmDeleteId}
                         >
                             {deletingId === confirmDeleteId ? (
-                                <CircularProgress size={24}/>
+                                <CircularProgressZoomify in size={24}/>
                             ) : (
                                 'Удалить'
                             )}

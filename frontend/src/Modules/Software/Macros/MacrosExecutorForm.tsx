@@ -3,7 +3,7 @@ import React, {useContext, useState} from 'react';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {Message} from 'Core/components/Message';
 import {Button} from '@mui/material';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import TextField from '@mui/material/TextField';
 import {FC, FR} from 'wide-containers';
 import {useMacroControl} from './MacroControlProvider';
@@ -61,7 +61,7 @@ const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
                     <Button type="submit" disabled={loading} sx={{
                         fontSize: '1rem', fontWeight: 600,
                     }}>
-                        {loading ? <CircularProgress size="1.6rem"/> : t('execute')}
+                        {loading ? <CircularProgressZoomify in size="1.6rem"/> : t('execute')}
                     </Button>
                 </FR>
             </FC>

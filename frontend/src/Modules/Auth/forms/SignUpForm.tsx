@@ -9,7 +9,7 @@ import {SmartCaptcha} from '@yandex/smart-captcha';
 import {Button} from '@mui/material';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import {FC, FCCC} from 'wide-containers';
-import CircularProgress from 'Core/components/elements/CircularProgress';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import {debounce} from 'lodash';
@@ -219,7 +219,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                     {!confirmationSent && (
                         <FC pos={'relative'} cls={'mb-2'}>
                             <FCCC w={'100%'} h={'100%'} pos={'absolute'} top={0} left={0}>
-                                <CircularProgress size={'3rem'}/>
+                                <CircularProgressZoomify in size={'3rem'}/>
                             </FCCC>
                             <FC sx={{
                                 transformOrigin: '0 0', width: '100%',
