@@ -60,7 +60,7 @@ const Licenses: React.FC = () => {
                     <Collapse
                         key={license.id}
                         in={animate}
-                        timeout={200 + index * 100}
+                        timeout={400 + index * 100}
                         mountOnEnter
                         unmountOnExit={false}
                     >

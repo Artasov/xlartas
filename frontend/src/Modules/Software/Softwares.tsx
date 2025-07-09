@@ -30,7 +30,9 @@ const Softwares: React.FC = () => {
 
     /* ---------- старт анимации карточек после загрузки ---------- */
     useEffect(() => {
-        if (!loading) setAnimate(true);
+        if (!loading) {
+            setTimeout(() => setAnimate(true), 50)
+        }
     }, [loading]);
 
     /* ---------- рендер ---------- */
@@ -63,7 +65,7 @@ const Softwares: React.FC = () => {
                     <Collapse
                         key={software.id}
                         in={animate}
-                        timeout={200 + index * 100}
+                        timeout={500 + index * 100}
                         mountOnEnter
                         unmountOnExit={false}
                     >

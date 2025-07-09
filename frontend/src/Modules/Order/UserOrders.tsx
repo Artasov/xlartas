@@ -49,7 +49,7 @@ const UserOrders: React.FC = () => {
 
     /* ---------- рендер ---------- */
     return (
-        <FR wrap w="100%" g={2} py={1} px={2} position="relative" cls={'user-orders'}>
+        <FR wrap w="100%" g={1.2} py={1} px={2} position="relative" cls={'user-orders'}>
             {/* ---------------- Лоадер ---------------- */}
             <Zoom
                 in={loading}
