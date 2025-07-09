@@ -14,7 +14,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.filehost.controllers.files import STORAGE_LIMIT
+from django.conf import settings
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
 from apps.filehost.models import Folder, File
 from apps.filehost.serializers import FileSerializer, FolderSerializer
@@ -116,7 +116,7 @@ async def upload_files(request) -> Response:
         if f.file:
             total += f.file.size
     incoming = sum(f.size for f in files)
-    if total + incoming > STORAGE_LIMIT:
+    if total + incoming > settings.STORAGE_LIMIT:
         raise StorageLimitExceeded()
     uploaded_files = []
     for file in files:
