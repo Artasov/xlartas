@@ -41,7 +41,7 @@ async def rename_current_user(request) -> Response:
     data = await serializer.adata
     username = data.get('username')
     if username == request.user.username: raise UserException.AlreadyThisUsername()
-    if await User.objects.filter(username=username).aexists():
+    if await User.objects.aby_creds(username):
         raise UserException.UsernameAlreadyExists()
     request.user.username = username
     await request.user.asave()

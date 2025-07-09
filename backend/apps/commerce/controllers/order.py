@@ -52,9 +52,8 @@ async def create_order(request):
         # Так как не сохраняли при регистрации, а чек куда-то выслать нужно
         email = s.validated_data.get('email')
         if not email: raise UserException.EmailWasNotProvided()
-        if email and await User.objects.filter(
-                email=email
-        ).aexists(): raise UserException.AlreadyExistsWithThisEmail()
+        if email and await User.objects.aby_creds(email):
+            raise UserException.AlreadyExistsWithThisEmail()
         request.user.email = email
         await request.user.asave()
 

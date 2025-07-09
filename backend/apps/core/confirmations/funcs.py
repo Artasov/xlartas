@@ -46,8 +46,8 @@ async def confirm_email_action(code: 'ConfirmationCode'):
 async def confirm_phone_action(code: 'ConfirmationCode', new_phone: str):
     """Confirm phone number and update it if necessary."""
     # Ensure the phone number does not belong to another user
-    exists = await User.objects.filter(phone=new_phone).exclude(pk=code.user.pk).aexists()
-    if exists:
+    user = await User.objects.aby_creds(new_phone)
+    if user and user.pk != code.user.pk:
         raise UserException.AlreadyExistsWithThisPhone()
 
     # Update phone if it differs from the current one
