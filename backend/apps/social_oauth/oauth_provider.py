@@ -44,10 +44,7 @@ class OAuthProviderMixin:
         except provider_model.DoesNotExist:
             user = None
             if email:
-                try:
-                    user = await User.objects.aget(email=email)
-                except User.DoesNotExist:
-                    user = None
+                user = await User.objects.by_creds(email)
 
             if not user:
                 if not username:

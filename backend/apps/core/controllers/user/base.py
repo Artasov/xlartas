@@ -114,8 +114,8 @@ async def check_email_exists(request):
     email = request.data.get('email')
     if not is_email(email):
         raise UserException.WrongCredential()
-    exists = await User.objects.filter(email=email).aexists()
-    return Response({'exists': exists}, status=200)
+    exists = await User.objects.by_creds(email)
+    return Response({'exists': bool(exists)}, status=200)
 
 
 @acontroller('Check if phone exists')
@@ -124,5 +124,5 @@ async def check_email_exists(request):
 async def check_phone_exists(request):
     phone = request.data.get('phone')
     if not is_phone(phone): raise UserException.WrongCredential()
-    exists = await User.objects.filter(phone=phone).aexists()
-    return Response({'exists': exists}, status=200)
+    exists = await User.objects.by_creds(phone)
+    return Response({'exists': bool(exists)}, status=200)
