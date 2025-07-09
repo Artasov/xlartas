@@ -17,7 +17,9 @@ const Landing: React.FC = () => {
 
     /* ------- анимация появления ------- */
     const [animate, setAnimate] = useState(false);
-    useEffect(() => setAnimate(true), []);
+    useEffect(() => {
+        setTimeout(() => setAnimate(true), 200);
+    }, []);
 
     /* ------- очистка навигации ------- */
     useEffect(() => {

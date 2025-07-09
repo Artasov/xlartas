@@ -1,7 +1,6 @@
 // Modules/User/Profile.tsx
 import React, {useContext, useEffect} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
-import {useTheme} from 'Theme/ThemeContext';
 import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
 import XLMineProfileInfoForm from '../xLMine/xLMineProfileInfoForm';
@@ -16,7 +15,6 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
-    const {plt} = useTheme();                             // не удаляем ваш контекст
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -55,16 +53,14 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
         }
     }, [location.pathname, navigate, tabs, basePath]);
 
-    /* ---------- активная вкладка ---------- */
     const activePath =
         tabs.find((t) => location.pathname.startsWith(t.path))?.path ?? false;
 
     return (
         <FC h="100%">
-            {/* Вкладки */}
             <FRS g={2} px={3} pt={1}>
                 <Tabs
-                    value={activePath}                         // значение-ключ — path
+                    value={activePath}
                     onChange={(_, newValue) => navigate(newValue)}
                     textColor="inherit"
                     indicatorColor="primary"
@@ -80,13 +76,10 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
                 </Tabs>
             </FRS>
 
-            {/* Контент выбранной вкладки */}
             <FC flexGrow={1} scroll="y-auto" px={2} py={1}>
                 <Routes>
                     <Route path="user" element={<UserPersonalInfoForm/>}/>
                     <Route path="minecraft" element={<XLMineProfileInfoForm/>}/>
-                    {/* <Route path="client" element={<ClientProfile />} /> */}
-                    {/* <Route path="employee" element={<EmployeeProfile />} /> */}
                 </Routes>
             </FC>
         </FC>

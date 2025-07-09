@@ -153,7 +153,7 @@ const Cabinet: React.FC = () => {
                                 <UserAvatarEditable size={'8em'}/>
                             </FC>
                         </FCSC>
-                        <Collapse in={menuOpen} appear timeout={400}>
+                        <Collapse in={menuOpen} appear timeout={700}>
                             <FC g={1}>
                                 <CabinetNavLink
                                     text={t('profile')} iconSx={{transform: 'scale(1.2)'}} to="/profile"
@@ -215,8 +215,8 @@ const Cabinet: React.FC = () => {
                             <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
                             <Route path='/storage/*' element={<Storage/>}/>
 
-                            <Route path="/orders" element={<FCSS scroll={'y-auto'} g={1} pt={2} p={1}>
-                                <UserOrders className={'px-2'}/>
+                            <Route path="/orders" element={<FCSS scroll={'y-auto'} h={'100%'} g={1} pt={2} p={1}>
+                                <UserOrders/>
                             </FCSS>}/>
                             <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>
                         </Routes>

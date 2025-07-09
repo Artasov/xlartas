@@ -9,20 +9,17 @@ import {FC as FCC, FCCC, FR} from 'wide-containers';
 import CircularProgress from 'Core/components/elements/CircularProgress';
 import {useApi} from 'Api/useApi';
 import Collapse from '@mui/material/Collapse';
+import Zoom from '@mui/material/Zoom'; // остаётся Zoom
 
-interface UserOrdersProps {
-    className?: string;
-}
-
-const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
+const UserOrders: React.FC = () => {
     const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
     const {notAuthentication} = useErrorProcessing();
     const [orders, setOrders] = useState<IOrder[]>([]);
     const {api} = useApi();
     const navigate = useNavigate();
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const [animate, setAnimate] = useState<boolean>(false);        // ⬅️ логика проще
+    const [loading, setLoading] = useState(true);
+    const [animate, setAnimate] = useState(false);
 
     /* ---------- загрузка заказов ---------- */
     useEffect(() => {
@@ -31,8 +28,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
             return;
         }
 
-        setLoading(true);
-        setAnimate(false);                                         // ⬅️ сброс анимации
+        setAnimate(false);
 
         api.get('/api/v1/user/orders/')
             .then(data => setOrders(data))
@@ -46,22 +42,44 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
 
     /* ---------- колбэки обновления/удаления ---------- */
     const handleOrderUpdate = (updatedOrder: IOrder) =>
-        setOrders(prev => prev.map(o => o.id === updatedOrder.id ? updatedOrder : o));
+        setOrders(prev => prev.map(o => (o.id === updatedOrder.id ? updatedOrder : o)));
 
     const handleOrderDelete = (deletedId: string) =>
         setOrders(prev => prev.filter(o => String(o.id) !== deletedId));
 
     /* ---------- рендер ---------- */
     return (
-        <FR wrap w="100%" g={2} py={1} cls={className}>
-            {orders.length > 0 ? (
+        <FR wrap w="100%" g={2} py={1} px={2} position="relative" cls={'user-orders'}>
+            {/* ---------------- Лоадер ---------------- */}
+            <Zoom
+                in={loading}
+                appear
+                mountOnEnter
+                unmountOnExit
+                timeout={{enter: 300, exit: 300}}
+            >
+                <FCCC
+                    w="100%"
+                    mt={5}
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    zIndex={1}
+                >
+                    <CircularProgress size="90px"/>
+                </FCCC>
+            </Zoom>
+
+            {/* ---------------- Список заказов ---------------- */}
+            {orders.length > 0 &&
                 orders.map((order, index) => (
                     <Collapse
                         key={order.id}
                         in={animate}
                         appear
-                        sx={{width: '100%'}}                                         /* ⬅️ включаем enter-анимацию при маунте */
-                        timeout={250 + index * 100}                      /* «каскад» по 100 мс */
+                        sx={{width: '100%'}}
+                        timeout={450 + index * 100}
                         unmountOnExit={false}
                     >
                         <OrderItem
@@ -71,14 +89,19 @@ const UserOrders: React.FC<UserOrdersProps> = ({className}) => {
                             onOrderDeleted={() => handleOrderDelete(String(order.id))}
                         />
                     </Collapse>
-                ))
-            ) : loading ? (
-                <FCCC w="100%" mt={5}>
-                    <CircularProgress size="90px"/>
-                </FCCC>
-            ) : (
-                <FCC w="100%" g={1} p={2} h="100%" scroll="y-auto"
-                     cls="no-scrollbar" textAlign="center">
+                ))}
+
+            {/* ---------------- Сообщение «нет заказов» ---------------- */}
+            {!loading && orders.length === 0 && (
+                <FCC
+                    w="100%"
+                    g={1}
+                    p={2}
+                    h="100%"
+                    scroll="y-auto"
+                    cls="no-scrollbar"
+                    textAlign="center"
+                >
                     <p>У вас ещё нет заказов</p>
                 </FCC>
             )}
