@@ -1,38 +1,31 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useApi} from '../Api/useApi';
 import {IFile, IFolder} from './types';
-import FileCard from './FileCard';
-import FolderCard from './FolderCard';
-import FileTableRow from './FileTableRow';
-import FolderTableRow from './FolderTableRow';
+import FileGrid from './FileGrid';
+import FileTable from './FileTable';
 import {FC, FR, FRBC, FRSE} from 'wide-containers';
 import MoveDialog from './MoveDialog';
 import ShareDialog from './ShareDialog';
 import UploadProgressWindow from './UploadProgressWindow';
 import useFileUpload from './useFileUpload';
+import useFolderPath from './useFolderPath';
+import PathBreadcrumbs from './PathBreadcrumbs';
+import ViewModeSwitcher from './ViewModeSwitcher';
+import CreateFolderDialog from './CreateFolderDialog';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+import ContextMenu from './ContextMenu';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
 import {
-    Box,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
-    Link,
     Menu,
     MenuItem,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    TextField,
+    Dialog,
+    DialogActions,
+    DialogTitle,
     useMediaQuery
 } from '@mui/material';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import FileUpload from 'UI/FileUpload';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -60,7 +53,6 @@ const Master: React.FC = () => {
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [folder, setFolder] = useState<IFolder | null>(null);
     const [files, setFiles] = useState<IFile[]>([]);
-    const [path, setPath] = useState<IFolder[]>([]);
     const [selectMode, setSelectMode] = useState(false);
     const [selected, setSelected] = useState<IFile[]>([]);
     const [showMove, setShowMove] = useState(false);
@@ -70,6 +62,12 @@ const Master: React.FC = () => {
     const [context, setContext] = useState<{ x: number; y: number } | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [view, setView] = useState<'cards' | 'table'>('cards');
+
+    const refreshCaches = () => {
+        setFolderCached(folderId, undefined as any);
+        setAllFilesCached(undefined as any);
+        setFavoriteFilesCached(undefined as any);
+    };
 
     const load = () => {
         const cached = getFolderCached(folderId);
@@ -90,23 +88,7 @@ const Master: React.FC = () => {
         load();
     }, [api, folderId]);
 
-    useEffect(() => {
-        const build = async () => {
-            if (!folder) {
-                setPath([]);
-                return;
-            }
-            const p: IFolder[] = [];
-            let cur: IFolder | null = folder;
-            while (cur) {
-                p.unshift(cur);
-                if (cur.parent === null) break;
-                cur = await api.post('/api/v1/filehost/folder/', {id: cur.parent});
-            }
-            setPath(p);
-        };
-        build();
-    }, [folder, api]);
+    const path = useFolderPath(folder);
 
     const toggleSelect = (f: IFile) => {
         setSelected(prev => prev.find(x => x.id === f.id) ? prev.filter(x => x.id !== f.id) : [...prev, f]);
@@ -119,9 +101,7 @@ const Master: React.FC = () => {
     const deleteSelected = async () => {
         await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
         setSelected([]);
-        setFolderCached(folderId, undefined as any);
-        setAllFilesCached(undefined as any);
-        setFavoriteFilesCached(undefined as any);
+        refreshCaches();
         load();
     };
 
@@ -132,9 +112,7 @@ const Master: React.FC = () => {
 
     const handleUpload = async (file: File | null) => {
         await uploadFile(file);
-        setFolderCached(folderId, undefined as any);
-        setAllFilesCached(undefined as any);
-        setFavoriteFilesCached(undefined as any);
+        refreshCaches();
         load();
     };
 
@@ -142,17 +120,13 @@ const Master: React.FC = () => {
         await api.post('/api/v1/filehost/folder/add/', {name: newFolderName, parent_id: folderId});
         setShowCreate(false);
         setNewFolderName('');
-        setFolderCached(folderId, undefined as any);
-        setAllFilesCached(undefined as any);
-        setFavoriteFilesCached(undefined as any);
+        refreshCaches();
         load();
     };
 
     const handleDeleteFolder = async (id: number) => {
         await api.delete('/api/v1/filehost/item/delete/', {data: {folder_id: id}});
-        setFolderCached(folderId, undefined as any);
-        setAllFilesCached(undefined as any);
-        setFavoriteFilesCached(undefined as any);
+        refreshCaches();
         load();
     };
 
@@ -165,18 +139,7 @@ const Master: React.FC = () => {
     return (
         <>
             <DropOverlay onFileDrop={handleUpload}/>
-            <FR g={0.5} px={2} flexWrap={'wrap'} bg={plt.text.primary + '11'} rounded={2} my={.4}>
-                <Link underline="hover" onClick={() => navigate('/storage/master/')}
-                      style={{cursor: 'pointer'}}>root</Link>
-                {path.slice(1).map(p => (
-                    <React.Fragment key={p.id}>
-                        <span>/</span>
-                        <Link underline="hover" onClick={() => navigate(`/storage/master/${p.id}/`)}
-                              style={{cursor: 'pointer'}}>{p.name}</Link>
-                    </React.Fragment>
-                ))}
-                <span>/</span>
-            </FR>
+            <PathBreadcrumbs path={path} onNavigate={fid => navigate(fid ? `/storage/master/${fid}/` : '/storage/master/')}/>
             <FC g={0.5}
                 ref={containerRef}
                 onContextMenu={e => {
@@ -214,130 +177,62 @@ const Master: React.FC = () => {
                         </FR>
                     </FRSE>
                     <FR>
-                        <FR>
-                            <IconButton onClick={() => setView('cards')}
-                                        color={view === 'cards' ? 'primary' : 'default'}>
-                                <ViewModuleIcon/>
-                            </IconButton>
-                            <IconButton onClick={() => setView('table')}
-                                        color={view === 'table' ? 'primary' : 'default'}>
-                                <ViewListIcon/>
-                            </IconButton>
-                        </FR>
+                        <ViewModeSwitcher view={view} onChange={setView}/>
                     </FR>
                 </FRBC>
                 {view === 'cards' ? (
-                    <Box mt={.4} sx={{
-                        display: 'grid',
-                        gap: '0.5rem',
-                        gridTemplateColumns: {
-                            xs: 'repeat(2,1fr)',
-                            sm: 'repeat(3,1fr)',
-                            md: 'repeat(4,1fr)',
-                            lg: 'repeat(4,1fr)'
-                        }
-                    }}>
-                        {folders.map(f => (
-                            <FolderCard
-                                key={f.id}
-                                id={f.id}
-                                name={f.name}
-                                onDelete={handleDeleteFolder}
-                                onOpen={openFolder}
-                                onRenamed={() => {
-                                    setFolderCached(folderId, undefined as any);
-                                    setAllFilesCached(undefined as any);
-                                    setFavoriteFilesCached(undefined as any);
-                                    load();
-                                }}
-                            />
-                        ))}
-                        {files
-                            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                            .map(f => (
-                                <FileCard key={f.id} file={f} selectMode={selectMode}
-                                          selected={!!selected.find(s => s.id === f.id)}
-                                          onToggleSelect={toggleSelect}
-                                          onSelectMode={() => {
-                                              setSelectMode(true);
-                                              toggleSelect(f);
-                                          }}
-                                          onDelete={() => {
-                                              setSelected([f]);
-                                              setConfirmOpen(true);
-                                          }}
-                                          onShare={() => setShowShare(f)}
-                                          onDownload={file => window.open(file.file)}/>
-                            ))}
-                    </Box>
+                    <FileGrid
+                        folders={folders}
+                        files={files}
+                        selectMode={selectMode}
+                        selected={selected}
+                        onToggleSelect={toggleSelect}
+                        onSelectMode={f => {
+                            setSelectMode(true);
+                            toggleSelect(f);
+                        }}
+                        onDeleteFile={f => {
+                            setSelected([f]);
+                            setConfirmOpen(true);
+                        }}
+                        onShareFile={f => setShowShare(f)}
+                        onDownloadFile={file => window.open(file.file)}
+                        onDeleteFolder={handleDeleteFolder}
+                        onOpenFolder={openFolder}
+                        reload={load}
+                        parentId={folderId}
+                    />
                 ) : (
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{p: 0}}/>
-                                <TableCell sx={{pl: 0}}>{t('name')}</TableCell>
-                                {isGtSm && <TableCell>{t('upload_date')}</TableCell>}
-                                {isGtSm && <TableCell>{t('size')}</TableCell>}
-                                <TableCell/>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {folders.map(f => (
-                                <FolderTableRow
-                                    key={f.id}
-                                    id={f.id}
-                                    name={f.name}
-                                    onDelete={handleDeleteFolder}
-                                    onOpen={openFolder}
-                                    onRenamed={() => {
-                                        setFolderCached(folderId, undefined as any);
-                                        setAllFilesCached(undefined as any);
-                                        setFavoriteFilesCached(undefined as any);
-                                        load();
-                                    }}
-                                />
-                            ))}
-                            {files
-                                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                                .map(f => (
-                                    <FileTableRow key={f.id} file={f}
-                                                  selectMode={selectMode}
-                                                  selected={!!selected.find(s => s.id === f.id)}
-                                                  onToggleSelect={toggleSelect}
-                                                  onSelectMode={() => {
-                                                      setSelectMode(true);
-                                                      toggleSelect(f);
-                                                  }}
-                                                  onDelete={() => {
-                                                      setSelected([f]);
-                                                      setConfirmOpen(true);
-                                                  }}
-                                                  onShare={() => setShowShare(f)}
-                                                  onDownload={file => window.open(file.file)}
-                                    />
-                                ))}
-                        </TableBody>
-                    </Table>
+                    <FileTable
+                        folders={folders}
+                        files={files}
+                        selectMode={selectMode}
+                        selected={selected}
+                        showColumns={isGtSm}
+                        onToggleSelect={toggleSelect}
+                        onSelectMode={f => {
+                            setSelectMode(true);
+                            toggleSelect(f);
+                        }}
+                        onDeleteFile={f => {
+                            setSelected([f]);
+                            setConfirmOpen(true);
+                        }}
+                        onShareFile={f => setShowShare(f)}
+                        onDownloadFile={file => window.open(file.file)}
+                        onDeleteFolder={handleDeleteFolder}
+                        onOpenFolder={openFolder}
+                        reload={load}
+                        parentId={folderId}
+                    />
                 )}
 
-                <Menu open={!!context} onClose={() => setContext(null)} anchorReference="anchorPosition"
-                      anchorPosition={context ? {top: context.y, left: context.x} : undefined}>
-                    <MenuItem>
-                        <label style={{cursor: 'pointer'}}>
-                            {t('upload_file')}
-                            <input type="file" hidden onChange={e => {
-                                if (e.target.files && e.target.files[0]) {
-                                    handleUpload(e.target.files[0]);
-                                    setContext(null);
-                                }
-                            }}/>
-                        </label>
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        setShowCreate(true);
-                        setContext(null);
-                    }}>{t('create_folder')}</MenuItem>
-                </Menu>
+                <ContextMenu
+                    anchor={context}
+                    onClose={() => setContext(null)}
+                    onUpload={handleUpload}
+                    onCreateFolder={() => setShowCreate(true)}
+                />
 
                 <MoveDialog
                     files={selected}
@@ -346,41 +241,28 @@ const Master: React.FC = () => {
                     onClose={() => {
                         setShowMove(false);
                         setSelected([]);
-                        setFolderCached(folderId, undefined as any);
-                        setAllFilesCached(undefined as any);
-                        setFavoriteFilesCached(undefined as any);
+                        refreshCaches();
                         load();
                     }}
                 />
                 <ShareDialog file={showShare} open={!!showShare} onClose={() => setShowShare(null)}/>
 
-                <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-                    <DialogTitle>{t('delete')}</DialogTitle>
-                    <DialogActions>
-                        <Button onClick={() => setConfirmOpen(false)}>{t('cancel')}</Button>
-                        <Button color="error" onClick={async () => {
-                            await deleteSelected();
-                            setConfirmOpen(false);
-                        }}>{t('delete')}</Button>
-                    </DialogActions>
-                </Dialog>
+                <ConfirmDeleteDialog
+                    open={confirmOpen}
+                    onCancel={() => setConfirmOpen(false)}
+                    onConfirm={async () => {
+                        await deleteSelected();
+                        setConfirmOpen(false);
+                    }}
+                />
 
-                <Dialog open={showCreate} onClose={() => setShowCreate(false)}>
-                    <DialogTitle sx={{textAlign: 'center', pb: .4, opacity: '80%'}}>{t('create_folder')}</DialogTitle>
-                    <DialogContent sx={{pb: 0, px: 1.4}}>
-                        <TextField
-                            value={newFolderName}
-                            size={'small'}
-                            fullWidth sx={{mt: 1}}
-                            label={t('folder_name')}
-                            onChange={e => setNewFolderName(e.target.value)}
-                        />
-                    </DialogContent>
-                    <DialogActions sx={{pb: 2, px: 1.3}}>
-                        <Button onClick={() => setShowCreate(false)}>{t('cancel')}</Button>
-                        <Button onClick={handleCreateFolder}>{t('create_folder')}</Button>
-                    </DialogActions>
-                </Dialog>
+                <CreateFolderDialog
+                    open={showCreate}
+                    value={newFolderName}
+                    onChange={setNewFolderName}
+                    onCreate={handleCreateFolder}
+                    onClose={() => setShowCreate(false)}
+                />
 
                 {uploads.length > 0 && (
                     <UploadProgressWindow
