@@ -20,12 +20,12 @@ class VKOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         vk_id = user_data['id']
-        existing_link = await VKUser.objects.select_related('user').filter(vk_id=vk_id).afirst()
-        if existing_link and existing_link.user != user:
-            raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
-        vk_user, _ = await VKUser.objects.aget_or_create(user=user)
-        vk_user.vk_id = vk_id
-        await vk_user.asave()
+        await OAuthProviderMixin.link_user_account_model(
+            user,
+            VKUser,
+            'vk_id',
+            str(vk_id),
+        )
 
     async def get_user_data(self, code: str) -> dict[str, Any]:
         """

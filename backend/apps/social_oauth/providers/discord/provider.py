@@ -19,13 +19,12 @@ class DiscordOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         discord_id = user_data['id']
-        existing_link = await DiscordUser.objects.select_related('user').filter(discord_id=discord_id).afirst()
-        if existing_link and existing_link.user != user:
-            raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
-        discord_user, _ = await DiscordUser.objects.aget_or_create(user=user)
-        discord_user.discord_id = discord_id
-        # Обновляем другие поля при необходимости
-        await discord_user.asave()
+        await OAuthProviderMixin.link_user_account_model(
+            user,
+            DiscordUser,
+            'discord_id',
+            discord_id,
+        )
 
     async def get_user_data(self, code: str) -> dict[str, Any]:
         """

@@ -19,13 +19,12 @@ class YandexOAuthProvider(OAuthProviderMixin, OAuthProvider):
     @staticmethod
     async def link_user_account(user, user_data):
         yandex_id = user_data['id']
-        existing_link = await YandexUser.objects.select_related('user').filter(yandex_id=yandex_id).afirst()
-        if existing_link and existing_link.user != user:
-            raise SocialOAuthException.AccountAlreadyLinkedAnotherUser()
-        yandex_user, _ = await YandexUser.objects.aget_or_create(user=user)
-        yandex_user.yandex_id = yandex_id
-        # Обновляем другие поля при необходимости
-        await yandex_user.asave()
+        await OAuthProviderMixin.link_user_account_model(
+            user,
+            YandexUser,
+            'yandex_id',
+            yandex_id,
+        )
 
     async def get_user_data(self, code: str) -> dict[str, Any]:
         """
