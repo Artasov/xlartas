@@ -1,5 +1,5 @@
 # mailing/admin.py
-from ckeditor.widgets import CKEditorWidget  # импорт виджета CKEditor
+from tinymce.widgets import TinyMCE  # импорт виджета TinyMCE
 from django.contrib.admin import ModelAdmin, register, action
 from django.forms import ModelForm
 
@@ -12,8 +12,8 @@ class MailingAdminForm(ModelForm):
         model = Mailing
         fields = '__all__'
         widgets = {
-            # Используем CKEditor для поля html_content
-            'html_content': CKEditorWidget(),
+            # Используем TinyMCE для поля html_content
+            'html_content': TinyMCE(),
         }
 
 

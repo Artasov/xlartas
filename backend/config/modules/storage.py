@@ -20,10 +20,12 @@ FILE_UPLOAD_TEMP_DIR = join(BASE_DIR.parent, 'data', 'temp')
 makedirs(FILE_UPLOAD_TEMP_DIR, exist_ok=True)
 
 # Static | Media
-STATICFILES_DIRS = (
-    join(FRONTEND_DIR, 'build', 'static'),
+frontend_static = FRONTEND_DIR / 'build' / 'static'
+STATICFILES_DIRS = [
     join(BASE_DIR, 'static')
-)
+]
+if frontend_static.exists():
+    STATICFILES_DIRS.insert(0, str(frontend_static))
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
