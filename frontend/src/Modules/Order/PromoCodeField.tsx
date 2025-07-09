@@ -91,7 +91,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
     return (
         <FC w={'100%'} pos={'relative'} cls={cls}>
             <TextField
-                label="Промокод"
+                label={t('promo_code') ?? 'Промокод'}
                 variant={'filled'}
                 value={promoCode}
                 onChange={handleChange}
