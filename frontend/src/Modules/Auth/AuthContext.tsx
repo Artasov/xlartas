@@ -64,6 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         pprint('Success Auth')
         localStorage.setItem('access', jwtPair.access);
         localStorage.setItem('refresh', jwtPair.refresh);
+        pprint(jwtPair)
         await updateCurrentUser()
         const nextFromUrl = new URLSearchParams(window.location.search).get('next');
         pprint('Final auth next')
