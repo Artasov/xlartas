@@ -1,11 +1,13 @@
 # software/models/software.py
 import logging
+from typing import TYPE_CHECKING
 
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin, ACreatedAtIndexedMixin
 from django.db.models import (
     ForeignKey, CASCADE, DateTimeField, SET_NULL, CharField, URLField, TextField,
     IntegerField, PositiveIntegerField, OneToOneField, FileField, BooleanField
 )
+from django.db.models.manager import Manager
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -16,6 +18,9 @@ from apps.software.exceptions.software import SoftwareException
 from apps.software.services.license import SoftwareLicenseService
 from apps.software.services.order import SoftwareOrderService
 from apps.software.services.software import SoftwareService
+
+if TYPE_CHECKING:
+    from apps.commerce.models.product import ProductPrice
 
 log = logging.getLogger('global')
 
@@ -33,6 +38,7 @@ class SoftwareFile(ACreatedAtIndexedMixin):
 
 
 class Software(Product, SoftwareService, SoftwareException):
+    prices: Manager['ProductPrice']
     file = OneToOneField(
         'software.SoftwareFile', SET_NULL,
         null=True, blank=True, verbose_name=_('File')
