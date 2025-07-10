@@ -18,6 +18,9 @@ if TYPE_CHECKING:
 
 
 class NotifyService:
+    status: str
+    sent_time: timezone.datetime | None
+
     def send(self: 'Notify') -> None:
         from apps.notify.registry import NOTIFY_CONFIGS, Notifies
         from apps.notify.providers.base import INotifyProvider
@@ -53,13 +56,13 @@ class NotifyService:
                     )
 
             self.status = self.Status.SENT
-            self.sent_time = timezone.now()  # TODO: Instance attribute sent_time defined outside __init__
+            self.sent_time = timezone.now()
             self.save(update_fields=['status', 'sent_time'])
             log.info(f'Notification id={self.id} sent successfully')
 
         except Exception as e:
             log.error(f'Failed to send notification {self.id}: {traceback_str(e)}')
-            self.status = self.Status.FAILED  # TODO: Instance attribute status defined outside __init__
+            self.status = self.Status.FAILED
             self.save(update_fields=['status'])
 
     async def asend(self: 'Notify') -> None:
