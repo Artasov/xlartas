@@ -33,29 +33,29 @@ services:
       restart_policy:
         condition: on-failure
 
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    hostname: pgadmin
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-#    ports:
-#      - "5050:80"
-#    networks:
-#      - net
-#    deploy:
-#      replicas: 1
-#      update_config:
-#        parallelism: 1
-#        delay: 10s
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: '0.4'
-#          memory: 256M
-#        reservations:
-#          memory: 128M
+  #  pgadmin:
+  #    image: dpage/pgadmin4
+  #    hostname: pgadmin
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #    ports:
+  #      - "5050:80"
+  #    networks:
+  #      - net
+  #    deploy:
+  #      replicas: 1
+  #      update_config:
+  #        parallelism: 1
+  #        delay: 10s
+  #      restart_policy:
+  #        condition: on-failure
+  #      resources:
+  #        limits:
+  #          cpus: '0.4'
+  #          memory: 256M
+  #        reservations:
+  #          memory: 128M
 
   redis:
     user: 1000:1001
@@ -64,8 +64,8 @@ services:
     volumes:
       - ./data/redis/:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-#    ports:
-#       - "6379:6379"
+    #    ports:
+    #       - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       timeout: 5s
@@ -107,7 +107,7 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8000 || exit 1"]
+      test: [ "CMD-SHELL", "nc -z localhost 8000 || exit 1" ]
       timeout: 30s
       interval: 5s
       retries: 3
@@ -201,6 +201,38 @@ services:
 #        reservations:
 #          cpus: '0.25'
 #          memory: 128M
+
+# --- sonar stack -------------------------------------------------
+sonardb:
+  image: postgres:16-alpine
+  hostname: sonardb
+  environment:
+    - POSTGRES_USER=sonar
+    - POSTGRES_PASSWORD=sonar
+    - POSTGRES_DB=sonar
+  volumes:
+    - ./data/sonar_db:/var/lib/postgresql/data
+  networks: [ net ]
+  deploy:
+    replicas: 1
+    restart_policy: { condition: on-failure }
+
+sonarqube:
+  image: sonarqube:10.5.1-community
+  hostname: sonarqube
+  depends_on: [ sonardb ]
+  environment:
+    - SONAR_JDBC_URL=jdbc:postgresql://sonardb:5432/sonar
+    - SONAR_JDBC_USERNAME=sonar
+    - SONAR_JDBC_PASSWORD=sonar
+  volumes:
+    - ./data/sonarqube/data:/opt/sonarqube/data
+    - ./data/sonarqube/extensions:/opt/sonarqube/extensions
+    - ./data/sonarqube/logs:/opt/sonarqube/logs
+  networks: [ net ]
+  deploy:
+    replicas: 1
+    restart_policy: { condition: on-failure }
 
 networks:
   net:
