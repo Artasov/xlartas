@@ -1,5 +1,6 @@
 # software/models/software.py
 import logging
+from typing import TYPE_CHECKING
 
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin, ACreatedAtIndexedMixin
 from django.db.models import (
@@ -17,6 +18,10 @@ from apps.software.services.license import SoftwareLicenseService
 from apps.software.services.order import SoftwareOrderService
 from apps.software.services.software import SoftwareService
 
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+    from apps.commerce.models.product import ProductPrice
+
 log = logging.getLogger('global')
 
 
@@ -33,6 +38,7 @@ class SoftwareFile(ACreatedAtIndexedMixin):
 
 
 class Software(Product, SoftwareService, SoftwareException):
+    prices: RelatedManager['ProductPrice']
     file = OneToOneField(
         'software.SoftwareFile', SET_NULL,
         null=True, blank=True, verbose_name=_('File')

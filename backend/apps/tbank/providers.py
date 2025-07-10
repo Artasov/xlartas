@@ -1,4 +1,5 @@
 # tbank/providers.py
+from abc import ABC
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -13,11 +14,11 @@ from apps.tbank.classes.TBank import (
 from apps.tbank.managers.customer import TBankCustomerManager
 from apps.tbank.models import TBankPayment, TBankInstallment
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     pass
 
 
-class _TBankBaseProvider(BasePaymentProvider):  # TODO: Class _TBankBaseProvider must implement all abstract methods
+class _TBankBaseProvider(BasePaymentProvider, ABC):
     async def _get_customer_key(self) -> str:
         customer = await TBankCustomerManager.get_or_init(
             user_id=self.order.user.id,
