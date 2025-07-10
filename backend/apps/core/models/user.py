@@ -1,5 +1,6 @@
 # core/models/user.py
 import uuid
+from typing import TYPE_CHECKING
 
 from adjango.fields import AManyToManyField
 from adjango.models.base import AAbstractUser, AModel
@@ -22,6 +23,10 @@ from apps.xlmine.services.donate import UserDonateService
 from apps.xlmine.services.privilege import UserPrivilegeService
 from apps.xlmine.services.user import UserXLMineService
 from utils.pictures import CorrectOrientation
+
+if TYPE_CHECKING:
+    from django.db.models import Manager
+    from apps.commerce.models.payment import Payment
 
 
 def generate_custom_key() -> str: return uuid.uuid4().hex[:20]
@@ -52,6 +57,8 @@ class User(
         EN = 'en', _('English')
 
     objects = UserManager()
+
+    payments: Manager['Payment']
 
     password = CharField(_('Password'), max_length=128, blank=True)
     email = EmailField(_('Email'), blank=True, null=True, db_index=True)
