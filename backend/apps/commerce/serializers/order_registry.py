@@ -1,20 +1,22 @@
 # commerce/serializers/order_registry.py
 from collections import OrderedDict
 
-from apps.commerce.exceptions.order import OrderException
+from adjango.aserializers import AModelSerializer
 
+from apps.commerce.exceptions.order import OrderException
+from apps.commerce.models import Order
 
 ORDER_SERIALIZERS: dict = OrderedDict()
 
 
-class RegisterOrderSerializerMeta(type):
+class RegisterOrderSerializerMeta(type(AModelSerializer)):
     """Metaclass that automatically registers order serializers."""
 
     def __new__(mcls, name, bases, attrs):
         cls = super().__new__(mcls, name, bases, attrs)
-        meta = attrs.get('Meta')
+        meta = getattr(cls, 'Meta', None)
         model = getattr(meta, 'model', None)
-        if model:
+        if model and model is not Order:
             ORDER_SERIALIZERS.setdefault(model, {})['small'] = cls
             ORDER_SERIALIZERS.setdefault(model, {})['full'] = cls
         return cls

@@ -2,13 +2,12 @@
 from adjango.aserializers import AModelSerializer
 from rest_framework.fields import SerializerMethodField
 
-from apps.commerce.serializers.order_registry import RegisterOrderSerializerMeta
-
 from apps.ckassa.models import CKassaPayment
 from apps.ckassa.serializers import CKassaPaymentSmallPublicSerializer
 from apps.cloudpayments.models import CloudPaymentPayment
 from apps.cloudpayments.serializers import CloudPaymentSmallPublicSerializer
 from apps.commerce.models import Order, HandMadePayment, BalancePayment
+from apps.commerce.serializers.order_registry import RegisterOrderSerializerMeta
 from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.commerce.serializers.promocode import PromocodeSerializer
 from apps.freekassa.models import FreeKassaPayment

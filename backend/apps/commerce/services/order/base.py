@@ -83,13 +83,10 @@ class OrderService:
         elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
             await self.cancel(request=request, reason=reason)  # noqa
 
-    # ---------------------------------------------------------------- #
-    #   ИНИЦИАЛИЗАЦИЯ ЗАКАЗА
-    # ---------------------------------------------------------------- #
     async def init(self: 'Order', request, init_payment: bool = True):
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
-        self.product: Product = await self.product.aget_real_instance()  # noqa
+        self.product: Product = await self.product.aget_real_instance()  # noqa # Тут тоже неверная типизация.
         commerce_log.info(f'For product {self.product.name}')  # noqa
         price = await self.receipt_price  # noqa
         commerce_log.info(f'Price: {price}')

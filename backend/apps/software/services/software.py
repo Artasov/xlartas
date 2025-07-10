@@ -5,20 +5,21 @@ from typing import TYPE_CHECKING
 
 from django.utils import timezone
 
+from apps.commerce.services.product import IProductService
+
 if TYPE_CHECKING:
     from apps.software.models import SoftwareOrder, Software
 
 logger = logging.getLogger(__name__)
 
 
-class SoftwareService:
+class SoftwareService(IProductService):
     async def new_order(self: 'Software', request) -> 'SoftwareOrder':
         from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder
         s = SoftwareOrderCreateSerializer(
             data=request.data, context={'request': request}
         )
-        logger.debug('new_order: serializer validation start')
         await s.ais_valid(raise_exception=True)
         data = s.validated_data
         promocode = data.get('promocode', None)
@@ -29,7 +30,6 @@ class SoftwareService:
                 currency=data['currency'],
                 raise_exception=True
             )
-        logger.debug('new_order: serializer validated')
         order = SoftwareOrder(
             user=request.user,
             currency=request.data['currency'],
@@ -39,9 +39,7 @@ class SoftwareService:
             promocode=promocode
         )
         await order.asave()
-        logger.debug('new_order: order saved')
         await order.init(request)
-        logger.debug('new_order: initialization complete')
         return order
 
     async def can_pregive(
