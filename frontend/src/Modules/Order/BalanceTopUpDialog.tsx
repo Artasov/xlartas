@@ -73,7 +73,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
             onClose={() => !loading && onClose()}
         >
             <DialogTitle sx={{pb: 1.5}}>{t('top_up_balance')}</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{position: 'relative'}}>
                 {!product ? (
                     <CircularProgressZoomify in size="40px"/>
                 ) : (
@@ -98,7 +98,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                             freekassaExtra={<FR mb={0.5}>{t('freekassa_help_desc')}</FR>}
                         />
                         <Button onClick={handleCreate} disabled={loading} sx={{fontWeight: 'bold'}}>
-                            {loading ? <CircularProgressZoomify in size="20px"/> : t('next')}
+                            {loading ? <CircularProgressZoomify mt={5} in size="20px"/> : t('next')}
                         </Button>
                     </FC>
                 )}

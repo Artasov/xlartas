@@ -20,10 +20,10 @@ import {FC, FR, FRC, FRSC} from "wide-containers";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import copyToClipboard from "Utils/clipboard";
 import {useApi} from "Api/useApi";
-import UserPrivilege from "../xLMine/Privilege/UserPrivilege";
 import TextField from "@mui/material/TextField";
 import UserBalance from "Order/UserBalance";
-import Collapse from '@mui/material/Collapse'; // ⬅️ добавлен импорт
+import Collapse from '@mui/material/Collapse';
+import UserPrivilege from "xLMine/Privilege/UserPrivilege"; // ⬅️ добавлен импорт
 
 interface FormData {
     username: string;
@@ -144,23 +144,21 @@ const UserPersonalInfoForm: React.FC = () => {
                         }
                     </FC>
                 </FR>
-
-                <FC mb={1}>
-                    <FRSC wrap g={1}>
+                <FC g={1} mb={1}>
+                    <FR g={1} h={'2.2rem'}>
                         <FR color={plt.text.primary} fontWeight={'bold'}
                             fontSize={isGtSm ? '2.2rem' : '1.7rem'}
-                            lineHeight={'1.8rem'} sx={{userSelect: 'all'}}>
+                            sx={{userSelect: 'all', lineHeight: '2.2rem'}}>
                             {user.username}
                         </FR>
-                        <FR mt={.57} lineHeight={'1.5rem'}
+                        <FR lineHeight={'1.5rem'} w={'100%'} h={'100%'}
                             fontSize={isGtSm ? '1.7rem' : '1.5rem'}
                             fontWeight={'bold'}>
                             <UserPrivilege/>
                         </FR>
-                    </FRSC>
+                    </FR>
                     <UserBalance/>
                 </FC>
-
                 <FC mt={1} g={2} cls={'user-form'}>
                     {user.secret_key &&
                         <FC pEvents={true}

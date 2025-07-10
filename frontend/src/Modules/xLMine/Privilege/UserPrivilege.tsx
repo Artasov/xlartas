@@ -47,15 +47,15 @@ const UserPrivilege: React.FC = () => {
 
     if (privilege === undefined) {
         return (
-            <FRCC>
-                <CircularProgressZoomify in size={22}/>
+            <FRCC pos={'relative'} h={'100%'} w={'50px'}>
+                <CircularProgressZoomify in size={22} h={'100%'}/>
             </FRCC>
         );
     }
     if (!privilege) return null; // Нет привилегий
 
     return (
-        <FC g={1} color={privilege.color || '#aa00aa'} height="min-content">
+        <FC g={1} color={privilege.color || '#aa00aa'} height="100%">
             <Tooltip title={privilege.description || ''}>
                 {/* обёртка <span> делает children единичным ReactElement‑ом */}
                 <FR>

@@ -237,7 +237,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             )}
 
             {/* ---------- Лоадер ---------- */}
-            {loading && <FR mt={1}> <CircularProgressZoomify in size={'40px'}/> </FR>}
+            {loading && <FR mt={1} h={'40px'} pos={'relative'}> <CircularProgressZoomify in size={'40px'}/> </FR>}
 
             {/* ---------- Платёжные системы ---------- */}
             {selectedCurrency && filteredPaymentTypes.length > 0 && (
