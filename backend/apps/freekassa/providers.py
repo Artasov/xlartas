@@ -56,3 +56,19 @@ class FreeKassaProvider(BasePaymentProvider):
         except Exception as exc:
             raise PaymentException.InitError(f'FreeKassa init error: {exc}') from exc
         return payment
+
+    async def sync(self, payment: FreeKassaPayment) -> None:
+        from apps.freekassa.services.payment import FreeKassaPaymentService
+
+        if not isinstance(payment, FreeKassaPayment):
+            return
+
+        if payment.fk_order_id is None:
+            return
+
+        status = await FreeKassaPaymentService.actual_status(payment.fk_order_id)
+        if status is not None and status != payment.status:
+            payment.status = status
+            if status == FreeKassaPayment.Status.PAID:
+                payment.is_paid = True
+            await payment.asave()

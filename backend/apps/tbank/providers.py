@@ -11,6 +11,7 @@ from apps.tbank.classes.TBank import (
 )
 from apps.tbank.managers.customer import TBankCustomerManager
 from apps.tbank.models import TBankPayment, TBankInstallment
+from apps.commerce.models import Payment
 
 if TYPE_CHECKING:  # pragma: no cover
     pass
@@ -78,6 +79,21 @@ class TBankPaymentProvider(_TBankBaseProvider):
             status=response['Status'],
             payment_url=response['PaymentURL'],
         )
+
+    async def sync(self, payment: Payment) -> None:
+        from apps.tbank.services.payment import TBankPaymentService
+        if not isinstance(payment, TBankPayment):
+            return
+
+        status = await TBankPaymentService.actual_status(payment.id)
+        if status and status != payment.status:
+            payment.status = status
+            await payment.asave()
+
+        if status in (TBankPayment.Status.CONFIRMED, TBankPayment.Status.AUTHORIZED):
+            if not payment.is_paid:
+                payment.is_paid = True
+                await payment.asave()
 
 
 class TBankInstallmentProvider(_TBankBaseProvider):

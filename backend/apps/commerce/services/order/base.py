@@ -7,7 +7,6 @@ from adrf.requests import AsyncRequest
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 
-from apps.cloudpayments.classes.payment import CloudPaymentAPI
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 
@@ -103,31 +102,26 @@ class OrderService:
         await self.asave()
 
     async def sync_with_payment_system(self: 'Order'):
-        from apps.cloudpayments.classes.payment import CloudPaymentAPI
-        from apps.tbank.models import TBankPayment
-        from apps.cloudpayments.models import CloudPaymentPayment
-        from apps.commerce.models.payment import HandMadePayment
-        payment = await self.arelated('payment')
-        if isinstance(self.payment, TBankPayment):
-            payment: TBankPayment
-            tbank_log.info(f'TBank Payment synchronization......')
-            actual_status = await payment.actual_status(payment_id=payment.id)
-            if actual_status != payment.status:
-                payment.status = actual_status
-                await payment.asave()
-            if ((payment.status == TBankPayment.Status.CONFIRMED or payment.status == TBankPayment.Status.AUTHORIZED)
-                    and not self.is_executed and not self.is_refunded):
-                await self.execute()  # noqa
-            tbank_log.info(f'TBank Payment {payment.id} synchronization successfully.')
-        elif isinstance(payment, CloudPaymentPayment):
-            status = await CloudPaymentAPI.actual_status(payment)  # noqa
-            if (status == CloudPaymentPayment.Status.COMPLETED
-                    and not self.is_executed and not self.is_refunded):
-                await self.execute()  # noqa
-        elif isinstance(self.payment, HandMadePayment):
-            pass  # Ручная оплата, и тут ничего не надо
-        else:
+        """Synchronize payment status using payment provider."""
+        from apps.commerce.providers.base import BasePaymentProvider
+        from apps.commerce.services.payment_registry import PaymentSystemRegistry
+
+        if not self.payment_id or not self.payment_system:
             raise PaymentException.PaymentSystemNotFound()
+
+        payment = await self.arelated('payment')
+        try:
+            provider_cls: type[BasePaymentProvider] = (
+                PaymentSystemRegistry.provider_cls(self.payment_system)
+            )
+        except ValueError:
+            raise PaymentException.PaymentSystemNotFound() from None
+
+        provider = provider_cls(order=self, request=None)  # type: ignore[arg-type]
+        await provider.sync(payment)
+
+        if payment.is_paid and not self.is_executed and not self.is_refunded:
+            await self.execute()
 
     async def execute(self: 'Order'):
         """

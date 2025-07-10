@@ -28,3 +28,6 @@ class HandMadeProvider(BasePaymentProvider):
         except Exception as exc:
             raise PaymentException.InitError(f'HandMade init error: {exc}') from exc
         return payment
+
+    async def sync(self, payment: HandMadePayment) -> None:
+        return None

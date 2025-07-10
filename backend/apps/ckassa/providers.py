@@ -63,3 +63,14 @@ class CKassaProvider(BasePaymentProvider):
         )
 
         return payment
+
+    async def sync(self, payment: CKassaPayment) -> None:
+        from .services.payment import CKassaPaymentService
+
+        if not isinstance(payment, CKassaPayment):
+            return
+
+        status = await CKassaPaymentService.actual_status(payment.reg_pay_num)
+        if status and status != payment.status:
+            payment.status = status
+            await payment.asave()
