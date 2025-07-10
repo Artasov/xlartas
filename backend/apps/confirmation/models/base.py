@@ -18,8 +18,7 @@ from apps.core.models.user import User
 def generate_short_code(): return randint(1000, 10000)
 
 
-class ConfirmationCode(APolymorphicModel, ACreatedAtIndexedMixin,
-                       ConfirmationCodeService):
+class ConfirmationCode(APolymorphicModel, ACreatedAtIndexedMixin, ConfirmationCodeService):
     from apps.confirmation.managers.base import ConfirmationCodeManager
     objects = ConfirmationCodeManager()
 

@@ -1,10 +1,11 @@
 # commerce/models/product.py
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from adjango.models import APolymorphicModel
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin
 from django.db.models import CharField, TextField, ForeignKey, CASCADE, BooleanField, DecimalField
-from typing import TYPE_CHECKING
+from django.db.models.manager import Manager
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField
 from pilkit.processors import ResizeToFit
@@ -13,12 +14,11 @@ from apps.commerce.models.payment import ACurrencyAmountMixin
 from utils.pictures import CorrectOrientation
 
 if TYPE_CHECKING:
-    from django.db.models.manager import RelatedManager
-    from apps.commerce.models.product import ProductPrice
+    from apps.commerce.models import ProductPrice
 
 
 class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
-    prices: RelatedManager['ProductPrice']
+    prices: Manager['ProductPrice']
     name = CharField(verbose_name=_('Name'), max_length=255, db_index=True)
     pic = ProcessedImageField(
         verbose_name=_('Picture'),
