@@ -9,7 +9,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from adrf.requests import AsyncRequest
 
 
-class BalanceProductService(IProductService):
+class BalanceProductService(IProductService['BalanceProduct', 'BalanceProductOrder']):
     @staticmethod
     async def new_order(request: 'AsyncRequest') -> 'BalanceProductOrder':
         from apps.commerce.serializers.balance import BalanceProductOrderCreateSerializer
@@ -34,7 +34,7 @@ class BalanceProductService(IProductService):
         await user.asave()
 
 
-class BalanceProductOrderService(OrderService):
+class BalanceProductOrderService(OrderService['BalanceProductOrder', 'BalanceProduct']):
     @property
     async def receipt_price(self: 'BalanceProductOrder') -> Decimal:
         return self.requested_amount
