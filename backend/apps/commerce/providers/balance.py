@@ -27,3 +27,6 @@ class BalanceProvider(BasePaymentProvider):
         await payment.asave()
         await self.order.execute()  # noqa
         return payment
+
+    async def sync(self, payment: BalancePayment) -> None:
+        return None
