@@ -2,7 +2,13 @@
 import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
-from abc import ABC, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod
+from adjango.models import APolymorphicModel
+
+
+class ConfirmationCodeServiceMeta(type(APolymorphicModel), ABCMeta):
+    """Metaclass combining Django polymorphic model base and ABCMeta."""
+    pass
 
 from adjango.utils.base import AsyncAtomicContextManager, diff_by_timedelta
 from adrf.requests import AsyncRequest
@@ -52,7 +58,7 @@ async def get_confirmation_code_instance(
     return confirmation_models[method]
 
 
-class ConfirmationCodeService(ABC):
+class ConfirmationCodeService(ABC, metaclass=ConfirmationCodeServiceMeta):
     @classmethod
     @abstractmethod
     def get_confirmation_method(cls) -> str:
