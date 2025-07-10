@@ -18,29 +18,23 @@ const Softwares: React.FC = () => {
     const {api} = useApi();
     const {t} = useTranslation();
 
-    /* ---------- загрузка ПО ---------- */
     useEffect(() => {
         setLoading(true);
-        setAnimate(false);                           // ← сбрасываем анимацию
+        setAnimate(false);
         api.get('/api/v1/software/')
             .then(data => setSoftwares(data))
             .finally(() => setLoading(false));
     }, [api]);
 
-    /* ---------- старт анимации карточек после загрузки ---------- */
     useEffect(() => {
         if (!loading) {
             setTimeout(() => setAnimate(true), 50)
         }
     }, [loading]);
 
-    /* ---------- рендер ---------- */
     return (
         <FRCC g={2} wrap position="relative" w="100%">
-            {/* ---------------- Лоадер ---------------- */}
-            <CircularProgressZoomify in={loading} size="90px"/>
-
-            {/* ---------------- Список ПО ---------------- */}
+            <CircularProgressZoomify in={loading} mt={'10%'} size="90px"/>
             {softwares.length > 0 &&
                 softwares.map((software, index) => (
                     <Collapse
@@ -56,8 +50,6 @@ const Softwares: React.FC = () => {
                         />
                     </Collapse>
                 ))}
-
-            {/* ---------------- Сообщение «нет ПО» ---------------- */}
             {!loading && softwares.length === 0 && (
                 <FRCC>{t('no_softwares')}</FRCC>
             )}

@@ -21,7 +21,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Collapse from '@mui/material/Collapse'; // ← NEW
-import Zoom from '@mui/material/Zoom'; // ← NEW
 
 const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
@@ -46,7 +45,7 @@ const SoftwareDetailComponent: React.FC = () => {
     /* ---------- загрузка Software ---------- */
     useEffect(() => {
         setLoading(true);
-        setAnimate(false);                                   // ← сбрасываем анимацию
+        setAnimate(false);
         if (!id) {
             Message.error(t('software_id_not_provided'));
             setLoading(false);
@@ -99,26 +98,10 @@ const SoftwareDetailComponent: React.FC = () => {
     return (
         <FC pos="relative" cls={'software-detail'} h={'100%'}>
             {/* ----------- Спиннер (с анимацией Zoom) ----------- */}
-            <Zoom
-                in={loading}
-                appear
-                mountOnEnter
-                unmountOnExit
-                timeout={{enter: 300, exit: 300}}
-            >
-                <FRCC
-                    pos="absolute"
-                    top={0}
-                    left={0}
-                    w="100%"
-                    h="60%"
-                    zIndex={2}
-                >
-                    <CircularProgressZoomify in size="80px"/>
-                </FRCC>
-            </Zoom>
+            <FRCC pos="relative">
+                <CircularProgressZoomify in={loading} mt={'10%'} size="80px"/>
+            </FRCC>
 
-            {/* ----------- Контент (с анимацией Collapse) ----------- */}
             <Collapse in={animate} timeout={300} mountOnEnter unmountOnExit>
                 {software ? (
                     <FC pos="relative">
@@ -126,7 +109,9 @@ const SoftwareDetailComponent: React.FC = () => {
                         {isAuthenticated && (
                             <FRE w={'100%'} p={1} pos="absolute" top={0} left={0}>
                                 {isTested === null && licenseLoading
-                                    ? <CircularProgressZoomify in size="20px"/>
+                                    ? <FR h={20} w={120} pos={'relative'}>
+                                        <CircularProgressZoomify in size="20px"/>
+                                    </FR>
                                     : isTested
                                         ? <FR opacity={60} bg={plt.text.primary + '0b'} rounded={2} p={1} lh="1rem">
                                             {t('hours_left', {hours: licenseHours ?? 0})}

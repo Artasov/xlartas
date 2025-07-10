@@ -14,28 +14,22 @@ const Licenses: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [animate, setAnimate] = useState(false);
 
-    /* ---------- загрузка лицензий ---------- */
     useEffect(() => {
         setLoading(true);
-        setAnimate(false);                           // ← сбрасываем анимацию
+        setAnimate(false);
         api.get('/api/v1/software/licenses/')
             .then(data => setLicenses(data))
             .catch(() => Message.error(t('licenses_load_error')))
             .finally(() => setLoading(false));
     }, [api, t]);
 
-    /* ---------- старт анимации карточек после загрузки ---------- */
     useEffect(() => {
         if (!loading) setAnimate(true);
     }, [loading]);
 
-    /* ---------- рендер ---------- */
     return (
         <FR wrap g={2} p={2} position="relative" cls="licenses">
-            {/* ---------------- Лоадер ---------------- */}
-            <CircularProgressZoomify in={loading} size="90px"/>
-
-            {/* ---------------- Список лицензий ---------------- */}
+            <CircularProgressZoomify in={loading} mt={'10%'} size="90px"/>
             {licenses.length > 0 &&
                 licenses.map((license, index) => (
                     <Collapse
@@ -48,8 +42,6 @@ const Licenses: React.FC = () => {
                         <LicenseCard license={license}/>
                     </Collapse>
                 ))}
-
-            {/* ---------------- Сообщение «нет лицензий» ---------------- */}
             {!loading && licenses.length === 0 && (
                 <FCC w="100%" p={2} textAlign="center">
                     {t('licenses_not_found') ?? 'Лицензии не найдены'}

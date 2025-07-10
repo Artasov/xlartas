@@ -5,6 +5,7 @@ import {FC, FR, FRCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
 import {IPrivilege} from '../types/base';
 import {useTranslation} from 'react-i18next';
 
@@ -13,7 +14,7 @@ const UserPrivilege: React.FC = () => {
     const [privilege, setPrivilege] = useState<IPrivilege | null | undefined>(undefined);
     const {t} = useTranslation();
 
-    /** превращаем "&#RRGGBBХ"‑строку в набор span‑ов */
+    /** превращаем "&#RRGGBBХ"-строку в набор span-ов */
     const renderGradient = (str: string) => {
         const result: React.ReactNode[] = [];
         let i = 0;
@@ -45,26 +46,39 @@ const UserPrivilege: React.FC = () => {
             });
     }, [api]);
 
+    // Показываем индикатор загрузки, пока привилегия не получена
     if (privilege === undefined) {
         return (
-            <FRCC pos={'relative'} h={'100%'} w={'50px'}>
-                <CircularProgressZoomify in size={22} h={'100%'}/>
+            <FRCC pos="relative" h="100%" w="50px">
+                <CircularProgressZoomify in size={22} h="100%"/>
             </FRCC>
         );
     }
-    if (!privilege) return null; // Нет привилегий
 
+    // Если привилегии нет — ничего не рендерим
+    if (!privilege) return null;
+
+    // Плавное появление привилегии после загрузки
     return (
-        <FC g={1} color={privilege.color || '#aa00aa'} height="100%">
-            <Tooltip title={privilege.description || ''}>
-                {/* обёртка <span> делает children единичным ReactElement‑ом */}
-                <FR>
-                    <FR>{renderGradient(privilege.prefix || '')}</FR>
-                    <FR pos={'absolute'}
-                        sx={{filter: 'blur(10px) contrast(2) brightness(2)'}}>{renderGradient(privilege.prefix || '')}</FR>
-                </FR>
-            </Tooltip>
-        </FC>
+        <Zoom
+            in
+            appear
+            mountOnEnter
+            unmountOnExit
+            timeout={{enter: 1500, exit: 200}}
+        >
+            <FC g={1} color={privilege.color || '#aa00aa'} height="100%">
+                <Tooltip title={privilege.description || ''}>
+                    <FR>
+                        <FR>{renderGradient(privilege.prefix || '')}</FR>
+                        <FR pos={'absolute'}
+                            sx={{filter: 'blur(10px) contrast(2) brightness(2)'}}>
+                            {renderGradient(privilege.prefix || '')}
+                        </FR>
+                    </FR>
+                </Tooltip>
+            </FC>
+        </Zoom>
     );
 };
 

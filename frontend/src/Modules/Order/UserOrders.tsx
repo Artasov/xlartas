@@ -50,7 +50,7 @@ const UserOrders: React.FC = () => {
     return (
         <FR wrap w="100%" g={1.2} py={1} px={2} position="relative" cls={'user-orders'}>
             {/* ---------------- Лоадер ---------------- */}
-            <CircularProgressZoomify in={loading} size="90px"/>
+            <CircularProgressZoomify in={loading} mt={10} size="90px"/>
 
             {/* ---------------- Список заказов ---------------- */}
             {orders.length > 0 &&

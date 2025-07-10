@@ -26,7 +26,7 @@ const CircularProgressZoomify: React.FC<CircularProgressZoomifyProps> = (
         appear
         mountOnEnter
         unmountOnExit
-        timeout={{enter: 400, exit: 600}}
+        timeout={{enter: 500, exit: 600}}
     >
         <FRCC
             w={'100%'}
