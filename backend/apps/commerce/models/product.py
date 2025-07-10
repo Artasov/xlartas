@@ -1,6 +1,5 @@
 # commerce/models/product.py
 from decimal import Decimal
-from typing import TYPE_CHECKING
 
 from adjango.models import APolymorphicModel
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin
@@ -13,12 +12,29 @@ from pilkit.processors import ResizeToFit
 from apps.commerce.models.payment import ACurrencyAmountMixin
 from utils.pictures import CorrectOrientation
 
-if TYPE_CHECKING:
-    from apps.commerce.models import ProductPrice as _ProductPrice
+
+class ProductPrice(ACurrencyAmountMixin):
+    product = ForeignKey('commerce.Product', CASCADE, 'prices', verbose_name=_('Product'))
+    exponent = DecimalField(
+        verbose_name=_('Exponent'), max_digits=10,
+        decimal_places=2, default=None, null=True, blank=True
+    )
+    offset = DecimalField(
+        verbose_name=_('Offset'), max_digits=10,
+        decimal_places=2, default=None, null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = _('Product Price')
+        verbose_name_plural = _('Product Prices')
+        unique_together = ('product', 'currency')
+
+    def __str__(self):
+        return f'{self.product.name} - {self.amount} {self.currency}'
 
 
 class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
-    prices: Manager['_ProductPrice']
+    prices: Manager[ProductPrice]
     name = CharField(verbose_name=_('Name'), max_length=255, db_index=True)
     pic = ProcessedImageField(
         verbose_name=_('Picture'),
@@ -40,8 +56,7 @@ class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
         return self.name
 
     async def aget_price(self, currency) -> Decimal | None:
-        price = await self.prices.agetorn(
-            currency=currency)  # TODO: Исправить Unresolved attribute reference 'prices' for class 'Product'
+        price = await self.prices.agetorn(currency=currency)
         return price.amount if price else None
 
     def get_price(self, currency) -> Decimal | None:
@@ -49,23 +64,3 @@ class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
             return self.prices.get(currency=currency)
         except ProductPrice.DoesNotExist:
             return None
-
-
-class ProductPrice(ACurrencyAmountMixin):
-    product = ForeignKey(Product, CASCADE, 'prices', verbose_name=_('Product'))
-    exponent = DecimalField(
-        verbose_name=_('Exponent'), max_digits=10,
-        decimal_places=2, default=None, null=True, blank=True
-    )
-    offset = DecimalField(
-        verbose_name=_('Offset'), max_digits=10,
-        decimal_places=2, default=None, null=True, blank=True
-    )
-
-    class Meta:
-        verbose_name = _('Product Price')
-        verbose_name_plural = _('Product Prices')
-        unique_together = ('product', 'currency')
-
-    def __str__(self):
-        return f'{self.product.name} - {self.amount} {self.currency}'

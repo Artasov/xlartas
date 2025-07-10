@@ -21,7 +21,7 @@ class DiscordOAuthProvider(OAuthProviderMixin, OAuthProvider):
         discord_id = user_data['id']
         await OAuthProviderMixin.link_user_account_model(
             user,
-            DiscordUser,  # TODO: Expected type 'Model', got 'Type[DiscordUser]' instead
+            DiscordUser,
             'discord_id',
             discord_id,
         )
@@ -77,7 +77,7 @@ class DiscordOAuthProvider(OAuthProviderMixin, OAuthProvider):
         )
 
         return await self._get_or_create_user_base(
-            DiscordUser,  # TODO: Expected type 'Model', got 'Type[DiscordUser]' instead
+            DiscordUser,
             'discord_id',
             discord_id,
             email=user_data.get('email', ''),

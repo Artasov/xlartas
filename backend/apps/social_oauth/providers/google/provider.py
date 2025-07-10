@@ -21,7 +21,7 @@ class GoogleOAuthProvider(OAuthProviderMixin, OAuthProvider):
         google_id = user_data['sub']
         await OAuthProviderMixin.link_user_account_model(
             user,
-            GoogleUser,  # TODO: Expected type 'Model', got 'Type[GoogleUser]' instead
+            GoogleUser,
             'google_id',
             google_id,
         )
@@ -81,7 +81,7 @@ class GoogleOAuthProvider(OAuthProviderMixin, OAuthProvider):
             raise SocialOAuthException.GoogleEmailWasNotProvided()
 
         return await self._get_or_create_user_base(
-            GoogleUser,  # TODO: Expected type 'Model', got 'Type[GoogleUser]' instead
+            GoogleUser,
             'google_id',
             google_id,
             email=email,

@@ -16,8 +16,7 @@ if TYPE_CHECKING:
 
 class CommerceUserService:
     def success_payments(self: 'User', currency: str) -> AQuerySet:
-        return self.payments.filter(is_paid=True,
-                                    currency=currency)  # TODO: Unresolved attribute reference 'payments' for class 'User'
+        return self.payments.filter(is_paid=True, currency=currency)
 
     async def sum_success_payments_amount(self: 'User', currency: str) -> float:
         aggregate_result = await self.success_payments(
@@ -54,7 +53,7 @@ class CommerceUserService:
 
         :return: True, если были оплаты за последний месяц, иначе False.
         """
-        return await self.payments.filter(  # TODO: Unresolved attribute reference 'payments' for class 'User'
+        return await self.payments.filter(
             is_paid=True, created_at__gte=timezone.now() - timedelta(days=days)
         ).aexists()
 

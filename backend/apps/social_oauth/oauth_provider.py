@@ -29,7 +29,7 @@ class OAuthProviderMixin:
 
     async def _get_or_create_user_base(
             self,
-            provider_model: Model,
+            provider_model: type[Model],
             provider_id_field: str,
             provider_id: str,
             *,
@@ -83,7 +83,7 @@ class OAuthProviderMixin:
     @staticmethod
     async def link_user_account_model(
             user: User,
-            provider_model: Model,
+            provider_model: type[Model],
             provider_id_field: str,
             provider_id: str,
     ) -> None:

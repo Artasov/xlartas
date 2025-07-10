@@ -5,7 +5,7 @@ from apps.commerce.models import Payment
 from .services.payment import CKassaPaymentService
 
 
-class CKassaPayment(Payment, CKassaPaymentService):  # TODO: Class CKassaPayment must implement all abstract methods
+class CKassaPayment(Payment, CKassaPaymentService):
     reg_pay_num = CharField(_('RegPayNum'), max_length=20, blank=True, null=True)
     status = CharField(_('Status'), max_length=20, blank=True, null=True, db_index=True)
 
