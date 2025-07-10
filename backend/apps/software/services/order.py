@@ -12,7 +12,8 @@ if TYPE_CHECKING:
 class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):
     @property
     async def receipt_price(self: 'SoftwareOrder') -> Decimal:
-        price_row = await self.product.prices.agetorn(currency=self.currency)  # TODO: Unresolved attribute reference 'prices' for class 'Software'
+        price_row = await self.product.prices.agetorn(
+            currency=self.currency)  # TODO: Unresolved attribute reference 'prices' for class 'Software'
         if not price_row:
             return Decimal('0')
 

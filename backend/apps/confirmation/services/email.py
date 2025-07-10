@@ -17,9 +17,9 @@ class EmailConfirmationCodeService(ConfirmationCodeService):
 
     @classmethod
     async def send_code(
-        cls, code: str, action: ConfirmationAction,
-        user: settings.AUTH_USER_MODEL,
-        extra_data: dict | None = None
+            cls, code: str, action: ConfirmationAction,
+            user: settings.AUTH_USER_MODEL,
+            extra_data: dict | None = None
     ) -> None:
         from apps.confirmation.tasks.tasks import send_confirmation_code_to_email_task
         if not user.email: raise UserException.EmailDoesNotExists()

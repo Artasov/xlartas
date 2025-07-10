@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import BalanceTopUpDialog from './BalanceTopUpDialog';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {FR, FRSC} from "wide-containers";
 import {Button} from "@mui/material";
 import {useTranslation} from 'react-i18next';

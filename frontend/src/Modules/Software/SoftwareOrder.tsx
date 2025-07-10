@@ -9,13 +9,13 @@ import {ICurrencyWithPrice, IPaymentSystem} from 'types/commerce/shop';
 import {ISoftware} from './Types/Software';
 import {IPromocode} from 'types/commerce/promocode';
 import PromoCodeField from 'Order/PromoCodeField';
-import PaymentSystemInfo from '../Order/PaymentSystemInfo';
+import PaymentSystemInfo from 'Order/PaymentSystemInfo';
 
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {useNavigate} from 'react-router-dom';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 

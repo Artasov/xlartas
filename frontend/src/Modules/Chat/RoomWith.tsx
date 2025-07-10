@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import Room from './Room';
 import {IRoom} from 'types/chat/models';
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 interface RoomWithProps {
     userId?: number;

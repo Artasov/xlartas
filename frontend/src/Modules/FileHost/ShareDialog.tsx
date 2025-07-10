@@ -13,7 +13,7 @@ import {
     Typography
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {useTranslation} from 'react-i18next';
 import {IFile} from './types';
 import {FR, FRSC} from "wide-containers";

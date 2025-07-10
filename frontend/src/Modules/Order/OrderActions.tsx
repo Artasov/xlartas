@@ -9,7 +9,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 import PaymentTypePickerModal from "Order/PaymentTypePickerModal";
 import {FRSC} from "wide-containers";
 

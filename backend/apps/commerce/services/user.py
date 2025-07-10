@@ -16,7 +16,8 @@ if TYPE_CHECKING:
 
 class CommerceUserService:
     def success_payments(self: 'User', currency: str) -> AQuerySet:
-        return self.payments.filter(is_paid=True, currency=currency)  # TODO: Unresolved attribute reference 'payments' for class 'User'
+        return self.payments.filter(is_paid=True,
+                                    currency=currency)  # TODO: Unresolved attribute reference 'payments' for class 'User'
 
     async def sum_success_payments_amount(self: 'User', currency: str) -> float:
         aggregate_result = await self.success_payments(

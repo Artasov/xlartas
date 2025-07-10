@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import FileTableRow from './FileTableRow';
 import {IFile} from './types';
 import useFileUpload from './useFileUpload';
@@ -67,7 +67,7 @@ const AllFiles: React.FC = () => {
             <DropOverlay onFileDrop={handleUpload}/>
             <div onDragOver={e => e.preventDefault()} onDrop={e => {
                 e.preventDefault();
-                if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+                if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]).then();
             }}>
                 {selectMode && (
                     <FRSE g={1} mb={1}>

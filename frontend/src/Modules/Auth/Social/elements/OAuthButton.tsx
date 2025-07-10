@@ -2,7 +2,7 @@
 import React, {useEffect} from "react";
 import {IconButton} from "@mui/material";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {DOMAIN_URL, DOMAIN_URL_ENCODED} from "../../../Api/axiosConfig";
+import {DOMAIN_URL, DOMAIN_URL_ENCODED} from "Api/axiosConfig";
 import {OAuthProvider} from "Auth/Social/types";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {useTheme} from "Theme/ThemeContext";

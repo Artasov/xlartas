@@ -5,7 +5,7 @@ import {Button} from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import {FCC, FRCC} from "wide-containers";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 import {Message} from "Core/components/Message";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {useTheme} from "Theme/ThemeContext";

@@ -9,7 +9,7 @@ import './UserAvatarEditable.sass';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 
 interface UserAvatarEditableProps {
     size: string;

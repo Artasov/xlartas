@@ -3,7 +3,7 @@ import {IconButton, TableCell, TableRow, useMediaQuery} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {FRSE} from 'wide-containers';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';

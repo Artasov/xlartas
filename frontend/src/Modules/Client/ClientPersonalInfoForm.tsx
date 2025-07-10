@@ -6,7 +6,7 @@ import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import TextField from "@mui/material/TextField";
 import {Button} from "@mui/material";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 interface FormData {
     about_me: string;

@@ -12,7 +12,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IPromocode} from "types/commerce/promocode";
 import {ICurrency} from "types/commerce/shop";
 import {Message} from "Core/components/Message";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 interface PromoCodeFieldProps {
     cls?: string;

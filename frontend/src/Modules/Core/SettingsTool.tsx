@@ -10,7 +10,7 @@ import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 interface BackendConfigResponse {
     config: {

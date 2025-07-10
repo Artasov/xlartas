@@ -11,7 +11,7 @@ import {useTheme} from 'Theme/ThemeContext';
 import SoftwareOrder from './SoftwareOrder';
 import {ISoftware} from './Types/Software';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {Message} from 'Core/components/Message';
 import SoftwareTestPeriodButton from './SoftwareTestPeriodButton';
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';

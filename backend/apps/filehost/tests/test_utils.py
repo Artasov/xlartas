@@ -3,6 +3,7 @@ from django.test import RequestFactory
 
 from apps.filehost.utils import parse_pagination
 
+
 @pytest.mark.django_db
 def test_parse_pagination_defaults():
     request = RequestFactory().get('/files/')

@@ -2,7 +2,6 @@
 import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
-from abc import ABC, abstractmethod
 
 from adjango.utils.base import AsyncAtomicContextManager, diff_by_timedelta
 from adrf.requests import AsyncRequest
@@ -59,10 +58,11 @@ class ConfirmationCodeService:
 
     @classmethod
     async def send_code(
-        cls, code: str, action: ConfirmationAction,
-        user: 'User', extra_data: dict | None = None
+            cls, code: str, action: ConfirmationAction,
+            user: 'User', extra_data: dict | None = None
     ) -> None:
         raise NotImplementedError
+
     @staticmethod
     async def create_and_send(
             request: AsyncRequest | WSGIRequest | ASGIRequest,
@@ -132,12 +132,12 @@ class ConfirmationCodeService:
         )
         action: ConfirmationAction = confirmation_actions.get(code.action).copy()
         del action['func']
-        method_name = cls.get_confirmation_method().upper()  # TODO: Unresolved attribute reference 'get_confirmation_method' for class 'ConfirmationCode'
+        method_name = cls.get_confirmation_method().upper()
         if False and (settings.DEBUG and not settings.DEBUG_SEND_NOTIFIES) or user.is_test:
             log.debug(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')
         else:
             log.info(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')
-            await cls.send_code(code.code, action, user, extra_data) # TODO: Unresolved attribute reference 'send_code'
+            await cls.send_code(code.code, action, user, extra_data)
         return code
 
     async def confirmation(self: 'ConfirmationCode', **kwargs):

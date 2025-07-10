@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from adjango.utils.funcs import set_image_by_url
+from django.db.models import Model
 
 from apps.core.models import User
 from apps.core.services.auth import JWTPair
@@ -16,7 +17,8 @@ log = logging.getLogger('social_auth')
 class OAuthProviderMixin:
     """Mixin containing helper methods for OAuth providers."""
 
-    async def _set_avatar_from_url(self, user: User, url: str | None) -> None:
+    @staticmethod
+    async def _set_avatar_from_url(user: User, url: str | None) -> None:
         """Download and attach user avatar from URL if available."""
         if not url:
             return
@@ -26,16 +28,16 @@ class OAuthProviderMixin:
             log.warning(f'Failed to set avatar for user {user.id} from {url}: {exc}')
 
     async def _get_or_create_user_base(
-        self,
-        provider_model: type,
-        provider_id_field: str,
-        provider_id: str,
-        *,
-        email: str | None = '',
-        username: str = '',
-        first_name: str = '',
-        last_name: str = '',
-        avatar_url: str | None = None,
+            self,
+            provider_model: Model,
+            provider_id_field: str,
+            provider_id: str,
+            *,
+            email: str | None = '',
+            username: str = '',
+            first_name: str = '',
+            last_name: str = '',
+            avatar_url: str | None = None,
     ) -> User:
         """Shared logic of retrieving or creating a user for OAuth providers."""
 
@@ -80,17 +82,17 @@ class OAuthProviderMixin:
 
     @staticmethod
     async def link_user_account_model(
-        user: User,
-        provider_model: type,
-        provider_id_field: str,
-        provider_id: str,
+            user: User,
+            provider_model: Model,
+            provider_id_field: str,
+            provider_id: str,
     ) -> None:
         """Link given ``user`` with OAuth ``provider_model`` by ``provider_id``.
 
         If the account with ``provider_id`` is already linked to another user,
         :class:`SocialOAuthException.AccountAlreadyLinkedAnotherUser` is raised.
         """
-        existing_link = await provider_model.objects.select_related("user").filter(
+        existing_link = await provider_model.objects.select_related('user').filter(
             **{provider_id_field: provider_id}
         ).afirst()
         if existing_link and existing_link.user != user:

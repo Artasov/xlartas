@@ -140,7 +140,8 @@ class TBankInstallmentService:
 
         # resp содержит {'status': '...', 'committed': ..., ...}
         self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
-        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
+        self.committed = bool(
+            resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp
 
@@ -156,7 +157,8 @@ class TBankInstallmentService:
         resp = await self._post_json(url, data={}, headers=headers)
 
         self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
-        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
+        self.committed = bool(
+            resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp
 
@@ -172,6 +174,7 @@ class TBankInstallmentService:
         resp = await self._get_json(url, headers=headers)
 
         self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
-        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
+        self.committed = bool(
+            resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp

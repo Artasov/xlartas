@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
-import {useApi} from "../../Api/useApi";
+import {useApi} from "Api/useApi";
 import {WirelessMacro} from "../Types/Software";
 import {useTranslation} from "react-i18next";
 

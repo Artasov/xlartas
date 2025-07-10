@@ -56,7 +56,6 @@ class ScreenStreamConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(f'screen_{user.id}', self.channel_name)
         await self.accept()
 
-
     async def disconnect(self, code):
         if hasattr(self, 'user'):
             await self.channel_layer.group_discard(f'screen_{self.user.id}', self.channel_name)

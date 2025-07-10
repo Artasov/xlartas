@@ -8,7 +8,7 @@ from django.conf import settings
 from apps.commerce.services.payment.base import BasePaymentService
 
 
-class CKassaPaymentService(BasePaymentService):
+class CKassaPaymentService(BasePaymentService):  # TODO: Class CKassaPaymentService must implement all abstract methods
     @staticmethod
     async def actual_status(reg_pay_num: str) -> Optional[str]:
         headers = {

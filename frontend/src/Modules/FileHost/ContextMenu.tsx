@@ -3,7 +3,7 @@ import {Menu, MenuItem} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 
 interface Props {
-    anchor: {x: number; y: number} | null;
+    anchor: { x: number; y: number } | null;
     onClose: () => void;
     onUpload: (file: File) => void;
     onCreateFolder: () => void;

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {IFile, IFolder} from './types';
 import FileGrid from './FileGrid';
 import FileTable from './FileTable';
@@ -16,18 +16,8 @@ import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import ContextMenu from './ContextMenu';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
-import {
-    Button,
-    IconButton,
-    Menu,
-    MenuItem,
-    Dialog,
-    DialogActions,
-    DialogTitle,
-    useMediaQuery
-} from '@mui/material';
+import {IconButton, useMediaQuery} from '@mui/material';
 import FileUpload from 'UI/FileUpload';
-import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import DropOverlay from './DropOverlay';
 import {
@@ -45,7 +35,7 @@ const Master: React.FC = () => {
     const {plt} = useTheme();
     const {id} = useParams();
     const folderId = id ? Number(id) : null;
-    const {t} = useTranslation();
+    // const {t} = useTranslation();
     const navigate = useNavigate();
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const {handleUpload: uploadFile, uploads, clearUploads} = useFileUpload(folderId);
@@ -139,7 +129,8 @@ const Master: React.FC = () => {
     return (
         <>
             <DropOverlay onFileDrop={handleUpload}/>
-            <PathBreadcrumbs path={path} onNavigate={fid => navigate(fid ? `/storage/master/${fid}/` : '/storage/master/')}/>
+            <PathBreadcrumbs path={path}
+                             onNavigate={fid => navigate(fid ? `/storage/master/${fid}/` : '/storage/master/')}/>
             <FC g={0.5}
                 ref={containerRef}
                 onContextMenu={e => {

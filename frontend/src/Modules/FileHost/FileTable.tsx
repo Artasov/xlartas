@@ -22,7 +22,22 @@ interface Props {
     parentId: number | null;
 }
 
-const FileTable: React.FC<Props> = ({folders, files, selectMode, selected, showColumns, onToggleSelect, onSelectMode, onDeleteFile, onShareFile, onDownloadFile, onDeleteFolder, onOpenFolder, reload, parentId}) => (
+const FileTable: React.FC<Props> = ({
+                                        folders,
+                                        files,
+                                        selectMode,
+                                        selected,
+                                        showColumns,
+                                        onToggleSelect,
+                                        onSelectMode,
+                                        onDeleteFile,
+                                        onShareFile,
+                                        onDownloadFile,
+                                        onDeleteFolder,
+                                        onOpenFolder,
+                                        reload,
+                                        parentId
+                                    }) => (
     <Table size="small">
         <TableHead>
             <TableRow>

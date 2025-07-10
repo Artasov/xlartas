@@ -22,8 +22,6 @@ from django_minio_backend import MinioBackend
 from django_redis import get_redis_connection
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny
-
-from utils.decorators import staff_required
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_503_SERVICE_UNAVAILABLE, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR,
@@ -31,6 +29,7 @@ from rest_framework.status import (
 )
 
 from apps.core.tasks.test_tasks import test_task
+from utils.decorators import staff_required
 
 log = logging.getLogger('console')
 
@@ -140,7 +139,7 @@ async def backend_config(_):
 
 
 @staff_required
-async def clear_redis(request, key=None):
+async def clear_redis(_, key=None):
     """
     - Если передан GET-параметр 'key', удаляет только указанный ключ.
     - Если параметр 'key' не передан, очищает весь Redis-кеш.
@@ -187,7 +186,7 @@ def change_user_id(request, new_id):
 
 
 @staff_required
-async def run_collectstatic(request):
+async def run_collectstatic(_):
     """
     Асинхронный контроллер для выполнения команды collectstatic.
     Доступен только для пользователей с разрешениями IsAuthenticated и AdminPermission.

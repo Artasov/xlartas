@@ -71,7 +71,7 @@ const useRoomMessages = ({roomId, api}: UseRoomMessagesParams) => {
             !isLoadingMore &&
             !isFetchingRef.current
         ) {
-            fetchMessages(nextPageUrl);
+            fetchMessages(nextPageUrl).then();
         }
     }, [fetchMessages, nextPageUrl, isLoadingMore]);
 

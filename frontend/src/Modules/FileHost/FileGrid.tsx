@@ -21,7 +21,21 @@ interface Props {
     parentId: number | null;
 }
 
-const FileGrid: React.FC<Props> = ({folders, files, selectMode, selected, onToggleSelect, onSelectMode, onDeleteFile, onShareFile, onDownloadFile, onDeleteFolder, onOpenFolder, reload, parentId}) => (
+const FileGrid: React.FC<Props> = ({
+                                       folders,
+                                       files,
+                                       selectMode,
+                                       selected,
+                                       onToggleSelect,
+                                       onSelectMode,
+                                       onDeleteFile,
+                                       onShareFile,
+                                       onDownloadFile,
+                                       onDeleteFolder,
+                                       onOpenFolder,
+                                       reload,
+                                       parentId
+                                   }) => (
     <Box mt={.4} sx={{
         display: 'grid',
         gap: '0.5rem',

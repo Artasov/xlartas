@@ -1,9 +1,9 @@
 # software/tests/test_services.py
 from datetime import timedelta
+from decimal import Decimal
 
 import pytest
 from django.utils import timezone
-from decimal import Decimal
 
 from apps.commerce.models.payment import Currency, PaymentSystem
 from apps.commerce.models.product import ProductPrice

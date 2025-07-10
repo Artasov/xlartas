@@ -12,8 +12,8 @@ ORDER_SERIALIZERS: dict = OrderedDict()
 class RegisterOrderSerializerMeta(type(AModelSerializer)):
     """Metaclass that automatically registers order serializers."""
 
-    def __new__(mcls, name, bases, attrs):
-        cls = super().__new__(mcls, name, bases, attrs)
+    def __new__(cls, name, bases, attrs):
+        cls = super().__new__(cls, name, bases, attrs)
         meta = getattr(cls, 'Meta', None)
         model = getattr(meta, 'model', None)
         if model and model is not Order:

@@ -11,7 +11,7 @@ import MobileNavigationMenu from "Core/components/Header/MobileNavigationMenu";
 import AdminLink from "Core/components/AdminLink";
 import LogsLink from "Core/components/LogsLink";
 import DesktopNavigationMenu from "Core/components/Header/DesktopNavigationMenu";
-import {FRBC, FRCC} from "wide-containers";
+import {FR, FRBC, FRCC} from "wide-containers";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {IconButton} from "@mui/material";
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
             <FRCC>
                 <IconButton onClick={() => {
                     navigate(-1);
-                }} sx={{width: 30, height: 30, opacity: '50%', transform: 'scale(1.3)'}}>
+                }} sx={{opacity: '50%', transform: 'scale(1.3)'}}>
                     <ArrowBackIosNewRoundedIcon/>
                 </IconButton>
                 <FRCC onClick={hideMobileMenu} color={plt.text.primary}>
@@ -77,8 +77,10 @@ const Header: React.FC = () => {
                     </>
                 )}
                 <FRCC g={1}>
+                    {isAuthenticated === null && <FR h={35} w={35} pos={'relative'}>
+                        <CircularProgressZoomify in size={'35px'}/>
+                    </FR>}
                     <LanguageSwitcher/>
-                    {isAuthenticated === null && <CircularProgressZoomify in size={'35px'}/>}
                     {profileBtnVisible && !location.pathname.includes('/profile') && (
                         <Link to={'/profile'}> <UserAvatar
                             size={user?.avatar ? '37px' : '30px'}

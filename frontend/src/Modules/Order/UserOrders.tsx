@@ -5,7 +5,7 @@ import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import {IOrder} from 'types/commerce/shop';
 import OrderItem from 'Order/OrderItem';
-import {FC as FCC, FCCC, FR} from 'wide-containers';
+import {FC, FR} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {useApi} from 'Api/useApi';
 import Collapse from '@mui/material/Collapse';
@@ -74,7 +74,7 @@ const UserOrders: React.FC = () => {
 
             {/* ---------------- Сообщение «нет заказов» ---------------- */}
             {!loading && orders.length === 0 && (
-                <FCC
+                <FC
                     w="100%"
                     g={1}
                     p={2}
@@ -84,7 +84,7 @@ const UserOrders: React.FC = () => {
                     textAlign="center"
                 >
                     <p>У вас ещё нет заказов</p>
-                </FCC>
+                </FC>
             )}
         </FR>
     );

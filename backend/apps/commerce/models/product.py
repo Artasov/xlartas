@@ -14,11 +14,11 @@ from apps.commerce.models.payment import ACurrencyAmountMixin
 from utils.pictures import CorrectOrientation
 
 if TYPE_CHECKING:
-    from apps.commerce.models import ProductPrice
+    from apps.commerce.models import ProductPrice as _ProductPrice
 
 
 class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
-    prices: Manager['ProductPrice']
+    prices: Manager['_ProductPrice']
     name = CharField(verbose_name=_('Name'), max_length=255, db_index=True)
     pic = ProcessedImageField(
         verbose_name=_('Picture'),

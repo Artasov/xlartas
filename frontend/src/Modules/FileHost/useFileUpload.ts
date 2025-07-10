@@ -1,4 +1,4 @@
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {useState} from 'react';
 import {UploadItem} from './UploadProgressWindow';
 

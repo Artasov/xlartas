@@ -1,6 +1,6 @@
 // Modules/xLMine/Privilege/UserPrivilege.tsx
 import React, {useEffect, useState} from 'react';
-import {useApi} from '../../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {FC, FR, FRCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';

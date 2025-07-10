@@ -1,11 +1,11 @@
 import pytest
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIRequestFactory
-from django.conf import settings
 
+from apps.core.models import User
 from apps.filehost.controllers.base import upload_files
 from apps.filehost.exceptions.base import StorageLimitExceeded
-from apps.core.models import User
 from apps.filehost.models import File
 
 

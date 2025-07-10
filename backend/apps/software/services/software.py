@@ -61,7 +61,8 @@ class SoftwareService(IProductService['Software', 'SoftwareOrder']):
                 })
             return False
 
-        price_exists = await self.prices.filter(currency=order.currency).aexists()  # TODO: Unresolved attribute reference 'prices' for class 'Software'
+        price_exists = await self.prices.filter(
+            currency=order.currency).aexists()  # TODO: Unresolved attribute reference 'prices' for class 'Software'
         if not price_exists:
             if raise_exceptions:
                 raise ValidationError({'detail': 'Price for currency not found'})

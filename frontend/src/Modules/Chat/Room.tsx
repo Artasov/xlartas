@@ -15,7 +15,7 @@ import MessagesList from './MessagesList';
 import useRoomMessages from './useRoomMessages';
 import useRoomSocket from './useRoomSocket';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 
 interface RoomProps {
     room?: IRoom | null;
@@ -64,8 +64,8 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
             return;
         }
         if (roomId) {
-            fetchMessages();
-            fetchRoom();
+            fetchMessages().then();
+            fetchRoom().then();
         }
     }, [roomId, fetchMessages, fetchRoom, notAuthentication, isAuthenticated]);
 

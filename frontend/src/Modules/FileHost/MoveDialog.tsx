@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select} from '@mui/material';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {useTranslation} from 'react-i18next';
 import {IFile, IFolder} from './types';
 

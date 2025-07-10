@@ -9,7 +9,7 @@ import {Message} from 'Core/components/Message';
 import {FC, FRC, FREC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import MacroFormDialog from './MacroFormDialog';
-import {useApi} from '../../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {WirelessMacro} from '../Types/Software';
 import {useMacroControl} from './MacroControlProvider';
 import {useTranslation} from 'react-i18next';

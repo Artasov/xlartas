@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, TextField} from '@mui/material';
-import {YANDEX_RECAPTCHA_SITE_KEY} from '../Api/axiosConfig';
+import {YANDEX_RECAPTCHA_SITE_KEY} from 'Api/axiosConfig';
 import {Message} from 'Core/components/Message';
 import DynamicForm from 'Core/components/elements/DynamicForm';
 import {SmartCaptcha} from '@yandex/smart-captcha';
@@ -12,7 +12,7 @@ import {FC, FCCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import pprint from 'Utils/pprint';
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 export type ConfirmationMethod = 'email' | 'phone';
 

@@ -45,9 +45,7 @@ const useRoomSocket = ({roomId, isAuthenticated, userId, setMessages}: UseRoomSo
         }
     }, [setMessages, updateRoom]);
 
-    const sendMessage = useWebSocket({roomId, isAuthenticated, userId, onMessage: handleWebSocketMessage});
-
-    return sendMessage;
+    return useWebSocket({roomId, isAuthenticated, userId, onMessage: handleWebSocketMessage});
 };
 
 export default useRoomSocket;

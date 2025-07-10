@@ -15,7 +15,7 @@ import {Message} from "Core/components/Message";
 import {isEmail, isPhone} from "Utils/validator/base";
 import SignUpForm from "Auth/forms/SignUpForm";
 import BackButton from "Core/components/BackButton";
-import {useApi} from "../../Api/useApi";
+import {useApi} from "Api/useApi";
 import {useTranslation} from "react-i18next";
 
 type AuthFormProps = {

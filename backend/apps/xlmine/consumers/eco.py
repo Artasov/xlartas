@@ -16,7 +16,8 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         # Пример: ждём токен в query string: ?token=<JWT_ACCESS>
-        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=', '')  # TODO: Instance attribute jwt_token defined outside __init__
+        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=',
+                                                                            '')  # TODO: Instance attribute jwt_token defined outside __init__
         if not self.jwt_token:
             await self.close()
             return

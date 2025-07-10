@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import {IFolder} from './types';
 
 const useFolderPath = (folder: IFolder | null) => {
@@ -21,7 +21,7 @@ const useFolderPath = (folder: IFolder | null) => {
             }
             setPath(p);
         };
-        build();
+        build().then();
     }, [folder, api]);
 
     return path;

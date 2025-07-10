@@ -18,7 +18,7 @@ import {
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 import {FC, FCCC, FRSC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher} from "./types/base";

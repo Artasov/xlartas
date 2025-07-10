@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useApi} from '../Api/useApi';
+import {useApi} from 'Api/useApi';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
-import {FCC, FCCC, FR} from 'wide-containers';
+import {FCC, FR} from 'wide-containers';
 import LicenseCard from './LicenseCard';
 import {Message} from 'Core/components/Message';
 import Collapse from '@mui/material/Collapse';

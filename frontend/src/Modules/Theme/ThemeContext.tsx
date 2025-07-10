@@ -2,7 +2,7 @@
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
 import darkTheme, {lightTheme} from "./themeConfig";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 interface ThemeContextType {
     theme: any;

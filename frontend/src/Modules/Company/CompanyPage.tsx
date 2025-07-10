@@ -7,7 +7,7 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import {FC, FCSS, FR} from "wide-containers";
 import {Company} from "Company/Types";
 import {useTheme} from "Theme/ThemeContext";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 import copyToClipboard from "Utils/clipboard";
 import './CompanyPage.sass'
 

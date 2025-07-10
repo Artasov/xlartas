@@ -8,7 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import {Link, Typography} from '@mui/material';
 import {FC} from "wide-containers";
 import {CompanyDocument} from "Company/Types";
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 
 
 const CompanyDocumentDetail: React.FC = () => {

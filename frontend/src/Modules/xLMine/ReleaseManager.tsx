@@ -19,7 +19,7 @@ import {
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useApi} from "../Api/useApi";
+import {useApi} from "Api/useApi";
 import {FC, FCS, FR, FRC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {IRelease} from "./types/base";
@@ -240,7 +240,8 @@ const ReleaseManager: React.FC = () => {
                                         <TableCell>
                                             <IconButton onClick={() => openConfirmDelete(r.id)}
                                                         disabled={deletingId === r.id}>
-                                                {deletingId === r.id ? <CircularProgressZoomify in size={24}/> : <DeleteIcon/>}
+                                                {deletingId === r.id ? <CircularProgressZoomify in size={24}/> :
+                                                    <DeleteIcon/>}
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
