@@ -6,13 +6,14 @@ from typing import TYPE_CHECKING
 from django.utils import timezone
 
 from apps.commerce.exceptions.promocode import PromocodeException
+from apps.commerce.services.order.base import OrderT
 
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
     from apps.commerce.models.promocode import Promocode, PromocodeUsage
     from apps.core.models.user import User
-    from apps.commerce.models import Product, Order
+    from apps.commerce.models import Product
 
 
 class PromoCodeService:
@@ -100,19 +101,19 @@ class PromoCodeService:
         # Это можно будет реализовать при фактической оплате.
         pass
 
-    async def calc_price_for_order(self: 'Promocode', order: 'Order') -> Decimal:
+    async def calc_price_for_order(self: 'Promocode', order: 'OrderT') -> Decimal:
         """
         Рассчитывает итоговую цену для заказа с учётом данного промокода.
         """
-        product = order.product  # noqa
+        product = order.product
 
         # Ищем скидку для продукта
         discount = await self.discounts.filter(product=product).afirst()
         if not discount:
             # Если нет скидки для продукта, возвращаем исходную цену
-            return await order.product.aget_price(currency=order.currency)  # noqa
+            return await order.product.aget_price(currency=order.currency)
 
-        original_price = await order.product.aget_price(currency=order.currency)  # noqa
+        original_price = await order.product.aget_price(currency=order.currency)
         if original_price is None:
             # Нет цены или ошибка
             return Decimal('0.00')

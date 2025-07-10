@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from adjango.utils.base import build_full_url
 
+from apps.commerce.models import Payment
 from apps.commerce.providers.base import BasePaymentProvider
 from apps.tbank.classes.TBank import (
     TBank, ReceiptFFD105, ItemFFD105, Payments,
@@ -11,13 +12,12 @@ from apps.tbank.classes.TBank import (
 )
 from apps.tbank.managers.customer import TBankCustomerManager
 from apps.tbank.models import TBankPayment, TBankInstallment
-from apps.commerce.models import Payment
 
 if TYPE_CHECKING:  # pragma: no cover
     pass
 
 
-class _TBankBaseProvider(BasePaymentProvider):  # noqa
+class _TBankBaseProvider(BasePaymentProvider):  # TODO: Class _TBankBaseProvider must implement all abstract methods
     async def _get_customer_key(self) -> str:
         customer = await TBankCustomerManager.get_or_init(
             user_id=self.order.user.id,
@@ -41,7 +41,7 @@ class TBankPaymentProvider(_TBankBaseProvider):
         redirect_url = build_full_url('tbank:notification') + SUCCESS_FAILURE_GET_PARAMS_TEMPLATE
 
         items = [ItemFFD105(
-            Name=self.order.product.name,  # noqa
+            Name=self.order.product.name,
             Price=price_cents,
             Quantity=1,
             Amount=price_cents,
@@ -115,7 +115,7 @@ class TBankInstallmentProvider(_TBankBaseProvider):
 
         # Параметры для create_installment:
         items = [{
-            'name': self.order.product.name,  # noqa
+            'name': self.order.product.name,
             'quantity': 1,
             'price': int(amount),
             'category': 'service',

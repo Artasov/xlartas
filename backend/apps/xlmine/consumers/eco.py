@@ -16,21 +16,21 @@ class BalanceConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         # Пример: ждём токен в query string: ?token=<JWT_ACCESS>
-        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=', '')  # noqa
+        self.jwt_token = self.scope['query_string'].decode('utf-8').replace('token=', '')  # TODO: Instance attribute jwt_token defined outside __init__
         if not self.jwt_token:
             await self.close()
             return
 
         # Проверяем JWT
         try:
-            self.user = await self._get_user(self.jwt_token)  # noqa
+            self.user = await self._get_user(self.jwt_token)  # TODO: Instance attribute user defined outside __init__
         except AuthenticationFailed:
             await self.close()
             return
 
         # Подключаемся
         await self.accept()
-        self.group_name = f'user_{self.user.id}'  # noqa
+        self.group_name = f'user_{self.user.id}'  # TODO: Instance attribute group_name defined outside __init__
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         # Можно отправить initial-сообщение
         await self.send_json({

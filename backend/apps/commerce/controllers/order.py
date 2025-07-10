@@ -16,7 +16,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import Order, Currency, Product
-from apps.commerce.serializers.order_registry import get_order_serializer, ORDER_SERIALIZERS
+from apps.commerce.serializers.order_registry import get_order_serializer
 from apps.commerce.services.order.base import OrderService
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
@@ -58,9 +58,9 @@ async def create_order(request):
         await request.user.asave()
 
     # Создание заказа
-    product: Product = await s.validated_data['product'].aget_real_instance()  # Вот тут неверная типизация ведь тут на самом деле одна из дочерних моделей. Я не знаю как противпизировать, я не хочу писать много или.
+    product = await s.validated_data['product'].aget_real_instance()
     async with AsyncAtomicContextManager():
-        order = await product.new_order(request=request)  # noqa
+        order = await product.new_order(request=request)
         if settings.DEBUG and not settings.DEBUG_INIT_PAYMENT:
             return Response('/something-go-wrong', status=HTTP_201_CREATED)
         if not order.payment:
@@ -86,7 +86,7 @@ async def user_orders(request):
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def order_detail(request, id):
-    order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id, user=request.user)
+    order = await Order.objects.agetorn(OrderException.NotFound, id=id, user=request.user)
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -95,9 +95,9 @@ async def order_detail(request, id):
 @api_view(('POST',))
 @permission_classes((IsAdminUser,))
 async def order_execute(_request, id):
-    order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id)
+    order = await Order.objects.agetorn(OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.execute()  # noqa
+        await order.execute()
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -115,9 +115,9 @@ async def order_delete(_request, id):
 @api_view(('POST',))
 @permission_classes((IsAdminUser,))
 async def order_init(request, id, init_payment):
-    order: Order = await Order.objects.agetorn(OrderException.NotFound, id=id)
+    order = await Order.objects.agetorn(OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.init(request, init_payment=bool(init_payment))  # noqa
+        await order.init(request, init_payment=bool(init_payment))
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -144,7 +144,7 @@ async def resend_payment_notification(_request, id):
     async with AsyncAtomicContextManager():
         payment = await order.arelated('payment')
         if isinstance(payment, TBankPayment):
-            await payment.resend()  # TODO: Unresolved attribute reference 'resend' for class 'TBankPayment'
+            await payment.resend()
         else:
             PaymentException.PaymentSystemNotFound()
     return Response(status=HTTP_200_OK)

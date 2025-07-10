@@ -122,8 +122,8 @@ class TBankInstallmentService:
           'id' = ID заявки в TCB
           'link' = ссылка на форму
         """
-        self.status = TBankInstallmentStatus.NEW  # noqa
-        self.payment_url = response_data.get('link')  # noqa
+        self.status = TBankInstallmentStatus.NEW  # TODO: Instance attribute status defined outside __init__
+        self.payment_url = response_data.get('link')  # TODO: Instance attribute payment_url defined outside __init__
         await self.asave()
         return response_data  # может пригодиться
 
@@ -139,8 +139,8 @@ class TBankInstallmentService:
         resp = await self._post_json(url, data={}, headers=headers)
 
         # resp содержит {'status': '...', 'committed': ..., ...}
-        self.status = resp.get('status', self.status)  # noqa
-        self.committed = bool(resp.get('committed', False))  # noqa
+        self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
+        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp
 
@@ -155,8 +155,8 @@ class TBankInstallmentService:
         headers = self._basic_auth_headers()
         resp = await self._post_json(url, data={}, headers=headers)
 
-        self.status = resp.get('status', self.status)  # noqa
-        self.committed = bool(resp.get('committed', False))  # noqa
+        self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
+        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp
 
@@ -171,7 +171,7 @@ class TBankInstallmentService:
         headers = self._basic_auth_headers()
         resp = await self._get_json(url, headers=headers)
 
-        self.status = resp.get('status', self.status)  # noqa
-        self.committed = bool(resp.get('committed', False))  # noqa
+        self.status = resp.get('status', self.status)  # TODO: Instance attribute status defined outside __init__
+        self.committed = bool(resp.get('committed', False))  # TODO: Instance attribute committed defined outside __init__
         await self.asave()
         return resp

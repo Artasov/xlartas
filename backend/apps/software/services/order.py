@@ -1,14 +1,18 @@
 # software/services/order.py
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from apps.commerce.services.order.base import OrderService
 from apps.software.services.license import SoftwareLicenseService
+
+if TYPE_CHECKING:
+    from apps.software.models import SoftwareOrder
 
 
 class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):
     @property
     async def receipt_price(self: 'SoftwareOrder') -> Decimal:
-        price_row = await self.product.prices.agetorn(currency=self.currency)  # noqa
+        price_row = await self.product.prices.agetorn(currency=self.currency)  # TODO: Unresolved attribute reference 'prices' for class 'Software'
         if not price_row:
             return Decimal('0')
 

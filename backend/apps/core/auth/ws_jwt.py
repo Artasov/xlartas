@@ -12,7 +12,7 @@ from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from rest_framework_simplejwt.backends import TokenBackend
-from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.tokens import UntypedToken, Token
 
 
 @database_sync_to_async
@@ -64,13 +64,12 @@ class JWTAuthMiddlewareInst:  # ← scope wrapper
         return None
 
     @staticmethod
-    async def _authenticate(token: str | None):
+    async def _authenticate(token: Token | None):
         if not token:
             return AnonymousUser()
         try:
-            # signature / exp validation
-            UntypedToken(token)  # noqa
-            data = TokenBackend(algorithm='HS256').decode(token, verify=True)  # noqa
+            UntypedToken(token)
+            data = TokenBackend(algorithm='HS256').decode(token, verify=True)
             return await _get_user(data.get('user_id'))
         except Exception:  # noqa
             return AnonymousUser()

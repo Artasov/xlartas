@@ -23,7 +23,7 @@ class TBankPaymentService(BasePaymentService):
         if self.status == self.Status.CANCELED:
             raise PaymentAlreadyCanceled()
         await TBank().Cancel(payment_id=str(self.id))
-        self.status = self.Status.CANCELED  # noqa
+        self.status = self.Status.CANCELED  # TODO: Instance attribute status defined outside __init__
         await self.asave()
         log.info('[TBank] Payment %s canceled', self.id)
 

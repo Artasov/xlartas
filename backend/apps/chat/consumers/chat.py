@@ -36,7 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def receive(self, text_data):  # noqa
+    async def receive(self, text_data=None, bytes_data=None):
         data = json.loads(text_data)
         if data['type'] == 'read_message':
             await self.mark_message_as_read(data['message_id'])

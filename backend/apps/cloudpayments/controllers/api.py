@@ -40,9 +40,9 @@ async def success(request):
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        order: Order = await Order.objects.select_for_update().aget(pk=invoice_id)
+        order = await Order.objects.select_for_update().aget(pk=invoice_id)
         order.payment = await order.arelated('payment')  # CloudPaymentPayment
-        payment: CloudPaymentPayment = order.payment  # noqa
+        payment: CloudPaymentPayment = order.payment
 
         # --- проверяем статус транзакции у CloudPayments ---
         is_confirmed: bool = await CloudPaymentService.actual_status(invoice_id)
@@ -53,18 +53,15 @@ async def success(request):
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        # --- помечаем как оплачено ---
         order.is_paid = True
         payment.is_paid = True
         payment.status = CloudPaymentPayment.Status.COMPLETED
         await order.asave()
         await payment.asave()
 
-        # --- выполняем сам заказ ---
         try:
-            await order.execute()  # noqa
+            await order.execute()
         except OrderException.AlreadyExecuted:
-            # уже был выполнен, ничего страшного
             pass
 
         return Response({'success': True}, status=HTTP_200_OK)

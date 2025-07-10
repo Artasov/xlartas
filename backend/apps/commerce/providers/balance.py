@@ -25,7 +25,7 @@ class BalanceProvider(BasePaymentProvider):
         self.order.is_paid = True
         await self.order.asave()
         await payment.asave()
-        await self.order.execute()  # noqa
+        await self.order.execute()
         return payment
 
     async def sync(self, payment: BalancePayment) -> None:

@@ -7,8 +7,10 @@ from typing import TYPE_CHECKING
 
 from adrf.requests import AsyncRequest
 
+from apps.commerce.services.order.base import OrderT
+
 if TYPE_CHECKING:  # pragma: no cover
-    from apps.commerce.models import Order, Payment
+    from apps.commerce.models import Payment
 
 
 class BasePaymentProvider(abc.ABC):
@@ -18,14 +20,13 @@ class BasePaymentProvider(abc.ABC):
 
     system_name: str  # Например 'tbank'
 
-    def __init__(self, *, order: 'Order', request: AsyncRequest) -> None:
+    def __init__(self, *, order: 'OrderT', request: AsyncRequest) -> None:
         self.order = order
         self.request = request
 
     # --- Factories --------------------------------------------------- #
     @classmethod
-    async def create(cls, *, order: 'Order', request: AsyncRequest,
-                     amount: Decimal) -> 'Payment':
+    async def create(cls, *, order: 'OrderT', request, amount: Decimal) -> 'Payment':
         """Создать сущность Payment и инициализировать платёжную сессию."""
         self = cls(order=order, request=request)
         return await self._create(amount)

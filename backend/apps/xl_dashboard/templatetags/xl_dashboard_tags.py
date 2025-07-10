@@ -18,8 +18,7 @@ def show_xl_dashboard(context):
         {% show_xl_dashboard %}
     """
     xl_dashboard = getattr(settings, 'XL_DASHBOARD', {})
-    user = context['request'].user  # noqa
-
+    # user = context['request'].user
     sections = []
     actions = xl_dashboard.get('xl-actions', {})
 

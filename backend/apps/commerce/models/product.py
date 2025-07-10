@@ -34,12 +34,13 @@ class Product(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
         return self.name
 
     async def aget_price(self, currency) -> Decimal | None:
-        price = await self.prices.agetorn(currency=currency)  # noqa
+        price = await self.prices.agetorn(
+            currency=currency)  # TODO: Исправить Unresolved attribute reference 'prices' for class 'Product'
         return price.amount if price else None
 
     def get_price(self, currency) -> Decimal | None:
         try:
-            return self.prices.get(currency=currency)  # noqa
+            return self.prices.get(currency=currency)
         except ProductPrice.DoesNotExist:
             return None
 

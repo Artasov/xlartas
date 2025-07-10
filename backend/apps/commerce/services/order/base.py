@@ -1,23 +1,18 @@
 # commerce/services/order/base.py
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING, Union, Generic, TypeVar
+from typing import TYPE_CHECKING, Union, Generic
 
-from adrf.requests import AsyncRequest
-from django.core.handlers.asgi import ASGIRequest
-from django.core.handlers.wsgi import WSGIRequest
-
+from apps.cloudpayments.classes.payment import CloudPaymentAPI
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
+from apps.commerce.services.typing import OrderT, ProductT
 
 tbank_log = logging.getLogger('tbank')
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order, HandMadePayment, Product
-
-OrderT = TypeVar('OrderT', bound='Order')
-ProductT = TypeVar('ProductT', bound='Product')
+    from apps.commerce.models import Order, HandMadePayment
 
 
 class OrderService(Generic[OrderT, ProductT]):
@@ -33,9 +28,7 @@ class OrderService(Generic[OrderT, ProductT]):
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
     # ---------------------------------------------------------------- #
-    async def init_payment(
-            self: OrderT, request: AsyncRequest, price: Decimal,
-    ):
+    async def init_payment(self: OrderT, request, price: Decimal):
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
         available = PaymentSystemRegistry.available_systems(self.currency)
         if self.payment_system not in available:
@@ -47,7 +40,7 @@ class OrderService(Generic[OrderT, ProductT]):
         )
         commerce_log.info(f'Using {provider_cls} provider')
         payment = await provider_cls.create(order=self, request=request, amount=price)
-        self.payment = payment  # noqa
+        self.payment = payment  # TODO: Instance attribute payment defined outside __init__
         await self.asave()
 
     @property
@@ -55,27 +48,15 @@ class OrderService(Generic[OrderT, ProductT]):
         """
         Возвращает финальную сумму для чека.
         """
-        price_row = await self.product.prices.agetorn(currency=self.currency)  # noqa
-        if not price_row:
-            # Если нет строки цены, 0
-            return Decimal('0')
-
-        # Для большинства заказов используется базовая цена продукта
+        price_row = await self.product.prices.agetorn(currency=self.currency)
+        if not price_row: return Decimal('0')
         price = price_row.amount
-
-        # Если есть промокод, учитываем скидку
-        if self.promocode:
-            price = await self.promocode.calc_price_for_order(order=self)
-
+        if self.promocode: price = await self.promocode.calc_price_for_order(order=self)
         return price
 
-    async def safe_cancel(
-            self: OrderT,
-            request: AsyncRequest | WSGIRequest | ASGIRequest,
-            reason: str
-    ):
+    async def safe_cancel(self: OrderT, request, reason: str):
         if not any((self.is_inited, self.is_executed, self.is_paid, self.is_cancelled, self.is_refunded)):
-            await self.cancel(request=request, reason=reason)  # noqa
+            await self.cancel(request=request, reason=reason)
         elif self.is_cancelled:
             raise OrderException.AlreadyCanceled()
         elif self.is_paid:
@@ -83,25 +64,23 @@ class OrderService(Generic[OrderT, ProductT]):
         elif self.is_refunded:
             raise OrderException.CannotCancelRefunded()
         elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
-            await self.cancel(request=request, reason=reason)  # noqa
+            await self.cancel(request=request, reason=reason)
 
     async def init(self: OrderT, request, init_payment: bool = True):
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
-        self.product: Product = await self.product.aget_real_instance()  # noqa # Тут тоже неверная типизация.
-        commerce_log.info(f'For product {self.product.name}')  # noqa
-        price = await self.receipt_price  # noqa
+        self.product = await self.product.aget_real_instance()  # TODO: Instance attribute product defined outside __init__ но на самом то деле это поле из модели
+        commerce_log.info(f'For product {self.product.name}')
+        price = await self.receipt_price
         commerce_log.info(f'Price: {price}')
-        self.amount = price  # noqa
+        self.amount = price  # TODO: тоже самое Instance attribute amount defined outside __init__
         await self.asave()
-        await self.product.can_pregive(self, raise_exceptions=True)  # noqa
-        commerce_log.info(f'Pregive process product {self.product.name}')  # noqa
+        await self.product.can_pregive(self, raise_exceptions=True)
+        commerce_log.info(f'Pregive process product {self.product.name}')
         await self.product.pregive(self)  # noqa
         if self.payment_system and init_payment and price > 0:
-            await self.init_payment(  # noqa
-                request, price
-            )  # TODO: Unresolved attribute reference 'init_payment' for class 'Order'
-        self.is_inited = True  # noqa
+            await self.init_payment(request, price)
+        self.is_inited = True  # TODO: Instance attribute is_inited defined outside __init__
         await self.asave()
 
     async def sync_with_payment_system(self: OrderT):
@@ -120,7 +99,7 @@ class OrderService(Generic[OrderT, ProductT]):
         except ValueError:
             raise PaymentException.PaymentSystemNotFound() from None
 
-        provider = provider_cls(order=self, request=None)  # type: ignore[arg-type]
+        provider = provider_cls(order=self, request=None)
         await provider.sync(payment)
 
         if payment.is_paid and not self.is_executed and not self.is_refunded:
@@ -136,24 +115,19 @@ class OrderService(Generic[OrderT, ProductT]):
         if self.is_refunded: raise OrderException.CannotExecuteRefunded()
         if self.is_executed: raise OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()  # noqa
-        await self.product.postgive(self)  # noqa
-        if self.promocode_id:
-            await PromocodeUsage.objects.acreate(
-                user_id=self.user_id, promocode_id=self.promocode_id,
-            )
-        self.is_executed = True  # noqa
+        self.product = await self.product.aget_real_instance()  # TODO: Instance attribute product defined outside __init__
+        await self.product.postgive(self)
+        if self.promocode_id:  await PromocodeUsage.objects.acreate(
+            user_id=self.user_id, promocode_id=self.promocode_id,
+        )
+        self.is_executed = True  # TODO: Instance attribute is_executed defined outside __init__
         await self.asave()
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
 
-    async def cancel(
-            self: Union['Order', 'OrderService'],
-            request: AsyncRequest | WSGIRequest | ASGIRequest,
-            reason: str
-    ):
+    async def cancel(self: Union['Order', 'OrderService'], request, reason: str):
         if getattr(self, 'payment_id'):
             await self.cancel_payment()
-        self.product = await self.arelated('product')  # noqa
+        self.product = await self.arelated('product')  # TODO: Instance attribute product defined outside __init__
         await self.product.cancel_given(request=request, order=self, reason=reason)
         self.is_cancelled = True  # noqa
         await self.asave()
@@ -186,7 +160,7 @@ class OrderService(Generic[OrderT, ProductT]):
             else:
                 await self.payment.cancel()
         elif isinstance(self.payment, CloudPaymentPayment):
-            await CloudPaymentAPI.cancel(self.payment)  # noqa # TODO: Не реализовано
+            await CloudPaymentAPI.cancel(self.payment)  # noqa TODO: Не реализовано
         elif isinstance(self.payment, HandMadePayment):
             pass  # Ручная оплата, отмена тоже ручная
         else:

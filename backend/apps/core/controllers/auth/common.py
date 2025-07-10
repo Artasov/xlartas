@@ -78,7 +78,7 @@ async def signup(request) -> Response:
             request=request,
             action=CoreConfirmationActionType.SIGNUP,
             method='email',  # Потому что у нас только по email подтверждения создания аккаунта
-            credential=email,  # noqa
+            credential=email,
             raise_exceptions=True
         )
         return Response({

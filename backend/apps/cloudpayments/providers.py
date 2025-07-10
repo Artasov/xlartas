@@ -23,7 +23,7 @@ class CloudPaymentsProvider(BasePaymentProvider):
     system_name = 'cloud_payment'  # соответствует PaymentSystem.CloudPayment
 
     # --------------------------------------------------------------------- #
-    async def _create(self, amount: Decimal) -> CloudPaymentPayment:  # noqa: D401
+    async def _create(self, amount: Decimal) -> CloudPaymentPayment:
         """
         Создаём локальную модель и возвращаем её.
         Виджет CloudPayments открывается на фронте, поэтому URL не нужен.
@@ -33,13 +33,13 @@ class CloudPaymentsProvider(BasePaymentProvider):
                 user=self.order.user,
                 amount=amount,
             )
-        except Exception as exc:  # pragma: no cover
+        except Exception as exc:
             raise PaymentException.InitError(f'CloudPayments init error: {exc}') from exc
 
         return payment
 
     # --------------------------------------------------------------------- #
-    async def cancel(self, payment: Payment) -> None:  # noqa: D401
+    async def cancel(self, payment: Payment) -> None:
         """
         Charge‑схема CloudPayments не предусматривает «Cancel».
         Отмена = Refund → реализуется отдельным use‑case'ом, здесь просто no‑op.

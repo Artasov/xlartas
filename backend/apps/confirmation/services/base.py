@@ -57,7 +57,7 @@ class ConfirmationCodeService:
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             action: str,
             method: str,
-            credential: str,
+            credential: str | None,
             raise_exceptions: bool = False,
     ) -> 'ConfirmationCode':
         data = request.data
@@ -74,10 +74,9 @@ class ConfirmationCodeService:
 
     @staticmethod
     async def can_new(
-            request: AsyncRequest | WSGIRequest | ASGIRequest,
-            action: str,
-            method: str,  # noqa
-            credential: str,
+            request, action: str,
+            method: str,  # noqa Просто не используется пока
+            credential: str | None,
             raise_exceptions: bool = False
     ) -> Union['User', bool]:
         from apps.core.models import User
@@ -122,12 +121,12 @@ class ConfirmationCodeService:
         )
         action: ConfirmationAction = confirmation_actions.get(code.action).copy()
         del action['func']
-        method_name = cls.get_confirmation_method().upper()  # noqa
+        method_name = cls.get_confirmation_method().upper()  # TODO: Unresolved attribute reference 'get_confirmation_method' for class 'ConfirmationCode'
         if False and (settings.DEBUG and not settings.DEBUG_SEND_NOTIFIES) or user.is_test:
             log.debug(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')
         else:
             log.info(f'{method_name} {code.action} user={user.id} CONFIRMATION CODE: {code.code}')
-            await cls.send_code(code.code, action, user, extra_data)  # noqa
+            await cls.send_code(code.code, action, user, extra_data) # TODO: Unresolved attribute reference 'send_code'
         return code
 
     async def confirmation(self: 'ConfirmationCode', **kwargs):
@@ -137,7 +136,7 @@ class ConfirmationCodeService:
     async def make_action(self: 'ConfirmationCode', **kwargs) -> ConfirmationResult:
         async with AsyncAtomicContextManager():
             func = self.get_action_func()
-            self.is_used = True  # noqa
+            self.is_used = True  # TODO: Instance attribute is_used defined outside __init__
             await self.asave()
             result = await func(self, **kwargs)
             return ConfirmationResult(result=result, action=self.action)

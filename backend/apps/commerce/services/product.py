@@ -1,12 +1,12 @@
 # commerce/services/product.py
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Generic, TypeVar
+from typing import TYPE_CHECKING, Generic
+
+from apps.commerce.services.typing import ProductT, OrderT
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order, Product
+    from apps.commerce.models import Product
 
-OrderT = TypeVar('OrderT', bound='Order')
-ProductT = TypeVar('ProductT', bound='Product')
 
 class IProductService(Generic[ProductT, OrderT]):
     """
