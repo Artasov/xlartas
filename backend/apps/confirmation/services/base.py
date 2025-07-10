@@ -52,6 +52,7 @@ async def get_confirmation_code_instance(
 
 
 class ConfirmationCodeService:
+    is_used: bool
     @classmethod
     def get_confirmation_method(cls) -> str:
         raise NotImplementedError
@@ -147,7 +148,7 @@ class ConfirmationCodeService:
     async def make_action(self: 'ConfirmationCode', **kwargs) -> ConfirmationResult:
         async with AsyncAtomicContextManager():
             func = self.get_action_func()
-            self.is_used = True  # TODO: Instance attribute is_used defined outside __init__
+            self.is_used = True
             await self.asave()
             result = await func(self, **kwargs)
             return ConfirmationResult(result=result, action=self.action)
