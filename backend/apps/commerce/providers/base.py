@@ -5,8 +5,6 @@ import abc
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from adrf.requests import AsyncRequest
-
 from apps.commerce.services.order.base import OrderT
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -20,7 +18,7 @@ class BasePaymentProvider(abc.ABC):
 
     system_name: str  # Например 'tbank'
 
-    def __init__(self, *, order: 'OrderT', request: AsyncRequest) -> None:
+    def __init__(self, *, order: 'OrderT', request) -> None:
         self.order = order
         self.request = request
 

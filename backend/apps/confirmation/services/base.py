@@ -2,6 +2,7 @@
 import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
+from abc import ABC, abstractmethod
 
 from adjango.utils.base import AsyncAtomicContextManager, diff_by_timedelta
 from adrf.requests import AsyncRequest
