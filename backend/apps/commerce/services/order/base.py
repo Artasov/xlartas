@@ -3,7 +3,6 @@ import logging
 from decimal import Decimal
 from typing import TYPE_CHECKING, Union, Generic
 
-from apps.cloudpayments.classes.payment import CloudPaymentAPI
 from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.services.typing import OrderT, ProductT
@@ -149,18 +148,19 @@ class OrderService(Generic[OrderT, ProductT]):
     async def cancel_payment(self: Union['Order', 'OrderService']):
         """Отменяет только платеж в шлюзе."""
         await self.sync_with_payment_system()
+        self.payment = await self.arelated('payment')
         from apps.tbank.models import TBankPayment
         from apps.commerce.models.payment import HandMadePayment
         from apps.cloudpayments.models import CloudPaymentPayment
         if isinstance(self.payment, TBankPayment):
-            payment: TBankPayment = await self.arelated('payment')
+            payment: TBankPayment = self.payment
             if payment.is_paid:
                 tbank_log.info(f'TBank Payment {payment.id} cannot cancel paid.')
                 raise OrderException.CannotCancelPaid()
             else:
                 await self.payment.cancel()
         elif isinstance(self.payment, CloudPaymentPayment):
-            await CloudPaymentAPI.cancel(self.payment)  # noqa TODO: Не реализовано
+            await self.payment.cancel()
         elif isinstance(self.payment, HandMadePayment):
             pass  # Ручная оплата, отмена тоже ручная
         else:
