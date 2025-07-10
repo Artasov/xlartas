@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 OrderT = TypeVar('OrderT', bound='Order')
 ProductT = TypeVar('ProductT', bound='Product')
 
-
 class IProductService(Generic[ProductT, OrderT]):
     """
     Интерфейс-сервис для работы с продуктами, который реализует общие шаги
