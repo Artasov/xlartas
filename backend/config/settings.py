@@ -23,9 +23,6 @@ from config.modules.third_party_services import *
 from config.modules.ws import *
 from config.modules.xl_dashboard import *
 
-# Maximum total storage allowed for user file uploads (in bytes)
-STORAGE_LIMIT = 300 * 1024 * 1024  # 300 MB
-
 log = logging.getLogger('global')
 log.info('#####################################')
 log.info('########## Server Settings ##########')

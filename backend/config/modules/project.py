@@ -14,3 +14,6 @@ DEVELOPER_EMAIL = 'ivanhvalevskey@gmail.com'
 MAX_DEPOSIT_AMOUNT = 10_000
 MIN_DEPOSIT_AMOUNT = 1 if DEBUG else 50
 DEFAULT_DEPOSIT_AMOUNT = 100
+
+# Maximum total storage allowed for user file uploads (in bytes)
+STORAGE_LIMIT = 300 * 1024 * 1024  # 300 MB
