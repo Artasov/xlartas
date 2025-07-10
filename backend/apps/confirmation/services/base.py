@@ -2,6 +2,7 @@
 import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
+from abc import ABC, abstractmethod
 
 from adjango.utils.base import AsyncAtomicContextManager, diff_by_timedelta
 from adrf.requests import AsyncRequest
@@ -51,7 +52,19 @@ async def get_confirmation_code_instance(
     return confirmation_models[method]
 
 
-class ConfirmationCodeService:
+class ConfirmationCodeService(ABC):
+    @classmethod
+    @abstractmethod
+    def get_confirmation_method(cls) -> str:
+        ...
+
+    @classmethod
+    @abstractmethod
+    async def send_code(
+        cls, code: str, action: ConfirmationAction,
+        user: 'User', extra_data: dict | None = None
+    ) -> None:
+        ...
     @staticmethod
     async def create_and_send(
             request: AsyncRequest | WSGIRequest | ASGIRequest,
