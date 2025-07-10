@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from apps.commerce.models import GiftCertificate, GiftCertificateOrder
 
 
-class GiftCertificateService(IProductService):
+class GiftCertificateService(IProductService['GiftCertificate', 'GiftCertificateOrder']):
     @staticmethod
     async def new_order(
             request

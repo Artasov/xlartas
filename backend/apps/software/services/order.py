@@ -5,7 +5,7 @@ from apps.commerce.services.order.base import OrderService
 from apps.software.services.license import SoftwareLicenseService
 
 
-class SoftwareOrderService(OrderService):
+class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):
     @property
     async def receipt_price(self: 'SoftwareOrder') -> Decimal:
         price_row = await self.product.prices.agetorn(currency=self.currency)  # noqa

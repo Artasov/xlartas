@@ -1,12 +1,15 @@
 # commerce/services/product.py
 from abc import abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, TypeVar, Protocol
 
 if TYPE_CHECKING:
     from apps.commerce.models import Order, Product
 
+OrderT = TypeVar('OrderT', bound='Order')
+ProductT = TypeVar('ProductT', bound='Product')
 
-class IProductService:
+
+class IProductService(Protocol, Generic[ProductT, OrderT]):
     """
     Интерфейс-сервис для работы с продуктами, который реализует общие шаги
     для выдачи продуктов. Создания заказа под продукт и т.д. Этот класс должен быть унаследован конкретными
@@ -18,23 +21,23 @@ class IProductService:
     @abstractmethod
     async def new_order(
             request
-    ) -> 'Order': # Тут неверная типизация, потому что на самом деле мы получим одного оиз наследников Order, я не знаю как правильно протипизировать
+    ) -> OrderT:
         pass
 
     @abstractmethod
-    async def cancel_given(self, request, order: 'Order', reason: str):
+    async def cancel_given(self: ProductT, request, order: OrderT, reason: str):
         """Отменяем выдачу товара"""
         pass
 
     @abstractmethod
-    async def can_pregive(self: 'Product', order: 'Order', raise_exceptions=False) -> bool:
+    async def can_pregive(self: ProductT, order: OrderT, raise_exceptions=False) -> bool:
         """
         Можем ли мы сделать начальную инициализацию продукта у клиента?
         """
         pass
 
     @abstractmethod
-    async def pregive(self: 'Product', order: 'Order'):
+    async def pregive(self: ProductT, order: OrderT):
         """
         Подготовка к выдаче продукта до завершения оплаты.
         Выполняет все начальные действия перед оплатой.
@@ -42,7 +45,7 @@ class IProductService:
         pass
 
     @abstractmethod
-    async def postgive(self: 'Product', order: 'Order'):
+    async def postgive(self: ProductT, order: OrderT):
         """
         Завершение выдачи продукта после оплаты.
         Выполняет действия для завершения процесса выдачи.
