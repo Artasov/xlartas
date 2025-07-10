@@ -1,7 +1,7 @@
 # commerce/services/order/base.py
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Generic, TypeVar
 
 from adrf.requests import AsyncRequest
 from django.core.handlers.asgi import ASGIRequest
@@ -14,10 +14,13 @@ tbank_log = logging.getLogger('tbank')
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order, HandMadePayment
+    from apps.commerce.models import Order, HandMadePayment, Product
+
+OrderT = TypeVar('OrderT', bound='Order')
+ProductT = TypeVar('ProductT', bound='Product')
 
 
-class OrderService:
+class OrderService(Generic[OrderT, ProductT]):
     """
     Интерфейс-сервис для работы с заказами, частично реализующий функционал.
     Этот класс должен быть унаследован конкретными сервисами заказов,
@@ -31,7 +34,7 @@ class OrderService:
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
     # ---------------------------------------------------------------- #
     async def init_payment(
-            self: 'Order', request: AsyncRequest, price: Decimal,
+            self: OrderT, request: AsyncRequest, price: Decimal,
     ):
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
         available = PaymentSystemRegistry.available_systems(self.currency)
@@ -48,7 +51,7 @@ class OrderService:
         await self.asave()
 
     @property
-    async def receipt_price(self: 'Order'):
+    async def receipt_price(self: OrderT):
         """
         Возвращает финальную сумму для чека.
         """
@@ -67,7 +70,7 @@ class OrderService:
         return price
 
     async def safe_cancel(
-            self: 'Order',
+            self: OrderT,
             request: AsyncRequest | WSGIRequest | ASGIRequest,
             reason: str
     ):
@@ -82,7 +85,7 @@ class OrderService:
         elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
             await self.cancel(request=request, reason=reason)  # noqa
 
-    async def init(self: 'Order', request, init_payment: bool = True):
+    async def init(self: OrderT, request, init_payment: bool = True):
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
         self.product: Product = await self.product.aget_real_instance()  # noqa # Тут тоже неверная типизация.
@@ -101,7 +104,7 @@ class OrderService:
         self.is_inited = True  # noqa
         await self.asave()
 
-    async def sync_with_payment_system(self: 'Order'):
+    async def sync_with_payment_system(self: OrderT):
         """Synchronize payment status using payment provider."""
         from apps.commerce.providers.base import BasePaymentProvider
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
@@ -123,7 +126,7 @@ class OrderService:
         if payment.is_paid and not self.is_executed and not self.is_refunded:
             await self.execute()
 
-    async def execute(self: 'Order'):
+    async def execute(self: OrderT):
         """
         Выполнение заказа после оплаты.
         Отвечает за выполнение операций после оплаты заказа. Выдача товара в том или ином виде,
