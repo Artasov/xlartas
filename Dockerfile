@@ -21,8 +21,8 @@ RUN apk update && \
     chmod +x /srv/entrypoint_celery.sh && \
     dos2unix /srv/entrypoint_flower.sh && \
     chmod +x /srv/entrypoint_flower.sh && \
-    mkdir -p /srv/data/cache/ /srv/data/temp/ /srv/data/rabbitmq/ /srv/backend/logs/ /srv/static/ /srv/media/ && \
-    chmod -R 777 /srv/data/cache/ /srv/data/temp/ /srv/data/rabbitmq/ /srv/backend/logs/ /srv/static/ /srv/media/ && \
+    mkdir -p /srv/data/cache/ /srv/data/temp/ /srv/data/rabbitmq/ /srv/data/sonarqube/ /srv/data/sonarqube/data/ /srv/data/sonarqube/extensions/ /srv/data/sonarqube/logs/ /srv/backend/logs/ /srv/static/ /srv/media/ && \
+    chmod -R 777 /srv/data/cache/ /srv/data/temp/ /srv/data/rabbitmq/ /srv/data/sonarqube/ /srv/data/sonarqube/data/ /srv/data/sonarqube/extensions/ /srv/data/sonarqube/logs/ /srv/backend/logs/ /srv/static/ /srv/media/ && \
     echo "server pool.ntp.org iburst" >> /etc/chrony/chrony.conf
 
 #############
