@@ -219,6 +219,14 @@ services:
 
   sonarqube:
     image: sonarqube:10.5.1-community
+    sysctls:
+      - vm.max_map_count=262144
+      - fs.file-max=131072
+    ulimits:
+      nproc: 8192
+      nofile:
+        soft: 131072
+        hard: 131072
     hostname: sonarqube
     depends_on: [ sonardb ]
     environment:

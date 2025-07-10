@@ -53,6 +53,7 @@ async def get_confirmation_code_instance(
 
 class ConfirmationCodeService:
     is_used: bool
+
     @classmethod
     def get_confirmation_method(cls) -> str:
         raise NotImplementedError

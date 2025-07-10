@@ -22,7 +22,7 @@ class VKOAuthProvider(OAuthProviderMixin, OAuthProvider):
         vk_id = user_data['id']
         await OAuthProviderMixin.link_user_account_model(
             user,
-            VKUser,
+            VKUser, # TODO: Expected type 'Model', got 'Type[VKUser]' instead
             'vk_id',
             str(vk_id),
         )
@@ -78,7 +78,7 @@ class VKOAuthProvider(OAuthProviderMixin, OAuthProvider):
             raise SocialOAuthException.VKIDNotProvided()
 
         return await self._get_or_create_user_base(
-            VKUser,
+            VKUser, # TODO: Expected type 'Model', got 'Type[VKUser]' instead
             'vk_id',
             vk_id,
             email=user_data.get('email', ''),

@@ -21,7 +21,7 @@ class YandexOAuthProvider(OAuthProviderMixin, OAuthProvider):
         yandex_id = user_data['id']
         await OAuthProviderMixin.link_user_account_model(
             user,
-            YandexUser,
+            YandexUser, # TODO: Expected type 'Model', got 'Type[YandexUser]' instead
             'yandex_id',
             yandex_id,
         )
@@ -78,7 +78,7 @@ class YandexOAuthProvider(OAuthProviderMixin, OAuthProvider):
                 avatar_url = f'https://avatars.yandex.net/get-yapic/{avatar_id}/islands-200'
 
         return await self._get_or_create_user_base(
-            YandexUser,
+            YandexUser, # TODO: Expected type 'Model', got 'Type[YandexUser]' instead
             'yandex_id',
             yandex_id,
             email=email,
