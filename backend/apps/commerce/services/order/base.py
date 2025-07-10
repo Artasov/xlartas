@@ -12,7 +12,6 @@ commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
     from apps.commerce.models import Order, HandMadePayment
-    from apps.commerce.models.payment import Payment
 
 
 class OrderService(Generic[OrderT, ProductT]):
@@ -123,7 +122,7 @@ class OrderService(Generic[OrderT, ProductT]):
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()
         await self.product.postgive(self)
-        if self.promocode_id:  await PromocodeUsage.objects.acreate(
+        if self.promocode_id: await PromocodeUsage.objects.acreate(
             user_id=self.user_id, promocode_id=self.promocode_id,
         )
         self.is_executed = True
