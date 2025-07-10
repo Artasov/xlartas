@@ -1,6 +1,6 @@
 # commerce/services/product.py
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Generic, TypeVar, Protocol
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 if TYPE_CHECKING:
     from apps.commerce.models import Order, Product
@@ -8,8 +8,7 @@ if TYPE_CHECKING:
 OrderT = TypeVar('OrderT', bound='Order')
 ProductT = TypeVar('ProductT', bound='Product')
 
-
-class IProductService(Protocol, Generic[ProductT, OrderT]):
+class IProductService(Generic[ProductT, OrderT]):
     """
     Интерфейс-сервис для работы с продуктами, который реализует общие шаги
     для выдачи продуктов. Создания заказа под продукт и т.д. Этот класс должен быть унаследован конкретными
