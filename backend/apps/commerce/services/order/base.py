@@ -12,6 +12,7 @@ commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
     from apps.commerce.models import Order, HandMadePayment
+    from apps.commerce.models.payment import Payment
 
 
 class OrderService(Generic[OrderT, ProductT]):
@@ -23,6 +24,12 @@ class OrderService(Generic[OrderT, ProductT]):
     @method init: Метод для инициализации заказа.
     @method execute: Метод для выполнения заказа.
     """
+
+    payment: 'Payment | None'
+    product: ProductT
+    amount: Decimal | None
+    is_inited: bool
+    is_executed: bool
 
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
@@ -39,7 +46,7 @@ class OrderService(Generic[OrderT, ProductT]):
         )
         commerce_log.info(f'Using {provider_cls} provider')
         payment = await provider_cls.create(order=self, request=request, amount=price)
-        self.payment = payment  # TODO: Instance attribute payment defined outside __init__
+        self.payment = payment
         await self.asave()
 
     @property
@@ -68,18 +75,18 @@ class OrderService(Generic[OrderT, ProductT]):
     async def init(self: OrderT, request, init_payment: bool = True):
         commerce_log.info(f'Start init order {self.id}')
         self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()  # TODO: Instance attribute product defined outside __init__ но на самом то деле это поле из модели
+        self.product = await self.product.aget_real_instance()
         commerce_log.info(f'For product {self.product.name}')
         price = await self.receipt_price
         commerce_log.info(f'Price: {price}')
-        self.amount = price  # TODO: тоже самое Instance attribute amount defined outside __init__
+        self.amount = price
         await self.asave()
         await self.product.can_pregive(self, raise_exceptions=True)
         commerce_log.info(f'Pregive process product {self.product.name}')
         await self.product.pregive(self)  # noqa
         if self.payment_system and init_payment and price > 0:
             await self.init_payment(request, price)
-        self.is_inited = True  # TODO: Instance attribute is_inited defined outside __init__
+        self.is_inited = True
         await self.asave()
 
     async def sync_with_payment_system(self: OrderT):
@@ -114,19 +121,19 @@ class OrderService(Generic[OrderT, ProductT]):
         if self.is_refunded: raise OrderException.CannotExecuteRefunded()
         if self.is_executed: raise OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()  # TODO: Instance attribute product defined outside __init__
+        self.product = await self.product.aget_real_instance()
         await self.product.postgive(self)
         if self.promocode_id:  await PromocodeUsage.objects.acreate(
             user_id=self.user_id, promocode_id=self.promocode_id,
         )
-        self.is_executed = True  # TODO: Instance attribute is_executed defined outside __init__
+        self.is_executed = True
         await self.asave()
         commerce_log.info(f'Order {self.id} EXECUTED successfully')
 
     async def cancel(self: Union['Order', 'OrderService'], request, reason: str):
         if getattr(self, 'payment_id'):
             await self.cancel_payment()
-        self.product = await self.arelated('product')  # TODO: Instance attribute product defined outside __init__
+        self.product = await self.arelated('product')
         await self.product.cancel_given(request=request, order=self, reason=reason)
         self.is_cancelled = True  # noqa
         await self.asave()
