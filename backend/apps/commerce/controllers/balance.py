@@ -7,15 +7,13 @@ from rest_framework.status import HTTP_200_OK
 
 from apps.commerce.models import BalanceProduct
 from apps.commerce.serializers.balance import BalanceProductSerializer
-from apps.core.models import User
 
 
 @acontroller('Get user balance')
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def user_balance(request):
-    user: User = request.user
-    return Response({'balance': float(user.balance)}, status=HTTP_200_OK)
+    return Response({'balance': float(request.user.balance)}, status=HTTP_200_OK)
 
 
 @acontroller('Get latest balance product')

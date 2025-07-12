@@ -17,7 +17,7 @@ export interface AuthContextType {
     user: IUser | null;
     setUser: (user: IUser | null) => void;
     updateCurrentUser: () => Promise<void>;
-    login: (username: string, password: string) => Promise<void>;
+    login: (username: string, password: string, next?: string) => Promise<void>;
     logout: () => void;
     frontendLogout: () => void;
     handleAuthResponse: (jwtPair: JWTPair, next?: string) => void;
@@ -97,10 +97,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             frontendLogout()
         }
     }
-    const login = async (username: string, password: string) => {
+    const login = async (username: string, password: string, next?: string) => {
         try {
             const r = await axios.post('/api/v1/token/', {username, password})
-            await handleAuthResponse(r.data)
+            await handleAuthResponse(r.data, next)
         } catch (e) {
             Message.error(t('invalid_credentials'))
         }

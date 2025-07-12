@@ -5,6 +5,7 @@ import {AuthContext, AuthContextType} from 'Auth/AuthContext';
 import 'react-phone-input-2/lib/material.css'
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
+import {useLocation} from 'react-router-dom';
 import TextField from "@mui/material/TextField";
 import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";
@@ -30,6 +31,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const {t} = useTranslation();
 
     const {isAuthenticated, login, handleAuthResponse} = useContext(AuthContext) as AuthContextType;
+    const location = useLocation();
     const [credential, setCredential] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [step, setStep] = useState<number>(1);  // 1 - Enter credential, 2 - Choose login method, 3 - SignUpForm, 4 - ConfirmationCode
@@ -52,7 +54,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
 
     const handlePasswordLogin = () => {
         setLoading(true);
-        login(credential, password)
+        const next = `${location.pathname}${location.search}`;
+        login(credential, password, next)
             .then(r => setLoading(false))
             .catch(() => setLoading(false));
     };
@@ -144,7 +147,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
 
     const onConfirmAuth = (action_result: any) => {
         pprint('onConfirmAuth', action_result);
-        handleAuthResponse(action_result.result, '/profile');
+        const next = `${location.pathname}${location.search}`;
+        handleAuthResponse(action_result.result, next);
     }
 
     const handleResend = () => {
