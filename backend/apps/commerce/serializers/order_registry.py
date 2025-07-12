@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from adjango.aserializers import AModelSerializer
 
-from apps.commerce.exceptions.order import OrderException
+from apps.commerce.services.order.exceptions import _OrderException
 from apps.commerce.models import Order
 
 ORDER_SERIALIZERS: dict = OrderedDict()
@@ -26,4 +26,4 @@ def get_order_serializer(order_instance, serializer_type='small'):
     for order_class, serializers in ORDER_SERIALIZERS.items():
         if isinstance(order_instance, order_class):
             return serializers[serializer_type]
-    raise OrderException.UnknownOrderInstance()
+    raise _OrderException.UnknownOrderInstance()

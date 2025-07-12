@@ -7,7 +7,7 @@ from rest_framework.status import (
 )
 
 
-class OrderException:
+class _OrderException:
     class UnknownOrderInstance(APIException):
         status_code = HTTP_404_NOT_FOUND
         default_detail = {'message': _('Unknown order instance')}

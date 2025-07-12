@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 
 from apps.commerce.services.order.base import OrderService
-from apps.commerce.services.product import IProductService
+from apps.commerce.services.product import ProductBaseService
 
 if TYPE_CHECKING:  # pragma: no cover
     from apps.commerce.models import BalanceProductOrder, BalanceProduct
@@ -10,15 +10,15 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class BalanceService:
-    @property
-    async def actual_balance_product(self) -> Optional['BalanceProduct']:
+    @staticmethod
+    async def actual_balance_product() -> Optional['BalanceProduct']:
         try:
             return await BalanceProduct.objects.alatest('id')
         except BalanceProduct.DoesNotExist:
             return None
 
 
-class BalanceProductService(IProductService['BalanceProduct', 'BalanceProductOrder']):
+class BalanceProductService(ProductBaseService['BalanceProduct', 'BalanceProductOrder']):
     @staticmethod
     async def new_order(request: 'AsyncRequest') -> 'BalanceProductOrder':
         from apps.commerce.serializers.balance import BalanceProductOrderCreateSerializer

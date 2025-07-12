@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.models.order import Order
 from .product import Product
-from ..services.gift_certificate import GiftCertificateService
+from ..services.gift_certificate import GiftCertificateService, GiftCertificateOrderService
 
 
 class GiftCertificate(Product, GiftCertificateService):
@@ -23,7 +23,7 @@ class GiftCertificate(Product, GiftCertificateService):
         return f'Gift Certificate for Product:{self.product_id}'
 
 
-class GiftCertificateOrder(Order):
+class GiftCertificateOrder(Order, GiftCertificateOrderService):
     key = UUIDField(default=uuid.uuid4, editable=False, unique=True)
     product = ForeignKey(GiftCertificate, CASCADE, verbose_name=_('Product'))
 

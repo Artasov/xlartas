@@ -31,7 +31,7 @@ XL_DASHBOARD = {
         'All': 'commerce.Order',
         'Balance': 'commerce.BalanceProductOrder',
         'Software': 'software.SoftwareOrder',
-        'Donate': 'software.DonateOrder',
+        'Donate': 'xlmine.DonateOrder',
     },
     'Payments': {
         'All': 'commerce.Payment',
@@ -114,6 +114,9 @@ XL_DASHBOARD = {
     'Company': {
         'Company': 'company.Company',
         'Document': 'company.CompanyDocument',
+    },
+    'Wireless': {
+        'Wireless Macro': 'software.WirelessMacro',
     },
     'Chat': {
         'Room': 'chat.Room',

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from apps.commerce.models import Product
 
 
-class IProductService(Generic[ProductT, OrderT]):
+class ProductBaseService(Generic[ProductT, OrderT]):
     """
     Интерфейс-сервис для работы с продуктами, который реализует общие шаги
     для выдачи продуктов. Создания заказа под продукт и т.д. Этот класс должен быть унаследован конкретными

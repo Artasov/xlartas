@@ -10,7 +10,7 @@ from adrf.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from apps.commerce.exceptions.order import OrderException
+from apps.commerce.services.order.exceptions import _OrderException
 from apps.commerce.models import Order
 from apps.commerce.providers.registry import get_provider
 from apps.commerce.serializers.payment import BasePaymentSerializer
@@ -36,7 +36,7 @@ async def init_payment(request, id: str):
     order: Order = await Order.objects.select_for_update().aget(pk=id)
 
     if order.is_paid:
-        raise OrderException.AlreadyPaid()
+        raise _OrderException.AlreadyPaid()
 
     if order.payment_id:
         _payment = await order.arelated('payment')

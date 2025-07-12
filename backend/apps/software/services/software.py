@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from django.utils import timezone
 
-from apps.commerce.services.product import IProductService
+from apps.commerce.services.product import ProductBaseService
 
 if TYPE_CHECKING:
     from apps.software.models import SoftwareOrder, Software
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class SoftwareService(IProductService['Software', 'SoftwareOrder']):
+class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
     async def new_order(self: 'Software', request) -> 'SoftwareOrder':
         from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder

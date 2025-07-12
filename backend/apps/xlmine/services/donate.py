@@ -15,10 +15,10 @@ class UserDonateService:
         return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)
 
 
-from apps.commerce.services.product import IProductService
+from apps.commerce.services.product import ProductBaseService
 
 
-class DonateService(IProductService['Donate', 'DonateOrder']):
+class DonateService(ProductBaseService['Donate', 'DonateOrder']):
     """
      Логика для «донатного» продукта.
      """

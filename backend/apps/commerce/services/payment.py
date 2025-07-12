@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from apps.commerce.models import Payment
 
 
-class IPaymentService:
+class PaymentBaseService:
 
     @abstractmethod
     async def cancel(self: 'Payment'):

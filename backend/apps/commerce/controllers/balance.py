@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 
-from apps.commerce.models import BalanceProduct
 from apps.commerce.serializers.balance import BalanceProductSerializer
+from apps.commerce.services.balance import BalanceService
 
 
 @acontroller('Get user balance')
@@ -19,9 +19,6 @@ async def user_balance(request):
 @acontroller('Get latest balance product')
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
-async def get_latest_balance_product(_request):
-    try:
-        product = await BalanceProduct.objects.alatest('id')
-    except BalanceProduct.DoesNotExist:
-        return Response(None)
-    return Response(await BalanceProductSerializer(product).adata)
+async def get_latest_balance_product(_):
+    product = await BalanceService.actual_balance_product()
+    return Response(await BalanceProductSerializer(product).adata if product else Response(None))

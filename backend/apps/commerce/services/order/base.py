@@ -3,8 +3,8 @@ import logging
 from decimal import Decimal
 from typing import TYPE_CHECKING, Union, Generic
 
-from apps.commerce.exceptions.order import OrderException
 from apps.commerce.exceptions.payment import PaymentException
+from apps.commerce.services.order.exceptions import _OrderException
 from apps.commerce.services.typing import OrderT, ProductT
 
 tbank_log = logging.getLogger('tbank')
@@ -29,6 +29,8 @@ class OrderService(Generic[OrderT, ProductT]):
     amount: Decimal | None
     is_inited: bool
     is_executed: bool
+    
+    exceptions = _OrderException
 
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
@@ -63,11 +65,11 @@ class OrderService(Generic[OrderT, ProductT]):
         if not any((self.is_inited, self.is_executed, self.is_paid, self.is_cancelled, self.is_refunded)):
             await self.cancel(request=request, reason=reason)
         elif self.is_cancelled:
-            raise OrderException.AlreadyCanceled()
+            raise _OrderException.AlreadyCanceled()
         elif self.is_paid:
-            raise OrderException.CannotCancelPaid()
+            raise _OrderException.CannotCancelPaid()
         elif self.is_refunded:
-            raise OrderException.CannotCancelRefunded()
+            raise _OrderException.CannotCancelRefunded()
         elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
             await self.cancel(request=request, reason=reason)
 
@@ -117,8 +119,8 @@ class OrderService(Generic[OrderT, ProductT]):
         обновление моделей оплат, отправка уведомлений если нужно и т.д.
         """
         from apps.commerce.models import PromocodeUsage
-        if self.is_refunded: raise OrderException.CannotExecuteRefunded()
-        if self.is_executed: raise OrderException.AlreadyExecuted()
+        if self.is_refunded: raise _OrderException.CannotExecuteRefunded()
+        if self.is_executed: raise _OrderException.AlreadyExecuted()
         self.product = await self.arelated('product')
         self.product = await self.product.aget_real_instance()
         await self.product.postgive(self)
@@ -162,7 +164,7 @@ class OrderService(Generic[OrderT, ProductT]):
             payment: TBankPayment = self.payment
             if payment.is_paid:
                 tbank_log.info(f'TBank Payment {payment.id} cannot cancel paid.')
-                raise OrderException.CannotCancelPaid()
+                raise _OrderException.CannotCancelPaid()
             else:
                 await self.payment.cancel()
         elif isinstance(self.payment, CloudPaymentPayment):
