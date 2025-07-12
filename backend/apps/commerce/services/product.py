@@ -18,9 +18,7 @@ class ProductBaseService(Generic[ProductT, OrderT]):
 
     @staticmethod
     @abstractmethod
-    async def new_order(
-            request
-    ) -> OrderT:
+    async def new_order(request) -> OrderT:
         pass
 
     @abstractmethod
