@@ -6,7 +6,8 @@ import pprint from 'Utils/pprint';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Message} from "Core/components/Message";
 import {openAuthModal} from "Redux/modalsSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "Redux/store";
 
 // Типизация для ErrorContext
 export interface ErrorContextType {
@@ -22,7 +23,15 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
     const {hideMobileMenu} = useNavigation();
     const {frontendLogout} = useContext(AuthContext) as AuthContextType;
     const dispatch = useDispatch();
+    const authModalOpen = useSelector((state: RootState) => state.modals.authModalOpen);
     const isHandlingAuthError = useRef(false);
+
+    useEffect(() => {
+        if (!authModalOpen) {
+            isHandlingAuthError.current = false;
+        }
+    }, [authModalOpen]);
+
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
