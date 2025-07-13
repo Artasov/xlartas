@@ -32,7 +32,7 @@ async def get_file_by_id(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_all_files(request) -> Response:
-    page, page_size, offset = parse_pagination(request)
+    _, page_size, offset = parse_pagination(request)
     files_qs = File.objects.filter(user=request.user).order_by('-created_at')[offset:offset + page_size]
     files = []
     async for f in files_qs:
@@ -63,7 +63,7 @@ async def add_file(request) -> Response:
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def get_favorite_files(request) -> Response:
-    page, page_size, offset = parse_pagination(request)
+    _, page_size, offset = parse_pagination(request)
     files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[
                offset:offset + page_size]
     files = []

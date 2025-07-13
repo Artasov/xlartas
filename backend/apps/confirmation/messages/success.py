@@ -8,4 +8,4 @@ SUCCESS_CONFIRMATION_CODE_SENT = _('Confirmation code has been successfully sent
 
 class Responses:
     class Success:
-        ConformationCodeSent = Response({'message': SUCCESS_CONFIRMATION_CODE_SENT}, status=status.HTTP_200_OK)
+        confirmation_code_sent = Response({'message': SUCCESS_CONFIRMATION_CODE_SENT}, status=status.HTTP_200_OK)

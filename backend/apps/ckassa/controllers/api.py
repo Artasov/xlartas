@@ -33,7 +33,7 @@ async def notification(request):
         return Response({'detail': 'ip not allowed'}, status=HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
         if not order_id:
-            return redirect(f'/orders/')
+            return redirect('/orders/')
         return redirect(f'/orders/{order_id}/')
 
     # order_id may come in properties under key 'НОМЕР ЗАКАЗА'

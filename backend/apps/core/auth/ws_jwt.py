@@ -19,10 +19,10 @@ from rest_framework_simplejwt.tokens import UntypedToken, Token
 def _get_user(user_id: int | str | None):
     if not user_id:
         return AnonymousUser()
-    User = get_user_model()
+    user_model = get_user_model()
     try:
-        return User.objects.get(pk=user_id)
-    except User.DoesNotExist:
+        return user_model.objects.get(pk=user_id)
+    except user_model.DoesNotExist:
         return AnonymousUser()
 
 

@@ -42,8 +42,8 @@ async def init_payment(request, id: str):
         _payment = await order.arelated('payment')
         return Response(await BasePaymentSerializer(order.payment).adata, status=HTTP_200_OK)
 
-    Provider = get_provider(payment_system)
-    payment = await Provider.create(order=order, request=request, amount=amount)
+    provider = get_provider(payment_system)
+    payment = await provider.create(order=order, request=request, amount=amount)
 
     order.payment = payment
     order.payment_system = payment_system

@@ -44,7 +44,7 @@ async def new_confirmation_code(request) -> Response:
         credential=credential,
         raise_exceptions=True
     )
-    return Responses.Success.ConformationCodeSent
+    return Responses.Success.confirmation_code_sent
 
 
 @acontroller('Confirm by code')

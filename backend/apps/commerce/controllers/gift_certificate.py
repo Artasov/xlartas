@@ -26,9 +26,9 @@ async def get_gift_certificates(_):
 @acontroller('Gift Certificate detail')
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-async def gift_certificate_detail(_, productId):
+async def gift_certificate_detail(_, product_id):
     gift_certificate = await GiftCertificate.objects.agetorn(
-        PaymentBaseService.exceptions.NotFound, id=productId
+        PaymentBaseService.exceptions.NotFound, id=product_id
     )
     serializer = GiftCertificateSerializer(gift_certificate)
     return Response(await serializer.adata)
