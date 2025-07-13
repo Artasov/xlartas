@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apps.commerce.services.balance
-
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -36,7 +34,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Balance product',
                 'verbose_name_plural': 'Balance products',
             },
-            bases=('commerce.product', apps.commerce.services.balance.BalanceProductService),
+            bases=('commerce.product',),
         ),
         migrations.AlterField(
             model_name='order',
@@ -62,6 +60,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Balance product order',
                 'verbose_name_plural': 'Balance product orders',
             },
-            bases=('commerce.order', apps.commerce.services.balance.BalanceProductOrderService),
+            bases=('commerce.order',),
         ),
     ]

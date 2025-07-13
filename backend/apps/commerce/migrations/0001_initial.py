@@ -9,8 +9,6 @@ from django.db import migrations, models
 import apps.commerce.managers.client
 import apps.commerce.managers.employee
 import apps.commerce.models.promocode
-import apps.commerce.services.employee
-import apps.commerce.services.promocode.base
 import apps.uuid6.field
 
 
@@ -76,9 +74,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Employee',
                 'verbose_name_plural': 'Employees',
             },
-            bases=(
-                models.Model, adjango.services.polymorphic.APolymorphicBaseService, adjango.services.base.ABaseService,
-                apps.commerce.services.employee.EmployeeService),
+            bases=(models.Model, adjango.services.base.ABaseService,),
         ),
         migrations.CreateModel(
             name='EmployeeAvailabilityInterval',
@@ -228,9 +224,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Promocode',
                 'verbose_name_plural': 'Promocodes',
             },
-            bases=(
-                models.Model, adjango.services.base.ABaseService,
-                apps.commerce.services.promocode.base.PromocodeService),
+            bases=(models.Model, adjango.services.base.ABaseService),
         ),
         migrations.CreateModel(
             name='PromocodeProductDiscount',

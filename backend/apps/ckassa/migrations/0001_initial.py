@@ -29,6 +29,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'CKassa payment',
                 'verbose_name_plural': 'CKassa payments',
             },
-            bases=('commerce.payment', apps.ckassa.services.payment.CKassaPaymentService),
+            bases=('commerce.payment',),
         ),
     ]

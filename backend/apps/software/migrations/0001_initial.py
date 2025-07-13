@@ -6,7 +6,6 @@ from django.conf import settings
 from django.db import migrations, models
 
 import apps.software.services.license
-import apps.software.services.order
 import apps.software.services.software
 
 
@@ -51,7 +50,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Software',
                 'verbose_name_plural': 'Softwares',
             },
-            bases=('commerce.product', apps.software.services.software.SoftwareService),
+            bases=('commerce.product',),
         ),
         migrations.CreateModel(
             name='SoftwareOrder',
@@ -69,7 +68,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Software Order',
                 'verbose_name_plural': 'Software Orders',
             },
-            bases=('commerce.order', apps.software.services.order.SoftwareOrderService),
+            bases=('commerce.order',),
         ),
         migrations.CreateModel(
             name='SoftwareLicense',

@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apps.freekassa.services.payment
-
 
 class Migration(migrations.Migration):
     initial = True
@@ -30,6 +28,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'FreeKassa payment',
                 'verbose_name_plural': 'FreeKassa payments',
             },
-            bases=('commerce.payment', apps.freekassa.services.payment.FreeKassaPaymentService),
+            bases=('commerce.payment',),
         ),
     ]

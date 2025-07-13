@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(models.Model, adjango.services.base.ABaseService, apps.core.services.user.mixer.UserService),
+            bases=(models.Model, adjango.services.base.ABaseService),
             managers=[
                 ('objects', apps.core.managers.user.UserManager()),
             ],

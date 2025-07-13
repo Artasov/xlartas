@@ -2,16 +2,16 @@ import logging
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
-from apps.converter.models import (Conversion, ConversionVariant, Format,
-                                   Parameter)
-from apps.converter.serializers import (ConversionSerializer, FormatSerializer,
-                                        ParameterSerializer)
-from apps.converter.services import ConversionService
-from django.http import HttpRequest
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
+
+from apps.converter.models import (Conversion, Format)
+from apps.converter.serializers import (
+    ConversionSerializer, FormatSerializer, ParameterSerializer
+)
+from apps.converter.services import ConversionService
 
 log = logging.getLogger("global")
 

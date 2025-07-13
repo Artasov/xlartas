@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Donate',
                 'verbose_name_plural': 'Donates',
             },
-            bases=('commerce.product', apps.xlmine.services.donate.DonateService),
+            bases=('commerce.product',),
         ),
         migrations.CreateModel(
             name='Privilege',
@@ -57,6 +57,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Donate order',
                 'verbose_name_plural': 'Donate orders',
             },
-            bases=('commerce.order', apps.xlmine.services.donate.DonateOrderService),
+            bases=('commerce.order',),
         ),
     ]

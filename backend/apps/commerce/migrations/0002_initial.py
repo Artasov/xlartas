@@ -174,7 +174,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Gift certificate',
                 'verbose_name_plural': 'Gift certificates',
             },
-            bases=('commerce.product', apps.commerce.services.gift_certificate.GiftCertificateService),
+            bases=('commerce.product',),
         ),
         migrations.AddField(
             model_name='giftcertificateusage',

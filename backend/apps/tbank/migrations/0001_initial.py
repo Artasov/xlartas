@@ -130,7 +130,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'TBank payment',
                 'verbose_name_plural': 'TBank payments',
             },
-            bases=('commerce.payment', apps.tbank.services.payment.TBankPaymentService),
+            bases=('commerce.payment',),
         ),
         migrations.CreateModel(
             name='TBankRecurringPayment',
