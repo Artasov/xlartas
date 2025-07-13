@@ -12,7 +12,7 @@ from .product import Product
 from ..services.gift_certificate import GiftCertificateService, GiftCertificateOrderService
 
 
-class GiftCertificate(Product, GiftCertificateService):
+class GiftCertificate(Product):
     product = ForeignKey('commerce.Product', CASCADE, related_name='gift_certificates')
 
     class Meta:
@@ -22,14 +22,22 @@ class GiftCertificate(Product, GiftCertificateService):
     def __str__(self):
         return f'Gift Certificate for Product:{self.product_id}'
 
+    @property
+    def service(self) -> GiftCertificateService:
+        return GiftCertificateService(self)
 
-class GiftCertificateOrder(Order, GiftCertificateOrderService):
+
+class GiftCertificateOrder(Order):
     key = UUIDField(default=uuid.uuid4, editable=False, unique=True)
     product = ForeignKey(GiftCertificate, CASCADE, verbose_name=_('Product'))
 
     class Meta:
         verbose_name = _('Gift certificate order')
         verbose_name_plural = _('Gift certificate orders')
+
+    @property
+    def service(self) -> GiftCertificateOrderService:
+        return GiftCertificateOrderService(self)
 
 
 class GiftCertificateUsage(ACreatedAtIndexedMixin):

@@ -23,8 +23,7 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
      Логика для «донатного» продукта.
      """
 
-    @staticmethod
-    async def new_order(request) -> 'DonateOrder':
+    async def new_order(self, request) -> 'DonateOrder':
         """
         Создание нового заказа на донат (например, через
         отдельный сериалайзер DonateOrderCreateSerializer).
@@ -35,12 +34,12 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
         s = DonateOrderCreateSerializer(data=request.data, context={'request': request})
         await s.ais_valid(raise_exception=True)
         order: 'DonateOrder' = await s.asave()
-        # Инициализация оплаты
-        await order.init(request)
+        await order.service.init(request)
         return order
 
     async def can_pregive(
-            self: 'Donate', order: 'DonateOrder',
+            self,
+            order: 'DonateOrder',
             raise_exceptions: bool = False
     ) -> bool:
         """Check that donate product can be issued."""
@@ -52,13 +51,13 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
             return False
         return True
 
-    async def pregive(self: 'Donate', order: 'DonateOrder'):
+    async def pregive(self, order: 'DonateOrder'):
         """Create XLMine user record if needed before payment."""
         from apps.xlmine.models.user import UserXLMine
 
         await UserXLMine.objects.aget_or_create(user_id=order.user_id)
 
-    async def postgive(self: 'Donate', order: 'DonateOrder'):
+    async def postgive(self, order: 'DonateOrder'):
         """
         Действия после успешной оплаты: начисляем пользователю коины.
         Берём стоимость заказа в рублях (order.receipt_price) и добавляем к user.xlmine.coins
@@ -69,7 +68,7 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
         from apps.xlmine.models.user import UserXLMine
         xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
         # Считаем стоимость заказа (финальная сумма, учтя промокод и т.д.)
-        order_price = await order.receipt_price
+        order_price = await order.service.receipt_price
         if not order_price:
             order_price = Decimal('0.00')
 

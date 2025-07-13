@@ -50,7 +50,7 @@ async def notification(request):
     await order.asave()
 
     try:
-        await order.execute()
+        await order.service.execute()
     except Exception:  # noqa
         log.warning('FreeKassa payment for order %s failed', order_id, exc_info=True)
 

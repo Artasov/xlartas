@@ -27,7 +27,7 @@ async def test_postgive_creates_license_and_extends():
         license_hours=2,
     )
 
-    await software.postgive(order)
+    await software.service.postgive(order)
     license_obj = await SoftwareLicense.objects.aget(user=user, software=software)
     assert license_obj.license_ends_at is not None
     assert abs((license_obj.license_ends_at - timezone.now()) - timedelta(hours=2)) < timedelta(seconds=5)
@@ -40,7 +40,7 @@ async def test_postgive_creates_license_and_extends():
         payment_system=PaymentSystem.HandMade,
         license_hours=3,
     )
-    await software.postgive(order2)
+    await software.service.postgive(order2)
     await license_obj.arefresh_from_db()
     assert abs((license_obj.license_ends_at - prev_end) - timedelta(hours=3)) < timedelta(seconds=5)
 
@@ -58,12 +58,12 @@ async def test_can_pregive_checks():
         payment_system=PaymentSystem.HandMade,
         license_hours=4,
     )
-    assert await software.can_pregive(order) is False
+    assert await software.service.can_pregive(order) is False
     with pytest.raises(Exception):
-        await software.can_pregive(order, raise_exceptions=True)
+        await software.service.can_pregive(order, raise_exceptions=True)
 
     order.license_hours = 6
-    assert await software.can_pregive(order) is True
+    assert await software.service.can_pregive(order) is True
 
 
 @pytest.mark.django_db
@@ -97,4 +97,4 @@ async def test_receipt_price_uses_license_hours():
         )
     )
 
-    assert await order.receipt_price == expected
+    assert await order.service.receipt_price == expected

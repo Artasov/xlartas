@@ -11,23 +11,26 @@ if TYPE_CHECKING:
 
 class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):
     @property
-    async def receipt_price(self: 'SoftwareOrder') -> Decimal:
-        price_row = await self.product.prices.agetorn(currency=self.currency)
-        if not price_row: return Decimal('0')
+    async def receipt_price(self) -> Decimal:
+        product = await self.order.arelated('product')
+        product = await product.aget_real_instance()
+        price_row = await product.prices.agetorn(currency=self.order.currency)
+        if not price_row:
+            return Decimal('0')
 
         amount = float(price_row.amount)
         exponent = float(price_row.exponent or 1.0)
         offset = float(price_row.offset or 0.0)
 
         final_cost_int = SoftwareLicenseService.calculate_price(
-            hours=self.license_hours,
+            hours=self.order.license_hours,
             amount=amount,
             exponent=exponent,
             offset=offset,
         )
         price = Decimal(str(final_cost_int))
 
-        if self.promocode:
-            price = await self.promocode.calc_price_for_order(order=self)
+        if self.order.promocode:
+            price = await self.order.promocode.calc_price_for_order(order=self.order)
 
         return price

@@ -50,7 +50,7 @@ async def notification(request):
             await request.order.payment.asave()
             try:
                 log.info('Stage #22')
-                await request.order.execute()
+                await request.order.service.execute()
             except _OrderException.AlreadyExecuted:
                 log.info('Stage #23')
                 pass

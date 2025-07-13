@@ -56,7 +56,7 @@ async def installment_notification(request):
 
         try:
             log.info('Stage #16 (Installment) => order.execute()')
-            await order.execute()
+            await order.service.execute()
         except _OrderException.AlreadyExecuted:
             log.info('Stage #17 (Installment) => AlreadyExecuted pass')
 
