@@ -1,4 +1,4 @@
-# core/services/user.py
+# core/services/user/base.py
 import string
 from random import choices
 from typing import TYPE_CHECKING

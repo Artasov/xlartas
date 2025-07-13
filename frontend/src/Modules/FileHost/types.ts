@@ -1,3 +1,4 @@
+// Modules/FileHost/types.ts
 export interface IFile {
     id: number;
     name: string;

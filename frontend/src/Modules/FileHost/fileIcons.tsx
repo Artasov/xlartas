@@ -1,3 +1,4 @@
+// Modules/FileHost/fileIcons.tsx
 import React from 'react';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import ImageIcon from '@mui/icons-material/Image';

@@ -1,3 +1,4 @@
+// Modules/FileHost/ImagePreview.tsx
 import React from 'react';
 import {Dialog, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';

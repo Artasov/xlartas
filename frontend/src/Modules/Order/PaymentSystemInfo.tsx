@@ -1,3 +1,4 @@
+// Modules/Order/PaymentSystemInfo.tsx
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Collapse} from '@mui/material';

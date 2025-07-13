@@ -1,3 +1,4 @@
+// Modules/FileHost/FileTableRow.tsx
 import React, {useEffect, useState} from 'react';
 import {IconButton, TableCell, TableRow, useMediaQuery} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';

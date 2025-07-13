@@ -1,3 +1,4 @@
+// Modules/FileHost/FileItem.tsx
 import React, {useEffect, useState} from 'react';
 import {IconButton, Menu, MenuItem} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';

@@ -1,3 +1,4 @@
+// UI/LanguageSwitcher.tsx
 import React, {useContext} from 'react';
 import {MenuItem} from '@mui/material';
 import PublicIcon from '@mui/icons-material/Public';

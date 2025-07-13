@@ -1,3 +1,4 @@
+# freekassa/services/payment.py
 from __future__ import annotations
 
 import hashlib
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     from apps.freekassa.models import FreeKassaPayment
 
 
-class FreeKassaPaymentService(PaymentBaseService):
+class FreeKassaPaymentService(PaymentBaseService['FreeKassaPayment']):
     def __init__(self, payment: 'FreeKassaPayment') -> None:
         super().__init__(payment)  # Expected type 'Type[Payment]', got 'FreeKassaPayment' instead
 

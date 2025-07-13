@@ -1,4 +1,4 @@
-// Modules/Order/CircularProgressZoomify.tsx
+// Modules/Core/components/elements/CircularProgressZoomify.tsx
 import React from 'react';
 import Zoom from '@mui/material/Zoom';
 import {FRCC} from 'wide-containers';

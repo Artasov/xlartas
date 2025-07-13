@@ -1,3 +1,4 @@
+// Modules/FileHost/FavoriteFiles.tsx
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
 import {useApi} from 'Api/useApi';

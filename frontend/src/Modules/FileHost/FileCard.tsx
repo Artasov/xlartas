@@ -1,3 +1,4 @@
+// Modules/FileHost/FileCard.tsx
 import React, {useEffect, useState} from 'react';
 import {IconButton, Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';

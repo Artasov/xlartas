@@ -1,4 +1,4 @@
-# software/desktop_software_urls.py
+# software/legacy/desktop_software_urls.py
 from django.urls import path
 
 from apps.software.legacy.desktop_software_api import (

@@ -181,7 +181,7 @@ async def clear_redis(_, key=None):
 def change_user_id(request, new_id):
     if not request.user or not request.user.is_authenticated or not request.user.is_staff:
         return JsonResponse({'error': 'Access denied'}, status=HTTP_403_FORBIDDEN)
-    request.user.change_id(new_id)
+    request.user.service.change_id(new_id)
     return JsonResponse({'status': 'id changed'}, status=HTTP_200_OK)
 
 

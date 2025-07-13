@@ -1,3 +1,4 @@
+// Modules/FileHost/useFolderPath.ts
 import {useEffect, useState} from 'react';
 import {useApi} from 'Api/useApi';
 import {IFolder} from './types';

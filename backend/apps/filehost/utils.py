@@ -1,3 +1,4 @@
+# filehost/utils.py
 """Utility functions for filehost app."""
 from rest_framework.request import Request
 

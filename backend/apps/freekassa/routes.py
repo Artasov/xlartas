@@ -1,3 +1,4 @@
+# freekassa/routes.py
 from django.urls import path
 
 from apps.freekassa.controllers.api import notification

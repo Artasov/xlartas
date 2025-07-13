@@ -1,3 +1,4 @@
+// Modules/FileHost/UploadProgressWindow.tsx
 import React, {useState} from 'react';
 import {Button, Collapse, IconButton, LinearProgress, Paper, useMediaQuery} from '@mui/material';
 import {FC, FRB, FRSE} from 'wide-containers';

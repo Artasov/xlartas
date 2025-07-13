@@ -1,3 +1,4 @@
+// Modules/FileHost/FileActions.tsx
 import React from 'react';
 import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
 import {FRSE} from 'wide-containers';

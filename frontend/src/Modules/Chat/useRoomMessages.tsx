@@ -1,4 +1,4 @@
-// Modules/Chat/useRoomMessages.ts
+// Modules/Chat/useRoomMessages.tsx
 
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {parseISO} from 'date-fns';

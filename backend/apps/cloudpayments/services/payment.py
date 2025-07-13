@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from apps.cloudpayments.models import CloudPaymentPayment
 
 
-class CloudPaymentService(PaymentBaseService):
+class CloudPaymentService(PaymentBaseService['CloudPaymentPayment']):
 
     def __init__(self, payment: 'CloudPaymentPayment') -> None:
         super().__init__(payment)  # Expected type 'Type[Payment]', got 'CloudPaymentPayment' instead

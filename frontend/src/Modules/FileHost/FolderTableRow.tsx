@@ -1,3 +1,4 @@
+// Modules/FileHost/FolderTableRow.tsx
 import React, {useState} from 'react';
 import {TableCell, TableRow, useMediaQuery} from '@mui/material';
 import {useNavigate} from 'react-router-dom';

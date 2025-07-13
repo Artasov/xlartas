@@ -1,3 +1,4 @@
+# commerce/models/balance.py
 from django.db.models import CASCADE, ForeignKey, DecimalField
 from django.utils.translation import gettext_lazy as _
 

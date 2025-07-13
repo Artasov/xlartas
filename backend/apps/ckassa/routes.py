@@ -1,3 +1,4 @@
+# ckassa/routes.py
 from django.urls import path
 
 from apps.ckassa.controllers.api import notification

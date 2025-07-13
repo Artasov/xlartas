@@ -1,3 +1,4 @@
+# freekassa/models.py
 from django.db.models import BigIntegerField, IntegerField, CharField, IntegerChoices
 from django.utils.translation import gettext_lazy as _
 

@@ -183,3 +183,4 @@ poetry.lock
 /deploy_key.pub
 /backend/utils/copy_configuration.py
 # Frontend build artifacts
+/docs/sonar_token

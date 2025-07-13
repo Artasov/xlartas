@@ -1,3 +1,4 @@
+// Modules/FileHost/FolderActions.tsx
 import React from 'react';
 import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';

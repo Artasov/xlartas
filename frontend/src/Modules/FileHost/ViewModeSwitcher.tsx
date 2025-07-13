@@ -1,3 +1,4 @@
+// Modules/FileHost/ViewModeSwitcher.tsx
 import React from 'react';
 import {IconButton} from '@mui/material';
 import ViewListIcon from '@mui/icons-material/ViewList';

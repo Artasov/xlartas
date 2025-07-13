@@ -1,4 +1,4 @@
-# software/desktop_software_api.py
+# software/legacy/desktop_software_api.py
 
 import json
 import logging

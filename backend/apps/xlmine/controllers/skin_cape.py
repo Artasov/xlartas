@@ -17,7 +17,7 @@ async def upload_skin(request):
         return Response({'detail': 'skin file is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        await request.user.set_skin(skin_file)
+        await request.user.service.set_skin(skin_file)
         xlm = await UserXLMine.objects.aget(user=request.user)
         return Response({'skin': settings.DOMAIN_URL + xlm.skin.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:
@@ -32,7 +32,7 @@ async def upload_cape(request):
         return Response({'detail': 'cape file is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        await request.user.set_cape(cape_file)
+        await request.user.service.set_cape(cape_file)
         xlm = await UserXLMine.objects.aget(user=request.user)
         return Response({'cape': settings.DOMAIN_URL + xlm.cape.url}, status=status.HTTP_200_OK)
     except ConnectionRefusedError:

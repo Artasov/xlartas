@@ -1,3 +1,4 @@
+# ckassa/services/payment.py
 from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
     from apps.ckassa.models import CKassaPayment
 
 
-class CKassaPaymentService(PaymentBaseService):
+class CKassaPaymentService(PaymentBaseService['CKassaPayment']):
 
     def __init__(self, payment: 'CKassaPayment') -> None:
         super().__init__(payment)  # Expected type 'Type[Payment]', got 'CKassaPayment' instead

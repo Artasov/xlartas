@@ -1,4 +1,6 @@
+# software/admin/wireless.py
 from django.contrib import admin
+
 from apps.software.models.wireless import WirelessMacro
 
 

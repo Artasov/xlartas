@@ -1,3 +1,4 @@
+# freekassa/serializers.py
 from apps.commerce.serializers.payment import BasePaymentSerializer
 from apps.freekassa.models import FreeKassaPayment
 

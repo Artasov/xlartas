@@ -1,3 +1,4 @@
+// Modules/FileHost/RenameDialog.tsx
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
 import {useApi} from 'Api/useApi';

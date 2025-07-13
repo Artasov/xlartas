@@ -1,3 +1,4 @@
+// Modules/Order/PaymentTypePicker.tsx
 import React, {useEffect, useState} from 'react';
 import {ICurrency, ICurrencyWithPrice, IPaymentSystem, IProductPrice} from 'types/commerce/shop';
 import RadioLine from 'Core/components/elements/RadioLine';

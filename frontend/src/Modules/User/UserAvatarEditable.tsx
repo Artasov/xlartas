@@ -1,3 +1,4 @@
+// Modules/User/UserAvatarEditable.tsx
 import React, {ChangeEvent, useContext, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import UserAvatar from 'User/UserAvatar';

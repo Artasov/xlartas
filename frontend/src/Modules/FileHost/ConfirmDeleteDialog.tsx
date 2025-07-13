@@ -1,3 +1,4 @@
+// Modules/FileHost/ConfirmDeleteDialog.tsx
 import React from 'react';
 import {Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import {useTranslation} from 'react-i18next';

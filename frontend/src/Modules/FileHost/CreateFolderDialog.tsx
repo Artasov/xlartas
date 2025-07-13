@@ -1,3 +1,4 @@
+// Modules/FileHost/CreateFolderDialog.tsx
 import React from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
 import {useTranslation} from 'react-i18next';

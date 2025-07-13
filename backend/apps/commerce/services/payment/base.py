@@ -2,13 +2,13 @@
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, TypeVar, Generic
 
 from apps.commerce.services.payment.exceptions import _PaymentException
 from apps.core.services.base import BaseService
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Payment
+    pass
 
 
 class PaymentError(Exception):
@@ -19,7 +19,10 @@ class PaymentAlreadyCanceled(PaymentError):
     ...
 
 
-class PaymentBaseService(BaseService):
+P_co = TypeVar('P_co', bound='Payment', covariant=True)
+
+
+class PaymentBaseService(BaseService, Generic[P_co]):
     """
     Абстрактный класс, который **все** модели‑платежи должны наследовать.
 
@@ -30,7 +33,7 @@ class PaymentBaseService(BaseService):
 
     exceptions = _PaymentException
 
-    def __init__(self, payment: Type[Payment]) -> None:
+    def __init__(self, payment: P_co) -> None:
         self.payment = payment
 
     @abc.abstractmethod

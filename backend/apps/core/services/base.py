@@ -1,4 +1,4 @@
-# commerce/services/base.py
+# core/services/base.py
 """
 Универсальный базовый сервис.
 
@@ -17,8 +17,7 @@ from typing import Any, List, Type
 class ServiceMeta(type):
     """Метакласс-агрегатор для контейнеров исключений."""
 
-    # flake8 понимает docstring в одной строке, pylint — в две. :)
-    def __new__(  # noqa: D401
+    def __new__(
             mcls: Type["ServiceMeta"],
             name: str,
             bases: tuple[type, ...],

@@ -183,7 +183,7 @@ async def get_current_privilege(request):
     privilege = await xlmine_user.arelated('privilege') if getattr(xlmine_user, 'privilege_id') else None
     return Response({
         'privilege': await PrivilegeSerializer(privilege).adata if privilege else None,
-        'total_donate_amount': float(await request.user.sum_donate_amount()),
+        'total_donate_amount': float(await request.user.service.sum_donate_amount()),
     })
 
 

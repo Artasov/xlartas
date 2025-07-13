@@ -1,4 +1,4 @@
-# commerce/services/product.py
+# commerce/services/product/base.py
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Generic
 

@@ -1,3 +1,4 @@
+// Modules/FileHost/ShareDialog.tsx
 import React, {useEffect, useState} from 'react';
 import {
     Button,

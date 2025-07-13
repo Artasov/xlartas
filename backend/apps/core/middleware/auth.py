@@ -1,3 +1,4 @@
+# core/middleware/auth.py
 import logging
 from urllib.parse import parse_qs
 

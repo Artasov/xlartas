@@ -1,3 +1,4 @@
+# ckassa/serializers.py
 from apps.ckassa.models import CKassaPayment
 from apps.commerce.serializers.payment import BasePaymentSerializer
 

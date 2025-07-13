@@ -1,3 +1,4 @@
+// Modules/FileHost/storageCache.ts
 export interface FolderContent {
     folder: any;
     folders: any[];

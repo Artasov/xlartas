@@ -11,14 +11,14 @@ if TYPE_CHECKING:
     from apps.tbank.models import TBankPayment
 
 
-class TBankPaymentService(PaymentBaseService):
+class TBankPaymentService(PaymentBaseService['TBankPayment']):
     """
     Логика TBank‑платежей, приведена к унифицированному контракту.
     """
     status: str
 
     def __init__(self, payment: 'TBankPayment') -> None:
-        super().__init__(payment)  # Expected type 'Type[Payment]', got 'TBankPayment' instead
+        super().__init__(payment)
 
     @staticmethod
     async def actual_status(payment_id: int) -> str | None:

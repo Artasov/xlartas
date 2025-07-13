@@ -1,4 +1,4 @@
-// Modules/Auth/Social/elements/UserBalance.tsx
+// Modules/Order/UserBalance.tsx
 import React, {useEffect, useState} from 'react';
 import BalanceTopUpDialog from './BalanceTopUpDialog';
 import {useApi} from 'Api/useApi';

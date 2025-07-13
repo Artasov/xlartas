@@ -1,3 +1,4 @@
+# core/middleware/locale.py
 from __future__ import annotations
 
 from django.utils import translation
