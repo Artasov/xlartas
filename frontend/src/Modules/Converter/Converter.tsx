@@ -1,6 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Box, Button, CircularProgress, Typography} from '@mui/material';
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Typography,
+    Snackbar
+} from '@mui/material';
+import MuiAlert, {AlertProps} from '@mui/material/Alert';
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
@@ -19,6 +30,7 @@ const Converter: React.FC = () => {
     const [conversion, setConversion] = useState<IConversion | null>(null);
     const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         axios.get('/api/v1/converter/formats/').then(r => setFormats(r.data));
@@ -36,7 +48,13 @@ const Converter: React.FC = () => {
         if (!file || formats.length === 0) return;
         const ext = file.name.split('.').pop()?.toLowerCase();
         const fmt = formats.find(f => f.name.toLowerCase() === ext);
-        if (fmt) setSource(fmt);
+        if (fmt) {
+            setSource(fmt);
+        } else {
+            setError(`Неизвестный формат файла${ext ? ` (.${ext})` : ''}`);
+            setFile(null);
+            setSource(null);
+        }
     }, [file, formats]);
 
     const pollStatus = (id: number) => {
@@ -106,17 +124,11 @@ const Converter: React.FC = () => {
             {/* Правая колонка: выбор форматов и параметров */}
             {file && (
                 <FC>
-                    <FormatPicker
-                        formats={formats}
-                        value={source?.id}
-                        onChange={id => {
-                            const f = formats.find(f => f.id === id) || null;
-                            setSource(f);
-                        }}
-                    />
-
                     {source && (
                         <>
+                            <Box mt={2}>
+                                <Typography>Формат: {source.name}</Typography>
+                            </Box>
                             <Box mt={2}>
                                 <FormatPicker
                                     formats={targets}
@@ -146,6 +158,14 @@ const Converter: React.FC = () => {
                     )}
                 </FC>
             )}
+            <Snackbar open={!!error} autoHideDuration={6000} onClose={(_e, r) => {
+                if (r === 'clickaway') return;
+                setError(null);
+            }}>
+                <Alert onClose={() => setError(null)} severity="error" sx={{width: '100%'}}>
+                    {error}
+                </Alert>
+            </Snackbar>
         </FR>
     );
 };
