@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Button, CircularProgress, Grid, Box, Typography} from '@mui/material';
+import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
 import {IFormat, IParameter, IConversion} from 'types/converter';
@@ -72,10 +73,7 @@ const Converter: React.FC = () => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-                <Button variant="outlined" component="label">
-                    {file ? file.name : 'Select file'}
-                    <input hidden type="file" onChange={e => setFile(e.target.files?.[0] || null)}/>
-                </Button>
+                <FileDropZone file={file} onChange={setFile} />
                 {conversion && !conversion.is_done && (
                     <Box mt={2}><CircularProgress/></Box>
                 )}
