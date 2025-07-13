@@ -2,14 +2,17 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Generic
 
+from apps.commerce.services.product.exceptions import _ProductException
 from apps.commerce.services.typing import ProductT, OrderT
+from apps.core.services.base import BaseService
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Product
+    pass
 
 
-class ProductBaseService(Generic[ProductT, OrderT]):
+class ProductBaseService(BaseService, Generic[ProductT, OrderT]):
     """Base service for working with product instances."""
+    exceptions = _ProductException
 
     def __init__(self, product: ProductT) -> None:
         self.product = product

@@ -9,10 +9,10 @@ from rest_framework.exceptions import APIException
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 from apps.commerce.services.order.base import OrderService
-from apps.commerce.services.product import ProductBaseService
+from apps.commerce.services.product.base import ProductBaseService
 
 if TYPE_CHECKING:
-    from apps.commerce.models import GiftCertificate, GiftCertificateOrder
+    from apps.commerce.models import GiftCertificateOrder
     from apps.core.models import User
 
 commerce_log = logging.getLogger('commerce')
@@ -86,7 +86,7 @@ class GiftCertificateService(ProductBaseService):
         commerce_log.info(f'Product {self.product.name} postgived order:{order.id}')
 
     async def activate(
-            self: 'GiftCertificate',
+            self,
             request: AsyncRequest,
             order: 'GiftCertificateOrder',
             for_user: 'User'

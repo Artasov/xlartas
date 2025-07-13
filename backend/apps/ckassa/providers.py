@@ -7,14 +7,14 @@ import httpx
 from adjango.utils.base import apprint
 from django.conf import settings
 
-from apps.commerce.exceptions.payment import PaymentException
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
 from .models import CKassaPayment
+from ..commerce.services.payment.base import PaymentBaseService
 
 logger = logging.getLogger(__name__)
 
 
-class CKassaProvider(BasePaymentProvider):
+class CKassaProvider(PaymentBaseProvider):
     system_name = 'ckassa'
 
     async def _create(self, amount: Decimal) -> CKassaPayment:
@@ -48,7 +48,7 @@ class CKassaProvider(BasePaymentProvider):
 
             # Явно проверяем код ответа и бросаем, если не 2xx
             if resp.status_code >= 400:
-                raise PaymentException.InitError(
+                raise PaymentBaseService.exceptions.InitError(
                     f'CKassa init error: status {resp.status_code}, response: {resp_text}'
                 )
 

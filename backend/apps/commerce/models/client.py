@@ -7,10 +7,9 @@ from django.db.models import (
 from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.managers.client import ClientManager
-from apps.commerce.services.client import ClientService
 
 
-class Client(AModel, ClientService):
+class Client(AModel):
     objects = ClientManager()
 
     class Status(TextChoices):

@@ -27,7 +27,7 @@ class TBankCustomer(AModel):
         verbose_name_plural = _('TBank customers')
 
 
-class TBankPayment(Payment, TBankPaymentService):
+class TBankPayment(Payment):
     class Status(TextChoices):
         NEW = 'NEW', 'NEW'
         FORM_SHOWED = 'FORM_SHOWED', 'FORM_SHOWED'
@@ -70,6 +70,10 @@ class TBankPayment(Payment, TBankPaymentService):
     class Meta:
         verbose_name = _('TBank payment')
         verbose_name_plural = _('TBank payments')
+
+    @property
+    def service(self) -> TBankPaymentService:
+        return TBankPaymentService(self)
 
     def __str__(self):
         return f'TBankPayment:{self.id}'

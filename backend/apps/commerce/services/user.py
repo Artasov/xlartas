@@ -7,6 +7,8 @@ from adjango.querysets.base import AQuerySet
 from django.db.models import Sum
 from django.utils import timezone
 
+from apps.core.services.user.base import UserBaseService
+
 log = logging.getLogger('global')
 
 if TYPE_CHECKING:
@@ -14,12 +16,12 @@ if TYPE_CHECKING:
     from apps.commerce.models import Payment
 
 
-class CommerceUserService:
-    def success_payments(self: 'User', currency: str) -> AQuerySet:
-        return self.payments.filter(is_paid=True, currency=currency)
+class CommerceUserService(UserBaseService):
+    def success_payments(self, currency: str) -> AQuerySet:
+        return self.user.payments.filter(is_paid=True, currency=currency)
 
-    async def sum_success_payments_amount(self: 'User', currency: str) -> float:
-        aggregate_result = await self.success_payments(
+    async def sum_success_payments_amount(self, currency: str) -> float:
+        aggregate_result = await self.user.service.success_payments(
             currency
         ).aaggregate(total=Sum('amount'))
         amount = float(aggregate_result['total'] or 0.0)
@@ -32,7 +34,7 @@ class CommerceUserService:
         :param currency: Валюта платежа. По умолчанию RUB.
         :return: Дата последнего успешного платежа или None, если платежи отсутствуют.
         """
-        return await self.success_payments(
+        return await self.user.service.success_payments(
             currency=currency
         ).order_by(
             '-created_at'
@@ -40,20 +42,20 @@ class CommerceUserService:
             'created_at', flat=True
         ).afirst()
 
-    async def amount_last_success_payment(self: 'User', currency: str) -> float:
-        last_payment: Optional['Payment'] = await self.success_payments(
+    async def amount_last_success_payment(self, currency: str) -> float:
+        last_payment: Optional['Payment'] = await self.user.service.success_payments(
             currency=currency
         ).order_by('-created_at').afirst()
         amount = float(last_payment.amount) if last_payment else 0.0
         return amount
 
-    async def has_payments_last_x_days(self: 'User', days: int) -> bool:
+    async def has_payments_last_x_days(self, days: int) -> bool:
         """
         Проверяет, были ли у пользователя оплаченные платежи за последний месяц.
 
         :return: True, если были оплаты за последний месяц, иначе False.
         """
-        return await self.payments.filter(
+        return await self.user.payments.filter(
             is_paid=True, created_at__gte=timezone.now() - timedelta(days=days)
         ).aexists()
 

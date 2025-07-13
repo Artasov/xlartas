@@ -16,13 +16,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 from pilkit.processors import ResizeToFit
 from timezone_field import TimeZoneField
 
-from apps.commerce.services.user import CommerceUserService
 from apps.core.managers.user import UserManager
 from apps.core.models.choices import Gender
-from apps.core.services.user import UserService, generate_random_username
-from apps.xlmine.services.donate import UserDonateService
-from apps.xlmine.services.privilege import UserPrivilegeService
-from apps.xlmine.services.user import UserXLMineService
+from apps.core.services.user.base import generate_random_username
+from apps.core.services.user.mixer import UserService
 from utils.pictures import CorrectOrientation
 
 if TYPE_CHECKING:
@@ -46,11 +43,6 @@ class Role(AModel):
 
 class User(
     AAbstractUser,
-    UserService,
-    UserDonateService,
-    UserXLMineService,
-    UserPrivilegeService,
-    CommerceUserService
 ):
     class PreferredLang(TextChoices):
         RU = 'ru', _('Русский')
@@ -87,9 +79,13 @@ class User(
     balance = DecimalField(decimal_places=2, max_digits=8, default=0)
 
     def __str__(self):
-        return f'{self.full_name if self.full_name else self.username}:{self.id}'
+        return f'{self.service.full_name if self.service.full_name else self.username}:{self.id}'
 
     def save(self, *args, **kwargs):
         if not self.username:
             self.username = generate_random_username()
         super().save(*args, **kwargs)
+
+    @property
+    def service(self) -> UserService:
+        return UserService(self)

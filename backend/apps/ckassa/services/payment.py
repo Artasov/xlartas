@@ -1,14 +1,21 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 import httpx
 from django.conf import settings
 
-from apps.commerce.services.payment.base import BasePaymentService
+from apps.commerce.services.payment.base import PaymentBaseService
+
+if TYPE_CHECKING:
+    from apps.ckassa.models import CKassaPayment
 
 
-class CKassaPaymentService(BasePaymentService):
+class CKassaPaymentService(PaymentBaseService):
+
+    def __init__(self, payment: 'CKassaPayment') -> None:
+        super().__init__(payment)  # Expected type 'Type[Payment]', got 'CKassaPayment' instead
+
     @staticmethod
     async def actual_status(reg_pay_num: str) -> Optional[str]:
         headers = {

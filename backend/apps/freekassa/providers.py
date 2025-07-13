@@ -5,13 +5,12 @@ import urllib.parse
 from decimal import Decimal
 
 from django.conf import settings
-
-from apps.commerce.exceptions.payment import PaymentException
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
+from apps.commerce.services.payment.base import PaymentBaseService
 from apps.freekassa.models import FreeKassaPayment
 
 
-class FreeKassaProvider(BasePaymentProvider):
+class FreeKassaProvider(PaymentBaseProvider):
     system_name = 'freekassa'
 
     async def _create(self, amount: Decimal) -> FreeKassaPayment:
@@ -54,7 +53,7 @@ class FreeKassaProvider(BasePaymentProvider):
                 payment_url=payment_url,
             )
         except Exception as exc:
-            raise PaymentException.InitError(f'FreeKassa init error: {exc}') from exc
+            raise PaymentBaseService.exceptions.InitError(f'FreeKassa init error: {exc}') from exc
         return payment
 
     async def sync(self, payment: FreeKassaPayment) -> None:

@@ -12,8 +12,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 from apps.cloudpayments.models import CloudPaymentPayment
 from apps.cloudpayments.services.payment import CloudPaymentService
-from apps.commerce.services.order.exceptions import _OrderException
 from apps.commerce.models import Order
+from apps.commerce.services.order.base import OrderService
 
 log = logging.getLogger('global')
 
@@ -61,7 +61,7 @@ async def success(request):
 
         try:
             await order.service.execute()
-        except _OrderException.AlreadyExecuted:
+        except OrderService.exceptions.AlreadyExecuted:
             pass
 
         return Response({'success': True}, status=HTTP_200_OK)

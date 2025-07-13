@@ -6,7 +6,7 @@ from rest_framework.status import (
 )
 
 
-class PaymentException:
+class _PaymentException:
     class CurrencyNotSupported(APIException):
         status_code = HTTP_400_BAD_REQUEST
         default_detail = {'message': _('Currency not supported.')}

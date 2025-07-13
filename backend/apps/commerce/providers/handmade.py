@@ -3,12 +3,12 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import HandMadePayment, PaymentSystem
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
+from apps.commerce.services.payment.base import PaymentBaseService
 
 
-class HandMadeProvider(BasePaymentProvider):
+class HandMadeProvider(PaymentBaseProvider):
     """
     Простейший «ручной» провайдер:
     • создаёт запись `HandMadePayment`;
@@ -26,7 +26,7 @@ class HandMadeProvider(BasePaymentProvider):
                 payment_url=None,
             )
         except Exception as exc:
-            raise PaymentException.InitError(f'HandMade init error: {exc}') from exc
+            raise PaymentBaseService.exceptions.InitError(f'HandMade init error: {exc}') from exc
         return payment
 
     async def sync(self, payment: HandMadePayment) -> None:

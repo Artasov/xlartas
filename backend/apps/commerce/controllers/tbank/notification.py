@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from apps.commerce.services.order.exceptions import _OrderException
+from apps.commerce.services.order.base import OrderService
 from apps.tbank.decorators.base import async_tbank_payment_notification
 
 log = logging.getLogger('global')
@@ -51,7 +51,7 @@ async def notification(request):
             try:
                 log.info('Stage #22')
                 await request.order.service.execute()
-            except _OrderException.AlreadyExecuted:
+            except OrderService.exceptions.AlreadyExecuted:
                 log.info('Stage #23')
                 pass
             if request.method == 'GET':

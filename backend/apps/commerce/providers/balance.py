@@ -1,17 +1,17 @@
 from decimal import Decimal
 
-from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import BalancePayment, PaymentSystem
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
+from apps.commerce.services.payment.base import PaymentBaseService
 
 
-class BalanceProvider(BasePaymentProvider):
+class BalanceProvider(PaymentBaseProvider):
     system_name = PaymentSystem.Balance
 
     async def _create(self, amount: Decimal) -> BalancePayment:
         user = await self.order.arelated('user')
         if user.balance < amount:
-            raise PaymentException.InitError('Not enough balance')
+            raise PaymentBaseService.exceptions.InitError('Not enough balance')
         user.balance -= amount
         await user.asave()
         payment = await BalancePayment.objects.acreate(

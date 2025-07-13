@@ -5,12 +5,12 @@ from decimal import Decimal
 
 from apps.cloudpayments.classes.payment import CloudPaymentAPI
 from apps.cloudpayments.models import CloudPaymentPayment
-from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.models import Payment
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
+from apps.commerce.services.payment.base import PaymentBaseService
 
 
-class CloudPaymentsProvider(BasePaymentProvider):
+class CloudPaymentsProvider(PaymentBaseProvider):
     """
     Интеграция CloudPayments (виджет, QR‑SBP, Apple / Google / ЮMoney‑Pay …).
 
@@ -34,7 +34,7 @@ class CloudPaymentsProvider(BasePaymentProvider):
                 amount=amount,
             )
         except Exception as exc:
-            raise PaymentException.InitError(f'CloudPayments init error: {exc}') from exc
+            raise PaymentBaseService.exceptions.InitError(f'CloudPayments init error: {exc}') from exc
 
         return payment
 

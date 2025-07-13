@@ -2,20 +2,28 @@
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from adjango.querysets.base import AQuerySet
 from django.db.models import Sum
 
+from apps.commerce.services.order.base import OrderService
+from apps.commerce.services.product.base import ProductBaseService
+from apps.core.services.user.base import UserBaseService
+
 if TYPE_CHECKING:
-    from apps.core.models import User
-    from apps.xlmine.models import Donate, DonateOrder
+    from apps.xlmine.models import DonateOrder
 
 
-class UserDonateService:
+class UserDonateService(UserBaseService):
 
-    async def sum_donate_amount(self: 'User') -> Decimal:
-        return (await self.donate_orders.aaggregate(total=Sum('payment__amount')))['total'] or Decimal(0)
+    @property
+    def donate_orders(self) -> AQuerySet['DonateOrder']:
+        from apps.xlmine.models import DonateOrder
+        return DonateOrder.objects.filter(user_id=self.user.id)
 
-
-from apps.commerce.services.product import ProductBaseService
+    async def sum_donate_amount(self) -> Decimal:
+        return (await self.user.service.donate_orders.aaggregate(
+            total=Sum('payment__amount')
+        ))['total'] or Decimal(0)
 
 
 class DonateService(ProductBaseService['Donate', 'DonateOrder']):
@@ -45,7 +53,7 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
         """Check that donate product can be issued."""
         from rest_framework.exceptions import ValidationError
 
-        if not self.is_available:
+        if not self.product.is_available:
             if raise_exceptions:
                 raise ValidationError({'detail': 'Product is not available'})
             return False
@@ -84,9 +92,6 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
         Отмена выдачи. Если хотите «забирать» коины обратно – можно реализовать здесь.
         """
         pass
-
-
-from apps.commerce.services.order.base import OrderService
 
 
 class DonateOrderService(OrderService['DonateOrder', 'Donate']):

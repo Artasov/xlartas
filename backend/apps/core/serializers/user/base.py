@@ -23,6 +23,7 @@ class UserSelfSerializer(AModelSerializer):
     is_password_exists = SerializerMethodField()
     roles = SlugRelatedField(many=True, read_only=True, slug_field='name')
     coins = SerializerMethodField()
+    full_name = SerializerMethodField()
 
     class Meta:
         model = User
@@ -35,6 +36,9 @@ class UserSelfSerializer(AModelSerializer):
             'is_email_confirmed', 'is_phone_confirmed', 'is_staff',
             'is_password_exists'
         )
+
+    @staticmethod
+    def get_full_name(user: User): return user.service.full_name
 
     @staticmethod
     def get_is_password_exists(user): return bool(user.password) and user.has_usable_password()
@@ -73,6 +77,7 @@ class UserAvatarSerializer(AModelSerializer):
 
 class UserPublicSerializer(AModelSerializer):
     timezone = TimeZoneSerializerField(use_pytz=True)
+    full_name = SerializerMethodField()
 
     class Meta:
         model = User
@@ -80,6 +85,9 @@ class UserPublicSerializer(AModelSerializer):
             'id', 'full_name', 'avatar', 'first_name',
             'last_name', 'middle_name', 'gender', 'timezone'
         )
+
+    @staticmethod
+    def get_full_name(user: User): return user.service.full_name
 
 
 class SignUpSerializer(ASerializer):

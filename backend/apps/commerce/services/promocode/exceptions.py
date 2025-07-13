@@ -5,9 +5,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 
-class PromocodeException(ModelApiBaseException):
-    """Классы исключений для промокодов."""
-
+class _PromocodeException(ModelApiBaseException):
     class ApiEx(ModelApiBaseException.ApiEx):
         class NotFound(APIException):
             status_code = HTTP_404_NOT_FOUND

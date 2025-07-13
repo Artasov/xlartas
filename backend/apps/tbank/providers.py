@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from adjango.utils.base import build_full_url
 
 from apps.commerce.models import Payment
-from apps.commerce.providers.base import BasePaymentProvider
+from apps.commerce.providers.base import PaymentBaseProvider
 from apps.tbank.classes.TBank import (
     TBank, ReceiptFFD105, ItemFFD105, Payments,
     OperationInitiatorType, SUCCESS_FAILURE_GET_PARAMS_TEMPLATE
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     pass
 
 
-class _TBankBaseProvider(BasePaymentProvider, ABC):
+class _TBankBaseProvider(PaymentBaseProvider, ABC):
     async def _get_customer_key(self) -> str:
         customer = await TBankCustomerManager.get_or_init(
             user_id=self.order.user.id,

@@ -3,18 +3,19 @@ import logging
 from decimal import Decimal
 from typing import TYPE_CHECKING, Generic
 
-from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.services.order.exceptions import _OrderException
+from apps.commerce.services.payment.base import PaymentBaseService
 from apps.commerce.services.typing import OrderT, ProductT
+from apps.core.services.base import BaseService
 
 tbank_log = logging.getLogger('tbank')
 commerce_log = logging.getLogger('commerce')
 
 if TYPE_CHECKING:
-    from apps.commerce.models import Order, HandMadePayment
+    pass
 
 
-class OrderService(Generic[OrderT, ProductT]):
+class OrderService(BaseService, Generic[OrderT, ProductT]):
     """
     Интерфейс-сервис для работы с заказами, частично реализующий функционал.
     Этот класс должен быть унаследован конкретными сервисами заказов,
@@ -29,19 +30,14 @@ class OrderService(Generic[OrderT, ProductT]):
     def __init__(self, order: OrderT) -> None:
         self.order = order
 
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
-    # ---------------------------------------------------------------- #
     async def init_payment(self, request, price: Decimal) -> None:
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
         available = PaymentSystemRegistry.available_systems(self.order.currency)
         if self.order.payment_system not in available:
-            raise PaymentException.CurrencyNotSupportedForPaymentSystem()
+            raise PaymentBaseService.exceptions.CurrencyNotSupportedForPaymentSystem()
 
-        from apps.commerce.providers.base import BasePaymentProvider
-        provider_cls: type[BasePaymentProvider] = (
+        from apps.commerce.providers.base import PaymentBaseProvider
+        provider_cls: type[PaymentBaseProvider] = (
             PaymentSystemRegistry.provider_cls(self.order.payment_system)
         )
         commerce_log.info(f'Using {provider_cls} provider')
@@ -52,7 +48,7 @@ class OrderService(Generic[OrderT, ProductT]):
     @property
     async def receipt_price(self) -> Decimal:
         """
-        Возвращает финальную сумму для чека.
+        Возвращает финальную сумму заказа.
         """
         product = await self.order.arelated('product')
         product = await product.aget_real_instance()
@@ -65,14 +61,15 @@ class OrderService(Generic[OrderT, ProductT]):
         return price
 
     async def safe_cancel(self, request, reason: str) -> None:
-        if not any((self.order.is_inited, self.order.is_executed, self.order.is_paid, self.order.is_cancelled, self.order.is_refunded)):
+        if not any((self.order.is_inited, self.order.is_executed, self.order.is_paid, self.order.is_cancelled,
+                    self.order.is_refunded)):
             await self.cancel(request=request, reason=reason)
         elif self.order.is_cancelled:
-            raise _OrderException.AlreadyCanceled()
+            raise self.exceptions.AlreadyCanceled()
         elif self.order.is_paid:
-            raise _OrderException.CannotCancelPaid()
+            raise self.exceptions.CannotCancelPaid()
         elif self.order.is_refunded:
-            raise _OrderException.CannotCancelRefunded()
+            raise self.exceptions.CannotCancelRefunded()
         elif self.order.is_inited and not any((self.order.is_executed, self.order.is_cancelled, self.order.is_paid)):
             await self.cancel(request=request, reason=reason)
 
@@ -95,19 +92,19 @@ class OrderService(Generic[OrderT, ProductT]):
 
     async def sync_with_payment_system(self) -> None:
         """Synchronize payment status using payment provider."""
-        from apps.commerce.providers.base import BasePaymentProvider
+        from apps.commerce.providers.base import PaymentBaseProvider
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
 
         if not self.order.payment_id or not self.order.payment_system:
-            raise PaymentException.PaymentSystemNotFound()
+            raise PaymentBaseService.exceptions.PaymentSystemNotFound()
 
         payment = await self.order.arelated('payment')
         try:
-            provider_cls: type[BasePaymentProvider] = (
+            provider_cls: type[PaymentBaseProvider] = (
                 PaymentSystemRegistry.provider_cls(self.order.payment_system)
             )
         except ValueError:
-            raise PaymentException.PaymentSystemNotFound() from None
+            raise PaymentBaseService.exceptions.PaymentSystemNotFound() from None
 
         provider = provider_cls(order=self.order, request=None)
         await provider.sync(payment)
@@ -146,19 +143,18 @@ class OrderService(Generic[OrderT, ProductT]):
         await self.order.asave()
 
     def check_available_to_init_payment(self) -> None:
-        from apps.commerce.models import Order
         from apps.commerce.models.payment import CurrencyPaymentSystemMapping
         available_payment_systems = CurrencyPaymentSystemMapping.get_payment(self.order.currency)
         if not available_payment_systems:
             tbank_log.info(f'Валюта {self.order.currency} не поддерживается.')
-            raise PaymentException.CurrencyNotSupported(
+            raise PaymentBaseService.exceptions.CurrencyNotSupported(
                 f'Валюта {self.order.currency} не поддерживается.'
             )
         if self.order.payment_system not in available_payment_systems:
             tbank_log.info(
                 f'Платежная система {self.order.payment_system} не поддерживается для валюты {self.order.currency}.'
             )
-            raise PaymentException.CurrencyNotSupportedForPaymentSystem(
+            raise PaymentBaseService.exceptions.CurrencyNotSupportedForPaymentSystem(
                 f'Платежная система {self.order.payment_system} не поддерживается для валюты {self.order.currency}.'
             )
 
@@ -172,13 +168,13 @@ class OrderService(Generic[OrderT, ProductT]):
         if isinstance(payment, TBankPayment):
             if payment.is_paid:
                 tbank_log.info(f'TBank Payment {payment.id} cannot cancel paid.')
-                raise _OrderException.CannotCancelPaid()
+                raise self.exceptions.CannotCancelPaid()
             else:
-                await payment.cancel()
+                await payment.service.cancel()
         elif isinstance(payment, CloudPaymentPayment):
-            await payment.cancel()
+            await payment.service.cancel()
         elif isinstance(payment, HandMadePayment):
             pass  # Ручная оплата, отмена тоже ручная
         else:
             commerce_log.info(f'Payment system {self.order.payment_system} not found')
-            raise PaymentException.PaymentSystemNotFound()
+            raise PaymentBaseService.exceptions.PaymentSystemNotFound()

@@ -10,7 +10,8 @@ from django.db import migrations, models
 
 import apps.core.managers.user
 import apps.core.models.user
-import apps.core.services.user
+import apps.core.services.user.base
+import apps.core.services.user.mixer
 
 
 class Migration(migrations.Migration):
@@ -79,7 +80,7 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(models.Model, adjango.services.base.ABaseService, apps.core.services.user.UserService),
+            bases=(models.Model, adjango.services.base.ABaseService, apps.core.services.user.mixer.UserService),
             managers=[
                 ('objects', apps.core.managers.user.UserManager()),
             ],

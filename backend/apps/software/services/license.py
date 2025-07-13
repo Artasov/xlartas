@@ -23,9 +23,12 @@ _PRICING_STRATEGY = _load_strategy()
 
 
 class SoftwareLicenseService:
-    async def is_active(self: 'SoftwareLicense') -> bool:
-        if not self.license_ends_at: return False
-        return self.license_ends_at > timezone.now()
+    def __init__(self, license: 'SoftwareLicense'):
+        self.license = license
+
+    async def is_active(self) -> bool:
+        if not self.license.license_ends_at: return False
+        return self.license.license_ends_at > timezone.now()
 
     @staticmethod
     def calculate_price(hours: int,

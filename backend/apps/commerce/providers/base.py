@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from apps.commerce.models import Payment
 
 
-class BasePaymentProvider(abc.ABC):
+class PaymentBaseProvider(abc.ABC):
     """
     Базовый контракт для всех платёжных интеграций.
     """

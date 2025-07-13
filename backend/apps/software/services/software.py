@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING
 
 from django.utils import timezone
 
-from apps.commerce.services.product import ProductBaseService
+from apps.commerce.services.product.base import ProductBaseService
 
 if TYPE_CHECKING:
-    from apps.software.models import SoftwareOrder, Software
+    from apps.software.models import SoftwareOrder
 
 logger = logging.getLogger(__name__)
 
@@ -50,15 +50,15 @@ class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
         """Validate that the order can be initialized."""
         from rest_framework.exceptions import ValidationError
 
-        if not self.is_available:
+        if not self.product.is_available:
             if raise_exceptions:
                 raise ValidationError({'detail': 'Product is not available'})
             return False
 
-        if order.license_hours < self.min_license_order_hours:
+        if order.license_hours < self.product.min_license_order_hours:
             if raise_exceptions:
                 raise ValidationError({
-                    'detail': f'License hours must be ≥ {self.min_license_order_hours}'
+                    'detail': f'License hours must be ≥ {self.product.min_license_order_hours}'
                 })
             return False
 

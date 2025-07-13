@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from apps.commerce.services.order.exceptions import _OrderException
+from apps.commerce.services.order.base import OrderService
 from apps.tbank.decorators.installment import async_tbank_installment_notification
 
 log = logging.getLogger('commerce')
@@ -57,7 +57,7 @@ async def installment_notification(request):
         try:
             log.info('Stage #16 (Installment) => order.execute()')
             await order.service.execute()
-        except _OrderException.AlreadyExecuted:
+        except OrderService.exceptions.AlreadyExecuted:
             log.info('Stage #17 (Installment) => AlreadyExecuted pass')
 
         # Если GET, редиректим на success

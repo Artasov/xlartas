@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional, TypedDict
 import httpx
 from django.conf import settings
 
-from apps.commerce.exceptions.payment import PaymentException
+from apps.commerce.services.payment.base import PaymentBaseService
 
 log = logging.getLogger('cloud_payment')
 
@@ -50,12 +50,12 @@ class CloudPaymentAPI:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
             log.error('[CP] HTTP error %s – %s', exc.response.status_code, exc.response.text)
-            raise PaymentException.InitError()
+            raise PaymentBaseService.exceptions.InitError()
 
         j = r.json()
         if not j.get('Success', False):
             log.error('[CP] API error – %s', j.get('Message'))
-            raise PaymentException.InitError(j.get('Message') or 'CloudPayments error')
+            raise PaymentBaseService.exceptions.InitError(j.get('Message') or 'CloudPayments error')
         return j
 
     # --------------------------------------------------------------------- #

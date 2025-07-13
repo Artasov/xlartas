@@ -8,7 +8,7 @@ from apps.cloudpayments.services.payment import CloudPaymentService
 from apps.commerce.models import Payment
 
 
-class CloudPaymentPayment(Payment, CloudPaymentService):
+class CloudPaymentPayment(Payment):
     """
     Платёж CloudPayments. Храним id транзакции в CP и её статус.
     """
@@ -26,3 +26,7 @@ class CloudPaymentPayment(Payment, CloudPaymentService):
     class Meta:
         verbose_name = _('CloudPaymentAPI')
         verbose_name_plural = _('CloudPayments')
+
+    @property
+    def service(self) -> CloudPaymentService:
+        return CloudPaymentService(self)

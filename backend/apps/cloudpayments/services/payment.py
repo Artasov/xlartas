@@ -1,13 +1,17 @@
 # cloudpayments/services/payment.py
 from typing import TYPE_CHECKING
 
-from apps.commerce.services.payment.base import PaymentAlreadyCanceled, BasePaymentService
+from apps.commerce.services.payment.base import PaymentAlreadyCanceled, PaymentBaseService
 
 if TYPE_CHECKING:
-    pass
+    from apps.cloudpayments.models import CloudPaymentPayment
 
 
-class CloudPaymentService(BasePaymentService):
+class CloudPaymentService(PaymentBaseService):
+
+    def __init__(self, payment: 'CloudPaymentPayment') -> None:
+        super().__init__(payment)  # Expected type 'Type[Payment]', got 'CloudPaymentPayment' instead
+
     async def cancel(self) -> None:
         # API CloudPayments не поддерживает «cancel» для charge,
         # поэтому считаем платёж неизменяемым

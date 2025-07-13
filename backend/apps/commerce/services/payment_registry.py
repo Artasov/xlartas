@@ -18,7 +18,7 @@ from apps.commerce.models.payment import PaymentSystem
 log = logging.getLogger('payment_registry')
 
 if TYPE_CHECKING:
-    from apps.commerce.providers.base import BasePaymentProvider
+    from apps.commerce.providers.base import PaymentBaseProvider
 
 
 @dataclass(slots=True)
@@ -46,7 +46,7 @@ class PaymentSystemRegistry:
         if settings.MAIN_PROCESS: log.info('[PaymentRegistry] Registered %s', info.system)
 
     @classmethod
-    def provider_cls(cls, system: str) -> Type['BasePaymentProvider']:
+    def provider_cls(cls, system: str) -> Type['PaymentBaseProvider']:
         if system not in cls._registry:
             raise ValueError(f'Payment system {system} not registered')
         return cls._registry[system].load_provider_cls()

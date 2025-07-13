@@ -9,7 +9,6 @@ from django.db import migrations, models
 import apps.commerce.managers.client
 import apps.commerce.managers.employee
 import apps.commerce.models.promocode
-import apps.commerce.services.client
 import apps.commerce.services.employee
 import apps.commerce.services.promocode.base
 import apps.uuid6.field
@@ -35,7 +34,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Client',
                 'verbose_name_plural': 'Clients',
             },
-            bases=(models.Model, adjango.services.base.ABaseService, apps.commerce.services.client.ClientService),
+            bases=(models.Model, adjango.services.base.ABaseService),
             managers=[
                 ('objects', apps.commerce.managers.client.ClientManager()),
             ],
@@ -231,7 +230,7 @@ class Migration(migrations.Migration):
             },
             bases=(
                 models.Model, adjango.services.base.ABaseService,
-                apps.commerce.services.promocode.base.PromoCodeService),
+                apps.commerce.services.promocode.base.PromocodeService),
         ),
         migrations.CreateModel(
             name='PromocodeProductDiscount',

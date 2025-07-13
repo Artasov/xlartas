@@ -6,7 +6,7 @@ from rest_framework.status import (
 )
 
 
-class ProductException:
+class _ProductException:
     class NotFound(APIException):
         status_code = HTTP_404_NOT_FOUND
         default_detail = {'message': _('Product not found.')}

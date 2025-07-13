@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 
 from apps.commerce.services.order.base import OrderService
-from apps.commerce.services.product import ProductBaseService
+from apps.commerce.services.product.base import ProductBaseService
 
 if TYPE_CHECKING:  # pragma: no cover
     from apps.commerce.models import BalanceProductOrder, BalanceProduct

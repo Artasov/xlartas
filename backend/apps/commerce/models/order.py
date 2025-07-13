@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.managers.order import OrderBaseManager
 from apps.commerce.models.payment import PaymentSystem, Currency
+from apps.commerce.services.order.base import OrderService
 from apps.uuid6.field import UUIDv6Field
 
 
@@ -42,3 +43,7 @@ class Order(APolymorphicModel, ACreatedUpdatedAtIndexedMixin):
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
+
+    @property
+    def service(self) -> OrderService:
+        return OrderService(self)

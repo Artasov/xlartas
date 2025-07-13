@@ -5,18 +5,20 @@ from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 
+from apps.core.services.user.base import UserBaseService
+
 if TYPE_CHECKING:
     from apps.core.models import User
 
 
-class UserXLMineService:
+class UserXLMineService(UserBaseService):
 
-    async def xlmine_uuid(self: 'User') -> str:
+    async def xlmine_uuid(self) -> str:
         from apps.xlmine.models.user import UserXLMine
-        xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=self)
+        xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=self.user)
         return xlmine_user.uuid
 
-    async def set_skin(self: 'User', skin_file: UploadedFile) -> str:
+    async def set_skin(self, skin_file: UploadedFile) -> str:
         """
         Сохраняет файл скина и сразу же посылает RCON‑команду:
           /skin player <username> set <url>
@@ -25,7 +27,7 @@ class UserXLMineService:
         from apps.xlmine.services.server.console import RconServerConsole
 
         # 1. Сохраняем файл в модели (Media / CDN и т.п.)
-        xlm, _ = await UserXLMine.objects.aget_or_create(user=self)
+        xlm, _ = await UserXLMine.objects.aget_or_create(user=self.user)
         if xlm.skin:
             xlm.skin.delete(save=False)
         await sync_to_async(xlm.skin.save)(
@@ -39,10 +41,10 @@ class UserXLMineService:
         rcon = RconServerConsole()
         return rcon.send_command(
             # f'skinsrestorer:skin set {skin_url} {self.username} classic'
-            f'skin set web classic "{skin_url}" {self.username}'
+            f'skin set web classic "{skin_url}" {self.user.username}'
         )
 
-    async def clear_skin(self: 'User') -> str:
+    async def clear_skin(self) -> str:
         """
         Удаляем локально файл скина и шлём RCON‑команду:
           /skin player <username> clear
@@ -50,13 +52,13 @@ class UserXLMineService:
         from apps.xlmine.models.user import UserXLMine
         from apps.xlmine.services.server.console import RconServerConsole
 
-        xlm, _ = await UserXLMine.objects.aget_or_create(user=self)
+        xlm, _ = await UserXLMine.objects.aget_or_create(user=self.user)
         if xlm.skin:
             xlm.skin.delete(save=False)
             await sync_to_async(xlm.asave)()
 
         rcon = RconServerConsole()
-        return rcon.send_command(f'skin player {self.username} clear')
+        return rcon.send_command(f'skin player {self.user.username} clear')
 
     async def set_cape(self: 'User', cape_file: UploadedFile) -> str:
         """

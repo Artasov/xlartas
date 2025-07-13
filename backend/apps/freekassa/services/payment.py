@@ -3,15 +3,21 @@ from __future__ import annotations
 import hashlib
 import hmac
 import time
-from typing import Any, Dict
+from typing import Any, Dict, TYPE_CHECKING
 
 import httpx
 from django.conf import settings
 
-from apps.commerce.services.payment.base import BasePaymentService, PaymentAlreadyCanceled
+from apps.commerce.services.payment.base import PaymentBaseService, PaymentAlreadyCanceled
+
+if TYPE_CHECKING:
+    from apps.freekassa.models import FreeKassaPayment
 
 
-class FreeKassaPaymentService(BasePaymentService):
+class FreeKassaPaymentService(PaymentBaseService):
+    def __init__(self, payment: 'FreeKassaPayment') -> None:
+        super().__init__(payment)  # Expected type 'Type[Payment]', got 'FreeKassaPayment' instead
+
     @staticmethod
     async def actual_status(fk_order_id: int) -> int | None:
         data = {

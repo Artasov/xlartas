@@ -5,8 +5,7 @@ from typing import TYPE_CHECKING
 from apps.commerce.services.order.base import OrderService
 from apps.software.services.license import SoftwareLicenseService
 
-if TYPE_CHECKING:
-    from apps.software.models import SoftwareOrder
+if TYPE_CHECKING: ...
 
 
 class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):

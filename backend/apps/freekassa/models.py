@@ -5,7 +5,7 @@ from apps.commerce.models import Payment
 from .services.payment import FreeKassaPaymentService
 
 
-class FreeKassaPayment(Payment, FreeKassaPaymentService):
+class FreeKassaPayment(Payment):
     class Status(IntegerChoices):
         NEW = 0, _('New')
         PAID = 1, _('Paid')
@@ -20,3 +20,7 @@ class FreeKassaPayment(Payment, FreeKassaPaymentService):
     class Meta:
         verbose_name = _('FreeKassa payment')
         verbose_name_plural = _('FreeKassa payments')
+
+    @property
+    def service(self) -> FreeKassaPaymentService:
+        return FreeKassaPaymentService(self)

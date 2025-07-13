@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, Optional
 
 from asgiref.sync import async_to_sync
 
+from apps.core.services.user.base import UserBaseService
+
 if TYPE_CHECKING:
     from apps.core.models import User
     from apps.xlmine.models import Privilege
@@ -55,16 +57,11 @@ class PrivilegeService:
         return async_to_sync(self.sync_remote)()
 
 
-class UserPrivilegeService:
-
-    # ──────────────────────────────────────────────────────────────
-    # Helpers
-    # ──────────────────────────────────────────────────────────────
-
-    async def _next_privilege(self: 'User', up: bool = True) -> Optional['Privilege']:
+class UserPrivilegeService(UserBaseService):
+    async def __next_privilege(self, up: bool = True) -> Optional['Privilege']:
         from apps.xlmine.models import Privilege
         from apps.xlmine.models.user import UserXLMine
-        xlm: UserXLMine = await self.arelated('xlmine_user')
+        xlm: UserXLMine = await self.user.arelated('xlmine_user')
         if getattr(xlm, 'privilege_id') is None:
             await self.calc_and_set_current_privilege()
         current = await xlm.arelated('privilege')
@@ -78,59 +75,56 @@ class UserPrivilegeService:
             qs = Privilege.objects.filter(threshold__lt=current.threshold).order_by('-threshold')
         return await qs.afirst()
 
-    # ──────────────────────────────────────────────────────────────
-    # Public API
-    # ──────────────────────────────────────────────────────────────
-    async def set_privilege(self: 'User', privilege: 'Privilege'):
-        await privilege.rcon_give_to(self)
+    async def set_privilege(self, privilege: 'Privilege'):
+        await privilege.rcon_give_to(self.user)
 
-    async def calc_and_set_current_privilege(self: 'User'):
+    async def calc_and_set_current_privilege(self):
         from apps.xlmine.models import Privilege
-        xlm = await self.arelated('xlmine_user')
-        xlm.privilege = await Privilege.objects.get_by_threshold(await self.sum_donate_amount())
+        xlm = await self.user.arelated('xlmine_user')
+        xlm.privilege = await Privilege.objects.get_by_threshold(await self.user.service.sum_donate_amount())
         await xlm.asave()
 
-    async def upgrade_privilege(self: 'User') -> Optional['Privilege']:
+    async def upgrade_privilege(self) -> Optional['Privilege']:
         """
         Повышает привилегию пользователя до следующей относительно текущего threshold.
         Возвращает новую привилегию или None, если следующей нет.
         """
-        next_priv = await self._next_privilege(up=True)
-        if next_priv: await next_priv.rcon_give_to(self)
-        xlm = await self.arelated('xlmine_user')
+        next_priv = await self.__next_privilege(up=True)
+        if next_priv: await next_priv.rcon_give_to(self.user)
+        xlm = await self.user.arelated('xlmine_user')
         xlm.privilege = next_priv
         await xlm.asave()
         return next_priv
 
-    async def downgrade_privilege(self: 'User') -> Optional['Privilege']:
+    async def downgrade_privilege(self) -> Optional['Privilege']:
         """
         Понижает привилегию пользователя до предыдущей (нижней) относительно текущего threshold.
         Возвращает новую привилегию или None, если предыдущей нет.
         """
-        prev_priv = await self._next_privilege(up=False)
-        if prev_priv: await prev_priv.rcon_give_to(self)
-        xlm = await self.arelated('xlmine_user')
+        prev_priv = await self.__next_privilege(up=False)
+        if prev_priv: await prev_priv.rcon_give_to(self.user)
+        xlm = await self.user.arelated('xlmine_user')
         xlm.privilege = prev_priv
         await xlm.asave()
         return prev_priv
 
-    async def rcon_sync_privilege(self: 'User') -> Optional['Privilege']:
+    async def rcon_sync_privilege(self) -> Optional['Privilege']:
         """
         Удаляет все лакипермс‑привилегии пользователя и выставляет актуальную.
         """
-        xlmine_user = await self.arelated('xlmine_user')
+        xlmine_user = await self.user.arelated('xlmine_user')
         curr_priv = xlmine_user.privilege
-        if curr_priv: await curr_priv.rcon_give_to(self)
+        if curr_priv: await curr_priv.rcon_give_to(self.user)
         return curr_priv
 
-    def sync_upgrade_privilege(self: 'User') -> Optional['Privilege']:
-        return async_to_sync(self.upgrade_privilege)()
+    def sync_upgrade_privilege(self) -> Optional['Privilege']:
+        return async_to_sync(self.user.service.upgrade_privilege)()
 
-    def sync_downgrade_privilege(self: 'User') -> Optional['Privilege']:
-        return async_to_sync(self.downgrade_privilege)()
+    def sync_downgrade_privilege(self) -> Optional['Privilege']:
+        return async_to_sync(self.user.service.downgrade_privilege)()
 
     def sync_rcon_sync_privilege(self):
-        return async_to_sync(self.rcon_sync_privilege)()
+        return async_to_sync(self.user.service.rcon_sync_privilege)()
 
     def sync_calc_and_set_current_privilege(self):
         return async_to_sync(self.calc_and_set_current_privilege)()

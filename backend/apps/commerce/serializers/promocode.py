@@ -3,8 +3,8 @@ from adjango.aserializers import AModelSerializer, ASerializer
 from rest_framework.fields import CharField, ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
-from apps.commerce.exceptions.promocode import PromocodeException
 from apps.commerce.models import Product, Promocode, PromocodeProductDiscount, Currency
+from apps.commerce.services.promocode.base import PromocodeService
 
 
 class PromocodeProductDiscountSerializer(AModelSerializer):
@@ -45,5 +45,5 @@ class PromocodeCheckSerializer(ASerializer):
         try:
             promocode = Promocode.objects.get(code=code)
         except Promocode.DoesNotExist:
-            raise PromocodeException.ApiEx.DoesNotExist()
+            raise PromocodeService.exceptions.ApiEx.DoesNotExist()
         return promocode
