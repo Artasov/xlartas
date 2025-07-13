@@ -68,21 +68,35 @@ export const darkTheme = createTheme({
                 root: {},
                 h1: {
                     lineHeight: '1em',
+                    color: '#ffffff'
                 },
                 h2: {
                     lineHeight: '1em',
+                    color: '#ffffffee'
                 },
                 h3: {
                     lineHeight: '1em',
+                    color: '#ffffffdd'
                 },
                 h4: {
                     lineHeight: '1em',
+                    color: '#ffffffcc'
                 },
                 h5: {
                     lineHeight: '1em',
+                    color: '#ffffffcc'
                 },
                 h6: {
                     lineHeight: '1em',
+                    color: '#ffffffcc'
+                },
+                body1: {
+                    lineHeight: '1.2em',
+                    color: '#ffffff99'
+                },
+                body2: {
+                    lineHeight: '1.2em',
+                    color: '#ffffff77'
                 },
             },
         },

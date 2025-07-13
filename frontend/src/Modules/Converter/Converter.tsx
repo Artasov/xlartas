@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Button, CircularProgress, Grid, Box, Typography} from '@mui/material';
+import {Box, Button, CircularProgress, Typography} from '@mui/material';
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
 import {IConversion, IFormat, IParameter} from 'types/converter';
+import {FC, FR} from "wide-containers";
+import ConverterGuide from './ConverterGuide';
 
 const Converter: React.FC = () => {
     const [source, setSource] = useState<IFormat | null>(null);
@@ -74,9 +76,10 @@ const Converter: React.FC = () => {
     };
 
     return (
-        <Grid container spacing={2}>
-            <Grid size={{xs: 12, md: 6}}>
-                <FileDropZone file={file} onChange={setFile} />
+        <FR wrap w={'100%'} px={2} maxW={600} mx={'auto'}>
+            <ConverterGuide/>
+            <FC grow>
+                <FileDropZone file={file} onChange={setFile}/>
                 {conversion && !conversion.is_done && (
                     <Box mt={2}><CircularProgress/></Box>
                 )}
@@ -98,11 +101,11 @@ const Converter: React.FC = () => {
                         </Box>
                     </Box>
                 )}
-            </Grid>
+            </FC>
 
             {/* Правая колонка: выбор форматов и параметров */}
             {file && (
-                <Grid size={{xs: 12, md: 6}}>
+                <FC>
                     <FormatPicker
                         formats={formats}
                         value={source?.id}
@@ -141,9 +144,9 @@ const Converter: React.FC = () => {
                             </Box>
                         </>
                     )}
-                </Grid>
+                </FC>
             )}
-        </Grid>
+        </FR>
     );
 };
 
