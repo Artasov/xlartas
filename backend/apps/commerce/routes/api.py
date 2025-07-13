@@ -5,7 +5,8 @@ from apps.commerce.controllers.balance import (
     get_latest_balance_product, user_balance
 )
 from apps.commerce.controllers.employee_availability import EmployeeAvailabilityViewSet
-from apps.commerce.controllers.gift_certificate import activate_gift_certificate
+from apps.commerce.controllers.gift_certificate import activate_gift_certificate, gift_certificate_detail, \
+    get_gift_certificates
 from apps.commerce.controllers.order import (
     order_detail, user_orders, order_cancel,
     order_execute, resend_payment_notification,
@@ -45,5 +46,7 @@ urlpatterns = [
 
     path('promocode/applicable/', is_promocode_applicable),
 
-    path('gift-certificate/activate/', activate_gift_certificate)
+    path('gift-certificate/activate/', activate_gift_certificate),
+    path('gift-certificates/<int:productId>/', gift_certificate_detail),
+    path('gift-certificates/', get_gift_certificates),
 ]
