@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, FormControlLabel, MenuItem, TextField} from '@mui/material';
+import {Checkbox, FormControlLabel, MenuItem, TextField, InputAdornment} from '@mui/material';
 import {IParameter} from 'types/converter';
 
 interface Props {
@@ -30,7 +30,11 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 label={p.name}
                                 value={value || ''}
                                 onChange={e => onChange(p.name, Number(e.target.value))}
-                                InputProps={{endAdornment: p.unit}}
+                                InputProps={{
+                                    endAdornment: p.unit ? (
+                                        <InputAdornment position="end">{p.unit}</InputAdornment>
+                                    ) : undefined,
+                                }}
                                 fullWidth
                                 margin="normal"
                             />
@@ -58,6 +62,11 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 label={p.name}
                                 value={value || ''}
                                 onChange={e => onChange(p.name, e.target.value)}
+                                InputProps={{
+                                    endAdornment: p.unit ? (
+                                        <InputAdornment position="end">{p.unit}</InputAdornment>
+                                    ) : undefined,
+                                }}
                                 fullWidth
                                 margin="normal"
                             />
