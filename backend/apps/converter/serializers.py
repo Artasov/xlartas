@@ -22,6 +22,18 @@ class ParameterSerializer(AModelSerializer):
 
 
 class ConversionSerializer(AModelSerializer):
+    size = SerializerMethodField()
+
     class Meta:
         model = Conversion
         fields = "__all__"
+        extra_fields = ("size",)
+
+    @staticmethod
+    def get_size(obj) -> int | None:
+        if obj.output_file:
+            try:
+                return obj.output_file.size
+            except Exception:
+                return None
+        return None
