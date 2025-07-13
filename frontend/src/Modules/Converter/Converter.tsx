@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Box, Button, CircularProgress, Grid, Typography,} from '@mui/material';
-
+import {Button, CircularProgress, Grid, Box, Typography} from '@mui/material';
+import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
 import {IConversion, IFormat, IParameter} from 'types/converter';
@@ -18,12 +18,10 @@ const Converter: React.FC = () => {
     const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
 
-    /* ---------- 📥 Загрузка списков форматов ---------- */
     useEffect(() => {
         axios.get('/api/v1/converter/formats/').then(r => setFormats(r.data));
     }, []);
 
-    /* ---------- 📥 При выборе исходного формата ---------- */
     useEffect(() => {
         if (!source) return;
         axios.get(`/api/v1/converter/formats/${source.id}/variants/`)
@@ -32,7 +30,6 @@ const Converter: React.FC = () => {
             .then(r => setParams(r.data));
     }, [source]);
 
-    /* ---------- 🔍 Определяем формат по расширению файла ---------- */
     useEffect(() => {
         if (!file || formats.length === 0) return;
         const ext = file.name.split('.').pop()?.toLowerCase();
@@ -40,7 +37,6 @@ const Converter: React.FC = () => {
         if (fmt) setSource(fmt);
     }, [file, formats]);
 
-    /* ---------- 🔄 Поллинг статуса конвертации ---------- */
     const pollStatus = (id: number) => {
         const t = setInterval(() => {
             axios.get(`/api/v1/converter/conversion/${id}/`)
@@ -61,7 +57,6 @@ const Converter: React.FC = () => {
         if (timer) clearInterval(timer);
     }, [timer]);
 
-    /* ---------- ▶️ Стартуем конвертацию ---------- */
     const handleConvert = () => {
         if (!file || !source || !targetId) return;
         const formData = new FormData();
@@ -69,7 +64,6 @@ const Converter: React.FC = () => {
         formData.append('source_format', String(source.id));
         formData.append('target_format', String(targetId));
         formData.append('params', JSON.stringify(values));
-
         setLoading(true);
         axios.post('/api/v1/converter/convert/', formData)
             .then(r => {
@@ -79,16 +73,10 @@ const Converter: React.FC = () => {
             .catch(() => setLoading(false));
     };
 
-    /* ---------- 🖼️ UI ---------- */
     return (
         <Grid container spacing={2}>
-            {/* Левая колонка: загрузка файла и результат */}
             <Grid size={{xs: 12, md: 6}}>
-                <Button variant="outlined" component="label">
-                    {file ? file.name : 'Select file'}
-                    <input hidden type="file" onChange={e => setFile(e.target.files?.[0] || null)}/>
-                </Button>
-
+                <FileDropZone file={file} onChange={setFile} />
                 {conversion && !conversion.is_done && (
                     <Box mt={2}><CircularProgress/></Box>
                 )}
