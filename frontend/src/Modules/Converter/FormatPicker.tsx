@@ -12,7 +12,7 @@ const FormatPicker: React.FC<Props> = ({formats, value, onChange}) => {
     return (
         <Grid container spacing={2}>
             {formats.map(fmt => (
-                <Grid item key={fmt.id}>
+                <Grid key={fmt.id}>
                     <Button
                         variant={value === fmt.id ? 'contained' : 'outlined'}
                         onClick={() => onChange(fmt.id)}

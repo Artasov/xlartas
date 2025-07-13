@@ -47,8 +47,9 @@ const Converter: React.FC = () => {
                 const f = formats.find(f => f.id === id) || null;
                 setSource(f);
             }}/>
-            {source && <FormatPicker formats={targets} value={targetId || undefined} onChange={setTargetId}/>} 
-            {params.length > 0 && <ParameterForm parameters={params} values={values} onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}/>} 
+            {source && <FormatPicker formats={targets} value={targetId || undefined} onChange={setTargetId}/>}
+            {params.length > 0 && <ParameterForm parameters={params} values={values}
+                                                 onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}/>}
             <Button variant="contained" disabled={loading} onClick={handleConvert}>
                 {loading ? <CircularProgress size={24}/> : 'Convert'}
             </Button>

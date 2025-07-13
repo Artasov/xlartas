@@ -4,7 +4,7 @@ from django.db.models import FileField, ForeignKey, CASCADE, CharField, BooleanF
 from django.utils.translation import gettext_lazy as _
 
 
-class Conversion(AModel, ACreatedUpdatedAtIndexedMixin):
+class Conversion(ACreatedUpdatedAtIndexedMixin, AModel):
     user = ForeignKey('core.User', CASCADE, related_name='conversions', null=True, blank=True, verbose_name=_('User'))
     ip = CharField(max_length=64, verbose_name=_('IP'))
     input_file = FileField(upload_to='converter/input/', verbose_name=_('Input file'))

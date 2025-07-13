@@ -33,9 +33,9 @@ import Softwares from "./Modules/Software/Softwares";
 import {useTranslation} from 'react-i18next';
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";
-import {Converter} from "Converter";
 import BackgroundFlicker from "Core/BackgroundFlicker";
 import {LangProvider} from "Core/LanguageContext";
+import Converter from "Converter/Converter";
 
 
 const App: React.FC = () => {

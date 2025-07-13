@@ -19,7 +19,7 @@ log = logging.getLogger("global")
 @acontroller("List formats")
 @api_view(("GET",))
 @permission_classes((AllowAny,))
-async def list_formats(_request: HttpRequest):
+async def formats(_):
     data = [await FormatSerializer(f).adata async for f in Format.objects.all()]
     return Response(data, status=HTTP_200_OK)
 
@@ -27,7 +27,7 @@ async def list_formats(_request: HttpRequest):
 @acontroller("Parameters for format")
 @api_view(("GET",))
 @permission_classes((AllowAny,))
-async def format_parameters(_request: HttpRequest, format_id: int):
+async def parameters(_, format_id: int):
     fmt = await Format.objects.aget(id=format_id)
     data = [await ParameterSerializer(p).adata async for p in fmt.parameters.all()]
     return Response(data, status=HTTP_200_OK)
@@ -36,7 +36,7 @@ async def format_parameters(_request: HttpRequest, format_id: int):
 @acontroller("Conversion variants")
 @api_view(("GET",))
 @permission_classes((AllowAny,))
-async def conversion_variants(_request: HttpRequest, format_id: int):
+async def possible_out_formats(_, format_id: int):
     targets = Format.objects.filter(target_variants__source_id=format_id).distinct()
     data = [await FormatSerializer(fmt).adata async for fmt in targets]
     return Response(data, status=HTTP_200_OK)
@@ -45,7 +45,7 @@ async def conversion_variants(_request: HttpRequest, format_id: int):
 @acontroller("Create conversion")
 @api_view(("POST",))
 @permission_classes((AllowAny,))
-async def create_conversion(request: HttpRequest):
+async def convert(request):
     file = request.FILES.get("file")
     source_id = request.data.get("source_format")
     target_id = request.data.get("target_format")
@@ -72,6 +72,6 @@ async def create_conversion(request: HttpRequest):
 @acontroller("Conversion status")
 @api_view(("GET",))
 @permission_classes((AllowAny,))
-async def conversion_status(_request: HttpRequest, conversion_id: int):
+async def conversion_status(_, conversion_id: int):
     conversion = await Conversion.objects.aget(id=conversion_id)
     return Response(await ConversionSerializer(conversion).adata, status=HTTP_200_OK)

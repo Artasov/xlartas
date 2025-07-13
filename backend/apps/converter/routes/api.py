@@ -1,19 +1,19 @@
 from django.urls import path
 
 from apps.converter.controllers.base import (
-    list_formats,
-    conversion_variants,
-    format_parameters,
-    create_conversion,
+    formats,
+    possible_out_formats,
+    parameters,
+    convert,
     conversion_status,
 )
 
 app_name = 'converter'
 
 urlpatterns = [
-    path('converter/formats/', list_formats),
-    path('converter/formats/<int:format_id>/variants/', conversion_variants),
-    path('converter/formats/<int:format_id>/parameters/', format_parameters),
-    path('converter/convert/', create_conversion),
+    path('converter/formats/', formats),
+    path('converter/formats/<int:format_id>/variants/', possible_out_formats),
+    path('converter/formats/<int:format_id>/parameters/', parameters),
+    path('converter/convert/', convert),
     path('converter/conversion/<int:conversion_id>/', conversion_status),
 ]

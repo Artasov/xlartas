@@ -12,7 +12,7 @@ class ParameterType(TextChoices):
     SELECT = "select", _("Select")
 
 
-class Parameter(AModel, ACreatedUpdatedAtIndexedMixin):
+class Parameter(ACreatedUpdatedAtIndexedMixin, AModel):
     format = ForeignKey(
         "converter.Format", CASCADE, related_name="parameters", verbose_name=_("Format")
     )

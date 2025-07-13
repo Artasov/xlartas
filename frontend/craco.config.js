@@ -21,6 +21,7 @@ module.exports = {
             Chat: path.resolve(__dirname, 'src/Modules/Chat/'),
             Client: path.resolve(__dirname, 'src/Modules/Client/'),
             Company: path.resolve(__dirname, 'src/Modules/Company/'),
+            Converter: path.resolve(__dirname, 'src/Modules/Converter/'),
             Confirmation: path.resolve(__dirname, 'src/Modules/Confirmation/'),
             Core: path.resolve(__dirname, 'src/Modules/Core/'),
             Docs: path.resolve(__dirname, 'src/Modules/Docs/'),
