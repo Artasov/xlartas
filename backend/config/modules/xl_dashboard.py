@@ -123,6 +123,13 @@ XL_DASHBOARD = {
         'Message': 'chat.Message',
         'File': 'chat.File',
     },
+    'Converter': {
+        'Format': 'converter.Format',
+        'Parameter': 'converter.Parameter',
+        'Parameter option': 'converter.ParameterOption',
+        'Conversion variant': 'converter.ConversionVariant',
+        'Conversion': 'converter.Conversion',
+    },
     'xl-actions': {
         'Collect Static': 'run_collectstatic',
     }
