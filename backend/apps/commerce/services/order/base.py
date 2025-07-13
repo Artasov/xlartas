@@ -1,7 +1,7 @@
 # commerce/services/order/base.py
 import logging
 from decimal import Decimal
-from typing import TYPE_CHECKING, Union, Generic
+from typing import TYPE_CHECKING, Generic
 
 from apps.commerce.exceptions.payment import PaymentException
 from apps.commerce.services.order.exceptions import _OrderException
@@ -24,153 +24,161 @@ class OrderService(Generic[OrderT, ProductT]):
     @method execute: Метод для выполнения заказа.
     """
 
-    payment: 'Payment | None'
-    product: ProductT
-    amount: Decimal | None
-    is_inited: bool
-    is_executed: bool
-    
     exceptions = _OrderException
+
+    def __init__(self, order: OrderT) -> None:
+        self.order = order
+
+    # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
     #   ИНИЦИАЛИЗАЦИЯ ПЛАТЕЖА
     # ---------------------------------------------------------------- #
-    async def init_payment(self: OrderT, request, price: Decimal):
+    async def init_payment(self, request, price: Decimal) -> None:
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
-        available = PaymentSystemRegistry.available_systems(self.currency)
-        if self.payment_system not in available:
+        available = PaymentSystemRegistry.available_systems(self.order.currency)
+        if self.order.payment_system not in available:
             raise PaymentException.CurrencyNotSupportedForPaymentSystem()
 
         from apps.commerce.providers.base import BasePaymentProvider
         provider_cls: type[BasePaymentProvider] = (
-            PaymentSystemRegistry.provider_cls(self.payment_system)
+            PaymentSystemRegistry.provider_cls(self.order.payment_system)
         )
         commerce_log.info(f'Using {provider_cls} provider')
-        payment = await provider_cls.create(order=self, request=request, amount=price)
-        self.payment = payment
-        await self.asave()
+        payment = await provider_cls.create(order=self.order, request=request, amount=price)
+        self.order.payment = payment
+        await self.order.asave()
 
     @property
-    async def receipt_price(self: OrderT):
+    async def receipt_price(self) -> Decimal:
         """
         Возвращает финальную сумму для чека.
         """
-        price_row = await self.product.prices.agetorn(currency=self.currency)
-        if not price_row: return Decimal('0')
+        product = await self.order.arelated('product')
+        product = await product.aget_real_instance()
+        price_row = await product.prices.agetorn(currency=self.order.currency)
+        if not price_row:
+            return Decimal('0')
         price = price_row.amount
-        if self.promocode: price = await self.promocode.calc_price_for_order(order=self)
+        if self.order.promocode:
+            price = await self.order.promocode.calc_price_for_order(order=self.order)
         return price
 
-    async def safe_cancel(self: OrderT, request, reason: str):
-        if not any((self.is_inited, self.is_executed, self.is_paid, self.is_cancelled, self.is_refunded)):
+    async def safe_cancel(self, request, reason: str) -> None:
+        if not any((self.order.is_inited, self.order.is_executed, self.order.is_paid, self.order.is_cancelled, self.order.is_refunded)):
             await self.cancel(request=request, reason=reason)
-        elif self.is_cancelled:
+        elif self.order.is_cancelled:
             raise _OrderException.AlreadyCanceled()
-        elif self.is_paid:
+        elif self.order.is_paid:
             raise _OrderException.CannotCancelPaid()
-        elif self.is_refunded:
+        elif self.order.is_refunded:
             raise _OrderException.CannotCancelRefunded()
-        elif self.is_inited and not any((self.is_executed, self.is_cancelled, self.is_paid)):
+        elif self.order.is_inited and not any((self.order.is_executed, self.order.is_cancelled, self.order.is_paid)):
             await self.cancel(request=request, reason=reason)
 
-    async def init(self: OrderT, request, init_payment: bool = True):
-        commerce_log.info(f'Start init order {self.id}')
-        self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()
-        commerce_log.info(f'For product {self.product.name}')
+    async def init(self, request, init_payment: bool = True) -> None:
+        commerce_log.info(f'Start init order {self.order.id}')
+        product = await self.order.arelated('product')
+        product = await product.aget_real_instance()
+        commerce_log.info(f'For product {product.name}')
         price = await self.receipt_price
         commerce_log.info(f'Price: {price}')
-        self.amount = price
-        await self.asave()
-        await self.product.can_pregive(self, raise_exceptions=True)
-        commerce_log.info(f'Pregive process product {self.product.name}')
-        await self.product.pregive(self)  # noqa
-        if self.payment_system and init_payment and price > 0:
+        self.order.amount = price
+        await self.order.asave()
+        await product.service.can_pregive(self.order, raise_exceptions=True)
+        commerce_log.info(f'Pregive process product {product.name}')
+        await product.service.pregive(self.order)
+        if self.order.payment_system and init_payment and price > 0:
             await self.init_payment(request, price)
-        self.is_inited = True
-        await self.asave()
+        self.order.is_inited = True
+        await self.order.asave()
 
-    async def sync_with_payment_system(self: OrderT):
+    async def sync_with_payment_system(self) -> None:
         """Synchronize payment status using payment provider."""
         from apps.commerce.providers.base import BasePaymentProvider
         from apps.commerce.services.payment_registry import PaymentSystemRegistry
 
-        if not self.payment_id or not self.payment_system:
+        if not self.order.payment_id or not self.order.payment_system:
             raise PaymentException.PaymentSystemNotFound()
 
-        payment = await self.arelated('payment')
+        payment = await self.order.arelated('payment')
         try:
             provider_cls: type[BasePaymentProvider] = (
-                PaymentSystemRegistry.provider_cls(self.payment_system)
+                PaymentSystemRegistry.provider_cls(self.order.payment_system)
             )
         except ValueError:
             raise PaymentException.PaymentSystemNotFound() from None
 
-        provider = provider_cls(order=self, request=None)
+        provider = provider_cls(order=self.order, request=None)
         await provider.sync(payment)
 
-        if payment.is_paid and not self.is_executed and not self.is_refunded:
+        if payment.is_paid and not self.order.is_executed and not self.order.is_refunded:
             await self.execute()
 
-    async def execute(self: OrderT):
+    async def execute(self) -> None:
         """
         Выполнение заказа после оплаты.
         Отвечает за выполнение операций после оплаты заказа. Выдача товара в том или ином виде,
         обновление моделей оплат, отправка уведомлений если нужно и т.д.
         """
         from apps.commerce.models import PromocodeUsage
-        if self.is_refunded: raise _OrderException.CannotExecuteRefunded()
-        if self.is_executed: raise _OrderException.AlreadyExecuted()
-        self.product = await self.arelated('product')
-        self.product = await self.product.aget_real_instance()
-        await self.product.postgive(self)
-        if self.promocode_id: await PromocodeUsage.objects.acreate(
-            user_id=self.user_id, promocode_id=self.promocode_id,
-        )
-        self.is_executed = True
-        await self.asave()
-        commerce_log.info(f'Order {self.id} EXECUTED successfully')
+        if self.order.is_refunded:
+            raise _OrderException.CannotExecuteRefunded()
+        if self.order.is_executed:
+            raise _OrderException.AlreadyExecuted()
+        product = await self.order.arelated('product')
+        product = await product.aget_real_instance()
+        await product.service.postgive(self.order)
+        if self.order.promocode_id:
+            await PromocodeUsage.objects.acreate(
+                user_id=self.order.user_id, promocode_id=self.order.promocode_id,
+            )
+        self.order.is_executed = True
+        await self.order.asave()
+        commerce_log.info(f'Order {self.order.id} EXECUTED successfully')
 
-    async def cancel(self: Union['Order', 'OrderService'], request, reason: str):
-        if getattr(self, 'payment_id'):
+    async def cancel(self, request, reason: str) -> None:
+        if getattr(self.order, 'payment_id'):
             await self.cancel_payment()
-        self.product = await self.arelated('product')
-        await self.product.cancel_given(request=request, order=self, reason=reason)
-        self.is_cancelled = True  # noqa
-        await self.asave()
+        product = await self.order.arelated('product')
+        await product.service.cancel_given(request=request, order=self.order, reason=reason)
+        self.order.is_cancelled = True
+        await self.order.asave()
 
-    def check_available_to_init_payment(self: Union['Order', 'OrderService']):
+    def check_available_to_init_payment(self) -> None:
         from apps.commerce.models import Order
         from apps.commerce.models.payment import CurrencyPaymentSystemMapping
-        self: Order
-        available_payment_systems = CurrencyPaymentSystemMapping.get_payment(self.currency)
+        available_payment_systems = CurrencyPaymentSystemMapping.get_payment(self.order.currency)
         if not available_payment_systems:
-            tbank_log.info(f'Валюта {self.currency} не поддерживается.')
-            raise PaymentException.CurrencyNotSupported(f'Валюта {self.currency} не поддерживается.')
-        if self.payment_system not in available_payment_systems:
-            tbank_log.info(f'Платежная система {self.payment_system} не поддерживается для валюты {self.currency}.')
+            tbank_log.info(f'Валюта {self.order.currency} не поддерживается.')
+            raise PaymentException.CurrencyNotSupported(
+                f'Валюта {self.order.currency} не поддерживается.'
+            )
+        if self.order.payment_system not in available_payment_systems:
+            tbank_log.info(
+                f'Платежная система {self.order.payment_system} не поддерживается для валюты {self.order.currency}.'
+            )
             raise PaymentException.CurrencyNotSupportedForPaymentSystem(
-                f'Платежная система {self.payment_system} не поддерживается для валюты {self.currency}.'
+                f'Платежная система {self.order.payment_system} не поддерживается для валюты {self.order.currency}.'
             )
 
-    async def cancel_payment(self: Union['Order', 'OrderService']):
+    async def cancel_payment(self) -> None:
         """Отменяет только платеж в шлюзе."""
         await self.sync_with_payment_system()
-        self.payment = await self.arelated('payment')
+        payment = await self.order.arelated('payment')
         from apps.tbank.models import TBankPayment
         from apps.commerce.models.payment import HandMadePayment
         from apps.cloudpayments.models import CloudPaymentPayment
-        if isinstance(self.payment, TBankPayment):
-            payment: TBankPayment = self.payment
+        if isinstance(payment, TBankPayment):
             if payment.is_paid:
                 tbank_log.info(f'TBank Payment {payment.id} cannot cancel paid.')
                 raise _OrderException.CannotCancelPaid()
             else:
-                await self.payment.cancel()
-        elif isinstance(self.payment, CloudPaymentPayment):
-            await self.payment.cancel()
-        elif isinstance(self.payment, HandMadePayment):
+                await payment.cancel()
+        elif isinstance(payment, CloudPaymentPayment):
+            await payment.cancel()
+        elif isinstance(payment, HandMadePayment):
             pass  # Ручная оплата, отмена тоже ручная
         else:
-            commerce_log.info(f'Payment system {self.payment_system} not found')
+            commerce_log.info(f'Payment system {self.order.payment_system} not found')
             raise PaymentException.PaymentSystemNotFound()

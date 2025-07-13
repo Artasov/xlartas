@@ -19,25 +19,24 @@ class BalanceService:
 
 
 class BalanceProductService(ProductBaseService['BalanceProduct', 'BalanceProductOrder']):
-    @staticmethod
-    async def new_order(request: 'AsyncRequest') -> 'BalanceProductOrder':
+    async def new_order(self, request: 'AsyncRequest') -> 'BalanceProductOrder':
         from apps.commerce.serializers.balance import BalanceProductOrderCreateSerializer
         s = BalanceProductOrderCreateSerializer(data=request.data, context={'request': request})
         await s.ais_valid(raise_exception=True)
         order: 'BalanceProductOrder' = await s.asave()
-        await order.init(request)
+        await order.service.init(request)
         return order
 
     async def cancel_given(self, request, order: 'BalanceProductOrder', reason: str):
         pass
 
-    async def can_pregive(self: 'BalanceProduct', order: 'BalanceProductOrder', raise_exceptions=False) -> bool:
+    async def can_pregive(self, order: 'BalanceProductOrder', raise_exceptions: bool = False) -> bool:
         return True
 
-    async def pregive(self: 'BalanceProduct', order: 'BalanceProductOrder'):
+    async def pregive(self, order: 'BalanceProductOrder'):
         pass
 
-    async def postgive(self: 'BalanceProduct', order: 'BalanceProductOrder'):
+    async def postgive(self, order: 'BalanceProductOrder'):
         user = await order.arelated('user')
         user.balance = (user.balance or Decimal('0')) + order.requested_amount
         await user.asave()
@@ -45,5 +44,5 @@ class BalanceProductService(ProductBaseService['BalanceProduct', 'BalanceProduct
 
 class BalanceProductOrderService(OrderService['BalanceProductOrder', 'BalanceProduct']):
     @property
-    async def receipt_price(self: 'BalanceProductOrder') -> Decimal:
-        return self.requested_amount
+    async def receipt_price(self) -> Decimal:
+        return self.order.requested_amount

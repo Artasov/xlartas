@@ -71,8 +71,11 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
             detail = getattr(e, 'detail', None)
             if detail and isinstance(detail, dict) and 'message' in detail:
                 # Если есть detail и в нем есть message, используем его
-                self.message_user(request, f'Ошибка при обработке заказа {order.id}: {detail['message']}',
-                                  level=messages.ERROR)
+                self.message_user(
+                    request,
+                    f"Ошибка при обработке заказа {order.id}: {detail['message']}",
+                    level=messages.ERROR,
+                )
                 return
         # Если нет detail или message - используем текст исключения
         self.message_user(request, f'Ошибка при обработке заказа {order.id}: {str(e)}', level=messages.ERROR)
@@ -116,7 +119,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
             for order in queryset:
                 log.info(f'Отмена заказа {order.id}')
                 try:
-                    async_to_sync(order.get_real_instance().safe_cancel)(request, '')
+                    async_to_sync(order.get_real_instance().service.safe_cancel)(request, '')
                 except Exception as e:
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно отменены.')

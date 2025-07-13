@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
-    async def new_order(self: 'Software', request) -> 'SoftwareOrder':
+    async def new_order(self, request) -> 'SoftwareOrder':
         from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder
         s = SoftwareOrderCreateSerializer(
@@ -34,16 +34,17 @@ class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
             user=request.user,
             currency=request.data['currency'],
             payment_system=request.data['payment_system'],
-            product=self,
+            product=self.product,
             license_hours=int(data['license_hours']),
             promocode=promocode
         )
         await order.asave()
-        await order.init(request)
+        await order.service.init(request)
         return order
 
     async def can_pregive(
-            self: 'Software', order: 'SoftwareOrder',
+            self,
+            order: 'SoftwareOrder',
             raise_exceptions: bool = False
     ) -> bool:
         """Validate that the order can be initialized."""
@@ -61,7 +62,7 @@ class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
                 })
             return False
 
-        price_exists = await self.prices.filter(currency=order.currency).aexists()
+        price_exists = await self.product.prices.filter(currency=order.currency).aexists()
         if not price_exists:
             if raise_exceptions:
                 raise ValidationError({'detail': 'Price for currency not found'})
@@ -69,23 +70,23 @@ class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
 
         return True
 
-    async def pregive(self: 'Software', order: 'SoftwareOrder'):
+    async def pregive(self, order: 'SoftwareOrder'):
         """Prepare license object before payment."""
         from apps.software.models import SoftwareLicense
 
         await SoftwareLicense.objects.aget_or_create(
             user_id=order.user_id,
-            software=self,
+            software=self.product,
         )
 
     async def cancel_given(self, request, order: 'SoftwareOrder', reason: str, ):
         pass
 
-    async def postgive(self: 'Software', order: 'SoftwareOrder'):
+    async def postgive(self, order: 'SoftwareOrder'):
         from apps.software.models import SoftwareLicense
         license_hours = order.license_hours
         software_license, _ = await SoftwareLicense.objects.aget_or_create(
-            user_id=order.user_id, software=self
+            user_id=order.user_id, software=self.product
         )
         now = timezone.now()
         add_time = timedelta(hours=license_hours)

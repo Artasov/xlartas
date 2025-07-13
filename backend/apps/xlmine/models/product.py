@@ -7,7 +7,7 @@ from apps.commerce.models import Product, Order
 from apps.xlmine.services.donate import DonateService, DonateOrderService
 
 
-class Donate(Product, DonateService, ModelApiBaseException):
+class Donate(Product, ModelApiBaseException):
     """
     Продукт «Донат». При покупке данного продукта пользователю начисляются
     внутриигровые коины (coins_amount).
@@ -19,8 +19,12 @@ class Donate(Product, DonateService, ModelApiBaseException):
 
     def __str__(self): return 'Donate'
 
+    @property
+    def service(self) -> DonateService:
+        return DonateService(self)
 
-class DonateOrder(Order, DonateOrderService):
+
+class DonateOrder(Order):
     """
     Заказ на покупку Donate (донат).
     """
@@ -32,3 +36,7 @@ class DonateOrder(Order, DonateOrderService):
 
     def __str__(self):
         return f'DonateOrder:{self.id} [user={self.user_id}]'
+
+    @property
+    def service(self) -> DonateOrderService:
+        return DonateOrderService(self)

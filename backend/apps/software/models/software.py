@@ -37,7 +37,7 @@ class SoftwareFile(ACreatedAtIndexedMixin):
         return f'SoftwareFile: (v{self.version})'
 
 
-class Software(Product, SoftwareService, SoftwareException):
+class Software(Product, SoftwareException):
     prices: Manager['ProductPrice']
     file = OneToOneField(
         'software.SoftwareFile', SET_NULL,
@@ -56,8 +56,12 @@ class Software(Product, SoftwareService, SoftwareException):
     def __str__(self):
         return f'{self.name} (v{self.file.version})' if self.file else self.name
 
+    @property
+    def service(self) -> SoftwareService:
+        return SoftwareService(self)
 
-class SoftwareOrder(Order, SoftwareOrderService):
+
+class SoftwareOrder(Order):
     product = ForeignKey(Software, CASCADE, 'orders', verbose_name=_('Software Product'))
     license_hours = PositiveIntegerField(
         _('License Hours'), default=1,
@@ -68,8 +72,12 @@ class SoftwareOrder(Order, SoftwareOrderService):
         verbose_name = _('Software Order')
         verbose_name_plural = _('Software Orders')
 
+    @property
+    def service(self) -> SoftwareOrderService:
+        return SoftwareOrderService(self)
 
-class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseService, SoftwareLicenseException):
+
+class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseException):
     user = ForeignKey(User, CASCADE, 'software_licenses', verbose_name=_('User'))
     software = ForeignKey(Software, CASCADE, 'licenses', verbose_name=_('Software'))
     license_ends_at = DateTimeField(_('License ends at'), blank=True, null=True)
@@ -82,6 +90,10 @@ class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseService, Sof
 
     def __str__(self):
         return f'{self.user} -> {self.software} (until {self.license_ends_at})'
+
+    @property
+    def service(self) -> SoftwareLicenseService:
+        return SoftwareLicenseService(self)
 
     def is_active(self) -> bool:
         if not self.license_ends_at:

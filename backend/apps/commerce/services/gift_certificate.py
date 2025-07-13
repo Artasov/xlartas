@@ -38,10 +38,7 @@ class GiftCertificateOrderService(OrderService):
 class GiftCertificateService(ProductBaseService):
     exceptions = _GiftCertificateException
 
-    @staticmethod
-    async def new_order(
-            request: AsyncRequest
-    ) -> 'GiftCertificateOrder':
+    async def new_order(self, request: AsyncRequest) -> 'GiftCertificateOrder':
         from apps.commerce.serializers.gift_certificate import GiftCertificateOrderCreateSerializer
         s = GiftCertificateOrderCreateSerializer(
             data=request.data, context={'request': request}
@@ -58,7 +55,7 @@ class GiftCertificateService(ProductBaseService):
                 raise_exception=True
             )
         order: 'GiftCertificateOrder' = await s.asave()
-        await order.init(request)
+        await order.service.init(request)
         return order
 
     async def cancel_given(
@@ -70,23 +67,23 @@ class GiftCertificateService(ProductBaseService):
         pass
 
     async def can_pregive(
-            self: 'GiftCertificate',
+            self,
             order: 'GiftCertificateOrder',
-            raise_exceptions=False
+            raise_exceptions: bool = False
     ) -> bool:
         pass
 
     async def pregive(
-            self: 'GiftCertificate',
+            self,
             order: 'GiftCertificateOrder',
     ) -> None:
-        commerce_log.info(f'Product {self.name} pregived order:{order.id}')
+        commerce_log.info(f'Product {self.product.name} pregived order:{order.id}')
 
     async def postgive(
-            self: 'GiftCertificate',
+            self,
             order: 'GiftCertificateOrder',
     ) -> None:
-        commerce_log.info(f'Product {self.name} postgived order:{order.id}')
+        commerce_log.info(f'Product {self.product.name} postgived order:{order.id}')
 
     async def activate(
             self: 'GiftCertificate',
@@ -101,10 +98,10 @@ class GiftCertificateService(ProductBaseService):
         if await GiftCertificateUsage.objects.filter(
                 order=order
         ).aexists(): raise self.exceptions.ApiEx.AlreadyUsed()
-        product = await self.arelated('product')
+        product = await self.product.arelated('product')
         product = await product.aget_real_instance()
-        await product.pregive(request, order, for_user)
-        await product.postgive(request, order, for_user)
+        await product.service.pregive(request, order, for_user)
+        await product.service.postgive(request, order, for_user)
         await GiftCertificateUsage.objects.acreate(
             order=order, user=for_user
         )

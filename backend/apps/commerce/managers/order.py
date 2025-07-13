@@ -14,4 +14,5 @@ class OrderBaseManager(APolymorphicManager):
                 is_inited=False, is_executed=False,
                 is_paid=False, is_cancelled=False,
                 is_refunded=False
-        ): await order.safe_cancel()
+        ):
+            await order.service.safe_cancel()

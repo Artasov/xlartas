@@ -97,7 +97,7 @@ async def order_detail(request, id):
 async def order_execute(_request, id):
     order = await Order.objects.agetorn(_OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.execute()
+        await order.service.execute()
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -117,7 +117,7 @@ async def order_delete(_request, id):
 async def order_init(request, id, init_payment):
     order = await Order.objects.agetorn(_OrderException.NotFound, id=id)
     async with AsyncAtomicContextManager():
-        await order.init(request, init_payment=bool(init_payment))
+        await order.service.init(request, init_payment=bool(init_payment))
     serializer_class = get_order_serializer(order, 'full')
     return Response(await serializer_class(order).adata, status=HTTP_200_OK)
 
@@ -130,7 +130,7 @@ async def order_cancel(request, id):
         _OrderException.NotFound, id=id, user=request.user
     )
     async with AsyncAtomicContextManager():
-        await order.safe_cancel(request=request, reason='')
+        await order.service.safe_cancel(request=request, reason='')
         if isinstance(order, SoftwareOrder):
             return Response(await SoftwareOrderSerializer(order).adata, status=HTTP_200_OK)
         raise _OrderException.UnknownOrderInstance()

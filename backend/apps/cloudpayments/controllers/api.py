@@ -60,7 +60,7 @@ async def success(request):
         await payment.asave()
 
         try:
-            await order.execute()
+            await order.service.execute()
         except _OrderException.AlreadyExecuted:
             pass
 

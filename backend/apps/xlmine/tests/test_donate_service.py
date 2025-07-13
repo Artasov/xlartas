@@ -27,8 +27,8 @@ async def test_postgive_adds_coins_and_recalculates_privilege():
         payment_system=PaymentSystem.HandMade,
     )
 
-    await donate.pregive(order)
-    await donate.postgive(order)
+    await donate.service.pregive(order)
+    await donate.service.postgive(order)
 
     xlm_user = await UserXLMine.objects.aget(user=user)
     assert xlm_user.coins == Decimal('10')
