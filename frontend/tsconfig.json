@@ -71,6 +71,9 @@
       "User/*": [
         "Modules/User/*"
       ],
+      "Converter/*": [
+        "Modules/Converter/*"
+      ],
       "xLMine/*": [
         "Modules/xLMine/*"
       ]
