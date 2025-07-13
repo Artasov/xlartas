@@ -10,7 +10,14 @@ from .tasks import send_mailing
 class MailingAdminForm(ModelForm):
     class Meta:
         model = Mailing
-        fields = '__all__'
+        fields = (
+            'subject',
+            'html_content',
+            'start_date',
+            'users',
+            'sent_users',
+            'sent',
+        )
         widgets = {
             # Используем TinyMCE для поля html_content
             'html_content': TinyMCE(),

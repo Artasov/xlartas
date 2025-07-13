@@ -79,8 +79,8 @@ class ConfirmationCodeService:
             raise_exceptions=raise_exceptions
         )
         # Sending
-        ConfirmationModel = await get_confirmation_code_instance(method)
-        return await ConfirmationModel.send_new(user=user, action=action, extra_data={
+        confirmation_model = await get_confirmation_code_instance(method)
+        return await confirmation_model.send_new(user=user, action=action, extra_data={
             'new_phone': data.get('new_phone'),
             'new_email': data.get('new_email'),
         })

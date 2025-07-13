@@ -47,7 +47,7 @@ class RoomViewSet(viewsets.ModelViewSet):
 @api_view(('GET',))
 @permission_classes((IsAuthenticated,))
 async def personal_room_with_user(request, user_id: int):
-    room, created = await Room.get_or_create_private((
+    room, _ = await Room.get_or_create_private((
         request.user,
         await User.objects.agetorn(UserException.NotFound, id=user_id)
     ))

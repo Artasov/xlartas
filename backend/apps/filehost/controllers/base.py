@@ -70,7 +70,6 @@ async def download_archive(request):
     except Exception:
         log.exception('Error while creating archive')
         raise
-        # return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     finally:
         if temp_dir:
             shutil.rmtree(temp_dir)

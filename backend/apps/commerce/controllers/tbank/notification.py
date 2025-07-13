@@ -53,7 +53,6 @@ async def notification(request):
                 await request.order.service.execute()
             except OrderService.exceptions.AlreadyExecuted:
                 log.info('Stage #23')
-                pass
             if request.method == 'GET':
                 log.info('Stage #24')
                 return redirect(f'{settings.DOMAIN_URL}/orders/?success_message=Заказ успешно оплачен!')

@@ -45,21 +45,17 @@ def health(_request) -> Response:
     if settings.INTENSIVE_HEALTH_TEST:
         test_task.delay(randint(1000, 10000))
 
-    # # Cache
-    # if settings.INTENSIVE_HEALTH_TEST:
-    #     pprint(f'Cache working: {cache('health_test_cache', randint(1000, 10000))[0]}')
-
     # Database
     try:
         connections['default'].cursor()
-    except Exception as e:  # noqa
-        return Response(f'Database is dead', HTTP_503_SERVICE_UNAVAILABLE)
+    except Exception:  # noqa
+        return Response('Database is dead', HTTP_503_SERVICE_UNAVAILABLE)
 
     # Minio
     if settings.MINIO_USE:
         MB = MinioBackend()
         if not MB.is_minio_available():
-            log.error(f'Minio is dead')
+            log.error('Minio is dead')
             log.error(MB.is_minio_available().details)
             log.error(f'MINIO_STATIC_FILES_BUCKET = {MB.MINIO_STATIC_FILES_BUCKET}')
             log.error(f'MINIO_MEDIA_FILES_BUCKET = {MB.MINIO_MEDIA_FILES_BUCKET}')
