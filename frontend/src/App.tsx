@@ -33,6 +33,7 @@ import Softwares from "./Modules/Software/Softwares";
 import {useTranslation} from 'react-i18next';
 import SoftwareDetail from "./Modules/Software/SoftwareDetail";
 import XLMineLanding from "./Modules/xLMine/XLMineLanding";
+import {Converter} from "Converter";
 import BackgroundFlicker from "Core/BackgroundFlicker";
 import {LangProvider} from "Core/LanguageContext";
 
@@ -133,6 +134,7 @@ const App: React.FC = () => {
                             </FC>}/>
                         </>}
                         <Route path='/xlmine' element={<XLMineLanding/>}/>
+                        <Route path='/converter' element={<Converter/>}/>
                         <Route path='/*' element={<Cabinet/>}/>
                     </Routes>
                 </main>

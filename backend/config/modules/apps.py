@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'apps.theme',
     'apps.surveys',
     'apps.filehost',
+    'apps.converter',
     'apps.xlmine',
 
 ]
