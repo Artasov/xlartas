@@ -24,7 +24,7 @@ const FileDropZone: React.FC<Props> = ({file, onChange, label = 'Select file'}) 
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minHeight: 100,
+                minHeight: file ? 100 : 200,
                 border: over ? '2px dashed' : '1px solid',
                 borderColor: 'grey.400',
                 borderRadius: 1,

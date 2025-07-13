@@ -101,46 +101,48 @@ const Converter: React.FC = () => {
             </Grid>
 
             {/* Правая колонка: выбор форматов и параметров */}
-            <Grid size={{xs: 12, md: 6}}>
-                <FormatPicker
-                    formats={formats}
-                    value={source?.id}
-                    onChange={id => {
-                        const f = formats.find(f => f.id === id) || null;
-                        setSource(f);
-                    }}
-                />
+            {file && (
+                <Grid size={{xs: 12, md: 6}}>
+                    <FormatPicker
+                        formats={formats}
+                        value={source?.id}
+                        onChange={id => {
+                            const f = formats.find(f => f.id === id) || null;
+                            setSource(f);
+                        }}
+                    />
 
-                {source && (
-                    <>
-                        <Box mt={2}>
-                            <FormatPicker
-                                formats={targets}
-                                value={targetId ?? undefined}
-                                onChange={setTargetId}
-                            />
-                        </Box>
+                    {source && (
+                        <>
+                            <Box mt={2}>
+                                <FormatPicker
+                                    formats={targets}
+                                    value={targetId ?? undefined}
+                                    onChange={setTargetId}
+                                />
+                            </Box>
 
-                        {params.length > 0 && (
-                            <ParameterForm
-                                parameters={params}
-                                values={values}
-                                onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}
-                            />
-                        )}
+                            {params.length > 0 && (
+                                <ParameterForm
+                                    parameters={params}
+                                    values={values}
+                                    onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}
+                                />
+                            )}
 
-                        <Box mt={2}>
-                            <Button
-                                variant="contained"
-                                disabled={loading}
-                                onClick={handleConvert}
-                            >
-                                {loading ? <CircularProgress size={24}/> : 'Convert'}
-                            </Button>
-                        </Box>
-                    </>
-                )}
-            </Grid>
+                            <Box mt={2}>
+                                <Button
+                                    variant="contained"
+                                    disabled={loading}
+                                    onClick={handleConvert}
+                                >
+                                    {loading ? <CircularProgress size={24}/> : 'Convert'}
+                                </Button>
+                            </Box>
+                        </>
+                    )}
+                </Grid>
+            )}
         </Grid>
     );
 };
