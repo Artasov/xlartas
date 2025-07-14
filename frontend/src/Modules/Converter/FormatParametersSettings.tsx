@@ -1,6 +1,7 @@
 // FormatParametersSettings.tsx
 import React from 'react';
 import {InputAdornment, MenuItem, TextField} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 import {IParameter} from 'types/converter';
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange}) => {
     // один общий набор slotProps, чтобы label всегда «припаркован» наверху
     const labelShrink = {inputLabel: {shrink: true}} as const;
+    const {t} = useTranslation();
 
     return (
         <>
@@ -41,9 +43,9 @@ const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange
                                     ...labelShrink
                                 }}
                             >
-                                <MenuItem value="">Like source</MenuItem>
-                                <MenuItem value="true">True</MenuItem>
-                                <MenuItem value="false">False</MenuItem>
+                                <MenuItem value="">{t('like_source')}</MenuItem>
+                                <MenuItem value="true">{t('bool_true')}</MenuItem>
+                                <MenuItem value="false">{t('bool_false')}</MenuItem>
                             </TextField>
                         );
 
@@ -60,7 +62,7 @@ const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange
                                         ? null
                                         : Number(v));
                                 }}
-                                placeholder="Like source"
+                                placeholder={t('like_source')}
                                 fullWidth
                                 size="small"
                                 slotProps={{
@@ -89,7 +91,7 @@ const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange
                                     ...labelShrink
                                 }}
                             >
-                                <MenuItem value="">Like source</MenuItem>
+                                <MenuItem value="">{t('like_source')}</MenuItem>
                                 {p.options?.map(opt => (
                                     <MenuItem key={opt} value={opt}>
                                         {opt}
@@ -105,7 +107,7 @@ const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange
                                 label={p.name}
                                 value={value ?? ''}
                                 onChange={e => onChange(p.name, e.target.value || null)}
-                                placeholder="Like source"
+                                placeholder={t('like_source')}
                                 fullWidth
                                 size="small"
                                 slotProps={{

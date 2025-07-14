@@ -3,6 +3,10 @@ import {Box, Typography} from '@mui/material';
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import {FR} from "wide-containers";
 import formatFileSize from "Utils/formatFileSize";
+import {useTranslation} from 'react-i18next';
+import {Message} from 'Modules/Core/components/Message';
+
+const MAX_SIZE = 50 * 1024 * 1024;
 
 interface Props {
     file: File | null;
@@ -12,11 +16,20 @@ interface Props {
 const FileDropZone: React.FC<Props> = ({file, onChange}) => {
     const [over, setOver] = useState(false);
     const {plt} = useTheme();
+    const {t} = useTranslation();
+
+    const handleFile = (f: File | null) => {
+        if (f && f.size > MAX_SIZE) {
+            Message.error(t('converter_file_too_large'));
+            return;
+        }
+        onChange(f);
+    };
 
     const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
         e.preventDefault();
         const f = e.dataTransfer.files?.[0];
-        if (f) onChange(f);
+        handleFile(f || null);
         setOver(false);
     };
 
@@ -60,7 +73,7 @@ const FileDropZone: React.FC<Props> = ({file, onChange}) => {
             onDragLeave={() => setOver(false)}
             onDrop={handleDrop}
         >
-            {over ? 'Бросай' : file
+            {over ? t('converter_drop_now') : file
                 ? <FR>
                     {file.name}
                     {file && (
@@ -69,9 +82,9 @@ const FileDropZone: React.FC<Props> = ({file, onChange}) => {
                         </Typography>
                     )}
                 </FR>
-                : 'Select file for convert'
+                : t('converter_drag_drop')
             }
-            <input hidden type="file" onChange={e => onChange(e.target.files?.[0] || null)}/>
+            <input hidden type="file" onChange={e => handleFile(e.target.files?.[0] || null)}/>
         </Box>
     );
 };

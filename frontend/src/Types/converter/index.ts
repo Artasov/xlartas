@@ -24,3 +24,8 @@ export interface IConversion {
     params: Record<string, any>;
     is_done: boolean;
 }
+
+export interface IConvertResult {
+    conversion: IConversion;
+    remaining: number;
+}
