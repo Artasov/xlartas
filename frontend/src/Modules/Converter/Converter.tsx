@@ -4,8 +4,6 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Box,
-    IconButton,
     Button,
     Collapse,
     TextField,
@@ -24,10 +22,9 @@ import CircularProgressZoomify from "Core/components/elements/CircularProgressZo
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import {buildWSUrl} from 'Utils/ws';
-import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
+import ConversationResultCard from "Converter/ConversationResultCard";
 
 const wsFmt = (x: unknown) => {
     if (typeof x === 'string') {
@@ -61,7 +58,7 @@ const Converter: React.FC = () => {
     useEffect(() => {
         api.get<IFormat[]>('/api/v1/converter/formats/')
             .then(setFormats);
-        api.get<{remaining: number}>('/api/v1/converter/remaining/')
+        api.get<{ remaining: number }>('/api/v1/converter/remaining/')
             .then(res => setRemaining(res.remaining));
     }, [api]);
 
@@ -243,7 +240,7 @@ const Converter: React.FC = () => {
                                 </FC>
                             </Collapse>
                         </FC>
-                        <FCCC pt={.4} mr={-2} ml={-2.6}>
+                        <FCCC cls={'aaaaaaaaa'} pt={.4} mr={-2} ml={-2.6} mt={-1}>
                             <FR mb={-3.3} w={'4px'} h={'100%'} rounded={1} bg={plt.text.primary}></FR>
                             <KeyboardArrowDownRoundedIcon sx={{fontSize: '3rem', mb: -2}}/>
                         </FCCC>
@@ -277,21 +274,7 @@ const Converter: React.FC = () => {
                         </Button>
                     </Collapse>
                     {conversions.map(c => (
-                        c.is_done && c.output_file && (
-                            <Box key={c.id} mt={1}>
-                                <Typography>{c.output_name ?? c.output_file.split('/')?.pop()}</Typography>
-                                {typeof c.size === 'number' && (
-                                    <Typography variant="caption">
-                                        {formatFileSize(c.size)}
-                                    </Typography>
-                                )}
-                                <Box mt={1}>
-                                    <IconButton color="primary" href={`/api/v1/converter/download/${c.id}/`}>
-                                        <DownloadRoundedIcon/>
-                                    </IconButton>
-                                </Box>
-                            </Box>
-                        )
+                        <ConversationResultCard key={c.id} conversion={c}/>
                     ))}
                 </FC>
             )}

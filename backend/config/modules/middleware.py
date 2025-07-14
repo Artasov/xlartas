@@ -4,7 +4,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'adjango.middleware.IPAddressMiddleware',
     'logui.middleware.RequestResponseLoggerMiddleware',
-    'silk.middleware.SilkyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'csp.middleware.CSPMiddleware',
@@ -19,3 +18,4 @@ MIDDLEWARE = [
 
 ]
 if DEV: MIDDLEWARE.append('adjango.middleware.MediaDomainSubstitutionJSONMiddleware')
+if not DEV: MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
