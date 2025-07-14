@@ -21,13 +21,8 @@ import {IconButton, useMediaQuery} from '@mui/material';
 import FileUpload from 'UI/FileUpload';
 import {useNavigate, useParams} from 'react-router-dom';
 import DropOverlay from './DropOverlay';
-import {
-    FolderContent,
-    getFolderCached,
-    setAllFilesCached,
-    setFavoriteFilesCached,
-    setFolderCached
-} from './storageCache';
+import {setFolderCached} from './storageCache';
+import useFileHost from './useFileHost';
 import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
 import {useTheme} from "Theme/ThemeContext";
 
@@ -41,9 +36,7 @@ const Master: React.FC = () => {
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const {handleUpload: uploadFile, uploads, clearUploads} = useFileUpload(folderId);
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [folders, setFolders] = useState<IFolder[]>([]);
-    const [folder, setFolder] = useState<IFolder | null>(null);
-    const [files, setFiles] = useState<IFile[]>([]);
+    const {folders, folder, files, load, refreshCaches} = useFileHost(folderId);
     const [selectMode, setSelectMode] = useState(false);
     const [selected, setSelected] = useState<IFile[]>([]);
     const [showMove, setShowMove] = useState(false);
@@ -53,31 +46,6 @@ const Master: React.FC = () => {
     const [context, setContext] = useState<{ x: number; y: number } | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [view, setView] = useState<'cards' | 'table'>('cards');
-
-    const refreshCaches = () => {
-        setFolderCached(folderId, undefined as any);
-        setAllFilesCached(undefined as any);
-        setFavoriteFilesCached(undefined as any);
-    };
-
-    const load = () => {
-        const cached = getFolderCached(folderId);
-        if (cached) {
-            setFolders(cached.folders);
-            setFiles(cached.files);
-            setFolder(cached.folder);
-            return;
-        }
-        api.post('/api/v1/filehost/folder/content/', {id: folderId}).then((data: FolderContent) => {
-            setFolders(data.folders);
-            setFiles(data.files);
-            setFolder(data.folder);
-            setFolderCached(folderId, data);
-        });
-    };
-    useEffect(() => {
-        load();
-    }, [api, folderId]);
 
     const path = useFolderPath(folder);
 
