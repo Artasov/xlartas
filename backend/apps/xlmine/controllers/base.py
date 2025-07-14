@@ -7,6 +7,7 @@ from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from django.conf import settings
 from django.core.files import File
+from django.core.files.uploadedfile import UploadedFile
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import permission_classes
@@ -22,8 +23,85 @@ from apps.xlmine.permissions import IsMinecraftDev  # ваша кастомна�
 from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
 from apps.xlmine.serializers.donate import DonateSerializer
 from apps.xlmine.services.base import calculate_sha256
+from typing import Optional
 
 log = logging.getLogger('global')
+
+
+def save_chunk(
+    chunk_file: UploadedFile,
+    temp_dir: str,
+    upload_id: str,
+    chunk_index: int,
+    total_chunks: int,
+) -> str:
+    """Save uploaded chunk to ``temp_dir`` and return its path.
+
+    :param chunk_file: Uploaded chunk file.
+    :param temp_dir: Directory where chunks are stored.
+    :param upload_id: Identifier of the current upload.
+    :param chunk_index: Index of the chunk starting from ``0``.
+    :param total_chunks: Total number of chunks.
+    :return: Path to the saved chunk file.
+    """
+    chunk_path = os.path.join(temp_dir, f"{upload_id}_{chunk_index}")
+    with open(chunk_path, "wb") as f:
+        for data in chunk_file.chunks():
+            f.write(data)
+    log.info(
+        "Сохранён чанк %s из %s для upload_id %s",
+        chunk_index + 1,
+        total_chunks,
+        upload_id,
+    )
+    return chunk_path
+
+
+def assemble_file(
+    temp_dir: str, upload_id: str, filename: str, total_chunks: int
+) -> str:
+    """Combine chunks into a single file and return its path.
+
+    :param temp_dir: Directory containing chunk files.
+    :param upload_id: Identifier of the current upload.
+    :param filename: Name of the resulting file.
+    :param total_chunks: Total number of chunks.
+    :return: Path to the assembled file.
+    :raises FileNotFoundError: If one of the chunks is missing.
+    """
+
+    final_path = os.path.join(temp_dir, f"{upload_id}_{filename}")
+    with open(final_path, "wb") as final_file:
+        for i in range(total_chunks):
+            part = os.path.join(temp_dir, f"{upload_id}_{i}")
+            if not os.path.exists(part):
+                raise FileNotFoundError(f"Отсутствует чанк {i}")
+            with open(part, "rb") as cf:
+                final_file.write(cf.read())
+            os.remove(part)
+            log.info(
+                "Чанк %s удалён после сборки для upload_id %s",
+                i + 1,
+                upload_id,
+            )
+    return final_path
+
+
+def load_security_meta(security_meta_path: str) -> Optional[str]:
+    """Return security metadata stored in ``security_meta_path``.
+
+    The file is removed after reading.
+
+    :param security_meta_path: Path to metadata file.
+    :return: File content or ``None`` if file does not exist.
+    """
+
+    if os.path.exists(security_meta_path):
+        with open(security_meta_path, "r") as sm:
+            data = sm.read()
+        os.remove(security_meta_path)
+        return data
+    return None
 
 
 class LauncherViewSet(ModelViewSet):
@@ -89,42 +167,20 @@ class ChunkedReleaseUploadView(APIView):
                 sm.write(security_json_str)
 
         # сохраняем сам чанк
-        chunk_path = os.path.join(temp_dir, f'{upload_id}_{chunk_index}')
-        with open(chunk_path, 'wb') as f:
-            for data in chunk_file.chunks():
-                f.write(data)
-        log.info(
-            'Сохранён чанк %s из %s для upload_id %s',
-            chunk_index + 1, total_chunks, upload_id
-        )
+        save_chunk(chunk_file, temp_dir, upload_id, chunk_index, total_chunks)
 
         # если последний чанк — склеиваем и создаём объект Release
         if chunk_index == total_chunks - 1:
-            final_path = os.path.join(temp_dir, f'{upload_id}_{filename}')
-            with open(final_path, 'wb') as final_file:
-                for i in range(total_chunks):
-                    part = os.path.join(temp_dir, f'{upload_id}_{i}')
-                    if not os.path.exists(part):
-                        log.error('Отсутствует чанк %s для upload_id %s', i, upload_id)
-                        return Response(
-                            {'error': f'Отсутствует чанк {i}'},
-                            status=status.HTTP_400_BAD_REQUEST
-                        )
-                    with open(part, 'rb') as cf:
-                        final_file.write(cf.read())
-                    os.remove(part)
-                    log.info(
-                        'Чанк %s удалён после сборки для upload_id %s',
-                        i + 1, upload_id
-                    )
+            try:
+                final_path = assemble_file(temp_dir, upload_id, filename, total_chunks)
+            except FileNotFoundError as exc:
+                log.error('%s для upload_id %s', exc, upload_id)
+                return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
             # если на последнем нет JSON — читаем из файла мета
-            if not security_json_str and os.path.exists(security_meta_path):
-                with open(security_meta_path, 'r') as sm:
-                    security_json_str = sm.read()
-
-            # удаляем мета-файл
-            if os.path.exists(security_meta_path):
+            if not security_json_str:
+                security_json_str = load_security_meta(security_meta_path)
+            elif os.path.exists(security_meta_path):
                 os.remove(security_meta_path)
 
             log.info('Собран файл: %s. Создаём объект Release.', final_path)
