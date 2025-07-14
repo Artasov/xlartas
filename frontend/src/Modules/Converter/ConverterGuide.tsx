@@ -30,7 +30,7 @@ const ConverterGuide: React.FC = () => {
 
     return (
         <Collapse in={open} mountOnEnter unmountOnExit timeout={400}>
-            <Paper elevation={1} sx={{p: 2, mb: 2}}>
+            <Paper elevation={1} sx={{p: 2}}>
                 <FC g={1}>
                     <Typography variant="h6">Как пользоваться конвертером</Typography>
 

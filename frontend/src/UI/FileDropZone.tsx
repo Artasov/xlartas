@@ -10,12 +10,23 @@ interface Props {
 const FileDropZone: React.FC<Props> = ({file, onChange}) => {
     const [over, setOver] = useState(false);
     const {plt} = useTheme();
+
     const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
         e.preventDefault();
         const f = e.dataTransfer.files?.[0];
         if (f) onChange(f);
         setOver(false);
     };
+
+    // динамический размер шрифта для имени файла
+    const fontSize =
+        file
+            ? file.name.length < 10
+                ? '2.2rem'
+                : file.name.length <= 20
+                    ? '2rem'
+                    : '1.5rem'
+            : '1.3rem';
 
     return (
         <Box
@@ -26,14 +37,15 @@ const FileDropZone: React.FC<Props> = ({file, onChange}) => {
                 justifyContent: 'center',
                 minHeight: file ? 100 : 200,
                 border: '7px dashed',
-                backgroundColor: plt.text.primary + '0b',
+                backgroundColor: file ? plt.text.primary : plt.text.primary + '0b',
                 borderColor: plt.text.primary + '07',
+                transition: 'min-height 520ms ease',
                 borderRadius: 1,
                 width: '100%',
-                fontSize: '1.3rem',
+                fontSize,
                 fontWeight: '600',
                 letterSpacing: '.1rem',
-                color: over ? plt.text.primary + '88' : plt.text.primary + '55',
+                color: file ? plt.primary.contrastText : over ? plt.text.primary + '88' : plt.text.primary + '55',
                 cursor: 'pointer',
                 '&:hover': {
                     borderStyle: 'dashed',

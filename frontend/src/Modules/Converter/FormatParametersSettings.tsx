@@ -1,3 +1,4 @@
+// FormatParametersSettings.tsx
 import React from 'react';
 import {InputAdornment, MenuItem, TextField} from '@mui/material';
 import {IParameter} from 'types/converter';
@@ -8,7 +9,10 @@ interface Props {
     onChange: (name: string, value: any) => void;
 }
 
-const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
+const FormatParametersSettings: React.FC<Props> = ({parameters, values, onChange}) => {
+    // один общий набор slotProps, чтобы label всегда «припаркован» наверху
+    const labelShrink = {inputLabel: {shrink: true}} as const;
+
     return (
         <>
             {parameters.map(p => {
@@ -18,18 +22,24 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                     case 'bool':
                         return (
                             <TextField
-                                select
-                                // ⬇️ заменили SelectProps → slotProps.select
-                                slotProps={{select: {displayEmpty: true}}}
                                 key={p.name}
+                                select
                                 label={p.name}
-                                value={value === true ? 'true' : value === false ? 'false' : ''}
+                                value={value === true ? 'true'
+                                    : value === false ? 'false'
+                                        : ''}
                                 onChange={e => {
                                     const v = e.target.value;
-                                    onChange(p.name, v === '' ? null : v === 'true');
+                                    onChange(p.name, v === ''
+                                        ? null
+                                        : v === 'true');
                                 }}
                                 fullWidth
                                 size="small"
+                                slotProps={{
+                                    select: {displayEmpty: true},
+                                    ...labelShrink
+                                }}
                             >
                                 <MenuItem value="">Like source</MenuItem>
                                 <MenuItem value="true">True</MenuItem>
@@ -46,33 +56,38 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 value={value ?? ''}
                                 onChange={e => {
                                     const v = e.target.value;
-                                    onChange(p.name, v === '' ? null : Number(v));
+                                    onChange(p.name, v === ''
+                                        ? null
+                                        : Number(v));
                                 }}
                                 placeholder="Like source"
-                                // ⬇️ заменили InputProps → slotProps.input
-                                slotProps={{
-                                    input: {
-                                        endAdornment: p.unit ? (
-                                            <InputAdornment position="end">{p.unit}</InputAdornment>
-                                        ) : undefined,
-                                    },
-                                }}
                                 fullWidth
                                 size="small"
+                                slotProps={{
+                                    input: {
+                                        endAdornment: p.unit
+                                            ? <InputAdornment position="end">{p.unit}</InputAdornment>
+                                            : undefined
+                                    },
+                                    ...labelShrink
+                                }}
                             />
                         );
 
                     case 'select':
                         return (
                             <TextField
-                                select
-                                slotProps={{select: {displayEmpty: true}}}
                                 key={p.name}
+                                select
                                 label={p.name}
                                 value={value ?? ''}
                                 onChange={e => onChange(p.name, e.target.value || null)}
                                 fullWidth
                                 size="small"
+                                slotProps={{
+                                    select: {displayEmpty: true},
+                                    ...labelShrink
+                                }}
                             >
                                 <MenuItem value="">Like source</MenuItem>
                                 {p.options?.map(opt => (
@@ -91,15 +106,16 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 value={value ?? ''}
                                 onChange={e => onChange(p.name, e.target.value || null)}
                                 placeholder="Like source"
-                                slotProps={{
-                                    input: {
-                                        endAdornment: p.unit ? (
-                                            <InputAdornment position="end">{p.unit}</InputAdornment>
-                                        ) : undefined,
-                                    },
-                                }}
                                 fullWidth
                                 size="small"
+                                slotProps={{
+                                    input: {
+                                        endAdornment: p.unit
+                                            ? <InputAdornment position="end">{p.unit}</InputAdornment>
+                                            : undefined
+                                    },
+                                    ...labelShrink
+                                }}
                             />
                         );
                 }
@@ -108,4 +124,4 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
     );
 };
 
-export default ParameterForm;
+export default FormatParametersSettings;
