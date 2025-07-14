@@ -1,6 +1,6 @@
 # social_oauth/providers/google/provider.py
 
-import logging
+from utils.log import get_global_logger
 from typing import Any
 
 import aiohttp
@@ -12,7 +12,7 @@ from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import GoogleUser
 from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 class GoogleOAuthProvider(OAuthProviderMixin, OAuthProvider):

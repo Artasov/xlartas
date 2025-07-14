@@ -1,5 +1,5 @@
 # core/services/phone/base.py
-import logging
+from utils.log import get_global_logger
 
 import aiohttp
 import requests
@@ -17,7 +17,7 @@ class SMSServiceUnavailableException(SMSSendException):
     pass
 
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 async def asend_sms(phone: str, message: str):

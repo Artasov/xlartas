@@ -1,5 +1,5 @@
 # tbank/decorators/installment.py
-import logging
+from utils.log import get_global_logger
 from functools import wraps
 
 import dateutil.parser
@@ -12,7 +12,7 @@ from apps.commerce.models import Order
 from apps.tbank.exceptions.base import TBankException
 from apps.tbank.models import TBankInstallment
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 def async_tbank_installment_notification(view_func):

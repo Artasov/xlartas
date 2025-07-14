@@ -1,5 +1,5 @@
 # company/controllers.py
-import logging
+from utils.log import get_global_logger
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from .models import CompanyDocument, Company
 from .serializers import CompanyDocumentSerializer, CompanySerializer
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('Get Company Details with Public Documents')

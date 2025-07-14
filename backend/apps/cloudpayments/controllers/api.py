@@ -1,5 +1,5 @@
 # cloudpayments/controllers/api.py
-import logging
+from utils.log import get_global_logger
 from typing import Any, Dict
 
 from adjango.adecorators import acontroller, aatomic
@@ -15,7 +15,7 @@ from apps.cloudpayments.services.payment import CloudPaymentService
 from apps.commerce.models import Order
 from apps.commerce.services.order.base import OrderService
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('CloudPayments Success')

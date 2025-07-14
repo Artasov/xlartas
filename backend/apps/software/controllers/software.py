@@ -1,5 +1,5 @@
 # software/controllers/software.py
-import logging
+from utils.log import get_global_logger
 from datetime import timedelta
 
 from adjango.adecorators import acontroller
@@ -14,7 +14,7 @@ from rest_framework.status import HTTP_200_OK
 from apps.software.models import Software, SoftwareLicense
 from apps.software.serializers.software import SoftwareSerializer
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('List Softwares')

@@ -1,12 +1,12 @@
 # core/templatetags/core_tags.py
-import logging
+from utils.log import get_global_logger
 
 from django import template
 
 from utils.timezone import parse_and_convert, get_timezone_abbreviation
 
 register = template.Library()
-logger = logging.getLogger('global')
+logger = get_global_logger()
 
 
 @register.filter

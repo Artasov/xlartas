@@ -1,5 +1,5 @@
 # commerce/controllers/order.py
-import logging
+from utils.log import get_global_logger
 
 from adjango.adecorators import acontroller
 from adjango.aserializers import ASerializer
@@ -23,7 +23,7 @@ from apps.software.models import SoftwareOrder
 from apps.software.serializers import SoftwareOrderSerializer
 from apps.tbank.models import TBankPayment
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('Create order')

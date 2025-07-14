@@ -1,10 +1,10 @@
 # xlmine/utils/map_render.py
-import logging
+from utils.log import get_global_logger
 import time
 
 from apps.xlmine.services.server.console import RconServerConsole
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 def teleport_player_grid(

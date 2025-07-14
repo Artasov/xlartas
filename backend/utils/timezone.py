@@ -1,11 +1,11 @@
-import logging
+from utils.log import get_global_logger
 from datetime import datetime
 
 import pytz
 from dateutil import parser
 from django.conf import settings
 
-logger = logging.getLogger('global')
+logger = get_global_logger()
 
 TIMEZONES_ABBREVIATIONS = {
     'Europe/London': 'GMT',  # GMT или BST в зависимости от времени года

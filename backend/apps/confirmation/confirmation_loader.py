@@ -1,6 +1,6 @@
 # confirmation/confirmation_loader.py
 import importlib
-import logging
+from utils.log import get_global_logger
 import os
 from typing import TYPE_CHECKING
 
@@ -9,7 +9,7 @@ from django.conf import settings
 
 if TYPE_CHECKING: from apps.confirmation.services.actions import ConfirmationAction
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 confirmation_actions: dict[str, 'ConfirmationAction'] = {}
 
