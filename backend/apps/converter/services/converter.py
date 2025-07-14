@@ -144,6 +144,7 @@ class ConversionService:
             source_format: Format,
             target_format: Format,
             params: dict | None = None,
+            output_name: str | None = None,
     ) -> Conversion:
         if not await cls.check_rate_limit(user, ip):
             raise ValueError('Rate limit exceeded')
@@ -154,6 +155,7 @@ class ConversionService:
             source_format=source_format,
             target_format=target_format,
             params=params or {},
+            output_name=output_name,
         )
         from apps.converter.tasks import process_conversion_task
         process_conversion_task.delay(conversion.id)

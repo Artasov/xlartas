@@ -6,6 +6,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
+from django.http import FileResponse, HttpResponseNotFound
 
 from apps.converter.models import (Conversion, Format)
 from apps.converter.serializers import (
@@ -50,6 +51,7 @@ async def convert(request):
     source_id = request.data.get("source_format")
     target_id = request.data.get("target_format")
     params = request.data.get("params", {})
+    output_name = request.data.get("output_name")
     if not all([file, source_id, target_id]):
         return Response({"detail": "Invalid request"}, status=HTTP_200_OK)
     source = await Format.objects.aget(id=source_id)
@@ -63,6 +65,7 @@ async def convert(request):
         source_format=source,
         target_format=target,
         params=params,
+        output_name=output_name,
     )
     return Response(
         await ConversionSerializer(conversion).adata, status=HTTP_201_CREATED
@@ -75,3 +78,21 @@ async def convert(request):
 async def conversion_status(_, conversion_id: int):
     conversion = await Conversion.objects.aget(id=conversion_id)
     return Response(await ConversionSerializer(conversion).adata, status=HTTP_200_OK)
+
+
+@acontroller("Download converted file")
+@api_view(("GET",))
+@permission_classes((AllowAny,))
+async def download(_, conversion_id: int):
+    try:
+        conversion = await Conversion.objects.aget(id=conversion_id)
+    except Conversion.DoesNotExist:
+        return HttpResponseNotFound("Conversion not found")
+
+    if not conversion.is_done or not conversion.output_file:
+        return HttpResponseNotFound("File not available")
+
+    response = FileResponse(open(conversion.output_file.path, "rb"), content_type="application/octet-stream")
+    filename = conversion.output_name or conversion.output_file.name.split("/")[-1]
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return response
