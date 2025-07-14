@@ -1,3 +1,4 @@
+import { Grow } from "@mui/material";
 import { ThemeOptions } from "@mui/material/styles";
 
 const componentOverrides: ThemeOptions["components"] = {
