@@ -13,13 +13,13 @@ class UUIDv6Field(models.UUIDField):
         kwargs['editable'] = False
         super().__init__(*args, **kwargs)
 
-    def get_prep_value(self, value):
+    def get_prep_value(self, value: uuid6.UUID | str | None):
         if isinstance(value, uuid6.UUID):
             return str(value)
         return super().get_prep_value(value)
 
     @staticmethod
-    def from_db_value(value, expression, connection):  # noqa
+    def from_db_value(value: uuid6.UUID | str | None, expression, connection):  # noqa
         if value is None:
             return value
         if isinstance(value, uuid6.UUID):
