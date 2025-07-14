@@ -155,23 +155,6 @@ const Converter: React.FC = () => {
             <ConverterGuide/>
             <FC grow mt={1}>
                 <FileDropZone file={file} onChange={setFile}/>
-                {conversion?.is_done && conversion.output_file && (
-                    <Box mt={1}>
-                        <Typography>{conversion.output_name ?? conversion.output_file.split('/')?.pop()}</Typography>
-                        {typeof conversion.size === 'number' && (
-                            <Typography variant="caption">
-                                {formatFileSize(conversion.size)}
-                            </Typography>
-                        )}
-                        <Box mt={1}>
-                            <Button variant="contained"
-                                    href={`/api/v1/converter/download/${conversion.id}/`}
-                                    download>
-                                Download
-                            </Button>
-                        </Box>
-                    </Box>
-                )}
             </FC>
             {file && source && (
                 <FC g={1}>
@@ -231,15 +214,17 @@ const Converter: React.FC = () => {
                                         </FRSC>
                                     </Collapse>
                                     <Collapse in={renameOpen} timeout={400}>
-                                        <TextField label={'Выходное имя файла'} size="small"
-                                                   value={outputName} sx={{
-                                            mt: 1, width: '98%',
-                                            '& .MuiInputBase-input': {
-
-                                                fontSize: '1.4rem'
-                                            }
-                                        }}
-                                                   onChange={e => setOutputName(e.target.value)}/>
+                                        <TextField
+                                            label={'Выходное имя файла'} size="small"
+                                            value={outputName}
+                                            sx={{
+                                                mt: 1.4, width: '98%',
+                                                '& .MuiInputBase-input': {
+                                                    fontSize: '1.4rem'
+                                                }
+                                            }}
+                                            onChange={e => setOutputName(e.target.value)}
+                                        />
                                     </Collapse>
                                 </FC>
                             </Collapse>
@@ -261,8 +246,8 @@ const Converter: React.FC = () => {
                                 backgroundColor: '#ffffff',
                                 color: '#000',
                                 '&:hover': {
-                                    color: '#fff',
-                                    backgroundColor: '#000',
+                                    color: theme.colors.primary.main,
+                                    backgroundColor: plt.text.primary,
                                 },
                             }}
                             variant="contained"
@@ -280,6 +265,21 @@ const Converter: React.FC = () => {
                             </Collapse>
                         </Button>
                     </Collapse>
+                    {conversion?.is_done && conversion.output_file && (
+                        <Box mt={1}>
+                            <Typography>{conversion.output_name ?? conversion.output_file.split('/')?.pop()}</Typography>
+                            {typeof conversion.size === 'number' && (
+                                <Typography variant="caption">
+                                    {formatFileSize(conversion.size)}
+                                </Typography>
+                            )}
+                            <Box mt={1}>
+                                <Button variant="contained" href={`/api/v1/converter/download/${conversion.id}/`}>
+                                    Download
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
                 </FC>
             )}
         </FC>
