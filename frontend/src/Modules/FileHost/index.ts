@@ -18,3 +18,4 @@ export {default as FolderTableRow} from './FolderTableRow';
 export {default as FileActions} from './FileActions';
 export {default as FolderActions} from './FolderActions';
 export {default as useLongPress} from './useLongPress';
+export {default as useFileHost} from './useFileHost';
