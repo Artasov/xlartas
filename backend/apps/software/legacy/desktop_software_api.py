@@ -11,13 +11,11 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from .utils import JSON_HEADERS, get_user_by_credentials, json_response
 from apps.core.models import User
 from apps.software.models import Software, SoftwareLicense
 
 log = logging.getLogger('global')
-
-# Default headers for JSON responses
-JSON_HEADERS = {'Content-Type': 'application/json'}
 
 # Эти константы замените своими сообщениями
 SOMETHING_WRONG = 'Something went wrong.'
@@ -52,33 +50,20 @@ async def software_auth(request) -> Response:
     # Проверяем обязательные поля
     if not all((hw_id, software_name, str(is_first_license_checking))):
         log.info('[software_auth] Missing fields.')
-        return Response(
-            {'accept': False, 'error': SOMETHING_WRONG},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': SOMETHING_WRONG})
 
     # Ищем пользователя
-    try:
-        user_ = await User.objects.aget(username=username, secret_key=secret_key)
-    except User.DoesNotExist:
+    user_ = await get_user_by_credentials(username=username, secret_key=secret_key)
+    if not user_:
         log.info(f'[software_auth] User does not exist or secret_key mismatch: {username}')
-        return Response(
-            {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG})
 
     # Проверяем, не используется ли один hw_id на нескольких разных аккаунтах
     # (исключаем самого user_, чтобы не учитывать его собственную запись)
     other_hwid_count = await User.objects.filter(hw_id=hw_id).exclude(pk=user_.pk).acount()
     if other_hwid_count > 0:
         log.info(f'[software_auth] Multi account prohibited. user_id={user_.id}, hw_id={hw_id}')
-        return Response(
-            {'accept': False, 'error': MULTI_ACCOUNT_PROHIBITED},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': MULTI_ACCOUNT_PROHIBITED})
 
     is_first_start = False
 
@@ -92,22 +77,14 @@ async def software_auth(request) -> Response:
         # Если hw_id у юзера есть, но он отличается
         if hw_id != user_.hw_id:
             log.info(f'[software_auth] HWID mismatch user:{user_.id}')
-            return Response(
-                {'accept': False, 'error': HWID_NOT_EQUAL, 'error_type': 'hw_id'},
-                status=status.HTTP_200_OK,
-                headers=JSON_HEADERS
-            )
+            return json_response({'accept': False, 'error': HWID_NOT_EQUAL, 'error_type': 'hw_id'})
 
     # Ищем Software
     try:
         software_ = await Software.objects.aget(name=software_name)
     except Software.DoesNotExist:
         log.info(f'[software_auth] Software not found: {software_name}')
-        return Response(
-            {'accept': False, 'error': PRODUCT_NOT_EXISTS},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': PRODUCT_NOT_EXISTS})
 
     # Создаем или получаем SoftwareLicense
     license_obj, _ = await SoftwareLicense.objects.aget_or_create(
@@ -126,29 +103,21 @@ async def software_auth(request) -> Response:
                 # Допустим, ничего не делаем, либо вы можете делать:
                 # license_obj.updated_at = now  # или что-то подобное
                 await license_obj.asave()
-            return Response(
-                {
-                    'accept': True,
-                    'full_license': False,
-                    'hw_id': user_.hw_id,
-                    'is_first_start': is_first_start
-                },
-                headers=JSON_HEADERS,
-                status=status.HTTP_200_OK
-            )
+            return json_response({
+                'accept': True,
+                'full_license': False,
+                'hw_id': user_.hw_id,
+                'is_first_start': is_first_start
+            })
         else:
             # Полная лицензия просрочена:
             shop_link = request.build_absolute_uri(get_shop_url(software_.id))
-            return Response(
-                {
-                    'accept': False,
-                    'error': LICENSE_TIMEOUT.format(
-                        f'<a style="color: white;" href="{shop_link}">shop</a>'
-                    )
-                },
-                status=status.HTTP_200_OK,
-                headers=JSON_HEADERS
-            )
+            return json_response({
+                'accept': False,
+                'error': LICENSE_TIMEOUT.format(
+                    f'<a style="color: white;" href="{shop_link}">shop</a>'
+                )
+            })
 
     # Если лицензия активна:
     # Если нужно, увеличиваем какой-нибудь счётчик запусков/использований:
@@ -159,16 +128,12 @@ async def software_auth(request) -> Response:
         # license_obj.updated_at = now
         await license_obj.asave()
 
-    return Response(
-        {
-            'accept': True,
-            'full_license': True,
-            'hw_id': user_.hw_id,
-            'is_first_start': is_first_start
-        },
-        headers=JSON_HEADERS,
-        status=status.HTTP_200_OK
-    )
+    return json_response({
+        'accept': True,
+        'full_license': True,
+        'hw_id': user_.hw_id,
+        'is_first_start': is_first_start
+    })
 
 
 @csrf_exempt
@@ -186,21 +151,12 @@ async def set_user_hw_id(request) -> Response:
 
     if not all((username, secret_key, hw_id)):
         log.info('[set_user_hw_id] Missing fields or invalid request.')
-        return Response(
-            {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG})
 
-    try:
-        user_ = await User.objects.aget(username=username, secret_key=secret_key)
-    except User.DoesNotExist:
+    user_ = await get_user_by_credentials(username=username, secret_key=secret_key)
+    if not user_:
         log.info(f'[set_user_hw_id] User not found or secret key mismatch: {username}')
-        return Response(
-            {'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG},
-            status=status.HTTP_200_OK,
-            headers=JSON_HEADERS
-        )
+        return json_response({'accept': False, 'error': LOGIN_OR_SECRET_KEY_WRONG})
 
     user_.hw_id = hw_id
     await user_.asave()
@@ -210,10 +166,7 @@ async def set_user_hw_id(request) -> Response:
     now = timezone.now()
     await SoftwareLicense.objects.filter(user=user_).aupdate(license_ends_at=now)
 
-    return Response(
-        {'accept': True},
-        headers=JSON_HEADERS
-    )
+    return json_response({'accept': True})
 
 
 @api_view(('GET',))
@@ -222,26 +175,11 @@ async def get_software_version(request, software_name: str) -> Response:
     try:
         software_ = await Software.objects.select_related('file').aget(name=software_name)
         if not software_.file:
-            return Response(
-                {
-                    'version': None,
-                    'url': None
-                },
-                status=status.HTTP_200_OK
-            )
+            return json_response({'version': None, 'url': None})
 
         # ВАЖНО: возвращаем абсолютный путь:
         absolute_url = request.build_absolute_uri(software_.file.file.url)
 
-        return Response(
-            {
-                'version': software_.file.version,
-                'url': absolute_url
-            },
-            status=status.HTTP_200_OK
-        )
+        return json_response({'version': software_.file.version, 'url': absolute_url})
     except Software.DoesNotExist:
-        return Response(
-            {'detail': 'Software does not exist.'},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        return json_response({'detail': 'Software does not exist.'}, status_code=status.HTTP_404_NOT_FOUND)
