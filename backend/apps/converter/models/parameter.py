@@ -23,6 +23,7 @@ class Parameter(ACreatedUpdatedAtIndexedMixin, AModel):
     unit = CharField(max_length=20, blank=True, null=True, verbose_name=_("Unit"))
     min_value = IntegerField(blank=True, null=True, verbose_name=_("Min value"))
     max_value = IntegerField(blank=True, null=True, verbose_name=_("Max value"))
+    default_value = CharField(max_length=100, blank=True, null=True, verbose_name=_("Default value"))
 
     class Meta:
         verbose_name = _("Parameter")

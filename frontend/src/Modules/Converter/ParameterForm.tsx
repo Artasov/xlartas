@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, FormControlLabel, MenuItem, TextField, InputAdornment} from '@mui/material';
+import {MenuItem, TextField, InputAdornment} from '@mui/material';
 import {IParameter} from 'types/converter';
 
 interface Props {
@@ -16,11 +16,21 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                 switch (p.type) {
                     case 'bool':
                         return (
-                            <FormControlLabel
+                            <TextField
+                                select
                                 key={p.name}
-                                control={<Checkbox checked={!!value} onChange={e => onChange(p.name, e.target.checked)}/>}
                                 label={p.name}
-                            />
+                                value={value === true ? 'true' : value === false ? 'false' : ''}
+                                onChange={e => {
+                                    const v = e.target.value;
+                                    onChange(p.name, v === '' ? null : v === 'true');
+                                }}
+                                fullWidth size={'small'}
+                            >
+                                <MenuItem value="">Like source</MenuItem>
+                                <MenuItem value="true">True</MenuItem>
+                                <MenuItem value="false">False</MenuItem>
+                            </TextField>
                         );
                     case 'int':
                         return (
@@ -28,8 +38,12 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 key={p.name}
                                 type="number"
                                 label={p.name}
-                                value={value || ''}
-                                onChange={e => onChange(p.name, Number(e.target.value))}
+                                value={value ?? ''}
+                                onChange={e => {
+                                    const v = e.target.value;
+                                    onChange(p.name, v === '' ? null : Number(v));
+                                }}
+                                placeholder="Like source"
                                 InputProps={{
                                     endAdornment: p.unit ? (
                                         <InputAdornment position="end">{p.unit}</InputAdornment>
@@ -44,10 +58,11 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 select
                                 key={p.name}
                                 label={p.name}
-                                value={value || ''}
-                                onChange={e => onChange(p.name, e.target.value)}
+                                value={value ?? ''}
+                                onChange={e => onChange(p.name, e.target.value || null)}
                                 fullWidth size={'small'}
                             >
+                                <MenuItem value="">Like source</MenuItem>
                                 {p.options?.map(opt => (
                                     <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                                 ))}
@@ -58,8 +73,9 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                             <TextField
                                 key={p.name}
                                 label={p.name}
-                                value={value || ''}
-                                onChange={e => onChange(p.name, e.target.value)}
+                                value={value ?? ''}
+                                onChange={e => onChange(p.name, e.target.value || null)}
+                                placeholder="Like source"
                                 InputProps={{
                                     endAdornment: p.unit ? (
                                         <InputAdornment position="end">{p.unit}</InputAdornment>
