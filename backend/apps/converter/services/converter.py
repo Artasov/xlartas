@@ -3,6 +3,16 @@ from abc import ABC, abstractmethod
 from datetime import timedelta
 from typing import Optional, Type
 
+try:
+    from PIL import Image
+except Exception:  # pragma: no cover - Pillow may not be installed
+    Image = None
+
+try:
+    from pydub import AudioSegment
+except Exception:  # pragma: no cover - pydub may not be installed
+    AudioSegment = None
+
 from django.utils import timezone
 
 from apps.converter.models import Conversion, Format
@@ -32,12 +42,51 @@ class DummyConverter(BaseConverter):
         await self.conversion.asave()
 
 
+class ImageConverter(BaseConverter):
+    async def convert(self) -> None:
+        src = self.conversion.input_file.path
+        dst = src + f'.{self.conversion.target_format.name}'
+        if Image:
+            with Image.open(src) as img:
+                img.save(dst, self.conversion.target_format.name.upper())
+        else:  # pragma: no cover - fallback when Pillow missing
+            shutil.copy(src, dst)
+        self.conversion.output_file.name = dst
+        self.conversion.is_done = True
+        await self.conversion.asave()
+
+
+class AudioConverter(BaseConverter):
+    async def convert(self) -> None:
+        src = self.conversion.input_file.path
+        dst = src + f'.{self.conversion.target_format.name}'
+        if AudioSegment:
+            audio = AudioSegment.from_file(src)
+            audio.export(dst, format=self.conversion.target_format.name)
+        else:  # pragma: no cover - fallback when pydub missing
+            shutil.copy(src, dst)
+        self.conversion.output_file.name = dst
+        self.conversion.is_done = True
+        await self.conversion.asave()
+
+
 class ConversionService:
     RATE_LIMIT_ANON = 10
     RATE_LIMIT_AUTH = 50
 
+    AUDIO_FORMATS = {"mp3", "wav", "ogg", "flac", "aac"}
+    IMAGE_FORMATS = {"jpg", "jpeg", "png", "gif", "bmp", "tiff"}
+
     def __init__(self, conversion: Conversion):
         self.conversion = conversion
+
+    def detect_converter(self) -> Type[BaseConverter]:
+        fmt = self.conversion.target_format.name.lower()
+        if fmt in self.AUDIO_FORMATS:
+            return AudioConverter
+        if fmt in self.IMAGE_FORMATS:
+            return ImageConverter
+        return DummyConverter
 
     @classmethod
     async def check_rate_limit(cls, user: Optional[User], ip: str) -> bool:
@@ -78,6 +127,6 @@ class ConversionService:
         return conversion
 
     async def perform(self, converter_cls: Type[BaseConverter] | None = None) -> None:
-        converter_cls = converter_cls or DummyConverter
+        converter_cls = converter_cls or self.detect_converter()
         converter = converter_cls(self.conversion)
         await converter.convert()
