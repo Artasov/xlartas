@@ -1,7 +1,7 @@
 // Modules/Theme/ThemeContext.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
-import darkTheme, {lightTheme} from "./themeConfig";
+import {darkTheme, lightTheme} from "../../theme";
 import {useApi} from "Api/useApi";
 
 interface ThemeContextType {
