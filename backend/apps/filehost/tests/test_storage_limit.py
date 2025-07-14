@@ -5,7 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIRequestFactory
 
 from apps.core.models import User
-from apps.filehost.controllers.base import upload_files
+from apps.filehost.controllers.file.upload import upload_files
 from apps.filehost.exceptions.base import StorageLimitExceeded
 from apps.filehost.models import File
 

@@ -1,14 +1,9 @@
-# filehost/controllers/base.py
-import logging
-import os
-import shutil
-
+# filehost/controllers/file/manage.py
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from adrf.generics import aget_object_or_404
 from asgiref.sync import sync_to_async
 from django.conf import settings
-from django.http import HttpResponse, FileResponse, HttpResponseNotFound
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.decorators import permission_classes
@@ -16,75 +11,100 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.filehost.exceptions.base import IdWasNotProvided, StorageLimitExceeded
-from apps.filehost.models import Folder, File
-from apps.filehost.serializers import FileSerializer, FolderSerializer
+from apps.filehost.models import File, Folder
+from apps.filehost.serializers import (
+    FileSerializer, FolderSerializer
+)
 from apps.filehost.services.base import (
-    create_archive,
     get_tags,
     get_folders,
     get_files,
     get_root_folder,
 )
+from apps.filehost.utils import parse_pagination
 
-log = logging.getLogger('global')
 
-
-@acontroller('Download File')
+@acontroller('Get File By ID')
 @api_view(('POST',))
 @permission_classes((IsAuthenticated,))
-async def download_file(request):
+async def get_file_by_id(request) -> Response:
+    file_id = request.data.get('id')
+    if not file_id:
+        raise IdWasNotProvided()
+    file = await aget_object_or_404(File, id=file_id, user=request.user)
+    serializer = FileSerializer(file)
+    return Response(await serializer.adata, status=status.HTTP_200_OK)
+
+
+@acontroller('Get All Files')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_all_files(request) -> Response:
+    _, page_size, offset = parse_pagination(request)
+    files_qs = File.objects.filter(user=request.user).order_by('-created_at')[offset:offset + page_size]
+    files = []
+    async for f in files_qs:
+        files.append(await FileSerializer(f).adata)
+    return Response(files, status=status.HTTP_200_OK)
+
+
+@acontroller('Add File')
+@api_view(('POST',))
+@permission_classes((IsAuthenticated,))
+async def add_file(request) -> Response:
+    user = request.user
+    file_size = int(request.data.get('size', 0))
+    total = 0
+    async for f in File.objects.filter(user=user):
+        if f.file:
+            total += f.file.size
+    if total + file_size > settings.STORAGE_LIMIT:
+        raise StorageLimitExceeded()
+    request.data['user'] = user.id
+    serializer = FileSerializer(data=request.data)
+    await serializer.ais_valid(raise_exception=True)
+    file = await serializer.asave()
+    return Response(await FileSerializer(file).adata, status=status.HTTP_201_CREATED)
+
+
+@acontroller('Get Favorite Files')
+@api_view(('GET',))
+@permission_classes((IsAuthenticated,))
+async def get_favorite_files(request) -> Response:
+    _, page_size, offset = parse_pagination(request)
+    files_qs = File.objects.filter(user=request.user, is_favorite=True).order_by('-created_at')[
+               offset:offset + page_size]
+    files = []
+    async for f in files_qs:
+        files.append(await FileSerializer(f).adata)
+    return Response(files, status=status.HTTP_200_OK)
+
+
+@acontroller('Toggle Favorite File')
+@api_view(('POST',))
+@permission_classes((IsAuthenticated,))
+async def toggle_favorite(request) -> Response:
     file_id = request.data.get('file_id')
-    user = request.user
+    if not file_id:
+        raise IdWasNotProvided()
+    file = await aget_object_or_404(File, id=file_id, user=request.user)
+    if 'value' in request.data:
+        file.is_favorite = bool(request.data.get('value'))
+    else:
+        file.is_favorite = not file.is_favorite
+    await file.asave()
+    return Response(await FileSerializer(file).adata, status=status.HTTP_200_OK)
 
-    try:
-        file = await File.objects.aget(id=file_id, user=user)
-        response = FileResponse(open(file.file.path, 'rb'), content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{file.name}"'
-        return response
-    except File.DoesNotExist:
-        return HttpResponseNotFound(_('File not found'))
 
-
-@acontroller('Download Archive')
-@api_view(('POST',))
+@acontroller('Get Storage Usage')
+@api_view(('GET',))
 @permission_classes((IsAuthenticated,))
-async def download_archive(request):
-    folder_ids = request.data.get('folder_ids', [])
-    file_ids = request.data.get('file_ids', [])
-    archive_format = request.data.get('archive_format', 'zip')  # Default to zip
-    user = request.user
-
-    folders = await Folder.objects.afilter(id__in=folder_ids, user=user)
-    files = await File.objects.afilter(id__in=file_ids, user=user)
-
-    if not folders and not files:
-        return Response({'error': _('No valid files or folders selected')}, status=status.HTTP_400_BAD_REQUEST)
-
-    temp_dir = None
-    try:
-        archive_path, temp_dir = await create_archive(folders, files, archive_format)
-
-        with open(archive_path, 'rb') as archive:
-            response = HttpResponse(archive.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(archive_path)}"'
-    except Exception:
-        log.exception('Error while creating archive')
-        raise
-    finally:
-        if temp_dir:
-            shutil.rmtree(temp_dir)
-
-    return response
-
-
-async def add_folder_to_zip(folder, zip_file):
-    files = File.objects.filter(folder=folder)
-    async for file in files:
-        zip_file.write(file.file.path, os.path.join(folder.name, file.name))
-
-    subfolders = Folder.objects.filter(parent=folder)
-    async for subfolder in subfolders:
-        await add_folder_to_zip(subfolder, zip_file)
+async def get_storage_usage(request) -> Response:
+    total = 0
+    async for f in File.objects.filter(user=request.user):
+        if f.file:
+            total += f.file.size
+    return Response({'used': total, 'limit': settings.STORAGE_LIMIT}, status=status.HTTP_200_OK)
 
 
 @acontroller('Get Full File and Folder Tree')
@@ -101,34 +121,6 @@ async def get_full_tree(request) -> Response:
         'files': await get_files(folder=root_folder)
     }]
     return Response(tree, status=status.HTTP_200_OK)
-
-
-@acontroller('Upload Files')
-@api_view(('POST',))
-@permission_classes((IsAuthenticated,))
-async def upload_files(request) -> Response:
-    parent_id = request.data.get('parent_id', None)
-    files = request.FILES.getlist('files')
-    if parent_id:
-        parent = await Folder.objects.aget(id=parent_id, user=request.user)
-    else:
-        parent, _ = await get_root_folder(request.user)
-
-    total = 0
-    async for f in File.objects.filter(user=request.user):
-        if f.file:
-            total += f.file.size
-    incoming = sum(f.size for f in files)
-    if total + incoming > settings.STORAGE_LIMIT:
-        raise StorageLimitExceeded()
-    uploaded_files = []
-    for file in files:
-        uploaded_file = await File.objects.acreate(
-            file=file, folder=parent, user=request.user
-        )
-        uploaded_files.append(await FileSerializer(uploaded_file).adata)
-
-    return Response(uploaded_files, status=status.HTTP_201_CREATED)
 
 
 @acontroller('Bulk Delete Items')
@@ -150,7 +142,6 @@ async def bulk_delete_items(request) -> Response:
         if folder.user != request.user:
             return Response({'error': _('Permission denied')}, status=status.HTTP_403_FORBIDDEN)
 
-    # Удаляем файлы и папки
     await File.objects.filter(id__in=[file.id for file in files]).adelete()
     await Folder.objects.filter(id__in=[folder.id for folder in folders]).adelete()
 
