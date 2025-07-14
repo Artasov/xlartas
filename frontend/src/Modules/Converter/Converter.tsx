@@ -16,7 +16,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import FormatParametersSettings from './FormatParametersSettings';
-import {IConversion, IFormat, IParameter} from 'types/converter';
+import {IConversion, IConvertResult, IFormat, IParameter} from 'types/converter';
 import {FC, FCCC, FR, FRSC} from "wide-containers";
 import ConverterGuide from './ConverterGuide';
 import {Message} from 'Modules/Core/components/Message';
