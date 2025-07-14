@@ -24,6 +24,16 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import {buildWSUrl} from 'Utils/ws';
 
+const wsFmt = (x: unknown) => {
+    if (typeof x === 'string') {
+        return x.length > 500 ? `${x.slice(0, 497)}...` : x;
+    }
+    return x;
+};
+
+const logWSReq = (u: string) => console.info(`WS \u2794 ${u}`);
+const logWSMsg = (u: string, d: unknown) => console.info(`WS \u21f3 ${u}`, wsFmt(d));
+
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
     const {api} = useApi();
@@ -90,21 +100,25 @@ const Converter: React.FC = () => {
         api.post<IConversion>('/api/v1/converter/convert/', formData)
             .then(data => {
                 setConversion(data);
-                const ws = new WebSocket(buildWSUrl(`/ws/converter/${data.id}/`));
+                const url = buildWSUrl(`/ws/converter/${data.id}/`);
+                logWSReq(url);
+                const ws = new WebSocket(url);
                 wsRef.current = ws;
                 ws.onmessage = e => {
                     try {
                         const obj = JSON.parse(e.data);
+                        logWSMsg(url, obj);
                         if (obj.event === 'conversion_done') {
                             setConversion(obj.conversion);
                             setLoading(false);
                             ws.close();
                         }
                     } catch {
-                        /* ignore */
+                        logWSMsg(url, e.data);
                     }
                 };
                 ws.onclose = () => {
+                    logWSMsg(url, {event: 'close'});
                     wsRef.current = null;
                 };
             })
