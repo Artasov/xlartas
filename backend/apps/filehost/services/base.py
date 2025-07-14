@@ -84,30 +84,6 @@ async def get_subfolders(folder):
     return subfolders_list
 
 
-async def collect_files(folder, base_path=''):
-    files = []
-    subfolders = Folder.objects.filter(parent=folder)
-    async for subfolder in subfolders:
-        files.extend(await collect_files(subfolder, os.path.join(base_path, subfolder.name)))
-    folder_files = File.objects.filter(folder=folder)
-    async for file in folder_files:
-        files.append((file, os.path.join(base_path, file.name)))
-    return files
-
-
-async def create_archive(folders, files, archive_format='zip'):
-    temp_dir = tempfile.mkdtemp()
-    archive_name = os.path.join(temp_dir, f'archive{randint(1000, 9999)}.{archive_format}')
-
-    with zipfile.ZipFile(archive_name, 'w') as archive:
-        for folder in folders:
-            folder_files = await collect_files(folder, folder.name)
-            for file, arcname in folder_files:
-                archive.write(file.file.path, arcname)
-        for file in files:
-            archive.write(file.file.path, file.name)
-
-    return archive_name, temp_dir
 
 
 async def get_all_subfolders(folder):
