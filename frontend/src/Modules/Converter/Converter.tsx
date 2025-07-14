@@ -157,7 +157,7 @@ const Converter: React.FC = () => {
                 <FileDropZone file={file} onChange={setFile}/>
                 {conversion?.is_done && conversion.output_file && (
                     <Box mt={1}>
-                        <Typography>{conversion.output_file.split('/').pop()}</Typography>
+                        <Typography>{conversion.output_name ?? conversion.output_file.split('/')?.pop()}</Typography>
                         {typeof conversion.size === 'number' && (
                             <Typography variant="caption">
                                 {formatFileSize(conversion.size)}
@@ -165,7 +165,7 @@ const Converter: React.FC = () => {
                         )}
                         <Box mt={1}>
                             <Button variant="contained"
-                                    href={conversion.output_file}
+                                    href={`/api/v1/converter/download/${conversion.id}/`}
                                     download>
                                 Download
                             </Button>

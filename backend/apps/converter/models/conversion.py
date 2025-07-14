@@ -9,6 +9,7 @@ class Conversion(ACreatedUpdatedAtIndexedMixin, AModel):
     ip = CharField(max_length=64, verbose_name=_('IP'))
     input_file = FileField(upload_to='converter/input/', verbose_name=_('Input file'))
     output_file = FileField(upload_to='converter/output/', null=True, blank=True, verbose_name=_('Output file'))
+    output_name = CharField(max_length=100, null=True, blank=True, verbose_name=_('Output name'))
     source_format = ForeignKey('converter.Format', CASCADE, related_name='+', verbose_name=_('Source format'))
     target_format = ForeignKey('converter.Format', CASCADE, related_name='+', verbose_name=_('Target format'))
     params = JSONField(blank=True, null=True, verbose_name=_('Parameters'))
