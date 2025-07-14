@@ -276,6 +276,23 @@ export const darkTheme = createTheme({
                 },
             },
         },
+        MuiAccordionSummary: {
+            styleOverrides: {
+                root: {
+                    minHeight: '48px',            // базовая высота
+                    '&.Mui-expanded': {
+                        minHeight: '48px',          // остаётся такой же при раскрытии
+                    },
+                },
+                /* контейнер с текстом/иконкой внутри хедера */
+                content: {
+                    margin: '12px 0',             // базовый вертикальный отступ
+                    '&.Mui-expanded': {
+                        margin: '12px 0',           // тот же при раскрытии
+                    },
+                },
+            },
+        },
     },
     palette: {
         mode: 'dark',
