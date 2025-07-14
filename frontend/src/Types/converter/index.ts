@@ -10,6 +10,7 @@ export interface IParameter {
     type: 'bool' | 'int' | 'str' | 'select';
     unit?: string | null;
     options?: string[] | null;
+    default_value?: string | null;
 }
 
 export interface IConversion {

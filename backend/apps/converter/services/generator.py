@@ -42,17 +42,20 @@ AUDIO_PARAMS = [
         "type": "select",
         "unit": "kbps",
         "options": [64, 96, 128, 192, 256, 320],
+        "default_value": None,
     },
     {
         "name": "sample_rate",
         "type": "select",
         "unit": "Hz",
         "options": [22050, 44100, 48000],
+        "default_value": None,
     },
     {
         "name": "channels",
         "type": "select",
         "options": [1, 2],
+        "default_value": None,
     },
 ]
 
@@ -62,12 +65,14 @@ IMAGE_PARAMS = [
         "type": "int",
         "unit": "px",
         "min_value": 1,
+        "default_value": None,
     },
     {
         "name": "height",
         "type": "int",
         "unit": "px",
         "min_value": 1,
+        "default_value": None,
     },
     {
         "name": "quality",
@@ -75,6 +80,7 @@ IMAGE_PARAMS = [
         "unit": "%",
         "min_value": 1,
         "max_value": 100,
+        "default_value": None,
     },
 ]
 
@@ -84,18 +90,21 @@ VIDEO_PARAMS = [
         "type": "int",
         "unit": "px",
         "min_value": 1,
+        "default_value": None,
     },
     {
         "name": "height",
         "type": "int",
         "unit": "px",
         "min_value": 1,
+        "default_value": None,
     },
     {
         "name": "framerate",
         "type": "select",
         "unit": "fps",
         "options": [24, 30, 60],
+        "default_value": None,
     },
     {
         "name": "video_bitrate",
@@ -103,6 +112,7 @@ VIDEO_PARAMS = [
         "unit": "kbps",
         "min_value": 100,
         "max_value": 50000,
+        "default_value": None,
     },
 ]
 
@@ -152,6 +162,7 @@ def load_converter_data(data: dict) -> None:
                     "unit": p.get("unit"),
                     "min_value": p.get("min_value"),
                     "max_value": p.get("max_value"),
+                    "default_value": p.get("default_value"),
                 },
             )
             if "options" in p:

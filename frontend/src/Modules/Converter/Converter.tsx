@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Box, Button, CircularProgress, Typography} from '@mui/material';
+import {Box, Button, CircularProgress, Typography, Accordion, AccordionSummary, AccordionDetails} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
@@ -34,6 +35,14 @@ const Converter: React.FC = () => {
         axios.get(`/api/v1/converter/formats/${source.id}/parameters/`)
             .then(r => setParams(r.data));
     }, [source]);
+
+    useEffect(() => {
+        const defaults: Record<string, any> = {};
+        params.forEach(p => {
+            defaults[p.name] = p.default_value ?? null;
+        });
+        setValues(defaults);
+    }, [params]);
 
     useEffect(() => {
         if (!file || formats.length === 0) return;
@@ -121,11 +130,18 @@ const Converter: React.FC = () => {
                     />
                     <FC g={1} mt={1}>
                         {params.length > 0 && (
-                            <ParameterForm
-                                parameters={params}
-                                values={values}
-                                onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}
-                            />
+                            <Accordion defaultExpanded>
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                    Параметры
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <ParameterForm
+                                        parameters={params}
+                                        values={values}
+                                        onChange={(n, v) => setValues(prev => ({ ...prev, [n]: v }))}
+                                    />
+                                </AccordionDetails>
+                            </Accordion>
                         )}
                     </FC>
 
@@ -143,7 +159,7 @@ const Converter: React.FC = () => {
                             disabled={loading}
                             onClick={handleConvert}
                         >
-                            {!loading ? <CircularProgressZoomify h={'100%'} in size={44}/> : 'CONVERT'}
+                            {loading ? <CircularProgressZoomify h={'100%'} in size={44}/> : `Convert to ${targets.find(t => t.id === targetId)?.name ?? ''}`}
                         </Button>
                     </Box>
                 </FC>
