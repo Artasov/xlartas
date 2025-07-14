@@ -6,9 +6,9 @@ import {
     AccordionSummary,
     Box,
     Button,
-    CircularProgress,
     Collapse,
-    Typography
+    Typography,
+    useMediaQuery
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
@@ -21,7 +21,7 @@ import {Message} from 'Modules/Core/components/Message';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
@@ -36,6 +36,7 @@ const Converter: React.FC = () => {
     const [conversion, setConversion] = useState<IConversion | null>(null);
     const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
+    const isGtSm = useMediaQuery('(min-width: 576px)');
 
     useEffect(() => {
         api.get<IFormat[]>('/api/v1/converter/formats/')
@@ -63,6 +64,7 @@ const Converter: React.FC = () => {
         const ext = file.name.split('.').pop()?.toLowerCase();
         const fmt = formats.find(f => f.name.toLowerCase() === ext);
         if (fmt) {
+            setTargetId(null);
             setSource(fmt);
         } else {
             Message.error(`Неизвестный формат файла${ext ? ` (.${ext})` : ''}`);
@@ -111,10 +113,6 @@ const Converter: React.FC = () => {
             <ConverterGuide/>
             <FC grow mt={1}>
                 <FileDropZone file={file} onChange={setFile}/>
-                {conversion && !conversion.is_done && (
-                    <Box mt={1}><CircularProgress/></Box>
-                )}
-
                 {conversion?.is_done && conversion.output_file && (
                     <Box mt={1}>
                         <Typography>{conversion.output_file.split('/').pop()}</Typography>
@@ -133,27 +131,27 @@ const Converter: React.FC = () => {
                     </Box>
                 )}
             </FC>
-
-            {/* Правая колонка: выбор форматов и параметров */}
             {file && source && (
-                <FC g={1} mt={1}>
+                <FC g={1}>
                     <FR g={1}>
-                        <FC g={1} grow>
-                            <FormatPicker
-                                formats={targets}
-                                value={targetId ?? undefined}
-                                onChange={setTargetId}
-                            />
+                        <FC grow>
                             <Collapse in={!targetId} unmountOnExit timeout={400}>
-                                <FRSC>
-                                    <ArrowDropUpRoundedIcon sx={{fontSize: '6rem', m: -3}}/>
+                                <FRSC mt={1}>
+                                    <ArrowDropDownRoundedIcon sx={{fontSize: '6rem', m: -3}}/>
                                     <FR fontSize={'1.3rem'} sx={{lineHeight: '1.2rem'}}>
                                         Выберите формат для конвертации
                                     </FR>
                                 </FRSC>
                             </Collapse>
+                            <FC mt={1}>
+                                <FormatPicker
+                                    formats={targets}
+                                    value={targetId ?? undefined}
+                                    onChange={setTargetId}
+                                />
+                            </FC>
                             <Collapse in={Boolean(targetId)} unmountOnExit timeout={400}>
-                                <FC g={1}>
+                                <FC g={1} mt={1}>
                                     {params.length > 0 && (
                                         <Accordion>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
@@ -182,9 +180,9 @@ const Converter: React.FC = () => {
                         <Button
                             sx={{
                                 fontWeight: '900',
-                                letterSpacing: '.2rem',
+                                letterSpacing: isGtSm ? '.2rem' : '.07rem',
                                 paddingBottom: '.6em',
-                                fontSize: '2rem',
+                                fontSize: isGtSm ? '2rem': '1.5rem',
                                 width: '100%',
                                 minHeight: '2.2em',
                                 backgroundColor: '#ffffff',
@@ -198,14 +196,15 @@ const Converter: React.FC = () => {
                             disabled={loading}
                             onClick={handleConvert}
                         >
-                            {loading
-                                ? <CircularProgressZoomify h={'100%'} in size={44}/>
-                                : <span>
-                                        Convert to <span style={{color: theme.colors.primary.main}}>
+                            <CircularProgressZoomify h="100%" in={loading} size={44}/>
+                            <Collapse in={!loading} orientation="horizontal" unmountOnExit timeout={400}>
+                                <span>
+                                    Convert&nbsp;to&nbsp;
+                                    <span style={{color: theme.colors.primary.main}}>
                                         {targets.find(t => t.id === targetId)?.name ?? ''}
                                     </span>
                                 </span>
-                            }
+                            </Collapse>
                         </Button>
                     </Collapse>
                 </FC>
