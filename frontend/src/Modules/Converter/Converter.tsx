@@ -50,7 +50,7 @@ const Converter: React.FC = () => {
     const [values, setValues] = useState<Record<string, any>>({});
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
-    const [conversion, setConversion] = useState<IConversion | null>(null);
+    const [conversions, setConversions] = useState<IConversion[]>([]);
     const wsRef = useRef<WebSocket | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
     const [renameOpen, setRenameOpen] = useState(false);
@@ -131,7 +131,7 @@ const Converter: React.FC = () => {
         setLoading(true);
         api.post<IConvertResult>('/api/v1/converter/convert/', formData)
             .then(data => {
-                setConversion(data.conversion);
+                setConversions(prev => [...prev, data.conversion]);
                 setRemaining(data.remaining);
                 const url = buildWSUrl(`/ws/converter/${data.conversion.id}/`);
                 logWSReq(url);
@@ -142,7 +142,7 @@ const Converter: React.FC = () => {
                         const obj = JSON.parse(e.data);
                         logWSMsg(url, obj);
                         if (obj.event === 'conversion_done') {
-                            setConversion(obj.conversion);
+                            setConversions(prev => prev.map(c => c.id === obj.conversion.id ? obj.conversion : c));
                             setLoading(false);
                             setTargetId(null);
                             ws.close();
@@ -276,21 +276,23 @@ const Converter: React.FC = () => {
                             </Collapse>
                         </Button>
                     </Collapse>
-                    {conversion?.is_done && conversion.output_file && (
-                        <Box mt={1}>
-                            <Typography>{conversion.output_name ?? conversion.output_file.split('/')?.pop()}</Typography>
-                            {typeof conversion.size === 'number' && (
-                                <Typography variant="caption">
-                                    {formatFileSize(conversion.size)}
-                                </Typography>
-                            )}
-                            <Box mt={1}>
-                                <IconButton color="primary" href={`/api/v1/converter/download/${conversion.id}/`}>
-                                    <DownloadRoundedIcon/>
-                                </IconButton>
+                    {conversions.map(c => (
+                        c.is_done && c.output_file && (
+                            <Box key={c.id} mt={1}>
+                                <Typography>{c.output_name ?? c.output_file.split('/')?.pop()}</Typography>
+                                {typeof c.size === 'number' && (
+                                    <Typography variant="caption">
+                                        {formatFileSize(c.size)}
+                                    </Typography>
+                                )}
+                                <Box mt={1}>
+                                    <IconButton color="primary" href={`/api/v1/converter/download/${c.id}/`}>
+                                        <DownloadRoundedIcon/>
+                                    </IconButton>
+                                </Box>
                             </Box>
-                        </Box>
-                    )}
+                        )
+                    ))}
                 </FC>
             )}
         </FC>
