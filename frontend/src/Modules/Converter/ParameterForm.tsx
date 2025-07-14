@@ -18,7 +18,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                         return (
                             <FormControlLabel
                                 key={p.name}
-                                control={<Checkbox checked={!!value} onChange={e => onChange(p.name, e.target.checked)}/>} 
+                                control={<Checkbox checked={!!value} onChange={e => onChange(p.name, e.target.checked)}/>}
                                 label={p.name}
                             />
                         );
@@ -35,8 +35,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                         <InputAdornment position="end">{p.unit}</InputAdornment>
                                     ) : undefined,
                                 }}
-                                fullWidth
-                                margin="normal"
+                                fullWidth size={'small'}
                             />
                         );
                     case 'select':
@@ -47,8 +46,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                 label={p.name}
                                 value={value || ''}
                                 onChange={e => onChange(p.name, e.target.value)}
-                                fullWidth
-                                margin="normal"
+                                fullWidth size={'small'}
                             >
                                 {p.options?.map(opt => (
                                     <MenuItem key={opt} value={opt}>{opt}</MenuItem>
@@ -67,8 +65,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                                         <InputAdornment position="end">{p.unit}</InputAdornment>
                                     ) : undefined,
                                 }}
-                                fullWidth
-                                margin="normal"
+                                fullWidth size={'small'}
                             />
                         );
                 }

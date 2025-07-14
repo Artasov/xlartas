@@ -150,6 +150,10 @@ export const darkTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: '#ffffff',
                     lineHeight: '1em',
                     padding: '.6em 1em .5em 1em',
                     backgroundColor: '#ffffff0b',
@@ -212,10 +216,19 @@ export const darkTheme = createTheme({
                 },
             },
         },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(15px)',
+                },
+            },
+        },
         MuiBackdrop: {
             styleOverrides: {
                 root: {
-
+                    '&.MuiBackdrop-invisible': {
+                        backdropFilter: 'none',
+                    },
                     backdropFilter: 'blur(15px)',
                     transition: 'backdrop-filter .35s ease, opacity .35s ease', // скрываем скроллбары полностью
                     '-ms-overflow-style': 'none',            // IE и Edge

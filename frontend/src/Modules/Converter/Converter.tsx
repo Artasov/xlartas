@@ -1,23 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Typography,
-    Snackbar
-} from '@mui/material';
-import MuiAlert, {AlertProps} from '@mui/material/Alert';
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import {Box, Button, CircularProgress, Typography} from '@mui/material';
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
 import ParameterForm from './ParameterForm';
 import {IConversion, IFormat, IParameter} from 'types/converter';
-import {FC, FR} from "wide-containers";
+import {FC} from "wide-containers";
 import ConverterGuide from './ConverterGuide';
+import {Message} from 'Modules/Core/components/Message';
+import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
+
 
 const Converter: React.FC = () => {
     const [source, setSource] = useState<IFormat | null>(null);
@@ -30,7 +22,6 @@ const Converter: React.FC = () => {
     const [conversion, setConversion] = useState<IConversion | null>(null);
     const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         axios.get('/api/v1/converter/formats/').then(r => setFormats(r.data));
@@ -51,7 +42,7 @@ const Converter: React.FC = () => {
         if (fmt) {
             setSource(fmt);
         } else {
-            setError(`Неизвестный формат файла${ext ? ` (.${ext})` : ''}`);
+            Message.error(`Неизвестный формат файла${ext ? ` (.${ext})` : ''}`);
             setFile(null);
             setSource(null);
         }
@@ -72,7 +63,6 @@ const Converter: React.FC = () => {
         setTimer(t);
     };
 
-    /* ---------- 🧹 Очищаем таймер при демонтировании ---------- */
     useEffect(() => () => {
         if (timer) clearInterval(timer);
     }, [timer]);
@@ -94,7 +84,7 @@ const Converter: React.FC = () => {
     };
 
     return (
-        <FR wrap w={'100%'} px={2} maxW={600} mx={'auto'}>
+        <FC w={'100%'} px={2} maxW={600} mx={'auto'}>
             <ConverterGuide/>
             <FC grow>
                 <FileDropZone file={file} onChange={setFile}/>
@@ -122,51 +112,43 @@ const Converter: React.FC = () => {
             </FC>
 
             {/* Правая колонка: выбор форматов и параметров */}
-            {file && (
-                <FC>
-                    {source && (
-                        <>
-                            <Box mt={2}>
-                                <Typography>Формат: {source.name}</Typography>
-                            </Box>
-                            <Box mt={2}>
-                                <FormatPicker
-                                    formats={targets}
-                                    value={targetId ?? undefined}
-                                    onChange={setTargetId}
-                                />
-                            </Box>
+            {file && source && (
+                <FC g={1} mt={1}>
+                    <FormatPicker
+                        formats={targets}
+                        value={targetId ?? undefined}
+                        onChange={setTargetId}
+                    />
+                    <FC g={1} mt={1}>
+                        {params.length > 0 && (
+                            <ParameterForm
+                                parameters={params}
+                                values={values}
+                                onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}
+                            />
+                        )}
+                    </FC>
 
-                            {params.length > 0 && (
-                                <ParameterForm
-                                    parameters={params}
-                                    values={values}
-                                    onChange={(n, v) => setValues(prev => ({...prev, [n]: v}))}
-                                />
-                            )}
-
-                            <Box mt={2}>
-                                <Button
-                                    variant="contained"
-                                    disabled={loading}
-                                    onClick={handleConvert}
-                                >
-                                    {loading ? <CircularProgress size={24}/> : 'Convert'}
-                                </Button>
-                            </Box>
-                        </>
-                    )}
+                    <Box mt={2}>
+                        <Button
+                            sx={{
+                                fontWeight: '900',
+                                letterSpacing: '.2rem',
+                                paddingBottom: '.6em',
+                                fontSize: '2rem',
+                                width: '100%',
+                                minHeight: '2.2em',
+                            }}
+                            variant="contained"
+                            disabled={loading}
+                            onClick={handleConvert}
+                        >
+                            {!loading ? <CircularProgressZoomify h={'100%'} in size={44}/> : 'CONVERT'}
+                        </Button>
+                    </Box>
                 </FC>
             )}
-            <Snackbar open={!!error} autoHideDuration={6000} onClose={(_e, r) => {
-                if (r === 'clickaway') return;
-                setError(null);
-            }}>
-                <Alert onClose={() => setError(null)} severity="error" sx={{width: '100%'}}>
-                    {error}
-                </Alert>
-            </Snackbar>
-        </FR>
+        </FC>
     );
 };
 
