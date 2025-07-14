@@ -34,7 +34,13 @@ def google_captcha_validation(request):
     return result
 
 
-def telegram_verify_hash(auth_data):
+def telegram_verify_hash(auth_data: dict) -> bool:
+    """Verify telegram login data by comparing the received hash and timestamp.
+
+    :param auth_data: Data received from Telegram login widget.
+    :return: ``True`` if hash is valid and request is not expired, otherwise
+        ``False``.
+    """
     check_hash = auth_data['hash']
 
     del auth_data['hash']
@@ -44,8 +50,8 @@ def telegram_verify_hash(auth_data):
     data_check_arr.sort()
     data_check_string = '\n'.join(data_check_arr)
     secret_key = hashlib.sha256(os.getenv('TELEGRAM_TOKEN').encode()).digest()
-    hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-    if hash != check_hash:
+    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+    if calculated_hash != check_hash:
         return False
     if time.time() - int(auth_data['auth_date']) > 86400:
         return False
