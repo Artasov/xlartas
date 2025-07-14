@@ -1,12 +1,12 @@
 # commerce/tasks/employee_tasks.py
-import logging
+from utils.log import get_global_logger
 
 from adjango.utils.common import traceback_str
 from celery import shared_task
 
 from apps.commerce.models import Employee
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @shared_task

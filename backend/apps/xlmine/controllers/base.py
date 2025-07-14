@@ -1,6 +1,6 @@
 # xlmine/controllers/base.py
 import json
-import logging
+from utils.log import get_global_logger
 import os
 
 from adjango.adecorators import acontroller
@@ -25,7 +25,7 @@ from apps.xlmine.serializers.donate import DonateSerializer
 from apps.xlmine.services.base import calculate_sha256
 from typing import Optional
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 def save_chunk(

@@ -1,5 +1,5 @@
 # ckassa/controllers/api.py
-import logging
+from utils.log import get_global_logger
 from typing import Any, Dict
 
 from adjango.adecorators import acontroller, aatomic
@@ -14,7 +14,7 @@ from apps.ckassa.consts import CKASSA_NOTIFICATION_ALLOWED_URLS
 from apps.ckassa.models import CKassaPayment
 from apps.commerce.models import Order
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('CKassa Notification')

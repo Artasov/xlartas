@@ -1,5 +1,5 @@
 # core/admin/user.py
-import logging
+from utils.log import get_global_logger
 
 from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin, messages
@@ -18,7 +18,7 @@ admin.site.site_header = 'xlartas'
 admin.site.site_title = 'xlartas'
 admin.site.index_title = ''
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @admin.register(Role)

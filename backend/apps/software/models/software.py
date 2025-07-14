@@ -1,5 +1,5 @@
 # software/models/software.py
-import logging
+from utils.log import get_global_logger
 from typing import TYPE_CHECKING
 
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin, ACreatedAtIndexedMixin
@@ -22,7 +22,7 @@ from apps.software.services.software import SoftwareService
 if TYPE_CHECKING:
     from apps.commerce.models.product import ProductPrice
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 class SoftwareFile(ACreatedAtIndexedMixin):

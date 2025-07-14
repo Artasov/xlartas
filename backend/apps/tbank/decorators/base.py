@@ -1,6 +1,6 @@
 # tbank/decorators/base.py
 
-import logging
+from utils.log import get_global_logger
 from functools import wraps
 
 from adjango.utils.common import traceback_str
@@ -15,7 +15,7 @@ from apps.tbank.exceptions.base import TBankException
 from apps.tbank.models import TBankPayment
 from apps.tbank.services.payment import TBankPaymentService
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 def async_tbank_payment_notification(view_func):

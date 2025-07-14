@@ -1,5 +1,5 @@
 # core/middleware/auth.py
-import logging
+from utils.log import get_global_logger
 from urllib.parse import parse_qs
 
 from channels.middleware import BaseMiddleware
@@ -8,7 +8,7 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework_simplejwt.tokens import AccessToken
 
 User = get_user_model()
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 async def get_user_from_token(token):

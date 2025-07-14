@@ -1,5 +1,5 @@
 # core/controllers/auth/common.py
-import logging
+from utils.log import get_global_logger
 from random import randint
 
 from adjango.adecorators import acontroller
@@ -21,7 +21,7 @@ from apps.core.exceptions.user import UserException
 from apps.core.models.user import User
 from apps.core.serializers.user.base import SignUpSerializer
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('Logout')

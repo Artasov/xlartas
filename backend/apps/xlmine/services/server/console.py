@@ -1,12 +1,12 @@
 # xlmine/services/server/console.py
 
-import logging
+from utils.log import get_global_logger
 
 from adjango.utils.common import traceback_str
 from django.conf import settings
 from mcrcon import MCRcon
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 class RconServerConsole:

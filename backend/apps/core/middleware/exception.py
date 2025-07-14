@@ -1,5 +1,5 @@
 # core/middleware/exception.py
-import logging
+from utils.log import get_global_logger
 import traceback
 
 from django.utils.deprecation import MiddlewareMixin
@@ -8,7 +8,7 @@ from django.utils.deprecation import MiddlewareMixin
 class ExceptionLoggingMiddleware(MiddlewareMixin):
     @staticmethod
     def process_exception(request, _exception):
-        log = logging.getLogger('global')  # Используйте ваш логгер
+        log = get_global_logger()  # Используйте ваш логгер
         # Получаем полную трассировку ошибки
         tb = traceback.format_exc()
         # Логируем информацию об ошибке

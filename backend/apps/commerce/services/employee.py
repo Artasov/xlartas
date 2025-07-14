@@ -1,5 +1,5 @@
 # commerce/services/employee.py
-import logging
+from utils.log import get_global_logger
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
@@ -7,7 +7,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 if TYPE_CHECKING:
     from apps.commerce.models import Employee

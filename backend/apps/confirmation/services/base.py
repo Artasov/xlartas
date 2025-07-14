@@ -1,5 +1,5 @@
 # confirmation/services/base.py
-import logging
+from utils.log import get_global_logger
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
 
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     )
     from apps.core.models import User
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 async def get_confirmation_code_instance(

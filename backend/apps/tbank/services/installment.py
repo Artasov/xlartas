@@ -1,6 +1,6 @@
 # tbank/services/installment.py
 import base64
-import logging
+from utils.log import get_global_logger
 from collections import namedtuple
 from typing import TYPE_CHECKING
 
@@ -9,7 +9,7 @@ from django.conf import settings
 
 if TYPE_CHECKING:
     from apps.tbank.models import TBankInstallment
-log = logging.getLogger('global')
+log = get_global_logger()
 
 InstallmentResponse = namedtuple(
     'InstallmentResponse',

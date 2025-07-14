@@ -1,5 +1,5 @@
 # converter/controllers/base.py
-import logging
+from utils.log import get_global_logger
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -16,7 +16,7 @@ from apps.converter.serializers import (
 )
 from apps.converter.services import ConversionService
 
-log = logging.getLogger("global")
+log = get_global_logger()
 
 
 @acontroller("List formats")

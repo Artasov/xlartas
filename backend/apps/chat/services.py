@@ -1,5 +1,5 @@
 # chat/services.py
-import logging
+from utils.log import get_global_logger
 from typing import TYPE_CHECKING
 
 from adjango.utils.base import AsyncAtomicContextManager
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from apps.core.models import User
     from apps.chat.models import Room
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 class RoomService:

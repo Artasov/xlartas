@@ -1,5 +1,5 @@
 # filehost/controllers/file/download.py
-import logging
+from utils.log import get_global_logger
 import os
 import shutil
 
@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from apps.filehost.models import Folder, File
 from apps.filehost.services.archive import create_archive
 
-log = logging.getLogger('global')
+log = get_global_logger()
 
 
 @acontroller('Download File')
