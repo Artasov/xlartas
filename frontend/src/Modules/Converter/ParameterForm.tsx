@@ -18,6 +18,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                         return (
                             <TextField
                                 select
+                                SelectProps={{displayEmpty: true}}
                                 key={p.name}
                                 label={p.name}
                                 value={value === true ? 'true' : value === false ? 'false' : ''}
@@ -56,6 +57,7 @@ const ParameterForm: React.FC<Props> = ({parameters, values, onChange}) => {
                         return (
                             <TextField
                                 select
+                                SelectProps={{displayEmpty: true}}
                                 key={p.name}
                                 label={p.name}
                                 value={value ?? ''}
