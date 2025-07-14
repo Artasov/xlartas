@@ -7,6 +7,7 @@ from apps.converter.controllers.base import (
     convert,
     conversion_status,
     download,
+    remaining,
 )
 
 app_name = 'converter'
@@ -18,4 +19,5 @@ urlpatterns = [
     path('converter/convert/', convert),
     path('converter/conversion/<int:conversion_id>/', conversion_status),
     path('converter/download/<int:conversion_id>/', download),
+    path('converter/remaining/', remaining),
 ]

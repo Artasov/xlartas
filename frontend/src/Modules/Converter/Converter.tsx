@@ -5,6 +5,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box,
+    IconButton,
     Button,
     Collapse,
     TextField,
@@ -23,8 +24,10 @@ import CircularProgressZoomify from "Core/components/elements/CircularProgressZo
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import {buildWSUrl} from 'Utils/ws';
 import formatFileSize from 'Utils/formatFileSize';
+import {useTranslation} from 'react-i18next';
 
 const wsFmt = (x: unknown) => {
     if (typeof x === 'string') {
@@ -39,6 +42,7 @@ const logWSMsg = (u: string, d: unknown) => console.info(`WS \u21f3 ${u}`, wsFmt
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
     const {api} = useApi();
+    const {t} = useTranslation();
     const [source, setSource] = useState<IFormat | null>(null);
     const [targetId, setTargetId] = useState<number | null>(null);
     const [targets, setTargets] = useState<IFormat[]>([]);
@@ -51,11 +55,14 @@ const Converter: React.FC = () => {
     const [formats, setFormats] = useState<IFormat[]>([]);
     const [renameOpen, setRenameOpen] = useState(false);
     const [outputName, setOutputName] = useState('');
+    const [remaining, setRemaining] = useState<number | null>(null);
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
     useEffect(() => {
         api.get<IFormat[]>('/api/v1/converter/formats/')
             .then(setFormats);
+        api.get<{remaining: number}>('/api/v1/converter/remaining/')
+            .then(res => setRemaining(res.remaining));
     }, [api]);
 
     useEffect(() => {
@@ -82,7 +89,7 @@ const Converter: React.FC = () => {
             setTargetId(null);
             setSource(fmt);
         } else {
-            Message.error(`Неизвестный формат файла${ext ? ` (.${ext})` : ''}`);
+            Message.error(t('converter_unknown_format', {ext: ext ? ` (.${ext})` : ''}));
             setFile(null);
             setSource(null);
         }
@@ -112,7 +119,7 @@ const Converter: React.FC = () => {
     const handleConvert = () => {
         if (!file || !source || !targetId) return;
         if (outputName.length > 100) {
-            Message.error('File name must be shorter than 100 characters');
+            Message.error(t('converter_file_name_too_long'));
             return;
         }
         const formData = new FormData();
@@ -122,10 +129,11 @@ const Converter: React.FC = () => {
         formData.append('params', JSON.stringify(values));
         if (outputName) formData.append('output_name', outputName);
         setLoading(true);
-        api.post<IConversion>('/api/v1/converter/convert/', formData)
+        api.post<IConvertResult>('/api/v1/converter/convert/', formData)
             .then(data => {
-                setConversion(data);
-                const url = buildWSUrl(`/ws/converter/${data.id}/`);
+                setConversion(data.conversion);
+                setRemaining(data.remaining);
+                const url = buildWSUrl(`/ws/converter/${data.conversion.id}/`);
                 logWSReq(url);
                 const ws = new WebSocket(url);
                 wsRef.current = ws;
@@ -136,6 +144,7 @@ const Converter: React.FC = () => {
                         if (obj.event === 'conversion_done') {
                             setConversion(obj.conversion);
                             setLoading(false);
+                            setTargetId(null);
                             ws.close();
                         }
                     } catch {
@@ -153,6 +162,11 @@ const Converter: React.FC = () => {
     return (
         <FC w={'100%'} px={2} maxW={600} mx={'auto'}>
             <ConverterGuide/>
+            {remaining !== null && (
+                <Typography align="center" fontWeight={600} mt={1}>
+                    {t('converter_remaining', {count: remaining})}
+                </Typography>
+            )}
             <FC grow mt={1}>
                 <FileDropZone file={file} onChange={setFile}/>
             </FC>
@@ -164,7 +178,7 @@ const Converter: React.FC = () => {
                                 <FRSC mt={1}>
                                     <ArrowDropDownRoundedIcon sx={{fontSize: '6rem', m: -3}}/>
                                     <FR fontSize={'1.3rem'} sx={{lineHeight: '1.2rem'}}>
-                                        Выберите формат для конвертации
+                                        {t('converter_select_format')}
                                     </FR>
                                 </FRSC>
                             </Collapse>
@@ -180,7 +194,7 @@ const Converter: React.FC = () => {
                                     {params.length > 0 && (
                                         <Accordion>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                                Параметры
+                                                {t('converter_parameters')}
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <FC g={1}>
@@ -209,13 +223,13 @@ const Converter: React.FC = () => {
                                                 }
                                                 setRenameOpen(true);
                                             }}>
-                                                Изменить имя
+                                                {t('converter_rename')}
                                             </Button>
                                         </FRSC>
                                     </Collapse>
                                     <Collapse in={renameOpen} timeout={400}>
                                         <TextField
-                                            label={'Выходное имя файла'} size="small"
+                                            label={t('converter_output_name')} size="small"
                                             value={outputName}
                                             sx={{
                                                 mt: 1.4, width: '98%',
@@ -257,10 +271,7 @@ const Converter: React.FC = () => {
                             <CircularProgressZoomify h="100%" in={loading} size={44}/>
                             <Collapse in={!loading} orientation="horizontal" unmountOnExit timeout={400}>
                                 <span>
-                                    Convert&nbsp;to&nbsp;
-                                    <span style={{color: theme.colors.primary.main}}>
-                                        {targets.find(t => t.id === targetId)?.name ?? ''}
-                                    </span>
+                                    {t('converter_convert_to', {format: targets.find(t => t.id === targetId)?.name ?? ''})}
                                 </span>
                             </Collapse>
                         </Button>
@@ -274,9 +285,9 @@ const Converter: React.FC = () => {
                                 </Typography>
                             )}
                             <Box mt={1}>
-                                <Button variant="contained" href={`/api/v1/converter/download/${conversion.id}/`}>
-                                    Download
-                                </Button>
+                                <IconButton color="primary" href={`/api/v1/converter/download/${conversion.id}/`}>
+                                    <DownloadRoundedIcon/>
+                                </IconButton>
                             </Box>
                         </Box>
                     )}

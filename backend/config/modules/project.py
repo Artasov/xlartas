@@ -17,3 +17,7 @@ DEFAULT_DEPOSIT_AMOUNT = 100
 
 # Maximum total storage allowed for user file uploads (in bytes)
 STORAGE_LIMIT = 300 * 1024 * 1024  # 300 MB
+
+# Converter
+MAX_CONVERTER_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
+CONVERTER_FILE_RETENTION_DAYS = 60  # 2 months

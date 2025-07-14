@@ -22,3 +22,20 @@ def process_conversion_task(conversion_id: int) -> None:
             'conversion': ConversionSerializer(conversion).data,
         }
     )
+
+
+@shared_task
+def cleanup_conversions() -> None:
+    from django.utils import timezone
+    from datetime import timedelta
+    from django.conf import settings
+    from apps.converter.models import Conversion
+
+    threshold = timezone.now() - timedelta(days=settings.CONVERTER_FILE_RETENTION_DAYS)
+    qs = Conversion.objects.filter(created_at__lt=threshold)
+    for conv in qs:
+        if conv.input_file:
+            conv.input_file.delete(save=False)
+        if conv.output_file:
+            conv.output_file.delete(save=False)
+    qs.delete()

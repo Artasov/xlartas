@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Collapse, Paper, Typography} from '@mui/material';
 import {FC} from 'wide-containers';
+import {useTranslation} from 'react-i18next';
 
 /**
  * Гайд-подсказка для конвертера.
@@ -15,6 +16,7 @@ const LOCAL_STORAGE_KEY = 'converterGuideHidden';
 
 const ConverterGuide: React.FC = () => {
     const [open, setOpen] = useState(false);
+    const {t} = useTranslation();
 
     /* ---------- 🪄 Считываем состояние из localStorage при инициализации ---------- */
     useEffect(() => {
@@ -32,18 +34,16 @@ const ConverterGuide: React.FC = () => {
         <Collapse in={open} mountOnEnter unmountOnExit timeout={400}>
             <Paper elevation={1} sx={{p: 2}}>
                 <FC g={1}>
-                    <Typography variant="h6">Как пользоваться конвертером</Typography>
+                    <Typography variant="h6">{t('converter_guide_title')}</Typography>
 
-                    <Typography variant="body2">1. Перетащите файл или кликните, чтобы выбрать его.</Typography>
-                    <Typography variant="body2">2. Проверьте, что исходный формат определился корректно.</Typography>
-                    <Typography variant="body2">3. Выберите целевой формат и, при необходимости, задайте
-                        параметры.</Typography>
-                    <Typography variant="body2">4. Нажмите «Convert» и дождитесь окончания обработки, затем скачайте
-                        результат.</Typography>
+                    <Typography variant="body2">{t('converter_guide_step1')}</Typography>
+                    <Typography variant="body2">{t('converter_guide_step2')}</Typography>
+                    <Typography variant="body2">{t('converter_guide_step3')}</Typography>
+                    <Typography variant="body2">{t('converter_guide_step4')}</Typography>
 
                     <Box mt={2}>
                         <Button size="small" onClick={handleClose} sx={{fontWeight: 'bold'}}>
-                            Больше не показывать
+                            {t('converter_hide')}
                         </Button>
                     </Box>
                 </FC>

@@ -4,6 +4,7 @@ import os
 import sys
 
 from adjango.utils.crontab import Crontab
+from celery.schedules import crontab
 from celery import Celery
 from django.apps import apps
 
@@ -31,5 +32,9 @@ app.conf.beat_schedule = {
     'send_mailing': {
         'task': 'apps.mailing.tasks.check_and_send_mailings',
         'schedule': Crontab.every(minutes=1),
+    },
+    'cleanup_conversions': {
+        'task': 'apps.converter.tasks.cleanup_conversions',
+        'schedule': crontab(hour=3, minute=0),
     },
 }

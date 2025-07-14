@@ -14,9 +14,11 @@ except Exception:  # pragma: no cover - pydub may not be installed
     AudioSegment = None
 
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.converter.models import Conversion, Format
 from apps.core.models import User
+from django.conf import settings
 
 
 class BaseConverter(ABC):
@@ -105,6 +107,7 @@ class AudioConverter(BaseConverter):
 class ConversionService:
     RATE_LIMIT_ANON = 10
     RATE_LIMIT_AUTH = 50
+    MAX_FILE_SIZE = settings.MAX_CONVERTER_FILE_SIZE
 
     AUDIO_FORMATS = {"mp3", "wav", "ogg", "flac", "aac"}
     IMAGE_FORMATS = {"jpg", "jpeg", "png", "gif", "bmp", "tiff"}
@@ -135,6 +138,20 @@ class ConversionService:
         return count < limit
 
     @classmethod
+    async def remaining_attempts(cls, user: Optional[User], ip: str) -> int:
+        time_threshold = timezone.now() - timedelta(hours=1)
+        qs = Conversion.objects.filter(created_at__gte=time_threshold, ip=ip)
+        if user:
+            qs = qs.filter(user=user)
+            limit = cls.RATE_LIMIT_AUTH
+        else:
+            qs = qs.filter(user__isnull=True)
+            limit = cls.RATE_LIMIT_ANON
+        count = await qs.acount()
+        remaining = limit - count
+        return remaining if remaining > 0 else 0
+
+    @classmethod
     async def create(
             cls,
             *,
@@ -146,8 +163,10 @@ class ConversionService:
             params: dict | None = None,
             output_name: str | None = None,
     ) -> Conversion:
+        if input_file.size > cls.MAX_FILE_SIZE:
+            raise ValueError(_('File too large'))
         if not await cls.check_rate_limit(user, ip):
-            raise ValueError('Rate limit exceeded')
+            raise ValueError(_('Rate limit exceeded'))
         conversion = await Conversion.objects.acreate(
             user=user,
             ip=ip,
