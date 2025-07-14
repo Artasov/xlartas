@@ -161,7 +161,7 @@ class DateRange:
             current += timedelta(days=1)
         return True
 
-    def append(self, minutes: int = 0, hours: int = 0, days: int = 0, months: int = 0, years: int = 0):
+    def append(self, minutes: int = 0, hours: int = 0, days: int = 0, months: int = 0, years: int = 0) -> None:
         """
         @param minutes: Количество минут для добавления (int).
         @param hours: Количество часов для добавления (int).
@@ -173,7 +173,7 @@ class DateRange:
         self.end += timedelta(minutes=minutes, hours=hours, days=days)
         self.end += relativedelta(months=months, years=years)
 
-    def prepend(self, minutes: int = 0, hours: int = 0, days: int = 0, months: int = 0, years: int = 0):
+    def prepend(self, minutes: int = 0, hours: int = 0, days: int = 0, months: int = 0, years: int = 0) -> None:
         """
         @param minutes: Количество минут для добавления к началу (int).
         @param hours: Количество часов для добавления к началу (int).
