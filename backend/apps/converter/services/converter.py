@@ -80,8 +80,9 @@ class ConversionService:
     def __init__(self, conversion: Conversion):
         self.conversion = conversion
 
-    def detect_converter(self) -> Type[BaseConverter]:
-        fmt = self.conversion.target_format.name.lower()
+    async def detect_converter(self) -> Type[BaseConverter]:
+        target = await self.conversion.arelated('target_format')
+        fmt = target.name.lower()
         if fmt in self.AUDIO_FORMATS:
             return AudioConverter
         if fmt in self.IMAGE_FORMATS:
@@ -103,14 +104,14 @@ class ConversionService:
 
     @classmethod
     async def create(
-        cls,
-        *,
-        user: Optional[User],
-        ip: str,
-        input_file,
-        source_format: Format,
-        target_format: Format,
-        params: dict | None = None,
+            cls,
+            *,
+            user: Optional[User],
+            ip: str,
+            input_file,
+            source_format: Format,
+            target_format: Format,
+            params: dict | None = None,
     ) -> Conversion:
         if not await cls.check_rate_limit(user, ip):
             raise ValueError('Rate limit exceeded')
@@ -127,6 +128,6 @@ class ConversionService:
         return conversion
 
     async def perform(self, converter_cls: Type[BaseConverter] | None = None) -> None:
-        converter_cls = converter_cls or self.detect_converter()
+        converter_cls = converter_cls or await self.detect_converter()
         converter = converter_cls(self.conversion)
         await converter.convert()
