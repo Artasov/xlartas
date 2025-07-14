@@ -8,7 +8,8 @@ import {
     Button,
     Collapse,
     Typography,
-    useMediaQuery
+    useMediaQuery,
+    TextField
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
@@ -23,6 +24,7 @@ import {useTheme} from 'Modules/Theme/ThemeContext';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import {buildWSUrl} from 'Utils/ws';
+import formatFileSize from 'Utils/formatFileSize';
 
 const wsFmt = (x: unknown) => {
     if (typeof x === 'string') {
@@ -47,6 +49,8 @@ const Converter: React.FC = () => {
     const [conversion, setConversion] = useState<IConversion | null>(null);
     const wsRef = useRef<WebSocket | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
+    const [renameOpen, setRenameOpen] = useState(false);
+    const [outputName, setOutputName] = useState('');
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
     useEffect(() => {
@@ -84,6 +88,22 @@ const Converter: React.FC = () => {
         }
     }, [file, formats]);
 
+    useEffect(() => {
+        if (!file || !targetId) {
+            setOutputName('');
+            return;
+        }
+        const target = targets.find(t => t.id === targetId);
+        if (!target) return;
+        const base = file.name.replace(/\.[^/.]+$/, '');
+        const defName = `${base}.${target.name}`;
+        if (!renameOpen || outputName === '') {
+            setOutputName(defName);
+        } else if (renameOpen) {
+            setOutputName(prev => `${prev.replace(/\.[^/.]+$/, '')}.${target.name}`);
+        }
+    }, [file, targetId, targets, renameOpen, outputName]);
+
     useEffect(() => () => {
         wsRef.current?.close();
     }, []);
@@ -91,11 +111,16 @@ const Converter: React.FC = () => {
 
     const handleConvert = () => {
         if (!file || !source || !targetId) return;
+        if (outputName.length > 100) {
+            Message.error('File name must be shorter than 100 characters');
+            return;
+        }
         const formData = new FormData();
         formData.append('file', file);
         formData.append('source_format', String(source.id));
         formData.append('target_format', String(targetId));
         formData.append('params', JSON.stringify(values));
+        if (outputName) formData.append('output_name', outputName);
         setLoading(true);
         api.post<IConversion>('/api/v1/converter/convert/', formData)
             .then(data => {
@@ -130,12 +155,17 @@ const Converter: React.FC = () => {
             <ConverterGuide/>
             <FC grow mt={1}>
                 <FileDropZone file={file} onChange={setFile}/>
+                {file && (
+                    <Typography variant="caption" mt={1}>
+                        {formatFileSize(file.size)}
+                    </Typography>
+                )}
                 {conversion?.is_done && conversion.output_file && (
                     <Box mt={1}>
                         <Typography>{conversion.output_file.split('/').pop()}</Typography>
                         {typeof conversion.size === 'number' && (
                             <Typography variant="caption">
-                                {(conversion.size / 1024).toFixed(1)} KB
+                                {formatFileSize(conversion.size)}
                             </Typography>
                         )}
                         <Box mt={1}>
@@ -185,6 +215,23 @@ const Converter: React.FC = () => {
                                             </AccordionDetails>
                                         </Accordion>
                                     )}
+                                    <FC>
+                                        <Collapse in={!renameOpen} orientation="horizontal" unmountOnExit timeout={400}>
+                                            <Button onClick={() => {
+                                                if (!renameOpen) {
+                                                    const target = targets.find(t => t.id === targetId);
+                                                    const base = file?.name.replace(/\.[^/.]+$/, '') ?? '';
+                                                    if (target) setOutputName(`${base}.${target.name}`);
+                                                }
+                                                setRenameOpen(true);
+                                            }}>
+                                                Изменить имя
+                                            </Button>
+                                        </Collapse>
+                                        <Collapse in={renameOpen} orientation="horizontal" timeout={400}>
+                                            <TextField fullWidth size="small" value={outputName} onChange={e => setOutputName(e.target.value)}/>
+                                        </Collapse>
+                                    </FC>
                                 </FC>
                             </Collapse>
                         </FC>
