@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useApi} from 'Api/useApi';
 import {
     Accordion,
@@ -7,9 +7,9 @@ import {
     Box,
     Button,
     Collapse,
+    TextField,
     Typography,
-    useMediaQuery,
-    TextField
+    useMediaQuery
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
@@ -155,11 +155,6 @@ const Converter: React.FC = () => {
             <ConverterGuide/>
             <FC grow mt={1}>
                 <FileDropZone file={file} onChange={setFile}/>
-                {file && (
-                    <Typography variant="caption" mt={1}>
-                        {formatFileSize(file.size)}
-                    </Typography>
-                )}
                 {conversion?.is_done && conversion.output_file && (
                     <Box mt={1}>
                         <Typography>{conversion.output_file.split('/').pop()}</Typography>
@@ -198,7 +193,7 @@ const Converter: React.FC = () => {
                                 />
                             </FC>
                             <Collapse in={Boolean(targetId)} unmountOnExit timeout={400}>
-                                <FC g={1} mt={1}>
+                                <FC mt={1}>
                                     {params.length > 0 && (
                                         <Accordion>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
@@ -215,8 +210,14 @@ const Converter: React.FC = () => {
                                             </AccordionDetails>
                                         </Accordion>
                                     )}
-                                    <FC>
-                                        <Collapse in={!renameOpen} orientation="horizontal" unmountOnExit timeout={400}>
+                                    <Collapse in={!renameOpen} unmountOnExit timeout={400}>
+                                        <FRSC mt={1} g={1}>
+                                            <Typography variant={'h6'} sx={{
+                                                color: plt.text.primary,
+                                                fontWeight: '600'
+                                            }}>
+                                                {outputName}
+                                            </Typography>
                                             <Button onClick={() => {
                                                 if (!renameOpen) {
                                                     const target = targets.find(t => t.id === targetId);
@@ -227,11 +228,19 @@ const Converter: React.FC = () => {
                                             }}>
                                                 Изменить имя
                                             </Button>
-                                        </Collapse>
-                                        <Collapse in={renameOpen} orientation="horizontal" timeout={400}>
-                                            <TextField fullWidth size="small" value={outputName} onChange={e => setOutputName(e.target.value)}/>
-                                        </Collapse>
-                                    </FC>
+                                        </FRSC>
+                                    </Collapse>
+                                    <Collapse in={renameOpen} timeout={400}>
+                                        <TextField label={'Выходное имя файла'} size="small"
+                                                   value={outputName} sx={{
+                                            mt: 1, width: '98%',
+                                            '& .MuiInputBase-input': {
+
+                                                fontSize: '1.4rem'
+                                            }
+                                        }}
+                                                   onChange={e => setOutputName(e.target.value)}/>
+                                    </Collapse>
                                 </FC>
                             </Collapse>
                         </FC>
@@ -246,7 +255,7 @@ const Converter: React.FC = () => {
                                 fontWeight: '900',
                                 letterSpacing: isGtSm ? '.2rem' : '.07rem',
                                 paddingBottom: '.6em',
-                                fontSize: isGtSm ? '2rem': '1.5rem',
+                                fontSize: isGtSm ? '2rem' : '1.5rem',
                                 width: '100%',
                                 minHeight: '2.2em',
                                 backgroundColor: '#ffffff',

@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import {useTheme} from 'Modules/Theme/ThemeContext';
+import {FR} from "wide-containers";
+import formatFileSize from "Utils/formatFileSize";
 
 interface Props {
     file: File | null;
@@ -58,7 +60,17 @@ const FileDropZone: React.FC<Props> = ({file, onChange}) => {
             onDragLeave={() => setOver(false)}
             onDrop={handleDrop}
         >
-            {over ? 'Бросай' : file ? file.name : 'Select file for convert'}
+            {over ? 'Бросай' : file
+                ? <FR>
+                    {file.name}
+                    {file && (
+                        <Typography variant="caption" fontSize={'.9rem'} mt={'auto'} sx={{mb: .2, ml: .5}}>
+                            {formatFileSize(file.size)}
+                        </Typography>
+                    )}
+                </FR>
+                : 'Select file for convert'
+            }
             <input hidden type="file" onChange={e => onChange(e.target.files?.[0] || null)}/>
         </Box>
     );

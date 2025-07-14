@@ -44,13 +44,45 @@ class DummyConverter(BaseConverter):
 
 class ImageConverter(BaseConverter):
     async def convert(self) -> None:
+        """
+        Конвертируем изображение в требуемый формат, корректируя режим,
+        если целевой формат не поддерживает альфу (например, JPEG).
+        Pillow выбросит «cannot write mode RGBA as JPEG», если попытаться
+        сохранить картинку с альфа-каналом напрямую – поэтому переводим
+        такие изображения в RGB или «сплющиваем» их на белый фон.
+        """
         src = self.conversion.input_file.path
-        dst = src + f'.{self.conversion.target_format.name}'
-        if Image:
-            with Image.open(src) as img:
-                img.save(dst, self.conversion.target_format.name.upper())
-        else:  # pragma: no cover - fallback when Pillow missing
+        ext = self.conversion.target_format.name.lower()  # 'jpg', 'png', …
+        dst = f"{src}.{ext}"
+
+        if Image:  # Pillow установлен
+            # '.jpg' → 'JPEG', '.tif' → 'TIFF', и т. д.
+            save_fmt = Image.registered_extensions().get(f".{ext}", ext.upper())
+
+            with Image.open(src) as im:
+                img = im  # не трогаем оригинал
+
+                # --- JPEG не умеет прозрачность и CMYK → преобразуем в RGB ---
+                if save_fmt in {"JPEG", "JPG", "JFIF"}:
+                    if img.mode in {"RGBA", "LA", "P"}:
+                        # «Сплющиваем» на белый фон, сохраняя изображение
+                        bg = Image.new("RGB", img.size, (255, 255, 255))
+
+                        # P-палитру сначала в RGBA → получаем альфу
+                        if img.mode == "P":
+                            img = img.convert("RGBA")
+
+                        alpha = img.split()[-1] if img.mode in {"RGBA", "LA"} else None
+                        bg.paste(img.convert("RGBA"), mask=alpha)
+                        img = bg
+                    elif img.mode != "RGB":  # CMYK, 1, I, …
+                        img = img.convert("RGB")
+
+                # --- сохраняем ---
+                img.save(dst, save_fmt)
+        else:  # pragma: no cover
             shutil.copy(src, dst)
+
         self.conversion.output_file.name = dst
         self.conversion.is_done = True
         await self.conversion.asave()

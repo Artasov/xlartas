@@ -45,7 +45,7 @@ export const darkTheme = createTheme({
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                    backgroundColor: '#ffffff0b',
+                    backgroundColor: '#ffffff0d',
                 },
             },
         },
@@ -156,7 +156,7 @@ export const darkTheme = createTheme({
                     color: '#ffffff',
                     lineHeight: '1em',
                     padding: '.6em 1em .5em 1em',
-                    backgroundColor: '#ffffff0b',
+                    backgroundColor: '#ffffff0d',
                     backdropFilter: 'blur(5px) saturate(180%)',
                     transition: 'transform 220ms ease-in-out, color 340ms ease, background-color 340ms ease',
                     '&:hover': {
@@ -272,6 +272,19 @@ export const darkTheme = createTheme({
                     },
                     '&.Mui-disabled': {
                         opacity: 0.3,
+                    },
+                },
+            },
+        },
+        MuiAccordion: {
+            styleOverrides: {
+                root: {
+                    /* базовый отступ снизу у свёрнутого аккордиона */
+                    marginBottom: 0,
+
+                    /* убираем нижний отступ, когда аккордион развёрнут */
+                    '&.Mui-expanded': {
+                        marginBottom: 0,
                     },
                 },
             },
