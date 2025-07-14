@@ -18,6 +18,10 @@ from apps.tbank.types import (
     ItemFFD105,
     Payments,
     OperationInitiatorType,
+    PaymentMethod,
+    PaymentObject,
+    Tax,
+    Taxation,
 )
 
 if TYPE_CHECKING:
@@ -52,9 +56,9 @@ class TBankPaymentProvider(_TBankBaseProvider):
             Price=price_cents,
             Quantity=1,
             Amount=price_cents,
-            PaymentMethod='full_payment',
-            PaymentObject='service',
-            Tax='none',
+            PaymentMethod=PaymentMethod.FULL_PAYMENT,
+            PaymentObject=PaymentObject.SERVICE,
+            Tax=Tax.NONE,
         )]
 
         response = await tbank.Init(
@@ -64,7 +68,7 @@ class TBankPaymentProvider(_TBankBaseProvider):
                 Items=items,
                 Email=self.order.user.email,
                 Phone=self.order.user.phone,
-                Taxation='usn_income',
+                Taxation=Taxation.USN_INCOME,
                 Payments=Payments(Electronic=price_cents),
             ),
             customer_key=customer_key,

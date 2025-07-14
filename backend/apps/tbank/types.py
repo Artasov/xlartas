@@ -1,33 +1,57 @@
 # tbank/types.py
 """Typed structures and enums used by the TBank client."""
 from enum import Enum
-from typing import Literal, Optional, TypedDict
+from typing import Optional, TypedDict
 
-PaymentMethod = Literal[
-    'full_prepayment',  # предоплата 100%
-    'prepayment',  # предоплата
-    'advance',  # аванс
-    'full_payment',  # полный расчет
-    'partial_payment',  # частичный расчет и кредит
-    'credit',  # передача в кредит
-    'credit_payment'  # оплата кредита
-]
+class PaymentMethod(str, Enum):
+    """Method of payment."""
 
-PaymentObject = Literal[
-    'commodity',  # товар
-    'excise',  # подакцизный товар
-    'job',  # работа
-    'service',  # услуга
-    'gambling_bet',  # ставка азартной игры
-    'gambling_prize',  # выигрыш азартной игры
-    'lottery',  # лотерейный билет
-    'lottery_prize',  # выигрыш лотереи
-    'intellectual_activity',  # предоставление результатов интеллектуальной деятельности
-    'payment',  # платеж
-    'agent_commission',  # агентское вознаграждение
-    'composite',  # составной предмет расчета
-    'another'  # иной предмет расчета
-]
+    FULL_PREPAYMENT = 'full_prepayment'
+    PREPAYMENT = 'prepayment'
+    ADVANCE = 'advance'
+    FULL_PAYMENT = 'full_payment'
+    PARTIAL_PAYMENT = 'partial_payment'
+    CREDIT = 'credit'
+    CREDIT_PAYMENT = 'credit_payment'
+
+class PaymentObject(str, Enum):
+    """Kind of paid item."""
+
+    COMMODITY = 'commodity'
+    EXCISE = 'excise'
+    JOB = 'job'
+    SERVICE = 'service'
+    GAMBLING_BET = 'gambling_bet'
+    GAMBLING_PRIZE = 'gambling_prize'
+    LOTTERY = 'lottery'
+    LOTTERY_PRIZE = 'lottery_prize'
+    INTELLECTUAL_ACTIVITY = 'intellectual_activity'
+    PAYMENT = 'payment'
+    AGENT_COMMISSION = 'agent_commission'
+    COMPOSITE = 'composite'
+    ANOTHER = 'another'
+
+
+class Tax(str, Enum):
+    """VAT rate for a position."""
+
+    NONE = 'none'
+    VAT0 = 'vat0'
+    VAT10 = 'vat10'
+    VAT20 = 'vat20'
+    VAT110 = 'vat110'
+    VAT120 = 'vat120'
+
+
+class Taxation(str, Enum):
+    """Merchant taxation system."""
+
+    OSN = 'osn'
+    USN_INCOME = 'usn_income'
+    USN_INCOME_OUTCOME = 'usn_income_outcome'
+    ENVD = 'envd'
+    ESN = 'esn'
+    PATENT = 'patent'
 
 
 class AgentData(TypedDict, total=False):
@@ -54,7 +78,7 @@ class ItemFFD105(TypedDict, total=False):
     Amount: int | float
     PaymentMethod: PaymentMethod | None
     PaymentObject: PaymentObject | None
-    Tax: Literal['none', 'vat0', 'vat10', 'vat20', 'vat110', 'vat120']
+    Tax: Tax
     AgentData: AgentData | None
     SupplierInfo: SupplierInfo | None
     Ean13: Optional[str]
@@ -82,9 +106,7 @@ class ReceiptFFD105(TypedDict, total=False):
     FfdVersion: Optional[str]
     Email: Optional[str]
     Phone: Optional[str]
-    Taxation: Literal[
-        'osn', 'usn_income', 'usn_income_outcome', 'envd', 'esn', 'patent'
-    ]
+    Taxation: Taxation
     Payments: Payments | None
     Shops: list[Shops] | None
 
