@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Box, Button, CircularProgress, Typography, Accordion, AccordionSummary, AccordionDetails} from '@mui/material';
+import {Box, Button, CircularProgress, Typography, Accordion, AccordionSummary, AccordionDetails, Collapse} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDropZone from 'UI/FileDropZone';
 import FormatPicker from './FormatPicker';
@@ -145,8 +145,9 @@ const Converter: React.FC = () => {
                         )}
                     </FC>
 
-                    <Box mt={2}>
-                        <Button
+                    <Collapse in={Boolean(targetId)}>
+                        <Box mt={2}>
+                            <Button
                             sx={{
                                 fontWeight: '900',
                                 letterSpacing: '.2rem',
@@ -161,7 +162,8 @@ const Converter: React.FC = () => {
                         >
                             {loading ? <CircularProgressZoomify h={'100%'} in size={44}/> : `Convert to ${targets.find(t => t.id === targetId)?.name ?? ''}`}
                         </Button>
-                    </Box>
+                        </Box>
+                    </Collapse>
                 </FC>
             )}
         </FC>
