@@ -3,8 +3,11 @@ from django.urls import re_path
 
 from apps.software.consumers.macros import MacroControlConsumer
 from apps.software.consumers.screen import ScreenStreamConsumer
+from apps.converter.routes.ws import websocket_urlpatterns as converter_ws
 
 websocket_urlpatterns = [
     re_path(r'^ws/macro-control/$', MacroControlConsumer.as_asgi()),
     re_path(r'^ws/screen-stream/$', ScreenStreamConsumer.as_asgi()),
 ]
+
+websocket_urlpatterns += converter_ws

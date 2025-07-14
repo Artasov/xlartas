@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useApi} from 'Api/useApi';
 import {
     Accordion,
@@ -22,6 +22,7 @@ import CircularProgressZoomify from "Core/components/elements/CircularProgressZo
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import {buildWSUrl} from 'Utils/ws';
 
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
@@ -34,7 +35,7 @@ const Converter: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [conversion, setConversion] = useState<IConversion | null>(null);
-    const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
+    const wsRef = useRef<WebSocket | null>(null);
     const [formats, setFormats] = useState<IFormat[]>([]);
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
@@ -73,24 +74,10 @@ const Converter: React.FC = () => {
         }
     }, [file, formats]);
 
-    const pollStatus = (id: number) => {
-        const t = setInterval(() => {
-            api.get<IConversion>(`/api/v1/converter/conversion/${id}/`)
-                .then(data => {
-                    setConversion(data);
-                    if (data.is_done) {
-                        clearInterval(t);
-                        setTimer(null);
-                        setLoading(false);
-                    }
-                });
-        }, 2000);
-        setTimer(t);
-    };
-
     useEffect(() => () => {
-        if (timer) clearInterval(timer);
-    }, [timer]);
+        wsRef.current?.close();
+    }, []);
+
 
     const handleConvert = () => {
         if (!file || !source || !targetId) return;
@@ -103,7 +90,23 @@ const Converter: React.FC = () => {
         api.post<IConversion>('/api/v1/converter/convert/', formData)
             .then(data => {
                 setConversion(data);
-                pollStatus(data.id);
+                const ws = new WebSocket(buildWSUrl(`/ws/converter/${data.id}/`));
+                wsRef.current = ws;
+                ws.onmessage = e => {
+                    try {
+                        const obj = JSON.parse(e.data);
+                        if (obj.event === 'conversion_done') {
+                            setConversion(obj.conversion);
+                            setLoading(false);
+                            ws.close();
+                        }
+                    } catch {
+                        /* ignore */
+                    }
+                };
+                ws.onclose = () => {
+                    wsRef.current = null;
+                };
             })
             .catch(() => setLoading(false));
     };
