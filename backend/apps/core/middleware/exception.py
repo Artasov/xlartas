@@ -1,8 +1,9 @@
 # core/middleware/exception.py
-from utils.log import get_global_logger
 import traceback
 
 from django.utils.deprecation import MiddlewareMixin
+
+from utils.log import get_global_logger
 
 
 class ExceptionLoggingMiddleware(MiddlewareMixin):

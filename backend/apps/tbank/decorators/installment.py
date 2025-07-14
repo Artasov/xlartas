@@ -1,5 +1,4 @@
 # tbank/decorators/installment.py
-from utils.log import get_global_logger
 from functools import wraps
 
 import dateutil.parser
@@ -11,6 +10,7 @@ from rest_framework.response import Response
 from apps.commerce.models import Order
 from apps.tbank.exceptions.base import TBankException
 from apps.tbank.models import TBankInstallment
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

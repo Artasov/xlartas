@@ -1,7 +1,7 @@
 // Modules/FileHost/Master.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {useApi} from 'Api/useApi';
-import {IFile, IFolder} from './types';
+import {IFile} from './types';
 import FileGrid from './FileGrid';
 import FileTable from './FileTable';
 import {FC, FR, FRBC, FRSE} from 'wide-containers';

@@ -1,3 +1,4 @@
+// theme/overrides/accordion.ts
 import {ThemeOptions} from '@mui/material/styles';
 
 const accordionOverrides: ThemeOptions['components'] = {

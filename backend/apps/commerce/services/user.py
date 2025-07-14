@@ -1,5 +1,4 @@
 # commerce/services/user.py
-from utils.log import get_global_logger
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Optional
 
@@ -8,6 +7,7 @@ from django.db.models import Sum
 from django.utils import timezone
 
 from apps.core.services.user.base import UserBaseService
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

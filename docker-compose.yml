@@ -174,33 +174,33 @@ services:
       restart_policy:
         condition: on-failure
 
-#  flower:
-#    hostname: flower
-#    image: localhost:5000/iflower:latest
-#    environment:
-#      - FLOWER_USER=${FLOWER_USER}
-#      - FLOWER_PASSWORD=${FLOWER_PASSWORD}
-#    volumes:
-#      - ./backend/logs:/srv/backend/logs
-#      - ./entrypoint_flower.sh:/srv/entrypoint_flower.sh
-#    ports:
-#      - "5555:5555"
-#    networks:
-#      - net
-#    deploy:
-#      replicas: 1
-#      update_config:
-#        parallelism: 1
-#        delay: 10s
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: '0.5'
-#          memory: 256M
-#        reservations:
-#          cpus: '0.25'
-#          memory: 128M
+  #  flower:
+  #    hostname: flower
+  #    image: localhost:5000/iflower:latest
+  #    environment:
+  #      - FLOWER_USER=${FLOWER_USER}
+  #      - FLOWER_PASSWORD=${FLOWER_PASSWORD}
+  #    volumes:
+  #      - ./backend/logs:/srv/backend/logs
+  #      - ./entrypoint_flower.sh:/srv/entrypoint_flower.sh
+  #    ports:
+  #      - "5555:5555"
+  #    networks:
+  #      - net
+  #    deploy:
+  #      replicas: 1
+  #      update_config:
+  #        parallelism: 1
+  #        delay: 10s
+  #      restart_policy:
+  #        condition: on-failure
+  #      resources:
+  #        limits:
+  #          cpus: '0.5'
+  #          memory: 256M
+  #        reservations:
+  #          cpus: '0.25'
+  #          memory: 128M
 
   # --- sonar stack -------------------------------------------------
   sonardb:

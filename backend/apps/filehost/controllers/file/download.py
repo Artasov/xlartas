@@ -1,5 +1,4 @@
 # filehost/controllers/file/download.py
-from utils.log import get_global_logger
 import os
 import shutil
 
@@ -13,6 +12,7 @@ from rest_framework.response import Response
 
 from apps.filehost.models import Folder, File
 from apps.filehost.services.archive import create_archive
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

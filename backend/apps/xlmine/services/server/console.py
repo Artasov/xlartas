@@ -1,10 +1,10 @@
 # xlmine/services/server/console.py
 
-from utils.log import get_global_logger
-
 from adjango.utils.common import traceback_str
 from django.conf import settings
 from mcrcon import MCRcon
+
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

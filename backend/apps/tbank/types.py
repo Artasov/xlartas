@@ -3,6 +3,7 @@
 from enum import Enum
 from typing import Optional, TypedDict
 
+
 class PaymentMethod(str, Enum):
     """Method of payment."""
 
@@ -13,6 +14,7 @@ class PaymentMethod(str, Enum):
     PARTIAL_PAYMENT = 'partial_payment'
     CREDIT = 'credit'
     CREDIT_PAYMENT = 'credit_payment'
+
 
 class PaymentObject(str, Enum):
     """Kind of paid item."""

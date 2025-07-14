@@ -12,11 +12,11 @@ from apps.commerce.models import Client
 from apps.commerce.serializers.client import ClientPublicSerializer, ClientUpdateSerializer
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
-from apps.core.services.credential import check_credential_exists
 from apps.core.serializers.user.base import (
     UserSelfSerializer, UserUsernameSerializer,
     UserUpdateSerializer, UserAvatarSerializer
 )
+from apps.core.services.credential import check_credential_exists
 
 
 @acontroller('Get current user json info')

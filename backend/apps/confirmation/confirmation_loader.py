@@ -1,11 +1,12 @@
 # confirmation/confirmation_loader.py
 import importlib
-from utils.log import get_global_logger
 import os
 from typing import TYPE_CHECKING
 
 from adjango.utils.common import traceback_str
 from django.conf import settings
+
+from utils.log import get_global_logger
 
 if TYPE_CHECKING: from apps.confirmation.services.actions import ConfirmationAction
 

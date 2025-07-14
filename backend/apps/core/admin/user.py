@@ -1,6 +1,4 @@
 # core/admin/user.py
-from utils.log import get_global_logger
-
 from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin, messages
 from django.db import transaction
@@ -13,6 +11,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from apps.core.models import User, Role
 from apps.xlmine.tasks import teleport_world_scan
+from utils.log import get_global_logger
 
 admin.site.site_header = 'xlartas'
 admin.site.site_title = 'xlartas'

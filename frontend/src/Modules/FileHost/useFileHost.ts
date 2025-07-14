@@ -2,7 +2,13 @@
 import {useApi} from 'Api/useApi';
 import {useEffect, useState} from 'react';
 import {IFile, IFolder} from './types';
-import {FolderContent, getFolderCached, setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
+import {
+    FolderContent,
+    getFolderCached,
+    setAllFilesCached,
+    setFavoriteFilesCached,
+    setFolderCached
+} from './storageCache';
 
 const useFileHost = (folderId: number | null) => {
     const {api} = useApi();

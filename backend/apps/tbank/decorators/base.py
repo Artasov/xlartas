@@ -1,6 +1,5 @@
 # tbank/decorators/base.py
 
-from utils.log import get_global_logger
 from functools import wraps
 
 from adjango.utils.common import traceback_str
@@ -14,6 +13,7 @@ from apps.tbank.consts import TBANK_NOTIFICATION_ALLOWED_URLS
 from apps.tbank.exceptions.base import TBankException
 from apps.tbank.models import TBankPayment
 from apps.tbank.services.payment import TBankPaymentService
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

@@ -1,3 +1,4 @@
+// theme/overrides/tabs.ts
 import {ThemeOptions} from '@mui/material/styles';
 
 const tabsOverrides: ThemeOptions['components'] = {

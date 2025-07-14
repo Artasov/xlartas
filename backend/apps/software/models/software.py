@@ -1,5 +1,4 @@
 # software/models/software.py
-from utils.log import get_global_logger
 from typing import TYPE_CHECKING
 
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin, ACreatedAtIndexedMixin
@@ -18,6 +17,7 @@ from apps.software.exceptions.software import SoftwareException
 from apps.software.services.license import SoftwareLicenseService
 from apps.software.services.order import SoftwareOrderService
 from apps.software.services.software import SoftwareService
+from utils.log import get_global_logger
 
 if TYPE_CHECKING:
     from apps.commerce.models.product import ProductPrice

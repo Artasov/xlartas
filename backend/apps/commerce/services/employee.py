@@ -1,11 +1,12 @@
 # commerce/services/employee.py
-from utils.log import get_global_logger
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
+
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

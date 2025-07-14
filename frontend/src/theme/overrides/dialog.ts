@@ -1,3 +1,4 @@
+// theme/overrides/dialog.ts
 import {Grow} from '@mui/material';
 import {ThemeOptions} from '@mui/material/styles';
 

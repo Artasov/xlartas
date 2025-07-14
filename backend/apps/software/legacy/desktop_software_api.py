@@ -1,7 +1,6 @@
 # software/legacy/desktop_software_api.py
 
 import json
-from utils.log import get_global_logger
 
 from adrf.decorators import api_view
 from django.utils import timezone
@@ -13,6 +12,7 @@ from rest_framework.response import Response
 
 from apps.core.models import User
 from apps.software.models import Software, SoftwareLicense
+from utils.log import get_global_logger
 from .utils import get_user_by_credentials, json_response
 
 log = get_global_logger()

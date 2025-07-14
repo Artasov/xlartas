@@ -1,6 +1,4 @@
 # converter/controllers/base.py
-from utils.log import get_global_logger
-
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from django.http import FileResponse, HttpResponseNotFound
@@ -15,6 +13,7 @@ from apps.converter.serializers import (
     ConversionSerializer, FormatSerializer, ParameterSerializer
 )
 from apps.converter.services import ConversionService
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

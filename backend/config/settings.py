@@ -1,5 +1,3 @@
-from utils.log import get_global_logger
-
 from adjango.utils.common import is_celery
 from django.utils.translation import gettext_lazy as _
 
@@ -23,6 +21,7 @@ from config.modules.storage import *
 from config.modules.third_party_services import *
 from config.modules.ws import *
 from config.modules.xl_dashboard import *
+from utils.log import get_global_logger
 
 log = get_global_logger()
 log.info('#####################################')

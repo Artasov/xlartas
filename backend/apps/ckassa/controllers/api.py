@@ -1,5 +1,4 @@
 # ckassa/controllers/api.py
-from utils.log import get_global_logger
 from typing import Any, Dict
 
 from adjango.adecorators import acontroller, aatomic
@@ -13,6 +12,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from apps.ckassa.consts import CKASSA_NOTIFICATION_ALLOWED_URLS
 from apps.ckassa.models import CKassaPayment
 from apps.commerce.models import Order
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

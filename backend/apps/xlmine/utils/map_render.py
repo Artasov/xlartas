@@ -1,8 +1,8 @@
 # xlmine/utils/map_render.py
-from utils.log import get_global_logger
 import time
 
 from apps.xlmine.services.server.console import RconServerConsole
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

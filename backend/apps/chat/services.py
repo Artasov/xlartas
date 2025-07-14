@@ -1,9 +1,10 @@
 # chat/services.py
-from utils.log import get_global_logger
 from typing import TYPE_CHECKING
 
 from adjango.utils.base import AsyncAtomicContextManager
 from django.db.models import Count
+
+from utils.log import get_global_logger
 
 if TYPE_CHECKING:
     from apps.core.models import User

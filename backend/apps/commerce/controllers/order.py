@@ -1,6 +1,4 @@
 # commerce/controllers/order.py
-from utils.log import get_global_logger
-
 from adjango.adecorators import acontroller
 from adjango.aserializers import ASerializer
 from adjango.utils.base import AsyncAtomicContextManager
@@ -22,6 +20,7 @@ from apps.core.models import User
 from apps.software.models import SoftwareOrder
 from apps.software.serializers import SoftwareOrderSerializer
 from apps.tbank.models import TBankPayment
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

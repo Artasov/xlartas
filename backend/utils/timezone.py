@@ -1,9 +1,10 @@
-from utils.log import get_global_logger
 from datetime import datetime
 
 import pytz
 from dateutil import parser
 from django.conf import settings
+
+from utils.log import get_global_logger
 
 logger = get_global_logger()
 

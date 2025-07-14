@@ -1,5 +1,4 @@
 # confirmation/services/base.py
-from utils.log import get_global_logger
 from datetime import timedelta
 from typing import TYPE_CHECKING, Union
 
@@ -15,6 +14,7 @@ from apps.confirmation.exceptions.base import ConfirmationException
 from apps.confirmation.services.actions import is_action_exists, ConfirmationResult, ConfirmationAction
 from apps.core.confirmations.actions import CoreConfirmationActionType
 from apps.core.exceptions.user import UserException
+from utils.log import get_global_logger
 
 if TYPE_CHECKING:
     from apps.confirmation.models.base import (

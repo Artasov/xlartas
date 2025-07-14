@@ -1,11 +1,12 @@
 # tbank/services/installment.py
 import base64
-from utils.log import get_global_logger
 from collections import namedtuple
 from typing import TYPE_CHECKING
 
 import aiohttp
 from django.conf import settings
+
+from utils.log import get_global_logger
 
 if TYPE_CHECKING:
     from apps.tbank.models import TBankInstallment

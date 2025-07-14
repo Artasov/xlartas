@@ -1,12 +1,11 @@
 # company/controllers.py
-from utils.log import get_global_logger
-
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from utils.log import get_global_logger
 from .models import CompanyDocument, Company
 from .serializers import CompanyDocumentSerializer, CompanySerializer
 

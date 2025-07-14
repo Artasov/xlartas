@@ -1,6 +1,5 @@
 # social_oauth/providers/google/provider.py
 
-from utils.log import get_global_logger
 from typing import Any
 
 import aiohttp
@@ -11,6 +10,7 @@ from apps.core.services.auth import new_jwt_for_user, JWTPair
 from apps.social_oauth.exceptions.base import SocialOAuthException
 from apps.social_oauth.models import GoogleUser
 from apps.social_oauth.oauth_provider import OAuthProvider, OAuthProviderMixin
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

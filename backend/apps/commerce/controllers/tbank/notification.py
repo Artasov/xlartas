@@ -1,6 +1,4 @@
 # commerce/controllers/tbank/notification.py
-from utils.log import get_global_logger
-
 from adjango.adecorators import acontroller, aforce_data, aatomic
 from adjango.utils.common import traceback_str
 from adrf.decorators import api_view
@@ -14,6 +12,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 from apps.commerce.services.order.base import OrderService
 from apps.tbank.decorators.base import async_tbank_payment_notification
+from utils.log import get_global_logger
 
 log = get_global_logger()
 

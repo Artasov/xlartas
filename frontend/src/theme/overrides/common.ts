@@ -1,3 +1,4 @@
+// theme/overrides/common.ts
 import {ThemeOptions} from '@mui/material/styles';
 
 const commonOverrides: ThemeOptions['components'] = {

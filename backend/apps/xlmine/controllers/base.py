@@ -1,7 +1,7 @@
 # xlmine/controllers/base.py
 import json
-from utils.log import get_global_logger
 import os
+from typing import Optional
 
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
@@ -23,17 +23,17 @@ from apps.xlmine.permissions import IsMinecraftDev  # ваша кастомна�
 from apps.xlmine.serializers.base import LauncherSerializer, ReleaseSerializer, PrivilegeSerializer
 from apps.xlmine.serializers.donate import DonateSerializer
 from apps.xlmine.services.base import calculate_sha256
-from typing import Optional
+from utils.log import get_global_logger
 
 log = get_global_logger()
 
 
 def save_chunk(
-    chunk_file: UploadedFile,
-    temp_dir: str,
-    upload_id: str,
-    chunk_index: int,
-    total_chunks: int,
+        chunk_file: UploadedFile,
+        temp_dir: str,
+        upload_id: str,
+        chunk_index: int,
+        total_chunks: int,
 ) -> str:
     """Save uploaded chunk to ``temp_dir`` and return its path.
 
@@ -58,7 +58,7 @@ def save_chunk(
 
 
 def assemble_file(
-    temp_dir: str, upload_id: str, filename: str, total_chunks: int
+        temp_dir: str, upload_id: str, filename: str, total_chunks: int
 ) -> str:
     """Combine chunks into a single file and return its path.
 
