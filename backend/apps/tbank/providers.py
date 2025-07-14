@@ -8,8 +8,14 @@ from adjango.utils.base import build_full_url
 from apps.commerce.models import Payment
 from apps.commerce.providers.base import PaymentBaseProvider
 from apps.tbank.classes.TBank import (
-    TBank, ReceiptFFD105, ItemFFD105, Payments,
-    OperationInitiatorType, SUCCESS_FAILURE_GET_PARAMS_TEMPLATE
+    TBank,
+    SUCCESS_FAILURE_GET_PARAMS_TEMPLATE,
+)
+from apps.tbank.types import (
+    ReceiptFFD105,
+    ItemFFD105,
+    Payments,
+    OperationInitiatorType,
 )
 from apps.tbank.managers.customer import TBankCustomerManager
 from apps.tbank.models import TBankPayment, TBankInstallment
