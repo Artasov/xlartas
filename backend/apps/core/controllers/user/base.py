@@ -12,6 +12,7 @@ from apps.commerce.models import Client
 from apps.commerce.serializers.client import ClientPublicSerializer, ClientUpdateSerializer
 from apps.core.exceptions.user import UserException
 from apps.core.models import User
+from apps.core.services.credential import check_credential_exists
 from apps.core.serializers.user.base import (
     UserSelfSerializer, UserUsernameSerializer,
     UserUpdateSerializer, UserAvatarSerializer
@@ -112,10 +113,8 @@ async def user_auth_methods(request):
 @permission_classes((AllowAny,))
 async def check_email_exists(request):
     email = request.data.get('email')
-    if not is_email(email):
-        raise UserException.WrongCredential()
-    exists = await User.objects.aby_creds(email)
-    return Response({'exists': bool(exists)}, status=200)
+    exists = await check_credential_exists(email)
+    return Response({'exists': exists}, status=200)
 
 
 @acontroller('Check if phone exists')
@@ -123,6 +122,5 @@ async def check_email_exists(request):
 @permission_classes((AllowAny,))
 async def check_phone_exists(request):
     phone = request.data.get('phone')
-    if not is_phone(phone): raise UserException.WrongCredential()
-    exists = await User.objects.aby_creds(phone)
-    return Response({'exists': bool(exists)}, status=200)
+    exists = await check_credential_exists(phone)
+    return Response({'exists': exists}, status=200)
