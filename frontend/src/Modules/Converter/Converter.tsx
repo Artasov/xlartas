@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import {useApi} from 'Api/useApi';
 import {
     Accordion,
     AccordionDetails,
@@ -25,6 +25,7 @@ import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
+    const {api} = useApi();
     const [source, setSource] = useState<IFormat | null>(null);
     const [targetId, setTargetId] = useState<number | null>(null);
     const [targets, setTargets] = useState<IFormat[]>([]);
@@ -37,16 +38,17 @@ const Converter: React.FC = () => {
     const [formats, setFormats] = useState<IFormat[]>([]);
 
     useEffect(() => {
-        axios.get('/api/v1/converter/formats/').then(r => setFormats(r.data));
-    }, []);
+        api.get<IFormat[]>('/api/v1/converter/formats/')
+            .then(setFormats);
+    }, [api]);
 
     useEffect(() => {
         if (!source) return;
-        axios.get(`/api/v1/converter/formats/${source.id}/variants/`)
-            .then(r => setTargets(r.data));
-        axios.get(`/api/v1/converter/formats/${source.id}/parameters/`)
-            .then(r => setParams(r.data));
-    }, [source]);
+        api.get<IFormat[]>(`/api/v1/converter/formats/${source.id}/variants/`)
+            .then(setTargets);
+        api.get<IParameter[]>(`/api/v1/converter/formats/${source.id}/parameters/`)
+            .then(setParams);
+    }, [source, api]);
 
     useEffect(() => {
         const defaults: Record<string, any> = {};
@@ -71,10 +73,10 @@ const Converter: React.FC = () => {
 
     const pollStatus = (id: number) => {
         const t = setInterval(() => {
-            axios.get(`/api/v1/converter/conversion/${id}/`)
-                .then(r => {
-                    setConversion(r.data);
-                    if (r.data.is_done) {
+            api.get<IConversion>(`/api/v1/converter/conversion/${id}/`)
+                .then(data => {
+                    setConversion(data);
+                    if (data.is_done) {
                         clearInterval(t);
                         setTimer(null);
                         setLoading(false);
@@ -96,10 +98,10 @@ const Converter: React.FC = () => {
         formData.append('target_format', String(targetId));
         formData.append('params', JSON.stringify(values));
         setLoading(true);
-        axios.post('/api/v1/converter/convert/', formData)
-            .then(r => {
-                setConversion(r.data);
-                pollStatus(r.data.id);
+        api.post<IConversion>('/api/v1/converter/convert/', formData)
+            .then(data => {
+                setConversion(data);
+                pollStatus(data.id);
             })
             .catch(() => setLoading(false));
     };
