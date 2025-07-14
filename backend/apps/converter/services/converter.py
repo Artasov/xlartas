@@ -33,6 +33,12 @@ class BaseConverter(ABC):
         """Perform conversion and save result to conversion.output_file"""
         pass
 
+    async def finalize(self, dst: str) -> None:
+        """Save conversion result path and mark conversion as done."""
+        self.conversion.output_file.name = dst
+        self.conversion.is_done = True
+        await self.conversion.asave()
+
 
 class DummyConverter(BaseConverter):
     async def convert(self) -> None:
@@ -40,9 +46,7 @@ class DummyConverter(BaseConverter):
         src = self.conversion.input_file.path
         dst = src + f'.{self.conversion.target_format.name}'
         shutil.copy(src, dst)
-        self.conversion.output_file.name = dst
-        self.conversion.is_done = True
-        await self.conversion.asave()
+        await self.finalize(dst)
 
 
 class ImageConverter(BaseConverter):
@@ -86,9 +90,7 @@ class ImageConverter(BaseConverter):
         else:  # pragma: no cover
             shutil.copy(src, dst)
 
-        self.conversion.output_file.name = dst
-        self.conversion.is_done = True
-        await self.conversion.asave()
+        await self.finalize(dst)
 
 
 class AudioConverter(BaseConverter):
@@ -100,9 +102,7 @@ class AudioConverter(BaseConverter):
             audio.export(dst, format=self.conversion.target_format.name)
         else:  # pragma: no cover - fallback when pydub missing
             shutil.copy(src, dst)
-        self.conversion.output_file.name = dst
-        self.conversion.is_done = True
-        await self.conversion.asave()
+        await self.finalize(dst)
 
 
 class ConversionService:
