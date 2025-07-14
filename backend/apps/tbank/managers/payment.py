@@ -5,8 +5,8 @@ from django.conf import settings
 from django.db.models import Manager
 
 from apps.tbank.classes.TBank import TBank
-from apps.tbank.types import OperationInitiatorType, ReceiptFFD12, ReceiptFFD105
 from apps.tbank.exceptions.base import TBankException
+from apps.tbank.types import OperationInitiatorType, ReceiptFFD12, ReceiptFFD105
 
 log = logging.getLogger('tbank')
 

@@ -4,8 +4,8 @@ import os
 import sys
 
 from adjango.utils.crontab import Crontab
-from celery.schedules import crontab
 from celery import Celery
+from celery.schedules import crontab
 from django.apps import apps
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))

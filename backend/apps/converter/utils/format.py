@@ -1,3 +1,4 @@
+# converter/utils/format.py
 """
 utils/converter_capabilities.py
 Определяем, какие форматы нам доступны в рантайме.

@@ -11,9 +11,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from .utils import JSON_HEADERS, get_user_by_credentials, json_response
 from apps.core.models import User
 from apps.software.models import Software, SoftwareLicense
+from .utils import get_user_by_credentials, json_response
 
 log = logging.getLogger('global')
 

@@ -1,8 +1,7 @@
-# apps/tbank/types.py
+# tbank/types.py
 """Typed structures and enums used by the TBank client."""
 from enum import Enum
 from typing import Literal, Optional, TypedDict
-
 
 PaymentMethod = Literal[
     'full_prepayment',  # предоплата 100%

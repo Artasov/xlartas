@@ -1,3 +1,4 @@
+# converter/routes/ws.py
 from django.urls import re_path
 
 from apps.converter.consumers.conversion import ConversionConsumer

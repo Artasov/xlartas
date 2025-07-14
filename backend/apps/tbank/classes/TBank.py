@@ -40,21 +40,21 @@ class TBank:
         return expected_token == token
 
     async def Init(
-        self,
-        amount: int,
-        order_id: str,
-        description: Optional[str] = None,
-        data: dict | None = None,
-        receipt: ReceiptFFD105 | ReceiptFFD12 | None = None,
-        pay_type: Optional[str] = None,
-        recurrent: Optional[str] = None,
-        customer_key: Optional[str] = None,
-        redirect_due_date: Optional[str] = None,
-        notification_url: Optional[str] = None,
-        success_url: Optional[str] = None,
-        fail_url: Optional[str] = None,
-        language: Optional[str] = None,
-        operation_initiator_type: OperationInitiatorType | None = None,
+            self,
+            amount: int,
+            order_id: str,
+            description: Optional[str] = None,
+            data: dict | None = None,
+            receipt: ReceiptFFD105 | ReceiptFFD12 | None = None,
+            pay_type: Optional[str] = None,
+            recurrent: Optional[str] = None,
+            customer_key: Optional[str] = None,
+            redirect_due_date: Optional[str] = None,
+            notification_url: Optional[str] = None,
+            success_url: Optional[str] = None,
+            fail_url: Optional[str] = None,
+            language: Optional[str] = None,
+            operation_initiator_type: OperationInitiatorType | None = None,
     ) -> InitResponse:
         """Initialize a payment session."""
         init_data: InitRequest = {
@@ -80,11 +80,11 @@ class TBank:
         return await request(self.base_url, self.terminal_key, 'Init', init_data)
 
     async def AddCustomer(
-        self,
-        customer_key: str,
-        ip: str | None = None,
-        email: str | None = None,
-        phone: str | None = None,
+            self,
+            customer_key: str,
+            ip: str | None = None,
+            email: str | None = None,
+            phone: str | None = None,
     ) -> dict:
         """Register a new customer."""
         if email:

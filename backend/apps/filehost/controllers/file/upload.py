@@ -1,11 +1,11 @@
 # filehost/controllers/file/upload.py
 from adjango.adecorators import acontroller
 from adrf.decorators import api_view
+from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.conf import settings
 
 from apps.filehost.exceptions.base import StorageLimitExceeded
 from apps.filehost.models import Folder, File

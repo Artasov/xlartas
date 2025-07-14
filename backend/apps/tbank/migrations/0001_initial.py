@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 import apps.tbank.models
 import apps.tbank.services.installment
-import apps.tbank.services.payment
 import apps.uuid6.field
 
 

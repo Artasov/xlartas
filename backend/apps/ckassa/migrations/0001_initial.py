@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apps.ckassa.services.payment
-
 
 class Migration(migrations.Migration):
     initial = True

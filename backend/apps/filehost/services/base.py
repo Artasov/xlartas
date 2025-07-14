@@ -1,8 +1,4 @@
 # filehost/services/base.py
-import os
-import tempfile
-import zipfile
-from random import randint
 
 from asgiref.sync import sync_to_async
 
@@ -82,8 +78,6 @@ async def get_subfolders(folder):
             'files': files
         })
     return subfolders_list
-
-
 
 
 async def get_all_subfolders(folder):

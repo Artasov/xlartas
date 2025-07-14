@@ -7,8 +7,6 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.commerce.services.gift_certificate
-
 
 class Migration(migrations.Migration):
     initial = True

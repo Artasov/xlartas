@@ -4,8 +4,6 @@ import adjango.services.base
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apps.xlmine.services.donate
-
 
 class Migration(migrations.Migration):
     dependencies = [

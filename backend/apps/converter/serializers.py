@@ -1,6 +1,8 @@
+# converter/serializers.py
 from adjango.aserializers import AModelSerializer
-from apps.converter.models import Conversion, Format, Parameter
 from rest_framework.fields import SerializerMethodField
+
+from apps.converter.models import Conversion, Format, Parameter
 
 
 class FormatSerializer(AModelSerializer):

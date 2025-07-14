@@ -1,3 +1,4 @@
+# converter/management/commands/generate_converter_data.py
 from django.core.management.base import BaseCommand
 
 from apps.converter.services import (

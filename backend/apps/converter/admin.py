@@ -91,4 +91,3 @@ class ConversionAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "ip")
     autocomplete_fields = ("user", "source_format", "target_format")
     readonly_fields = ("created_at", "updated_at")
-

@@ -1,3 +1,4 @@
+# converter/models/conversion_variant.py
 from adjango.models import AModel
 from django.db.models import CASCADE, ForeignKey, ManyToManyField
 from django.utils.translation import gettext_lazy as _

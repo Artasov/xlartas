@@ -11,14 +11,14 @@ from apps.tbank.classes.TBank import (
     TBank,
     SUCCESS_FAILURE_GET_PARAMS_TEMPLATE,
 )
+from apps.tbank.managers.customer import TBankCustomerManager
+from apps.tbank.models import TBankPayment, TBankInstallment
 from apps.tbank.types import (
     ReceiptFFD105,
     ItemFFD105,
     Payments,
     OperationInitiatorType,
 )
-from apps.tbank.managers.customer import TBankCustomerManager
-from apps.tbank.models import TBankPayment, TBankInstallment
 
 if TYPE_CHECKING:
     pass

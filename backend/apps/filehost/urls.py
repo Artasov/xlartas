@@ -7,12 +7,12 @@ from apps.filehost.controllers.accesses import (
 from apps.filehost.controllers.file.download import (
     download_file, download_archive,
 )
-from apps.filehost.controllers.file.upload import upload_files
 from apps.filehost.controllers.file.manage import (
     move_item, rename_item, get_full_tree, bulk_delete_items,
     bulk_update_items, get_file_by_id, get_all_files, add_file,
     get_favorite_files, toggle_favorite, get_storage_usage,
 )
+from apps.filehost.controllers.file.upload import upload_files
 from apps.filehost.controllers.folders import (
     get_folder_by_id, get_all_folders,
     get_folder_content, add_folder,

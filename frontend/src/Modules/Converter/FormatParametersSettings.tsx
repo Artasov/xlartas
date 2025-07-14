@@ -1,4 +1,4 @@
-// FormatParametersSettings.tsx
+// Modules/Converter/FormatParametersSettings.tsx
 import React from 'react';
 import {InputAdornment, MenuItem, TextField} from '@mui/material';
 import {useTranslation} from 'react-i18next';

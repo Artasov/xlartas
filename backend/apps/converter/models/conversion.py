@@ -1,3 +1,4 @@
+# converter/models/conversion.py
 from adjango.models import AModel
 from adjango.models.mixins import ACreatedUpdatedAtIndexedMixin
 from django.db.models import FileField, ForeignKey, CASCADE, CharField, BooleanField, JSONField

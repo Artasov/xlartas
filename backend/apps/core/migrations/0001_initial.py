@@ -10,7 +10,6 @@ from django.db import migrations, models
 
 import apps.core.managers.user
 import apps.core.models.user
-import apps.core.services.user.base
 import apps.core.services.user.mixer
 
 

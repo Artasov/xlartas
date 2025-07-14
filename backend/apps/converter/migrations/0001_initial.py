@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -34,8 +33,11 @@ class Migration(migrations.Migration):
             name='ConversionVariant',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('source', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='source_variants', to='converter.format', verbose_name='Source format')),
-                ('targets', models.ManyToManyField(related_name='target_variants', to='converter.format', verbose_name='Target formats')),
+                ('source',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='source_variants',
+                                   to='converter.format', verbose_name='Source format')),
+                ('targets', models.ManyToManyField(related_name='target_variants', to='converter.format',
+                                                   verbose_name='Target formats')),
             ],
             options={
                 'verbose_name': 'Conversion variant',
@@ -51,12 +53,19 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
                 ('ip', models.CharField(max_length=64, verbose_name='IP')),
                 ('input_file', models.FileField(upload_to='converter/input/', verbose_name='Input file')),
-                ('output_file', models.FileField(blank=True, null=True, upload_to='converter/output/', verbose_name='Output file')),
+                ('output_file',
+                 models.FileField(blank=True, null=True, upload_to='converter/output/', verbose_name='Output file')),
                 ('params', models.JSONField(blank=True, null=True, verbose_name='Parameters')),
                 ('is_done', models.BooleanField(default=False, verbose_name='Is done')),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='conversions', to=settings.AUTH_USER_MODEL, verbose_name='User')),
-                ('source_format', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='converter.format', verbose_name='Source format')),
-                ('target_format', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='converter.format', verbose_name='Target format')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                           related_name='conversions', to=settings.AUTH_USER_MODEL,
+                                           verbose_name='User')),
+                ('source_format',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='converter.format',
+                                   verbose_name='Source format')),
+                ('target_format',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='converter.format',
+                                   verbose_name='Target format')),
             ],
             options={
                 'verbose_name': 'Conversion',
@@ -71,11 +80,14 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, db_index=True, verbose_name='Updated at')),
                 ('name', models.CharField(max_length=50, verbose_name='Name')),
-                ('type', models.CharField(choices=[('bool', 'Boolean'), ('int', 'Integer'), ('str', 'String'), ('select', 'Select')], max_length=10, verbose_name='Type')),
+                ('type', models.CharField(
+                    choices=[('bool', 'Boolean'), ('int', 'Integer'), ('str', 'String'), ('select', 'Select')],
+                    max_length=10, verbose_name='Type')),
                 ('unit', models.CharField(blank=True, max_length=20, null=True, verbose_name='Unit')),
                 ('min_value', models.IntegerField(blank=True, null=True, verbose_name='Min value')),
                 ('max_value', models.IntegerField(blank=True, null=True, verbose_name='Max value')),
-                ('format', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='parameters', to='converter.format', verbose_name='Format')),
+                ('format', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='parameters',
+                                             to='converter.format', verbose_name='Format')),
             ],
             options={
                 'verbose_name': 'Parameter',
@@ -89,7 +101,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('value', models.CharField(max_length=100, verbose_name='Value')),
-                ('parameter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='converter.parameter', verbose_name='Parameter')),
+                ('parameter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options',
+                                                to='converter.parameter', verbose_name='Parameter')),
             ],
             options={
                 'verbose_name': 'Parameter option',

@@ -38,37 +38,37 @@ configurations = {
             # },
             # 'apps.commerce': {
             #     'admin': '__copy__',
-                # 'routes.api': '__copy__',
-                # 'controllers': {
-                #
-                # },
-                # 'models': '__copy__',
-                # 'services': '__copy__',
-                # 'serializers': '__copy__',
+            # 'routes.api': '__copy__',
+            # 'controllers': {
+            #
+            # },
+            # 'models': '__copy__',
+            # 'services': '__copy__',
+            # 'serializers': '__copy__',
             # },
             # 'apps.software': {
             #     'admin': '__copy__',
-                # 'consumers': '__copy__',
-                # 'routes.api': '__copy__',
-                # 'routes.ws': '__copy__',
-                # 'controllers': {
-                #     'software': '__copy__',
-                #     'license': '__copy__',
-                # },
-                # 'models': {
-                #     'software': '__copy__',
-                # },
-                # 'services': {
-                    # 'license': '__copy__',
-                    # 'order': '__copy__',
-                    # 'software': '__copy__',
-                # },
-                # 'serializers': {
-                #     'software': '__copy__',
-                # },
-                # 'tasks': {
-                #
-                # },
+            # 'consumers': '__copy__',
+            # 'routes.api': '__copy__',
+            # 'routes.ws': '__copy__',
+            # 'controllers': {
+            #     'software': '__copy__',
+            #     'license': '__copy__',
+            # },
+            # 'models': {
+            #     'software': '__copy__',
+            # },
+            # 'services': {
+            # 'license': '__copy__',
+            # 'order': '__copy__',
+            # 'software': '__copy__',
+            # },
+            # 'serializers': {
+            #     'software': '__copy__',
+            # },
+            # 'tasks': {
+            #
+            # },
             # },
         },
 
@@ -83,9 +83,9 @@ configurations = {
                 # 'Api': '__copy__',
                 # 'Core': {
                 #     'components': {
-                        # 'Header': '__copy__',
-                        # 'ErrorProvider': '__copy__',
-                    # }
+                # 'Header': '__copy__',
+                # 'ErrorProvider': '__copy__',
+                # }
                 # },
                 # 'Cabinet': '__copy__',
                 # 'Order': '__copy__',
