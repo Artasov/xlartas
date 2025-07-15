@@ -34,7 +34,8 @@ class TBank:
         self.password = password or settings.TBANK_PASSWORD
         self.base_url = 'https://securepay.tinkoff.ru/v2/'
 
-    def is_token_valid(self, response: dict) -> bool:
+    @staticmethod
+    def is_token_valid(response: dict) -> bool:
         token = str(response.get('Token'))
         expected_token = generate_token(response)
         return expected_token == token

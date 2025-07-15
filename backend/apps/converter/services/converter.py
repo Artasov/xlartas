@@ -6,12 +6,12 @@ from typing import Optional, Type
 
 try:
     from PIL import Image
-except Exception:  # pragma: no cover - Pillow may not be installed
+except Exception:  # noqa
     Image = None
 
 try:
-    from pydub import AudioSegment
-except Exception:  # pragma: no cover - pydub may not be installed
+    from pydub import AudioSegment  # noqa
+except Exception:  # noqa
     AudioSegment = None
 
 from django.utils import timezone
@@ -97,8 +97,8 @@ class AudioConverter(BaseConverter):
     async def convert(self) -> None:
         src = self.conversion.input_file.path
         dst = src + f'.{self.conversion.target_format.name}'
-        if AudioSegment:
-            audio = AudioSegment.from_file(src)
+        if AudioSegment is not None:
+            audio = AudioSegment.from_file(src)  # noqa
             audio.export(dst, format=self.conversion.target_format.name)
         else:  # pragma: no cover - fallback when pydub missing
             shutil.copy(src, dst)

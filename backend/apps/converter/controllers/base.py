@@ -76,8 +76,8 @@ async def convert(request):
             status = HTTP_429_TOO_MANY_REQUESTS
         return Response({"detail": msg}, status=status)
     data = await ConversionSerializer(conversion).adata
-    remaining = await ConversionService.remaining_attempts(user, ip)
-    return Response({"conversion": data, "remaining": remaining}, status=HTTP_201_CREATED)
+    remaining_ = await ConversionService.remaining_attempts(user, ip)
+    return Response({"conversion": data, "remaining": remaining_}, status=HTTP_201_CREATED)
 
 
 @acontroller("Conversion status")

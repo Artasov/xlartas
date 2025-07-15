@@ -12,12 +12,12 @@ from typing import Set
 
 try:
     from PIL import Image
-except Exception:  # pragma: no cover
+except Exception:  # noqa
     Image = None
 
 try:
-    from pydub import AudioSegment
-except Exception:  # pragma: no cover
+    from pydub import AudioSegment  # noqa
+except Exception:  # noqa
     AudioSegment = None
 
 

@@ -39,6 +39,7 @@ EDITABLE_FILES = [
     # файлы‑конфиги, которые можно менять
     'options.txt',
     'servers.dat',
+    'config/packetfixer.properties',
     'config/betterfpsdist.json',
     'config/bettergrass.json5',
     'config/blur.json',

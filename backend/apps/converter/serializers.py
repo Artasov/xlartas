@@ -36,6 +36,6 @@ class ConversionSerializer(AModelSerializer):
         if obj.output_file:
             try:
                 return obj.output_file.size
-            except Exception:
+            except Exception:  # noqa
                 return None
         return None
