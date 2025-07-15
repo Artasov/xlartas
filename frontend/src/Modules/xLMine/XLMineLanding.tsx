@@ -5,8 +5,9 @@ import {FC, FCA, FCC, FCCC, FCSC, FR, FRCC, FRSC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import minecraftHero from 'Static/img/xlmine/hero-bg.webp';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {Button, useMediaQuery} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogTitle, useMediaQuery} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useDispatch} from 'react-redux';
 import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
@@ -18,6 +19,35 @@ const screenshot1 = 'https://via.placeholder.com/400x250?text=Screenshot+1';
 const screenshot2 = 'https://via.placeholder.com/400x250?text=Screenshot+2';
 const screenshot3 = 'https://via.placeholder.com/400x250?text=Screenshot+3';
 
+const plugins = [
+    'xlmine-server-core — внутренняя «сердцевина» сервера, все уникальные фичи',
+    'AuctionGUIPlus — внутриигровой аукцион с GUI',
+    'AxTrade — безопасный обмен предметами между игроками',
+    'AxRewards — ежедневные/ивентовые награды, поощрения за он-лайн',
+    'AntiPopup — автоматический мут/кик при спаме и рекламе',
+    'И другие...'
+];
+
+const mods = [
+    'Античит — Не покажу какой',
+    'xl PvP — кастомный мод: «обратный» PvP-баланс 1.8 (кд ударов, крит-страфы)',
+    'c2me — многопоточная генерация чанков, разгрузка мира во время TPS-пиков',
+    'Applied Energistics 2 — сетевые МЭ-хранилища, автокрафт',
+    'Industrial Foregoing — продвинутые фермы, механизмы, авто-ресурсы',
+    'Biomes O’ Plenty — десятки новых биомов',
+    'Regions Unexplored — расширенная генерация ландшафтов и структур',
+    'AdditionalStructures / Structory — заброшенные руины, лагеря, деревни',
+    'Mutant Monsters, Creeper Overhaul, Enderman Overhaul — новые/улучшенные мобы',
+    'Automobility & Immersive Aircraft — наземный и воздушный транспорт',
+    'Open Parties & Claims — приваты, кланы, совместное строительство',
+    'Xaero’s Minimap + World Map — мини-карта и полноэкранная карта',
+    'Sodium + Lithium + FerriteCore + ModernFix — пакет оптимизаций FPS и памяти',
+    'Useful Backpacks — вместительные рюкзаки с автосортировкой',
+    'ItemPhysic — реалистичное поведение и физика предметов',
+    'Automated Ruins: Philips Ruins — ещё больше тематических строений',
+    'Ambient Sounds — объёмный саунд-дизайн биомов и пещер'
+];
+
 const XLMineLanding: React.FC = () => {
     const {plt, theme} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
@@ -28,6 +58,7 @@ const XLMineLanding: React.FC = () => {
     const angleRef = useRef(0);
     const mouseOffsetRef = useRef({x: 0, y: 0});
     const [loading, setLoading] = useState(false);
+    const [featuresOpen, setFeaturesOpen] = useState(false);
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
     // Настройки параллакса
@@ -159,6 +190,23 @@ const XLMineLanding: React.FC = () => {
                                 <span>{t('download_launcher')}</span>
                             </FRCC>
                         </Button>
+                        <Button onClick={() => setFeaturesOpen(true)}
+                                className="hover-scale-5 ftrans-200-eio"
+                                sx={{
+                                    fontSize: isGtSm ? '1.5rem' : '1.2rem',
+                                    backdropFilter: 'blur(5px) saturate(2) brightness(4)',
+                                    backgroundColor: 'transparent',
+                                    '&:hover': {
+                                        color: '#fff',
+                                        backdropFilter: 'blur(5px) saturate(2) brightness(4) hue-rotate(30deg)',
+                                        backgroundColor: 'transparent',
+                                    },
+                                }}>
+                            <FRCC fontWeight={'bold'} g={1} opacity={70}>
+                                <InfoOutlinedIcon sx={{fontSize: '2.1rem'}}/>
+                                <span>{t('xlmine_features')}</span>
+                            </FRCC>
+                        </Button>
                         <FCCC g={2} maxW={900} mx={'auto'} textAlign={'center'}>
                             <p style={{maxWidth: 400, fontSize: '1.1rem'}}>
                                 {t('xlmine_description')}
@@ -179,6 +227,25 @@ const XLMineLanding: React.FC = () => {
                     </FC>
                 </FCCC>
             </FCA>
+            <Dialog open={featuresOpen} onClose={() => setFeaturesOpen(false)}>
+                <DialogTitle sx={{textAlign: 'center', fontSize: '2rem'}}>
+                    xlmine
+                </DialogTitle>
+                <DialogContent>
+                    <FCCC g={2}>
+                        <p>{t('xlmine_description')}</p>
+                        <h3>{t('xlmine_plugins')}</h3>
+                        <ul>
+                            {plugins.map((p, i) => (<li key={i}>{p}</li>))}
+                        </ul>
+                        <h3>{t('xlmine_mods')}</h3>
+                        <ul>
+                            {mods.map((m, i) => (<li key={i}>{m}</li>))}
+                        </ul>
+                        <p>Всего установлено 205 модов.</p>
+                    </FCCC>
+                </DialogContent>
+            </Dialog>
         </FCC>
     );
 };
