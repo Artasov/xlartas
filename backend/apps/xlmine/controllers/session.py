@@ -35,14 +35,28 @@ async def join_server_view(request):
     except MinecraftSession.DoesNotExist:
         return Response({'error': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
     user = session_obj.user
-    xlmine_user, _ = await UserXLMine.objects.aget_or_create(user=user)
-    if profile_id and xlmine_user.uuid != profile_id:
-        xlmine_user.uuid = profile_id
-        await xlmine_user.asave()
+    _xlmine_user = UserXLMine.objects.aget_or_create(
+        user=user,
+        uuid=profile_id,
+        uuid__gte=50,
+    )
     session_obj.last_server_id = server_id
     await session_obj.asave()
-
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response({
+        'accessToken': access_token,
+        'clientToken': session_obj.client_token,
+        'selectedProfile': profile_id,
+        'user': {
+            'id': profile_id,
+            'username': user.username,
+            'properties': [
+                {
+                    'name': 'preferredLanguage',
+                    'value': 'ru'
+                }
+            ]
+        }
+    }, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
