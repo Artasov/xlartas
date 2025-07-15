@@ -67,6 +67,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
             'username',
             'first_name', 'last_name', 'middle_name',
             'email', 'phone',
+            'balance',
             'password',
             'hw_id',
             'roles',

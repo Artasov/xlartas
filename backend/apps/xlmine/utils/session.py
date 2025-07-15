@@ -1,10 +1,11 @@
 # xlmine/utils/session.py
 from __future__ import annotations
 
-from adrf.requests import AsyncRequest
+from apps.core.models import User
+from apps.xlmine.models.user import UserXLMine
 
 
-def get_skin_url(xlmine_user, request: AsyncRequest) -> str | None:
+def get_skin_url(xlmine_user: UserXLMine, request) -> str | None:
     """Return absolute skin URL or ``None`` if not set."""
     if getattr(xlmine_user, "skin", None):
         url = request.build_absolute_uri(xlmine_user.skin.url)
@@ -12,9 +13,9 @@ def get_skin_url(xlmine_user, request: AsyncRequest) -> str | None:
     return None
 
 
-async def build_profile(user, skin_url: str | None) -> dict:
+async def build_profile(user: User, skin_url: str | None) -> dict:
     """Return the Yggdrasil user profile structure."""
-    user_uuid = await user.xlmine_uuid()
+    user_uuid = await user.service.xlmine_uuid()
     return {
         "id": user_uuid,
         "username": user.username,

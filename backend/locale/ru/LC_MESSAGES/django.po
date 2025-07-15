@@ -1507,6 +1507,12 @@ msgstr "Нет данных"
 msgid "The test period is activated"
 msgstr "Тестовый период активирован"
 
+msgid "Role"
+msgstr "Роль"
+
+msgid "Roles"
+msgstr "Роли"
+
 #, python-format
 msgid ""
 "\n"

@@ -88,7 +88,13 @@ class SoftwareLicenseAdmin(ModelAdmin):
     list_display = (
         'user', 'software', 'days_left', 'is_tested', 'created_at', 'updated_at'
     )
-    search_fields = ('user__username', 'software__name')
+    search_fields = (
+        'user__username',
+        'user__first_name',
+        'user__last_name',
+        'user__middle_name',
+        'software__name'
+    )
     list_filter = ('software', 'is_tested',)
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-created_at',)

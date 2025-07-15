@@ -36,7 +36,7 @@ class Role(AModel):
     class Variant(ATextChoices):
         MINE_DEV = 'MINE-DEV', _('Minecraft Developer')
 
-    name = CharField(max_length=20, unique=True, choices=Variant.choices)
+    name = CharField(_('Name'), max_length=20, unique=True, choices=Variant.choices)
 
     def __str__(self): return str(self.Variant.get_label(self.name))
 
@@ -67,16 +67,16 @@ class User(
         _('Preferred language'), max_length=2,
         choices=PreferredLang.choices, default=PreferredLang.RU,
     )
-    roles = AManyToManyField('Role', related_name='users', blank=True)
+    roles = AManyToManyField('Role', related_name='users', blank=True, verbose_name=_('Roles'))
     timezone = TimeZoneField(verbose_name=_('Timezone'), default='UTC')
     is_email_confirmed = BooleanField(_('Is email confirmed'), default=False)
     is_phone_confirmed = BooleanField(_('Is phone confirmed'), default=False)
     is_test = BooleanField(_('Is test'), default=False)
     secret_key = CharField(max_length=20, default=generate_custom_key)
     referral_code = CharField(max_length=10, default=generate_referral_code)
-    hw_id = CharField(max_length=600, blank=True, null=True, default=None)
+    hw_id = CharField(max_length=600, blank=True, null=True, default=None, verbose_name=_('Hardware ID'))
     is_confirmed = BooleanField(default=False)
-    balance = DecimalField(decimal_places=2, max_digits=8, default=0)
+    balance = DecimalField(decimal_places=2, max_digits=8, default=0, verbose_name=_('Balance'))
 
     def __str__(self):
         return f'{self.service.full_name if self.service.full_name else self.username}:{self.id}'
