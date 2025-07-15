@@ -9,10 +9,10 @@ import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
 import BackButton from "Core/components/BackButton";
 import ShareDialog from './ShareDialog';
-import ImagePreview from './ImagePreview';
 import {isImage, isVideo} from './fileIcons';
 import FileActions from "Modules/FileHost/FileActions";
 import {useTheme} from "Theme/ThemeContext";
+import ImagePreview from "UI/ImagePreview";
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();
