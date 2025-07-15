@@ -78,7 +78,7 @@ async def has_joined_view(request):
     except MinecraftSession.DoesNotExist:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    user_uuid = await user.xlmine_uuid()
+    user_uuid = await user.service.xlmine_uuid()
     resp = {
         'id': user_uuid.replace('-', ''),
         'name': user.username,

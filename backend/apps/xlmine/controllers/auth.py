@@ -64,7 +64,7 @@ async def authenticate_view(request):
     )
     await session_obj.asave()
 
-    user_uuid = await user.xlmine_uuid()
+    user_uuid = await user.service.xlmine_uuid()
     selected_profile = {
         'id': user_uuid.replace('-', ''),
         'name': user.username
@@ -102,7 +102,7 @@ async def refresh_view(request):
     await session_obj.asave()
 
     user = session_obj.user
-    user_uuid = await user.xlmine_uuid()
+    user_uuid = await user.service.xlmine_uuid()
     selected_profile = {
         'id': user_uuid.replace('-', ''),
         'name': user.username
