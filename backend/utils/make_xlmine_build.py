@@ -184,9 +184,19 @@ for dirname in ['mods', 'config']:
 
 for root, _, files in os.walk(RELEASE_DIR):
     for file in files:
+        # относительный путь внутри релиза в формате с косой чертой
         rel_path = os.path.relpath(os.path.join(root, file), RELEASE_DIR).replace('\\', '/')
+
+        # 1) игнорируем всё, что пользователь вправе менять
         if is_editable(rel_path):
             continue
+
+        # 2) исключаем любые natives, распакуемые лаунчером:
+        #    …/versions/<любой-ID>/natives/<что-угодно>
+        if rel_path.startswith('versions/') and '/natives/' in rel_path:
+            continue
+
+        # 3) если файл защищён — считаем и записываем хэш
         security['protected_files'][rel_path] = sha256(Path(root) / file)
 
 SECURITY_PATH.write_text(json.dumps(security, ensure_ascii=False, indent=2), encoding='utf-8')

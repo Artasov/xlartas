@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dialog, DialogContent, DialogTitle} from '@mui/material';
-import {FCCC} from 'wide-containers';
+import {FC, FR} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {useTranslation} from 'react-i18next';
 
@@ -15,16 +15,16 @@ interface Props {
 }
 
 const plugins: FeatureItem[] = [
-    {name: 'xlmine-server-core', description: 'внутренняя «сердцевина» сервера, все уникальные фичи'},
-    {name: 'AuctionGUIPlus', description: 'внутриигровой аукцион с GUI'},
-    {name: 'AxTrade', description: 'безопасный обмен предметами между игроками'},
-    {name: 'AxRewards', description: 'ежедневные/ивентовые награды, поощрения за он-лайн'},
+    {name: 'xlmine-server-core', description: 'уникальные фичи сервера'},
+    {name: 'AuctionGUIPlus', description: 'аукцион с GUI'},
+    {name: 'AxTrade', description: 'обмен предметами между игроками'},
+    {name: 'AxRewards', description: 'ежедневные/ивентовые награды'},
     {name: 'И другие...', description: ''},
 ];
 
 const mods: FeatureItem[] = [
     {name: 'Античит', description: 'Не покажу какой'},
-    {name: 'xl PvP', description: 'кастомный мод: «обратный» PvP-баланс 1.8 (кд ударов, крит-страфы)'},
+    {name: 'xl PvP', description: 'кастомный мод: PvP-баланс 1.8'},
     {name: 'c2me', description: 'многопоточная генерация чанков, разгрузка мира во время TPS-пиков'},
     {name: 'Applied Energistics 2', description: 'сетевые МЭ-хранилища, автокрафт'},
     {name: 'Industrial Foregoing', description: 'продвинутые фермы, механизмы, авто-ресурсы'},
@@ -47,28 +47,44 @@ const XLMineFeaturesDialog: React.FC<Props> = ({open, onClose}) => {
     const {t} = useTranslation();
 
     const renderItem = (item: FeatureItem, idx: number) => (
-        <li key={idx}>
-            <span style={{color: theme.colors.primary.main}}>{item.name}</span>
+        <span key={idx}>
+            <span style={{
+                color: plt.text.primary + 'ff', padding: '0 7px',
+                backgroundColor: plt.text.primary + '33',
+                borderRadius: '5px'
+            }}>
+                {item.name}
+            </span>
             {item.description && (
-                <> — <span style={{color: plt.text.secondary}}>{item.description}</span></>
+                <>
+                    &nbsp;—&nbsp;<span style={{color: plt.text.primary + 'aa'}}>
+                        {item.description}
+                    </span>
+                </>
             )}
-        </li>
+        </span>
     );
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle sx={{textAlign: 'center', fontSize: '2rem'}}>
+            <DialogTitle sx={{fontSize: '2rem'}}>
                 xlmine
             </DialogTitle>
-            <DialogContent>
-                <FCCC g={2}>
-                    <p>{t('xlmine_description')}</p>
-                    <h3>{t('xlmine_plugins')}</h3>
-                    <ul>{plugins.map(renderItem)}</ul>
-                    <h3>{t('xlmine_mods')}</h3>
-                    <ul>{mods.map(renderItem)}</ul>
-                    <p>Всего установлено 205 модов.</p>
-                </FCCC>
+            <DialogContent className={'no-scrollbar'}>
+                <FC g={2}>
+                    <p style={{margin: 0}}>{t('xlmine_description')}</p>
+                    <FC g={2}>
+                        <FC>
+                            <h3>{t('xlmine_plugins')}</h3>
+                            <FC g={.4} w={'100%'}>{plugins.map(renderItem)}</FC>
+                        </FC>
+                        <FC>
+                            <h3>{t('xlmine_mods')}</h3>
+                            <FC g={.4} w={'100%'}>{mods.map(renderItem)}</FC>
+                            <p>Всего установлено 205 модов.</p>
+                        </FC>
+                    </FC>
+                </FC>
             </DialogContent>
         </Dialog>
     );
