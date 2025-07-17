@@ -1,13 +1,12 @@
 # xlmine/models/user.py
 import uuid as uuid_
 
-from adjango.models import AModel
-from adjango.models.mixins import ACreatedAtMixin
+from adjango.models.mixins import ACreatedAtMixin, ACreatedAtIndexedMixin
 from django.db.models import OneToOneField, DecimalField, CASCADE, CharField, ForeignKey, FileField
 from django.utils.translation import gettext_lazy as _
 
 
-class UserXLMine(AModel):
+class UserXLMine(ACreatedAtIndexedMixin):
     """
     Хранит данные о «майнкрафт-части» пользователя, в том числе текущее
     количество коинов. Связь 1 к 1 с основной моделью User.
