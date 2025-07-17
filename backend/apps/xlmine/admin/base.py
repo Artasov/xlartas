@@ -117,7 +117,7 @@ class PrivilegeAdmin(ModelAdmin):
 
 @register(UserXLMine)
 class UserXLMineAdmin(ModelAdmin):
-    list_display = ('user', 'coins')
+    list_display = ('user', 'coins', 'created_at')
     search_fields = ('user__username',)
 
 
