@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0004_alter_user_phone_alter_user_timezone'),
     ]
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='role',
             name='name',
-            field=models.CharField(choices=[('MINE-DEV', 'Minecraft Developer')], max_length=20, unique=True, verbose_name='Name'),
+            field=models.CharField(choices=[('MINE-DEV', 'Minecraft Developer')], max_length=20, unique=True,
+                                   verbose_name='Name'),
         ),
         migrations.AlterField(
             model_name='user',
@@ -29,6 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='roles',
-            field=adjango.fields.AManyToManyField(blank=True, related_name='users', to='core.role', verbose_name='Roles'),
+            field=adjango.fields.AManyToManyField(blank=True, related_name='users', to='core.role',
+                                                  verbose_name='Roles'),
         ),
     ]

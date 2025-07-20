@@ -1,6 +1,7 @@
+// Modules/xLMine/XLMineFeaturesDialog.tsx
 import React from 'react';
 import {Dialog, DialogContent, DialogTitle} from '@mui/material';
-import {FC, FR} from 'wide-containers';
+import {FC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {useTranslation} from 'react-i18next';
 

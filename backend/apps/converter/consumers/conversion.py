@@ -8,7 +8,8 @@ from apps.converter.serializers import ConversionSerializer
 
 class ConversionConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-        self.conversion_id = self.scope['url_route']['kwargs']['conversion_id']  # TODO:  Instance attribute conversion_id defined outside __init__
+        self.conversion_id = self.scope['url_route']['kwargs'][
+            'conversion_id']  # TODO:  Instance attribute conversion_id defined outside __init__
         self.group_name = f'conversion_{self.conversion_id}'  # TODO: Instance attribute group_name defined outside __init__
         conversion = await self._get_conversion()
         await self.accept()

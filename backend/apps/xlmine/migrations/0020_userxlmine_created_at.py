@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('xlmine', '0019_alter_minecraftsession_created_at'),
     ]
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userxlmine',
             name='created_at',
-            field=models.DateTimeField(auto_now_add=True, db_index=True, default=django.utils.timezone.now, verbose_name='Created at'),
+            field=models.DateTimeField(auto_now_add=True, db_index=True, default=django.utils.timezone.now,
+                                       verbose_name='Created at'),
             preserve_default=False,
         ),
     ]

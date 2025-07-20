@@ -55,7 +55,7 @@ def get_supported_audio_formats() -> Set[str]:
     if AudioSegment is None:  # pydub/ffmpeg не установлены
         return set()
 
-    ffmpeg_bin = AudioSegment.converter or "ffmpeg"  # путь до ffmpeg
+    ffmpeg_bin = AudioSegment.converter or "ffmpeg"  # noqa путь до ffmpeg
     if not Path(ffmpeg_bin).exists():
         return set()
 
