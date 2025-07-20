@@ -27,6 +27,8 @@ export interface AuthContextType {
     google_oauth2: (code: string, next: string | null) => Promise<void>;
     vk_oauth2: (code: string, next: string | null) => Promise<void>;
     yandex_oauth2: (code: string, next: string | null) => Promise<void>;
+    logoutInProgress: boolean;
+    setLogoutInProgress: (v: boolean) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +37,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const [logoutInProgress, setLogoutInProgress] = useState<boolean>(false);
     // Если переменная isAuthenticated !== null значит аутентификация уже была!
     // !isAuthenticated не значит, что авторизация не прошла, может она null и еще выполняется.
     const dispatch = useDispatch();
@@ -74,12 +77,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         dispatch(closeAuthModal());
         Message.success(t('login_success'));
     };
-    const logout = () => axios.post('/api/v1/logout/')
-        .then(() => {
-            frontendLogout();
-            Message.success(t('logout_success'));
-            navigate('/');
-        }).catch(() => Message.error(t('logout_error')));
+    const logout = () => {
+        setLogoutInProgress(true);
+        axios.post('/api/v1/logout/')
+            .then(() => {
+                frontendLogout();
+                Message.success(t('logout_success'));
+                navigate('/');
+            })
+            .catch(() => Message.error(t('logout_error')))
+            .finally(() => setLogoutInProgress(false));
+    };
 
     const updateCurrentUser = async () => {
         pprint('Update current user')
@@ -145,6 +153,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             google_oauth2,
             vk_oauth2,
             yandex_oauth2,
+            logoutInProgress,
+            setLogoutInProgress,
         }}>
             {children}
         </AuthContext.Provider>

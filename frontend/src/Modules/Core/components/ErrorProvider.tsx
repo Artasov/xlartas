@@ -21,7 +21,7 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
     const navigate = useNavigate();
     const location = useLocation();
     const {hideMobileMenu} = useNavigation();
-    const {frontendLogout} = useContext(AuthContext) as AuthContextType;
+    const {frontendLogout, logoutInProgress, setLogoutInProgress} = useContext(AuthContext) as AuthContextType;
     const dispatch = useDispatch();
     const authModalOpen = useSelector((state: RootState) => state.modals.authModalOpen);
     const isHandlingAuthError = useRef(false);
@@ -61,10 +61,13 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
 
     const notAuthentication = () => {
         if (isHandlingAuthError.current) return;
+        if (logoutInProgress) {
+            setLogoutInProgress(false);
+            return;
+        }
         isHandlingAuthError.current = true;
         frontendLogout();
         Message.notAuthentication();
-        // navigate('/?auth_modal=True');
         dispatch(openAuthModal());
         hideMobileMenu();
     };
