@@ -1,5 +1,5 @@
 // Modules/Order/OrderDetail.tsx
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
@@ -9,7 +9,7 @@ import moment from "moment";
 import OrderStatus from "Order/OrderStatus";
 import {IOrder} from "types/commerce/shop";
 import OrderActions from "Order/OrderActions";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
 import {useApi} from "Api/useApi";
@@ -22,7 +22,7 @@ interface OrderDetailProps {
 
 const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const {id} = useParams<{ id: string }>();
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const {notAuthentication} = useErrorProcessing();
     const [order, setOrder] = useState<IOrder | null>(null);
     const [orderNotFound, setOrderNotFound] = useState(false);

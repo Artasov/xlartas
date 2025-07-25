@@ -1,7 +1,7 @@
 // Modules/Auth/forms/AuthForm.tsx
 
-import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import React, {ChangeEvent, useEffect, useState} from 'react';
+import {useAuth} from 'Auth/AuthContext';
 import 'react-phone-input-2/lib/material.css'
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
@@ -30,7 +30,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const hasPasswordWay = ways.includes('password');
     const {t} = useTranslation();
 
-    const {isAuthenticated, login, handleAuthResponse} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, login, handleAuthResponse} = useAuth();
     const location = useLocation();
     const [credential, setCredential] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);

@@ -1,13 +1,13 @@
 // Modules/Auth/Social/OAuthCallback.tsx
 import {OAUTH_PROVIDERS} from 'Auth/Social/constants';
 import {useParams} from 'react-router-dom';
-import React, {useContext, useEffect} from "react";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import React, {useEffect} from "react";
+import {useAuth} from "Auth/AuthContext";
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import pprint from 'Utils/pprint';
 
 const OAuthCallback: React.FC = () => {
-    const auth = useContext(AuthContext) as AuthContextType;
+    const auth = useAuth();
     const {provider} = useParams<{ provider: string }>();
     const queryParams = new URLSearchParams(window.location.search);
     const code = queryParams.get('code');

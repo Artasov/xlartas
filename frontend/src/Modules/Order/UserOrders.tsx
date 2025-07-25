@@ -1,8 +1,8 @@
 // Modules/Order/UserOrders.tsx
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {IOrder} from 'types/commerce/shop';
 import OrderItem from 'Order/OrderItem';
 import {FC, FR} from 'wide-containers';
@@ -11,7 +11,7 @@ import {useApi} from 'Api/useApi';
 import Collapse from '@mui/material/Collapse';
 
 const UserOrders: React.FC = () => {
-    const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {user, isAuthenticated} = useAuth();
     const {notAuthentication} = useErrorProcessing();
     const [orders, setOrders] = useState<IOrder[]>([]);
     const {api} = useApi();

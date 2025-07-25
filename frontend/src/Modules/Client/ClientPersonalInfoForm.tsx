@@ -1,7 +1,7 @@
 // Modules/Client/ClientPersonalInfoForm.tsx
-import React, {ChangeEvent, FormEvent, useContext, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import TextField from "@mui/material/TextField";
@@ -13,7 +13,7 @@ interface FormData {
 }
 
 const ClientPersonalInfoForm: React.FC = () => {
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
 
     const [formData, setFormData] = useState<FormData>({
         about_me: user?.client?.about_me || '',

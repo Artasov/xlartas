@@ -1,10 +1,10 @@
 // Modules/User/UserPersonalInfoForm.tsx
-import React, {FormEvent, useContext, useEffect, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {format} from 'date-fns';
 import {Button, Typography, useMediaQuery} from '@mui/material';
 import {SelectChangeEvent} from '@mui/material/Select';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {Message} from "Core/components/Message";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -39,7 +39,7 @@ interface FormData {
 const UserPersonalInfoForm: React.FC = () => {
     const [formData, setFormData] = useState<FormData | null>(null);
     const [showSaveButton, setShowSaveButton] = useState(false);
-    const {isAuthenticated, user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, user, updateCurrentUser} = useAuth();
     const {notAuthentication} = useErrorProcessing();
     const {plt} = useTheme();
     const {t} = useTranslation();

@@ -1,6 +1,6 @@
 // Modules/Software/Macros/MacrosExecutorForm.tsx
-import React, {useContext, useState} from 'react';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import React, {useState} from 'react';
+import {useAuth} from 'Auth/AuthContext';
 import {Message} from 'Core/components/Message';
 import {Button} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const MacrosExecutorForm: React.FC<Props> = ({onExecuted, className}) => {
-    const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {user, isAuthenticated} = useAuth();
     const {sendMacro, readyState} = useMacroControl();
 
     const [macro, setMacro] = useState('');

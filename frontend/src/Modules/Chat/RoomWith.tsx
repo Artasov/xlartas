@@ -1,7 +1,7 @@
 // Modules/Chat/RoomWith.tsx
 
-import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import React, {useEffect, useState} from 'react';
+import {useAuth} from 'Auth/AuthContext';
 import Room from './Room';
 import {IRoom} from 'types/chat/models';
 import {useApi} from "Api/useApi";
@@ -17,7 +17,7 @@ const RoomWith: React.FC<RoomWithProps> = (
         showHeader,
     }) => {
 
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const [room, setRoom] = useState<IRoom | null>(null);
     const {api} = useApi();
 

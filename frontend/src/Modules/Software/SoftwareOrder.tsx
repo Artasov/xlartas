@@ -1,5 +1,5 @@
 // Modules/Software/SoftwareOrder.tsx
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Collapse, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery} from '@mui/material';
 import {Message} from 'Core/components/Message';
@@ -13,7 +13,7 @@ import PaymentSystemInfo from 'Order/PaymentSystemInfo';
 
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {useNavigate} from 'react-router-dom';
 import {useApi} from 'Api/useApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
@@ -50,7 +50,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const [creatingOrder, setCreatingOrder] = useState(false);
     const [payModal, setPayModal] = useState(false);
 
-    const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {user, isAuthenticated} = useAuth();
     const [_isPromoValid, setIsPromoValid] = useState<boolean | null>(null);
     const [promoCode, setPromoCode] = useState<string>('');
     const [_promocodeData, setPromocodeData] = useState<IPromocode | null>(null);

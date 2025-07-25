@@ -1,12 +1,12 @@
 // Modules/Core/SettingsTool.tsx
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import pprint from "Utils/pprint";
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
@@ -24,7 +24,7 @@ interface BackendConfigResponse {
 const SettingsTool: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [data, setData] = useState<BackendConfigResponse | null>(null);
-    const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, user} = useAuth();
     const {theme} = useTheme();
     const {api} = useApi();
     const openModal = useCallback(() => {

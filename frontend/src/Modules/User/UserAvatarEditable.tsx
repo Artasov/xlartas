@@ -1,10 +1,10 @@
 // Modules/User/UserAvatarEditable.tsx
-import React, {ChangeEvent, useContext, useRef, useState} from 'react';
+import React, {ChangeEvent, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import UserAvatar from 'User/UserAvatar';
 import {Message} from 'Core/components/Message';
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 
 import './UserAvatarEditable.sass';
 import {useTheme} from 'Theme/ThemeContext';
@@ -19,7 +19,7 @@ interface UserAvatarEditableProps {
 }
 
 const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, className}) => {
-    const {user, updateCurrentUser} = useContext(AuthContext) as AuthContextType;
+    const {user, updateCurrentUser} = useAuth();
     const {plt} = useTheme();
     const {t} = useTranslation();
     const uploadIconRef = useRef<HTMLDivElement>(null);

@@ -1,7 +1,7 @@
 // Modules/User/ProfileContext.tsx
-import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 
 type ProfileType = 'employee' | 'client' | null;
 
@@ -14,7 +14,7 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: ReactNode }> = ({children}) => {
-    const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, user} = useAuth();
     const navigate = useNavigate();
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null);
 

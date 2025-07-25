@@ -1,15 +1,15 @@
 // Modules/xLMine/xLMineProfileInfoForm.tsx
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FC, FR, FRSC} from 'wide-containers';
 import SkinCapeSetter from './SkinCape/SkinCapeSetter';
 import UserPrivilege from './Privilege/UserPrivilege';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {Collapse, useMediaQuery} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
 import {useTranslation} from 'react-i18next';
 
 const XLMineProfileInfoForm: React.FC = () => {
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const isGtSm = useMediaQuery('(min-width: 576px)');
     const [animate, setAnimate] = useState(false);
     const {plt} = useTheme();

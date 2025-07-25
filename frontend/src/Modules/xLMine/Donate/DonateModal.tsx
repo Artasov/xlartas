@@ -1,5 +1,5 @@
 // Modules/xLMine/Donate/DonateModal.tsx
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from 'react-i18next';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
 import {Button, Slider} from "@mui/material";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
@@ -43,7 +43,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const [price, setPrice] = useState<number>(1); // цена «1 руб. за 1 коин» — по умолчанию
     const [loading, setLoading] = useState<boolean>(false);
 
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
     const {t} = useTranslation();

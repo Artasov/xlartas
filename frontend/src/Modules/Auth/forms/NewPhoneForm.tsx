@@ -1,11 +1,11 @@
 // Modules/Auth/forms/NewPhoneForm.tsx
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";
 import {Button} from '@mui/material';
 import ConfirmationCode from 'Confirmation/ConfirmationCode';
 import {Message} from "Core/components/Message";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 
 interface NewPhoneFormProps {
     onSuccess: () => void;
@@ -14,7 +14,7 @@ interface NewPhoneFormProps {
 const NewPhoneForm: React.FC<NewPhoneFormProps> = ({onSuccess}) => {
     const [phone, setPhone] = useState<string>('');
     const [showConfirmationCode, setShowConfirmationCode] = useState<boolean>(false);
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {t} = useTranslation();
 
     const handlePhoneChange = (value: string) => {

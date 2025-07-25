@@ -1,5 +1,5 @@
 // Modules/Cabinet/Cabinet.tsx
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from "Theme/ThemeContext";
 import {useMediaQuery} from "@mui/material";
@@ -8,7 +8,7 @@ import {useProfile} from "User/ProfileContext";
 import NavLink from "Core/components/Header/NavLink";
 import {FC, FCCC, FCSC, FCSS, FRC} from "wide-containers";
 import UserAvatarEditable from "User/UserAvatarEditable";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import pprint from "Utils/pprint";
@@ -48,7 +48,7 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
 
 const Cabinet: React.FC = () => {
     const {t} = useTranslation();
-    const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, user} = useAuth();
     const {
         setMobileNavigationContent,
         hideMobileMenu,

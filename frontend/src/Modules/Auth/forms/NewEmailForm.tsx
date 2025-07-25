@@ -1,8 +1,8 @@
 // Modules/Auth/forms/NewEmailForm.tsx
-import React, {ChangeEvent, useContext, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import TextField from '@mui/material/TextField';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {Message} from "Core/components/Message";
 import {FC} from "wide-containers";
 import {Button} from "@mui/material";
@@ -14,7 +14,7 @@ interface NewEmailFormProps {
 
 const NewEmailForm: React.FC<NewEmailFormProps> = ({onSuccess}) => {
     const [showConfirmationCode, setShowConfirmationCode] = useState<boolean>(false);
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {t} = useTranslation();
     const [email, setEmail] = useState<string>(
         (user?.email && !user.is_email_confirmed) ? user.email : ''

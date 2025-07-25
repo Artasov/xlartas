@@ -1,5 +1,5 @@
 // Modules/Software/SoftwareDetail.tsx
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
@@ -10,7 +10,7 @@ import {FC, FCCC, FR, FRCC, FRE, FRSE} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import SoftwareOrder from './SoftwareOrder';
 import {ISoftware} from './Types/Software';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {useApi} from 'Api/useApi';
 import {Message} from 'Core/components/Message';
 import SoftwareTestPeriodButton from './SoftwareTestPeriodButton';
@@ -24,7 +24,7 @@ import Collapse from '@mui/material/Collapse'; // ← NEW
 
 const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const {plt} = useTheme();
     const {api} = useApi();
     const navigate = useNavigate();

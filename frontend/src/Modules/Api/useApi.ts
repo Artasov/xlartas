@@ -1,8 +1,8 @@
 // Modules/Api/useApi.ts
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
-import {useContext, useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {DOMAIN_URL} from './axiosConfig';
 
 type AxiosConfig = AxiosRequestConfig | undefined;
@@ -40,7 +40,7 @@ export const useApi = () => {
         byRespRef.current = byResponse;
     }, [byResponse]);
 
-    const authCtx = useContext(AuthContext) as AuthContextType | undefined;
+    const authCtx = useAuth();
     const frontendLogoutRef = useRef<() => void>(() => {
     });
     useEffect(() => {

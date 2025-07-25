@@ -1,7 +1,7 @@
 // Modules/Core/components/Header/Header.tsx
-import React, {useContext, useRef} from 'react';
+import React, {useRef} from 'react';
 import './Header.sass';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useTheme} from "Theme/ThemeContext";
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
         desktopMenuEnabled
     } = useNavigation();
     const btnToggleMenuRef = useRef<HTMLDivElement>(null);
-    const {user, isAuthenticated, logout} = useContext(AuthContext) as AuthContextType;
+    const {user, isAuthenticated, logout} = useAuth();
     const location = useLocation();
     const {plt} = useTheme();
     const isHeaderVisible = useSelector((state: any) => state.visibility.isHeaderVisible);
