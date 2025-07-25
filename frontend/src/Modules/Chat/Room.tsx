@@ -1,8 +1,8 @@
 // Modules/Chat/Room.tsx
-import React, {RefObject, useCallback, useContext, useEffect, useState} from 'react';
+import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import Divider from 'Core/components/elements/Divider';
 import {Message as ToastMessage} from 'Core/components/Message';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
@@ -28,7 +28,7 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
     const roomId = propRoomId ?? routeRoomId;
     const {headerNavHeight} = useNavigation();
     const [room, setRoom] = useState<IRoom | null>(roomProp ?? null);
-    const {isAuthenticated: authStatus, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated: authStatus, user} = useAuth();
     const isAuthenticated = authStatus ?? false;
     const {notAuthentication} = useErrorProcessing();
     const {api} = useApi();

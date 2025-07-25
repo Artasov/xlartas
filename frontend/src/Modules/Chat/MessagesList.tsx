@@ -1,12 +1,12 @@
 // Modules/Chat/MessagesList.tsx
 
-import React, {useContext} from 'react';
+import React from 'react';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC, FCCC, FCE} from "wide-containers";
 import RoomMessage from "Chat/RoomMessage";
 import {IMessage, IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {useTranslation} from "react-i18next";
 
 interface MessagesListProps {
@@ -27,7 +27,7 @@ const MessagesList: React.FC<MessagesListProps> = (
         messagesEndRef,
         messagesContainerRef
     }) => {
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {t} = useTranslation();
 
     const {plt, theme} = useTheme();

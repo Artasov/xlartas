@@ -1,5 +1,5 @@
 // Modules/Software/SoftwareTestPeriodButton.tsx
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button} from "@mui/material";
 import Dialog from '@mui/material/Dialog';
@@ -9,7 +9,7 @@ import {useApi} from "Api/useApi";
 import {Message} from "Core/components/Message";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {useTheme} from "Theme/ThemeContext";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {openAuthModal} from 'Redux/modalsSlice';
 import {useDispatch} from "react-redux";
@@ -30,7 +30,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
     }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const {api} = useApi();
     const {plt, theme} = useTheme();
     const {t} = useTranslation();

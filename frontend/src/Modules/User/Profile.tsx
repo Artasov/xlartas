@@ -1,12 +1,12 @@
 // Modules/User/Profile.tsx
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
 import XLMineProfileInfoForm from '../xLMine/xLMineProfileInfoForm';
 import {Tab, Tabs} from '@mui/material';
 import {useDispatch} from "react-redux";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {openAuthModal} from 'Redux/modalsSlice';
 import {useTranslation} from 'react-i18next';
 
@@ -18,7 +18,7 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
 
     /* ---------- список вкладок ---------- */
     const basePath = '/profile';

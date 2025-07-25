@@ -1,10 +1,10 @@
 // Modules/Order/OrderTemplate.tsx
 
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {Message} from 'Core/components/Message';
 import {useTheme} from 'Theme/ThemeContext';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC} from "wide-containers";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -12,7 +12,7 @@ import {redirectWithNextBack} from 'Utils/redirectNext';
 import {useTranslation} from "react-i18next";
 
 const OrderTemplate: React.FC = () => {
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const {headerNavHeight} = useNavigation();

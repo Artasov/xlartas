@@ -1,7 +1,7 @@
 // Modules/Auth/forms/NewPasswordForm.tsx
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {Button, IconButton, InputAdornment} from "@mui/material";
 import 'react-phone-input-2/lib/material.css';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
@@ -22,7 +22,7 @@ const NewPasswordForm: React.FC<NewPasswordFormProps> = (
         onSuccess = () => {
         }
     }) => {
-    const {user, isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {user, isAuthenticated} = useAuth();
     const [newPassword, setNewPassword] = useState<string>('');
     const [useConfirmation, setUseConfirmation] = useState<boolean>(false);
     const [confirmationMethod, setConfirmationMethod] = useState<'email' | 'phone' | null>(null);

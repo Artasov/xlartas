@@ -1,11 +1,11 @@
 // Modules/Chat/Chat.tsx
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import RoomItem from 'Chat/RoomItem';
 import {useMediaQuery} from '@mui/material';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import {useRooms} from './RoomsContext';
 import {IRoom} from "types/chat/models";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
@@ -16,7 +16,7 @@ const Chat: React.FC = () => {
     const {t} = useTranslation();
     const {rooms, loadMoreRooms, initialLoading} = useRooms();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {isAuthenticated, user} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated, user} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const isMdOrLarger = useMediaQuery('(min-width: 992px)');

@@ -1,8 +1,8 @@
 // Modules/Chat/RoomMessage.tsx
 
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import UserAvatar from "User/UserAvatar";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {format, isValid, parseISO} from 'date-fns';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DoneIcon from '@mui/icons-material/Done';
@@ -21,7 +21,7 @@ interface RoomMessageProps {
 }
 
 const RoomMessage: React.FC<RoomMessageProps> = ({message, room_capacity}) => {
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {plt, theme} = useTheme();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);

@@ -1,8 +1,8 @@
 // Modules/Order/OrderActions.tsx
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useSearchParams} from 'react-router-dom';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {Button, MenuItem} from "@mui/material";
 import OptionsMenu from "Core/components/elements/OptionsMenu";
 import {useTheme} from "Theme/ThemeContext";
@@ -30,7 +30,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
         setLoading
     }) => {
     const navigate = useNavigate();
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {theme, plt} = useTheme();
     const {api} = useApi()
     const {t} = useTranslation();

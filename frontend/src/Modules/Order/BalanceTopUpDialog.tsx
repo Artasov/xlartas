@@ -1,5 +1,5 @@
 // Modules/Order/BalanceTopUpDialog.tsx
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
@@ -11,7 +11,7 @@ import PaymentTypePicker from 'Order/PaymentTypePicker';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
 import {Message} from 'Core/components/Message';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 
 interface BalanceTopUpDialogProps {
     open: boolean;
@@ -21,7 +21,7 @@ interface BalanceTopUpDialogProps {
 const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) => {
     const {api} = useApi();
     const {notAuthentication} = useErrorProcessing();
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const {t} = useTranslation();
 
     const [product, setProduct] = useState<IProduct | null>(null);

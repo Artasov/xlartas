@@ -1,7 +1,7 @@
 // Modules/Core/components/ErrorProvider.tsx
-import React, {createContext, ReactNode, useContext, useEffect, useRef} from 'react';
+import React, {createContext, ReactNode, useEffect, useRef} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import pprint from 'Utils/pprint';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {Message} from "Core/components/Message";
@@ -21,7 +21,7 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
     const navigate = useNavigate();
     const location = useLocation();
     const {hideMobileMenu} = useNavigation();
-    const {frontendLogout, logoutInProgress, setLogoutInProgress} = useContext(AuthContext) as AuthContextType;
+    const {frontendLogout, logoutInProgress, setLogoutInProgress} = useAuth();
     const dispatch = useDispatch();
     const authModalOpen = useSelector((state: RootState) => state.modals.authModalOpen);
     const isHandlingAuthError = useRef(false);

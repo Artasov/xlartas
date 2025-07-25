@@ -1,12 +1,12 @@
 // Modules/Auth/Social/components/SocialOAuth.tsx
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button as MuiButton, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar} from '@mui/material';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {faGoogle, faYandex} from '@fortawesome/free-brands-svg-icons';
 import {axios, GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from '../../../Api/axiosConfig';
 import OAuthButton from "Auth/Social/elements/OAuthButton";
 import {ProviderConfig} from "Auth/Social/types";
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import {FR} from "wide-containers";
@@ -21,7 +21,7 @@ interface SocialOAuthProps {
 
 const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
     const socialDiv = useRef<HTMLDivElement | null>(null);
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [socialAccounts, setSocialAccounts] = useState<{ [key: string]: boolean }>({});
     const [pendingOAuthUrl, setPendingOAuthUrl] = useState<string | null>(null);

@@ -1,8 +1,8 @@
 // Modules/Chat/RoomItem.tsx
 
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import UserAvatar from "User/UserAvatar";
 import {format, isThisYear, isToday, parseISO} from 'date-fns';
 import {useTheme} from "Theme/ThemeContext";
@@ -17,7 +17,7 @@ interface RoomItemProps {
 
 const RoomItem: React.FC<RoomItemProps> = ({room, onClick}) => {
     const {t} = useTranslation();
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {plt, theme} = useTheme();
     const {roomId: currentRoomId} = useParams<{ roomId: string }>();
 

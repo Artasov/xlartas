@@ -1,12 +1,12 @@
 // Modules/Chat/RoomHeader.tsx
 
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {IconButton, useMediaQuery} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import UserAvatar from "User/UserAvatar";
 import {Link, useNavigate} from 'react-router-dom';
-import {AuthContext, AuthContextType} from "Auth/AuthContext";
+import {useAuth} from "Auth/AuthContext";
 import {IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";
 import {FRSC} from "wide-containers";
@@ -20,7 +20,7 @@ interface RoomHeaderProps {
 const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
     const navigate = useNavigate();
     const {selectedProfile} = useProfile();
-    const {user} = useContext(AuthContext) as AuthContextType;
+    const {user} = useAuth();
     const {plt} = useTheme();
     const isMdOrLarger = useMediaQuery('(min-width: 992px)');
     const {t} = useTranslation();

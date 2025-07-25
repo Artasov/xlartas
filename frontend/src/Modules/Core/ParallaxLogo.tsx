@@ -1,5 +1,5 @@
 // Modules/Core/ParallaxLogo.tsx
-import React, {RefObject, useCallback, useContext} from 'react';
+import React, {RefObject, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
@@ -9,7 +9,7 @@ import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
 import {FCCC, FR} from 'wide-containers';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
-import {AuthContext, AuthContextType} from 'Auth/AuthContext';
+import {useAuth} from 'Auth/AuthContext';
 import ParallaxContainer from './ParallaxContainer';
 import {openAuthModal} from 'Redux/modalsSlice';
 import {useDispatch} from 'react-redux';
@@ -34,7 +34,7 @@ const StyledH1 = styled('h1')<StyledH1Props>(({theme, fontSize}) => ({
 const ParallaxLogo: React.FC = () => {
     const {t} = useTranslation();
     const {mainRef} = useNavigation();
-    const {isAuthenticated} = useContext(AuthContext) as AuthContextType;
+    const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {plt} = useTheme();
