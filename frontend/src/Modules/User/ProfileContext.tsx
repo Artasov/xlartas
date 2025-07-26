@@ -1,5 +1,5 @@
 // Modules/User/ProfileContext.tsx
-import React, {createContext, ReactNode, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from "Auth/AuthContext";
 

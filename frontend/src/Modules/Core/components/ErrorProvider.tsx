@@ -1,5 +1,5 @@
 // Modules/Core/components/ErrorProvider.tsx
-import React, {createContext, ReactNode, useEffect, useRef} from 'react';
+import React, {createContext, ReactNode, useContext, useEffect, useRef} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useAuth} from "Auth/AuthContext";
 import pprint from 'Utils/pprint';
