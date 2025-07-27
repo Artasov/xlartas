@@ -1,15 +1,9 @@
 import 'moment/locale/ru';
-import './Static/css/base.sass';
 import pprint from "Utils/pprint";
-import './Static/css/wide-classes.css';
 import Cabinet from "Cabinet/Cabinet";
-import './Static/css/ReactToastify.sass';
 import Head from "Core/components/Head";
-import './Static/css/bootstrap_overwrite.sass';
 import SettingsTool from "Core/SettingsTool";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import OrderTemplate from "Order/OrderTemplate";
 import NewPassword from "Core/pages/NewPassword";
 import {HelmetProvider} from "react-helmet-async";
