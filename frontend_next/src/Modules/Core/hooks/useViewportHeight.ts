@@ -2,9 +2,13 @@
 import {useEffect, useState} from 'react';
 
 const useViewportHeight = () => {
-    const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+    const [viewportHeight, setViewportHeight] = useState(
+        typeof window !== 'undefined' ? window.innerHeight : 0,
+    );
 
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+
         const handleResize = () => {
             setViewportHeight(window.innerHeight);
         };
@@ -22,3 +26,4 @@ const useViewportHeight = () => {
 };
 
 export default useViewportHeight;
+
