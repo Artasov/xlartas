@@ -30,9 +30,12 @@ const OAuthButton: React.FC<OAuthButtonProps> = ({
                                                      linked = false,
                                                      onClick,
                                                  }) => {
-    const currentUrl = window.location.href;
+    const currentUrl = typeof window !== "undefined" ? window.location.href : "";
     const nextParam = encodeURIComponent(currentUrl);
-    const nextFromUrl = new URLSearchParams(window.location.search).get("next");
+    const nextFromUrl =
+        typeof window !== "undefined"
+            ? new URLSearchParams(window.location.search).get("next")
+            : null;
     const {plt} = useTheme();
     const oauthUrl = `${redirectUri}?response_type=code&client_id=${clientId}&redirect_uri=${DOMAIN_URL_ENCODED}%2Foauth%2F${provider}%2Fcallback%2F&scope=${scope}&state=${nextParam}&next=${nextFromUrl}`;
     const iconStyle = {color: plt.text.primary, height: `${pxIconSize}px`};
