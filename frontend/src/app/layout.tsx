@@ -7,6 +7,8 @@ import "../Static/css/ReactToastify.sass";
 import "../Static/css/bootstrap_overwrite.sass";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import Providers from "../providers";
+import LayoutClient from "./LayoutClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +46,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${robotoMono.variable}`}
     >
       <body style={{ fontFamily: 'var(--font-nunito)' }}>
-        {children}
+        <Providers>
+          <LayoutClient>{children}</LayoutClient>
+        </Providers>
       </body>
     </html>
   );

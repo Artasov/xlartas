@@ -1,6 +1,6 @@
 // Modules/Cabinet/CabinetNavLink.tsx
 import React from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'Utils/nextRouter';
 import {SvgIconComponent} from '@mui/icons-material';
 import {useTheme} from "Theme/ThemeContext";
 import {FRSC} from "wide-containers";

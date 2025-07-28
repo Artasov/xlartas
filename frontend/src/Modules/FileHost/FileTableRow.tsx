@@ -6,7 +6,7 @@ import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
 import {useApi} from 'Api/useApi';
 import {FRSE} from 'wide-containers';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useTranslation} from 'react-i18next';
 import useLongPress from './useLongPress';
 import FileActions from './FileActions';

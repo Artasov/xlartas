@@ -1,6 +1,6 @@
 // Modules/Core/components/LogsLink.tsx
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from 'Utils/nextRouter';
 import {useTheme} from "Theme/ThemeContext";
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
 

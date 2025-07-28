@@ -10,7 +10,7 @@ import {Message} from "Core/components/Message";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {useTheme} from "Theme/ThemeContext";
 import {useAuth} from "Auth/AuthContext";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 import {openAuthModal} from 'Redux/modalsSlice';
 import {useDispatch} from "react-redux";
 

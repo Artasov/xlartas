@@ -7,7 +7,7 @@ import 'react-phone-input-2/lib/material.css';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 import {Message} from "Core/components/Message";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 import {useTranslation} from 'react-i18next';
 import {FC} from 'wide-containers';
 import Visibility from '@mui/icons-material/Visibility';

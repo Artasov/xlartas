@@ -1,6 +1,6 @@
 // Modules/FileHost/FolderItem.tsx
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {FRSE} from 'wide-containers';
 
 interface Props {

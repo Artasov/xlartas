@@ -1,6 +1,6 @@
 // Modules/Core/pages/NewPassword.tsx
 import React from 'react';
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 import {Message} from "Core/components/Message";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import {useTranslation} from 'react-i18next';

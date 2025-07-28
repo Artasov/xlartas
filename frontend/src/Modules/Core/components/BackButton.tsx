@@ -3,7 +3,7 @@
 import React from 'react';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import {FRSC} from "wide-containers";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 
 interface BackButtonProps {
     iconFontSize?: "inherit" | "small" | "medium" | "large";

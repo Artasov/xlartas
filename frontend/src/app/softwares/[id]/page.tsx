@@ -1,11 +1,9 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-
-// Server-side rendering is enabled by default for dynamic imports.
-const RootApp = dynamic(() => import("../../../App"));
+import SoftwareDetail from "../../../Modules/Software/SoftwareDetail";
+import { FC } from "wide-containers";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { id } = await params;
+  const { id } = params;
   return {
     title: `Software ${id} - XLARTAS`,
     description: `Details about software ${id} on XLARTAS platform`,
@@ -13,5 +11,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default function SoftwareDetailPage() {
-  return <RootApp />;
+  return (
+    <FC g={2} p={2} mx={"auto"} maxW={700}>
+      <SoftwareDetail />
+    </FC>
+  );
 }

@@ -10,7 +10,7 @@ import {FC, FCCC, FCSC, FCSS, FRC} from "wide-containers";
 import UserAvatarEditable from "User/UserAvatarEditable";
 import {useAuth} from "Auth/AuthContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "Utils/nextRouter";
 import pprint from "Utils/pprint";
 import Profile from "User/Profile";
 import CreditScoreRoundedIcon from '@mui/icons-material/CreditScoreRounded';

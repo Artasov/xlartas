@@ -1,6 +1,6 @@
 // Modules/Core/components/Header/NavLink.tsx
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from 'Utils/nextRouter';
 import {useTheme} from 'Theme/ThemeContext';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
 

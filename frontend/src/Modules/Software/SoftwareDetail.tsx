@@ -1,7 +1,7 @@
 // Modules/Software/SoftwareDetail.tsx
 import React, {memo, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'Utils/nextRouter';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Button, IconButton} from '@mui/material';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';

@@ -6,7 +6,7 @@ import {useAuth} from "Auth/AuthContext";
 import UserAvatar from "User/UserAvatar";
 import {format, isThisYear, isToday, parseISO} from 'date-fns';
 import {useTheme} from "Theme/ThemeContext";
-import {useParams} from 'react-router-dom';
+import {useParams} from 'Utils/nextRouter';
 import {IRoom} from "types/chat/models";
 import {FCS, FR, FRBC, FRSC} from "wide-containers";
 

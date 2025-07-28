@@ -1,6 +1,6 @@
 // Modules/Order/OrderItem.tsx
 import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 
 import moment from "moment";
 import OrderActions from "Order/OrderActions";

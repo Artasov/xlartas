@@ -1,7 +1,7 @@
 // Modules/Order/OrderActions.tsx
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'Utils/nextRouter';
 import {useAuth} from "Auth/AuthContext";
 import {Button, MenuItem} from "@mui/material";
 import OptionsMenu from "Core/components/elements/OptionsMenu";

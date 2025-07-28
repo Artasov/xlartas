@@ -1,7 +1,7 @@
 // Modules/Order/OrderTemplate.tsx
 
 import React, {useEffect, useState} from 'react';
-import {Outlet, useLocation, useNavigate} from 'react-router-dom';
+import {Outlet, useLocation, useNavigate} from 'Utils/nextRouter';
 import {Message} from 'Core/components/Message';
 import {useTheme} from 'Theme/ThemeContext';
 import {useAuth} from 'Auth/AuthContext';

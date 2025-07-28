@@ -5,7 +5,7 @@ import {useAuth} from 'Auth/AuthContext';
 import 'react-phone-input-2/lib/material.css'
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
-import {useLocation} from 'react-router-dom';
+import {useLocation} from 'Utils/nextRouter';
 import TextField from "@mui/material/TextField";
 import pprint from "Utils/pprint";
 import ConfirmationCode, {ConfirmationMethod} from "Confirmation/ConfirmationCode";

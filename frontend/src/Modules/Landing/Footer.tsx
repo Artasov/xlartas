@@ -4,7 +4,7 @@ import {FC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {useApi} from 'Api/useApi';
 import {Company} from 'Company/Types';
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 
 const Footer: React.FC = () => {
     const {plt} = useTheme();

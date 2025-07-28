@@ -1,8 +1,7 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-
-// SSR support for RootApp
-const RootApp = dynamic(() => import("../../App"));
+import Softwares from "../../Modules/Software/Softwares";
+import { FC } from "wide-containers";
+import { useTranslation } from "react-i18next";
 
 export const metadata: Metadata = {
   title: "Softwares - XLARTAS",
@@ -10,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function SoftwaresPage() {
-  return <RootApp />;
+  const { t } = useTranslation();
+  return (
+    <FC g={2} p={2} mx={"auto"} maxW={800}>
+      <h1 className={"fs-1 lh-1 text-center"}>{t("softwares")}</h1>
+      <Softwares />
+    </FC>
+  );
 }

@@ -1,6 +1,6 @@
 // Modules/FileHost/FileDetail.tsx
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'Utils/nextRouter';
 import {useApi} from 'Api/useApi';
 import {IFile} from './types';
 import {Container, FC, FR, FRBC} from 'wide-containers';

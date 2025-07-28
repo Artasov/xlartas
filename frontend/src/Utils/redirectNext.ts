@@ -1,5 +1,5 @@
 // Utils/redirectNext.ts
-import {Location} from 'react-router-dom';
+import {Location} from 'Utils/nextRouter';
 import pprint from 'Utils/pprint';
 
 export function redirectNext(navigate: (url: string) => void, location: Location) {

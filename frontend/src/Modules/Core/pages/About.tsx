@@ -1,7 +1,7 @@
 // Modules/Core/pages/About.tsx
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {Button, Container, Link, Typography} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import TelegramIcon from '@mui/icons-material/Telegram';
