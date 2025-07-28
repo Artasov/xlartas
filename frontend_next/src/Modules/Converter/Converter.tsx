@@ -26,6 +26,7 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import {buildWSUrl} from 'Utils/ws';
 import {useTranslation} from 'react-i18next';
 import ConversationResultCard from "Converter/ConversationResultCard";
+import Head from "Core/components/Head";
 
 const wsFmt = (x: unknown) => {
     if (typeof x === 'string') {
@@ -159,6 +160,7 @@ const Converter: React.FC = () => {
 
     return (
         <FC w={'100%'} px={2} maxW={600} mx={'auto'}>
+            <Head title={'Converter - XLARTAS'} description={'Convert your files on the XLARTAS platform'}/>
             <ConverterGuide/>
             {remaining !== null && (
                 <Typography align="center" fontWeight={600} mt={1}>

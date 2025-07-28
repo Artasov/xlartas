@@ -13,6 +13,7 @@ import XLMineFeaturesDialog from './XLMineFeaturesDialog';
 import {useDispatch} from 'react-redux';
 import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
 import {useTranslation} from 'react-i18next';
+import Head from "Core/components/Head";
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -90,6 +91,7 @@ const XLMineLanding: React.FC = () => {
              h={`calc(100vh - ${headerNavHeight}px)`}
              maxH={`calc(100vh - ${headerNavHeight}px)`}
              color={plt.text.primary + '88'}>
+            <Head title={'XLMine - XLARTAS'} description={'XLMine launcher and features'}/>
             <FRSC cls={'gradient'} w={'100%'} h={'100%'}
                   pos={'fixed'} pEvents={false} zIndex={22}
                   top={`${headerNavHeight}px`} left={0} sx={{
