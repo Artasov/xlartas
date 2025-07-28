@@ -1,5 +1,5 @@
 // Modules/Core/BackgroundFlicker.tsx
-import React, {CSSProperties, useEffect, useMemo} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
 import {useTheme} from 'Theme/ThemeContext';
 
 /* ---------- API -------------------------------------------------------- */
@@ -134,7 +134,9 @@ const BackgroundFlicker: React.FC<BackgroundFlickerProps> = ({
     const primaryMain = theme.colors.primary.main;
     const secondaryMain = theme.colors.secondary.main;
 
-    const stars = useMemo(() => {
+    const [stars, setStars] = useState<StarProps[]>([]);
+
+    useEffect(() => {
         const rand = (min = 0, max = 1) => Math.random() * (max - min) + min;
         const sign = () => (Math.random() < 0.5 ? -1 : 1);
 
@@ -164,7 +166,7 @@ const BackgroundFlicker: React.FC<BackgroundFlickerProps> = ({
                 glowFactor,
             });
         }
-        return list;
+        setStars(list);
     }, [
         count,
         baseSize,
