@@ -23,7 +23,7 @@ def handling_function(fn_name: str, request: WSGIRequest | ASGIRequest, e: Excep
     @usage:
         _handling_function(fn_name, request, e)
     """
-    from utils.log import get_global_logger
+    from seo.log import get_global_logger
     log = get_global_logger()
     error_text = (f'ERROR in {fn_name}:\n'
                   f'{traceback_str(e)}\n'

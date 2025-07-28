@@ -13,7 +13,6 @@ ROOT_URLCONF = 'apps.core.routes.root'
 SITE_ID = int(env('SITE_ID'))
 
 APPS_DIR = join(BASE_DIR, 'apps')
-FRONTEND_DIR = BASE_DIR.parent / 'frontend'
 BASE_DATA_DIR = BASE_DIR / 'data'
 MAIN_PROCESS = True if env('RUN_MAIN') != 'true' else False
 
@@ -68,7 +67,6 @@ TEMPLATES = [
         'DIRS': [
             join(BASE_DIR, 'apps', 'core', 'templates'),
             join(BASE_DIR, 'templates'),
-            join(BASE_DIR.parent, 'frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {

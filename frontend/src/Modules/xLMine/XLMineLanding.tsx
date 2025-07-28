@@ -91,7 +91,7 @@ const XLMineLanding: React.FC = () => {
              h={`calc(100vh - ${headerNavHeight}px)`}
              maxH={`calc(100vh - ${headerNavHeight}px)`}
              color={plt.text.primary + '88'}>
-            <Head title={'XLMine - XLARTAS'} description={'XLMine launcher and features'}/>
+            <Head title={'xLMine'} description={'xLMine launcher and features'}/>
             <FRSC cls={'gradient'} w={'100%'} h={'100%'}
                   pos={'fixed'} pEvents={false} zIndex={22}
                   top={`${headerNavHeight}px`} left={0} sx={{
@@ -105,7 +105,7 @@ const XLMineLanding: React.FC = () => {
                     ')',
             }}></FRSC>
             <FCA ref={containerRef} h={'100%'} sx={{
-                backgroundImage: `url(${minecraftHero})`,
+                backgroundImage: `url(${minecraftHero.src})`,
                 backgroundSize: 'auto 150%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: '40% 50%',

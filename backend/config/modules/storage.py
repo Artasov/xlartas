@@ -2,7 +2,7 @@ from datetime import timedelta
 from os import makedirs
 from os.path import join
 
-from config.base import BASE_DIR, FRONTEND_DIR, MAIN_DOMAIN, env
+from config.base import BASE_DIR, MAIN_DOMAIN, env
 
 MINIO_USE = bool(int(env('MINIO_USE')))
 
@@ -20,12 +20,9 @@ FILE_UPLOAD_TEMP_DIR = join(BASE_DIR.parent, 'data', 'temp')
 makedirs(FILE_UPLOAD_TEMP_DIR, exist_ok=True)
 
 # Static | Media
-frontend_static = FRONTEND_DIR / 'build' / 'static'
 STATICFILES_DIRS = [
     join(BASE_DIR, 'static')
 ]
-if frontend_static.exists():
-    STATICFILES_DIRS.insert(0, str(frontend_static))
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
