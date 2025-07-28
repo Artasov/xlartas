@@ -1,9 +1,16 @@
 "use client";
-import NextLink from "next/link";
+import NextLink, {LinkProps as NextLinkProps} from "next/link";
 import {useRouter, usePathname, useSearchParams} from "next/navigation";
 import React from "react";
 
-export const Link = NextLink;
+export interface LinkProps extends Omit<NextLinkProps, 'href'> {
+    to?: NextLinkProps['href'];
+    href?: NextLinkProps['href'];
+}
+
+export const Link: React.FC<LinkProps> = ({to, href, ...props}) => (
+    <NextLink href={to ?? href ?? '#'} {...props} />
+);
 
 export function useNavigate() {
     const router = useRouter();
