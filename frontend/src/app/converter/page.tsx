@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 
+// Allow RootApp to render on the server as well as the client.
 const RootApp = dynamic(() => import("../../App"));
 
 export const metadata: Metadata = {

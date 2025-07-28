@@ -17,7 +17,9 @@ import {ErrorProvider} from "Core/components/ErrorProvider";
 import {Provider, useSelector} from "react-redux";
 import {HeaderProvider, useNavigation} from "Core/components/Header/HeaderProvider";
 import {AuthProvider, useAuth} from 'Auth/AuthContext';
-import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
+import {StaticRouter} from 'react-router-dom/server';
+import {usePathname} from 'next/navigation';
 import Landing from "Landing/Landing";
 import Header from "Core/components/Header/Header";
 import GlobalAuthModal from "Auth/GlobalAuthModal";
@@ -140,9 +142,17 @@ const App: React.FC = () => {
     );
 };
 
+const RouterWrapper: React.FC<{children: React.ReactNode}> = ({children}) => {
+    const pathname = usePathname();
+    if (typeof window === 'undefined') {
+        return <StaticRouter location={pathname}>{children}</StaticRouter>;
+    }
+    return <BrowserRouter>{children}</BrowserRouter>;
+};
+
 const RootApp: React.FC = () => (
     <Provider store={store}>
-        <Router>
+        <RouterWrapper>
             <HeaderProvider>
                 <AuthProvider>
                     <LangProvider>
@@ -156,7 +166,7 @@ const RootApp: React.FC = () => (
                     </LangProvider>
                 </AuthProvider>
             </HeaderProvider>
-        </Router>
+        </RouterWrapper>
     </Provider>
 );
 

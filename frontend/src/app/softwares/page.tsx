@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 
+// SSR support for RootApp
 const RootApp = dynamic(() => import("../../App"));
 
 export const metadata: Metadata = {
