@@ -1,3 +1,4 @@
+"use client";
 // Modules/Auth/AuthContext.tsx
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';

@@ -1,3 +1,4 @@
+"use client";
 // Modules/Api/useApi.ts
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
 import {useEffect, useRef} from 'react';

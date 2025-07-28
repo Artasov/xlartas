@@ -1,3 +1,4 @@
+"use client";
 // Modules/Core/components/ErrorProvider.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useRef} from 'react';
 import {useLocation, useNavigate} from 'Utils/nextRouter';

@@ -1,3 +1,4 @@
+"use client";
 // Modules/Core/ParallaxContainer.tsx
 import React, {useEffect, useRef} from 'react';
 import {FC as FCLayout, FCCC} from 'wide-containers';

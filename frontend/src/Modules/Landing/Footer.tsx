@@ -1,3 +1,4 @@
+"use client";
 // Modules/Landing/Footer.tsx
 import React, {useEffect, useState} from 'react';
 import {FC} from 'wide-containers';

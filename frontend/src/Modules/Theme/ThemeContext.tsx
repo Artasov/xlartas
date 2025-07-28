@@ -1,3 +1,4 @@
+"use client";
 // Modules/Theme/ThemeContext.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';

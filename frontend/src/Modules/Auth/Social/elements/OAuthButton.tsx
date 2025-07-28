@@ -1,3 +1,4 @@
+"use client";
 // Modules/Auth/Social/elements/OAuthButton.tsx
 import React, {useEffect} from "react";
 import {IconButton} from "@mui/material";

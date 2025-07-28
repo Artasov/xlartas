@@ -1,3 +1,4 @@
+"use client";
 // Modules/Landing/Landing.tsx
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from "Core/components/Header/HeaderProvider";
