@@ -20,27 +20,27 @@ import iconUnionPay from '../../Static/img/icon/payments/unionpay.svg';
 import iconSberPay from '../../Static/img/icon/payments/sberpay.svg';
 
 export const freekassaIcons = [
-    iconSBP,
-    iconVisa,
-    iconMastercard,
-    iconMir,
-    iconSteam,
-    iconBitcoin,
-    iconLitecoin,
-    iconEthereum,
-    iconTron,
-    iconTon,
-    iconBnb,
-    iconTron,
+    iconSBP.src,
+    iconVisa.src,
+    iconMastercard.src,
+    iconMir.src,
+    iconSteam.src,
+    iconBitcoin.src,
+    iconLitecoin.src,
+    iconEthereum.src,
+    iconTron.src,
+    iconTon.src,
+    iconBnb.src,
+    iconTron.src,
 ];
 
 export const ckassaIcons = [
-    iconSBP,
-    iconSberPay,
-    iconVisa,
-    iconMastercard,
-    iconMir,
-    iconUnionPay,
+    iconSBP.src,
+    iconSberPay.src,
+    iconVisa.src,
+    iconMastercard.src,
+    iconMir.src,
+    iconUnionPay.src,
 ];
 
 interface Props {
