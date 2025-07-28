@@ -1,6 +1,6 @@
 // Modules/Core/components/Head.tsx
 import React from 'react';
-import {Helmet} from 'react-helmet-async';
+import NextHead from 'next/head';
 
 interface HeadProps {
     title?: string;
@@ -85,7 +85,7 @@ const Head: React.FC<HeadProps> = (
     }) => {
 
     return (
-        <Helmet>
+        <NextHead>
             {/* Общие Meta Теги */}
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description}/>}
@@ -126,7 +126,7 @@ const Head: React.FC<HeadProps> = (
 
             {/* Favicon */}
             {icon && <link rel="icon" type="image/png" href={icon} sizes="16x16"/>}
-        </Helmet>
+        </NextHead>
     );
 };
 

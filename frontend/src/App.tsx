@@ -8,7 +8,6 @@ import SettingsTool from "Core/SettingsTool";
 import {ToastContainer} from "react-toastify";
 import OrderTemplate from "Order/OrderTemplate";
 import NewPassword from "Core/pages/NewPassword";
-import {HelmetProvider} from "react-helmet-async";
 import React, {useEffect} from 'react';
 import {ProfileProvider} from "User/ProfileContext";
 import OAuthCallback from "Auth/Social/OAuthCallback";
@@ -150,9 +149,7 @@ const RootApp: React.FC = () => (
                         <ProfileProvider>
                             <ErrorProvider>
                                 <ThemeProvider>
-                                    <HelmetProvider>
-                                        <App/>
-                                    </HelmetProvider>
+                                    <App/>
                                 </ThemeProvider>
                             </ErrorProvider>
                         </ProfileProvider>
