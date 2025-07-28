@@ -83,7 +83,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
             bgImageElement.style.display = 'block';
             appElement.style.background = '';
         } else {
-            bgImageElement.src = '';
+            bgImageElement.removeAttribute('src');
             bgImageElement.style.display = 'none';
         }
 

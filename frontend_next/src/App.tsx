@@ -1,3 +1,5 @@
+"use client";
+
 import 'moment/locale/ru';
 import pprint from "Utils/pprint";
 import Cabinet from "Cabinet/Cabinet";
@@ -81,7 +83,7 @@ const App: React.FC = () => {
                     />
                 )}
                 <div className="bg-image-wrapper">
-                    <img src="" className="bg-image" alt="Background"/>
+                    <img className="bg-image" alt="Background"/>
                 </div>
                 <Head/>
                 <Header/>
