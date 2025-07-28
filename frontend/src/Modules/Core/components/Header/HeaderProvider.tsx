@@ -1,3 +1,4 @@
+"use client";
 // Modules/Core/components/Header/HeaderProvider.tsx
 import React, {createContext, ReactNode, RefObject, useContext, useRef, useState,} from 'react';
 import Logo from 'Core/Logo';
