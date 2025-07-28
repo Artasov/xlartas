@@ -21,6 +21,8 @@ export const buildWSUrl = (path: string): string => {
         ? window.location.host
         : 'localhost:3000';
     const proto = getWsProtocol();
-    const token = localStorage.getItem('access');
+    const token = typeof window !== 'undefined'
+        ? window.localStorage.getItem('access')
+        : null;
     return `${proto}://${host}${path}${token ? `?token=${token}` : ''}`.replace(':3000', ':8000');
 };
