@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Collapse from '@mui/material/Collapse'; // ← NEW
+import Head from "Core/components/Head";
 
 const SoftwareDetailComponent: React.FC = () => {
     const {id} = useParams();
@@ -97,6 +98,7 @@ const SoftwareDetailComponent: React.FC = () => {
     /* ---------- рендер ---------- */
     return (
         <FC pos="relative" cls={'software-detail'} h={'100%'}>
+            <Head title={`${software ? software.name + ' - ' : ''}XLARTAS`} description={software?.description || ''}/>
             {/* ----------- Спиннер (с анимацией Zoom) ----------- */}
             <FRCC pos="relative">
                 <CircularProgressZoomify in={loading} mt={'10%'} size="80px"/>

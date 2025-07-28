@@ -9,6 +9,7 @@ import {Link, Typography} from '@mui/material';
 import {FC} from "wide-containers";
 import {CompanyDocument} from "Company/Types";
 import {useApi} from "Api/useApi";
+import Head from "Core/components/Head";
 
 
 const CompanyDocumentDetail: React.FC = () => {
@@ -36,6 +37,7 @@ const CompanyDocumentDetail: React.FC = () => {
 
     return (
         <FC maxW={700} pb={2} px={2} mx={'auto'}>
+            <Head title={`${document ? document.title + ' - ' : ''}XLARTAS`} description={'Company document details'}/>
             {document.file_url &&
                 <Link href={document.file_url} target="_blank" rel="noopener noreferrer">
                     Скачать документ

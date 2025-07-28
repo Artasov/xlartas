@@ -10,6 +10,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {useApi} from "Api/useApi";
 import copyToClipboard from "Utils/clipboard";
 import './CompanyPage.sass'
+import Head from "Core/components/Head";
 
 
 const CompanyPage: React.FC = () => {
@@ -44,6 +45,7 @@ const CompanyPage: React.FC = () => {
 
     return (
         <FCSS lh={'1.3rem'} px={2} g={1} maxW={500} mx={'auto'}>
+            <Head title={`${company ? company.name + ' - ' : ''}XLARTAS`} description={company?.description || 'Company details on XLARTAS'}/>
             <h1 style={{lineHeight: '1.6rem'}} className={'fs-4'}>{company.name}</h1>
             <h2 style={{lineHeight: '1.4rem'}} className={'fs-5'}>Общее</h2>
             <FC pl={2}>
