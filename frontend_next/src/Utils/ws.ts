@@ -7,9 +7,20 @@
  *
  * @param path «хвост» (/ws/…/) – со слешом в начале или без разницы.
  */
+
+export function getWsProtocol(): 'ws' | 'wss' {
+    if (typeof window === 'undefined') {
+        // На сервере не знаем протокол клиента — возвращаем безопасный по умолчанию
+        return 'ws';
+    }
+    return window.location.protocol === 'https:' ? 'wss' : 'ws';
+}
+
 export const buildWSUrl = (path: string): string => {
-    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.host;             // keeps :<port> if any
-    const token = localStorage.getItem('access');   // simple-jwt access
+    const host = typeof window !== 'undefined'
+        ? window.location.host
+        : 'localhost:3000';
+    const proto = getWsProtocol();
+    const token = localStorage.getItem('access');
     return `${proto}://${host}${path}${token ? `?token=${token}` : ''}`.replace(':3000', ':8000');
 };
