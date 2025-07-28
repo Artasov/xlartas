@@ -101,7 +101,7 @@ const ParallaxContainer: React.FC<ParallaxContainerProps> = ({
     return (
         <FCCC
             ref={containerRef}
-            h="100%" w="100%"
+            h="100%" w="100%" grow
             cls="parallax-container"
             scroll="hidden"
             sx={{perspective: '1000px', willChange: 'transform'}}

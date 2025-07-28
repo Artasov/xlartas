@@ -89,7 +89,7 @@ const App: React.FC = () => {
                 <Header/>
                 <SettingsTool/>
                 <GlobalAuthModal/>
-                <main className={`overflow-y-auto no-scrollbar w-100`}
+                <main className={`overflow-y-auto no-scrollbar w-100 fc`}
                       ref={mainRef} style={{
                     minHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',
                     maxHeight: isHeaderVisible ? `calc(100vh - ${headerNavHeight}px)` : '100vh',

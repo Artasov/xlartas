@@ -43,7 +43,7 @@ const Landing: React.FC = () => {
     return (
         <>
             <Zoom in={animate} appear timeout={2000}>
-                <FCCC pos="relative" w="100%" h="100%">
+                <FCCC pos="relative" w="100%" h="100%" grow>
                     <ParallaxLogo/>
                 </FCCC>
             </Zoom>
