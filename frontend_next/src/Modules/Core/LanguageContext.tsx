@@ -17,13 +17,17 @@ export const LangCtx = createContext<{
 
 export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
     const [lang, setLangState] = useState<Lang>(() =>
-        (localStorage.getItem('lang') as Lang) || 'ru',
+        typeof window !== 'undefined'
+            ? ((localStorage.getItem('lang') as Lang) || 'ru')
+            : 'ru',
     );
 
     const setLang = (l: Lang) => {
         i18n.changeLanguage(l).then();
         moment.locale(l);
-        localStorage.setItem('lang', l);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('lang', l);
+        }
         setLangState(l);
         axios.defaults.headers.common['Accept-Language'] = l;
         axios.post('/api/v1/user/set-lang/', {lang: l}).catch(() => null);

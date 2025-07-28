@@ -12,17 +12,23 @@ const LS_ACCESS = 'access';
 const LS_REFRESH = 'refresh';
 
 const saveTokens = (a: string, r: string) => {
-    localStorage.setItem(LS_ACCESS, a);
-    localStorage.setItem(LS_REFRESH, r);
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(LS_ACCESS, a);
+        localStorage.setItem(LS_REFRESH, r);
+    }
 };
 
 const clearTokens = () => {
-    localStorage.removeItem(LS_ACCESS);
-    localStorage.removeItem(LS_REFRESH);
+    if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(LS_ACCESS);
+        localStorage.removeItem(LS_REFRESH);
+    }
 };
 
-const getAccess = () => localStorage.getItem(LS_ACCESS);
-const getRefresh = () => localStorage.getItem(LS_REFRESH);
+const getAccess = () =>
+    typeof localStorage !== 'undefined' ? localStorage.getItem(LS_ACCESS) : null;
+const getRefresh = () =>
+    typeof localStorage !== 'undefined' ? localStorage.getItem(LS_REFRESH) : null;
 
 /* -------- stringify / preview helper (для логов) -------- */
 const fmt = (x: unknown) => {
@@ -52,10 +58,13 @@ export const useApi = () => {
 
     if (!axiosRef.current) {
         const inst = axios.create({baseURL: `${DOMAIN_URL}/`});
-        inst.defaults.headers.common['Accept-Language'] = localStorage.getItem('lang') || 'ru';
+        if (typeof localStorage !== 'undefined') {
+            inst.defaults.headers.common['Accept-Language'] =
+                localStorage.getItem('lang') || 'ru';
+        }
 
         const getCookie = (name: string): string | null => {
-            if (!document.cookie) return null;
+            if (typeof document === 'undefined' || !document.cookie) return null;
             const xsrfCookies = document.cookie
                 .split(';')
                 .map(c => c.trim())
