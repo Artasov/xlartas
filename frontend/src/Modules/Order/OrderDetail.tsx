@@ -1,6 +1,6 @@
 // Modules/Order/OrderDetail.tsx
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'Utils/nextRouter';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';

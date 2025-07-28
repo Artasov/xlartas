@@ -1,7 +1,7 @@
 // Modules/Company/CompanyPage.tsx
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'Utils/nextRouter';
 import {Message} from 'Core/components/Message';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FC, FCSS, FR} from "wide-containers";

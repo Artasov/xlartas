@@ -19,7 +19,7 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
 import {IconButton, useMediaQuery} from '@mui/material';
 import FileUpload from 'UI/FileUpload';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'Utils/nextRouter';
 import DropOverlay from './DropOverlay';
 import {setFolderCached} from './storageCache';
 import useFileHost from './useFileHost';

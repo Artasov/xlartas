@@ -1,6 +1,6 @@
 // Modules/FileHost/Storage.tsx
 import React, {useEffect, useState} from 'react';
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'Utils/nextRouter';
 import {Tab, Tabs} from '@mui/material';
 import Master from './Master';
 import AllFiles from './AllFiles';

@@ -1,7 +1,7 @@
 // Modules/FileHost/FolderCard.tsx
 import React, {useState} from 'react';
 import {Paper} from '@mui/material';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import RenameDialog from './RenameDialog';
 import useLongPress from './useLongPress';
 import FolderActions from './FolderActions';

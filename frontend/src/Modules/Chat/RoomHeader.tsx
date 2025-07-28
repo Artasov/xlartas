@@ -5,7 +5,7 @@ import {IconButton, useMediaQuery} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import UserAvatar from "User/UserAvatar";
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'Utils/nextRouter';
 import {useAuth} from "Auth/AuthContext";
 import {IRoom} from "types/chat/models";
 import {useTheme} from "Theme/ThemeContext";

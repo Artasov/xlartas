@@ -1,7 +1,7 @@
 // Modules/Chat/Room.tsx
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router-dom';
+import {useParams} from 'Utils/nextRouter';
 import {useAuth} from 'Auth/AuthContext';
 import Divider from 'Core/components/elements/Divider';
 import {Message as ToastMessage} from 'Core/components/Message';

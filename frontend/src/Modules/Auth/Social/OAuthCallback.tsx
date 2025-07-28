@@ -1,6 +1,6 @@
 // Modules/Auth/Social/OAuthCallback.tsx
 import {OAUTH_PROVIDERS} from 'Auth/Social/constants';
-import {useParams} from 'react-router-dom';
+import {useParams} from 'Utils/nextRouter';
 import React, {useEffect} from "react";
 import {useAuth} from "Auth/AuthContext";
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';

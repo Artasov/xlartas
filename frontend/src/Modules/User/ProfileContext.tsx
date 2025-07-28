@@ -1,6 +1,6 @@
 // Modules/User/ProfileContext.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useAuth} from "Auth/AuthContext";
 
 type ProfileType = 'employee' | 'client' | null;

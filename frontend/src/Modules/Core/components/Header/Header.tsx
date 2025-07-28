@@ -2,7 +2,7 @@
 import React, {useRef} from 'react';
 import './Header.sass';
 import {useAuth} from "Auth/AuthContext";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "Utils/nextRouter";
 import {useSelector} from "react-redux";
 import {useTheme} from "Theme/ThemeContext";
 import UserAvatar from "User/UserAvatar";

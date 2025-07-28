@@ -1,7 +1,7 @@
 // Modules/Chat/Chat.tsx
 import React, {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Outlet, useLocation, useNavigate} from 'react-router-dom';
+import {Outlet, useLocation, useNavigate} from 'Utils/nextRouter';
 import RoomItem from 'Chat/RoomItem';
 import {useMediaQuery} from '@mui/material';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';

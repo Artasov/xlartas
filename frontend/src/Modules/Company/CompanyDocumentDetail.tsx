@@ -1,7 +1,7 @@
 // Modules/Company/CompanyDocumentDetail.tsx
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router-dom';
+import {useParams} from 'Utils/nextRouter';
 import {Message} from 'Core/components/Message';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import ReactMarkdown from 'react-markdown';

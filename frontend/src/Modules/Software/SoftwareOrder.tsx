@@ -14,7 +14,7 @@ import PaymentSystemInfo from 'Order/PaymentSystemInfo';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {useAuth} from 'Auth/AuthContext';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useApi} from 'Api/useApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import PaymentTypePicker from 'Order/PaymentTypePicker';

@@ -1,7 +1,5 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-
-const RootApp = dynamic(() => import("../../App"));
+import XLMineLanding from "../../Modules/xLMine/XLMineLanding";
 
 export const metadata: Metadata = {
   title: "XLMine - XLARTAS",
@@ -9,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function XLMinePage() {
-  return <RootApp />;
+  return <XLMineLanding />;
 }

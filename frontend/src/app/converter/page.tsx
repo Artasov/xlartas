@@ -1,8 +1,5 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-
-// Allow RootApp to render on the server as well as the client.
-const RootApp = dynamic(() => import("../../App"));
+import Converter from "../../Modules/Converter/Converter";
 
 export const metadata: Metadata = {
   title: "Converter - XLARTAS",
@@ -10,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ConverterPage() {
-  return <RootApp />;
+  return <Converter />;
 }

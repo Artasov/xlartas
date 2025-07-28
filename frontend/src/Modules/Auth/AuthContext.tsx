@@ -3,7 +3,7 @@ import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {axios, DOMAIN_URL} from "../Api/axiosConfig";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "Utils/nextRouter";
 import {Message} from "Core/components/Message";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {IUser} from "types/core/user";

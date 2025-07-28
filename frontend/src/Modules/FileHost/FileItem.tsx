@@ -5,7 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import {useApi} from 'Api/useApi';
 import {FRSE} from 'wide-containers';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useTranslation} from 'react-i18next';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 

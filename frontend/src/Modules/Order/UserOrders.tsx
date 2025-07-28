@@ -1,6 +1,6 @@
 // Modules/Order/UserOrders.tsx
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {useAuth} from 'Auth/AuthContext';
 import {IOrder} from 'types/commerce/shop';

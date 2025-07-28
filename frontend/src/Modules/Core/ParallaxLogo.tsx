@@ -1,7 +1,7 @@
 // Modules/Core/ParallaxLogo.tsx
 import React, {RefObject, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Button} from '@mui/material';

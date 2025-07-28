@@ -1,7 +1,7 @@
 // Modules/Core/components/Header/HeaderProvider.tsx
 import React, {createContext, ReactNode, RefObject, useContext, useRef, useState,} from 'react';
 import Logo from 'Core/Logo';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 
 interface HeaderContextType {
     mobileNavigationContent: ReactNode | null;

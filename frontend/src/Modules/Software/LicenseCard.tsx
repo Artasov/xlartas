@@ -1,6 +1,6 @@
 // Modules/Software/LicenseCard.tsx
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {Card, CardContent, CardMedia, Typography} from '@mui/material';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC} from "wide-containers";

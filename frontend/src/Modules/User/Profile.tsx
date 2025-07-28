@@ -1,6 +1,6 @@
 // Modules/User/Profile.tsx
 import React, {useEffect} from 'react';
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'Utils/nextRouter';
 import {FC, FRS} from 'wide-containers';
 import UserPersonalInfoForm from 'User/UserPersonalInfoForm';
 import XLMineProfileInfoForm from '../xLMine/xLMineProfileInfoForm';

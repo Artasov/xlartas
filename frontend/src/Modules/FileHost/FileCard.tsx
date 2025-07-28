@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {IconButton, Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import {useApi} from 'Api/useApi';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';

@@ -1,6 +1,6 @@
 // Modules/Software/Softwares.tsx
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'Utils/nextRouter';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
