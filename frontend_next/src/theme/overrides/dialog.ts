@@ -47,8 +47,8 @@ const dialogOverrides: ThemeOptions['components'] = {
                 },
                 backdropFilter: 'blur(15px)',
                 transition: 'backdrop-filter .35s ease, opacity .35s ease', // скрываем скроллбары полностью
-                '-ms-overflow-style': 'none',
-                overflow: '-moz-scrollbars-none',
+                msOverflowStyle: 'none',
+                overflow: 'hidden',
                 '&::-webkit-scrollbar': {
                     width: 0,
                     height: 0,
