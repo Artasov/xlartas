@@ -16,7 +16,7 @@ const Logo: React.FC<LogoProps> = ({height, width, imgCls, cls, onClick}) => {
     const {plt} = useTheme();
     return (
         <FC cls={cls} pos={'relative'}>
-            <img src={logo}
+            <img src={logo.src}
                  onClick={onClick}
                  style={{
                      filter: plt.mode === 'dark' ? '' : 'invert(.8)',
@@ -27,7 +27,7 @@ const Logo: React.FC<LogoProps> = ({height, width, imgCls, cls, onClick}) => {
                  className={`${imgCls} logo d-inline-block align-top object-fit-cover`}
                  alt="xlartas"/>
             <img
-                src={logo}
+                src={logo.src}
                 onClick={onClick}
                 style={{
                     zIndex: 10,

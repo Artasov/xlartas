@@ -148,7 +148,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (paymentType.includes('tbank')) {
             return (
                 <PaymentTypeButton selected={isSelected} key={paymentType} px={1} py={.3}>
-                    <img src={logoTBank} alt={`Иконка ${paymentType}`} style={{maxHeight: 16, marginTop: 1}}/>
+                    <img src={logoTBank.src} alt={`Иконка ${paymentType}`} style={{maxHeight: 16, marginTop: 1}}/>
                     <span style={{fontWeight: 800, fontSize: '1.035rem'}}>
                         {paymentType === 'tbank' ? 'TBank' : 'TBank Рассрочка'}
                     </span>
@@ -160,7 +160,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (paymentType.includes('cloud_payment')) {
             return (
                 <PaymentTypeButton selected={isSelected} key={paymentType} px={1} py={.3}>
-                    <img src={logoCloudPayments} alt={`Иконка ${paymentType}`}
+                    <img src={logoCloudPayments.src} alt={`Иконка ${paymentType}`}
                          style={{maxHeight: paymentButtonHeight}}/>
                     <span style={{whiteSpace: 'nowrap', fontWeight: 800, fontSize: '1.035rem'}}>
                         Cloud Payments
@@ -173,7 +173,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (paymentType.includes('freekassa')) {
             return (
                 <PaymentTypeButton selected={isSelected} key={paymentType} px={1} py={.3}>
-                    <img src={logoFreeKassa} alt={`Иконка ${paymentType}`} style={{maxHeight: paymentButtonHeight}}/>
+                    <img src={logoFreeKassa.src} alt={`Иконка ${paymentType}`} style={{maxHeight: paymentButtonHeight}}/>
                 </PaymentTypeButton>
             );
         }
@@ -182,7 +182,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (paymentType.includes('ckassa')) {
             return (
                 <PaymentTypeButton selected={isSelected} key={paymentType} px={1} py={.3}>
-                    <img src={logoCKassa} alt={`Иконка ${paymentType}`} style={{maxHeight: paymentButtonHeight}}/>
+                    <img src={logoCKassa.src} alt={`Иконка ${paymentType}`} style={{maxHeight: paymentButtonHeight}}/>
                 </PaymentTypeButton>
             );
         }
@@ -210,7 +210,7 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
             <PaymentTypeButton selected={isSelected} key={paymentType} pl={1} pr={1.5}>
                 {paymentType === 'balance' ? (
                     <FRCC g={.8} fontWeight={'bold'} fontSize={'1.3rem'} sx={{whiteSpace: 'nowrap'}}>
-                        <img src={logo} alt={`Иконка ${paymentType}`}
+                        <img src={logo.src} alt={`Иконка ${paymentType}`}
                              style={{maxHeight: `calc(${paymentButtonHeight} - 10px)`}}/>
                         <span style={{opacity: '70%', letterSpacing: '.12rem'}}>{t('by_balance')}</span>
                     </FRCC>

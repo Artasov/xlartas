@@ -100,11 +100,11 @@ const ParallaxLogo: React.FC = () => {
                             transition: 'all 300ms ease-in-out',
                             '&:hover': {filter: 'hue-rotate(50deg)'}
                         }}>
-                            <img src={logoText} style={{
+                            <img src={logoText.src} style={{
                                 height: isGt1200 ? 30 : 23,
                             }} alt="xlmine"/>
                             <img
-                                src={logoText}
+                                src={logoText.src}
                                 style={{
                                     position: 'absolute',
                                     left: 0, top: 0,
@@ -116,7 +116,7 @@ const ParallaxLogo: React.FC = () => {
                                 alt="xlmine"
                             />
                             <img
-                                src={logoText}
+                                src={logoText.src}
                                 style={{
                                     position: 'absolute',
                                     left: 0,
