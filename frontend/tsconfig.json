@@ -1,108 +1,53 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "Extra/*": [
-        "Extra/*"
-      ],
-      "i18n/*": [
-        "i18n/*"
-      ],
-      "Modules/*": [
-        "Modules/*"
-      ],
-      "Redux/*": [
-        "Redux/*"
-      ],
-      "Static/*": [
-        "Static/*"
-      ],
-      "types/*": [
-        "Types/*"
-      ],
-      "UI/*": [
-        "UI/*"
-      ],
-      "Utils/*": [
-        "Utils/*"
-      ],
-      "Api/*": [
-        "Modules/Api/*"
-      ],
-      "Auth/*": [
-        "Modules/Auth/*"
-      ],
-      "Cabinet/*": [
-        "Modules/Cabinet/*"
-      ],
-      "Chat/*": [
-        "Modules/Chat/*"
-      ],
-      "Client/*": [
-        "Modules/Client/*"
-      ],
-      "Company/*": [
-        "Modules/Company/*"
-      ],
-      "Confirmation/*": [
-        "Modules/Confirmation/*"
-      ],
-      "Core/*": [
-        "Modules/Core/*"
-      ],
-      "Docs/*": [
-        "Modules/Docs/*"
-      ],
-      "Landing/*": [
-        "Modules/Landing/*"
-      ],
-      "Order/*": [
-        "Modules/Order/*"
-      ],
-      "Payment/*": [
-        "Modules/Payment/*"
-      ],
-      "TBank/*": [
-        "Modules/TBank/*"
-      ],
-      "Theme/*": [
-        "Modules/Theme/*"
-      ],
-      "User/*": [
-        "Modules/User/*"
-      ],
-      "Converter/*": [
-        "Modules/Converter/*"
-      ],
-      "xLMine/*": [
-        "Modules/xLMine/*"
-      ]
-    },
-    "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/Types"
-    ]
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"],
+      "Extra/*": ["Extra/*"],
+      "i18n/*": ["i18n/*"],
+      "Modules/*": ["Modules/*"],
+      "Redux/*": ["Redux/*"],
+      "Static/*": ["Static/*"],
+      "types/*": ["Types/*"],
+      "UI/*": ["UI/*"],
+      "Utils/*": ["Utils/*"],
+      "Api/*": ["Modules/Api/*"],
+      "Auth/*": ["Modules/Auth/*"],
+      "Cabinet/*": ["Modules/Cabinet/*"],
+      "Chat/*": ["Modules/Chat/*"],
+      "Client/*": ["Modules/Client/*"],
+      "Company/*": ["Modules/Company/*"],
+      "Confirmation/*": ["Modules/Confirmation/*"],
+      "Core/*": ["Modules/Core/*"],
+      "Docs/*": ["Modules/Docs/*"],
+      "Landing/*": ["Modules/Landing/*"],
+      "Order/*": ["Modules/Order/*"],
+      "Payment/*": ["Modules/Payment/*"],
+      "TBank/*": ["Modules/TBank/*"],
+      "Theme/*": ["Modules/Theme/*"],
+      "User/*": ["Modules/User/*"],
+      "Converter/*": ["Modules/Converter/*"],
+      "xLMine/*": ["Modules/xLMine/*"]
+    }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
