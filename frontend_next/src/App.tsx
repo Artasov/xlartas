@@ -40,7 +40,9 @@ const App: React.FC = () => {
     const {isAuthenticated} = useAuth();
     const {t} = useTranslation();
     const {headerNavHeight, mainRef} = useNavigation();
-    const isGt1000 = window.innerWidth > 1000;
+    // `window` is undefined during server-side rendering. Guard against it to
+    // ensure the component can render on the server without errors.
+    const isGt1000 = typeof window !== 'undefined' && window.innerWidth > 1000;
     const isBackgroundFlickerEnabled = useSelector((state: RootState) => state.visibility.isBackgroundFlickerEnabled);
 
     useEffect(() => {
