@@ -2,8 +2,12 @@
 import type { Metadata } from "next";
 import SoftwareDetailPageClient from "./SoftwareDetailPageClient";
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
+interface PageProps {
+  params: { id: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = params;
   return {
     title: `Software ${id} - XLARTAS`,
     description: `Details about software ${id} on XLARTAS platform`,
@@ -11,5 +15,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 export default function SoftwareDetailPage() {
+  // просто рендерим клиентский, без пропсов
   return <SoftwareDetailPageClient />;
 }

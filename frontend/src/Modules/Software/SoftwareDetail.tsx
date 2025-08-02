@@ -24,7 +24,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Collapse from '@mui/material/Collapse';
 import Head from "Core/components/Head";
 
-const SoftwareDetailComponent: React.FC = () => {
+const SoftwareDetail: React.FC = () => {
     const {id} = useParams();
     const {isAuthenticated} = useAuth();
     const {plt} = useTheme();
@@ -232,4 +232,4 @@ const SoftwareDetailComponent: React.FC = () => {
     );
 };
 
-export default memo(SoftwareDetailComponent);
+export default memo(SoftwareDetail);
