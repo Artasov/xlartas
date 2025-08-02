@@ -35,7 +35,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const {api} = useApi()
     const {t} = useTranslation();
     const [payModal, setPayModal] = useState(false);
-    const [searchParams] = useSearchParams();
+    const searchParams = useSearchParams();
 
     // если в URL есть `?pay=1`, открываем modal сразу
     React.useEffect(() => {
