@@ -1,6 +1,6 @@
 "use client";
 import NextLink, {LinkProps as NextLinkProps} from "next/link";
-import {useRouter, usePathname, useSearchParams} from "next/navigation";
+import {useRouter, usePathname, useSearchParams as useNextSearchParams} from "next/navigation";
 import React from "react";
 
 export interface LinkProps extends Omit<NextLinkProps, 'href'> {
@@ -22,11 +22,22 @@ export function useNavigate() {
 
 export function useLocation() {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const searchParams = useNextSearchParams();
     return {
         pathname,
         search: searchParams.toString(),
     };
+}
+
+export function useSearchParams() {
+    return useNextSearchParams();
+}
+
+const ParamsContext = React.createContext<Record<string, string>>({});
+const BasePathContext = React.createContext<string>("/");
+
+export function useParams<T extends Record<string, string | undefined> = Record<string, string | undefined>>() {
+    return React.useContext(ParamsContext) as T;
 }
 
 function pathToRegex(path: string): RegExp {
@@ -40,11 +51,38 @@ function pathToRegex(path: string): RegExp {
 
 export const Routes: React.FC<{children: React.ReactNode}> = ({children}) => <>{children}</>;
 
+function joinPaths(base: string, path: string) {
+    if (path.startsWith('/')) return path;
+    if (base.endsWith('/')) return base + path;
+    return base + '/' + path;
+}
+
+function extractParams(pattern: string, pathname: string) {
+    const params: Record<string, string> = {};
+    const patternSegments = pattern.replace(/\*.*$/, '').split('/').filter(Boolean);
+    const pathnameSegments = pathname.split('/').filter(Boolean);
+    patternSegments.forEach((seg, i) => {
+        if (seg.startsWith(':')) params[seg.slice(1)] = pathnameSegments[i] ?? '';
+    });
+    return params;
+}
+
 export const Route: React.FC<{path: string; element: React.ReactNode}> = ({path, element}) => {
     const pathname = usePathname();
-    const regex = pathToRegex(path);
-    if (regex.test(pathname)) return <>{element}</>;
-    return null;
+    const base = React.useContext(BasePathContext);
+    const parentParams = React.useContext(ParamsContext);
+    const fullPath = joinPaths(base, path);
+    const regex = pathToRegex(fullPath);
+    if (!regex.test(pathname)) return null;
+    const params = extractParams(fullPath, pathname);
+    const childBase = fullPath.replace(/\*.*$/, '');
+    return (
+        <ParamsContext.Provider value={{...parentParams, ...params}}>
+            <BasePathContext.Provider value={childBase}>
+                {element}
+            </BasePathContext.Provider>
+        </ParamsContext.Provider>
+    );
 };
 
 export const Outlet: React.FC<{children?: React.ReactNode}> = ({children}) => <>{children}</>;
