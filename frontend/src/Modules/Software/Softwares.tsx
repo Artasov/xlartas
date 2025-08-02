@@ -1,4 +1,5 @@
 // Modules/Software/Softwares.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'Utils/nextRouter';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
@@ -9,7 +10,6 @@ import {useApi} from 'Api/useApi';
 import SoftwareCard from './SoftwareCard';
 import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
-import Head from "Core/components/Head";
 
 const Softwares: React.FC = () => {
     const [softwares, setSoftwares] = useState<ISoftware[]>([]);
@@ -36,7 +36,7 @@ const Softwares: React.FC = () => {
 
     return (
         <FRCC g={2} wrap position="relative" w="100%">
-            <Head title={'Softwares - XLARTAS'} description={'Explore available software on XLARTAS platform'}/>
+            <h1 className={"fs-1 lh-1 text-center"}>{t('softwares')}</h1>
             <CircularProgressZoomify in={loading} mt={'10%'} size="90px"/>
             {softwares.length > 0 &&
                 softwares.map((software, index) => (

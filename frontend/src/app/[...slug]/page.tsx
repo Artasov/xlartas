@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Cabinet from "../../Modules/Cabinet/Cabinet";
 
 export const metadata: Metadata = {
-  title: "Cabinet - XLARTAS",
+  title: "XL | Profile",
   description: "User cabinet",
 };
 
