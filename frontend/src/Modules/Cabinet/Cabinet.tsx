@@ -1,3 +1,4 @@
+// Modules/Cabinet/Cabinet.tsx
 "use client";
 // Modules/Cabinet/Cabinet.tsx
 import React, {useEffect, useRef, useState} from 'react';

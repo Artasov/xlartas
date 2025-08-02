@@ -1,3 +1,4 @@
+// app/softwares/SoftwaresPageClient.tsx
 "use client";
 
 import Softwares from "../../Modules/Software/Softwares";

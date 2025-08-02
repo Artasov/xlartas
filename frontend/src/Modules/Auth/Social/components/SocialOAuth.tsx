@@ -1,3 +1,4 @@
+// Modules/Auth/Social/components/SocialOAuth.tsx
 "use client";
 // Modules/Auth/Social/components/SocialOAuth.tsx
 import React, {useEffect, useRef, useState} from 'react';

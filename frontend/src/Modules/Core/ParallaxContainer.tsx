@@ -1,3 +1,4 @@
+// Modules/Core/ParallaxContainer.tsx
 "use client";
 // Modules/Core/ParallaxContainer.tsx
 import React, {useEffect, useRef} from 'react';

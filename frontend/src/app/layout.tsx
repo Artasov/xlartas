@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Nunito, Roboto_Mono } from "next/font/google";
 import "./globals.css";

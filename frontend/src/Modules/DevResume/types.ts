@@ -1,3 +1,4 @@
+// Modules/DevResume/types.ts
 import React from "react";
 
 export interface Skill {

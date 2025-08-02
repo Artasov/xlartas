@@ -1,3 +1,4 @@
+// Modules/Core/components/ErrorProvider.tsx
 "use client";
 // Modules/Core/components/ErrorProvider.tsx
 import React, {createContext, ReactNode, useContext, useEffect, useRef} from 'react';

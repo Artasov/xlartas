@@ -1,3 +1,4 @@
+// app/devresume/page.tsx
 import type { Metadata } from "next";
 import DevResumePage from "../../Modules/DevResume/DevResumePage";
 

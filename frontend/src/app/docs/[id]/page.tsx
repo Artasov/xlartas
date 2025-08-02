@@ -1,3 +1,4 @@
+// app/docs/[id]/page.tsx
 import type { Metadata } from "next";
 import CompanyDocumentDetail from "../../../Modules/Company/CompanyDocumentDetail";
 

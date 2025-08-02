@@ -1,3 +1,4 @@
+// app/[...slug]/page.tsx
 import type { Metadata } from "next";
 import Cabinet from "../../Modules/Cabinet/Cabinet";
 

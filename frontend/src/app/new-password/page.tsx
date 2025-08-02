@@ -1,3 +1,4 @@
+// app/new-password/page.tsx
 import type { Metadata } from "next";
 import NewPassword from "../../Modules/Core/pages/NewPassword";
 

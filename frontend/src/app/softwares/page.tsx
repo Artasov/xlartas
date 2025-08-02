@@ -1,3 +1,4 @@
+// app/softwares/page.tsx
 import type {Metadata} from "next";
 import SoftwaresPageClient from "./SoftwaresPageClient";
 

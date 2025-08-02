@@ -1,4 +1,4 @@
-// react-icons
+// Modules/DevResume/skills.ts
 import {
     SiAdobeaftereffects,
     SiAdobeaudition,

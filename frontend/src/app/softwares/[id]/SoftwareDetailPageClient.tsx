@@ -1,3 +1,4 @@
+// app/softwares/[id]/SoftwareDetailPageClient.tsx
 "use client";
 
 import SoftwareDetail from "../../../Modules/Software/SoftwareDetail";

@@ -1,3 +1,4 @@
+// app/xlmine/page.tsx
 import type { Metadata } from "next";
 import XLMineLanding from "../../Modules/xLMine/XLMineLanding";
 

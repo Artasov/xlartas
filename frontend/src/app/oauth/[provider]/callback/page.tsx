@@ -1,3 +1,4 @@
+// app/oauth/[provider]/callback/page.tsx
 import type { Metadata } from "next";
 import OAuthCallback from "../../../../Modules/Auth/Social/OAuthCallback";
 

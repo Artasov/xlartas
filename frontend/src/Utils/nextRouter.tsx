@@ -1,3 +1,4 @@
+// Utils/nextRouter.tsx
 "use client";
 import NextLink, {LinkProps as NextLinkProps} from "next/link";
 import {useRouter, usePathname, useSearchParams as useNextSearchParams} from "next/navigation";

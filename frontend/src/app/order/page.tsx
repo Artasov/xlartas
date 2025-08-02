@@ -1,3 +1,4 @@
+// app/order/page.tsx
 import type { Metadata } from "next";
 import OrderTemplate from "../../Modules/Order/OrderTemplate";
 

@@ -1,3 +1,4 @@
+// Modules/Landing/Footer.tsx
 "use client";
 // Modules/Landing/Footer.tsx
 import React, {useEffect, useState} from 'react';
