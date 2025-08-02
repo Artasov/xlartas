@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/xLMine/XLMineLanding.tsx
 
 import React, {useEffect, useRef, useState} from 'react';
