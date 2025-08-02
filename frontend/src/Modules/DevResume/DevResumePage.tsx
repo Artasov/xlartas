@@ -1,108 +1,13 @@
 'use client';
 
-import {Avatar, Box, Grid, Typography} from '@mui/material';
-import {
-    SiAdobeaftereffects,
-    SiAdobeaudition,
-    SiAdobeillustrator,
-    SiAdobephotoshop,
-    SiAdobepremierepro,
-    SiBootstrap,
-    SiC,
-    SiCmake,
-    SiCplusplus,
-    SiCss3,
-    SiDjango,
-    SiDocker,
-    SiElectron,
-    SiFastapi,
-    SiFigma,
-    SiFlask,
-    SiGit,
-    SiGnubash,
-    SiGradle,
-    SiHtml5,
-    SiIntellijidea,
-    SiJquery,
-    SiLinux,
-    SiMui,
-    SiMysql,
-    SiNeovim,
-    SiNginx,
-    SiObsidian,
-    SiOpencv,
-    SiPostgresql,
-    SiPostman,
-    SiPycharm,
-    SiPython,
-    SiPytorch,
-    SiQt,
-    SiRabbitmq,
-    SiReact,
-    SiRedis,
-    SiRedux,
-    SiSass,
-    SiSelenium,
-    SiSpring,
-    SiSqlite,
-    SiSublimetext,
-    SiTypescript,
-    SiVuedotjs,
-} from 'react-icons/si';
-import {DiJava, DiVisualstudio} from 'react-icons/di';
-import React from "react";
+import React from 'react';
+import {Avatar, Box, Typography} from '@mui/material';
+import TechnologyGrid from './TechnologyGrid';
+import {skills} from './skills';
+import headerBg from 'Static/img/dev_resume/dev-resume-bg.png';
+import headerAva from 'Static/img/dev_resume/cj3ogBvDp24.jpg';
 
-const skills = [
-    {name: 'Python', Icon: SiPython},
-    {name: 'TypeScript', Icon: SiTypescript},
-    {name: 'C', Icon: SiC},
-    {name: 'C++', Icon: SiCplusplus},
-    {name: 'Java', Icon: DiJava},
-    {name: 'Sass', Icon: SiSass},
-    {name: 'HTML5', Icon: SiHtml5},
-    {name: 'CSS3', Icon: SiCss3},
-    {name: 'Django', Icon: SiDjango},
-    {name: 'React', Icon: SiReact},
-    {name: 'Vue', Icon: SiVuedotjs},
-    {name: 'Redux', Icon: SiRedux},
-    {name: 'Material UI', Icon: SiMui},
-    {name: 'FastAPI', Icon: SiFastapi},
-    {name: 'Flask', Icon: SiFlask},
-    {name: 'Qt', Icon: SiQt},
-    {name: 'Spring', Icon: SiSpring},
-    {name: 'Electron', Icon: SiElectron},
-    {name: 'Bootstrap', Icon: SiBootstrap},
-    {name: 'Gradle', Icon: SiGradle},
-    {name: 'RabbitMQ', Icon: SiRabbitmq},
-    {name: 'Docker', Icon: SiDocker},
-    {name: 'Nginx', Icon: SiNginx},
-    {name: 'Selenium', Icon: SiSelenium},
-    {name: 'Git', Icon: SiGit},
-    {name: 'Linux', Icon: SiLinux},
-    {name: 'Bash', Icon: SiGnubash},
-    {name: 'CMake', Icon: SiCmake},
-    {name: 'OpenCV', Icon: SiOpencv},
-    {name: 'PyTorch', Icon: SiPytorch},
-    {name: 'jQuery', Icon: SiJquery},
-    {name: 'Redis', Icon: SiRedis},
-    {name: 'SQLite', Icon: SiSqlite},
-    {name: 'PostgreSQL', Icon: SiPostgresql},
-    {name: 'MySQL', Icon: SiMysql},
-    {name: 'PyCharm', Icon: SiPycharm},
-    {name: 'Intellij IDEA', Icon: SiIntellijidea},
-    {name: 'VS Code', Icon: DiVisualstudio},
-    {name: 'Neovim', Icon: SiNeovim},
-    {name: 'Postman', Icon: SiPostman},
-    {name: 'Figma', Icon: SiFigma},
-    {name: 'After Effects', Icon: SiAdobeaftereffects},
-    {name: 'Premiere Pro', Icon: SiAdobepremierepro},
-    {name: 'Audition', Icon: SiAdobeaudition},
-    {name: 'Photoshop', Icon: SiAdobephotoshop},
-    {name: 'Illustrator', Icon: SiAdobeillustrator},
-    {name: 'Obsidian', Icon: SiObsidian},
-    {name: 'Sublime Text', Icon: SiSublimetext},
-];
-
+/* ───────────────────── Опыт ───────────────────── */
 const experiences = [
     {
         role: 'Software Engineer',
@@ -112,67 +17,66 @@ const experiences = [
     },
 ];
 
+/* ─────────────────── Страница резюме ─────────────────── */
 export default function DevResumePage() {
     return (
-        <Box sx={{p: 4}}>
-            <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 4}}>
-                <Avatar
-                    src="https://via.placeholder.com/150"
-                    alt="Avatar"
-                    sx={{width: 80, height: 80}}
+        <Box sx={{p: 2}} maxWidth={1000} alignSelf={'center'}>
+            {/* Шапка */}
+            <Box sx={{
+                display: 'flex', alignItems: 'center', gap: 2, position: 'relative',
+                minHeight: 200
+            }}>
+                <Box
+                    component="img"
+                    src={headerBg.src}
+                    alt="Header bg"
+                    width={'100%'} height={'100%'}
+                    position={'absolute'}
+                    sx={{objectFit: 'cover'}}
+                    borderRadius={'1.2rem'}
                 />
-                <Box>
-                    <Typography variant="h4">Your Name</Typography>
-                    <Typography variant="subtitle1">Full Stack Developer</Typography>
-                </Box>
             </Box>
 
-            <Box sx={{mb: 4}}>
-                <Typography variant="h5" gutterBottom>
-                    About Me
-                </Typography>
+            <Box position={'relative'} mt={1}>
+                <Avatar
+                    src={headerAva.src}
+                    alt="Avatar"
+                    sx={{
+                        width: 120, height: 120,
+                        position: 'absolute',
+                        bottom: 0
+                    }}
+                />
+                <Typography variant="h4" sx={{ml: 15}}>Nikita Artasov</Typography>
+            </Box>
+
+            {/* Блок «Обо мне» */}
+            <Box my={2}>
+                <Typography variant="h5" gutterBottom>About Me</Typography>
                 <Typography>
-                    This is a placeholder about me section. Replace this text with a brief description about yourself.
+                    This is a placeholder about-me section. Replace this text with a brief description
+                    about yourself.
                 </Typography>
             </Box>
 
+            {/* Технологии */}
+            <Box my={2}>
+                <TechnologyGrid skills={skills}/>
+            </Box>
+            {/* Опыт */}
             <Box sx={{mb: 4}}>
-                <Typography variant="h5" gutterBottom>
-                    Experience
-                </Typography>
-                {experiences.map((exp, idx) => (
-                    <Box key={idx} sx={{mb: 2}}>
+                <Typography variant="h5" gutterBottom>Experience</Typography>
+                {experiences.map(({role, company, period, description}) => (
+                    <Box key={role} sx={{mb: 2}}>
                         <Typography variant="subtitle1">
-                            <strong>{exp.role}</strong> – {exp.company}
+                            <strong>{role}</strong>&nbsp;–&nbsp;{company}
                         </Typography>
-                        <Typography variant="caption" display="block">
-                            {exp.period}
-                        </Typography>
-                        <Typography>{exp.description}</Typography>
+                        <Typography variant="caption" display="block">{period}</Typography>
+                        <Typography>{description}</Typography>
                     </Box>
                 ))}
             </Box>
 
-            <Box>
-                <Typography variant="h5" gutterBottom>
-                    Technologies
-                </Typography>
-                <Grid container spacing={2}>
-                    {skills.map(({name, Icon}) => (
-                        <Grid
-                            size={{xs: 4, sm: 2}}
-                            key={name}
-                            sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
-                        >
-                            <Icon size={32}/>
-                            <Typography variant="caption" align="center">
-                                {name}
-                            </Typography>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Box>
         </Box>
     );
 }
-
