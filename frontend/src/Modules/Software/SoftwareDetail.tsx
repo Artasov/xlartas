@@ -1,4 +1,5 @@
 // Modules/Software/SoftwareDetail.tsx
+"use client";
 import React, {memo, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'Utils/nextRouter';
@@ -20,7 +21,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Collapse from '@mui/material/Collapse'; // ← NEW
+import Collapse from '@mui/material/Collapse';
 import Head from "Core/components/Head";
 
 const SoftwareDetailComponent: React.FC = () => {

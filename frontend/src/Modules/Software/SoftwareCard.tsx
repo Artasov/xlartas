@@ -1,5 +1,5 @@
 // Modules/Software/SoftwareCard.tsx
-
+"use client";
 import React from 'react';
 import {useTheme} from "Theme/ThemeContext";
 import {ISoftware} from "./Types/Software";
