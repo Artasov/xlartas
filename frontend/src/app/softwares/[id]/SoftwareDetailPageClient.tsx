@@ -4,6 +4,7 @@
 import {FC} from "wide-containers";
 import {useParams} from "next/navigation";
 import SoftwareDetail from "../../../Modules/Software/SoftwareDetail";
+import Providers from "../../../providers";
 
 export default function SoftwareDetailPageClient() {
     const params = useParams();
@@ -16,8 +17,10 @@ export default function SoftwareDetailPageClient() {
     }
 
     return (
-        <FC g={2} p={2} mx={"auto"} maxW={700}>
-            <SoftwareDetail id={id}/>
-        </FC>
+        <Providers>
+            <FC g={2} p={2} mx={"auto"} maxW={700}>
+                <SoftwareDetail/>
+            </FC>
+        </Providers>
     );
 }
