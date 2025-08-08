@@ -16,7 +16,7 @@ import {Message} from "Core/components/Message";
 import {isEmail, isPhone} from "Utils/validator/base";
 import SignUpForm from "Auth/forms/SignUpForm";
 import BackButton from "Core/components/BackButton";
-import {useApi} from "Api/useApi";
+import {useAuthApi} from 'Auth/useAuthApi';
 import {useTranslation} from "react-i18next";
 
 type AuthFormProps = {
@@ -45,7 +45,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const [useConfirmation, setUseConfirmation] = useState<boolean>(false);
     const [confirmationAction, setConfirmationAction] = useState<string>('auth'); // 'auth' or 'signup'
     const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false);
-    const {api} = useApi();
+    const {getAuthMethods} = useAuthApi();
 
     useEffect(() => {
         if (!hasPhone && hasEmail) setSelectedTab(1);
@@ -106,7 +106,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ways = ['phone']}) => {
     const handleNextStep = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        api.post('/api/v1/user/auth_methods/', {credential}).then(data => {
+        getAuthMethods(credential).then(data => {
             if (data.user_not_exists) {
                 setStep(3);
             } else {

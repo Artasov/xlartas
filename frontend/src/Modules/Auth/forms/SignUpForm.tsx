@@ -16,7 +16,7 @@ import {debounce} from 'lodash';
 import 'Core/components/elements/PhoneField/PhoneField.sass';
 import {YANDEX_RECAPTCHA_SITE_KEY} from "Api/axiosConfig";
 import pprint from "Utils/pprint";
-import {useApi} from "Api/useApi";
+import {useAuthApi} from 'Auth/useAuthApi';
 
 interface SignUpFormProps {
     credential: string;
@@ -59,7 +59,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
 
     const [initialCodeSent, setInitialCodeSent] = useState<boolean>(false);
 
-    const {api} = useApi();
+    const {checkPhoneExists, checkEmailExists, signup} = useAuthApi();
 
     useEffect(() => {
         pprint('credential');
@@ -83,7 +83,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
             if (phoneCheckRef.current) phoneCheckRef.current.cancel();
             if (valid) {
                 phoneCheckRef.current = debounce(async () => {
-                    api.post('/api/v1/check-phone-exists/', {phone}).then(
+                    checkPhoneExists(phone).then(
                         data => setIsPhoneAvailable(!data.exists)
                     );
                 }, 500);
@@ -103,7 +103,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
             if (emailCheckRef.current) emailCheckRef.current.cancel();
             if (valid) {
                 emailCheckRef.current = debounce(async () => {
-                    api.post('/api/v1/check-email-exists/', {email}).then(
+                    checkEmailExists(email).then(
                         data => setIsEmailAvailable(!data.exists)
                     );
                 }, 500);
@@ -135,7 +135,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
         if (mode === 'phone') data.phone = phone || null;
         else data.email = email || null;
 
-        api.post('/api/v1/signup/', data).then(data => {
+        signup(data).then(data => {
             Message.success(data.message);
             if (data.confirmation_sent) {
                 setConfirmationSent(true);

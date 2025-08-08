@@ -1,7 +1,7 @@
 // Modules/FileHost/FileDetail.tsx
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'Utils/nextRouter';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {IFile} from './types';
 import {Container, FC, FR, FRBC} from 'wide-containers';
 
@@ -16,7 +16,7 @@ import ImagePreview from "UI/ImagePreview";
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();
-    const {api} = useApi();
+    const {getFile, deleteItem} = useFileHostApi();
     const navigate = useNavigate();
     const {t} = useTranslation();
     const [file, setFile] = useState<IFile | null>(null);
@@ -25,8 +25,8 @@ const FileDetail: React.FC = () => {
     const {plt} = useTheme();
 
     useEffect(() => {
-        if (id) api.post('/api/v1/filehost/file/', {id: Number(id)}).then(setFile);
-    }, [id]);
+        if (id) getFile(Number(id)).then(setFile);
+    }, [id, getFile]);
     if (!file) return null;
 
     return (
@@ -41,7 +41,7 @@ const FileDetail: React.FC = () => {
                     onDownload={() => window.open(file.file)}
                     onShare={() => setShowShare(true)}
                     onDelete={async (f) => {
-                        await api.delete('/api/v1/filehost/item/delete/', {data: {file_id: f.id}});
+                        await deleteItem({file_id: f.id});
                         navigate(-1);
                     }}
                 />

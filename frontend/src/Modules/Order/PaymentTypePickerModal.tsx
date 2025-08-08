@@ -10,7 +10,7 @@ import {ICurrencyWithPrice, IOrder, IPaymentSystem} from 'types/commerce/shop';
 import {Button} from '@mui/material';
 import {Message} from 'Core/components/Message';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
-import {useApi} from 'Api/useApi';
+import {useOrderApi} from 'Order/useOrderApi';
 import {FC, FRE} from "wide-containers";
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 }
 
 const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymentInited}) => {
-    const {api} = useApi();
+    const {initPayment} = useOrderApi();
     const [currency, setCurrency] = useState<ICurrencyWithPrice | null>(null);
     const [system, setSystem] = useState<IPaymentSystem | null>(null);
     const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const PaymentTypePickerModal: React.FC<Props> = ({open, onClose, order, onPaymen
         }
         setLoading(true);
         try {
-            const resp = await api.post(`/api/v1/orders/${order.id}/init-payment/`, {
+            const resp = await initPayment(order.id, {
                 payment_system: system,
                 currency: currency.currency,
                 amount: currency.priceObject?.amount,

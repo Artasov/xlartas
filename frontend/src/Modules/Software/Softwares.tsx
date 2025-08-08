@@ -6,7 +6,7 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import {FC, FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {ISoftware} from './Types/Software';
-import {useApi} from 'Api/useApi';
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import SoftwareCard from './SoftwareCard';
 import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
@@ -17,16 +17,16 @@ const Softwares: React.FC = () => {
     const [animate, setAnimate] = useState(false);
     const navigate = useNavigate();
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {listSoftware} = useSoftwareApi();
     const {t} = useTranslation();
 
     useEffect(() => {
         setLoading(true);
         setAnimate(false);
-        api.get('/api/v1/software/')
+        listSoftware()
             .then(data => setSoftwares(data))
             .finally(() => setLoading(false));
-    }, [api]);
+    }, [listSoftware]);
 
     useEffect(() => {
         if (!loading) {

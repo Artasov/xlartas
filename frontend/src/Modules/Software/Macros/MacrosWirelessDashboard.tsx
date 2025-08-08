@@ -9,14 +9,14 @@ import {Message} from 'Core/components/Message';
 import {FC, FRC, FREC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import MacroFormDialog from './MacroFormDialog';
-import {useApi} from 'Api/useApi';
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import {WirelessMacro} from '../Types/Software';
 import {useMacroControl} from './MacroControlProvider';
 import {useTranslation} from 'react-i18next';
 
 const MacrosWirelessDashboard: React.FC = () => {
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {listWirelessMacros, deleteWirelessMacro} = useSoftwareApi();
     const {sendMacro} = useMacroControl();
 
     const [macros, setMacros] = useState<WirelessMacro[] | null>(null);
@@ -26,7 +26,7 @@ const MacrosWirelessDashboard: React.FC = () => {
 
     const load = async () => {
         try {
-            setMacros((await api.get('/api/v1/wireless-macros/')).results);
+            setMacros((await listWirelessMacros()).results);
         } catch {
             Message.error(t('load_macros_error'));
         }
@@ -37,7 +37,7 @@ const MacrosWirelessDashboard: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await api.delete(`/api/v1/wireless-macros/${id}/`);
+            await deleteWirelessMacro(id);
             setMacros(prev => prev!.filter(m => m.id !== id));
         } catch {
             Message.error(t('delete_macro_error'));

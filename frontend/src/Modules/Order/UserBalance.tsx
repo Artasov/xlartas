@@ -1,7 +1,7 @@
 // Modules/Order/UserBalance.tsx
 import React, {useEffect, useState} from 'react';
 import BalanceTopUpDialog from './BalanceTopUpDialog';
-import {useApi} from 'Api/useApi';
+import {useOrderApi} from 'Order/useOrderApi';
 import {FR, FRSC} from 'wide-containers';
 import {Button} from '@mui/material';
 import Zoom from '@mui/material/Zoom';
@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 
 const UserBalance: React.FC = () => {
-    const {api} = useApi();
+    const {getUserBalance} = useOrderApi();
     const {t} = useTranslation();
     const [balance, setBalance] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
@@ -17,7 +17,7 @@ const UserBalance: React.FC = () => {
 
     const fetchBalance = () => {
         setLoading(true);
-        api.get('/api/v1/user/balance/')
+        getUserBalance()
             .then((d: any) => setBalance(parseFloat(d.balance)))
             .catch(() => null)
             .finally(() => setLoading(false));

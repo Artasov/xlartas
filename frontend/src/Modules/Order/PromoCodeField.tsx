@@ -12,7 +12,7 @@ import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IPromocode} from "types/commerce/promocode";
 import {ICurrency} from "types/commerce/shop";
 import {Message} from "Core/components/Message";
-import {useApi} from "Api/useApi";
+import {useOrderApi} from 'Order/useOrderApi';
 
 interface PromoCodeFieldProps {
     cls?: string;
@@ -30,7 +30,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
     const [promoCode, setPromoCode] = useState<string>('');
     const [status, setStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
     const promoCodeRef = useRef<HTMLInputElement>(null);
-    const {api} = useApi();
+    const {applyPromocode} = useOrderApi();
     const {plt, theme} = useTheme();
     const {byResponse} = useErrorProcessing();
     const {t} = useTranslation();
@@ -43,7 +43,7 @@ const PromoCodeField: React.FC<PromoCodeFieldProps> = (
         }
         setStatus('checking');
         try {
-            const response = await api.post('api/v1/promocode/applicable/', {
+            const response = await applyPromocode({
                 promocode: code,
                 employee: employeeId,
                 product: productId,

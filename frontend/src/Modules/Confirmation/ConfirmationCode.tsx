@@ -12,7 +12,7 @@ import {FC, FCCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {isEmail, isPhone} from 'Utils/validator/base';
 import pprint from 'Utils/pprint';
-import {useApi} from "Api/useApi";
+import {useConfirmationApi} from 'Confirmation/useConfirmationApi';
 
 export type ConfirmationMethod = 'email' | 'phone';
 
@@ -61,7 +61,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
     const [resetCaptcha, setResetCaptcha] = useState<number>(0);
     const [isSending, setIsSending] = useState<boolean>(false);
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {confirmCode: confirmCodeApi, sendCode} = useConfirmationApi();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -96,7 +96,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
 
     const confirmCode = async () => {
         try {
-            const data = await api.post('/api/v1/confirmation-code/confirm/', {
+            const data = await confirmCodeApi({
                 code,
                 credential,
                 action,
@@ -134,10 +134,7 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                     captchaToken,
                     ...additional_params,
                 };
-            const endpoint = initialCodeSent
-                ? '/api/v1/confirmation-code/resend/'
-                : '/api/v1/confirmation-code/new/';
-            const data = await api.post(endpoint, payload);
+            const data = await sendCode(payload, initialCodeSent);
             if (onGeneratedCode) onGeneratedCode();
             setResendTimeout(60);
             setCodeSent(true);

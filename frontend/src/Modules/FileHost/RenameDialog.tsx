@@ -1,7 +1,7 @@
 // Modules/FileHost/RenameDialog.tsx
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {useTranslation} from 'react-i18next';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const RenameDialog: React.FC<Props> = ({id, name, open, onClose, onRenamed}) => {
-    const {api} = useApi();
+    const {renameItem} = useFileHostApi();
     const {t} = useTranslation();
     const [value, setValue] = useState(name);
 
@@ -23,7 +23,7 @@ const RenameDialog: React.FC<Props> = ({id, name, open, onClose, onRenamed}) => 
 
     const handleRename = async () => {
         if (!id) return;
-        await api.post('/api/v1/filehost/item/rename/', {item_id: id, new_name: value});
+        await renameItem(id, value);
         onClose();
         onRenamed && onRenamed();
     };

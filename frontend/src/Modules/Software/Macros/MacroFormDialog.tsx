@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
-import {useApi} from "Api/useApi";
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import {WirelessMacro} from "../Types/Software";
 import {useTranslation} from "react-i18next";
 
@@ -23,7 +23,7 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
     const [name, setName] = useState(macro?.name ?? '');
     const [priority, setPriority] = useState(macro?.priority ?? 0);
     const [saving, setSaving] = useState(false);
-    const {api} = useApi();
+    const {updateWirelessMacro, createWirelessMacro} = useSoftwareApi();
     const {t} = useTranslation();
 
     /* Подтягиваем данные при повторных открытиях диалога */
@@ -46,15 +46,9 @@ const MacroFormDialog: React.FC<Props> = ({open, onClose, onSaved, macro}) => {
         try {
             let resp: WirelessMacro;
             if (isEdit) {
-                resp = await api.patch<WirelessMacro>(
-                    `/api/v1/wireless-macros/${macro!.id}/`,
-                    {name: name.trim(), priority}
-                );
+                resp = await updateWirelessMacro(macro!.id, {name: name.trim(), priority});
             } else {
-                resp = await api.post<WirelessMacro>(
-                    '/api/v1/wireless-macros/',
-                    {name: name.trim(), priority}
-                );
+                resp = await createWirelessMacro({name: name.trim(), priority});
             }
             onSaved(resp);
             onClose();

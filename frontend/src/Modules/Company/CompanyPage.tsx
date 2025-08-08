@@ -7,7 +7,7 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import {FC, FCSS, FR} from "wide-containers";
 import {Company} from "Company/Types";
 import {useTheme} from "Theme/ThemeContext";
-import {useApi} from "Api/useApi";
+import {useCompanyApi} from 'Company/useCompanyApi';
 import copyToClipboard from "Utils/clipboard";
 import './CompanyPage.sass'
 import Head from "Core/components/Head";
@@ -19,13 +19,13 @@ const CompanyPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
     const {theme} = useTheme();
-    const {api} = useApi();
+    const {getCompany} = useCompanyApi();
     const {t} = useTranslation();
 
     useEffect(() => {
         if (!name) return
         const fetchCompany = async () => {
-            api.get(`/api/v1/companies/${encodeURIComponent(name)}/`).then(data => setCompany(data)).finally(() => setLoading(false));
+            getCompany(name).then(data => setCompany(data)).finally(() => setLoading(false));
         };
         if (name) {
             fetchCompany().then();
@@ -33,7 +33,7 @@ const CompanyPage: React.FC = () => {
             setLoading(false);
             Message.error(t('company_name_not_specified'));
         }
-    }, [name, api]);
+    }, [name, getCompany]);
 
     if (loading) {
         return <CircularProgressZoomify in size="60px"/>;

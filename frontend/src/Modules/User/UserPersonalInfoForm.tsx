@@ -19,7 +19,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {FC, FR, FRC, FRSC} from "wide-containers";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import copyToClipboard from "Utils/clipboard";
-import {useApi} from "Api/useApi";
+import {useUserApi} from 'User/useUserApi';
 import TextField from "@mui/material/TextField";
 import UserBalance from "Order/UserBalance";
 import Collapse from '@mui/material/Collapse';
@@ -43,7 +43,7 @@ const UserPersonalInfoForm: React.FC = () => {
     const {notAuthentication} = useErrorProcessing();
     const {plt} = useTheme();
     const {t} = useTranslation();
-    const {api} = useApi();
+    const {updateInfo} = useUserApi();
 
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
     const [isEmailModalOpen, setIsEmailModalOpen] = useState<boolean>(false);
@@ -97,7 +97,7 @@ const UserPersonalInfoForm: React.FC = () => {
             delete dataToSubmit.birth_date;
         }
 
-        api.patch('/api/v1/user/update/', dataToSubmit).then(() => {
+        updateInfo(dataToSubmit).then(() => {
             setShowSaveButton(false);
             updateCurrentUser().then(
                 () => Message.success(t('user_update_success'))

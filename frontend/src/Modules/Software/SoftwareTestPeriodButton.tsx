@@ -5,7 +5,7 @@ import {Button} from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import {FCC, FRCC} from "wide-containers";
-import {useApi} from "Api/useApi";
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import {Message} from "Core/components/Message";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {useTheme} from "Theme/ThemeContext";
@@ -31,7 +31,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const {isAuthenticated} = useAuth();
-    const {api} = useApi();
+    const {activateTestPeriod} = useSoftwareApi();
     const {plt, theme} = useTheme();
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ const SoftwareTestPeriodButton: React.FC<SoftwareTestPeriodButtonProps> = (
         }
         setIsLoading(true);
         try {
-            const response = await api.post(`/api/v1/software/${softwareId}/activate-test-period/`);
+            const response = await activateTestPeriod(softwareId);
             Message.success(response.detail || t('test_activation_success'));
             refreshLicense();
             setIsModalOpen(false);

@@ -1,24 +1,24 @@
 // Modules/FileHost/StorageUsageBar.tsx
 import React, {useEffect, useState} from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {useTranslation} from 'react-i18next';
 import {FRCC} from 'wide-containers';
 import {useTheme} from "Theme/ThemeContext";
 
 const StorageUsageBar: React.FC = () => {
-    const {api} = useApi();
+    const {getStorageUsage} = useFileHostApi();
     const {t} = useTranslation();
     const [used, setUsed] = useState(0);
     const [limit, setLimit] = useState(1);
     const {plt} = useTheme();
 
     useEffect(() => {
-        api.get('/api/v1/filehost/storage/usage/').then(data => {
+        getStorageUsage().then(data => {
             setUsed(data.used);
             setLimit(data.limit);
         }).catch(() => null);
-    }, [api]);
+    }, [getStorageUsage]);
 
     const percent = Math.min(100, (used / limit) * 100);
 

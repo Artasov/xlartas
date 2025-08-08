@@ -15,7 +15,7 @@ import MessagesList from './MessagesList';
 import useRoomMessages from './useRoomMessages';
 import useRoomSocket from './useRoomSocket';
 import {useNavigation} from 'Core/components/Header/HeaderProvider';
-import {useApi} from 'Api/useApi';
+import {useChatApi} from 'Chat/useChatApi';
 
 interface RoomProps {
     room?: IRoom | null;
@@ -31,7 +31,7 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
     const {isAuthenticated: authStatus, user} = useAuth();
     const isAuthenticated = authStatus ?? false;
     const {notAuthentication} = useErrorProcessing();
-    const {api} = useApi();
+    const {getRoom} = useChatApi();
     const {t} = useTranslation();
 
     const {
@@ -44,7 +44,7 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
         fetchMessages,
         reset,
         messagesRef,
-    } = useRoomMessages({roomId, api});
+    } = useRoomMessages({roomId});
 
     const sendMessage = useRoomSocket({
         roomId: roomId || '',
@@ -55,8 +55,8 @@ const Room: React.FC<RoomProps> = ({room: roomProp, roomId: propRoomId, showHead
 
     const fetchRoom = useCallback(async () => {
         if (roomProp || !roomId) return;
-        api.get(`/api/v1/rooms/${roomId}/`).then(data => setRoom(data));
-    }, [roomId, api, roomProp]);
+        getRoom(roomId).then(data => setRoom(data));
+    }, [roomId, getRoom, roomProp]);
 
     useEffect(() => {
         if (!isAuthenticated) {

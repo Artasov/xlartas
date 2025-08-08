@@ -1,7 +1,7 @@
 // Modules/FileHost/MoveDialog.tsx
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select} from '@mui/material';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {useTranslation} from 'react-i18next';
 import {IFile, IFolder} from './types';
 
@@ -13,21 +13,21 @@ interface Props {
 }
 
 const MoveDialog: React.FC<Props> = ({files, open, onClose, onMoved}) => {
-    const {api} = useApi();
+    const {getFolders, moveItem} = useFileHostApi();
     const {t} = useTranslation();
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [target, setTarget] = useState<number | ''>('');
 
     useEffect(() => {
         if (open) {
-            api.get('/api/v1/filehost/folders/').then(setFolders);
+            getFolders().then(setFolders);
         }
-    }, [open]);
+    }, [open, getFolders]);
 
     const handleMove = async () => {
         if (!target) return;
         for (const f of files) {
-            await api.post('/api/v1/filehost/item/move/', {item_id: f.id, new_folder_id: target});
+            await moveItem(f.id, target as number);
         }
         onMoved && onMoved(target as number);
         onClose();

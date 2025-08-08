@@ -12,7 +12,7 @@ import OrderActions from "Order/OrderActions";
 import {useAuth} from "Auth/AuthContext";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FCCC, FR, FRBC, FRSC} from "wide-containers";
-import {useApi} from "Api/useApi";
+import {useOrderApi} from 'Order/useOrderApi';
 import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
 
@@ -31,7 +31,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {getOrder} = useOrderApi();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -40,11 +40,11 @@ const OrderDetail: React.FC<OrderDetailProps> = ({className}) => {
             return;
         }
         setLoading(true);
-        api.get(`/api/v1/orders/${id}/`).then(data => {
+        getOrder(id).then(data => {
             setOrder(data);
             if (!data) setOrderNotFound(true);
         }).catch(_ => null).finally(() => setLoading(false));
-    }, [id, isAuthenticated]);
+    }, [id, isAuthenticated, getOrder]);
 
     useEffect(() => {
         if (!loading) setAnimate(true);

@@ -6,6 +6,7 @@ import {IConversion} from 'types/converter';
 import formatFileSize from 'Utils/formatFileSize';
 import {useTheme} from 'Modules/Theme/ThemeContext';
 import {FRBC} from "wide-containers";
+import {useConverterApi} from 'Converter/useConverterApi';
 
 interface ConversationResultCardProps {
     conversion: IConversion | null;
@@ -13,6 +14,7 @@ interface ConversationResultCardProps {
 
 const ConversationResultCard: React.FC<ConversationResultCardProps> = ({conversion}) => {
     const {plt} = useTheme();
+    const {getDownloadLink} = useConverterApi();
     if (!conversion?.is_done || !conversion.output_file) return null;
 
     return (
@@ -27,7 +29,7 @@ const ConversationResultCard: React.FC<ConversationResultCardProps> = ({conversi
             )}
             <IconButton
                 color="primary"
-                href={`/api/v1/converter/download/${conversion.id}/`}
+                href={getDownloadLink(conversion.id)}
                 download
             >
                 <DownloadRoundedIcon/>

@@ -7,14 +7,14 @@ import {IOrder} from 'types/commerce/shop';
 import OrderItem from 'Order/OrderItem';
 import {FC, FR} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
-import {useApi} from 'Api/useApi';
+import {useOrderApi} from 'Order/useOrderApi';
 import Collapse from '@mui/material/Collapse';
 
 const UserOrders: React.FC = () => {
     const {user, isAuthenticated} = useAuth();
     const {notAuthentication} = useErrorProcessing();
     const [orders, setOrders] = useState<IOrder[]>([]);
-    const {api} = useApi();
+    const {getUserOrders} = useOrderApi();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -29,10 +29,10 @@ const UserOrders: React.FC = () => {
 
         setAnimate(false);
 
-        api.get('/api/v1/user/orders/')
+        getUserOrders()
             .then(data => setOrders(data))
             .finally(() => setLoading(false));
-    }, [user, isAuthenticated, api, notAuthentication]);
+    }, [user, isAuthenticated, getUserOrders, notAuthentication]);
 
     /* ---------- старт анимации после загрузки ---------- */
     useEffect(() => {

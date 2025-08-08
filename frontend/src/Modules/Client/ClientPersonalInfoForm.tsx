@@ -6,7 +6,7 @@ import {FC} from "wide-containers";
 import {Message} from "Core/components/Message";
 import TextField from "@mui/material/TextField";
 import {Button} from "@mui/material";
-import {useApi} from "Api/useApi";
+import {useClientApi} from 'Client/useClientApi';
 
 interface FormData {
     about_me: string;
@@ -19,7 +19,7 @@ const ClientPersonalInfoForm: React.FC = () => {
         about_me: user?.client?.about_me || '',
     });
 
-    const {api} = useApi();
+    const {updateClient} = useClientApi();
     const {t} = useTranslation();
     const [showSaveButton, setShowSaveButton] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +36,7 @@ const ClientPersonalInfoForm: React.FC = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        api.patch('/api/v1/client/update/', formData).then(() => {
+        updateClient(formData as any).then(() => {
             Message.success(t('client_update_success'));
             setShowSaveButton(false);
         }).finally(() => setIsSubmitting(false));

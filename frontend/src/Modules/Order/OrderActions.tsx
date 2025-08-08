@@ -9,7 +9,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {Message} from "Core/components/Message";
 import pprint from 'Utils/pprint';
 import {IOrder} from "types/commerce/shop";
-import {useApi} from "Api/useApi";
+import {useOrderApi} from 'Order/useOrderApi';
 import PaymentTypePickerModal from "Order/PaymentTypePickerModal";
 import {FRSC} from "wide-containers";
 
@@ -32,7 +32,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     const navigate = useNavigate();
     const {user} = useAuth();
     const {theme, plt} = useTheme();
-    const {api} = useApi()
+    const {cancelOrder, executeOrder, deleteOrder, resendPaymentNotification} = useOrderApi();
     const {t} = useTranslation();
     const [payModal, setPayModal] = useState(false);
     const searchParams = useSearchParams();
@@ -48,7 +48,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
     // Action Handlers
     const handleCancelOrder = () => {
         setLoading(true);
-        api.post(`/api/v1/orders/${order.id}/cancel/`).then(data => {
+        cancelOrder(order.id).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent(t('order_canceled_success'))}`);
         }).catch(_ => null).finally(() => setLoading(false));
@@ -56,14 +56,14 @@ const OrderActions: React.FC<OrderActionsProps> = (
 
     const handleExecuteOrder = () => {
         setLoading(true);
-        api.post(`/api/v1/orders/${order.id}/execute/`).then(data => {
+        executeOrder(order.id).then(data => {
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent(t('order_completed_success'))}`);
         }).catch(_ => null).finally(() => setLoading(false));
     };
     const handleDeleteOrder = () => {
         setLoading(true);
-        api.post(`/api/v1/orders/${order.id}/delete/`).then(data => {
+        deleteOrder(order.id).then(() => {
             Message.success(t('order_deleted_success'))
             if (onOrderDeleted) onOrderDeleted();
         }).catch(_ => null).finally(() => setLoading(false));
@@ -71,7 +71,7 @@ const OrderActions: React.FC<OrderActionsProps> = (
 
     const handleResendNotificationOrder = () => {
         setLoading(true);
-        api.post(`/api/v1/orders/${order.id}/resend_payment_notification/`).then(data => {
+        resendPaymentNotification(order.id).then(data => {
             pprint(`Order ID: ${order.id} notification resent`, data);
             onSomeUpdatingOrderAction(data);
             navigate(`?success_message=${encodeURIComponent(t('order_notification_resent_success'))}`);

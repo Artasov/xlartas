@@ -1,7 +1,7 @@
 // Modules/FileHost/FavoriteFiles.tsx
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import FileTableRow from './FileTableRow';
 import {IFile} from './types';
 import useFileUpload from './useFileUpload';
@@ -26,7 +26,7 @@ import {useTranslation} from 'react-i18next';
 import {getFavoriteFilesCached, setFavoriteFilesCached} from './storageCache';
 
 const FavoriteFiles: React.FC = () => {
-    const {api} = useApi();
+    const {getFavoriteFiles, bulkDelete} = useFileHostApi();
     const {handleUpload, uploads, clearUploads} = useFileUpload(null, () => setFavoriteFilesCached(undefined as any));
     const {t} = useTranslation();
     const isGtSm = useMediaQuery('(min-width: 576px)');
@@ -43,7 +43,7 @@ const FavoriteFiles: React.FC = () => {
             const cached = getFavoriteFilesCached();
             if (cached) return cached;
         }
-        const data = await api.get(`/api/v1/filehost/files/favorite/?page=${page}&page_size=20`);
+        const data = await getFavoriteFiles(page, 20);
         if (page === 1) setFavoriteFilesCached(data);
         return data;
     };
@@ -57,7 +57,7 @@ const FavoriteFiles: React.FC = () => {
     }, [selected]);
 
     const deleteSelected = async () => {
-        await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
+        await bulkDelete(selected.map(s => s.id));
         setSelected([]);
         setFavoriteFilesCached(undefined as any);
         setTrigger(t => t + 1);
