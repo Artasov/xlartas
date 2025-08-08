@@ -1,7 +1,6 @@
 // Modules/FileHost/FileDetail.tsx
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'Utils/nextRouter';
-import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {IFile} from './types';
 import {Container, FC, FR, FRBC} from 'wide-containers';
 
@@ -13,6 +12,7 @@ import {isImage, isVideo} from './fileIcons';
 import FileActions from "Modules/FileHost/FileActions";
 import {useTheme} from "Theme/ThemeContext";
 import ImagePreview from "UI/ImagePreview";
+import {useFileHostApi} from "Modules/FileHost/useFileHostApi";
 
 const FileDetail: React.FC = () => {
     const {id} = useParams();

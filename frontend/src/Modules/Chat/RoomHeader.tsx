@@ -38,7 +38,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                 : t('favorites');
         }
         return room.name || '';
-    }, [room, otherParticipant]);
+    }, [room, otherParticipant, t]);
 
     const profileLink = useMemo(() => {
         if (!otherParticipant) return '#';
@@ -50,7 +50,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
         } else {
             return `/employee/${otherParticipant.id}`;
         }
-    }, [selectedProfile, otherParticipant]);
+    }, [selectedProfile, otherParticipant, user]);
 
     return (
         <FRSC g={1} w={'100%'} mb={1} cls={'pb-1 px-3 pt-3'}>
@@ -71,11 +71,9 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({room}) => {
                     ''
                     : <CircularProgressZoomify in/>
             }
-            <Link className={'tdn'} style={{
-                color: plt.text.primary
-            }} to={room && roomName === t('favorites')
+            <Link to={room && roomName === t('favorites')
                 ? '/profile' : profileLink}>
-                <h4 className={'m-0 ps-1'}>
+                <h4 className={'m-0 ps-1 tdn'} style={{color: plt.text.primary}}>
                     {room ? roomName : <CircularProgressZoomify in/>}
                 </h4>
             </Link>

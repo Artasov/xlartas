@@ -22,7 +22,7 @@ const NavLink: React.FC<NavLinkProps> = ({to, icon, sx, cls, onClick, children})
         if (onClick) onClick();
     };
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleMouseDown = (e: React.MouseEvent<HTMLSpanElement>) => {
         if (e.button === 1) {
             e.preventDefault();
             e.stopPropagation();
@@ -31,15 +31,15 @@ const NavLink: React.FC<NavLinkProps> = ({to, icon, sx, cls, onClick, children})
     };
 
     return (
-        <Link
-            to={to}
-            onClick={handleClick}
-            onMouseDown={handleMouseDown}
-            style={{color: plt.text.primary, ...sx, cursor: 'pointer'}}
-            className={`tdn gap-1 frcc ${cls || ''}`}
-        >
-            {icon}
-            <span>{children}</span>
+        <Link to={to} onClick={handleClick}>
+            <span
+                onMouseDown={handleMouseDown}
+                className={`tdn gap-1 frcc ${cls || ''}`}
+                style={{color: plt.text.primary, ...sx, cursor: 'pointer'}}
+            >
+                {icon}
+                <span>{children}</span>
+            </span>
         </Link>
     );
 };

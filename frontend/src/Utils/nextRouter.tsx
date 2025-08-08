@@ -11,17 +11,24 @@ import React from "react";
 export interface LinkProps extends Omit<NextLinkProps, 'href'> {
     to?: NextLinkProps['href'];
     href?: NextLinkProps['href'];
+    children?: React.ReactNode;
 }
 
-export const Link: React.FC<LinkProps> = ({to, href, ...props}) => (
-    <NextLink href={to ?? href ?? '#'} {...props} />
+export const Link: React.FC<LinkProps> = ({to, href, children, ...props}) => (
+    <NextLink href={to ?? href ?? '#'} {...props}>
+        {children}
+    </NextLink>
 );
 
 export function useNavigate() {
     const router = useRouter();
-    return (href: string | number) => {
-        if (typeof href === 'number') router.back();
-        else router.push(href);
+    return (href: string | number, options?: { replace?: boolean }) => {
+        if (typeof href === 'number') {
+            router.back();
+        } else {
+            if (options?.replace) router.replace(href);
+            else router.push(href);
+        }
     };
 }
 

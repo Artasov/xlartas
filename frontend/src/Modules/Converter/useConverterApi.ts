@@ -1,5 +1,5 @@
 import {useApi} from 'Api/useApi';
-import {IFormat, IParameter, IConvertResult} from 'types/converter';
+import {IConvertResult, IFormat, IParameter} from 'types/converter';
 
 export const useConverterApi = () => {
     const {api} = useApi();

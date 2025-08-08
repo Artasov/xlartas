@@ -100,7 +100,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     /* ------------------------------------------------------------------ */
     /*  order create                                                      */
     /* ------------------------------------------------------------------ */
-    const createOrder = async () => {
+    const handleCreateOrder = async () => {
         if (licenseHours < software.min_license_order_hours) {
             Message.error(
                 t('min_hours_message', {hours: software.min_license_order_hours})
@@ -219,7 +219,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                                                 sx={{lineHeight: '1.2rem'}}>{t('freekassa_note')}</FR>}
                         />
                         <FRC g={1} mt={1}>
-                            <Button disabled={creatingOrder} onClick={createOrder} sx={{
+                            <Button disabled={creatingOrder} onClick={handleCreateOrder} sx={{
                                 fontWeight: 'bold', width: '100%',
                             }}>
                                 {creatingOrder

@@ -1,6 +1,5 @@
 // Modules/Core/components/Header/HeaderProvider.tsx
 "use client";
-// Modules/Core/components/Header/HeaderProvider.tsx
 import React, {createContext, ReactNode, RefObject, useContext, useRef, useState,} from 'react';
 import Logo from 'Core/Logo';
 import {useNavigate} from 'Utils/nextRouter';
@@ -20,15 +19,15 @@ interface HeaderContextType {
     disableMobileMenu: () => void;
     enableDesktopMenu: () => void;
     disableDesktopMenu: () => void;
-    headerNavRef: RefObject<HTMLElement>;
-    headerRef: RefObject<HTMLDivElement>;
+    headerNavRef: RefObject<HTMLElement | null>;
+    headerRef: RefObject<HTMLDivElement | null>;
     headerNavHeight: number;
     setHeaderNavHeight: (height: number) => void;
     profileBtnVisible: boolean;
     setProfileBtnVisible: (visible: boolean) => void;
     logoContent: ReactNode;
     setLogoContent: (content: ReactNode) => void;
-    mainRef: RefObject<HTMLDivElement>;
+    mainRef: RefObject<HTMLDivElement | null>;
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
@@ -51,9 +50,9 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
     const [mobileMenuEnabled, setMobileMenuEnabled] = useState<boolean>(true);
     const [desktopMenuEnabled, setDesktopMenuEnabled] = useState<boolean>(true);
 
-    const headerRef = useRef<HTMLDivElement>(null);
-    const headerNavRef = useRef<HTMLElement>(null);
-    const mainRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLDivElement | null>(null);
+    const headerNavRef = useRef<HTMLElement | null>(null);
+    const mainRef = useRef<HTMLDivElement | null>(null);
     const [headerNavHeight, setHeaderNavHeight] = useState<number>(70);
     const [profileBtnVisible, setProfileBtnVisible] = useState<boolean>(true);
     const navigate = useNavigate();

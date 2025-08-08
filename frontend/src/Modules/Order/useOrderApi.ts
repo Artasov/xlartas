@@ -9,7 +9,7 @@ export const useOrderApi = () => {
         applyPromocode: (payload: unknown) => api.post('/api/v1/promocode/applicable/', payload),
         getPaymentTypes: () => api.get('/api/v1/payment/types/'),
         getUserOrders: () => api.get('/api/v1/user/orders/'),
-        initPayment: (orderId: number, payload: unknown) =>
+        initPayment: (orderId: string | number, payload: unknown) =>
             api.post(`/api/v1/orders/${orderId}/init-payment/`, payload),
         getOrder: (id: number | string) => api.get(`/api/v1/orders/${id}/`),
         cancelOrder: (id: number | string) => api.post(`/api/v1/orders/${id}/cancel/`),

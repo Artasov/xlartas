@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'logui',
     'cachalot',
     'csp',
- 
+
     'apps.xl_dashboard',
     'apps.company',
     'apps.mailing',

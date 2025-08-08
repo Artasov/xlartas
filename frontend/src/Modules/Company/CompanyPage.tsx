@@ -45,7 +45,7 @@ const CompanyPage: React.FC = () => {
 
     return (
         <FCSS lh={'1.3rem'} px={2} g={1} maxW={500} mx={'auto'}>
-            <Head title={`${company ? company.name + ' - ' : ''}XLARTAS`} description={company?.description || 'Company details on XLARTAS'}/>
+            <Head title={`${company ? company.name + ' - ' : ''}`}/>
             <h1 style={{lineHeight: '1.6rem'}} className={'fs-4'}>{company.name}</h1>
             <h2 style={{lineHeight: '1.4rem'}} className={'fs-5'}>Общее</h2>
             <FC pl={2}>

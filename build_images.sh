@@ -1,3 +1,4 @@
+# build_images.sh
 #!/bin/bash
 
 REGISTRY="localhost:5000"
@@ -40,6 +41,12 @@ echo "Building and pushing FLOWER..."
 echo "-------------------"
 docker build -f DockerfileFlower -t $REGISTRY/iflower:latest .
 docker push $REGISTRY/iflower:latest &
+
+echo "--------------------"
+echo "Building and pushing NEXT..."
+echo "-------------------"
+docker build -f DockerfileNext -t $REGISTRY/ifrontend:latest .
+docker push $REGISTRY/ifrontend:latest &
 
 # Wait for all background processes to finish
 wait

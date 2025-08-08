@@ -7,13 +7,14 @@ import Header from "Core/components/Header/Header";
 import SettingsTool from "Core/SettingsTool";
 import GlobalAuthModal from "Auth/GlobalAuthModal";
 import dynamic from "next/dynamic";
-const BackgroundFlicker = dynamic(() => import("Core/BackgroundFlicker"), {ssr: false});
 import {useTheme} from "Theme/ThemeContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {useSelector} from "react-redux";
 import {RootState} from "Redux/store";
 
-export default function LayoutClient({children}: {children: React.ReactNode}) {
+const BackgroundFlicker = dynamic(() => import("Core/BackgroundFlicker"), {ssr: false});
+
+export default function LayoutClient({children}: { children: React.ReactNode }) {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();

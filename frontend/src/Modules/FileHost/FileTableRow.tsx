@@ -4,7 +4,6 @@ import {IconButton, TableCell, TableRow, useMediaQuery} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
-import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {FRSE} from 'wide-containers';
 import {useNavigate} from 'Utils/nextRouter';
 import {useTranslation} from 'react-i18next';
@@ -12,6 +11,7 @@ import useLongPress from './useLongPress';
 import FileActions from './FileActions';
 import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './storageCache';
 import {getFileIcon} from './fileIcons';
+import {useFileHostApi} from "Modules/FileHost/useFileHostApi";
 
 interface Props {
     file: IFile;
@@ -25,17 +25,18 @@ interface Props {
     onSelectMode?: (f: IFile) => void;
 }
 
-const FileTableRow: React.FC<Props> = ({
-                                           file,
-                                           selectMode,
-                                           selected,
-                                           onToggleSelect,
-                                           onFavorite,
-                                           onDelete,
-                                           onDownload,
-                                           onShare,
-                                           onSelectMode
-                                       }) => {
+const FileTableRow: React.FC<Props> = (
+    {
+        file,
+        selectMode,
+        selected,
+        onToggleSelect,
+        onFavorite,
+        onDelete,
+        onDownload,
+        onShare,
+        onSelectMode
+    }) => {
     const {toggleFavorite} = useFileHostApi();
     const {t} = useTranslation();
     const navigate = useNavigate();
