@@ -1,24 +1,32 @@
 # DockerfileNext
 # -------- Next.js (Node) production image --------
-# Переход на Debian-слой (glibc) вместо Alpine (musl), чтобы sharp корректно подхватывал бинарники
-
 FROM node:20-bookworm-slim AS deps
 WORKDIR /app
 
+# Копируем только манифесты для детерминированной установки
 COPY ./frontend/package.json ./frontend/yarn.lock* ./frontend/package-lock.json* ./
 
-# build-essential и python3 нужны для нативных модулей на случай пересборки
+# Инструменты для нативных модулей (на случай пересборки sharp)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential python3 ca-certificates \
-  && rm -rf /var/lib/apt/lists/* \
-  && corepack enable \
-  && if [ -f yarn.lock ]; then \
-       yarn install --frozen-lockfile; \
-     elif [ -f package-lock.json ]; then \
-       npm ci --legacy-peer-deps; \
-     else \
-       npm i --legacy-peer-deps; \
-     fi
+      build-essential python3 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV SHARP_IGNORE_GLOBAL_LIBVIPS=1
+ENV npm_config_build_from_source=false
+
+RUN corepack enable && \
+    if [ -f yarn.lock ]; then \
+      yarn install --frozen-lockfile; \
+      # гарантированно ставим совместимый sharp (Node 20)
+      yarn add -W sharp@^0.33.0 --dev || yarn add -W sharp@^0.33.0; \
+    elif [ -f package-lock.json ]; then \
+      npm ci --legacy-peer-deps --include=optional; \
+      npm i -D sharp@^0.33.0 --include=optional || true; \
+    else \
+      npm i --legacy-peer-deps --include=optional; \
+      npm i -D sharp@^0.33.0 --include=optional || true; \
+    fi \
+    && node -e "require('sharp'); console.log('sharp loaded')"
 
 FROM node:20-bookworm-slim AS builder
 WORKDIR /app
@@ -39,10 +47,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Копируем собранный проект и node_modules
 COPY --from=builder /app ./
 
 EXPOSE 3000
 
-# Запускаем стандартный сервер Next
 CMD [ "sh", "-c", "corepack enable >/dev/null 2>&1 || true; if [ -f yarn.lock ]; then yarn start -p 3000; else npm run start -- -p 3000; fi" ]
