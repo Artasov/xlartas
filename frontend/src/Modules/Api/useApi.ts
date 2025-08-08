@@ -2,7 +2,7 @@
 "use client";
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
 import {useEffect, useRef} from 'react';
-import {useErrorProcessing} from 'Core/components/ErrorProvider';
+import {ErrorContextType, useErrorProcessing} from 'Core/components/ErrorProvider';
 import {useAuth} from 'Auth/AuthContext';
 import {API_BASE_URL} from './axiosConfig';
 
@@ -41,7 +41,12 @@ const fmt = (x: unknown) => {
 };
 
 export const useApi = () => {
-    const {byResponse} = useErrorProcessing();
+    let byResponse: ErrorContextType['byResponse'] = (err) => console.error(err);
+    try {
+        ({byResponse} = useErrorProcessing());
+    } catch {
+        // ErrorProvider is not mounted; fallback to console.error
+    }
     const byRespRef = useRef(byResponse);
     useEffect(() => {
         byRespRef.current = byResponse;
