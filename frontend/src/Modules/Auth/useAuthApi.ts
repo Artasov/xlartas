@@ -1,3 +1,4 @@
+"use client";
 import {useApi} from 'Api/useApi';
 import {JWTPair} from 'types/core/auth';
 import {IUser} from 'types/core/user';

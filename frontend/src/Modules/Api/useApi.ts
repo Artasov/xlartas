@@ -1,9 +1,9 @@
 // Modules/Api/useApi.ts
 "use client";
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useContext} from 'react';
 import {ErrorContextType, useErrorProcessing} from 'Core/components/ErrorProvider';
-import {useAuth} from 'Auth/AuthContext';
+import {AuthContext} from 'Auth/AuthContext';
 import {API_BASE_URL} from './axiosConfig';
 
 type AxiosConfig = AxiosRequestConfig | undefined;
@@ -52,7 +52,7 @@ export const useApi = () => {
         byRespRef.current = byResponse;
     }, [byResponse]);
 
-    const authCtx = useAuth();
+    const authCtx = useContext(AuthContext);
     const frontendLogoutRef = useRef<() => void>(() => {
     });
     useEffect(() => {

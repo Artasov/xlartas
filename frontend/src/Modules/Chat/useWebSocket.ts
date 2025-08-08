@@ -1,4 +1,5 @@
 // Modules/Chat/useWebSocket.ts
+"use client";
 
 import {useCallback, useEffect, useRef} from 'react';
 import {useAuthApi} from 'Auth/useAuthApi';
