@@ -5,7 +5,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Button as MuiButton, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar} from '@mui/material';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {faGoogle, faYandex} from '@fortawesome/free-brands-svg-icons';
-import {axios, GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from '../../../Api/axiosConfig';
+import {GOOGLE_CLIENT_ID, YANDEX_CLIENT_ID} from '../../../Api/axiosConfig';
+import {useAuthApi} from 'Auth/useAuthApi';
 import OAuthButton from "Auth/Social/elements/OAuthButton";
 import {ProviderConfig} from "Auth/Social/types";
 import {useAuth} from "Auth/AuthContext";
@@ -24,6 +25,7 @@ interface SocialOAuthProps {
 const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
     const socialDiv = useRef<HTMLDivElement | null>(null);
     const {isAuthenticated} = useAuth();
+    const {getSocialAccounts} = useAuthApi();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [socialAccounts, setSocialAccounts] = useState<{ [key: string]: boolean }>({});
     const [pendingOAuthUrl, setPendingOAuthUrl] = useState<string | null>(null);
@@ -38,14 +40,14 @@ const SocialOAuth: React.FC<SocialOAuthProps> = ({className}) => {
 
     useEffect(() => {
         if (isAuthenticated)
-            axios.get('/api/v1/oauth/user/social-accounts/')
-                .then(response => {
-                    setSocialAccounts(response.data);
+            getSocialAccounts()
+                .then(data => {
+                    setSocialAccounts(data);
                 })
                 .catch(error => {
                     console.error(error);
                 });
-    }, [isAuthenticated]);
+    }, [isAuthenticated, getSocialAccounts]);
 
     const providers: ProviderConfig[] = [
         {

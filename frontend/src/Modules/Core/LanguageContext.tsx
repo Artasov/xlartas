@@ -1,6 +1,7 @@
 // Modules/Core/LanguageContext.tsx
 import React, {createContext, PropsWithChildren, useEffect, useState} from 'react';
 import axios from 'axios';
+import {useCoreApi} from 'Core/useCoreApi';
 import moment from 'moment';
 import 'moment/locale/ru';
 import i18n from "../../i18n";
@@ -21,6 +22,8 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
             ? ((localStorage.getItem('lang') as Lang) || 'ru')
             : 'ru',
     );
+    const {setLang: setLangRequest} = useCoreApi();
+
 
     const setLang = (l: Lang) => {
         i18n.changeLanguage(l).then();
@@ -30,7 +33,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
         }
         setLangState(l);
         axios.defaults.headers.common['Accept-Language'] = l;
-        axios.post('/api/v1/user/set-lang/', {lang: l}).catch(() => null);
+        setLangRequest(l);
     };
 
     /* init once */

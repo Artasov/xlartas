@@ -1,7 +1,7 @@
 // Modules/Chat/useWebSocket.ts
 
 import {useCallback, useEffect, useRef} from 'react';
-import {axios} from '../Api/axiosConfig';
+import {useAuthApi} from 'Auth/useAuthApi';
 import {isTokenExpiringSoon} from 'Utils/jwt';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {useRooms} from './RoomsContext';
@@ -17,6 +17,7 @@ interface UseWebSocketProps {
 const useWebSocket = ({roomId, isAuthenticated, userId, onMessage}: UseWebSocketProps) => {
     const ws = useRef<WebSocket | null>(null);
     const {byResponse} = useErrorProcessing();
+    const {refreshToken} = useAuthApi();
     const {updateRoom} = useRooms();
 
     useEffect(() => {
@@ -33,11 +34,10 @@ const useWebSocket = ({roomId, isAuthenticated, userId, onMessage}: UseWebSocket
 
             if (token && isTokenExpiringSoon(token)) {
                 try {
-                    const response = await axios.post('/api/v1/token/refresh/', {
-                        refresh: localStorage.getItem('refresh'),
-                    });
-                    localStorage.setItem('access', response.data.access);
-                    token = response.data.access;
+                    const response = await refreshToken(localStorage.getItem('refresh') || '');
+                    localStorage.setItem('access', response.access);
+                    if (response.refresh) localStorage.setItem('refresh', response.refresh);
+                    token = response.access;
                 } catch (error) {
                     byResponse(error);
                     return;

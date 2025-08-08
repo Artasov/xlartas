@@ -1,7 +1,7 @@
 // Modules/Chat/RoomsContext.tsx
 import React, {createContext, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {IRoom} from 'types/chat/models';
-import {axios} from '../Api/axiosConfig';
+import {useChatApi} from 'Chat/useChatApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import pprint from 'Utils/pprint';
 
@@ -27,6 +27,7 @@ export const RoomsProvider: React.FC<{ children: React.ReactNode }> = ({children
     const [rooms, setRooms] = useState<IRoom[]>([]);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
     const {byResponse} = useErrorProcessing();
+    const {listRooms, listRoomsByUrl} = useChatApi();
     const isLoadingRef = useRef<boolean>(false);
     const [initialLoading, setInitialLoading] = useState<boolean>(true); // Состояние первой загрузки
 
@@ -35,33 +36,33 @@ export const RoomsProvider: React.FC<{ children: React.ReactNode }> = ({children
         isLoadingRef.current = true;
         setInitialLoading(true); // Начинаем начальную загрузку
         try {
-            const response = await axios.get('/api/v1/rooms/');
-            pprint('Rooms fetched:', response.data);
-            setRooms(response.data.results);
-            setNextPageUrl(response.data.next);
+            const response = await listRooms();
+            pprint('Rooms fetched:', response);
+            setRooms(response.results);
+            setNextPageUrl(response.next);
         } catch (error) {
             byResponse(error);
         } finally {
             isLoadingRef.current = false;
             setInitialLoading(false); // Завершаем начальную загрузку
         }
-    }, [byResponse]);
+    }, [byResponse, listRooms]);
 
     const loadMoreRooms = useCallback(async () => {
         if (nextPageUrl && !isLoadingRef.current) {
             isLoadingRef.current = true;
             try {
-                const response = await axios.get(nextPageUrl);
-                pprint('More rooms fetched:', response.data);
-                setRooms(prevRooms => [...prevRooms, ...response.data.results]);
-                setNextPageUrl(response.data.next);
+                const response = await listRoomsByUrl(nextPageUrl);
+                pprint('More rooms fetched:', response);
+                setRooms(prevRooms => [...prevRooms, ...response.results]);
+                setNextPageUrl(response.next);
             } catch (error) {
                 byResponse(error);
             } finally {
                 isLoadingRef.current = false;
             }
         }
-    }, [nextPageUrl, byResponse]);
+    }, [nextPageUrl, byResponse, listRoomsByUrl]);
 
     const updateRoom = useCallback((updatedRoom: IRoom) => {
         setRooms(prevRooms => {
