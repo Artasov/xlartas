@@ -1,27 +1,32 @@
 # DockerfileNext
 # -------- Next.js (Node) production image --------
-FROM node:20-alpine AS deps
+# Переход на Debian-слой (glibc) вместо Alpine (musl), чтобы sharp корректно подхватывал бинарники
+
+FROM node:20-bookworm-slim AS deps
 WORKDIR /app
 
 COPY ./frontend/package.json ./frontend/yarn.lock* ./frontend/package-lock.json* ./
 
-# Сначала пытаемся установить через yarn (если есть yarn.lock),
-# иначе падаем обратно на npm с --legacy-peer-deps, чтобы не умирать на peer deps (CRA-хвосты и т.п.)
-RUN corepack enable && \
-    if [ -f yarn.lock ]; then \
-      yarn install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then \
-      npm ci --legacy-peer-deps; \
-    else \
-      npm i --legacy-peer-deps; \
-    fi
+# build-essential и python3 нужны для нативных модулей на случай пересборки
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential python3 ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && corepack enable \
+  && if [ -f yarn.lock ]; then \
+       yarn install --frozen-lockfile; \
+     elif [ -f package-lock.json ]; then \
+       npm ci --legacy-peer-deps; \
+     else \
+       npm i --legacy-peer-deps; \
+     fi
 
-FROM node:20-alpine AS builder
+FROM node:20-bookworm-slim AS builder
 WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+
 COPY ./frontend/ ./
 COPY --from=deps /app/node_modules ./node_modules
 
-ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable && \
     if [ -f yarn.lock ]; then \
       yarn build; \
@@ -29,7 +34,7 @@ RUN corepack enable && \
       npm run build; \
     fi
 
-FROM node:20-alpine AS runner
+FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
