@@ -1,4 +1,5 @@
 // Modules/Chat/useRoomSocket.ts
+"use client";
 
 import {useCallback} from 'react';
 import {IMessage} from 'types/chat/models';
