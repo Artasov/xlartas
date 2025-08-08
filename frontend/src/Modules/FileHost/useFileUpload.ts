@@ -1,10 +1,10 @@
 // Modules/FileHost/useFileUpload.ts
-import {useApi} from 'Api/useApi';
 import {useState} from 'react';
 import {UploadItem} from './UploadProgressWindow';
+import {useFileHostApi} from './useFileHostApi';
 
 const useFileUpload = (parentId: number | null, onUploaded?: () => void) => {
-    const {api} = useApi();
+    const {uploadFiles} = useFileHostApi();
     const [uploads, setUploads] = useState<UploadItem[]>([]);
 
     const handleUpload = async (file: File | null) => {
@@ -14,7 +14,7 @@ const useFileUpload = (parentId: number | null, onUploaded?: () => void) => {
         const formData = new FormData();
         formData.append('files', file);
         if (parentId) formData.append('parent_id', String(parentId));
-        const resp = await api.post('/api/v1/filehost/files/upload/', formData, {
+        const resp = await uploadFiles(formData, {
             headers: {'Content-Type': 'multipart/form-data'},
             onUploadProgress: e => {
                 if (e.total !== undefined) {

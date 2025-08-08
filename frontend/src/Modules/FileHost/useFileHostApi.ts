@@ -1,4 +1,6 @@
 import {useApi} from 'Api/useApi';
+import type {AxiosRequestConfig} from 'axios';
+import type {FolderContent} from './storageCache';
 
 export const useFileHostApi = () => {
     const {api} = useApi();
@@ -18,14 +20,11 @@ export const useFileHostApi = () => {
         deleteItem: (payload: any) => api.delete('/api/v1/filehost/item/delete/', {data: payload}),
         getFile: (id: number) => api.post('/api/v1/filehost/file/', {id}),
         getFolders: () => api.get('/api/v1/filehost/folders/'),
-        moveItem: (item_id: number, new_folder_id: number | null) => api.post('/api/v1/filehost/item/move/', {
-            item_id,
-            new_folder_id
-        }),
-        renameItem: (item_id: number, new_name: string) => api.post('/api/v1/filehost/item/rename/', {
-            item_id,
-            new_name
-        }),
+        getFolderContent: (id: number | null) => api.post<FolderContent>('/api/v1/filehost/folder/content/', {id}),
+        uploadFiles: (formData: FormData, config?: AxiosRequestConfig) =>
+            api.post('/api/v1/filehost/files/upload/', formData, config),
+        moveItem: (item_id: number, new_folder_id: number | null) => api.post('/api/v1/filehost/item/move/', {item_id, new_folder_id}),
+        renameItem: (item_id: number, new_name: string) => api.post('/api/v1/filehost/item/rename/', {item_id, new_name}),
         getFolder: (id: number) => api.post('/api/v1/filehost/folder/', {id}),
     };
 };
