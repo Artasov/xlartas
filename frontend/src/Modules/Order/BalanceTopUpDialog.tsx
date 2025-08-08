@@ -32,10 +32,8 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
 
 
     useEffect(() => {
-        if (open) {
-            getLatestBalanceProduct().then(p => setProduct(p)).catch(() => null);
-        }
-    }, [open, api]);
+        if (open) getLatestBalanceProduct().then(p => setProduct(p)).catch(() => null);
+    }, [open]);
 
     useEffect(() => {
         if (open) {

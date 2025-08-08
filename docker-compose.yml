@@ -1,3 +1,6 @@
+# docker-compose.yml
+version: "3.9"
+
 services:
   nginxproxymanager:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -22,16 +25,12 @@ services:
       - ./nginx/letsencrypt:/etc/letsencrypt
       - ./static:/data/static
       - ./media:/data/media
-    networks:
-      - net
+    networks: [ net ]
     stop_grace_period: 5s
     deploy:
       replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+      update_config: { parallelism: 1, delay: 10s }
+      restart_policy: { condition: on-failure }
 
   #  pgadmin:
   #    image: dpage/pgadmin4
@@ -64,29 +63,20 @@ services:
     volumes:
       - ./data/redis/:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-    #    ports:
-    #       - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       timeout: 5s
       retries: 10
       start_period: 5s
     command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      - net
+    networks: [ net ]
     stop_grace_period: 5s
     deploy:
       replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
+      update_config: { parallelism: 1, delay: 10s }
       resources:
-        limits:
-          cpus: '0.5'
-          memory: 4G
-        reservations:
-          cpus: '0.25'
-          memory: 512M
+        limits: { cpus: '0.5', memory: 4G }
+        reservations: { cpus: '0.25', memory: 512M }
 
   web:
     hostname: web
@@ -112,18 +102,26 @@ services:
       interval: 5s
       retries: 3
       start_period: 120s
-    cap_add:
-      - SYS_TIME
-    networks:
-      - net
+    cap_add: [ SYS_TIME ]
+    networks: [ net ]
     stop_grace_period: 5s
     deploy:
       replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 30s
-      restart_policy:
-        condition: on-failure
+      update_config: { parallelism: 1, delay: 30s }
+      restart_policy: { condition: on-failure }
+
+  frontend:
+    hostname: frontend
+    image: localhost:5000/ifrontend:latest
+    environment:
+      # Для SSR (если потребуется) можно раскомментировать, чтобы ходить к Django по внутреннему имени:
+      - NEXT_INTERNAL_API_BASE=http://web:8000
+      - NODE_ENV=production
+    depends_on: [ web ]
+    networks: [ net ]
+    deploy:
+      replicas: 1
+      restart_policy: { condition: on-failure }
 
   celery:
     hostname: celery
@@ -136,21 +134,14 @@ services:
       - ./entrypoint_celery.sh:/srv/entrypoint_celery.sh
     environment:
       - LOG_PREFIX=celery
-    networks:
-      - net
+    networks: [ net ]
     stop_grace_period: 2s
     deploy:
       replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-    security_opt:
-      - seccomp=unconfined
-    cap_add:
-      - SYS_ADMIN
-
+      update_config: { parallelism: 1, delay: 10s }
+      restart_policy: { condition: on-failure }
+    security_opt: [ seccomp=unconfined ]
+    cap_add: [ SYS_ADMIN ]
 
   beat:
     hostname: beat
@@ -163,16 +154,12 @@ services:
       - ./entrypoint_beat.sh:/srv/entrypoint_beat.sh
     environment:
       - LOG_PREFIX=beat
-    networks:
-      - net
+    networks: [ net ]
     stop_grace_period: 2s
     deploy:
       replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+      update_config: { parallelism: 1, delay: 10s }
+      restart_policy: { condition: on-failure }
 
   #  flower:
   #    hostname: flower
@@ -221,9 +208,7 @@ services:
     image: sonarqube:10.5.1-community
     ulimits:
       nproc: 8192
-      nofile:
-        soft: 131072
-        hard: 131072
+      nofile: { soft: 131072, hard: 131072 }
     hostname: sonarqube
     depends_on: [ sonardb ]
     environment:

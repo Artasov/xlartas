@@ -1,11 +1,10 @@
 // Modules/Api/useApi.ts
 "use client";
-// Modules/Api/useApi.ts
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from 'axios';
 import {useEffect, useRef} from 'react';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
 import {useAuth} from 'Auth/AuthContext';
-import {DOMAIN_URL} from './axiosConfig';
+import {API_BASE_URL} from './axiosConfig';
 
 type AxiosConfig = AxiosRequestConfig | undefined;
 
@@ -56,12 +55,13 @@ export const useApi = () => {
         });
     }, [authCtx]);
 
-    const axiosRef = useRef<AxiosInstance>();
+    const axiosRef = useRef<AxiosInstance | null>(null);
 
     if (!axiosRef.current) {
-        const inst = axios.create({baseURL: `${DOMAIN_URL}/`});
+        // Базовый URL относительный (в PROD ходим через тот же домен; в DEV переписывается next.config.ts)
+        const inst = axios.create({baseURL: API_BASE_URL});
         if (typeof localStorage !== 'undefined') {
-            inst.defaults.headers.common['Accept-Language'] =
+            (inst.defaults.headers.common as any)['Accept-Language'] =
                 localStorage.getItem('lang') || 'ru';
         }
 

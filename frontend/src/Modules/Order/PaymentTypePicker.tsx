@@ -172,7 +172,8 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
         if (paymentType.includes('freekassa')) {
             return (
                 <PaymentTypeButton selected={isSelected} key={paymentType} px={1} py={.3}>
-                    <img src={logoFreeKassa.src} alt={`Иконка ${paymentType}`} style={{maxHeight: paymentButtonHeight}}/>
+                    <img src={logoFreeKassa.src} alt={`Иконка ${paymentType}`}
+                         style={{maxHeight: paymentButtonHeight}}/>
                 </PaymentTypeButton>
             );
         }

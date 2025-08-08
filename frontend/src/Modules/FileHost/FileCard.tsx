@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {IconButton, Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {useNavigate} from 'Utils/nextRouter';
-import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {IFile} from './types';
 import formatFileSize from 'Utils/formatFileSize';
 import {useTranslation} from 'react-i18next';
@@ -13,6 +12,7 @@ import {setAllFilesCached, setFavoriteFilesCached, setFolderCached} from './stor
 import {FC, FR, FRBC, FRC} from "wide-containers";
 import {getFileIcon, isImage} from './fileIcons';
 import {useTheme} from "Theme/ThemeContext";
+import {useFileHostApi} from "Modules/FileHost/useFileHostApi";
 
 interface Props {
     file: IFile;

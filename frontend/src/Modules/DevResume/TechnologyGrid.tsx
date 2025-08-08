@@ -4,7 +4,7 @@
 import React from 'react';
 import {Box, Grid, Tooltip} from '@mui/material';
 import {Skill} from "Modules/DevResume/types";
-import { FC } from 'wide-containers';
+import {FC} from 'wide-containers';
 
 export default function TechnologyGrid({skills}: { skills: Skill[] }) {
     return (

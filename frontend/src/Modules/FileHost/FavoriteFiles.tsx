@@ -1,7 +1,6 @@
 // Modules/FileHost/FavoriteFiles.tsx
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
-import {useFileHostApi} from 'FileHost/useFileHostApi';
 import FileTableRow from './FileTableRow';
 import {IFile} from './types';
 import useFileUpload from './useFileUpload';
@@ -24,6 +23,7 @@ import {FRSE} from 'wide-containers';
 import DropOverlay from './DropOverlay';
 import {useTranslation} from 'react-i18next';
 import {getFavoriteFilesCached, setFavoriteFilesCached} from './storageCache';
+import {useFileHostApi} from "Modules/FileHost/useFileHostApi";
 
 const FavoriteFiles: React.FC = () => {
     const {getFavoriteFiles, bulkDelete} = useFileHostApi();

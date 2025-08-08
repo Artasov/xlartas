@@ -25,18 +25,25 @@ const ScreenViewer: React.FC<Props> = ({className, style}) => {
     const {plt} = useTheme();
 
     const [state, setState] = useState<StreamState>('pending');
-    const timerRef = useRef<NodeJS.Timeout>();
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     /* ——— определяем state: active ↔ off ——— */
     useEffect(() => {
         if (frame) {
-            clearTimeout(timerRef.current);
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
             setState('active');
             return;
         }
 
         /* пока ws открывается — ждём TIMEOUT_MS */
         if (state === 'pending' && readyState === WebSocket.OPEN) {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
             timerRef.current = setTimeout(() => setState('off'), TIMEOUT_MS);
         }
 
@@ -44,10 +51,18 @@ const ScreenViewer: React.FC<Props> = ({className, style}) => {
         if ((readyState === WebSocket.CLOSED ||
                 readyState === WebSocket.CLOSING) &&
             !frame) {
-            clearTimeout(timerRef.current);
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
             setState('off');
         }
-        return () => clearTimeout(timerRef.current);
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
+        };
     }, [frame, readyState, state]);
 
     /* ---------- плавающая UI ---------- */
@@ -75,7 +90,7 @@ const ScreenViewer: React.FC<Props> = ({className, style}) => {
     const resetLast = () => (last.current = null);
 
     const isTouch = matchMedia('(pointer: coarse)').matches;
-    const touchTimer = useRef<NodeJS.Timeout | null>(null);
+    const touchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const pointerDown = (e: React.PointerEvent) => {
         if (e.pointerType === 'mouse') {
@@ -87,6 +102,10 @@ const ScreenViewer: React.FC<Props> = ({className, style}) => {
         }
         /* touch: долгое — RMB */
         if (isTouch) {
+            if (touchTimer.current) {
+                clearTimeout(touchTimer.current);
+                touchTimer.current = null;
+            }
             touchTimer.current = setTimeout(() => {
                 sendMouseClick('right');
                 touchTimer.current = null;

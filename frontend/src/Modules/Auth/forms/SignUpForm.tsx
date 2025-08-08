@@ -93,7 +93,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                 if (phoneCheckRef.current) phoneCheckRef.current.cancel();
             };
         }
-    }, [phone, api, phoneTouched, mode]);
+    }, [phone, phoneTouched, mode]);
 
     useEffect(() => {
         if (mode === 'email' && emailTouched) {
@@ -113,7 +113,7 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                 if (emailCheckRef.current) emailCheckRef.current.cancel();
             };
         }
-    }, [email, api, emailTouched, mode]);
+    }, [email, emailTouched, mode]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

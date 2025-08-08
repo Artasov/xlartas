@@ -9,7 +9,7 @@ import {ProfileProvider} from "User/ProfileContext";
 import {ErrorProvider} from "Core/components/ErrorProvider";
 import {ThemeProvider} from "Theme/ThemeContext";
 
-export default function Providers({children}: {children: React.ReactNode}) {
+export default function Providers({children}: { children: React.ReactNode }) {
     return (
         <Provider store={store}>
             <HeaderProvider>

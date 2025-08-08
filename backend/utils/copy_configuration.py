@@ -99,6 +99,45 @@ configurations = {
             # 'Redux': '__copy__',
         }
     },
+    'cicd': {
+        '__start_dir__': r'F:\dev',
+        '__exclude__': [
+            '__init__',
+            'pycache',
+            '.pyc',
+        ],
+        '__add_paths__': True,
+
+        'xl': {
+            'frontend': {
+                'next.config.js': '__copy__',
+            },
+            'backend': {
+                'config': '__copy__',
+                'apps.core': {
+                    'routes.root': '__copy__',
+                    'routes.api': '__copy__',
+                },
+            },
+            'build_images.sh': '__copy__',
+            'build_up.sh': '__copy__',
+            'docker-compose.yml': '__copy__',
+            'Dockerfile': '__copy__',
+            'DockerfileBeat': '__copy__',
+            'DockerfileCelery': '__copy__',
+            'DockerfileFlower': '__copy__',
+            'DockerfileMinio': '__copy__',
+            'DockerfileNext': '__copy__',
+            'DockerfileWeb': '__copy__',
+            'entrypoint.sh': '__copy__',
+            'entrypoint_beat.sh': '__copy__',
+            'entrypoint_celery.sh': '__copy__',
+            'entrypoint_flower.sh': '__copy__',
+            'entrypoint_minio.sh': '__copy__',
+            'pyproject.toml': '__copy__',
+            'redis.conf': '__copy__',
+        },
+    },
     #######################
     #       XLMACROS      #
     #######################

@@ -6,10 +6,10 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import {FC, FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
 import {ISoftware} from './Types/Software';
-import {useSoftwareApi} from 'Software/useSoftwareApi';
 import SoftwareCard from './SoftwareCard';
 import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
+import {useSoftwareApi} from './useSoftwareApi';
 
 const Softwares: React.FC = () => {
     const [softwares, setSoftwares] = useState<ISoftware[]>([]);

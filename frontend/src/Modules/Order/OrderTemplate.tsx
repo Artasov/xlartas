@@ -27,7 +27,6 @@ const OrderTemplate: React.FC = () => {
         } else setLoading(false);
     }, [isAuthenticated, navigate, location]);
 
-
     if (loading) return <CircularProgressZoomify in size={'150px'}/>;
 
     return (

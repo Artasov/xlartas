@@ -11,12 +11,21 @@ export const useFileHostApi = () => {
         getFavoriteFiles: (page: number, page_size = 20) => api.get(`/api/v1/filehost/files/favorite/?page=${page}&page_size=${page_size}`),
         bulkDelete: (file_ids: number[]) => api.post('/api/v1/filehost/items/bulk_delete/', {file_ids}),
         getStorageUsage: () => api.get('/api/v1/filehost/storage/usage/'),
-        addFolder: (name: string, parent_id: number | null) => api.post('/api/v1/filehost/folder/add/', {name, parent_id}),
+        addFolder: (name: string, parent_id: number | null) => api.post('/api/v1/filehost/folder/add/', {
+            name,
+            parent_id
+        }),
         deleteItem: (payload: any) => api.delete('/api/v1/filehost/item/delete/', {data: payload}),
         getFile: (id: number) => api.post('/api/v1/filehost/file/', {id}),
         getFolders: () => api.get('/api/v1/filehost/folders/'),
-        moveItem: (item_id: number, new_folder_id: number | null) => api.post('/api/v1/filehost/item/move/', {item_id, new_folder_id}),
-        renameItem: (item_id: number, new_name: string) => api.post('/api/v1/filehost/item/rename/', {item_id, new_name}),
+        moveItem: (item_id: number, new_folder_id: number | null) => api.post('/api/v1/filehost/item/move/', {
+            item_id,
+            new_folder_id
+        }),
+        renameItem: (item_id: number, new_name: string) => api.post('/api/v1/filehost/item/rename/', {
+            item_id,
+            new_name
+        }),
         getFolder: (id: number) => api.post('/api/v1/filehost/folder/', {id}),
     };
 };
