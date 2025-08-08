@@ -1,5 +1,5 @@
-# build_up.sh
 #!/bin/bash
+# build_up.sh
 echo "-----------------------"
 echo "Building docker-compose..."
 echo "-----------------------"

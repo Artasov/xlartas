@@ -1,5 +1,5 @@
-# build_images.sh
 #!/bin/bash
+# build_images.sh
 
 REGISTRY="localhost:5000"
 

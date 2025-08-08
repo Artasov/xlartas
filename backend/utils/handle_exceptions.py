@@ -6,6 +6,8 @@ from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 from django.core.handlers.wsgi import WSGIRequest
 
+from utils.log import get_global_logger
+
 
 def handling_function(fn_name: str, request: WSGIRequest | ASGIRequest, e: Exception, *args: Any,
                       **kwargs: Any) -> None:
