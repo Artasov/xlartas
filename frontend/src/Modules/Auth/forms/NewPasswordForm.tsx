@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Auth/forms/NewPasswordForm.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';

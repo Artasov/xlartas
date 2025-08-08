@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Converter/ConversationResultCard.tsx
 import React from 'react';
 import {IconButton, Typography} from '@mui/material';

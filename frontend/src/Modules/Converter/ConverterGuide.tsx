@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Converter/ConverterGuide.tsx
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Collapse, Paper, Typography} from '@mui/material';

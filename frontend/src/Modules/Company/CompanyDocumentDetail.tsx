@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Company/CompanyDocumentDetail.tsx
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';

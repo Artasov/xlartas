@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Confirmation/ConfirmationCode.tsx
 
 import React, {useEffect, useState} from 'react';
