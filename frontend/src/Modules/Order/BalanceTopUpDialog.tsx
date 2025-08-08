@@ -6,7 +6,7 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import {FC, FR} from 'wide-containers';
 import PaymentSystemInfo from './PaymentSystemInfo';
 
-import {useApi} from 'Api/useApi';
+import {useOrderApi} from 'Order/useOrderApi';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 import {ICurrencyWithPrice, IPaymentSystem, IProduct} from 'types/commerce/shop';
 import {Message} from 'Core/components/Message';
@@ -19,7 +19,7 @@ interface BalanceTopUpDialogProps {
 }
 
 const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) => {
-    const {api} = useApi();
+    const {getLatestBalanceProduct, createOrder} = useOrderApi();
     const {notAuthentication} = useErrorProcessing();
     const {isAuthenticated} = useAuth();
     const {t} = useTranslation();
@@ -33,7 +33,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
 
     useEffect(() => {
         if (open) {
-            api.get('/api/v1/balance/product/latest/').then(p => setProduct(p)).catch(() => null);
+            getLatestBalanceProduct().then(p => setProduct(p)).catch(() => null);
         }
     }, [open, api]);
 
@@ -59,7 +59,7 @@ const BalanceTopUpDialog: React.FC<BalanceTopUpDialogProps> = ({open, onClose}) 
                 payment_system: system,
                 requested_amount: amount,
             };
-            const data = await api.post('/api/v1/orders/create/', payload);
+            const data = await createOrder(payload);
             if (data?.payment_url) window.open(data.payment_url, '_blank');
             Message.success(t('balance_topup_created'));
             onClose();

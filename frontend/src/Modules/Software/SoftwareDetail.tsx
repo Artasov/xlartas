@@ -12,7 +12,7 @@ import {useTheme} from 'Theme/ThemeContext';
 import SoftwareOrder from './SoftwareOrder';
 import {ISoftware} from './Types/Software';
 import {useAuth} from 'Auth/AuthContext';
-import {useApi} from 'Api/useApi';
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import {Message} from 'Core/components/Message';
 import SoftwareTestPeriodButton from './SoftwareTestPeriodButton';
 import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
@@ -28,7 +28,7 @@ const SoftwareDetail: React.FC = () => {
     const {id} = useParams();
     const {isAuthenticated} = useAuth();
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {getSoftware, getLicense} = useSoftwareApi();
     const navigate = useNavigate();
     const {t} = useTranslation();
 
@@ -53,11 +53,11 @@ const SoftwareDetail: React.FC = () => {
             setLoading(false);
             return;
         }
-        api.get(`/api/v1/software/${id}/`)
+        getSoftware(id as any)
             .then(data => setSoftware(data))
             .catch(() => Message.error(t('software_load_error')))
             .finally(() => setLoading(false));
-    }, [id, api, t]);
+    }, [id, getSoftware, t]);
 
     /* ---------- старт анимации контента после загрузки ---------- */
     useEffect(() => {
@@ -68,7 +68,7 @@ const SoftwareDetail: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated && software) {
             setLicenseLoading(true);
-            api.get(`/api/v1/license/${software.id}/`)
+            getLicense(software.id)
                 .then(data => {
                     if (data.no_one) {
                         setLicenseHours(0);
@@ -81,12 +81,12 @@ const SoftwareDetail: React.FC = () => {
                 .catch(() => null)
                 .finally(() => setLicenseLoading(false));
         }
-    }, [isAuthenticated, software, api]);
+    }, [isAuthenticated, software, getLicense]);
 
     const refreshLicense = () => {
         if (isAuthenticated && software) {
             setLicenseLoading(true);
-            api.get(`/api/v1/license/${software.id}/`)
+            getLicense(software.id)
                 .then(data => {
                     setLicenseHours(data.remaining_hours);
                     setIsTested(data.is_tested);

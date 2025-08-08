@@ -4,21 +4,21 @@
 import React, {useEffect, useState} from 'react';
 import {FC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
-import {useApi} from 'Api/useApi';
+import {useCompanyApi} from 'Company/useCompanyApi';
 import {Company} from 'Company/Types';
 import {useNavigate} from "Utils/nextRouter";
 
 const Footer: React.FC = () => {
     const {plt} = useTheme();
-    const {api} = useApi();
+    const {getCompany} = useCompanyApi();
     const [company, setCompany] = useState<Company | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get<Company>('/api/v1/companies/XLARTAS/').then(setCompany).catch(() => {
+        getCompany('XLARTAS').then(setCompany).catch(() => {
             setCompany(null);
         });
-    }, [api]);
+    }, [getCompany]);
 
     return (
         <FC component={'footer'}

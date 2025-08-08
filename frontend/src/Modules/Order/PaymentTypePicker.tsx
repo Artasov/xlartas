@@ -12,7 +12,7 @@ import logoFreeKassa from '../../Static/img/icon/freekassa/logo.png';
 import RadioCustomLine from 'Core/components/elements/RadioCustomLine';
 import {FC, FR, FRCC} from 'wide-containers';
 import {useTheme} from 'Theme/ThemeContext';
-import {useApi} from 'Api/useApi';
+import {useOrderApi} from 'Order/useOrderApi';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import pprint from 'Utils/pprint';
 import {useTranslation} from 'react-i18next';
@@ -39,18 +39,17 @@ const PaymentTypePicker: React.FC<PaymentTypePickerProps> = (
     const [paymentTypes, setPaymentTypes] = useState<{ [key: string]: IPaymentSystem[] }>({});
     const [selectedPaymentType, setSelectedPaymentType] = useState<IPaymentSystem | null>(null);
     const {plt, theme} = useTheme();
-    const {api} = useApi();
+    const {getPaymentTypes} = useOrderApi();
     const {t} = useTranslation();
 
     /* -------------------- Загрузка типов оплаты -------------------- */
     useEffect(() => {
         setLoading(true);
-        api
-            .get('/api/v1/payment/types/')
+        getPaymentTypes()
             .then((data) => setPaymentTypes(data))
             .catch(() => null)
             .finally(() => setLoading(false));
-    }, [api]);
+    }, [getPaymentTypes]);
 
     /* -------------------- Инициализация валюты/системы -------------------- */
     useEffect(() => {

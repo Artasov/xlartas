@@ -14,7 +14,7 @@ import {
     Typography
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {useTranslation} from 'react-i18next';
 import {IFile} from './types';
 import {FR, FRSC} from "wide-containers";
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const ShareDialog: React.FC<Props> = ({file, open, onClose}) => {
-    const {api} = useApi();
+    const {listAccess, grantAccess, revokeAccess} = useFileHostApi();
     const {t} = useTranslation();
     const [emails, setEmails] = useState<string[]>([]);
     const [email, setEmail] = useState('');
@@ -42,22 +42,22 @@ const ShareDialog: React.FC<Props> = ({file, open, onClose}) => {
 
     useEffect(() => {
         if (open && file) {
-            api.get(`/api/v1/filehost/access/list/?file_id=${file.id}`).then((d: any[]) => {
+            listAccess(file.id).then((d: any[]) => {
                 const pub = d.find(a => a.is_public);
                 setPublicAccess(pub || null);
                 setIsPublic(!!pub);
             });
         }
-    }, [open, file]);
+    }, [open, file, listAccess]);
 
     const handleShare = async () => {
         if (!file) return;
         if (isPublic && !publicAccess) {
-            const res = await api.post('/api/v1/filehost/access/grant/', {file_id: file.id, is_public: true});
+            const res = await grantAccess({file_id: file.id, is_public: true});
             setPublicAccess(res);
         }
         for (const em of emails) {
-            await api.post('/api/v1/filehost/access/grant/', {file_id: file.id, email: em});
+            await grantAccess({file_id: file.id, email: em});
         }
         onClose();
         setEmails([]);
@@ -67,10 +67,10 @@ const ShareDialog: React.FC<Props> = ({file, open, onClose}) => {
         setIsPublic(checked);
         if (!file) return;
         if (checked) {
-            const res = await api.post('/api/v1/filehost/access/grant/', {file_id: file.id, is_public: true});
+            const res = await grantAccess({file_id: file.id, is_public: true});
             setPublicAccess(res);
         } else if (publicAccess) {
-            await api.delete('/api/v1/filehost/access/revoke/', {data: {access_id: publicAccess.id}});
+            await revokeAccess(publicAccess.id);
             setPublicAccess(null);
         }
     };

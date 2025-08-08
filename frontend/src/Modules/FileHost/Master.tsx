@@ -1,6 +1,6 @@
 // Modules/FileHost/Master.tsx
 import React, {useEffect, useRef, useState} from 'react';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {IFile} from './types';
 import FileGrid from './FileGrid';
 import FileTable from './FileTable';
@@ -27,7 +27,7 @@ import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRound
 import {useTheme} from "Theme/ThemeContext";
 
 const Master: React.FC = () => {
-    const {api} = useApi();
+    const {bulkDelete, addFolder, deleteItem} = useFileHostApi();
     const {plt} = useTheme();
     const {id} = useParams();
     const folderId = id ? Number(id) : null;
@@ -58,7 +58,7 @@ const Master: React.FC = () => {
     }, [selected]);
 
     const deleteSelected = async () => {
-        await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
+        await bulkDelete(selected.map(s => s.id));
         setSelected([]);
         refreshCaches();
         load();
@@ -76,7 +76,7 @@ const Master: React.FC = () => {
     };
 
     const handleCreateFolder = async () => {
-        await api.post('/api/v1/filehost/folder/add/', {name: newFolderName, parent_id: folderId});
+        await addFolder(newFolderName, folderId);
         setShowCreate(false);
         setNewFolderName('');
         refreshCaches();
@@ -84,7 +84,7 @@ const Master: React.FC = () => {
     };
 
     const handleDeleteFolder = async (id: number) => {
-        await api.delete('/api/v1/filehost/item/delete/', {data: {folder_id: id}});
+        await deleteItem({folder_id: id});
         refreshCaches();
         load();
     };

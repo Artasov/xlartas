@@ -4,13 +4,14 @@ import {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {parseISO} from 'date-fns';
 import DateLabel from './DateLabel';
 import {IMessage} from 'types/chat/models';
+import {useChatApi} from 'Chat/useChatApi';
 
 interface UseRoomMessagesParams {
     roomId?: string;
-    api: any;
 }
 
-const useRoomMessages = ({roomId, api}: UseRoomMessagesParams) => {
+const useRoomMessages = ({roomId}: UseRoomMessagesParams) => {
+    const {listMessages} = useChatApi();
     const [messages, setMessages] = useState<IMessage[]>([]);
     const messagesRef = useRef<IMessage[]>(messages);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
@@ -35,7 +36,7 @@ const useRoomMessages = ({roomId, api}: UseRoomMessagesParams) => {
         if (url && messagesContainerRef.current) {
             prevScrollHeightRef.current = messagesContainerRef.current.scrollHeight;
         }
-        api.get(url || `/api/v1/rooms/${roomId}/messages/`).then((data: any) => {
+        listMessages(roomId, url || undefined).then((data: any) => {
             setMessages(prev => {
                 const newMessages = data.results.filter((msg: IMessage) => !prev.some(e => e.id === msg.id));
                 return [...newMessages, ...prev];
@@ -62,7 +63,7 @@ const useRoomMessages = ({roomId, api}: UseRoomMessagesParams) => {
             setIsLoadingMore(false);
             isFetchingRef.current = false;
         });
-    }, [roomId, api, isLoadingMore]);
+    }, [roomId, isLoadingMore, listMessages]);
 
     const handleScroll = useCallback(() => {
         if (

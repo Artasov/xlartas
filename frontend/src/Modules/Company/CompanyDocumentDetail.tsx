@@ -8,7 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import {Link, Typography} from '@mui/material';
 import {FC} from "wide-containers";
 import {CompanyDocument} from "Company/Types";
-import {useApi} from "Api/useApi";
+import {useCompanyApi} from 'Company/useCompanyApi';
 import Head from "Core/components/Head";
 
 
@@ -17,11 +17,11 @@ const CompanyDocumentDetail: React.FC = () => {
     const [document, setDocument] = useState<CompanyDocument | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const {api} = useApi();
+    const {getDocument} = useCompanyApi();
     const {t} = useTranslation();
     useEffect(() => {
         const fetchDocument = async () => {
-            api.get(`/api/v1/docs/${id}/`).then(data => setDocument(data)).finally(() => setLoading(false));
+            getDocument(id!).then(data => setDocument(data)).finally(() => setLoading(false));
         };
         if (id) {
             fetchDocument().then();
@@ -29,7 +29,7 @@ const CompanyDocumentDetail: React.FC = () => {
             setLoading(false);
             Message.error(t('document_id_not_specified'));
         }
-    }, [id]);
+    }, [id, getDocument, t]);
 
     if (loading) return <CircularProgressZoomify in size="60px"/>;
 

@@ -10,7 +10,7 @@ import './UserAvatarEditable.sass';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
-import {useApi} from 'Api/useApi';
+import {useUserApi} from 'User/useUserApi';
 
 interface UserAvatarEditableProps {
     size: string;
@@ -24,7 +24,7 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
     const {t} = useTranslation();
     const uploadIconRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {api} = useApi();
+    const {updateAvatar} = useUserApi();
 
     const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -32,9 +32,7 @@ const UserAvatarEditable: React.FC<UserAvatarEditableProps> = ({size, sx, classN
             setIsLoading(true);
             const formData = new FormData();
             formData.append('avatar', file);
-            api.patch('/api/v1/user/update/avatar/', formData, {
-                headers: {'Content-Type': 'multipart/form-data'},
-            }).then(() => {
+            updateAvatar(formData).then(() => {
                 updateCurrentUser().then(() => Message.success(t('avatar_update_success')));
             }).catch(() => Message.error(t('avatar_update_error')))
                 .finally(() => {

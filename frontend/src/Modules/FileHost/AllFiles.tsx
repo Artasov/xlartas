@@ -1,7 +1,7 @@
 // Modules/FileHost/AllFiles.tsx
 import React, {useEffect, useState} from 'react';
 import PaginatedList from 'Core/components/elements/PaginatedList';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import FileTableRow from './FileTableRow';
 import {IFile} from './types';
 import useFileUpload from './useFileUpload';
@@ -26,7 +26,7 @@ import {useTranslation} from 'react-i18next';
 import {getAllFilesCached, setAllFilesCached} from './storageCache';
 
 const AllFiles: React.FC = () => {
-    const {api} = useApi();
+    const {getFiles, bulkDelete} = useFileHostApi();
     const {handleUpload, uploads, clearUploads} = useFileUpload(null, () => setAllFilesCached(undefined as any));
     const {t} = useTranslation();
 
@@ -43,7 +43,7 @@ const AllFiles: React.FC = () => {
             const cached = getAllFilesCached();
             if (cached) return cached;
         }
-        const data = await api.get(`/api/v1/filehost/files/?page=${page}&page_size=20`);
+        const data = await getFiles(page, 20);
         if (page === 1) setAllFilesCached(data);
         return data;
     };
@@ -57,7 +57,7 @@ const AllFiles: React.FC = () => {
     }, [selected]);
 
     const deleteSelected = async () => {
-        await api.post('/api/v1/filehost/items/bulk_delete/', {file_ids: selected.map(s => s.id)});
+        await bulkDelete(selected.map(s => s.id));
         setSelected([]);
         setAllFilesCached(undefined as any);
         setTrigger(t => t + 1);

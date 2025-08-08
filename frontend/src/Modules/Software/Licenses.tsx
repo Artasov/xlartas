@@ -1,7 +1,7 @@
 // Modules/Software/Licenses.tsx
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useApi} from 'Api/useApi';
+import {useSoftwareApi} from 'Software/useSoftwareApi';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {FCC, FR} from 'wide-containers';
 import LicenseCard from './LicenseCard';
@@ -9,7 +9,7 @@ import {Message} from 'Core/components/Message';
 import Collapse from '@mui/material/Collapse';
 
 const Licenses: React.FC = () => {
-    const {api} = useApi();
+    const {listLicenses} = useSoftwareApi();
     const {t} = useTranslation();
     const [licenses, setLicenses] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -18,11 +18,11 @@ const Licenses: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         setAnimate(false);
-        api.get('/api/v1/software/licenses/')
+        listLicenses()
             .then(data => setLicenses(data))
             .catch(() => Message.error(t('licenses_load_error')))
             .finally(() => setLoading(false));
-    }, [api, t]);
+    }, [listLicenses, t]);
 
     useEffect(() => {
         if (!loading) setAnimate(true);

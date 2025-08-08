@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {IconButton, Menu, MenuItem} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import {IFile} from './types';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {FRSE} from 'wide-containers';
 import {useNavigate} from 'Utils/nextRouter';
 import {useTranslation} from 'react-i18next';
@@ -32,7 +32,7 @@ const FileItem: React.FC<Props> = ({
                                        onShare,
                                        onSelectMode
                                    }) => {
-    const {api} = useApi();
+    const {toggleFavorite} = useFileHostApi();
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -41,7 +41,7 @@ const FileItem: React.FC<Props> = ({
     useEffect(() => setFavorite(file.is_favorite), [file.is_favorite]);
 
     const toggleFav = () => {
-        api.post('/api/v1/filehost/files/toggle_favorite/', {file_id: file.id}).then((d) => {
+        toggleFavorite(file.id).then((d) => {
             setFavorite(d.is_favorite);
             onFavorite && onFavorite({...file, is_favorite: d.is_favorite});
             setFavoriteFilesCached(undefined as any);

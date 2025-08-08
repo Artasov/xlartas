@@ -15,8 +15,8 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {useAuth} from 'Auth/AuthContext';
 import {useNavigate} from 'Utils/nextRouter';
-import {useApi} from 'Api/useApi';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';
+import {useOrderApi} from 'Order/useOrderApi';
 import PaymentTypePicker from 'Order/PaymentTypePicker';
 
 /* ----------  utils ---------- */
@@ -61,7 +61,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
     const [system, setSystem] = useState<IPaymentSystem | null>(null);
 
     const navigate = useNavigate();
-    const {api} = useApi();
+    const {createOrder} = useOrderApi();
     const {notAuthentication} = useErrorProcessing();
     const {t} = useTranslation();
 
@@ -118,7 +118,7 @@ const SoftwareOrder: React.FC<SoftwareOrderProps> = ({software, onSuccess}) => {
                 promocode: promoCode || null,
                 email: user?.email ?? null,
             };
-            const data = await api.post('/api/v1/orders/create/', payload);
+            const data = await createOrder(payload);
 
             Message.success(t('order_created_success'), 2, 5000);
 

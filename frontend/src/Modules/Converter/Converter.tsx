@@ -1,6 +1,6 @@
 // Modules/Converter/Converter.tsx
 import React, {useEffect, useRef, useState} from 'react';
-import {useApi} from 'Api/useApi';
+import {useConverterApi} from 'Converter/useConverterApi';
 import {
     Accordion,
     AccordionDetails,
@@ -40,7 +40,7 @@ const logWSMsg = (u: string, d: unknown) => console.info(`WS \u21f3 ${u}`, wsFmt
 
 const Converter: React.FC = () => {
     const {theme, plt} = useTheme();
-    const {api} = useApi();
+    const {listFormats, getRemaining, listFormatVariants, listFormatParameters, convert} = useConverterApi();
     const {t} = useTranslation();
     const [source, setSource] = useState<IFormat | null>(null);
     const [targetId, setTargetId] = useState<number | null>(null);
@@ -58,19 +58,15 @@ const Converter: React.FC = () => {
     const isGtSm = useMediaQuery('(min-width: 576px)');
 
     useEffect(() => {
-        api.get<IFormat[]>('/api/v1/converter/formats/')
-            .then(setFormats);
-        api.get<{ remaining: number }>('/api/v1/converter/remaining/')
-            .then(res => setRemaining(res.remaining));
-    }, [api]);
+        listFormats().then(setFormats);
+        getRemaining().then(res => setRemaining(res.remaining));
+    }, [listFormats, getRemaining]);
 
     useEffect(() => {
         if (!source) return;
-        api.get<IFormat[]>(`/api/v1/converter/formats/${source.id}/variants/`)
-            .then(setTargets);
-        api.get<IParameter[]>(`/api/v1/converter/formats/${source.id}/parameters/`)
-            .then(setParams);
-    }, [source, api]);
+        listFormatVariants(source.id).then(setTargets);
+        listFormatParameters(source.id).then(setParams);
+    }, [source, listFormatVariants, listFormatParameters]);
 
     useEffect(() => {
         const defaults: Record<string, any> = {};
@@ -128,7 +124,7 @@ const Converter: React.FC = () => {
         formData.append('params', JSON.stringify(values));
         if (outputName) formData.append('output_name', outputName);
         setLoading(true);
-        api.post<IConvertResult>('/api/v1/converter/convert/', formData)
+        convert(formData)
             .then(data => {
                 setConversions(prev => [...prev, data.conversion]);
                 setRemaining(data.remaining);

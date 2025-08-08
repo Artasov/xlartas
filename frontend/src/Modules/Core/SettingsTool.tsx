@@ -10,7 +10,7 @@ import {useAuth} from 'Auth/AuthContext';
 import {FC, FCCC, FCSC} from "wide-containers";
 import {useTheme} from "Theme/ThemeContext";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
-import {useApi} from "Api/useApi";
+import {useCoreApi} from 'Core/useCoreApi';
 
 interface BackendConfigResponse {
     config: {
@@ -26,7 +26,7 @@ const SettingsTool: React.FC = () => {
     const [data, setData] = useState<BackendConfigResponse | null>(null);
     const {isAuthenticated, user} = useAuth();
     const {theme} = useTheme();
-    const {api} = useApi();
+    const {getBackendConfig} = useCoreApi();
     const openModal = useCallback(() => {
         setIsOpen(true);
     }, []);
@@ -41,8 +41,8 @@ const SettingsTool: React.FC = () => {
             return;
         }
         pprint("Fetching backend config...");
-        api.get('/api/v1/backend/config/').then(data => setData(data));
-    }, [api, isAuthenticated, user]);
+        getBackendConfig().then(data => setData(data));
+    }, [getBackendConfig, isAuthenticated, user]);
 
     useEffect(() => {
         if (isOpen) {

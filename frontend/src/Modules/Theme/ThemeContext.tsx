@@ -4,7 +4,7 @@
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
 import {darkTheme, lightTheme} from "../../theme";
-import {useApi} from "Api/useApi";
+import {useThemeApi} from 'Theme/useThemeApi';
 
 interface ThemeContextType {
     theme: any;
@@ -37,10 +37,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     const [backgroundImages, setBackgroundImages] = useState<BackgroundImages>({dark: [], light: []});
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
     const [themeLoading, setThemeLoading] = useState<boolean>(true);
-    const {api} = useApi();
+    const {getThemes} = useThemeApi();
     const processTheme = async () => {
         try {
-            const data = await api.get('/api/v1/themes/');
+            const data = await getThemes();
             const darkImages = data.filter((theme: any) => theme.mode === 'dark').map((theme: any) => theme.bg_image);
             const lightImages = data.filter((theme: any) => theme.mode === 'light').map((theme: any) => theme.bg_image);
             setBackgroundImages({dark: darkImages, light: lightImages});

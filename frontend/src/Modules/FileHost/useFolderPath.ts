@@ -1,10 +1,10 @@
 // Modules/FileHost/useFolderPath.ts
 import {useEffect, useState} from 'react';
-import {useApi} from 'Api/useApi';
+import {useFileHostApi} from 'FileHost/useFileHostApi';
 import {IFolder} from './types';
 
 const useFolderPath = (folder: IFolder | null) => {
-    const {api} = useApi();
+    const {getFolder} = useFileHostApi();
     const [path, setPath] = useState<IFolder[]>([]);
 
     useEffect(() => {
@@ -18,12 +18,12 @@ const useFolderPath = (folder: IFolder | null) => {
             while (cur) {
                 p.unshift(cur);
                 if (cur.parent === null) break;
-                cur = await api.post('/api/v1/filehost/folder/', {id: cur.parent});
+                cur = await getFolder(cur.parent);
             }
             setPath(p);
         };
         build().then();
-    }, [folder, api]);
+    }, [folder, getFolder]);
 
     return path;
 };
