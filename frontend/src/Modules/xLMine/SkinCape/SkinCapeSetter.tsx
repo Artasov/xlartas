@@ -1,13 +1,13 @@
 // Modules/xLMine/SkinCape/SkinCapeSetter.tsx
 import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useApi} from 'Modules/Api/useApi';
 import {Button} from "@mui/material";
 import {FCC, FRCC} from "wide-containers";
 import {Message} from 'Core/components/Message';
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 const SkinCapeSetter: React.FC = () => {
-    const {api} = useApi();
+    const {getCurrentSkinCape, uploadSkin, uploadCape} = useXLMineApi();
     const {t} = useTranslation();
     const [skinUrl, setSkinUrl] = useState<string | null>(null);
     const [capeUrl, setCapeUrl] = useState<string | null>(null);
@@ -15,12 +15,12 @@ const SkinCapeSetter: React.FC = () => {
     const [validCape, setValidCape] = useState<boolean>(false);
 
     const fetchCurrent = useCallback(async () => {
-        const data = await api.get('/api/v1/xlmine/current/skin-cape/');
+        const data = await getCurrentSkinCape();
         if (data?.skin) setSkinUrl(data.skin);
         else setSkinUrl(null);
         if (data?.cape) setCapeUrl(data.cape);
         else setCapeUrl(null);
-    }, [api]);
+    }, [getCurrentSkinCape]);
 
     useEffect(() => {
         fetchCurrent().then();
@@ -64,11 +64,9 @@ const SkinCapeSetter: React.FC = () => {
         const fd = new FormData();
         fd.append(type, file);
         try {
-            const data = await api.post(
-                `/api/v1/xlmine/${type === 'skin' ? 'skin' : 'cape'}/`,
-                fd,
-                {headers: {'Content-Type': 'multipart/form-data'}}
-            );
+            const data = type === 'skin'
+                ? await uploadSkin(fd)
+                : await uploadCape(fd);
             if (type === 'skin') setSkinUrl(data.skin);
             else setCapeUrl(data.cape);
             Message.success(t('update_success'));

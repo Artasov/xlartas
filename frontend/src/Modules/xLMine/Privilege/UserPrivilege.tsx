@@ -1,6 +1,5 @@
 // Modules/xLMine/Privilege/UserPrivilege.tsx
 import React, {useEffect, useState} from 'react';
-import {useApi} from 'Api/useApi';
 import {FC, FR, FRCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
@@ -8,9 +7,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import {IPrivilege} from '../types/base';
 import {useTranslation} from 'react-i18next';
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 const UserPrivilege: React.FC = () => {
-    const {api} = useApi();
+    const {getCurrentPrivilege} = useXLMineApi();
     const [privilege, setPrivilege] = useState<IPrivilege | null | undefined>(undefined);
     const {t} = useTranslation();
 
@@ -38,13 +38,13 @@ const UserPrivilege: React.FC = () => {
     };
 
     useEffect(() => {
-        api.get('/api/v1/xlmine/privilege/current/')
+        getCurrentPrivilege()
             .then(data => setPrivilege(data.privilege))
             .catch(() => {
                 Message.error(t('privilege_load_error'));
                 setPrivilege(null);
             });
-    }, [api]);
+    }, [getCurrentPrivilege]);
 
     // Показываем индикатор загрузки, пока привилегия не получена
     if (privilege === undefined) {

@@ -20,18 +20,18 @@ import {
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useApi} from "Api/useApi";
 import {FC, FCS, FR, FRC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {IRelease} from "./types/base";
 import {v4 as uuidv4} from 'uuid';
 import TextField from "@mui/material/TextField";
 import Collapse from '@mui/material/Collapse';
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 const CHUNK_SIZE = 50 * 1024 * 1024;
 
 const ReleaseManager: React.FC = () => {
-    const {api} = useApi();
+    const {getReleases, uploadReleaseChunk, deleteRelease} = useXLMineApi();
     const {t} = useTranslation();
 
     const [file, setFile] = useState<File | null>(null);
@@ -53,7 +53,7 @@ const ReleaseManager: React.FC = () => {
     const fetchVersions = async () => {
         setLoading(true);
         try {
-            const {results} = await api.get('/api/v1/xlmine/release/');
+            const {results} = await getReleases();
             setReleases(results);
         } catch {
             Message.error(t('release_versions_load_error'));
@@ -116,9 +116,7 @@ const ReleaseManager: React.FC = () => {
                 // Добавляем security_json только в первый чанк
                 if (idx === 0) formData.append('security_json', securityJson);
 
-                response = await api.post('/api/v1/xlmine/chunked-release/', formData, {
-                    headers: {'Content-Type': 'multipart/form-data'},
-                });
+                response = await uploadReleaseChunk(formData);
 
                 setUploadProgress(Math.round(((idx + 1) / totalChunks) * 100));
             }
@@ -149,7 +147,7 @@ const ReleaseManager: React.FC = () => {
         if (!confirmDeleteId) return;
         setDeletingId(confirmDeleteId);
         try {
-            await api.delete(`/api/v1/xlmine/release/${confirmDeleteId}/`);
+            await deleteRelease(confirmDeleteId);
             setReleases(prev => prev.filter(r => r.id !== confirmDeleteId));
             Message.success(t('version_deleted'));
         } catch {

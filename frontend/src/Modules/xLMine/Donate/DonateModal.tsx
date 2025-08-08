@@ -9,13 +9,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
 import {Button, Slider} from "@mui/material";
 import {useAuth} from "Auth/AuthContext";
-import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {FC, FCSC, FR, FRBC, FRSC} from "wide-containers";
 import {useErrorProcessing} from "Core/components/ErrorProvider";
 import {IDonate} from "./types";
 import PrivilegesView from "../Privilege/PrivilegesView";
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 const MIN_COINS = 10;
 const MAX_COINS = 10000;
@@ -44,7 +44,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const {isAuthenticated} = useAuth();
-    const {api} = useApi();
+    const {getLatestDonateProduct, createOrder} = useXLMineApi();
     const {notAuthentication} = useErrorProcessing();
     const {t} = useTranslation();
 
@@ -54,8 +54,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
         setCoins(MIN_COINS);
         setDonate(null);
         setPrice(1);
-        api
-            .get("/api/v1/xlmine/donate/product/latest/")
+        getLatestDonateProduct()
             .then((data) => {
                 setDonate(data);
                 // Берём price из product.prices[0].amount
@@ -65,7 +64,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
                 }
             })
             .catch((_error) => null);
-    }, [isOpen, api]);
+    }, [isOpen, getLatestDonateProduct]);
 
     const handleClose = () => {
         if (!loading) onClose();
@@ -91,8 +90,7 @@ const DonateModal: React.FC<IDonateModalProps> = ({isOpen, onClose}) => {
             coins_amount: coins,
             amount: finalCost,
         };
-        api
-            .post("/api/v1/orders/create/", payload)
+        createOrder(payload)
             .then((_data) => {
                 Message.success(t('donate_coins_created_success'), 2, 5000);
                 onClose();

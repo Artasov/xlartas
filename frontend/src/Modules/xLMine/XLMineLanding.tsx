@@ -16,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import {hideBackgroundFlicker, showBackgroundFlicker} from 'Redux/visibilitySlice';
 import {useTranslation} from 'react-i18next';
 import Head from "Core/components/Head";
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 // Пример: можно использовать кастомные пути к картинкам
 // Замените на свои реальные изображения
@@ -41,10 +42,11 @@ const XLMineLanding: React.FC = () => {
     const MOVE_PERCENT = 25;   // усиление движения мышью
     const AUTO_PERCENT = 5;    // автоматическое движение
 
+    const {getLatestLauncher} = useXLMineApi();
+
     const handleDownload = async () => {
         setLoading(true);
-        const response = await fetch('/api/v1/xlmine/launcher/latest/');
-        const data = await response.json();
+        const data = await getLatestLauncher();
         window.location.href = data.file;
         setTimeout(() => {
             setLoading(false);
