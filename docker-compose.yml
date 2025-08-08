@@ -93,7 +93,6 @@ services:
       - ./static:/srv/static
       - ./media:/srv/media
       - ./backend/logs:/srv/backend/logs
-      - ./frontend/build/:/srv/frontend/build
     ports:
       - "8000:8000"
     healthcheck:
