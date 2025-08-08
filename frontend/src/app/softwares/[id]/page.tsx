@@ -3,11 +3,11 @@ import type {Metadata} from "next";
 import SoftwareDetailPageClient from "./SoftwareDetailPageClient";
 
 interface PageProps {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
-    const {id} = params;
+    const {id} = await params;
     return {
         title: `Software ${id} - XLARTAS`,
         description: `Details about software ${id} on XLARTAS platform`,
