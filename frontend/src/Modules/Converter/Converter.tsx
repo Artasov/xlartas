@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Converter/Converter.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {useConverterApi} from 'Converter/useConverterApi';

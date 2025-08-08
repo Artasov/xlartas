@@ -1,3 +1,4 @@
+"use client";
 import {useApi} from 'Api/useApi';
 
 export const useConfirmationApi = () => {

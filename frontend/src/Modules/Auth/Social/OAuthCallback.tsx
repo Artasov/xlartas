@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Auth/Social/OAuthCallback.tsx
 import {OAUTH_PROVIDERS} from 'Auth/Social/constants';
 import {useParams} from 'Utils/nextRouter';

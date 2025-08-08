@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Core/pages/NewPassword.tsx
 import React from 'react';
 import {useNavigate} from "Utils/nextRouter";

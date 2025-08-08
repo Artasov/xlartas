@@ -1,3 +1,5 @@
+'use client';
+
 // Modules/Converter/FormatParametersSettings.tsx
 import React from 'react';
 import {InputAdornment, MenuItem, TextField} from '@mui/material';
