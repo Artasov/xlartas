@@ -5,7 +5,6 @@ import {useNavigate} from 'Utils/nextRouter';
 import {Button, Container, Link, Typography} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import TelegramIcon from '@mui/icons-material/Telegram';
-// @ts-ignore
 import tinkoffFullEn from '../../../Static/img/icon/tbank/long_dark_logo.svg';
 import Head from "Core/components/Head";
 
