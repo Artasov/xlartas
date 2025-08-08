@@ -1,4 +1,5 @@
 // Modules/Core/components/Header/Header.tsx
+"use client";
 import React, {useRef} from 'react';
 import './Header.sass';
 import {useAuth} from "Auth/AuthContext";

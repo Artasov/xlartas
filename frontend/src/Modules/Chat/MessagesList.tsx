@@ -1,4 +1,5 @@
 // Modules/Chat/MessagesList.tsx
+"use client";
 
 import React from 'react';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';

@@ -1,4 +1,5 @@
 // Modules/Software/Macros/MacrosExecutorForm.tsx
+"use client";
 import React, {useState} from 'react';
 import {useAuth} from 'Auth/AuthContext';
 import {Message} from 'Core/components/Message';

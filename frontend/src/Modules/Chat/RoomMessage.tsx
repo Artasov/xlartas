@@ -1,4 +1,5 @@
 // Modules/Chat/RoomMessage.tsx
+"use client";
 
 import React, {useCallback, useState} from 'react';
 import UserAvatar from "User/UserAvatar";

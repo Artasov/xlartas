@@ -1,4 +1,5 @@
 // Modules/Core/SettingsTool.tsx
+"use client";
 import React, {useCallback, useEffect, useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';

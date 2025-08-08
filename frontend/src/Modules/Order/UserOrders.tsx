@@ -1,4 +1,5 @@
 // Modules/Order/UserOrders.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'Utils/nextRouter';
 import {useErrorProcessing} from 'Core/components/ErrorProvider';

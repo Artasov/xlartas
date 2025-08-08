@@ -1,4 +1,5 @@
 // Modules/Auth/forms/AuthForm.tsx
+"use client";
 
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useAuth} from 'Auth/AuthContext';

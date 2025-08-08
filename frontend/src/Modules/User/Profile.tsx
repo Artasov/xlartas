@@ -1,4 +1,5 @@
 // Modules/User/Profile.tsx
+"use client";
 import React, {useEffect} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'Utils/nextRouter';
 import {FC, FRS} from 'wide-containers';

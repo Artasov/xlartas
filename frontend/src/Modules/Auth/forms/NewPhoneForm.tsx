@@ -1,4 +1,5 @@
 // Modules/Auth/forms/NewPhoneForm.tsx
+"use client";
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PhoneField from "Core/components/elements/PhoneField/PhoneField";

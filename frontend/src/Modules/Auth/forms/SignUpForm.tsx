@@ -1,4 +1,5 @@
 // Modules/Auth/forms/SignUpForm.tsx
+"use client";
 import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import ConfirmationCode, {ConfirmationMethod} from 'Confirmation/ConfirmationCode';

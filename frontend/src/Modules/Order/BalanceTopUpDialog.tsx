@@ -1,4 +1,5 @@
 // Modules/Order/BalanceTopUpDialog.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Dialog, DialogContent, DialogTitle, TextField} from '@mui/material';

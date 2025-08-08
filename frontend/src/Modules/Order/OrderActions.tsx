@@ -1,4 +1,5 @@
 // Modules/Order/OrderActions.tsx
+"use client";
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useSearchParams} from 'Utils/nextRouter';
