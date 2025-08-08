@@ -4,7 +4,7 @@
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
-import {axios, DOMAIN_URL} from "../Api/axiosConfig";
+import {useAuthApi} from 'Auth/useAuthApi';
 import {useNavigate} from "Utils/nextRouter";
 import {Message} from "Core/components/Message";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -41,13 +41,10 @@ export const useAuth = () => {
     return context;
 };
 
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [logoutInProgress, setLogoutInProgress] = useState<boolean>(false);
-    // Если переменная isAuthenticated !== null значит аутентификация уже была!
-    // !isAuthenticated не значит, что авторизация не прошла, может она null и еще выполняется.
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -55,16 +52,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     const {hideMobileMenu} = useNavigation();
 
+    const {login: apiLogin, logout: apiLogout, getCurrentUser, oauthCallback} = useAuthApi();
+
     useEffect(() => {
         if (localStorage.getItem('access')) updateCurrentUser().then();
         else {
-            pprint('dispatch - auth set false')
+            pprint('dispatch - auth set false');
             setIsAuthenticated(false);
         }
     }, [dispatch]);
 
     const frontendLogout = () => {
-        pprint('frontendLogout')
+        pprint('frontendLogout');
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
         setUser(null);
@@ -72,14 +71,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         hideMobileMenu();
     };
     const handleAuthResponse = async (jwtPair: JWTPair, next?: string) => {
-        pprint('Success Auth')
+        pprint('Success Auth');
         localStorage.setItem('access', jwtPair.access);
         localStorage.setItem('refresh', jwtPair.refresh);
-        pprint(jwtPair)
-        await updateCurrentUser()
+        pprint(jwtPair);
+        await updateCurrentUser();
         const nextFromUrl = new URLSearchParams(window.location.search).get('next');
-        pprint('Final auth next')
-        // pprint(nextFromUrl ? nextFromUrl : next ? next : '/profile')
+        pprint('Final auth next');
         navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
         hideMobileMenu();
         dispatch(closeAuthModal());
@@ -87,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     };
     const logout = () => {
         setLogoutInProgress(true);
-        axios.post('/api/v1/logout/')
+        apiLogout()
             .then(() => {
                 frontendLogout();
                 Message.success(t('logout_success'));
@@ -98,37 +96,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     };
 
     const updateCurrentUser = async () => {
-        pprint('Update current user')
-        const access = localStorage.getItem('access')
+        pprint('Update current user');
         try {
-            const response = await axios.get('/api/v1/current_user/', {
-                headers: {Authorization: `Bearer ${access}`}
-            })
-            pprint('User')
-            pprint(response.data)
-            setUser(response.data);
+            const data = await getCurrentUser();
+            pprint('User');
+            pprint(data);
+            setUser(data);
             setIsAuthenticated(true);
         } catch (e) {
-            console.error(`User error: ${e}`)
-            frontendLogout()
+            console.error(`User error: ${e}`);
+            frontendLogout();
         }
-    }
+    };
     const login = async (username: string, password: string, next?: string) => {
         try {
-            const r = await axios.post('/api/v1/token/', {username, password})
-            await handleAuthResponse(r.data, next)
+            const r = await apiLogin(username, password);
+            await handleAuthResponse(r, next);
         } catch (e) {
-            Message.error(t('invalid_credentials'))
+            Message.error(t('invalid_credentials'));
         }
-    }
-    const oauth2Handler = async (provider: OAuthProvider,
-                                 code: string,
-                                 next: string | null = null) => {
+    };
+    const oauth2Handler = async (
+        provider: OAuthProvider,
+        code: string,
+        next: string | null = null,
+    ) => {
         pprint(`OAuth2 : ${provider}`);
         try {
-            const r = await axios.get(`${DOMAIN_URL}/api/v1/oauth/${provider}/callback/?code=${code}`);
-            if (r.data.access && r.data.refresh) {
-                await handleAuthResponse(r.data, next ? next : '/profile');
+            const r = await oauthCallback(provider, code);
+            if (r.access && r.refresh) {
+                await handleAuthResponse(r, next ? next : '/profile');
             } else {
                 const capitalizeFirstLetter = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                 Message.success(`${capitalizeFirstLetter(provider)} аккаунт успешно привязан.`);
