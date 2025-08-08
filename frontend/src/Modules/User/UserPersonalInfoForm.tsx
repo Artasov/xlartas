@@ -1,4 +1,5 @@
 // Modules/User/UserPersonalInfoForm.tsx
+"use client";
 import React, {FormEvent, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {format} from 'date-fns';

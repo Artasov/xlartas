@@ -1,4 +1,5 @@
 // Modules/Software/SoftwareOrder.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button, Collapse, Dialog, DialogContent, DialogTitle, IconButton, Slider, useMediaQuery} from '@mui/material';

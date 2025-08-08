@@ -1,4 +1,5 @@
 // Modules/Auth/forms/NewEmailForm.tsx
+"use client";
 import React, {ChangeEvent, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import TextField from '@mui/material/TextField';

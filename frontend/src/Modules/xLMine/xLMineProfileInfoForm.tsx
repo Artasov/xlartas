@@ -1,4 +1,5 @@
 // Modules/xLMine/xLMineProfileInfoForm.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {FC, FR, FRSC} from 'wide-containers';
 import SkinCapeSetter from './SkinCape/SkinCapeSetter';

@@ -1,4 +1,5 @@
 // Modules/xLMine/Donate/DonateModal.tsx
+"use client";
 import React, {useEffect, useState} from "react";
 import {useTranslation} from 'react-i18next';
 import Modal from "@mui/material/Modal";

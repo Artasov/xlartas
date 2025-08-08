@@ -1,4 +1,5 @@
 // Modules/User/UserAvatarEditable.tsx
+"use client";
 import React, {ChangeEvent, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import UserAvatar from 'User/UserAvatar';

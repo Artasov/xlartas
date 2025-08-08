@@ -1,4 +1,5 @@
 // Modules/Chat/RoomHeader.tsx
+"use client";
 
 import React, {useMemo} from 'react';
 import {IconButton, useMediaQuery} from '@mui/material';

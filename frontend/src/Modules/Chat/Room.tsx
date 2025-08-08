@@ -1,4 +1,5 @@
 // Modules/Chat/Room.tsx
+"use client";
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'Utils/nextRouter';

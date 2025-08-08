@@ -1,4 +1,5 @@
 // Modules/Order/OrderDetail.tsx
+"use client";
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'Utils/nextRouter';
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";

@@ -1,4 +1,5 @@
 // Modules/User/ProfileContext.tsx
+"use client";
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'Utils/nextRouter';
 import {useAuth} from "Auth/AuthContext";

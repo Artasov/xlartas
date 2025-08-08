@@ -1,4 +1,5 @@
 // Modules/Chat/RoomWith.tsx
+"use client";
 
 import React, {useEffect, useState} from 'react';
 import {useAuth} from 'Auth/AuthContext';

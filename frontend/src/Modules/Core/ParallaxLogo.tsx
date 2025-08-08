@@ -1,4 +1,5 @@
 // Modules/Core/ParallaxLogo.tsx
+"use client";
 import React, {RefObject, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'Utils/nextRouter';

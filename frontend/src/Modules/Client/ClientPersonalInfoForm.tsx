@@ -1,4 +1,5 @@
 // Modules/Client/ClientPersonalInfoForm.tsx
+"use client";
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAuth} from "Auth/AuthContext";
