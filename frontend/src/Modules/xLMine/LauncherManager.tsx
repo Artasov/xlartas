@@ -19,15 +19,15 @@ import {
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import {Message} from 'Core/components/Message';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useApi} from "Api/useApi";
 import {FC, FCCC, FRSC} from "wide-containers";
 import FileUpload from "../../UI/FileUpload";
 import {ILauncher} from "./types/base";
 import TextField from "@mui/material/TextField";
 import Collapse from '@mui/material/Collapse';
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 const LauncherManager: React.FC = () => {
-    const {api} = useApi();
+    const {getLaunchers, createLauncher, deleteLauncher} = useXLMineApi();
     const {t} = useTranslation();
 
     // ==== Состояния ====
@@ -48,7 +48,7 @@ const LauncherManager: React.FC = () => {
     const fetchVersions = async () => {
         setLoading(true);
         try {
-            const {results} = await api.get('/api/v1/xlmine/launcher/');
+            const {results} = await getLaunchers();
             setLaunchers(results);
         } catch (error) {
             Message.error(t('launcher_versions_load_error'));
@@ -83,9 +83,7 @@ const LauncherManager: React.FC = () => {
             formData.append('file', file);
             formData.append('version', version);
 
-            const newVersion = await api.post('/api/v1/xlmine/launcher/', formData, {
-                headers: {'Content-Type': 'multipart/form-data'}
-            });
+            const newVersion = await createLauncher(formData);
 
             setLaunchers(prev => [...prev, newVersion]);
 
@@ -114,7 +112,7 @@ const LauncherManager: React.FC = () => {
         if (!confirmDeleteId) return;
         setDeletingId(confirmDeleteId);
         try {
-            await api.delete(`/api/v1/xlmine/launcher/${confirmDeleteId}/`);
+            await deleteLauncher(confirmDeleteId);
             Message.success(t('version_deleted'));
             setLaunchers(prev => prev.filter(item => item.id !== confirmDeleteId));
         } catch (error) {

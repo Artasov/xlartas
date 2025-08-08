@@ -1,6 +1,5 @@
 // Modules/xLMine/Privilege/PrivilegesView.tsx
 import React, {useEffect, useState} from 'react';
-import {useApi} from "Modules/Api/useApi";
 import {Message} from "Core/components/Message";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {useTheme} from "Theme/ThemeContext";
@@ -8,6 +7,7 @@ import {IPrivilege} from "../types/base";
 import {FC, FCCC, FRSC} from "wide-containers";
 import PrivilegeItem from "./PrivilegeItem";
 import {useTranslation} from 'react-i18next';
+import {useXLMineApi} from 'xLMine/useXLMineApi';
 
 interface ICurrentPrivilegeResponse {
     privilege: IPrivilege | null;
@@ -16,7 +16,7 @@ interface ICurrentPrivilegeResponse {
 
 
 const PrivilegesView: React.FC = () => {
-    const {api} = useApi();
+    const {getPrivileges, getCurrentPrivilege} = useXLMineApi();
     const {plt} = useTheme();
     const {t} = useTranslation();
 
@@ -30,8 +30,8 @@ const PrivilegesView: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         Promise.all([
-            api.get<IPrivilege[]>('/api/v1/xlmine/privilege/'),
-            api.get<ICurrentPrivilegeResponse>('/api/v1/xlmine/privilege/current/')
+            getPrivileges(),
+            getCurrentPrivilege()
         ])
             .then(([privData, currentData]) => {
                 setPrivileges(privData);
@@ -43,7 +43,7 @@ const PrivilegesView: React.FC = () => {
                 setTotalDonate(0);
             })
             .finally(() => setLoading(false));
-    }, [api]);
+    }, [getPrivileges, getCurrentPrivilege]);
 
     if (loading) return <FCCC><CircularProgressZoomify in size="60px"/></FCCC>;
     if (!privileges || privileges.length === 0) return null; // Привилегий нет у юзера
