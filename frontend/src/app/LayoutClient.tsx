@@ -11,6 +11,7 @@ import {useTheme} from "Theme/ThemeContext";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {useSelector} from "react-redux";
 import {RootState} from "Redux/store";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const BackgroundFlicker = dynamic(() => import("Core/BackgroundFlicker"), {ssr: false});
 
@@ -18,7 +19,7 @@ export default function LayoutClient({children}: { children: React.ReactNode }) 
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
-    const isGt1000 = typeof window !== 'undefined' && window.innerWidth > 1000;
+    const isGt1000 = useMediaQuery('(min-width:1000px)');
     const isBackgroundFlickerEnabled = useSelector((state: RootState) => state.visibility.isBackgroundFlickerEnabled);
 
     return (

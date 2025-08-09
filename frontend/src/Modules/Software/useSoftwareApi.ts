@@ -1,8 +1,9 @@
 import {useApi} from 'Api/useApi';
+import {useMemo} from 'react';
 
 export const useSoftwareApi = () => {
     const {api} = useApi();
-    return {
+    return useMemo(() => ({
         listLicenses: () => api.get('/api/v1/software/licenses/'),
         listSoftware: () => api.get('/api/v1/software/'),
         getSoftware: (id: number | string) => api.get(`/api/v1/software/${id}/`),
@@ -12,7 +13,7 @@ export const useSoftwareApi = () => {
         deleteWirelessMacro: (id: number | string) => api.delete(`/api/v1/wireless-macros/${id}/`),
         updateWirelessMacro: (id: number | string, payload: unknown) => api.put(`/api/v1/wireless-macros/${id}/`, payload),
         createWirelessMacro: (payload: unknown) => api.post('/api/v1/wireless-macros/', payload),
-    };
+    }), [api]);
 };
 
 export type UseSoftwareApi = ReturnType<typeof useSoftwareApi>;

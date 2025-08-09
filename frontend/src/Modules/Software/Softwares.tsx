@@ -11,9 +11,13 @@ import {useTranslation} from 'react-i18next';
 import Collapse from '@mui/material/Collapse';
 import {useSoftwareApi} from './useSoftwareApi';
 
-const Softwares: React.FC = () => {
-    const [softwares, setSoftwares] = useState<ISoftware[]>([]);
-    const [loading, setLoading] = useState(true);
+interface SoftwaresProps {
+    initialSoftwares?: ISoftware[];
+}
+
+const Softwares: React.FC<SoftwaresProps> = ({initialSoftwares = []}) => {
+    const [softwares, setSoftwares] = useState<ISoftware[]>(initialSoftwares);
+    const [loading, setLoading] = useState(initialSoftwares.length === 0);
     const [animate, setAnimate] = useState(false);
     const navigate = useNavigate();
     const {plt} = useTheme();
@@ -21,16 +25,21 @@ const Softwares: React.FC = () => {
     const {t} = useTranslation();
 
     useEffect(() => {
-        setLoading(true);
-        setAnimate(false);
-        listSoftware()
-            .then(data => setSoftwares(data))
-            .finally(() => setLoading(false));
-    }, [listSoftware]);
+        if (initialSoftwares.length === 0) {
+            setLoading(true);
+            setAnimate(false);
+            listSoftware()
+                .then(data => setSoftwares(data))
+                .finally(() => setLoading(false));
+        } else {
+            setLoading(false);
+        }
+    }, [initialSoftwares.length, listSoftware]);
 
     useEffect(() => {
         if (!loading) {
-            setTimeout(() => setAnimate(true), 50)
+            const t = setTimeout(() => setAnimate(true), 50);
+            return () => clearTimeout(t);
         }
     }, [loading]);
 

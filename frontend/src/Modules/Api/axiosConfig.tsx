@@ -1,5 +1,5 @@
 // Modules/Api/axiosConfig.tsx
-import axios from 'axios';
+// Содержит только константы конфигурации API. Сам Axios-инстанс создаётся в useApi.ts.
 
 const isClient = typeof window !== 'undefined';
 const isHttps = isClient && window.location.protocol === 'https:';
@@ -26,41 +26,3 @@ export const DOMAIN_URL = isClient
     : (process.env.NEXT_PUBLIC_APP_ORIGIN as string || 'http://localhost:3000');
 
 export const DOMAIN_URL_ENCODED = encodeURIComponent(DOMAIN_URL);
-
-const axiosInstance = axios.create({baseURL: API_BASE_URL});
-
-function getCookie(name: string): string | null {
-    if (typeof document === 'undefined' || !document.cookie) return null;
-    const xsrfCookies = document.cookie
-        .split(';')
-        .map(c => c.trim())
-        .filter(c => c.startsWith(`${name}=`));
-    if (xsrfCookies.length === 0) return null;
-    return decodeURIComponent(xsrfCookies[0].split('=')[1]);
-}
-
-axiosInstance.interceptors.request.use(
-    (config) => {
-        if (typeof localStorage !== 'undefined') {
-            const token = localStorage.getItem('access');
-            if (token) (config.headers as any).Authorization = `Bearer ${token}`;
-        }
-        const csrfToken = getCookie('csrftoken');
-        if (csrfToken) (config.headers as any)['X-CSRFToken'] = csrfToken;
-        return config;
-    },
-    (error) => Promise.reject(error),
-);
-
-axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error?.response?.status === 401 && typeof localStorage !== 'undefined') {
-            localStorage.removeItem('access');
-            localStorage.removeItem('refresh');
-        }
-        throw error;
-    },
-);
-
-export {axiosInstance as axios};

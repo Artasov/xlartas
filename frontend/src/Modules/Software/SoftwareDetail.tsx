@@ -24,7 +24,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Collapse from '@mui/material/Collapse';
 import Head from "Core/components/Head";
 
-const SoftwareDetail: React.FC = () => {
+interface SoftwareDetailProps {
+    initialSoftware?: ISoftware;
+}
+
+const SoftwareDetail: React.FC<SoftwareDetailProps> = ({initialSoftware}) => {
     const {id} = useParams();
     const {isAuthenticated} = useAuth();
     const {plt} = useTheme();
@@ -32,8 +36,8 @@ const SoftwareDetail: React.FC = () => {
     const navigate = useNavigate();
     const {t} = useTranslation();
 
-    const [software, setSoftware] = useState<ISoftware | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [software, setSoftware] = useState<ISoftware | null>(initialSoftware ?? null);
+    const [loading, setLoading] = useState(!initialSoftware);
     const [animate, setAnimate] = useState(false);          // ← NEW
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
 
@@ -46,18 +50,19 @@ const SoftwareDetail: React.FC = () => {
 
     /* ---------- загрузка Software ---------- */
     useEffect(() => {
-        setLoading(true);
-        setAnimate(false);
-        if (!id) {
+        const softwareId = initialSoftware?.id ?? id;
+        if (!software && softwareId) {
+            setLoading(true);
+            setAnimate(false);
+            getSoftware(softwareId as any)
+                .then(data => setSoftware(data))
+                .catch(() => Message.error(t('software_load_error')))
+                .finally(() => setLoading(false));
+        } else if (!softwareId) {
             Message.error(t('software_id_not_provided'));
             setLoading(false);
-            return;
         }
-        getSoftware(id as any)
-            .then(data => setSoftware(data))
-            .catch(() => Message.error(t('software_load_error')))
-            .finally(() => setLoading(false));
-    }, [id, getSoftware, t]);
+    }, [initialSoftware, id, software, getSoftware, t]);
 
     /* ---------- старт анимации контента после загрузки ---------- */
     useEffect(() => {

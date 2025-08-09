@@ -1,10 +1,11 @@
 import {useApi} from 'Api/useApi';
+import {useMemo} from 'react';
 import type {AxiosRequestConfig} from 'axios';
 import type {FolderContent} from './storageCache';
 
 export const useFileHostApi = () => {
     const {api} = useApi();
-    return {
+    return useMemo(() => ({
         toggleFavorite: (file_id: number) => api.post('/api/v1/filehost/files/toggle_favorite/', {file_id}),
         listAccess: (file_id: number) => api.get(`/api/v1/filehost/access/list/?file_id=${file_id}`),
         grantAccess: (payload: any) => api.post('/api/v1/filehost/access/grant/', payload),
@@ -26,7 +27,7 @@ export const useFileHostApi = () => {
         moveItem: (item_id: number, new_folder_id: number | null) => api.post('/api/v1/filehost/item/move/', {item_id, new_folder_id}),
         renameItem: (item_id: number, new_name: string) => api.post('/api/v1/filehost/item/rename/', {item_id, new_name}),
         getFolder: (id: number) => api.post('/api/v1/filehost/folder/', {id}),
-    };
+    }), [api]);
 };
 
 export type UseFileHostApi = ReturnType<typeof useFileHostApi>;
