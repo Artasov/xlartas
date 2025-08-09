@@ -109,6 +109,12 @@ export const useApi = () => {
             if (csrfToken) {
                 (cfg.headers as any)['X-CSRFToken'] = csrfToken;
             }
+            if (cfg.url && cfg.url.startsWith('/')) {
+                const [path, query] = cfg.url.split('?');
+                if (!path.endsWith('/')) {
+                    cfg.url = path + '/' + (query ? '?' + query : '');
+                }
+            }
             (cfg as any)._ts = performance.now();
             logReq(cfg.method, cfg.url, cfg.data);
             return cfg;
