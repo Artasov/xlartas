@@ -1,9 +1,10 @@
 import {useApi} from 'Api/useApi';
+import {useMemo} from 'react';
 
 export const useXLMineApi = () => {
     const {api} = useApi();
 
-    return {
+    return useMemo(() => ({
         // Launcher endpoints
         getLaunchers: () => api.get('/api/v1/xlmine/launcher/'),
         createLauncher: (formData: FormData) =>
@@ -39,7 +40,7 @@ export const useXLMineApi = () => {
         // Donate
         getLatestDonateProduct: () => api.get('/api/v1/xlmine/donate/product/latest/'),
         createOrder: (payload: unknown) => api.post('/api/v1/orders/create/', payload),
-    };
+    }), [api]);
 };
 
 export type UseXLMineApi = ReturnType<typeof useXLMineApi>;

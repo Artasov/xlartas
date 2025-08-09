@@ -3,11 +3,16 @@
 
 import Softwares from "../../Modules/Software/Softwares";
 import {FC} from "wide-containers";
+import {ISoftware} from "Software/Types/Software";
 
-export default function SoftwaresPageClient() {
+interface SoftwaresPageClientProps {
+    softwares: ISoftware[];
+}
+
+export default function SoftwaresPageClient({softwares}: SoftwaresPageClientProps) {
     return (
         <FC g={2} p={2} mx={"auto"} maxW={800}>
-            <Softwares/>
+            <Softwares initialSoftwares={softwares}/>
         </FC>
     );
 }

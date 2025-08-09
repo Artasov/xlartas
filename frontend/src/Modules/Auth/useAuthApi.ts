@@ -1,12 +1,13 @@
 "use client";
 import {useApi} from 'Api/useApi';
+import {useMemo} from 'react';
 import {JWTPair} from 'types/core/auth';
 import {IUser} from 'types/core/user';
 
 export const useAuthApi = () => {
     const {api} = useApi();
 
-    return {
+    return useMemo(() => ({
         login: (username: string, password: string) =>
             api.post<JWTPair>('/api/v1/token/', {username, password}),
         logout: () => api.post('/api/v1/logout/'),
@@ -20,7 +21,7 @@ export const useAuthApi = () => {
         checkEmailExists: (email: string) => api.post('/api/v1/check-email-exists/', {email}),
         signup: (payload: unknown) => api.post('/api/v1/signup/', payload),
         getAuthMethods: (credential: string) => api.post('/api/v1/user/auth_methods/', {credential}),
-    };
+    }), [api]);
 };
 
 export type UseAuthApi = ReturnType<typeof useAuthApi>;

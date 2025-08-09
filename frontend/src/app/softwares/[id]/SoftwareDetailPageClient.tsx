@@ -2,25 +2,17 @@
 "use client";
 
 import {FC} from "wide-containers";
-import {useParams} from "next/navigation";
 import SoftwareDetail from "../../../Modules/Software/SoftwareDetail";
-import Providers from "../../../providers";
+import {ISoftware} from "Software/Types/Software";
 
-export default function SoftwareDetailPageClient() {
-    const params = useParams();
-    const id = params?.id;
-    console.log("SoftwareDetailPageClient useParams id =", id);
+interface SoftwareDetailPageClientProps {
+    software: ISoftware;
+}
 
-    if (!id) {
-        // защита на случай, если id всё ещё не прочитался
-        return <p>Software ID not specified</p>;
-    }
-
+export default function SoftwareDetailPageClient({software}: SoftwareDetailPageClientProps) {
     return (
-        <Providers>
-            <FC g={2} p={2} mx={"auto"} maxW={700}>
-                <SoftwareDetail/>
-            </FC>
-        </Providers>
+        <FC g={2} p={2} mx={"auto"} maxW={700}>
+            <SoftwareDetail initialSoftware={software}/>
+        </FC>
     );
 }

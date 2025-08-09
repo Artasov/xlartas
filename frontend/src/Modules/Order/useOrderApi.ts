@@ -1,8 +1,9 @@
 import {useApi} from 'Api/useApi';
+import {useMemo} from 'react';
 
 export const useOrderApi = () => {
     const {api} = useApi();
-    return {
+    return useMemo(() => ({
         getUserBalance: () => api.get('/api/v1/user/balance/'),
         getLatestBalanceProduct: () => api.get('/api/v1/balance/product/latest/'),
         createOrder: (payload: unknown) => api.post('/api/v1/orders/create/', payload),
@@ -17,7 +18,7 @@ export const useOrderApi = () => {
         deleteOrder: (id: number | string) => api.post(`/api/v1/orders/${id}/delete/`),
         resendPaymentNotification: (id: number | string) =>
             api.post(`/api/v1/orders/${id}/resend_payment_notification/`),
-    };
+    }), [api]);
 };
 
 export type UseOrderApi = ReturnType<typeof useOrderApi>;

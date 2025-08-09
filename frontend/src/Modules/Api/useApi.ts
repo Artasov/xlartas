@@ -8,11 +8,25 @@ import {API_BASE_URL} from './axiosConfig';
 
 type AxiosConfig = AxiosRequestConfig | undefined;
 
-/* -------- localStorage helpers -------- */
+/* -------- helpers: cookies & token storage -------- */
 const LS_ACCESS = 'access';
 const LS_REFRESH = 'refresh';
 
+const getCookie = (name: string): string | null => {
+    if (typeof document === 'undefined' || !document.cookie) return null;
+    const xsrfCookies = document.cookie
+        .split(';')
+        .map(c => c.trim())
+        .filter(c => c.startsWith(`${name}=`));
+    if (xsrfCookies.length === 0) return null;
+    return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+};
+
 const saveTokens = (a: string, r: string) => {
+    if (typeof document !== 'undefined') {
+        document.cookie = `access=${a}; path=/`;
+        document.cookie = `refresh=${r}; path=/`;
+    }
     if (typeof localStorage !== 'undefined') {
         localStorage.setItem(LS_ACCESS, a);
         localStorage.setItem(LS_REFRESH, r);
@@ -20,16 +34,26 @@ const saveTokens = (a: string, r: string) => {
 };
 
 const clearTokens = () => {
+    if (typeof document !== 'undefined') {
+        document.cookie = 'access=; Max-Age=0; path=/';
+        document.cookie = 'refresh=; Max-Age=0; path=/';
+    }
     if (typeof localStorage !== 'undefined') {
         localStorage.removeItem(LS_ACCESS);
         localStorage.removeItem(LS_REFRESH);
     }
 };
 
-const getAccess = () =>
-    typeof localStorage !== 'undefined' ? localStorage.getItem(LS_ACCESS) : null;
-const getRefresh = () =>
-    typeof localStorage !== 'undefined' ? localStorage.getItem(LS_REFRESH) : null;
+const getAccess = () => {
+    const fromCookie = typeof document !== 'undefined' ? getCookie('access') : null;
+    if (fromCookie) return fromCookie;
+    return typeof localStorage !== 'undefined' ? localStorage.getItem(LS_ACCESS) : null;
+};
+const getRefresh = () => {
+    const fromCookie = typeof document !== 'undefined' ? getCookie('refresh') : null;
+    if (fromCookie) return fromCookie;
+    return typeof localStorage !== 'undefined' ? localStorage.getItem(LS_REFRESH) : null;
+};
 
 /* -------- stringify / preview helper (для логов) -------- */
 const fmt = (x: unknown) => {
@@ -65,20 +89,6 @@ export const useApi = () => {
     if (!axiosRef.current) {
         // Базовый URL относительный (в PROD ходим через тот же домен; в DEV переписывается next.config.ts)
         const inst = axios.create({baseURL: API_BASE_URL});
-        if (typeof localStorage !== 'undefined') {
-            (inst.defaults.headers.common as any)['Accept-Language'] =
-                localStorage.getItem('lang') || 'ru';
-        }
-
-        const getCookie = (name: string): string | null => {
-            if (typeof document === 'undefined' || !document.cookie) return null;
-            const xsrfCookies = document.cookie
-                .split(';')
-                .map(c => c.trim())
-                .filter(c => c.startsWith(`${name}=`));
-            if (xsrfCookies.length === 0) return null;
-            return decodeURIComponent(xsrfCookies[0].split('=')[1]);
-        };
 
         /* ---- helpers: log ---- */
         const logReq = (m?: string, u?: string, d?: unknown) =>
@@ -92,6 +102,9 @@ export const useApi = () => {
             if (token) {
                 (cfg.headers as any).Authorization = 'Bearer ' + token;
             }
+            const lang = typeof localStorage !== 'undefined' ?
+                localStorage.getItem('lang') || 'ru' : getCookie('lang') || 'ru';
+            (cfg.headers as any)['Accept-Language'] = lang;
             const csrfToken = getCookie('csrftoken');
             if (csrfToken) {
                 (cfg.headers as any)['X-CSRFToken'] = csrfToken;
