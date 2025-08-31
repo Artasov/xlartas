@@ -21,10 +21,12 @@ RUN corepack enable && \
       yarn add -W sharp@^0.33.0 --dev || yarn add -W sharp@^0.33.0; \
     elif [ -f package-lock.json ]; then \
       npm ci --legacy-peer-deps --include=optional; \
-      npm i -D sharp@^0.33.0 --include=optional || true; \
+      # install sharp without touching package.json/lock and ignore peers to avoid CRA/TS conflicts \
+      npm i --no-save --legacy-peer-deps --include=optional --os=linux --cpu=x64 sharp@^0.33.0 || true; \
     else \
       npm i --legacy-peer-deps --include=optional; \
-      npm i -D sharp@^0.33.0 --include=optional || true; \
+      # install sharp without touching package.json/lock and ignore peers to avoid CRA/TS conflicts \
+      npm i --no-save --legacy-peer-deps --include=optional --os=linux --cpu=x64 sharp@^0.33.0 || true; \
     fi \
     && node -e "require('sharp'); console.log('sharp loaded')"
 
