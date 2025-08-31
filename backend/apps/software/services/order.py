@@ -8,7 +8,7 @@ from apps.software.services.license import SoftwareLicenseService
 if TYPE_CHECKING: ...
 
 
-class SoftwareOrderService(OrderService['SoftwareOrder', 'Software']):
+class SoftwareOrderService(OrderService):
     @property
     async def receipt_price(self) -> Decimal:
         product = await self.order.arelated('product')

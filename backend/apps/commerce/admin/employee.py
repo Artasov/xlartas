@@ -1,5 +1,4 @@
 # commerce/admin/employee.py
-from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelFilter
@@ -29,13 +28,11 @@ class EmployeeAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
         PolymorphicChildModelFilter
     )
 
-    @admin_description('Type')
-    @admin_order_field('polymorphic_ctype')
+    @admin.display(description='Type', ordering='polymorphic_ctype')
     def get_subclass(self, obj):
         return obj.get_real_instance().__class__.__name__
 
-    @admin_description('Employee')
-    @admin_order_field('polymorphic_ctype')
+    @admin.display(description='Employee', ordering='polymorphic_ctype')
     def get_child(self, obj):
         real = obj.get_real_instance()
         return str(real) if real else '-'

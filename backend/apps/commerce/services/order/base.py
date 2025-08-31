@@ -3,6 +3,8 @@ import logging
 from decimal import Decimal
 from typing import TYPE_CHECKING, Generic
 
+from adjango.services.base import ABaseService
+
 from apps.commerce.services.order.exceptions import _OrderException
 from apps.commerce.services.payment.base import PaymentBaseService
 from apps.commerce.services.typing import OrderT, ProductT
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
     pass
 
 
-class OrderService(BaseService, Generic[OrderT, ProductT]):
+class OrderService(ABaseService):
     """
     Интерфейс-сервис для работы с заказами, частично реализующий функционал.
     Этот класс должен быть унаследован конкретными сервисами заказов,
@@ -27,8 +29,9 @@ class OrderService(BaseService, Generic[OrderT, ProductT]):
 
     exceptions = _OrderException
 
-    def __init__(self, order: OrderT) -> None:
-        self.order = order
+    def __init__(self, obj: OrderT) -> None:
+        super().__init__(obj)
+        self.order = obj
 
     async def init_payment(self, request, price: Decimal) -> None:
         from apps.commerce.services.payment_registry import PaymentSystemRegistry

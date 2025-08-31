@@ -1,21 +1,23 @@
 # commerce/services/product/base.py
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Generic
+from typing import TYPE_CHECKING
+
+from adjango.services.base import ABaseService
 
 from apps.commerce.services.product.exceptions import _ProductException
 from apps.commerce.services.typing import ProductT, OrderT
-from apps.core.services.base import BaseService
 
 if TYPE_CHECKING:
     pass
 
 
-class ProductBaseService(BaseService, Generic[ProductT, OrderT]):
+class ProductBaseService(ABaseService):
     """Base service for working with product instances."""
     exceptions = _ProductException
 
-    def __init__(self, product: ProductT) -> None:
-        self.product = product
+    def __init__(self, obj: ProductT) -> None:
+        super().__init__(obj)
+        self.product = obj
 
     @abstractmethod
     async def new_order(self, request) -> OrderT:

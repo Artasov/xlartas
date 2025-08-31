@@ -10,13 +10,13 @@ package-mode = false
 python = "^3.12"
 
 # Tier 1
-Django = "5.2.4"
-adjango = "0.5.6"
-djangorestframework = "3.16.0"
+Django = "5.2.5"
+adjango = "0.8.0"
+djangorestframework = "3.16.1"
 adrf = "0.1.9"
 celery = "5.5.3"
 daphne = "4.2.1"
-channels = "4.2.2"
+channels = "4.3.1"
 
 # Tier 2
 django-redis = "6.0.0"
@@ -25,29 +25,29 @@ django-logui = "0.1.2"
 django-endpoints = "0.0.3"
 django-extensions = "4.1"
 django-polymorphic = "4.1.0"
-djangorestframework-simplejwt = "5.5.0"
+djangorestframework-simplejwt = "5.5.1"
 django-minio-backend = "3.8.0"
 django-celery-beat = "2.8.1"
 django-cachalot = "2.8.0"
-django-silk = "5.4.0"
+django-silk = "5.4.2"
 django-imagekit = "5.0.0"
 django-csp = "4.0"
 django-user-agents = "0.4.0"
 django-object-actions = "5.0.0"
 django-phonenumber-field = { extras = ["phonenumbers"], version = "^8.0.0" }
-phonenumbers = "9.0.8"
+phonenumbers = "9.0.13"
 django-jazzmin = "3.0.1"
-django-import-export = { version = "4.3.8", extras = ["all"] }
+django-import-export = { version = "4.3.9", extras = ["all"] }
 
 pytest-asyncio = "0.26.0"
 pytest-django = "4.11.1"
 flower = "2.0.1"
 drf-yasg = "1.21.10"
-redis = "6.2.0"
-channels-redis = "4.2.1"
+redis = "6.4.0"
+channels-redis = "4.3.0"
 twisted = { version = "25.5.0", extras = ["http2", "tls"] }
 httpx = "0.28.1"
-uuid6 = "2025.0.0"
+uuid6 = "2025.0.1"
 mcrcon = "0.7.0"
 polib = "1.2.0"
 

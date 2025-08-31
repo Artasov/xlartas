@@ -1,5 +1,4 @@
 # commerce/admin/shop.py
-from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
@@ -30,7 +29,7 @@ class ProductAdmin(ImportExportModelAdmin):
         'make_installment_unavailable'
     )
 
-    @admin_description(_('Default Price'))
+    @admin.display(description=_('Default Price'))
     def get_default_price(self, obj):
         """Отображаем цену в валюте, установленной по умолчанию"""
         default_currency = Currency.RUB
@@ -81,8 +80,7 @@ class PaymentParentAdmin(PolymorphicParentModelAdmin):
         'created_at', 'updated_at'
     )
 
-    @admin_description(_('Type'))
-    @admin_order_field('polymorphic_ctype')
+    @admin.display(description=_('Type'), ordering='polymorphic_ctype')
     def get_subclass(self, obj):
         return obj.get_real_instance().__class__.__name__
 

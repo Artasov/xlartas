@@ -11,6 +11,11 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 
 from apps.software.models import Software, SoftwareLicense
+from adjango.exceptions.base import (
+    ApiExceptionGenerator,
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from apps.software.serializers.software import SoftwareSerializer
 from utils.log import get_global_logger
 
@@ -43,7 +48,9 @@ async def detail_software(_, software_id: int):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 async def activate_test_period(request, software_id: int):
-    software: Software = await Software.objects.agetorn(Software.ApiEx.DoesNotExist, id=software_id)
+    software: Software | None = await Software.objects.aget(id=software_id)
+    if not software:
+        raise ModelApiExceptionGenerator(Software, MAEBV.DoesNotExist)
 
     # Рассчитываем время тестового периода (количество дней из software.test_period_days переводим в часы)
     test_hours = int(software.test_period_days * 24)
@@ -59,7 +66,11 @@ async def activate_test_period(request, software_id: int):
     if license_obj:
         # Если уже использован тестовый период — ошибка
         if license_obj.is_tested:
-            raise SoftwareLicense.ApiEx.TestPeriodAlreadyUsed()
+            raise ModelApiExceptionGenerator(
+                SoftwareLicense, MAEBV.AlreadyUsed,
+                code='test_period_already_used',
+                extra={'message': str(_('Test period already used'))}
+            )
         # Обновляем существующую лицензию, назначая новый тестовый период
         license_obj.license_ends_at = license_ends_at
         license_obj.is_tested = True

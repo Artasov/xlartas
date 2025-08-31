@@ -2,11 +2,11 @@
 import logging
 from typing import TYPE_CHECKING
 
-from adjango.exceptions.base import ModelApiBaseException
+from adjango.exceptions.base import (
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from adrf.requests import AsyncRequest
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import APIException
-from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 from apps.commerce.services.order.base import OrderService
 from apps.commerce.services.product.base import ProductBaseService
@@ -18,26 +18,11 @@ if TYPE_CHECKING:
 commerce_log = logging.getLogger('commerce')
 
 
-class _GiftCertificateException(ModelApiBaseException):
-    class ApiEx(ModelApiBaseException.ApiEx):
-        class AlreadyUsed(APIException):
-            status_code = HTTP_403_FORBIDDEN
-            default_detail = {'message': _('Gift certificate is already used')}
-            default_code = 'gift_certificate_already_used'
-
-        class KeyNotFound(APIException):
-            status_code = HTTP_404_NOT_FOUND
-            default_detail = {'message': _('Gift certificate key not found')}
-            default_code = 'gift_certificate_key_not_found'
-
-
 class GiftCertificateOrderService(OrderService):
     pass
 
 
 class GiftCertificateService(ProductBaseService):
-    exceptions = _GiftCertificateException
-
     async def new_order(self, request: AsyncRequest) -> 'GiftCertificateOrder':
         from apps.commerce.serializers.gift_certificate import GiftCertificateOrderCreateSerializer
         s = GiftCertificateOrderCreateSerializer(
@@ -95,9 +80,12 @@ class GiftCertificateService(ProductBaseService):
         from apps.commerce.services.order.base import OrderService
         if not order.is_executed:
             raise OrderService.exceptions.NotExecutedYet()
-        if await GiftCertificateUsage.objects.filter(
-                order=order
-        ).aexists(): raise self.exceptions.ApiEx.AlreadyUsed()
+        if await GiftCertificateUsage.objects.filter(order=order).aexists():
+            # Gift certificate already used
+            raise ModelApiExceptionGenerator(
+                type(order), MAEBV.AlreadyUsed,
+                code='gift_certificate_already_used'
+            )
         product = await self.product.arelated('product')
         product = await product.aget_real_instance()
         await product.service.pregive(request, order, for_user)

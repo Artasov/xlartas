@@ -1,12 +1,16 @@
 # commerce/services/promocode/exceptions.py
-from adjango.exceptions.base import ModelApiBaseException
+from adjango.exceptions.base import (
+    ApiExceptionGenerator,
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import APIException
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 
-class _PromocodeException(ModelApiBaseException):
-    class ApiEx(ModelApiBaseException.ApiEx):
+class _PromocodeException:
+    class ApiEx:
         class NotFound(APIException):
             status_code = HTTP_404_NOT_FOUND
             default_detail = {'message': _('Promocode not found.')}

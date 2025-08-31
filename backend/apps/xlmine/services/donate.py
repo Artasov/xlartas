@@ -26,7 +26,7 @@ class UserDonateService(UserBaseService):
         ))['total'] or Decimal(0)
 
 
-class DonateService(ProductBaseService['Donate', 'DonateOrder']):
+class DonateService(ProductBaseService):
     """
      Логика для «донатного» продукта.
      """
@@ -94,5 +94,5 @@ class DonateService(ProductBaseService['Donate', 'DonateOrder']):
         pass
 
 
-class DonateOrderService(OrderService['DonateOrder', 'Donate']):
+class DonateOrderService(OrderService):
     pass

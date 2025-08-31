@@ -1,5 +1,9 @@
 # xlmine/models/product.py
-from adjango.exceptions.base import ModelApiBaseException
+from adjango.exceptions.base import (
+    ApiExceptionGenerator,
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from django.db.models import CASCADE, ForeignKey
 from django.utils.translation import gettext_lazy as _
 
@@ -7,7 +11,7 @@ from apps.commerce.models import Product, Order
 from apps.xlmine.services.donate import DonateService, DonateOrderService
 
 
-class Donate(Product, ModelApiBaseException):
+class Donate(Product):
     """
     Продукт «Донат». При покупке данного продукта пользователю начисляются
     внутриигровые коины (coins_amount).

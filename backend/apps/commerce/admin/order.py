@@ -1,7 +1,6 @@
 # commerce/admin/order.py
 import logging
 
-from adjango.decorators import admin_description, admin_order_field
 from adjango.utils.common import traceback_str
 from asgiref.sync import async_to_sync
 from django.contrib import admin, messages
@@ -58,8 +57,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
     )
     ordering = ('-created_at', '-updated_at',)
 
-    @admin_description(_('Type'))
-    @admin_order_field('polymorphic_ctype')
+    @admin.display(description=_('Type'), ordering='polymorphic_ctype')
     def get_subclass(self, obj):
         return obj.get_real_instance().__class__.__name__
 
@@ -80,7 +78,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
         # Если нет detail или message - используем текст исключения
         self.message_user(request, f'Ошибка при обработке заказа {order.id}: {str(e)}', level=messages.ERROR)
 
-    @admin_description(_('Init без оплаты'))
+    @admin.display(description=_('Init без оплаты'))
     def init_without_payment(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
@@ -91,7 +89,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно инициализированы без оплаты.')
 
-    @admin_description(_('Init с оплатой'))
+    @admin.display(description=_('Init с оплатой'))
     def init_with_payment(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
@@ -102,7 +100,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно инициализированы с оплатой.')
 
-    @admin_description(_('Execute'))
+    @admin.display(description=_('Execute'))
     def execute(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:
@@ -113,7 +111,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно выполнены.')
 
-    @admin_description(_('Отменить без оплаты'))
+    @admin.display(description=_('Отменить без оплаты'))
     def cancel(self, request, queryset: QuerySet):
         with transaction.atomic():
             for order in queryset:

@@ -7,6 +7,11 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 
 from apps.software.models.software import Software, SoftwareLicense
+from adjango.exceptions.base import (
+    ApiExceptionGenerator,
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from apps.software.serializers import SoftwareLicenseSerializer
 
 
@@ -14,7 +19,9 @@ from apps.software.serializers import SoftwareLicenseSerializer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 async def license_current_user(request, software_id: int):
-    software = await Software.objects.agetorn(Software.ApiEx.DoesNotExist, id=software_id)
+    software = await Software.objects.aget(id=software_id)
+    if not software:
+        raise ModelApiExceptionGenerator(Software, MAEBV.DoesNotExist)
     license = await SoftwareLicense.objects.agetorn(
         user=request.user, software=software
     )

@@ -19,7 +19,7 @@ class BalanceService:
             return None
 
 
-class BalanceProductService(ProductBaseService['BalanceProduct', 'BalanceProductOrder']):
+class BalanceProductService(ProductBaseService):
     async def new_order(self, request: 'AsyncRequest') -> 'BalanceProductOrder':
         from apps.commerce.serializers.balance import BalanceProductOrderCreateSerializer
         s = BalanceProductOrderCreateSerializer(data=request.data, context={'request': request})
@@ -43,7 +43,7 @@ class BalanceProductService(ProductBaseService['BalanceProduct', 'BalanceProduct
         await user.asave()
 
 
-class BalanceProductOrderService(OrderService['BalanceProductOrder', 'BalanceProduct']):
+class BalanceProductOrderService(OrderService):
     @property
     async def receipt_price(self) -> Decimal:
         return self.order.requested_amount

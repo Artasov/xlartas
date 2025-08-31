@@ -19,7 +19,12 @@ export const DOMAIN = isClient
 //  • в браузере — относительный '/', чтобы в PROD ходить на тот же домен через NPM;
 //  • на сервере (SSR) можно переопределить переменной окружения NEXT_INTERNAL_API_BASE (например, http://web:8000)
 const SERVER_INTERNAL_API_BASE = process.env.NEXT_INTERNAL_API_BASE || '';
-export const API_BASE_URL = isClient ? '/' : (SERVER_INTERNAL_API_BASE || '/');
+const PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
+// Prefer explicit API base URLs. On client, use NEXT_PUBLIC_API_BASE when provided.
+// On server (SSR/route handlers), use NEXT_INTERNAL_API_BASE when provided, falling back to the public one.
+export const API_BASE_URL = isClient
+    ? (PUBLIC_API_BASE || '/')
+    : (SERVER_INTERNAL_API_BASE || PUBLIC_API_BASE || '/');
 
 export const DOMAIN_URL = isClient
     ? `${isHttps ? 'https' : 'http'}://${DOMAIN}`

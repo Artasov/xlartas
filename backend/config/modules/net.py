@@ -3,7 +3,7 @@ from datetime import timedelta
 from config.base import DOMAIN_URL, MAIN_DOMAIN, DEV
 
 USER_AGENTS_CACHE = 'default'
-
+APPEND_SLASH=True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 CSRF_TRUSTED_ORIGINS = [
     DOMAIN_URL,

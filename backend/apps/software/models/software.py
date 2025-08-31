@@ -12,8 +12,11 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.commerce.models import Product, Order
 from apps.core.models import User
-from apps.software.exceptions.license import SoftwareLicenseException
-from apps.software.exceptions.software import SoftwareException
+from adjango.exceptions.base import (
+    ApiExceptionGenerator,
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 from apps.software.services.license import SoftwareLicenseService
 from apps.software.services.order import SoftwareOrderService
 from apps.software.services.software import SoftwareService
@@ -37,7 +40,7 @@ class SoftwareFile(ACreatedAtIndexedMixin):
         return f'SoftwareFile: (v{self.version})'
 
 
-class Software(Product, SoftwareException):
+class Software(Product):
     prices: Manager['ProductPrice']
     file = OneToOneField(
         'software.SoftwareFile', SET_NULL,
@@ -77,7 +80,7 @@ class SoftwareOrder(Order):
         return SoftwareOrderService(self)
 
 
-class SoftwareLicense(ACreatedUpdatedAtIndexedMixin, SoftwareLicenseException):
+class SoftwareLicense(ACreatedUpdatedAtIndexedMixin):
     user = ForeignKey(User, CASCADE, 'software_licenses', verbose_name=_('User'))
     software = ForeignKey(Software, CASCADE, 'licenses', verbose_name=_('Software'))
     license_ends_at = DateTimeField(_('License ends at'), blank=True, null=True)

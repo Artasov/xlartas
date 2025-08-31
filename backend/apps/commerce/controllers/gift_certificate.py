@@ -12,6 +12,10 @@ from apps.commerce.models.gift_certificate import GiftCertificate, GiftCertifica
 from apps.commerce.serializers.gift_certificate import GiftCertificateSerializer
 from apps.commerce.services.gift_certificate import GiftCertificateService
 from apps.commerce.services.payment.base import PaymentBaseService
+from adjango.exceptions.base import (
+    ModelApiExceptionGenerator,
+    ModelApiExceptionBaseVariant as MAEBV,
+)
 
 
 @acontroller('Gift Certificates list')
@@ -27,9 +31,9 @@ async def get_gift_certificates(_):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 async def gift_certificate_detail(_, product_id):
-    gift_certificate = await GiftCertificate.objects.agetorn(
-        PaymentBaseService.exceptions.NotFound, id=product_id
-    )
+    gift_certificate = await GiftCertificate.objects.aget(id=product_id)
+    if not gift_certificate:
+        raise ModelApiExceptionGenerator(GiftCertificate, MAEBV.DoesNotExist)
     serializer = GiftCertificateSerializer(gift_certificate)
     return Response(await serializer.adata)
 
@@ -45,9 +49,11 @@ async def activate_gift_certificate(request):
     await s.ais_valid(raise_exception=True)
     order = await GiftCertificateOrder.objects.select_related(
         'product'
-    ).agetorn(
-        GiftCertificateService.exceptions.KeyNotFound,
-        key=s.validated_data['key']
-    )
+    ).aget(key=s.validated_data['key'])
+    if not order:
+        raise ModelApiExceptionGenerator(
+            GiftCertificateOrder, MAEBV.DoesNotExist,
+            code='gift_certificate_key_not_found'
+        )
     await order.product.activate(request, order, request.user)
     return Response(status=201)

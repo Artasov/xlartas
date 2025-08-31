@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class SoftwareService(ProductBaseService['Software', 'SoftwareOrder']):
+class SoftwareService(ProductBaseService):
     async def new_order(self, request) -> 'SoftwareOrder':
         from apps.software.serializers import SoftwareOrderCreateSerializer
         from apps.software.models import SoftwareOrder

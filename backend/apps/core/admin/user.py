@@ -1,5 +1,4 @@
 # core/admin/user.py
-from adjango.decorators import admin_description, admin_order_field
 from django.contrib import admin, messages
 from django.db import transaction
 from django.urls import reverse
@@ -128,7 +127,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
             f'Admin action run_world_scan triggered Celery task {async_result.id}'
         )
 
-    @admin_description(_('Privilege'))
+    @admin.display(description=_('Privilege'))
     def current_privilege(self, obj):
         xlm = obj.xlmine_user
         prefix_code = xlm.privilege.prefix if xlm.privilege else ''
@@ -153,27 +152,27 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
                 i += 1
         return mark_safe(html)
 
-    @admin_description(_('Upgrade privilege'))
+    @admin.display(description=_('Upgrade privilege'))
     def upgrade_privilege(self, _, queryset):
         for user in queryset:
             user.sync_upgrade_privilege()
 
-    @admin_description(_('Downgrade privilege'))
+    @admin.display(description=_('Downgrade privilege'))
     def downgrade_privilege(self, _, queryset):
         for user in queryset:
             user.sync_downgrade_privilege()
 
-    @admin_description(_('RCON privilege sync'))
+    @admin.display(description=_('RCON privilege sync'))
     def sync_privilege(self, _, queryset):
         for user in queryset:
             user.sync_rcon_sync_privilege()
 
-    @admin_description(_('Calc and set current privilege'))
+    @admin.display(description=_('Calc and set current privilege'))
     def calc_and_set_current_privilege(self, _, queryset):
         for user in queryset:
             user.sync_calc_and_set_current_privilege()
 
-    @admin_description(_('Avatar'))
+    @admin.display(description=_('Avatar'))
     def display_avatar(self, obj):
         if obj.avatar:
             return format_html('<img src="{}" width="50" height="50" style="border-radius:30%; object-fit: cover;"/>',
@@ -181,8 +180,7 @@ class UserAdmin(DjangoObjectActions, ImportExportModelAdmin):
         return format_html('<img src="{}" width="50" height="50" style="border-radius:30%; object-fit: cover;"/>',
                            '/static/core/img/icon/user.png')
 
-    @admin_description('ID')
-    @admin_order_field('id')
+    @admin.display(description='ID', ordering='id')
     def display_user_id(self, obj):
         url = reverse('admin:core_user_change', args=[obj.id])
         return format_html('<a href="{}">{}</a>', url, obj.id)

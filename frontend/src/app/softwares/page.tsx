@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function SoftwaresPage() {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('access')?.value;
     const headers: Record<string, string> = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
