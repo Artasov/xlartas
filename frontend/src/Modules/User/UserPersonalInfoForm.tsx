@@ -17,13 +17,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import NewEmailForm from "Auth/forms/NewEmailForm";
 import SocialOAuth from "Auth/Social/components/SocialOAuth";
 import {useTheme} from "Theme/ThemeContext";
-import {FC, FR, FRC, FRSC} from "wide-containers";
+import {FC, FR, FRC, FRSC, FRCC} from "wide-containers";
 import NewPasswordForm from "Auth/forms/NewPasswordForm";
 import copyToClipboard from "Utils/clipboard";
 import {useUserApi} from 'User/useUserApi';
 import TextField from "@mui/material/TextField";
 import UserBalance from "Order/UserBalance";
 import Collapse from '@mui/material/Collapse';
+import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';
 import UserPrivilege from "xLMine/Privilege/UserPrivilege"; // ⬅️ добавлен импорт
 
 interface FormData {
@@ -106,7 +107,15 @@ const UserPersonalInfoForm: React.FC = () => {
         }).finally(() => setIsSubmitting(false));
     };
 
-    if (!formData || !user) return null;
+    if (isAuthenticated === false) return null;
+
+    if (!formData || !user) {
+        return (
+            <FRCC w={'100%'} h={'100%'}>
+                <CircularProgressZoomify in={true} size={'64px'}/>
+            </FRCC>
+        );
+    }
 
     return (
         <Collapse in={animate} appear timeout={800}>

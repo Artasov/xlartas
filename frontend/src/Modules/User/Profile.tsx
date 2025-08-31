@@ -79,8 +79,12 @@ const Profile: React.FC<ProfileProps> = ({selectedProfile}) => {
 
             <FC flexGrow={1} scroll="y-auto" px={2} py={1}>
                 <Routes>
-                    <Route path="user" element={<UserPersonalInfoForm/>}/>
-                    <Route path="minecraft" element={<XLMineProfileInfoForm/>}/>
+                    <Route path="/profile/*" element={
+                        <Routes>
+                            <Route path="user" element={<UserPersonalInfoForm/>}/>
+                            <Route path="minecraft" element={<XLMineProfileInfoForm/>}/>
+                        </Routes>
+                    }/>
                 </Routes>
             </FC>
         </FC>

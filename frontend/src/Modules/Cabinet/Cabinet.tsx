@@ -48,7 +48,7 @@ const CabinetWidthContext = React.createContext<CabinetWidthContextType>({
 });
 
 
-const Cabinet: React.FC = () => {
+const Cabinet: React.FC<{ children?: React.ReactNode }> = ({children}) => {
     const {t} = useTranslation();
     const {isAuthenticated, user} = useAuth();
     const {
@@ -85,7 +85,7 @@ const Cabinet: React.FC = () => {
                     {t('profile')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/softwares', true)}
-                         to="/software" icon={<WebhookIcon/>}>
+                         to="/softwares" icon={<WebhookIcon/>}>
                     {t('software')}
                 </NavLink>
                 <NavLink onClick={() => handleMenuLinkClick('/licenses', true)} to="/licenses"
@@ -204,24 +204,28 @@ const Cabinet: React.FC = () => {
                             : ''
                         }
                         ref={cabinetContainerRef}>
-                        <Routes>
-                            <Route path="profile/*" element={
-                                <Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>
-                            }/>
-                            <Route path="/softwares" element={<FCSS g={2} p={2}>
-                                <Softwares/>
-                            </FCSS>}/>
-                            <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
-                            <Route path='/licenses' element={<Licenses/>}/>
-                            <Route path='/wireless' element={<MacrosExecutorPage/>}/>
-                            <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
-                            <Route path='/storage/*' element={<Storage/>}/>
+                        {children ? (
+                            children
+                        ) : (
+                            <Routes>
+                                <Route path="profile/*" element={
+                                    <Profile selectedProfile={selectedProfile ? selectedProfile : 'client'}/>
+                                }/>
+                                <Route path="/softwares" element={<FCSS g={2} p={2}>
+                                    <Softwares/>
+                                </FCSS>}/>
+                                <Route path="/softwares/:id" element={<SoftwareDetail/>}/>
+                                <Route path='/licenses' element={<Licenses/>}/>
+                                <Route path='/wireless' element={<MacrosExecutorPage/>}/>
+                                <Route path='/xlmine-release' element={<MinecraftVersionsManager/>}/>
+                                <Route path='/storage/*' element={<Storage/>}/>
 
-                            <Route path="/orders" element={<FCSS scroll={'y-auto'} h={'100%'} g={1} pt={2} p={1}>
-                                <UserOrders/>
-                            </FCSS>}/>
-                            <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>
-                        </Routes>
+                                <Route path="/orders" element={<FCSS scroll={'y-auto'} h={'100%'} g={1} pt={2} p={1}>
+                                    <UserOrders/>
+                                </FCSS>}/>
+                                <Route path="orders/:id" element={<OrderDetail className={'px-3'}/>}/>
+                            </Routes>
+                        )}
                     </FC>
                 </FRC>
             </FC>

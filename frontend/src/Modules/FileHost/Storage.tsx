@@ -1,3 +1,4 @@
+"use client";
 // Modules/FileHost/Storage.tsx
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'Utils/nextRouter';

@@ -1,3 +1,4 @@
+"use client";
 // Modules/Software/Macros/MacrosExecutorPage.tsx
 import React, {useEffect, useState} from 'react';
 import {Tab, Tabs, useMediaQuery} from '@mui/material';
