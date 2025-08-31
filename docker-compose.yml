@@ -111,6 +111,9 @@ services:
 
   frontend:
     hostname: frontend
+    volumes:
+      - ./static:/srv/static
+      - ./media:/srv/media
     image: localhost:5000/ifrontend:latest
     environment:
       # Для SSR (если потребуется) можно раскомментировать, чтобы ходить к Django по внутреннему имени:
