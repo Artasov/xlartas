@@ -1,11 +1,12 @@
 // Modules/Core/ParallaxLogo.tsx
 "use client";
-import React, {RefObject, useCallback} from 'react';
+import React, {RefObject, useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'Utils/nextRouter';
 import {styled} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Button} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import SocialOAuth from 'Auth/Social/components/SocialOAuth';
 import Logo from 'Core/Logo';
 import {FCCC, FR} from 'wide-containers';
@@ -39,6 +40,7 @@ const ParallaxLogo: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {plt} = useTheme();
+    const [loading, setLoading] = useState<null | 'profile' | 'softwares' | 'about' | 'xlmine'>(null);
 
     const isGt1600 = useMediaQuery('(min-width:1600px)');
     const isGt1400 = useMediaQuery('(min-width:1400px)');
@@ -58,18 +60,26 @@ const ParallaxLogo: React.FC = () => {
     else if (isGt400) fontSize = '4.7rem';
 
     const handleAuthClick = useCallback(() => {
-        isAuthenticated ? navigate('/profile') : dispatch(openAuthModal());
+        if (isAuthenticated) {
+            setLoading('profile');
+            navigate('/profile');
+        } else {
+            dispatch(openAuthModal());
+        }
     }, [isAuthenticated, navigate, dispatch]);
 
     const handleSoftwareClick = useCallback(() => {
+        setLoading('softwares');
         navigate('/softwares');
     }, [navigate]);
 
     const handleXlMineClick = useCallback(() => {
+        setLoading('xlmine');
         navigate('/xlmine');
     }, [navigate]);
 
     const handleAboutClick = useCallback(() => {
+        setLoading('about');
         navigate('/companies/XLARTAS');
     }, [navigate]);
 
@@ -82,16 +92,32 @@ const ParallaxLogo: React.FC = () => {
                 <FCCC pos="absolute" zIndex={22} right="6.7%" bottom="32%">
                     <Button
                         className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-3' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
-                        onClick={handleAuthClick}>
-                        {isAuthenticated ? t('profile') : t('sign_in')}
+                        onClick={handleAuthClick}
+                        disabled={loading === 'profile'}
+                        aria-busy={loading === 'profile'}>
+                        {loading === 'profile' && isAuthenticated ? (
+                            <FR g={1}>
+                                <CircularProgress size={16} />
+                                <span>{t('profile')}</span>
+                            </FR>
+                        ) : (
+                            isAuthenticated ? t('profile') : t('sign_in')
+                        )}
                     </Button>
                 </FCCC>
                 {/* Кнопка "Software" */}
                 <FCCC pos="absolute" zIndex={22} left="6.6%" top="27%">
                     <Button
                         className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
-                        onClick={handleSoftwareClick}>
-                        {t('softwares')}
+                        onClick={handleSoftwareClick}
+                        disabled={loading === 'softwares'}
+                        aria-busy={loading === 'softwares'}>
+                        {loading === 'softwares' ? (
+                            <FR g={1}>
+                                <CircularProgress size={16} />
+                                <span>{t('softwares')}</span>
+                            </FR>
+                        ) : t('softwares')}
                     </Button>
                 </FCCC>
                 {/* Кнопка "xlmine" */}
@@ -143,8 +169,15 @@ const ParallaxLogo: React.FC = () => {
                                     ? 'fs-7 px-3 pt-4px'
                                     : 'fs-7 px-2 pt-2px pb-0'
                         }`}
-                        onClick={handleAboutClick}>
-                        {t('about')}
+                        onClick={handleAboutClick}
+                        disabled={loading === 'about'}
+                        aria-busy={loading === 'about'}>
+                        {loading === 'about' ? (
+                            <FR g={1}>
+                                <CircularProgress size={14} />
+                                <span>{t('about')}</span>
+                            </FR>
+                        ) : t('about')}
                     </Button>
                 </FCCC>
                 {/* Блок SocialOAuth */}

@@ -43,7 +43,7 @@ const StarRating: React.FC<StarRatingProps> = (
                 {[...Array(5)].map((_, index) => {
                     const fillPercentage = getStarFillPercentage(index, rating || 0);
                     return (
-                        <div key={index} style={{position: 'relative', display: 'inline-block'}}>
+                        <div key={`star-${index}`} style={{position: 'relative', display: 'inline-block'}}>
                             <StarRoundedIcon className={starClassName} sx={{
                                 color: plt.text.contrast70,
                                 filter: `drop-shadow(0 0 2px ${plt.text.contrast70.replace(' !important', '')});`

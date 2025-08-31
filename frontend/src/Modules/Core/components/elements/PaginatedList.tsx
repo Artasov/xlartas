@@ -96,7 +96,7 @@ const PaginatedList = <T extends unknown>(
             {data.length === 0 && !loading && renderEmpty ? renderEmpty() : null}
             {loadMoreAtTop && hasMore && !loading && <div ref={targetRef}></div>}
             {data.map((item, index) => (
-                <React.Fragment key={index}>
+                <React.Fragment key={`page-item-${index}`}>
                     {renderItem(item, index)}
                 </React.Fragment>
             ))}

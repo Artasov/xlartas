@@ -1,6 +1,6 @@
 // Modules/Core/components/Header/HeaderProvider.tsx
 "use client";
-import React, {createContext, ReactNode, RefObject, useContext, useRef, useState,} from 'react';
+import React, {createContext, ReactNode, RefObject, useCallback, useContext, useMemo, useRef, useState,} from 'react';
 import Logo from 'Core/Logo';
 import {useNavigate} from 'Utils/nextRouter';
 
@@ -57,17 +57,17 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
     const [profileBtnVisible, setProfileBtnVisible] = useState<boolean>(true);
     const navigate = useNavigate();
 
-    const defaultLogoContent = (
+    const defaultLogoContent = useMemo(() => (
         <Logo
             onClick={() => {
                 navigate('/');
             }}
             height={45}
         />
-    );
+    ), [navigate]);
     const [logoContent, setLogoContent] = useState<ReactNode>(defaultLogoContent);
 
-    const openMenu = () => {
+    const openMenu = useCallback(() => {
         if (headerNavRef.current) {
             headerNavRef.current.style.height = 'auto';
             const contentHeight = headerNavRef.current.scrollHeight + 50;
@@ -78,13 +78,13 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
                 }
             }, 0);
         }
-    };
+    }, []);
 
-    const closeMenu = () => {
+    const closeMenu = useCallback(() => {
         if (headerNavRef.current) headerNavRef.current.style.height = '0';
-    };
+    }, []);
 
-    const toggleMobileMenu = () => {
+    const toggleMobileMenu = useCallback(() => {
         if (!mobileNavigationContent || !mobileMenuEnabled) return;
         if (headerRef.current && headerNavRef.current) {
             headerRef.current.classList.toggle('header-mobile-menu-active');
@@ -94,59 +94,75 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({children}) => {
                 closeMenu();
             }
         }
-    };
+    }, [mobileNavigationContent, mobileMenuEnabled, openMenu, closeMenu]);
 
-    const hideMobileMenu = () => {
+    const hideMobileMenu = useCallback(() => {
         if (headerRef.current && headerNavRef.current) {
             headerRef.current.classList.remove('header-mobile-menu-active');
             closeMenu();
         }
-    };
+    }, [closeMenu]);
 
-    const showMobileMenu = () => {
+    const showMobileMenu = useCallback(() => {
         if (!mobileMenuEnabled) return;
         if (headerRef.current && headerNavRef.current) {
             headerRef.current.classList.add('header-mobile-menu-active');
             openMenu();
         }
-    };
+    }, [mobileMenuEnabled, openMenu]);
 
-    const enableMobileMenu = () => setMobileMenuEnabled(true);
-    const disableMobileMenu = () => {
+    const enableMobileMenu = useCallback(() => setMobileMenuEnabled(true), []);
+    const disableMobileMenu = useCallback(() => {
         hideMobileMenu();
         setMobileMenuEnabled(false);
-    };
-    const enableDesktopMenu = () => setDesktopMenuEnabled(true);
-    const disableDesktopMenu = () => setDesktopMenuEnabled(false);
+    }, [hideMobileMenu]);
+    const enableDesktopMenu = useCallback(() => setDesktopMenuEnabled(true), []);
+    const disableDesktopMenu = useCallback(() => setDesktopMenuEnabled(false), []);
+
+    const ctxValue = useMemo<HeaderContextType>(() => ({
+        mobileNavigationContent,
+        desktopNavigationContent,
+        defaultLogoContent,
+        mobileMenuEnabled,
+        desktopMenuEnabled,
+        setMobileNavigationContent,
+        setDesktopNavigationContent,
+        toggleMobileMenu,
+        hideMobileMenu,
+        showMobileMenu,
+        enableMobileMenu,
+        disableMobileMenu,
+        enableDesktopMenu,
+        disableDesktopMenu,
+        headerNavRef,
+        headerRef,
+        headerNavHeight,
+        setHeaderNavHeight,
+        profileBtnVisible,
+        setProfileBtnVisible,
+        logoContent,
+        setLogoContent,
+        mainRef,
+    }), [
+        mobileNavigationContent,
+        desktopNavigationContent,
+        defaultLogoContent,
+        mobileMenuEnabled,
+        desktopMenuEnabled,
+        toggleMobileMenu,
+        hideMobileMenu,
+        showMobileMenu,
+        enableMobileMenu,
+        disableMobileMenu,
+        enableDesktopMenu,
+        disableDesktopMenu,
+        headerNavHeight,
+        profileBtnVisible,
+        logoContent,
+    ]);
 
     return (
-        <HeaderContext.Provider
-            value={{
-                mobileNavigationContent,
-                desktopNavigationContent,
-                defaultLogoContent,
-                mobileMenuEnabled,
-                desktopMenuEnabled,
-                setMobileNavigationContent,
-                setDesktopNavigationContent,
-                toggleMobileMenu,
-                hideMobileMenu,
-                showMobileMenu,
-                enableMobileMenu,
-                disableMobileMenu,
-                enableDesktopMenu,
-                disableDesktopMenu,
-                headerNavRef,
-                headerRef,
-                headerNavHeight,
-                setHeaderNavHeight,
-                profileBtnVisible,
-                setProfileBtnVisible,
-                logoContent,
-                setLogoContent,
-                mainRef,
-            }}
-        >
+        <HeaderContext.Provider value={ctxValue}>
             {children}
         </HeaderContext.Provider>
     );

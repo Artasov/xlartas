@@ -1,7 +1,7 @@
 // Modules/Theme/ThemeContext.tsx
 "use client";
 // Modules/Theme/ThemeContext.tsx
-import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Palette, ThemeProvider as MuiThemeProvider} from '@mui/material/styles';
 import {darkTheme, lightTheme} from "../../theme";
 import {useThemeApi} from 'Theme/useThemeApi';
@@ -95,7 +95,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
         }
     }, [currentBackgroundIndex, themeMode, backgroundImages]);
 
-    const toggleTheme = () => {
+    const toggleTheme = useCallback(() => {
         const newThemeMode = themeMode === 'dark' ? 'light' : 'dark';
         setThemeMode(newThemeMode);
         setTheme(newThemeMode === 'dark' ? darkTheme : lightTheme);
@@ -104,9 +104,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
             ? parseInt(localStorage.getItem('darkBackgroundIndex') || '0', 10)
             : parseInt(localStorage.getItem('lightBackgroundIndex') || '0', 10);
         setCurrentBackgroundIndex(newBackgroundIndex);
-    };
+    }, [themeMode]);
 
-    const nextBackground = () => {
+    const nextBackground = useCallback(() => {
         if (backgroundImages[themeMode].length > 0) {
             const nextIndex = (currentBackgroundIndex + 1) % backgroundImages[themeMode].length;
             setCurrentBackgroundIndex(nextIndex);
@@ -116,10 +116,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
                 localStorage.setItem('lightBackgroundIndex', nextIndex.toString());
             }
         }
-    };
-    const plt = theme.palette
+    }, [backgroundImages, currentBackgroundIndex, themeMode]);
+    const plt = useMemo(() => theme.palette, [theme]);
+    const value = useMemo(() => ({theme, toggleTheme, nextBackground, themeLoading, plt}), [theme, toggleTheme, nextBackground, themeLoading, plt]);
     return (
-        <ThemeContext.Provider value={{theme, toggleTheme, nextBackground, themeLoading, plt}}>
+        <ThemeContext.Provider value={value}>
             <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
         </ThemeContext.Provider>
     );

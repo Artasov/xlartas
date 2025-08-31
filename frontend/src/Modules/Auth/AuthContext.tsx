@@ -1,7 +1,7 @@
 // Modules/Auth/AuthContext.tsx
 "use client";
 // Modules/Auth/AuthContext.tsx
-import React, {createContext, ReactNode, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useAuthApi} from 'Auth/useAuthApi';
@@ -62,40 +62,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         }
     }, [dispatch]);
 
-    const frontendLogout = () => {
+    const frontendLogout = React.useCallback(() => {
         pprint('frontendLogout');
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
         setUser(null);
         setIsAuthenticated(false);
         hideMobileMenu();
-    };
-    const handleAuthResponse = async (jwtPair: JWTPair, next?: string) => {
-        pprint('Success Auth');
-        localStorage.setItem('access', jwtPair.access);
-        localStorage.setItem('refresh', jwtPair.refresh);
-        pprint(jwtPair);
-        await updateCurrentUser();
-        const nextFromUrl = new URLSearchParams(window.location.search).get('next');
-        pprint('Final auth next');
-        navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
-        hideMobileMenu();
-        dispatch(closeAuthModal());
-        Message.success(t('login_success'));
-    };
-    const logout = () => {
-        setLogoutInProgress(true);
-        apiLogout()
-            .then(() => {
-                frontendLogout();
-                Message.success(t('logout_success'));
-                navigate('/');
-            })
-            .catch(() => Message.error(t('logout_error')))
-            .finally(() => setLogoutInProgress(false));
-    };
+    }, [hideMobileMenu]);
 
-    const updateCurrentUser = async () => {
+    const updateCurrentUser = React.useCallback(async () => {
         pprint('Update current user');
         try {
             const data = await getCurrentUser();
@@ -107,16 +83,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             console.error(`User error: ${e}`);
             frontendLogout();
         }
-    };
-    const login = async (username: string, password: string, next?: string) => {
+    }, [frontendLogout, getCurrentUser]);
+    const handleAuthResponse = React.useCallback(async (jwtPair: JWTPair, next?: string) => {
+        pprint('Success Auth');
+        localStorage.setItem('access', jwtPair.access);
+        localStorage.setItem('refresh', jwtPair.refresh);
+        pprint(jwtPair);
+        await updateCurrentUser();
+        const nextFromUrl = new URLSearchParams(window.location.search).get('next');
+        pprint('Final auth next');
+        navigate(nextFromUrl ? nextFromUrl : next ? next : '/profile');
+        hideMobileMenu();
+        dispatch(closeAuthModal());
+        Message.success(t('login_success'));
+    }, [dispatch, hideMobileMenu, navigate, t, updateCurrentUser]);
+    const logout = React.useCallback(() => {
+        setLogoutInProgress(true);
+        apiLogout()
+            .then(() => {
+                frontendLogout();
+                Message.success(t('logout_success'));
+                navigate('/');
+            })
+            .catch(() => Message.error(t('logout_error')))
+            .finally(() => setLogoutInProgress(false));
+    }, [apiLogout, frontendLogout, navigate, t]);
+
+    
+    const login = React.useCallback(async (username: string, password: string, next?: string) => {
         try {
             const r = await apiLogin(username, password);
             await handleAuthResponse(r, next);
         } catch (e) {
             Message.error(t('invalid_credentials'));
         }
-    };
-    const oauth2Handler = async (
+    }, [apiLogin, handleAuthResponse, t]);
+    const oauth2Handler = React.useCallback(async (
         provider: OAuthProvider,
         code: string,
         next: string | null = null,
@@ -135,32 +137,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         } catch {
             return Message.error(`Не удалось войти через ${provider}, свяжитесь с нами.`);
         }
-    };
-    const google_oauth2 = (code: string, next: string | null = null) =>
-        oauth2Handler(OAUTH_PROVIDERS.GOOGLE, code, next);
-    const discord_oauth2 = (code: string, next: string | null = null) =>
-        oauth2Handler(OAUTH_PROVIDERS.DISCORD, code, next);
-    const vk_oauth2 = (code: string, next: string | null = null) =>
-        oauth2Handler(OAUTH_PROVIDERS.VK, code, next);
-    const yandex_oauth2 = (code: string, next: string | null = null) =>
-        oauth2Handler(OAUTH_PROVIDERS.YANDEX, code, next);
+    }, [handleAuthResponse, navigate, oauthCallback, updateCurrentUser]);
+    const google_oauth2 = React.useCallback((code: string, next: string | null = null) =>
+        oauth2Handler(OAUTH_PROVIDERS.GOOGLE, code, next)
+    , [oauth2Handler]);
+    const discord_oauth2 = React.useCallback((code: string, next: string | null = null) =>
+        oauth2Handler(OAUTH_PROVIDERS.DISCORD, code, next)
+    , [oauth2Handler]);
+    const vk_oauth2 = React.useCallback((code: string, next: string | null = null) =>
+        oauth2Handler(OAUTH_PROVIDERS.VK, code, next)
+    , [oauth2Handler]);
+    const yandex_oauth2 = React.useCallback((code: string, next: string | null = null) =>
+        oauth2Handler(OAUTH_PROVIDERS.YANDEX, code, next)
+    , [oauth2Handler]);
+
+    const value = useMemo<AuthContextType>(() => ({
+        user,
+        setUser,
+        updateCurrentUser,
+        login,
+        logout,
+        frontendLogout,
+        isAuthenticated,
+        setIsAuthenticated,
+        handleAuthResponse,
+        discord_oauth2,
+        google_oauth2,
+        vk_oauth2,
+        yandex_oauth2,
+        logoutInProgress,
+        setLogoutInProgress,
+    }), [
+        user,
+        updateCurrentUser,
+        login,
+        logout,
+        frontendLogout,
+        isAuthenticated,
+        handleAuthResponse,
+        discord_oauth2,
+        google_oauth2,
+        vk_oauth2,
+        yandex_oauth2,
+        logoutInProgress,
+    ]);
 
     return (
-        <AuthContext.Provider value={{
-            user, setUser,
-            updateCurrentUser,
-            login, logout,
-            frontendLogout,
-            isAuthenticated,
-            setIsAuthenticated,
-            handleAuthResponse,
-            discord_oauth2,
-            google_oauth2,
-            vk_oauth2,
-            yandex_oauth2,
-            logoutInProgress,
-            setLogoutInProgress,
-        }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );

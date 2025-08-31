@@ -5,6 +5,7 @@ import './Header.sass';
 import {useAuth} from "Auth/AuthContext";
 import {Link, useLocation, useNavigate} from "Utils/nextRouter";
 import {useSelector} from "react-redux";
+import type {RootState} from "Redux/store";
 import {useTheme} from "Theme/ThemeContext";
 import UserAvatar from "User/UserAvatar";
 import {useNavigation} from "Core/components/Header/HeaderProvider";
@@ -36,7 +37,7 @@ const Header: React.FC = () => {
     const {user, isAuthenticated, logout} = useAuth();
     const location = useLocation();
     const {plt} = useTheme();
-    const isHeaderVisible = useSelector((state: any) => state.visibility.isHeaderVisible);
+    const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const navigate = useNavigate();
     // Теперь не привязываемся к медиазапросу, а показываем меню по состоянию.
     // При желании разработчик может сам управлять состоянием mobileMenuEnabled и desktopMenuEnabled

@@ -1,5 +1,5 @@
 // Modules/Core/LanguageContext.tsx
-import React, {createContext, PropsWithChildren, useEffect, useState} from 'react';
+import React, {createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState} from 'react';
 import axios from 'axios';
 import {useCoreApi} from 'Core/useCoreApi';
 import moment from 'moment';
@@ -25,7 +25,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
     const {setLang: setLangRequest} = useCoreApi();
 
 
-    const setLang = (l: Lang) => {
+    const setLang = useCallback((l: Lang) => {
         i18n.changeLanguage(l).then();
         moment.locale(l);
         if (typeof window !== 'undefined') {
@@ -34,7 +34,7 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
         setLangState(l);
         axios.defaults.headers.common['Accept-Language'] = l;
         setLangRequest(l);
-    };
+    }, [setLangRequest]);
 
     /* init once */
     useEffect(() => {
@@ -43,8 +43,9 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
         axios.defaults.headers.common['Accept-Language'] = lang;
     }, []);
 
+    const value = useMemo(() => ({lang, setLang}), [lang, setLang]);
     return (
-        <LangCtx.Provider value={{lang, setLang}}>
+        <LangCtx.Provider value={value}>
             {children}
         </LangCtx.Provider>
     );

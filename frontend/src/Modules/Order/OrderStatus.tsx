@@ -52,9 +52,9 @@ const OrderStatus: React.FC<OrderStatusProps> = ({order}) => {
 
     return (
         <FR g={'.5rem'} wrap>
-            {statusList.map((status, index) => (
+            {statusList.map((status) => (
                 <StatusItem
-                    key={index}
+                    key={status.label}
                     label={status.label}
                     negativeLabel={status.negativeLabel}
                     isActive={status.isActive}

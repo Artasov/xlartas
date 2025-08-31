@@ -1,7 +1,7 @@
 // Modules/Core/components/ErrorProvider.tsx
 "use client";
 // Modules/Core/components/ErrorProvider.tsx
-import React, {createContext, ReactNode, useContext, useEffect, useRef} from 'react';
+import React, {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef} from 'react';
 import {useLocation, useNavigate} from 'Utils/nextRouter';
 import {useAuth} from "Auth/AuthContext";
 import pprint from 'Utils/pprint';
@@ -61,7 +61,7 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
         }
     }, [location.search, navigate]);
 
-    const notAuthentication = () => {
+    const notAuthentication = useCallback(() => {
         if (isHandlingAuthError.current) return;
         if (logoutInProgress) {
             setLogoutInProgress(false);
@@ -72,9 +72,9 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
         Message.notAuthentication();
         dispatch(openAuthModal());
         hideMobileMenu();
-    };
+    }, [dispatch, frontendLogout, hideMobileMenu, logoutInProgress, setLogoutInProgress]);
 
-    const byResponse = (error: any) => {
+    const byResponse = useCallback((error: any) => {
         if (!error.response) {
             console.error(error);
             return;
@@ -109,10 +109,11 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
             Message.errorsByData(data);
         }
 
-    };
+    }, [notAuthentication]);
 
+    const value = useMemo<ErrorContextType>(() => ({byResponse, notAuthentication}), [byResponse, notAuthentication]);
     return (
-        <ErrorContext.Provider value={{byResponse, notAuthentication}}>
+        <ErrorContext.Provider value={value}>
             {children}
         </ErrorContext.Provider>
     );

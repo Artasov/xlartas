@@ -24,7 +24,7 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = (
                 top: index > 0 ? '0' : 'unset',
                 left: index > 0 ? `${index * 2}rem` : 'unset',
                 zIndex: 2 + users.length - index
-            }} key={index}>
+            }} key={user.id}>
                 <UserAvatar avatar={user.avatar} size={'2.7rem'}
                             zIndex={2 + users.length - index}/>
                 {users.length === 1 && (

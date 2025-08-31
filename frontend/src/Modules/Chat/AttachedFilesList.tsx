@@ -53,7 +53,7 @@ const AttachedFilesList: React.FC<AttachedFilesListProps> = ({files, onRemove}) 
         <Box display="flex" flexDirection="column" mt={2} width="100%">
             {files.map((file, index) => (
                 <Box
-                    key={index}
+                    key={`${file.name}-${index}`}
                     display="flex"
                     alignItems="center"
                     justifyContent="space-between"

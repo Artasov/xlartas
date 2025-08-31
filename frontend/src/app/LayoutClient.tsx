@@ -12,6 +12,7 @@ import {useNavigation} from "Core/components/Header/HeaderProvider";
 import {useSelector} from "react-redux";
 import {RootState} from "Redux/store";
 import useMediaQuery from "@mui/material/useMediaQuery";
+const SplashCursor = dynamic(() => import("UI/SplashCursor"), {ssr: false});
 
 const BackgroundFlicker = dynamic(() => import("Core/BackgroundFlicker"), {ssr: false});
 
@@ -24,6 +25,7 @@ export default function LayoutClient({children}: { children: React.ReactNode }) 
 
     return (
         <>
+            {isGt1000 && isBackgroundFlickerEnabled && <SplashCursor/>}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

@@ -171,11 +171,11 @@ const OrderActions: React.FC<OrderActionsProps> = (
         <FRSC g={1} wrap>
             {extended ? (
                 <>
-                    {actions.map((action, index) =>
+                    {actions.map((action) =>
                         action.disabled
-                            ? <span key={index}>{action.label}</span>
+                            ? <span key={action.label}>{action.label}</span>
                             : <Button
-                                key={index}
+                                key={action.label}
                                 className="h-min px-2 pt-6px"
                                 style={{color: plt.text.primary, ...action.style}}
                                 onClick={action.onClick}
@@ -187,9 +187,9 @@ const OrderActions: React.FC<OrderActionsProps> = (
             ) : (
                 actions.length > 0 && (
                     <OptionsMenu iconClassName="p-1" className="ms-auto">
-                        {actions.map((action, index) => (
+                        {actions.map((action) => (
                             <MenuItem
-                                key={index}
+                                key={action.label}
                                 onClick={action.onClick}
                                 disabled={action.disabled}>
                                 {action.label}
