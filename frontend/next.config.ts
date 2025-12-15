@@ -4,6 +4,8 @@ import type {NextConfig} from "next";
 const isDev = process.env.NODE_ENV !== "production";
 
 const nextConfig: NextConfig = {
+    // Делаем output 'standalone' как в xstudio, чтобы Docker-образ мог использовать .next/standalone
+    output: 'standalone',
     turbopack: {
         // Явно фиксируем root, чтобы Turbopack не подхватывал lockfile из корня репозитория.
         root: process.cwd(),
