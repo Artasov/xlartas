@@ -5,8 +5,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {useAuth} from 'Auth/AuthContext';
 import {Button, IconButton, InputAdornment} from "@mui/material";
-import 'react-phone-input-2/lib/material.css';
-import 'Core/components/elements/PhoneField/PhoneField.sass';
 import ConfirmationCode from "Confirmation/ConfirmationCode";
 import {Message} from "Core/components/Message";
 import {useNavigate} from "Utils/nextRouter";

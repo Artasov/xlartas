@@ -17,11 +17,7 @@ export const LangCtx = createContext<{
 });
 
 export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
-    const [lang, setLangState] = useState<Lang>(() =>
-        typeof window !== 'undefined'
-            ? ((localStorage.getItem('lang') as Lang) || 'ru')
-            : 'ru',
-    );
+    const [lang, setLangState] = useState<Lang>('ru');
     const {setLang: setLangRequest} = useCoreApi();
 
 
@@ -38,9 +34,14 @@ export const LangProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     /* init once */
     useEffect(() => {
-        i18n.changeLanguage(lang).then();
-        moment.locale(lang);
-        axios.defaults.headers.common['Accept-Language'] = lang;
+        const stored = typeof window !== 'undefined' ? (localStorage.getItem('lang') as Lang | null) : null;
+        let initialLang: Lang = 'ru';
+        if (stored === 'en' || stored === 'ru') initialLang = stored;
+        else if (typeof navigator !== 'undefined') initialLang = navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'ru';
+        i18n.changeLanguage(initialLang).then();
+        moment.locale(initialLang);
+        axios.defaults.headers.common['Accept-Language'] = initialLang;
+        setLangState(initialLang);
     }, []);
 
     const value = useMemo(() => ({lang, setLang}), [lang, setLang]);

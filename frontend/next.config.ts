@@ -4,11 +4,9 @@ import type {NextConfig} from "next";
 const isDev = process.env.NODE_ENV !== "production";
 
 const nextConfig: NextConfig = {
-    eslint: {
-        // Disable ESLint checks during production builds to avoid build failures
-        // caused by lint errors. Linting can still be run separately in CI or
-        // development environments.
-        ignoreDuringBuilds: true,
+    turbopack: {
+        // Явно фиксируем root, чтобы Turbopack не подхватывал lockfile из корня репозитория.
+        root: process.cwd(),
     },
     async rewrites() {
         // В DEV проксируем на Django (localhost:8000).

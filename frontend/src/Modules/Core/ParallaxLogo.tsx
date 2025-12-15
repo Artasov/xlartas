@@ -1,6 +1,6 @@
 // Modules/Core/ParallaxLogo.tsx
 "use client";
-import React, {RefObject, useCallback, useState} from 'react';
+import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'Utils/nextRouter';
 import {styled} from '@mui/material/styles';
@@ -50,14 +50,28 @@ const ParallaxLogo: React.FC = () => {
     const isGt600 = useMediaQuery('(min-width:600px)');
     const isGt400 = useMediaQuery('(min-width:400px)');
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const mqGt1600 = isMounted && isGt1600;
+    const mqGt1400 = isMounted && isGt1400;
+    const mqGt1200 = isMounted && isGt1200;
+    const mqGt1000 = isMounted && isGt1000;
+    const mqGt800 = isMounted && isGt800;
+    const mqGt600 = isMounted && isGt600;
+    const mqGt400 = isMounted && isGt400;
+
     let fontSize = '4.5rem';
-    if (isGt1600) fontSize = '6.5rem';
-    else if (isGt1400) fontSize = '6rem';
-    else if (isGt1200) fontSize = '5.7rem';
-    else if (isGt1000) fontSize = '5.5rem';
-    else if (isGt800) fontSize = '5rem';
-    else if (isGt600) fontSize = '4.8rem';
-    else if (isGt400) fontSize = '4.7rem';
+    if (mqGt1600) fontSize = '6.5rem';
+    else if (mqGt1400) fontSize = '6rem';
+    else if (mqGt1200) fontSize = '5.7rem';
+    else if (mqGt1000) fontSize = '5.5rem';
+    else if (mqGt800) fontSize = '5rem';
+    else if (mqGt600) fontSize = '4.8rem';
+    else if (mqGt400) fontSize = '4.7rem';
 
     const handleAuthClick = useCallback(() => {
         if (isAuthenticated) {
@@ -91,7 +105,7 @@ const ParallaxLogo: React.FC = () => {
                 {/* Кнопка "Sign in" / "Profile" */}
                 <FCCC pos="absolute" zIndex={22} right="6.7%" bottom="32%">
                     <Button
-                        className={`fw-bold pt-7px hover-scale-3 ${isGt1400 ? 'fs-5 px-3' : isGt400 ? 'fs-6 px-3' : 'px-2'}`}
+                        className={`fw-bold pt-7px hover-scale-3 ${mqGt1400 ? 'fs-5 px-3' : mqGt400 ? 'fs-6 px-3' : 'px-2'}`}
                         onClick={handleAuthClick}
                         disabled={loading === 'profile'}
                         aria-busy={loading === 'profile'}>
@@ -108,7 +122,7 @@ const ParallaxLogo: React.FC = () => {
                 {/* Кнопка "Software" */}
                 <FCCC pos="absolute" zIndex={22} left="6.6%" top="27%">
                     <Button
-                        className={`fw-bold pt-7px hover-scale-5 ${isGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
+                        className={`fw-bold pt-7px hover-scale-5 ${mqGt1400 ? 'fs-5 px-3' : 'fs-6 px-2'}`}
                         onClick={handleSoftwareClick}
                         disabled={loading === 'softwares'}
                         aria-busy={loading === 'softwares'}>
@@ -128,14 +142,14 @@ const ParallaxLogo: React.FC = () => {
                             '&:hover': {filter: 'hue-rotate(50deg)'}
                         }}>
                             <img src={logoText.src} style={{
-                                height: isGt1200 ? 30 : 23,
+                                height: mqGt1200 ? 30 : 23,
                             }} alt="xlmine"/>
                             <img
                                 src={logoText.src}
                                 style={{
                                     position: 'absolute',
                                     left: 0, top: 0,
-                                    height: isGt1200 ? 30 : 23,
+                                    height: mqGt1200 ? 30 : 23,
                                     filter: 'blur(82px)',
                                     opacity: '60%',
                                     willChange: 'filter'
@@ -148,7 +162,7 @@ const ParallaxLogo: React.FC = () => {
                                     position: 'absolute',
                                     left: 0,
                                     top: 0,
-                                    height: isGt1200 ? 30 : 23,
+                                    height: mqGt1200 ? 30 : 23,
                                     filter: 'blur(5px)',
                                     opacity: '60%',
                                     willChange: 'filter'
@@ -163,9 +177,9 @@ const ParallaxLogo: React.FC = () => {
                     <Button
                         size="small"
                         className={`fw-bold pb-3px hover-scale-5 ${
-                            isGt1400
+                            mqGt1400
                                 ? 'fs-6 px-3 pt-4px'
-                                : isGt1000
+                                : mqGt1000
                                     ? 'fs-7 px-3 pt-4px'
                                     : 'fs-7 px-2 pt-2px pb-0'
                         }`}
@@ -181,7 +195,7 @@ const ParallaxLogo: React.FC = () => {
                     </Button>
                 </FCCC>
                 {/* Блок SocialOAuth */}
-                <FCCC pos="absolute" zIndex={22} right={isGt1400 ? '9%' : '4%'} bottom={isGt1400 ? '41%' : '42%'}>
+                <FCCC pos="absolute" zIndex={22} right={mqGt1400 ? '9%' : '4%'} bottom={mqGt1400 ? '41%' : '42%'}>
                     <SocialOAuth className="frcc mt-2"/>
                 </FCCC>
             </FCCC>

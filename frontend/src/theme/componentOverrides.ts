@@ -8,6 +8,13 @@ import accordionOverrides from './overrides/accordion';
 
 const componentOverrides: ThemeOptions['components'] = Object.assign(
     {},
+    {
+        MuiUseMediaQuery: {
+            defaultProps: {
+                noSsr: true,
+            },
+        },
+    } satisfies ThemeOptions['components'],
     commonOverrides,
     buttonOverrides,
     dialogOverrides,

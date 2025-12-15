@@ -3,7 +3,6 @@ import React from 'react';
 import PhoneInput from "react-phone-input-2";
 import {useTheme} from "Theme/ThemeContext";
 import {FC, FR} from "wide-containers";
-import 'Core/components/elements/PhoneField/PhoneField.sass';
 
 interface PhoneFieldProps {
     phone: string;

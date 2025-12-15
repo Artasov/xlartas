@@ -6,8 +6,6 @@ import UserAvatar from 'User/UserAvatar';
 import {Message} from 'Core/components/Message';
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
 import {useAuth} from 'Auth/AuthContext';
-
-import './UserAvatarEditable.sass';
 import {useTheme} from 'Theme/ThemeContext';
 import {FC, FCCC} from 'wide-containers';
 import CircularProgressZoomify from 'Core/components/elements/CircularProgressZoomify';

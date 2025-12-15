@@ -14,7 +14,6 @@ import CircularProgressZoomify from 'Core/components/elements/CircularProgressZo
 import TermsCheckboxes from "Core/components/TermsCheckboxes";
 import {useTheme} from "Theme/ThemeContext";
 import {debounce} from 'lodash';
-import 'Core/components/elements/PhoneField/PhoneField.sass';
 import {YANDEX_RECAPTCHA_SITE_KEY} from "Api/axiosConfig";
 import pprint from "Utils/pprint";
 import {useAuthApi} from 'Auth/useAuthApi';

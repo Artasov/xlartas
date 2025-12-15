@@ -11,7 +11,6 @@ import {Company} from "Company/Types";
 import {useTheme} from "Theme/ThemeContext";
 import {useCompanyApi} from 'Company/useCompanyApi';
 import copyToClipboard from "Utils/clipboard";
-import './CompanyPage.sass'
 import Head from "Core/components/Head";
 
 

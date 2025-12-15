@@ -41,15 +41,17 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     const processTheme = async () => {
         try {
             const data = await getThemes();
-            const darkImages = data.filter((theme: any) => theme.mode === 'dark').map((theme: any) => theme.bg_image);
-            const lightImages = data.filter((theme: any) => theme.mode === 'light').map((theme: any) => theme.bg_image);
+            const darkImages = data.filter((item: any) => item.mode === 'dark').map((item: any) => item.bg_image);
+            const lightImages = data.filter((item: any) => item.mode === 'light').map((item: any) => item.bg_image);
             setBackgroundImages({dark: darkImages, light: lightImages});
 
-            const defaultTheme = data.find((theme: any) => theme.is_default);
+            const defaultTheme = data.find((item: any) => item.is_default && item.bg_image);
             if (defaultTheme) {
-                setThemeMode(defaultTheme.mode);
-                setTheme(defaultTheme.mode === 'dark' ? darkTheme : lightTheme);
-                setCurrentBackgroundIndex(defaultTheme.bg_image ? 0 : -1);
+                const images = defaultTheme.mode === 'dark' ? darkImages : lightImages;
+                const index = images.indexOf(defaultTheme.bg_image);
+                setCurrentBackgroundIndex(index >= 0 ? index : 0);
+            } else {
+                setCurrentBackgroundIndex(-1);
             }
         } catch (_) {
         }
@@ -57,22 +59,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     }
 
     useEffect(() => {
-        const savedThemeMode = localStorage.getItem('themeMode');
-        const savedDarkBackgroundIndex = parseInt(localStorage.getItem('darkBackgroundIndex') || '0', 10);
-        const savedLightBackgroundIndex = parseInt(localStorage.getItem('lightBackgroundIndex') || '0', 10);
-
-        if (savedThemeMode) {
-            setThemeMode(savedThemeMode as 'light' | 'dark');
-            setTheme(savedThemeMode === 'dark' ? darkTheme : lightTheme);
-            setCurrentBackgroundIndex(
-                savedThemeMode === 'dark'
-                    ? savedDarkBackgroundIndex
-                    : savedLightBackgroundIndex
-            );
-            setThemeLoading(false); // Добавлено
-        } else {
-            processTheme().then();
-        }
+        processTheme().then();
     }, []);
 
     useEffect(() => {

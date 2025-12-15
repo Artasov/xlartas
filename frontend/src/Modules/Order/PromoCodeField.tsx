@@ -1,7 +1,7 @@
 // Modules/Order/PromoCodeField.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import {FC} from "wide-containers";
 import CircularProgressZoomify from "Core/components/elements/CircularProgressZoomify";
 import {TextField} from "@mui/material";

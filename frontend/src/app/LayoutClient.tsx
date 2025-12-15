@@ -1,6 +1,6 @@
 // app/LayoutClient.tsx
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {ToastContainer} from "react-toastify";
 import Head from "Core/components/Head";
 import Header from "Core/components/Header/Header";
@@ -13,20 +13,25 @@ import {useSelector} from "react-redux";
 import {RootState} from "Redux/store";
 import useMediaQuery from "@mui/material/useMediaQuery";
 const SplashCursor = dynamic(() => import("UI/SplashCursor"), {ssr: false});
-
 const BackgroundFlicker = dynamic(() => import("Core/BackgroundFlicker"), {ssr: false});
 
 export default function LayoutClient({children}: { children: React.ReactNode }) {
     const isHeaderVisible = useSelector((state: RootState) => state.visibility.isHeaderVisible);
     const {plt} = useTheme();
     const {headerNavHeight, mainRef} = useNavigation();
-    const isGt1000 = useMediaQuery('(min-width:1000px)');
+    const isGt1000 = useMediaQuery('(min-width:1000px)', {noSsr: true});
     const isBackgroundFlickerEnabled = useSelector((state: RootState) => state.visibility.isBackgroundFlickerEnabled);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     return (
         <>
-            {isGt1000 && isBackgroundFlickerEnabled && <SplashCursor/>}
-            <ToastContainer
+            {isMounted && isGt1000 && isBackgroundFlickerEnabled && <SplashCursor/>}
+            {isMounted && (
+                <ToastContainer
                 position="top-right"
                 autoClose={5000}
                 hideProgressBar={false}
@@ -39,6 +44,7 @@ export default function LayoutClient({children}: { children: React.ReactNode }) 
                 theme={plt.mode}
                 className={`disable-tap-select`}
             />
+            )}
             <div
                 className={`App h-100 fc disable-tap-select`}
                 style={{
@@ -46,7 +52,7 @@ export default function LayoutClient({children}: { children: React.ReactNode }) 
                     backgroundColor: plt.primary.contrastText
                 }}
             >
-                {isBackgroundFlickerEnabled && (
+                {isMounted && isBackgroundFlickerEnabled && (
                     <BackgroundFlicker
                         count={isGt1000 ? 130 : 45}
                         stickThickness={0.3}
