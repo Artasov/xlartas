@@ -18,7 +18,7 @@ DISCORD_REDIRECT_URI = f'{DOMAIN_URL}/oauth/discord/callback/'
 # Yandex
 YANDEX_CLIENT_ID = env('YANDEX_CLIENT_ID')
 YANDEX_CLIENT_SECRET = env('YANDEX_CLIENT_SECRET')
-YANDEX_REDIRECT_URI = f'{DOMAIN_URL}/oauth/yandex/callback/'
+YANDEX_REDIRECT_URI = f'{'http://localhost:3000' if DEV else DOMAIN_URL}/oauth/yandex/callback/'
 
 YANDEX_RECAPTCHA_SECRET_KEY = env('YANDEX_RECAPTCHA_SECRET_KEY')
 
