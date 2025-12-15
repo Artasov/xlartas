@@ -29,6 +29,9 @@ FROM node:20-bookworm-slim AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Гарантируем наличие директории public (даже если вдруг она не попала в контекст)
+RUN mkdir -p public
+
 # Копируем исходники после установки зависимостей, чтобы кеш слоя node_modules сохранялся при изменении кода
 COPY ./ ./
 COPY --from=deps /app/node_modules ./node_modules

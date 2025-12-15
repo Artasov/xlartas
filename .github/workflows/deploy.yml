@@ -46,15 +46,11 @@ jobs:
             echo "--------------------"
             echo "Build and push complete."
             echo "--------------------"
-            # экспортируем переменные окружения из .env перед docker stack deploy
-            # временно отключаем -u, чтобы не падать на потенциально кривых переменных внутри .env
-            set +u
-            if [ -f /root/xlartas/.env ]; then
-              set -a
-              . /root/xlartas/.env
-              set +a
-            fi
-            set -u
+
+            # экспортируем переменные окружения из .env перед docker stack deploy (как в xstudio)
+            set -a
+            . /root/xlartas/.env
+            set +a
 
             docker stack deploy -c docker-compose.yml app
           EOF
