@@ -30,8 +30,8 @@ def find_unique_files(dir1, dir2):
 
 
 if __name__ == '__main__':
-    folder1 = r'C:\Users\xl\curseforge\minecraft\Instances\PIZDAREZ\mods'
-    folder2 = r'C:\Users\xl\AppData\Roaming\xlartas-launcher\xlartas-client\mods'
+    folder1 = r'C:\Users\xl\curseforge\minecraft\Instances\1.21.1Nerforagecurse\mods'
+    folder2 = r'C:\Users\xl\AppData\Roaming\xlmine-launcher\xlartas-client\mods'
     unique = find_unique_files(folder1, folder2)
     for path in unique:
-        logger.info(path)
+        print(path.split('\\')[-1])
