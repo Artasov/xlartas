@@ -31,3 +31,5 @@ echo "---------Starting Daphne...-------"
 echo "----------------------------------"
 # Запуск Daphne для обслуживания ASGI-приложения
 daphne config.asgi:application --port 8000 --bind 0.0.0.0
+
+

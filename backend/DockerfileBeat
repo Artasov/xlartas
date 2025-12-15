@@ -1,3 +1,4 @@
-# DockerfileBeat
 FROM localhost:5000/ibase:latest AS beat
 ENTRYPOINT ["sh", "/srv/entrypoint_beat.sh"]
+
+

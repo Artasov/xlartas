@@ -1,0 +1,68 @@
+FROM node:20-bookworm-slim AS deps
+WORKDIR /app
+
+# Копируем только манифесты для детерминированной установки (кэшируем зависимости)
+COPY ./package.json ./yarn.lock* ./package-lock.json* ./
+
+# Инструменты для нативных модулей (на случай пересборки sharp)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential python3 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV SHARP_IGNORE_GLOBAL_LIBVIPS=1
+ENV npm_config_build_from_source=false
+
+RUN corepack enable && \
+    if [ -f yarn.lock ]; then \
+      yarn install --frozen-lockfile; \
+      yarn add -W sharp@^0.33.0 --dev || yarn add -W sharp@^0.33.0; \
+    elif [ -f package-lock.json ]; then \
+      npm ci --legacy-peer-deps --include=optional; \
+      npm i --no-save --legacy-peer-deps --include=optional --os=linux --cpu=x64 sharp@^0.33.0 || true; \
+    else \
+      npm i --legacy-peer-deps --include=optional; \
+      npm i --no-save --legacy-peer-deps --include=optional --os=linux --cpu=x64 sharp@^0.33.0 || true; \
+    fi \
+    && node -e "require('sharp'); console.log('sharp loaded')"
+
+FROM node:20-bookworm-slim AS builder
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Копируем исходники после установки зависимостей, чтобы кеш слоя node_modules сохранялся при изменении кода
+COPY ./ ./
+COPY --from=deps /app/node_modules ./node_modules
+
+RUN corepack enable && \
+    if [ -f yarn.lock ]; then \
+      yarn build; \
+    else \
+      npm run build; \
+    fi
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Создаём отдельного пользователя ДО копирования файлов
+RUN useradd -m -u 1001 appuser
+
+# Копируем только необходимые файлы с правильными правами (standalone режим)
+# В standalone режиме Next.js создает минимальный набор файлов в .next/standalone
+COPY --from=builder --chown=appuser:appuser /app/.next/standalone ./
+COPY --from=builder --chown=appuser:appuser /app/.next/static ./.next/static
+COPY --from=builder --chown=appuser:appuser /app/public ./public
+
+# Пробрасываем статику и медиа с бэкенда (volume /srv/static и /srv/media монтируются в compose)
+RUN ln -sfn /srv/static /app/public/static && ln -sfn /srv/media /app/public/media
+
+# Запускаем приложение от не-root пользователя
+USER appuser
+
+EXPOSE 3000
+
+# В standalone режиме запускаем напрямую node server.js
+CMD ["node", "server.js"]
+
+

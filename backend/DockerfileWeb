@@ -1,3 +1,4 @@
-# DockerfileWeb
 FROM localhost:5000/ibase:latest AS web
 ENTRYPOINT ["sh", "/srv/entrypoint.sh"]
+
+

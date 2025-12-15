@@ -23,8 +23,8 @@ services:
     volumes:
       - ./nginx/data/:/data
       - ./nginx/letsencrypt:/etc/letsencrypt
-      - ./static:/data/static
-      - ./media:/data/media
+      - ./static:/data/static:ro
+      - ./media:/data/media:ro
     networks: [ net ]
     stop_grace_period: 5s
     deploy:
@@ -60,9 +60,11 @@ services:
     user: 1000:1001
     hostname: redis
     image: redis:alpine
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
     volumes:
       - ./data/redis/:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       timeout: 5s
@@ -81,6 +83,7 @@ services:
   web:
     hostname: web
     image: localhost:5000/iweb:latest
+    user: "1001:1001"
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -101,7 +104,9 @@ services:
       interval: 5s
       retries: 3
       start_period: 120s
-    cap_add: [ SYS_TIME ]
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
+    tmpfs: [ /tmp ]
     networks: [ net ]
     stop_grace_period: 5s
     deploy:
@@ -111,16 +116,21 @@ services:
 
   frontend:
     hostname: frontend
-    volumes:
-      - ./static:/srv/static
-      - ./media:/srv/media
     image: localhost:5000/ifrontend:latest
+    user: "1001:1001"
     environment:
       # Для SSR (если потребуется) можно раскомментировать, чтобы ходить к Django по внутреннему имени:
       - NEXT_INTERNAL_API_BASE=http://web:8000
       - NODE_ENV=production
+    volumes:
+      - ./static:/srv/static:ro
+      - ./media:/srv/media:ro
     depends_on: [ web ]
     networks: [ net ]
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/.next
     deploy:
       replicas: 1
       restart_policy: { condition: on-failure }
@@ -128,22 +138,24 @@ services:
   celery:
     hostname: celery
     image: localhost:5000/icelery:latest
+    user: "1001:1001"
     volumes:
       - ./data:/srv/data
       - ./static:/srv/static
       - ./media:/srv/media
       - ./backend/logs:/srv/backend/logs
-      - ./entrypoint_celery.sh:/srv/entrypoint_celery.sh
+      - ./backend/entrypoint_celery.sh:/srv/entrypoint_celery.sh:ro
     environment:
       - LOG_PREFIX=celery
     networks: [ net ]
     stop_grace_period: 2s
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
+    tmpfs: [ /tmp ]
     deploy:
       replicas: 1
       update_config: { parallelism: 1, delay: 10s }
       restart_policy: { condition: on-failure }
-    security_opt: [ seccomp=unconfined ]
-    cap_add: [ SYS_ADMIN ]
 
   beat:
     hostname: beat
@@ -153,7 +165,7 @@ services:
       - ./static:/srv/static
       - ./media:/srv/media
       - ./backend/logs:/srv/backend/logs
-      - ./entrypoint_beat.sh:/srv/entrypoint_beat.sh
+      - ./backend/entrypoint_beat.sh:/srv/entrypoint_beat.sh:ro
     environment:
       - LOG_PREFIX=beat
     networks: [ net ]
@@ -171,7 +183,7 @@ services:
   #      - FLOWER_PASSWORD=${FLOWER_PASSWORD}
   #    volumes:
   #      - ./backend/logs:/srv/backend/logs
-  #      - ./entrypoint_flower.sh:/srv/entrypoint_flower.sh
+  #      - ./backend/entrypoint_flower.sh:/srv/entrypoint_flower.sh
   #    ports:
   #      - "5555:5555"
   #    networks:

@@ -1,3 +1,4 @@
-# DockerfileCelery
 FROM localhost:5000/ibase:latest AS celery
 ENTRYPOINT ["sh", "/srv/entrypoint_celery.sh"]
+
+
