@@ -218,9 +218,6 @@ const SignUpForm: React.FC<SignUpFormProps> = (
                     />
                     {!confirmationSent && (
                         <FC pos={'relative'} cls={'mb-2'}>
-                            <FCCC w={'100%'} h={'100%'} pos={'absolute'} top={0} left={0}>
-                                <CircularProgressZoomify in size={'3rem'}/>
-                            </FCCC>
                             <FC sx={{
                                 transformOrigin: '0 0', width: '100%',
                                 filter: plt.mode === 'dark' ? 'invert(.87) hue-rotate(180deg)' : 'none',

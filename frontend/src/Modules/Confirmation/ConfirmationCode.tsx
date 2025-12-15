@@ -167,9 +167,6 @@ const ConfirmationCode: React.FC<ConfirmationCodeProps> = (
                 <FC g={1} pos="relative">
                     {!initialCodeSent && !disableCaptcha && (
                         <>
-                            <FCCC w="100%" h="100%" pos="absolute" top={0} left={0}>
-                                <CircularProgressZoomify in size="3rem"/>
-                            </FCCC>
                             <SmartCaptcha
                                 sitekey={YANDEX_RECAPTCHA_SITE_KEY}
                                 key={resetCaptcha}
