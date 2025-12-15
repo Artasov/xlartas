@@ -67,6 +67,12 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({children}) => 
             setLogoutInProgress(false);
             return;
         }
+        // Если пользователь уже разлогинен (нет токенов в хранилище), то
+        // игнорируем дополнительные 401/403 без показа ошибок и модалок.
+        const hasTokens = typeof window !== 'undefined'
+            && (localStorage.getItem('access') || localStorage.getItem('refresh'));
+        if (!hasTokens) return;
+
         isHandlingAuthError.current = true;
         frontendLogout();
         Message.notAuthentication();
