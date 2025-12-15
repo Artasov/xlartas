@@ -9,6 +9,7 @@ from django.db.models import Model
 
 from apps.core.models import User
 from apps.core.services.auth import JWTPair
+from apps.core.services.user.base import normalize_username
 from apps.social_oauth.exceptions.base import SocialOAuthException
 
 log = logging.getLogger('social_auth')
@@ -62,6 +63,7 @@ class OAuthProviderMixin:
             if not user:
                 if not username:
                     username = email.split('@')[0] if email else f'{provider_id_field}_{provider_id}'
+                username = normalize_username(username)
                 user = await User.objects.acreate(
                     email=email or '',
                     username=username,

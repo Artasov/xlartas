@@ -19,6 +19,7 @@ from apps.core.exceptions.base import CoreException
 from apps.core.exceptions.user import UserException
 from apps.core.models.user import User
 from apps.core.serializers.user.base import SignUpSerializer
+from apps.core.services.user.base import normalize_username
 from utils.log import get_global_logger
 
 log = get_global_logger()
@@ -56,9 +57,9 @@ async def signup(request) -> Response:
             raise UserException.AlreadyExistsWithThisPhone()
 
         if email:
-            username = f'{email.split('@')[0]}{randint(1000, 9999)}'
+            username = normalize_username(f'{email.split('@')[0]}{randint(1000, 9999)}')
         else:
-            username = f'{phone}_{randint(1000, 9999)}'
+            username = normalize_username(f'{phone}_{randint(1000, 9999)}')
         if email:
             await User.objects.acreate_user(
                 username=username,

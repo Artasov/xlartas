@@ -18,7 +18,7 @@ from timezone_field import TimeZoneField
 
 from apps.core.managers.user import UserManager
 from apps.core.models.choices import Gender
-from apps.core.services.user.base import generate_random_username
+from apps.core.services.user.base import generate_random_username, normalize_username
 from apps.core.services.user.mixer import UserService
 from utils.pictures import CorrectOrientation
 
@@ -82,6 +82,8 @@ class User(
         return f'{self.service.full_name if self.service.full_name else self.username}:{self.id}'
 
     def save(self, *args, **kwargs):
+        if self.username:
+            self.username = normalize_username(self.username)
         if not self.username:
             self.username = generate_random_username()
         super().save(*args, **kwargs)

@@ -9,6 +9,13 @@ if TYPE_CHECKING:
     from apps.core.models import User
 
 
+USERNAME_MAX_LENGTH = 14
+
+
+def normalize_username(username: str) -> str:
+    return username[:USERNAME_MAX_LENGTH]
+
+
 def generate_random_username():
     return 'U' + ''.join(choices(string.ascii_uppercase + string.digits, k=11))
 

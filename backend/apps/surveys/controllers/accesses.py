@@ -13,6 +13,7 @@ from apps.captcha.yandex import captcha_required
 from apps.core.exceptions.base import CoreException
 from apps.core.exceptions.user import UserException
 from apps.core.models.user import User
+from apps.core.services.user.base import normalize_username
 from apps.core.tasks.mail_tasks import send_survey_access, send_auto_created_user
 from apps.surveys.exceptions.base import CurrentUserNotSurveyAuthor, SurveyIdWasNotProvided
 from apps.surveys.models import SurveyAccess, Survey
@@ -55,7 +56,7 @@ async def survey_access_create(request) -> Response:
 
     user = await User.objects.aby_creds(email)
     if not user:
-        username = email.split('@')[0]
+        username = normalize_username(email.split('@')[0])
         password = get_random_string(length=12)
         user = User.objects.create_user(
             username=username, email=email, password=password
