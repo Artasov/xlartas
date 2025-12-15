@@ -1,9 +1,9 @@
-from config.base import DOMAIN_URL, env
+from config.base import DOMAIN_URL, env, DEV
 
 # Google
 GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
-GOOGLE_REDIRECT_URI = f'{DOMAIN_URL}/oauth/google/callback/'
+GOOGLE_REDIRECT_URI = f'{'http://localhost:3000' if DEV else DOMAIN_URL}/oauth/google/callback/'
 
 # Vk
 VK_AUTH_CLIENT_ID = env('VK_AUTH_CLIENT_ID')

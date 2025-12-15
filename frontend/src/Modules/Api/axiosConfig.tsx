@@ -10,9 +10,9 @@ export const YANDEX_RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_YANDEX_RECAPTCH
 export const YANDEX_CLIENT_ID = process.env.NEXT_PUBLIC_YANDEX_CLIENT_ID as string;
 export const VK_AUTH_CLIENT_ID = process.env.NEXT_PUBLIC_VK_AUTH_CLIENT_ID as string;
 
-// Домен приложения
+// Домен приложения (c учётом порта для локалки)
 export const DOMAIN = isClient
-    ? window.location.hostname
+    ? window.location.host
     : (process.env.NEXT_PUBLIC_DOMAIN as string);
 
 // Базовый URL для API:
