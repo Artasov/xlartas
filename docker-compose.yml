@@ -160,6 +160,7 @@ services:
   beat:
     hostname: beat
     image: localhost:5000/ibeat:latest
+    user: "1001:1001"
     volumes:
       - ./data:/srv/data
       - ./static:/srv/static
@@ -170,6 +171,9 @@ services:
       - LOG_PREFIX=beat
     networks: [ net ]
     stop_grace_period: 2s
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
+    tmpfs: [ /tmp ]
     deploy:
       replicas: 1
       update_config: { parallelism: 1, delay: 10s }
@@ -214,6 +218,9 @@ services:
     volumes:
       - ./data/sonar_db:/var/lib/postgresql/data
     networks: [ net ]
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
+    tmpfs: [ /tmp ]
     deploy:
       replicas: 1
       restart_policy: { condition: on-failure }
@@ -234,6 +241,9 @@ services:
       - ./data/sonarqube/extensions:/opt/sonarqube/extensions
       - ./data/sonarqube/logs:/opt/sonarqube/logs
     networks: [ net ]
+    cap_drop: [ ALL ]
+    security_opt: [ "no-new-privileges:true" ]
+    tmpfs: [ /tmp ]
     deploy:
       replicas: 1
       restart_policy: { condition: on-failure }
