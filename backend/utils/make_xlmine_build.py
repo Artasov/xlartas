@@ -44,6 +44,7 @@ EDITABLE_FILES = [
     'config/bettergrass.json5',
     'config/blur.json',
     'config/chat_heads.json5',
+    'config/chloride-client.json',
     'config/cull-less-leaves.json',
     'config/durabilitytooltip-common.toml',
     'config/emojiful.json',
