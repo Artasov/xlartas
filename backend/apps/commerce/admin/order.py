@@ -84,7 +84,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
             for order in queryset:
                 log.info(f'Инициализация заказа {order.id} без оплаты')
                 try:
-                    async_to_sync(order.get_real_instance().init)(request, init_payment=False)
+                    async_to_sync(order.get_real_instance().service.init)(request, init_payment=False)
                 except Exception as e:
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно инициализированы без оплаты.')
@@ -95,7 +95,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
             for order in queryset:
                 log.info(f'Инициализация заказа {order.id} с оплатой')
                 try:
-                    async_to_sync(order.get_real_instance().init)(request)
+                    async_to_sync(order.get_real_instance().service.init)(request)
                 except Exception as e:
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно инициализированы с оплатой.')
@@ -106,7 +106,7 @@ class OrderAdmin(ImportExportModelAdmin, PolymorphicParentModelAdmin):
             for order in queryset:
                 log.info(f'Исполнение заказа {order.id}')
                 try:
-                    async_to_sync(order.get_real_instance().execute)()
+                    async_to_sync(order.get_real_instance().service.execute)()
                 except Exception as e:
                     self._handle_exception_message(request, order, e)
             self.message_user(request, 'Заказы успешно выполнены.')
